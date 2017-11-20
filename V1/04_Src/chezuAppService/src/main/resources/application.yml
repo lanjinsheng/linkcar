@@ -1,0 +1,24 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://119.28.16.217:8761/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-expiration-duration-in-seconds: 30 
+    lease-renewal-interval-in-seconds: 10
+server:
+  port: 8081
+spring:
+  application:
+    name: service-app-chezu
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://115.159.216.58:6633/sjtest?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: sjTest
+    password: sjTest2962143!
+mybatis:
+  config-locations: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+ 
+  type-aliases-package: com.idata365.app.entity
