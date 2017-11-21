@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.idata365.app.entity.UserEntity;
 import com.idata365.app.enums.UserSexEnum;
@@ -65,8 +67,10 @@ public class DemoController {
          demoService.saveByMap(user);
          return String.valueOf("ok");
     }
+    
+
     @RequestMapping("fileUpload")
-    public String  fileUpload(@RequestParam("file") CommonsMultipartFile file) throws IOException {
+    public String  fileUpload(@RequestParam CommonsMultipartFile file) throws IOException {
          
          
         //用来检测程序运行时间
