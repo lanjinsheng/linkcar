@@ -23,7 +23,7 @@ public WebControllerAop() {
 	System.out.println("WebControllerAopWebControllerAopWebControllerAopWebControllerAop");
 }
     //匹配com.example.demo.controller包及其子包下的所有类的所有方法
-    @Pointcut("execution(* com.idata365.app.controller..*.*(..))")
+   @Pointcut("execution(* com.idata365.app.controller..*.*(..))")
     public void executeService(){
 
     }
