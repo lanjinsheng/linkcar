@@ -29,9 +29,9 @@
     <insert id="insert" parameterType="com.idata365.entity.UserEntity" >
        INSERT INTO 
             users
-            (userName,passWord,userSex) 
+            (userName,passWord,userSex,nickName) 
         VALUES
-            (#{userName}, #{passWord}, #{userSex})
+            (#{userName}, #{passWord}, #{userSex},#{nickName})
     </insert>
 
     <update id="update" parameterType="com.idata365.entity.UserEntity" >
