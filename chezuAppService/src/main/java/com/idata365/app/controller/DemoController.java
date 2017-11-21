@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.idata365.app.entity.UserEntity;
+import com.idata365.app.enums.UserSexEnum;
 import com.idata365.app.remote.DemoService;
 
 
@@ -35,7 +38,33 @@ public class DemoController {
     	System.out.println(requestBodyParams==null?"null":requestBodyParams.size());
         return demoService.getUsers();
     }
+    @RequestMapping(value = "/insertUserRemote")
+    public String insertUserRemote(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+//    	return name;
+    	System.out.println(allRequestParams==null?"null":allRequestParams.size());
+    	System.out.println(requestBodyParams==null?"null":requestBodyParams.size());
+    	UserEntity user=new UserEntity();
+    	user.setNickName("兰爷爷");
+    	user.setPassWord("abcd");
+    	user.setUserName("mogelylan");
+    	user.setUserSex(UserSexEnum.WOMAN);
+         demoService.save(user);
+         return String.valueOf(user.getId());
+    }
     
+    @RequestMapping(value = "/insertUserRemoteMap")
+    public String insertUserRemoteMap(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+//    	return name;
+    	System.out.println(allRequestParams==null?"null":allRequestParams.size());
+    	System.out.println(requestBodyParams==null?"null":requestBodyParams.size());
+    	Map<Object,Object> user=new HashMap<Object,Object>();
+    	user.put("nickName","兰爷爷2");
+    	user.put("passWord","abcd3");
+    	user.put("userName","mogelylan");
+    	user.put("userSex",UserSexEnum.WOMAN);
+         demoService.saveByMap(user);
+         return String.valueOf("ok");
+    }
     @RequestMapping("fileUpload")
     public String  fileUpload(@RequestParam("file") CommonsMultipartFile file) throws IOException {
          
