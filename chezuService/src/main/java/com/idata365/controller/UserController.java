@@ -1,15 +1,18 @@
 package com.idata365.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.entity.UserEntity;
+import com.idata365.enums.UserSexEnum;
 import com.idata365.mapper.UserMapper;
 
 @RestController
@@ -37,12 +40,20 @@ public class UserController {
         return "ok";
     }
     @RequestMapping("/add")
-    public void save(UserEntity user) {
+    public void save(@RequestBody UserEntity user) {
     	userMapper.insert(user);
     }
-    
+    @RequestMapping("/addMap")
+    public void saveMap(@RequestBody Map<Object,Object> user) {
+    	UserEntity u=new UserEntity();
+    	u.setNickName(String.valueOf(user.get("nickName")));
+    	u.setPassWord(String.valueOf(user.get("passWord")));
+    	u.setUserName(String.valueOf(user.get("userName")));
+    	u.setUserSex(UserSexEnum.valueOf(String.valueOf(user.get("userSex"))));
+    	userMapper.insert(u);
+    } 
     @RequestMapping(value="update")
-    public void update(UserEntity user) {
+    public void update(@RequestBody UserEntity user) {
     	userMapper.update(user);
     }
     
