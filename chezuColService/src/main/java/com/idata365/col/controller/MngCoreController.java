@@ -1,13 +1,11 @@
 package com.idata365.col.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.col.api.SSOTools;
@@ -32,11 +27,14 @@ import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.service.DataService;
+import com.idata365.col.util.GsonUtils;
+import com.idata365.col.util.PhoneGpsUtil;
+import com.idata365.col.util.ResultUtils;
 
 
 @RestController
-public class GetDataController extends BaseController<GetDataController> {
-	private final static Logger LOG = LoggerFactory.getLogger(GetDataController.class);
+public class MngCoreController extends BaseController<MngCoreController> {
+	private final static Logger LOG = LoggerFactory.getLogger(MngCoreController.class);
     @Autowired
     DataService dataService;
 	@Autowired  
@@ -61,8 +59,6 @@ public class GetDataController extends BaseController<GetDataController> {
 		  long id=Long.valueOf(allRequestParams.get("id").toString());
 		  DriveDataLog driveLog=  dataService.getDriveLog(id);
 		  List<DriveDataLog> drives=dataService.listDriveLogByUH(driveLog);
-		  
-		 
 	        HttpHeaders headers = new HttpHeaders();  
 	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
 	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "datas.zip"));  
@@ -91,21 +87,42 @@ public class GetDataController extends BaseController<GetDataController> {
 		                .contentLength(file.contentLength()) 
 		                .contentType(MediaType.parseMediaType("application/octet-stream"))  
 		                .body(new InputStreamResource(file.getInputStream())); 
-	  }catch(Exception e) {
-		  e.printStackTrace();
-	  }finally{
-          try {
-        	  if(os!=null) {
-        	  os.close();
-        	  }
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-      }
+			  }catch(Exception e) {
+				  e.printStackTrace();
+			  }finally{
+		          try {
+		        	  if(os!=null) {
+		        	  os.close();
+		        	  }
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		      }
 	  return null;
     }
-    
+    @RequestMapping(value = "/v1/getDriveResultByUH",method = {RequestMethod.POST,RequestMethod.GET})
+    public Map<String,Object>  getDealResult(@RequestParam Map<String,Object> map) {
+    	  DriveDataLog d=new DriveDataLog();	
+    	  d.setUserId(Long.valueOf(map.get("userId").toString()));
+    	  d.setHabitId(Long.valueOf(map.get("habitId").toString()));
+    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
+    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+    	  for(DriveDataLog drive:drives) {
+    		     StringBuffer json=new StringBuffer();
+		         SSOTools.getSSOFile(json,drive.getFilePath());
+		         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+		         if(jMap.get("gpsInfos")!=null) {
+		        	 list.addAll((List)jMap.get("gpsInfos"));
+		         }
+		 }
+    	  if(list.size()>0) {
+    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
+    		  return ResultUtils.rtSuccess(datasMap);
+    	  }
+    	  return ResultUtils.rtSuccess(null);
+
+    }
     @RequestMapping("/v1/index")
     public String index(){
         return "index";

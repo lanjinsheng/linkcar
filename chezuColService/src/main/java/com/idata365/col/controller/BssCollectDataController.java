@@ -32,8 +32,8 @@ import com.idata365.col.util.ValidTools;
 
 
 @RestController
-public class CollectDataController extends BaseController<CollectDataController> {
-	private final static Logger LOG = LoggerFactory.getLogger(CollectDataController.class);
+public class BssCollectDataController extends BaseController<BssCollectDataController> {
+	private final static Logger LOG = LoggerFactory.getLogger(BssCollectDataController.class);
     @Autowired
     DataService dataService;
     
