@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.idata365.col.entity.UserEntity;
 
 /**
- * Created by fangzhipeng on 2017/4/6.
+ * 
+    * @ClassName: DemoService
+    * @Description: TODO(这里用一句话描述这个类的作用)
+    * @author LanYeYe
+    * @date 2017年11月29日
+    *
  */
 @FeignClient(value = "service-chezu",fallback = DemoServiceHystric.class)
 public interface DemoService {
@@ -21,7 +26,6 @@ public interface DemoService {
     String getUsers();
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     void save(@RequestBody UserEntity user);
-    
     @RequestMapping(value = "/addMap",method = RequestMethod.POST)
     String saveByMap(@RequestBody Map<Object,Object> user);
     

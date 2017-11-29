@@ -1,16 +1,18 @@
 package com.idata365.col.util;
-import net.sf.json.JSONObject;
-//import com.alibaba.dubbo.common.json.JSONObject;
-//import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang.RandomStringUtils;
-
 import java.net.URLEncoder;
 import java.security.SecureRandom;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+//import com.alibaba.dubbo.common.json.JSONObject;
+//import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.RandomStringUtils;
+
+import net.sf.json.JSONObject;
 
 
 /**

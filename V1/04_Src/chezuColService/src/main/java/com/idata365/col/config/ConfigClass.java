@@ -2,7 +2,6 @@ package com.idata365.col.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ImportResource(locations={"classpath:thread.xml"})
