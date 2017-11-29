@@ -2,15 +2,11 @@ package com.idata365.col.api;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import org.springframework.core.io.FileSystemResource;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
@@ -19,6 +15,7 @@ import com.aliyun.oss.model.CannedAccessControlList;
 import com.aliyun.oss.model.CreateBucketRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.PutObjectRequest;
+import com.idata365.col.util.ZipUtils;
 
 /**
  * This sample demonstrates how to get started with basic requests to Aliyun OSS 
@@ -109,6 +106,15 @@ public class SSOTools {
             ossClient.shutdown();
         }
     }
+    public static void  addOSSTest(String path) {
+    	File f=new File(path);
+    	OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    	  ossClient.putObject(new PutObjectRequest(bucketName, "234242/20171128/A1511863208872", f));
+    	  ossClient.shutdown();
+    }
+    public static void main(String []args) {
+    	addOSSTest("d:\\gps.gz");
+    }
     public static boolean getSSOFile(StringBuffer json,String key) {
     	 OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
          try {
@@ -121,10 +127,10 @@ public class SSOTools {
              /*
               */
              OSSObject object = ossClient.getObject(bucketName, key);
-			 displayTextInputStream(object.getObjectContent(),json);
+             ZipUtils.uncompressToString(object.getObjectContent(),json);
              return true;
              
-         } catch (IOException e) {
+         } catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				  return false;
@@ -185,6 +191,12 @@ public class SSOTools {
         }
         reader.close();
     }
+    
+    private static void displayTextInputStream2(InputStream input,StringBuffer jsonSB) throws IOException {
+    	 
+    }
+      
+	
 
 //    private static void displayTextInputStream(InputStream input) throws IOException {
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(input));

@@ -37,7 +37,7 @@ public class DataService extends BaseService<DataService>{
 	SensorDataLogMapper sensorDataLogMapper;
 	
 	public DataService() {
-		LOG.info("DataServiceDataServiceDataServiceDataService");
+		LOG.info("DataService DataService DataService DataService");
 	}
 	public DriveDataLog getDriveLog(Long id) {
 		return driveDataLogMapper.getDriveDataLog(id);

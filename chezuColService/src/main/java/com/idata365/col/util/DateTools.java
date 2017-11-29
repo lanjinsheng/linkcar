@@ -12,6 +12,7 @@ public class DateTools
 {
 	
 	private static FastDateFormat yyMMddHHmmss = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+	private static FastDateFormat yyMMddHHmmssSSS = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
 	private static FastDateFormat yyyyMMdd = FastDateFormat.getInstance("yyyyMMdd");
 	
 	public static String getYYYYMMDD() {
@@ -19,7 +20,13 @@ public class DateTools
 	  return customDate;
 	}
 	
-	
+    public static long getDiffTimeS(String dateTime1,String dateTime2) throws ParseException {
+	       
+        Date d1 = DateUtils.parseDate(dateTime1,yyMMddHHmmssSSS.getPattern());
+        Date d2 = DateUtils.parseDate(dateTime2,yyMMddHHmmssSSS.getPattern());
+       return (long)((d1.getTime()-d2.getTime())/1000);
+  }
+
 	/**
 	 * 返回前天，昨天，明天，后天等
 	 * 

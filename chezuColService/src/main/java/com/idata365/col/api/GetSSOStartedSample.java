@@ -145,7 +145,7 @@ public class GetSSOStartedSample {
 
         return file;
     }
-
+   
     private static void displayTextInputStream(InputStream input) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         while (true) {
