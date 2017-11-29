@@ -17,7 +17,7 @@ public interface UploadDataStatusMapper {
 	 void insertUploadDataStatus(UploadDataStatus status);
 	 void updateSensorUploadStatus(UploadDataStatus status);
 	 
-	 List<UploadDataStatus>  getUploadDataStatus(Map<String,Object> map);
-	 
-	 
+	 List<UploadDataStatus>  getUploadDataStatusTask(UploadDataStatus status);
+	 void  lockUploadStatusTask(UploadDataStatus status);
+	 void  updateUploadStatusTask(UploadDataStatus status);
 }

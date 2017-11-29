@@ -36,7 +36,18 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
 	private final static Logger LOG = LoggerFactory.getLogger(BssCollectDataController.class);
     @Autowired
     DataService dataService;
-    
+    /**
+     * 
+        * @Title: uploadDriveData
+        * @Description: TODO(这里用一句话描述这个方法的作用)
+        * @param @param file
+        * @param @param map
+        * @param @return
+        * @param @throws IOException    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping(value = "/v1/uploadDriveData",method = RequestMethod.POST)
     public Map<String,Object>  uploadDriveData(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
     	 long  startTime=System.currentTimeMillis();
@@ -86,7 +97,18 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         LOG.info("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return ResultUtils.rtSuccess(null); 
     } 
-    
+    /**
+     * 
+        * @Title: uploadDriveData
+        * @Description: TODO(这里用一句话描述这个方法的作用)
+        * @param @param file
+        * @param @param map
+        * @param @return
+        * @param @throws IOException    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping(value = "/v1/uploadSensorData",method = RequestMethod.POST)
     public Map<String,Object>  uploadSensorData(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
     	 long  startTime=System.currentTimeMillis();
@@ -134,7 +156,18 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         LOG.info("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return ResultUtils.rtSuccess(null); 
     } 
-    
+    /**
+     * 
+        * @Title: uploadDriveData
+        * @Description: TODO(这里用一句话描述这个方法的作用)
+        * @param @param file
+        * @param @param map
+        * @param @return
+        * @param @throws IOException    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping(value = "/v1/config",method = { RequestMethod.POST,RequestMethod.GET})
     public Map<String,Object>  config(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) {
           //获取RequestAttributes
