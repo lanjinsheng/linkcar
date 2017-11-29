@@ -30,6 +30,7 @@ public class PhoneGpsUtil {
 		rtMap.put("maxSpeed", 0);
 		rtMap.put("avgSpeed", avgSpeed);
 		rtMap.put("distance", distance);
+		rtMap.put("driveTimes", 0);
 		int i=0;
 		String st=first.get("t");
 		StringBuffer et=new StringBuffer(first.get("t"));
@@ -61,7 +62,7 @@ public class PhoneGpsUtil {
 		
 		try {
 			 long subTime=DateTools.getDiffTimeS(et.toString(),st);
-			
+			 rtMap.put("driveTimes", subTime);
 			if(subTime>0){
 				avgSpeed=BigDecimal.valueOf(distance).divide(BigDecimal.valueOf(subTime), 2,BigDecimal.ROUND_HALF_UP).doubleValue();
 			}
@@ -69,6 +70,8 @@ public class PhoneGpsUtil {
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
+		rtMap.put("startTime", st);
+		rtMap.put("endTime", et.toString());
 		rtMap.put("maxSpeed", maxSpeed);
 		rtMap.put("avgSpeed", avgSpeed);
 		rtMap.put("distance", distance);

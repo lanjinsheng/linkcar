@@ -15,7 +15,9 @@ public class UploadDataStatus implements Serializable {
 	private int sensorUploadStatus;
 	private String equipmentInfo;
 	private int hadSensorData;
-	private String taskFlag;
+	private Long taskFlag;
+	private Long createTimeSS;
+	private int complete;
 	public Long getId() {
 		return id;
 	}
@@ -65,17 +67,29 @@ public class UploadDataStatus implements Serializable {
 	public void setSensorUploadStatus(int sensorUploadStatus) {
 		this.sensorUploadStatus = sensorUploadStatus;
 	}
-	public String getTaskFlag() {
-		return taskFlag;
-	}
-	public void setTaskFlag(String taskFlag) {
-		this.taskFlag = taskFlag;
-	}
 	public Date getSensorUploadTime() {
 		return sensorUploadTime;
 	}
 	public void setSensorUploadTime(Date sensorUploadTime) {
 		this.sensorUploadTime = sensorUploadTime;
+	}
+	public Long getTaskFlag() {
+		return taskFlag;
+	}
+	public void setTaskFlag(Long taskFlag) {
+		this.taskFlag = taskFlag;
+	}
+	public Long getCreateTimeSS() {
+		return createTimeSS;
+	}
+	public void setCreateTimeSS(Long createTimeSS) {
+		this.createTimeSS = createTimeSS;
+	}
+	public int getComplete() {
+		return complete;
+	}
+	public void setComplete(int complete) {
+		this.complete = complete;
 	}
 	
 	

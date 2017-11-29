@@ -1,5 +1,4 @@
 package com.idata365.col.schedule;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -37,8 +36,16 @@ public class DriveUploadScanTask extends TimerTask {
 		synchronized (lock){
 		if(pd){
 			pd=false;
-			List<UploadDataStatus> list=dataService.getUploadDataStatus(new HashMap());
+			long taskFlag=System.currentTimeMillis();
+			UploadDataStatus status=new UploadDataStatus();
+			status.setTaskFlag(taskFlag);
+			long createTimeSS=30*60*1000+taskFlag;
+			status.setCreateTimeSS(createTimeSS);
+			List<UploadDataStatus> list=dataService.getUploadDataStatusTask(status);
 			log.info("DriveUploadScanTask do--list.size="+list.size());
+			for(UploadDataStatus us:list) {
+				threadPool.execute(new DatasDealTask(us.getUserId(),us.getHabitId(),us.getTaskFlag(),us.getHadSensorData(),us.getId()));
+			}
 			pd=true;
 		}
 			

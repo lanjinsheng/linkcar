@@ -9,6 +9,7 @@ package com.idata365.col.service;
  */
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +20,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.col.entity.DriveDataLog;
+import com.idata365.col.entity.DriveDataMain;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.entity.UploadDataStatus;
+import com.idata365.col.mapper.DriveDataEventMapper;
 import com.idata365.col.mapper.DriveDataLogMapper;
+import com.idata365.col.mapper.DriveDataMainMapper;
 import com.idata365.col.mapper.SensorDataLogMapper;
 import com.idata365.col.mapper.UploadDataStatusMapper;
 import com.idata365.col.util.ResultUtils;
@@ -35,6 +39,12 @@ public class DataService extends BaseService<DataService>{
 	UploadDataStatusMapper uploadDataStatusMapper;
 	@Autowired
 	SensorDataLogMapper sensorDataLogMapper;
+	
+	@Autowired
+	DriveDataMainMapper driveDataMainMapper;
+	@Autowired
+	DriveDataEventMapper driveDataEventMapper;
+	
 	
 	public DataService() {
 		LOG.info("DataService DataService DataService DataService");
@@ -74,8 +84,14 @@ public class DataService extends BaseService<DataService>{
 			status.setScanStatus(0);
 			status.setUserId(log.getUserId());
 			status.setHadSensorData(log.getHadSensorData());
-			status.setTaskFlag("0");
+			status.setTaskFlag(0L);
+			status.setCreateTimeSS(System.currentTimeMillis());
 			status.setSensorUploadStatus(0);
+			if(status.getHadSensorData()==0) {
+				status.setComplete(1);
+			}else {
+				status.setComplete(0);
+			}
 			uploadDataStatusMapper.insertUploadDataStatus(status);
 		}
 	}
@@ -136,11 +152,34 @@ public class DataService extends BaseService<DataService>{
 			return sb.toString();
 	}
 	
-	
-	public List<UploadDataStatus>  getUploadDataStatus(Map<String,Object> map) {
-		  List<UploadDataStatus> list= uploadDataStatusMapper.getUploadDataStatus(map);
-		 
-			return list;
+	/**
+	 * 
+	    * @Title: lockUploadStatusTask
+	    * @Description: TODO(先锁定,后调用)
+	    * @param @param status    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public List<UploadDataStatus>  getUploadDataStatusTask(UploadDataStatus status) {
+		   uploadDataStatusMapper.lockUploadStatusTask(status);
+		  List<UploadDataStatus> list= uploadDataStatusMapper.getUploadDataStatusTask(status);
+		  return list;
 	}
 	
+	public void updateDataStatusTask(UploadDataStatus status) {
+		   uploadDataStatusMapper.updateUploadStatusTask(status);
+		  
+	}
+	
+	/**
+	 * 
+	 */
+	public void  insertEvents(DriveDataMain data,List<Map<String,Object>> eventList) {
+		driveDataMainMapper.insertDataLog(data);
+		Map<String,Object> alarmMap=new HashMap<String,Object>();
+		alarmMap.put("driveDataMainId", data.getId());
+		alarmMap.put("list", eventList);
+		driveDataEventMapper.insertDriveEvent(alarmMap);
+	}
 }

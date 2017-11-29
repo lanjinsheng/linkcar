@@ -1,0 +1,69 @@
+package com.idata365.col.entity;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class DriveDataEvent implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private Long id;
+	private Long driveDataMainId;
+	private int alarmType;
+	private BigDecimal alarmValue;
+	private BigDecimal lat;
+	private BigDecimal lng;
+	private Date startTime;
+	private Date endTime;
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Long getDriveDataMainId() {
+		return driveDataMainId;
+	}
+	public void setDriveDataMainId(Long driveDataMainId) {
+		this.driveDataMainId = driveDataMainId;
+	}
+	public int getAlarmType() {
+		return alarmType;
+	}
+	public void setAlarmType(int alarmType) {
+		this.alarmType = alarmType;
+	}
+	public BigDecimal getAlarmValue() {
+		return alarmValue;
+	}
+	public void setAlarmValue(BigDecimal alarmValue) {
+		this.alarmValue = alarmValue;
+	}
+	public BigDecimal getLat() {
+		return lat;
+	}
+	public void setLat(BigDecimal lat) {
+		this.lat = lat;
+	}
+	public BigDecimal getLng() {
+		return lng;
+	}
+	public void setLng(BigDecimal lng) {
+		this.lng = lng;
+	}
+	public Date getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	public Date getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	
+	
+
+	 
+}
