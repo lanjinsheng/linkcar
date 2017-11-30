@@ -18,7 +18,6 @@ import com.idata365.col.service.SpringContextUtil;
 import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.PhoneGpsUtil;
-import com.idata365.col.util.ResultUtils;
 
 public class DatasDealTask implements Runnable
 {

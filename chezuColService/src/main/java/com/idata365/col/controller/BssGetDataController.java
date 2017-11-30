@@ -1,5 +1,6 @@
 package com.idata365.col.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.service.DataService;
+import com.idata365.col.util.ExcelUtils;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.PhoneGpsUtil;
 import com.idata365.col.util.ResultUtils;
@@ -54,28 +56,28 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
     @RequestMapping(value = "/v1/downLoadDrive",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public ResponseEntity<InputStreamResource> downloadDriveData(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 	    LOG.info("start");
-	
 		  long id=Long.valueOf(allRequestParams.get("id").toString());
+		  long uid=System.currentTimeMillis();
 		  DriveDataLog driveLog=  dataService.getDriveLog(id);
 		  List<DriveDataLog> drives=dataService.listDriveLogByUH(driveLog);
 	        HttpHeaders headers = new HttpHeaders();  
 	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
-	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "datas.zip"));  
+	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "datas"+uid+".zip"));  
 	        headers.add("Pragma", "no-cache");  
 	        headers.add("Expires", "0");  
 		   	 String tmpPath=systemProPerties.getFileTmpDir();
-		     FileSystemResource   file = new FileSystemResource(tmpPath+System.currentTimeMillis());
+		     FileSystemResource   file = new FileSystemResource(tmpPath+id+System.currentTimeMillis());
 	         ZipOutputStream  os= null;
 	         try {
 	        	 os= new ZipOutputStream(file.getOutputStream());
 		         for(DriveDataLog drive:drives) {
-				   	 String name="drive"+System.currentTimeMillis();
+				   	 String name="drive"+drive.getSeq();
 			         SSOTools.getSSOFile(drive.getFilePath(),os,name);
 			   	 }
 			   	 if(driveLog.getHadSensorData()==1) {
 					  List<SensorDataLog> sensors=dataService.listSensorByUH(driveLog);
 					  for(SensorDataLog sensor:sensors) {
-						   	 String name="sensor"+System.currentTimeMillis();
+						   	 String name="sensor"+driveLog.getSeq();
 					         SSOTools.getSSOFile(sensor.getFilePath(),os,name);
 					  }
 				  }
@@ -100,30 +102,125 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 		      }
 	  return null;
     }
-    @RequestMapping(value = "/v1/getDriveResultByUH",method = {RequestMethod.POST,RequestMethod.GET})
-    public Map<String,Object>  getDealResult(@RequestParam Map<String,Object> map) {
-    	  DriveDataLog d=new DriveDataLog();	
-    	  d.setUserId(Long.valueOf(map.get("userId").toString()));
-    	  d.setHabitId(Long.valueOf(map.get("habitId").toString()));
-    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
-    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
-    	  for(DriveDataLog drive:drives) {
-    		     StringBuffer json=new StringBuffer();
-		         SSOTools.getSSOFile(json,drive.getFilePath());
-		         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
-		         if(jMap.get("gpsInfos")!=null) {
-		        	 list.addAll((List)jMap.get("gpsInfos"));
-		         }
-		 }
-    	  if(list.size()>0) {
-    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
-    		  return ResultUtils.rtSuccess(datasMap);
-    	  }
-    	  return ResultUtils.rtSuccess(null);
-
+    
+    @RequestMapping(value = "/v1/downLoadGpsExcel",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public ResponseEntity<InputStreamResource> downLoadGpsExcel(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	    LOG.info("start");
+		  long id=Long.valueOf(allRequestParams.get("id").toString());
+		  DriveDataLog driveLog=  dataService.getDriveLog(id);
+		  List<DriveDataLog> drives=dataService.listDriveLogByUH(driveLog);
+	        HttpHeaders headers = new HttpHeaders();  
+	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
+	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "Gps.xls"));  
+	        headers.add("Pragma", "no-cache");  
+	        headers.add("Expires", "0");  
+	         List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+	         try {
+		         for(DriveDataLog drive:drives) {
+		        	  StringBuffer json=new StringBuffer();
+				         SSOTools.getSSOFile(json,drive.getFilePath());
+				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+				         if(jMap.get("gpsInfos")!=null) {
+				        	 list.addAll((List)jMap.get("gpsInfos"));
+				         }
+			   	 }
+		        File excel=ExcelUtils.saveToExcelGps(list);
+		        FileSystemResource   file = new FileSystemResource(excel);
+		        return ResponseEntity  
+		                .ok()  
+		                .headers(headers)  
+		                .contentLength(file.contentLength()) 
+		                .contentType(MediaType.parseMediaType("application/octet-stream"))  
+		                .body(new InputStreamResource(file.getInputStream())); 
+			  }catch(Exception e) {
+				  e.printStackTrace();
+			  }finally{
+				  
+		      }
+	  return null;
     }
-    @RequestMapping("/v1/index")
-    public String index(){
-        return "index";
+    
+    @RequestMapping(value = "/v1/downLoadSensorExcel",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public ResponseEntity<InputStreamResource> downLoadSensorExcel(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	    LOG.info("start");
+		  long id=Long.valueOf(allRequestParams.get("id").toString());
+		  DriveDataLog driveLog=  dataService.getDriveLog(id);
+		  List<SensorDataLog> sensors=dataService.listSensorByUH(driveLog);
+	        HttpHeaders headers = new HttpHeaders();  
+	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
+	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "Sensor.xls"));  
+	        headers.add("Pragma", "no-cache");  
+	        headers.add("Expires", "0");  
+	         List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+	         try {
+	        	 for(SensorDataLog sensor:sensors) {
+	        		  StringBuffer json=new StringBuffer();
+				         SSOTools.getSSOFile(json,sensor.getFilePath());
+				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+				         if(jMap.get("sensorInfos")!=null) {
+				        	 list.addAll((List)jMap.get("sensorInfos"));
+				         }
+			    }
+		        File excel=ExcelUtils.saveToExcelSensor(list);
+		        FileSystemResource   file = new FileSystemResource(excel);
+		        return ResponseEntity  
+		                .ok()  
+		                .headers(headers)  
+		                .contentLength(file.contentLength()) 
+		                .contentType(MediaType.parseMediaType("application/octet-stream"))  
+		                .body(new InputStreamResource(file.getInputStream())); 
+			  }catch(Exception e) {
+				  e.printStackTrace();
+			  }finally{
+				  
+		      }
+	  return null;
+    }
+    
+    @RequestMapping(value = "/v1/downLoadAlarmExcel",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public ResponseEntity<InputStreamResource> downLoadAlarmExcel(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	    LOG.info("start");
+		  long id=Long.valueOf(allRequestParams.get("id").toString());
+		  DriveDataLog driveLog=  dataService.getDriveLog(id);
+		  List<DriveDataLog> drives=dataService.listDriveLogByUH(driveLog);
+	        HttpHeaders headers = new HttpHeaders();  
+	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
+	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "Alarm.xls"));  
+	        headers.add("Pragma", "no-cache");  
+	        headers.add("Expires", "0");  
+	         List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+	         try {
+		    	  for(DriveDataLog drive:drives) {
+		    		     StringBuffer json=new StringBuffer();
+				         SSOTools.getSSOFile(json,drive.getFilePath());
+				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+				         if(jMap.get("gpsInfos")!=null) {
+				        	 list.addAll((List)jMap.get("gpsInfos"));
+				         }
+				 }
+		    	  List<Map<String,Object>> eventList=new ArrayList<Map<String,Object>>();
+		    	  if(list.size()>0) {
+		    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
+		    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
+		    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
+		    		 List<Map<String,Object>> alarmListZhuan= (List<Map<String,Object>>)datasMap.get("alarmListZhuan");
+		    		 eventList.addAll(alarmListJia);
+		    		 eventList.addAll(alarmListJian);
+		    		 eventList.addAll(alarmListZhuan);
+		    	  }
+		        File excel=ExcelUtils.saveToExcelAlarm(eventList);
+		        FileSystemResource   file = new FileSystemResource(excel);
+		        return ResponseEntity  
+		                .ok()  
+		                .headers(headers)  
+		                .contentLength(file.contentLength()) 
+		                .contentType(MediaType.parseMediaType("application/octet-stream"))  
+		                .body(new InputStreamResource(file.getInputStream())); 
+			  }catch(Exception e) {
+				  e.printStackTrace();
+			  }finally{
+				  
+		      }
+	  return null;
     }
 }

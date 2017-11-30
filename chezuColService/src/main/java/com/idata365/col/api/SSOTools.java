@@ -109,11 +109,11 @@ public class SSOTools {
     public static void  addOSSTest(String path) {
     	File f=new File(path);
     	OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-    	  ossClient.putObject(new PutObjectRequest(bucketName, "234242/20171128/A1511863208872", f));
+    	  ossClient.putObject(new PutObjectRequest(bucketName, "234242/20171128/B1511863350788", f));
     	  ossClient.shutdown();
     }
     public static void main(String []args) {
-    	addOSSTest("d:\\gps.gz");
+    	addOSSTest("C:\\Users\\jinsheng\\Desktop\\1509497329859\\1509497329859.gz");
     }
     public static boolean getSSOFile(StringBuffer json,String key) {
     	 OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
