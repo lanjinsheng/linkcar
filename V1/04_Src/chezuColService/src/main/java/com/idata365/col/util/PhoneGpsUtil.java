@@ -114,7 +114,7 @@ public class PhoneGpsUtil {
 					Map<String,Object> alarm=new HashMap<String,Object>();
 					alarm.put("startTime", list.get(i).get("t"));
 					alarm.put("endTime", list.get(i).get("t"));
-					alarm.put("alarmValue", "100");
+					alarm.put("alarmValue", ds);
 					alarm.put("alarmType", "1");
 					alarm.put("lng", list.get(i).get("y"));
 					alarm.put("lat", list.get(i).get("x"));
@@ -193,7 +193,7 @@ public class PhoneGpsUtil {
 						Map<String,Object> alarm=new HashMap<String,Object>();
 						alarm.put("startTime",t);
 						alarm.put("endTime", t);
-						alarm.put("alarmValue", "100");
+						alarm.put("alarmValue", ds);
 						alarm.put("alarmType", "2");
 						alarm.put("lng", curPoint.get("y"));
 						alarm.put("lat", curPoint.get("x"));
