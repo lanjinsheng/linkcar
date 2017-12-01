@@ -1,3 +1,6 @@
+server:
+  port: 8081
+  
 eureka:
   client:
     serviceUrl:
@@ -7,19 +10,43 @@ eureka:
   instance:
     lease-expiration-duration-in-seconds: 30 
     lease-renewal-interval-in-seconds: 10
+    
 feign:
   hystrix:
     enabled: true
-server:
-  port: 8081
+
+  
 spring:
   application:
     name: service-app-chezu
+ 
+    
+
+# 驱动配置信息
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://115.159.216.58:6633/sjtest?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://115.159.216.58:6633/sjtest??useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: sjTest
     password: sjTest2962143!
+    driverClassName: com.mysql.jdbc.Driver
+
+#连接池的配置信息
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  
+    
+    
 mybatis:
   config-locations: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
