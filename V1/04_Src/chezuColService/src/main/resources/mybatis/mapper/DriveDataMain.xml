@@ -34,7 +34,7 @@
        UPDATE 
             driveDataMain 
        SET 
-         taskFlag=#{taskFlag},postTime=now()
+        isPost=-1,taskFlag=#{taskFlag},postTime=now()
        WHERE 
             isPost = 0  and taskFlag=0 and validStatus=1
     </update>
@@ -62,4 +62,14 @@
               taskFlag=#{taskFlag}
      </update>
 
+<!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           driveDataMain 
+       SET 
+           isPost=0,failTimes=failTimes+1
+       WHERE 
+              isPost=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+ 
 </mapper>

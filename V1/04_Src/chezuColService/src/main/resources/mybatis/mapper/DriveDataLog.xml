@@ -31,7 +31,7 @@
 		SELECT *  from driveDataLog where userId=#{userId} and habitId=#{habitId} order by seq;
 	</select>
     <select id="listPageDriveLog"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
-		SELECT *  from driveDataLog 
+		SELECT *  from driveDataLog order by id desc
 	</select>
 	 <select id="getDriveDataLog"  resultType="com.idata365.col.entity.DriveDataLog" parameterType="Long">
 		SELECT *  from driveDataLog where id=#{id}
