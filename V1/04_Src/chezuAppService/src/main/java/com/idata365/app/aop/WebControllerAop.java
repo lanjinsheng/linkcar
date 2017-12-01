@@ -1,17 +1,18 @@
 package com.idata365.app.aop;
 
-import com.google.common.collect.Maps;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.Map;
 
 /**
  * Created by **** 
@@ -19,10 +20,11 @@ import java.util.Map;
 @Component
 @Aspect
 public class WebControllerAop {
+	private final static Logger LOG = LoggerFactory.getLogger(WebControllerAop.class);
 public WebControllerAop() {
-	System.out.println("WebControllerAopWebControllerAopWebControllerAopWebControllerAop");
+	LOG.info("WebControllerAop init");
 }
-    //匹配com.example.demo.controller包及其子包下的所有类的所有方法
+    //匹配com.idata365.col.controller包及其子包下的所有类的所有方法
    @Pointcut("execution(* com.idata365.app.controller..*.*(..))")
     public void executeService(){
 
@@ -36,7 +38,7 @@ public WebControllerAop() {
     public void doBeforeAdvice(JoinPoint joinPoint){
         System.out.println("我是前置通知!!!");
         //获取目标方法的参数信息
-        Object[] obj = joinPoint.getArgs();
+//        Object[] obj = joinPoint.getArgs();
         //AOP代理类的信息
         joinPoint.getThis();
         //代理的目标对象
@@ -44,27 +46,10 @@ public WebControllerAop() {
         //用的最多 通知的签名
         Signature signature = joinPoint.getSignature();
         //代理的是哪一个方法
-        System.out.println(signature.getName());
+       LOG.info(signature.getName());
         //AOP代理类的名字
-        System.out.println(signature.getDeclaringTypeName());
+       LOG.info(signature.getDeclaringTypeName());
         //AOP代理类的类（class）信息
-        signature.getDeclaringType();
-        //获取RequestAttributes
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        //从获取RequestAttributes中获取HttpServletRequest的信息
-        HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-        //如果要获取Session信息的话，可以这样写：
-        //HttpSession session = (HttpSession) requestAttributes.resolveReference(RequestAttributes.REFERENCE_SESSION);
-        Enumeration<String> enumeration = request.getParameterNames();
-        Map<String,String> parameterMap = Maps.newHashMap();
-        while (enumeration.hasMoreElements()){
-            String parameter = enumeration.nextElement();
-            parameterMap.put(parameter,request.getParameter(parameter));
-        }
-//        String str = JSON.toJSONString(parameterMap);
-        if(obj.length > 0) {
-            System.out.println("请求的参数信息为："+"");
-        }
     }
 
     /**
@@ -79,13 +64,13 @@ public WebControllerAop() {
     @AfterReturning(value = "execution(* com.idata365.app.controller..*.*(..))",returning = "keys")
     public void doAfterReturningAdvice1(JoinPoint joinPoint,Object keys){
 
-        System.out.println("第一个后置返回通知的返回值："+keys);
+    	 LOG.info("第一个后置返回通知的返回值："+keys);
     }
 
     @AfterReturning(value = "execution(* com.idata365.app.controller..*.*(..))",returning = "keys",argNames = "keys")
     public void doAfterReturningAdvice2(String keys){
 
-        System.out.println("第二个后置返回通知的返回值："+keys);
+    	 LOG.info("第二个后置返回通知的返回值："+keys);
     }
 
     /**
@@ -99,9 +84,9 @@ public WebControllerAop() {
     @AfterThrowing(value = "executeService()",throwing = "exception")
     public void doAfterThrowingAdvice(JoinPoint joinPoint,Throwable exception){
         //目标方法名：
-        System.out.println(joinPoint.getSignature().getName());
+    	 LOG.info(joinPoint.getSignature().getName());
         if(exception instanceof NullPointerException){
-            System.out.println("发生了空指针异常!!!!!");
+        	 LOG.info("发生了空指针异常!!!!!");
         }
     }
 
@@ -112,7 +97,7 @@ public WebControllerAop() {
     @After("executeService()")
     public void doAfterAdvice(JoinPoint joinPoint){
 
-        System.out.println("后置通知执行了!!!!");
+    	 LOG.info("后置通知执行了!!!!");
     }
 
     /**
@@ -122,7 +107,7 @@ public WebControllerAop() {
      */
     @Around("execution(* com.idata365.app.controller..*.testAround*(..))")
     public Object doAroundAdvice(ProceedingJoinPoint proceedingJoinPoint){
-        System.out.println("环绕通知的目标方法名："+proceedingJoinPoint.getSignature().getName());
+    	 LOG.info("环绕通知的目标方法名："+proceedingJoinPoint.getSignature().getName());
         try {//obj之前可以写目标方法执行前的逻辑
             Object obj = proceedingJoinPoint.proceed();//调用执行目标方法
             return obj;
