@@ -27,19 +27,24 @@ public class DatasDealTask implements Runnable
 	private long  taskId;
     private int hadSensorData;
     private long id;
-	public DatasDealTask(long puserId,long phabitId,long ptaskId,int phadSensorData,long pId){
+    private long dealTimes;
+	public DatasDealTask(long puserId,long phabitId,long ptaskId,int phadSensorData,long pId, long pdealTimes){
 		 this.userId=puserId;
 		 this.habitId=phabitId;
 		 this.taskId=ptaskId;
 		 this.hadSensorData=phadSensorData;
 		 this.id=pId;
+		 this.dealTimes=pdealTimes;
 	}
 	@Override
 	public void run()
 	{
 		 log.info("start=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
+		 DataService dataService=SpringContextUtil.getBean("dataService", DataService.class);
+		 UploadDataStatus status=new UploadDataStatus();
+		 status.setTaskFlag(taskId);
+		 status.setId(id);
 		 try{
-			 DataService dataService=SpringContextUtil.getBean("dataService", DataService.class);
 			 DriveDataLog d=new DriveDataLog();	
 	    	  d.setUserId(userId);
 	    	  d.setHabitId(habitId);
@@ -84,14 +89,20 @@ public class DatasDealTask implements Runnable
 	    		  //插入数据
 	    		 dataService.insertEvents(data, eventList);
 	    		 //更新任务数据
-	    		 UploadDataStatus status=new UploadDataStatus();
 	    		 status.setScanStatus(1);
-	    		 status.setTaskFlag(taskId);
-	    		 status.setId(id);
 	    		 dataService.updateDataStatusTask(status);	    		 
 	    	  }
 			}catch(Exception e){
 				e.printStackTrace();
+				//有异常，进行回滚？
+				if(dealTimes>100) {
+					status.setInValid(1);
+					status.setScanStatus(1);
+				}else {
+					status.setScanStatus(0);
+					status.setInValid(0);
+				}
+				dataService.updateFailDataStatusTask(status);
 			}
 		 log.info("end=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
 	}

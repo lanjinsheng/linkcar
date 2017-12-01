@@ -18,6 +18,11 @@ public class UploadDataStatus implements Serializable {
 	private Long taskFlag;
 	private Long createTimeSS;
 	private int complete;
+	
+	private int inValid;
+	private Long dealTimes;
+	private Long scanTime;
+	
 	public Long getId() {
 		return id;
 	}
@@ -91,6 +96,25 @@ public class UploadDataStatus implements Serializable {
 	public void setComplete(int complete) {
 		this.complete = complete;
 	}
+	public int getInValid() {
+		return inValid;
+	}
+	public void setInValid(int inValid) {
+		this.inValid = inValid;
+	}
+	public Long getDealTimes() {
+		return dealTimes;
+	}
+	public void setDealTimes(Long dealTimes) {
+		this.dealTimes = dealTimes;
+	}
+	public Long getScanTime() {
+		return scanTime;
+	}
+	public void setScanTime(Long scanTime) {
+		this.scanTime = scanTime;
+	}
+ 
 	
 	
 }

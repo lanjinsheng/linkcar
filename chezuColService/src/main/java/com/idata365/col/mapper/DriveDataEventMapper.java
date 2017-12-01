@@ -18,4 +18,5 @@ public interface DriveDataEventMapper {
     void insertDriveEvent(Map<String,Object> alarmMap);
     
     List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive);
+   
 }
