@@ -11,8 +11,8 @@ import com.idata365.col.service.DataService;
 
 
 
-public class DriveUploadScanTask extends TimerTask { 
-	private static Logger log = Logger.getLogger(DriveUploadScanTask.class);
+public class DriveUploadScanMainTask extends TimerTask { 
+	private static Logger log = Logger.getLogger(DriveUploadScanMainTask.class);
 	private static Object lock = new Object();
 	public static boolean pd=true;
 	

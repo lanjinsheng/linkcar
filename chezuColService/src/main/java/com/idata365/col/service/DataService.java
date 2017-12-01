@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.col.entity.DriveDataEvent;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
 import com.idata365.col.entity.SensorDataLog;
@@ -175,11 +176,44 @@ public class DataService extends BaseService<DataService>{
 	/**
 	 * 
 	 */
+	@Transactional
 	public void  insertEvents(DriveDataMain data,List<Map<String,Object>> eventList) {
 		driveDataMainMapper.insertDataLog(data);
-		Map<String,Object> alarmMap=new HashMap<String,Object>();
-		alarmMap.put("driveDataMainId", data.getId());
-		alarmMap.put("list", eventList);
-		driveDataEventMapper.insertDriveEvent(alarmMap);
+		if(data.getId()!=null && data.getId()>0) {
+			Map<String,Object> alarmMap=new HashMap<String,Object>();
+			alarmMap.put("driveDataMainId", data.getId());
+			alarmMap.put("list", eventList);
+			driveDataEventMapper.insertDriveEvent(alarmMap);
+		}
 	}
+	
+	/**
+	 * 
+	    * @Title: getSendDriveTask
+	    * @Description: TODO(先锁定,后调用)
+	    * @param @param drive    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public List<DriveDataMain>  getSendDriveTask(DriveDataMain drive) {
+		    driveDataMainMapper.lockSendDriveTask(drive);
+		  List<DriveDataMain> list= driveDataMainMapper.getSendDriveTask(drive);
+		  return list;
+	}
+	
+	public void updateSuccSendDriveTask(DriveDataMain drive) {
+		drive.setIsPost(1);
+		driveDataMainMapper.updateSuccSendDriveTask(drive);
+	}
+	public void updateFailSendDriveTask(DriveDataMain drive) {
+		drive.setIsPost(0);
+		driveDataMainMapper.updateFailSendDriveTask(drive);
+	}
+	
+	
+	public List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive){
+		return driveDataEventMapper.listDriveEventByMainId(drive);
+	}
+	
 }

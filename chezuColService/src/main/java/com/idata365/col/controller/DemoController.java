@@ -5,9 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,19 +22,30 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.entity.UserEntity;
 import com.idata365.col.enums.UserSexEnum;
+import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.remote.DemoService;
 
 
 @RestController
 public class DemoController {
-
+	private final static Logger LOG = LoggerFactory.getLogger(BssGetDataController.class);
     @Autowired
     DemoService demoService;
+    @Autowired
+    ChezuDriveService chezuDriveService;
     @RequestMapping(value = "/hi",method = RequestMethod.GET)
     public String sayHi(@RequestParam String name){
 //    	return name;
         return demoService.sayHiFromClientOne(name);
     }
+    
+    @RequestMapping(value = "/testDriveSend",method = RequestMethod.GET)
+    public String testDriveSend(){
+//    	return name;
+    	LOG.info(String.valueOf(chezuDriveService.recieveDrive(new ArrayList())));
+       return "testDriveSend";
+    }
+    
     @RequestMapping(value = "/getDemoUser")
     public String getUser(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 //    	return name;

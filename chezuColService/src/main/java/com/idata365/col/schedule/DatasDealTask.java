@@ -70,8 +70,8 @@ public class DatasDealTask implements Runnable
 	    		 long driveTimes=Long.valueOf(datasMap.get("driveTimes").toString());
 	    		 DriveDataMain data=new DriveDataMain();
 	    		 data.setCreateTime(new Date());
-	    		 data.setDriveEndTime(DateTools.getDateTimeOfStr(endTime,"yyyy-MM-dd HH:mm:ss.SSS"));
-	    		 data.setDriveStartTime(DateTools.getDateTimeOfStr(startTime,"yyyy-MM-dd HH:mm:ss.SSS"));
+	    		 data.setDriveEndTime(endTime);
+	    		 data.setDriveStartTime(startTime);
 	    		 data.setDriveTimes(driveTimes);
 	    		 data.setHabitId(habitId);
 	    		 data.setIsPost(0);
