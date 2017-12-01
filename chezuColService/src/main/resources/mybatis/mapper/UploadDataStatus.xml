@@ -39,7 +39,7 @@
        UPDATE 
             uploadDataStatus 
        SET 
-       scanStatus=-1,taskFlag=#{taskFlag}
+       scanStatus=-1,taskFlag=#{taskFlag},scanTime=now()
        WHERE 
             scanStatus = 0  and (complete=1 or  createTimeSS<![CDATA[<]]>#{createTimeSS})
     </update>
@@ -58,5 +58,21 @@
        WHERE 
             id=#{id} and scanStatus =-1 and taskFlag=#{taskFlag}
      </update>
- 
+      <update id="updateFailUploadStatusTask" parameterType="com.idata365.col.entity.UploadDataStatus" >
+       UPDATE 
+            uploadDataStatus 
+       SET 
+       scanStatus=#{scanStatus},inValid=#{inValid},dealTimes=dealTimes+1
+       WHERE 
+            id=#{id} and scanStatus =-1 and taskFlag=#{taskFlag}
+     </update>
+     
+       <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           uploadDataStatus 
+       SET 
+           scanStatus=0,dealTimes=dealTimes+1
+       WHERE 
+              scanStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
 </mapper>
