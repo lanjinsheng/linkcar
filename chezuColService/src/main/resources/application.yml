@@ -8,6 +8,9 @@ eureka:
   instance:
     lease-expiration-duration-in-seconds: 30 
     lease-renewal-interval-in-seconds: 10
+feign:
+  hystrix:
+    enabled: true
 server:
   port: 9081
 spring:
@@ -30,4 +33,5 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
  
   type-aliases-package: com.idata365.col.entity
+
   
