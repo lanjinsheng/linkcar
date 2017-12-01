@@ -30,18 +30,19 @@ public class ExcelUtils {
 			ws.setColumnView(2,20);
 			ws.setColumnView(3,20);
 			ws.setColumnView(4,20);
-			
+			ws.setColumnView(5,20);
 			Label a= new Label(0, 0, "lng");
 			Label b= new Label(1, 0, "lat");
 			Label c= new Label(2, 0, "t");
 			Label d= new Label(3, 0, "s");
 			Label e= new Label(4, 0, "course");
-			
+			Label f= new Label(5, 0, "ha");
 			ws.addCell(a);
 			ws.addCell(b);
 			ws.addCell(c);
 			ws.addCell(d);
 			ws.addCell(e);
+			ws.addCell(f);
 			for (int i = 0; i < gpsList.size(); i++) {
 			    Map<String,Object> map=gpsList.get(i);
 			    Label c1= new Label(0, i+1,String.valueOf(map.get("y")));
@@ -49,12 +50,13 @@ public class ExcelUtils {
 			    Label c3= new Label(2, i+1,String.valueOf(map.get("t")));
 			    Label c4= new Label(3, i+1,String.valueOf(map.get("s")));
 			    Label c5= new Label(4, i+1,String.valueOf(map.get("c")));
+			    Label c6= new Label(5, i+1,String.valueOf(map.get("h")));
 			    ws.addCell(c1);
 			    ws.addCell(c2);
 			    ws.addCell(c3);
 			    ws.addCell(c4);
 			    ws.addCell(c5);
- 
+			    ws.addCell(c6);
 			}
      
 			//写进文档
@@ -134,7 +136,7 @@ public class ExcelUtils {
 	static WritableSheet createWs1(WritableWorkbook wwb,int sheet) throws RowsExceededException, WriteException{
 
 		// 创建工作表
-		WritableSheet ws = wwb.createSheet("sensor"+sheet, 0);
+		WritableSheet ws = wwb.createSheet("sensor"+sheet, sheet);
 		ws.setColumnView(0,20);
 		ws.setColumnView(1,20);
 		ws.setColumnView(2,20);
@@ -195,13 +197,33 @@ public class ExcelUtils {
 		return ws;
 	}
 	
+	
+	static WritableSheet createWs2(WritableWorkbook wwb,int sheet) throws RowsExceededException, WriteException{
+
+		// 创建工作表
+		WritableSheet ws = wwb.createSheet("device"+sheet, sheet);
+		ws.setColumnView(0,20);
+		ws.setColumnView(1,20);
+		ws.setColumnView(2,40);
+		//要插入到的Excel表格的行号，默认从0开始
+		Label a= new Label(0, 0, "亮度");
+		Label b= new Label(1, 0, "电池");
+		Label c= new Label(2, 0, "时间");
+		ws.addCell(a);
+		ws.addCell(b);
+		ws.addCell(c);
+	 
+		return ws;
+	}
+	
+	
 	/**
 	 * 将详细的信息保存到Excel
 	 * @param infos
 	 * @return
 	 */
 	static int sheetRecord=65535;
-	public static File saveToExcelSensor(List<Map<String,Object>> infos){
+	public static File saveToExcelSensor(List<Map<String,Object>> infos,List<Map<String,Object>> deviceInfos){
 		File file=null;
 		try {
 			WritableWorkbook wwb = null;
@@ -260,7 +282,19 @@ public class ExcelUtils {
 			    ws.addCell(c16);
 			    j++;
 			}
-     
+			int j2=0;
+			sheet++;
+			 ws=createWs2(wwb,sheet);
+			for (int i = 0; i < deviceInfos.size(); i++) {
+			    Map<String,Object> map=deviceInfos.get(i);
+			    Label c1= new Label(0, j2+1,String.valueOf(map.get("s")));
+			    Label c2= new Label(1, j2+1,String.valueOf(map.get("b")));
+			    Label c3= new Label(2, j2+1,String.valueOf(map.get("t")));
+			    ws.addCell(c1);
+			    ws.addCell(c2);
+			    ws.addCell(c3);
+			    j2++;
+			}
 			//写进文档
 			wwb.write();
 			// 关闭Excel工作簿对象

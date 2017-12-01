@@ -148,10 +148,11 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 		  List<SensorDataLog> sensors=dataService.listSensorByUH(driveLog);
 	        HttpHeaders headers = new HttpHeaders();  
 	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
-	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "Sensor.xls"));  
+	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", "SensorOther.xls"));  
 	        headers.add("Pragma", "no-cache");  
 	        headers.add("Expires", "0");  
 	         List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+	         List<Map<String,Object>> deviceInfos=new ArrayList<Map<String,Object>>();
 	         try {
 	        	 for(SensorDataLog sensor:sensors) {
 	        		  StringBuffer json=new StringBuffer();
@@ -160,8 +161,12 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 				         if(jMap.get("sensorInfos")!=null) {
 				        	 list.addAll((List)jMap.get("sensorInfos"));
 				         }
+				         if(jMap.get("deviceInfos")!=null) {
+				        	 deviceInfos.addAll((List)jMap.get("deviceInfos"));
+				         }
+				         
 			    }
-		        File excel=ExcelUtils.saveToExcelSensor(list);
+		        File excel=ExcelUtils.saveToExcelSensor(list,deviceInfos);
 		        FileSystemResource   file = new FileSystemResource(excel);
 		        return ResponseEntity  
 		                .ok()  

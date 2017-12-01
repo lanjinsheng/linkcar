@@ -71,7 +71,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         int hadSensorData=Integer.valueOf(identificationM.get("hadSensorData").toString());
         String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
-        String filePath=userId+"/"+YYYYMMDD+"/A"+System.currentTimeMillis();
+        String filePath=userId+"/"+YYYYMMDD+"/A"+seq+"_"+System.currentTimeMillis();
         LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
         try {
             //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
@@ -131,7 +131,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         int seq=Integer.valueOf(identificationM.get("seq").toString());
         String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
-        String filePath=userId+"/"+YYYYMMDD+"/B"+System.currentTimeMillis();
+        String filePath=userId+"/"+YYYYMMDD+"/B"+seq+"_"+System.currentTimeMillis();
         LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
         try {
             //获取输入流 CommonsMultipartFile 中可以直接得到文件的流

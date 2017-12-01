@@ -2,6 +2,8 @@ package com.idata365.col.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.col.entity.UploadDataStatus;
 
 /**
@@ -19,4 +21,8 @@ public interface UploadDataStatusMapper {
 	 List<UploadDataStatus>  getUploadDataStatusTask(UploadDataStatus status);
 	 void  lockUploadStatusTask(UploadDataStatus status);
 	 void  updateUploadStatusTask(UploadDataStatus status);
+	 void  updateFailUploadStatusTask(UploadDataStatus status);
+	 
+	 void  clearLockTask(@Param("compareTimes") long compareTimes);
+	 
 }

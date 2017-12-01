@@ -172,6 +172,11 @@ public class DataService extends BaseService<DataService>{
 		   uploadDataStatusMapper.updateUploadStatusTask(status);
 		  
 	}
+	public void updateFailDataStatusTask(UploadDataStatus status) {
+		   uploadDataStatusMapper.updateFailUploadStatusTask(status);
+		  
+	}
+	
 	
 	/**
 	 * 
@@ -180,10 +185,12 @@ public class DataService extends BaseService<DataService>{
 	public void  insertEvents(DriveDataMain data,List<Map<String,Object>> eventList) {
 		driveDataMainMapper.insertDataLog(data);
 		if(data.getId()!=null && data.getId()>0) {
-			Map<String,Object> alarmMap=new HashMap<String,Object>();
-			alarmMap.put("driveDataMainId", data.getId());
-			alarmMap.put("list", eventList);
-			driveDataEventMapper.insertDriveEvent(alarmMap);
+			if(eventList!=null && eventList.size()>0) {
+				Map<String,Object> alarmMap=new HashMap<String,Object>();
+				alarmMap.put("driveDataMainId", data.getId());
+				alarmMap.put("list", eventList);
+				driveDataEventMapper.insertDriveEvent(alarmMap);
+			}
 		}
 	}
 	
@@ -215,5 +222,13 @@ public class DataService extends BaseService<DataService>{
 	public List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive){
 		return driveDataEventMapper.listDriveEventByMainId(drive);
 	}
+	
+	
+	public void clearLockTask(){
+		long compareTimes=System.currentTimeMillis()-(5*60*1000);
+		driveDataMainMapper.clearLockTask(compareTimes);
+		uploadDataStatusMapper.clearLockTask(compareTimes);
+	}
+	
 	
 }
