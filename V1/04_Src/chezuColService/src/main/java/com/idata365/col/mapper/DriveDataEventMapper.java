@@ -1,6 +1,10 @@
 package com.idata365.col.mapper;
 
+import java.util.List;
 import java.util.Map;
+
+import com.idata365.col.entity.DriveDataEvent;
+import com.idata365.col.entity.DriveDataMain;
 
 /**
  * 
@@ -12,4 +16,6 @@ import java.util.Map;
  */
 public interface DriveDataEventMapper {
     void insertDriveEvent(Map<String,Object> alarmMap);
+    
+    List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive);
 }

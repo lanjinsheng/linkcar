@@ -1,6 +1,9 @@
 package com.idata365.col.mapper;
 
+import java.util.List;
+
 import com.idata365.col.entity.DriveDataMain;
+import com.idata365.col.entity.UploadDataStatus;
 /**
  * 
     * @ClassName: DriveDataLogMapper
@@ -12,4 +15,10 @@ import com.idata365.col.entity.DriveDataMain;
 public interface DriveDataMainMapper {
 
     void insertDataLog(DriveDataMain data);
+    
+	 List<DriveDataMain>  getSendDriveTask(DriveDataMain drive);
+	 void  lockSendDriveTask(DriveDataMain drive);
+	 void  updateSuccSendDriveTask(DriveDataMain drive);
+	 void  updateFailSendDriveTask(DriveDataMain drive);
+	 
 }

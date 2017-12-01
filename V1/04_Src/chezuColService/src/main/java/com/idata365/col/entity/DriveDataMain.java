@@ -9,9 +9,10 @@ public class DriveDataMain implements Serializable {
 	private Long id;
 	private Long userId;
 	private Long habitId;
+	private Long taskFlag;
 	private Date createTime;
-	private Date driveStartTime;
-	private Date driveEndTime;
+	private String driveStartTime;
+	private String driveEndTime;
 	private Long driveTimes;
 	private BigDecimal maxSpeed;
 	private BigDecimal driveDistance;
@@ -44,16 +45,17 @@ public class DriveDataMain implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	public Date getDriveStartTime() {
+ 
+	public String getDriveStartTime() {
 		return driveStartTime;
 	}
-	public void setDriveStartTime(Date driveStartTime) {
+	public void setDriveStartTime(String driveStartTime) {
 		this.driveStartTime = driveStartTime;
 	}
-	public Date getDriveEndTime() {
+	public String getDriveEndTime() {
 		return driveEndTime;
 	}
-	public void setDriveEndTime(Date driveEndTime) {
+	public void setDriveEndTime(String driveEndTime) {
 		this.driveEndTime = driveEndTime;
 	}
 	public Long getDriveTimes() {
@@ -97,6 +99,12 @@ public class DriveDataMain implements Serializable {
 	}
 	public void setValidStatus(int validStatus) {
 		this.validStatus = validStatus;
+	}
+	public Long getTaskFlag() {
+		return taskFlag;
+	}
+	public void setTaskFlag(Long taskFlag) {
+		this.taskFlag = taskFlag;
 	}
 	
 	
