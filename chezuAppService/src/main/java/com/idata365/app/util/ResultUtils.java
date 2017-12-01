@@ -40,7 +40,7 @@ public class ResultUtils {
 		result.put("status", STATUS_SUCCESS);
 		result.put("msg", "ok");
 		result.put("code", CODE_OK);
-		result.put("data", datas);
+		result.put("datas", datas);
 		return result;
 	}
 	public static Map<String, Object> rtFail(Object datas) {
@@ -51,7 +51,7 @@ public class ResultUtils {
 		result.put("status", STATUS_FAIL);
 		result.put("msg", "系统异常");
 		result.put("code", CODE_ERROR);
-		result.put("data", datas);
+		result.put("datas", datas);
 		return result;
 	}
 	public static Map<String, Object> rtFailVerification(Object datas) {
@@ -62,7 +62,7 @@ public class ResultUtils {
 		result.put("status", STATUS_FAIL);
 		result.put("msg", "校验不通过");
 		result.put("code", CODE_PARAM_VERIFICATION);
-		result.put("data", datas);
+		result.put("datas", datas);
 		return result;
 	}
 
@@ -74,7 +74,7 @@ public class ResultUtils {
 		result.put("status", STATUS_FAIL);
 		result.put("msg", "无效请求");
 		result.put("code", CODE_REQUEST_ERROR);
-		result.put("data", datas);
+		result.put("datas", datas);
 		return result;
 	}
 
@@ -86,7 +86,7 @@ public class ResultUtils {
 		result.put("status", STATUS_FAIL);
 		result.put("msg", "无效参数");
 		result.put("code", CODE_PARAM_ERROR);
-		result.put("data", datas);
+		result.put("datas", datas);
 		return result;
 	}
 
@@ -98,7 +98,7 @@ public class ResultUtils {
 		result.put("status", STATUS_FAIL);
 		result.put("msg", msg);
 		result.put("code", code);
-		result.put("data", datas);
+		result.put("datas", datas);
 		return result;
 	}
 }
