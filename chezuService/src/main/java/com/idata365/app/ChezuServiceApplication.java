@@ -2,8 +2,11 @@ package com.idata365.app;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableEurekaClient
 @RestController
 @MapperScan("com.idata365.mapper")
-@ComponentScan("com.idata365.controller")
+@ComponentScan("com.idata365.*")
+@EnableFeignClients("com.idata365.remote")
+@EnableAutoConfiguration(exclude={MultipartAutoConfiguration.class})
 public class ChezuServiceApplication {
 
 	public static void main(String[] args) {
