@@ -10,7 +10,6 @@
         <result column="habitId" property="habitId" jdbcType="BIGINT" />
         <result column="filePath" property="filePath" jdbcType="VARCHAR" />
         <result column="equipmentInfo" property="equipmentInfo" jdbcType="VARCHAR" />
-        <result column="createTime" property="createTime" jdbcType="DATE" />
     </resultMap>
 
     <insert id="insertDataLog" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.DriveDataLog" >
@@ -29,7 +28,7 @@
     
     
    <select id="listDriveLogByUH"  resultMap="driveDataLogMap" parameterType="com.idata365.col.entity.DriveDataLog">
-		SELECT *  from driveDataLog where userId=#{userId} and habitId=#{habitId}
+		SELECT *  from driveDataLog where userId=#{userId} and habitId=#{habitId} order by seq;
 	</select>
     <select id="listPageDriveLog"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
 		SELECT *  from driveDataLog 

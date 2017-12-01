@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.col.mapper.DriveDataEventMapper">
+    <resultMap id="driveEventMap" type="com.idata365.col.entity.DriveDataEvent" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="driveDataMainId" property="driveDataMainId" jdbcType="BIGINT" />
+         <result column="alarmType" property="alarmType" jdbcType="SMALLINT" />
+	    <result column="alarmValue" property="alarmValue" jdbcType="DECIMAL" />
+	      <result column="lat" property="lat" jdbcType="DECIMAL" />
+	      <result column="lng" property="lng" jdbcType="DECIMAL" />
+    </resultMap>
+
+   <insert id="insertDriveEvent" parameterType="java.util.HashMap">
+		 INSERT INTO  driveDataEvent (driveDataMainId,alarmType,alarmValue,lat,lng,startTime,endTime) VALUES
+    	<foreach collection="list" item="item" index="index" separator=",">
+    		(#{driveDataMainId},#{item.alarmType},#{item.alarmValue},#{item.lat},#{item.lng},#{item.startTime},#{item.endTime}) 
+    	</foreach>
+	</insert>
+	
+	   <select id="listDriveEventByMainId"  resultMap="driveEventMap" parameterType="com.idata365.col.entity.DriveDataMain">
+			SELECT *  from driveDataEvent where  driveDataMainId=#{id} order by id;
+	   </select>
+</mapper>
