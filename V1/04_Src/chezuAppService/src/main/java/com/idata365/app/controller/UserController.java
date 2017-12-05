@@ -1,9 +1,11 @@
 package com.idata365.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,46 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.UserEntity;
 import com.idata365.app.mapper.UserMapper;
+import com.idata365.app.service.LoginRegService;
 
 
 @RestController
 public class UserController {
 
 	@Autowired
-	private UserMapper userMapper;
+	private LoginRegService loginRegService;
 	public UserController() {
-		System.out.println("dsfsfsf");
+		System.out.println("UserController");
 	}
-	@RequestMapping("/getUsers")
-	public List<UserEntity> getUsers() {
-		List<UserEntity> users=userMapper.getAll();
-		return users;
-	}
-	
-    @RequestMapping("/getUser")
-    public UserEntity getUser(Long id) {
-    	UserEntity user=userMapper.getOne(id);
-        return user;
+ 
+    @RequestMapping("/login")
+    public Map<String,Object> login(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+     
+        return null;
     }
-    @RequestMapping(value = "/mytest",method = RequestMethod.GET)
-    public String mytest(@RequestParam String hi) {
-    	UserEntity user=userMapper.getOne(1L);
-        return "ok";
-    }
-    @RequestMapping("/add")
-    public void save(UserEntity user) {
-    	userMapper.insert(user);
-    }
-    
-    @RequestMapping(value="update")
-    public void update(UserEntity user) {
-    	userMapper.update(user);
-    }
-    
-    @RequestMapping(value="/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-    	userMapper.delete(id);
-    }
-    
+   
     
 }

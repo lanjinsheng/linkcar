@@ -2,6 +2,7 @@ package com.idata365.app.util;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.tomcat.util.security.MD5Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,13 +26,15 @@ public class SignUtils {
 		 }
 		 return false;
 	  }
-	 
+	 public static String getMD5MD5Password(String pwd) {
+		  return MD5Encoder.encode(MD5Encoder.encode(pwd.getBytes()).getBytes());
+	 }
 	 public static void main(String []args) {
 		  String sign;
 		try {
-			sign = HMAC.encryptHMAC("小波1000aaabbbccc", "sj3iUJ1C3lt74qe9LANPmILlsUT4UyX3In7YNRbujlI");
+			sign = getMD5MD5Password("123456abc");
 			System.out.println(sign);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
