@@ -3,16 +3,16 @@
 <mapper namespace="com.idata365.col.mapper.UploadDataStatusMapper">
     <resultMap id="uploadDataStatusMap" type="com.idata365.col.entity.UploadDataStatus" >
       <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="userId" property="userId" jdbcType="BIGINT" />
-        <result column="habitId" property="habitId" jdbcType="BIGINT" />
-        <result column="createTime" property="createTime" jdbcType="DATE" />
-         <result column="scanStatus" property="scanStatus" jdbcType="SMALLINT" />
-         <result column="hadSensorData" property="hadSensorData" jdbcType="SMALLINT" />
-     	<result column="sensorUploadStatus" property="sensorUploadStatus" jdbcType="SMALLINT" />   
-      	 <result column="taskFlag" property="taskFlag" jdbcType="BIGINT" />   
-      	 <result column="sensorUploadTime" property="sensorUploadTime" jdbcType="DATE" />
-         <result column="createTimeSS" property="createTimeSS" jdbcType="BIGINT" />
-        <result column="complete" property="complete" jdbcType="SMALLINT" />
+	        <result column="userId" property="userId" jdbcType="BIGINT" />
+	        <result column="habitId" property="habitId" jdbcType="BIGINT" />
+	        <result column="createTime" property="createTime" jdbcType="DATE" />
+	        <result column="scanStatus" property="scanStatus" jdbcType="SMALLINT" />
+	        <result column="hadSensorData" property="hadSensorData" jdbcType="SMALLINT" />
+	     	<result column="sensorUploadStatus" property="sensorUploadStatus" jdbcType="SMALLINT" />   
+	      	<result column="taskFlag" property="taskFlag" jdbcType="BIGINT" />   
+	      	<result column="sensorUploadTime" property="sensorUploadTime" jdbcType="DATE" />
+	        <result column="createTimeSS" property="createTimeSS" jdbcType="BIGINT" />
+	        <result column="complete" property="complete" jdbcType="SMALLINT" />
     </resultMap>
     <insert id="insertUploadDataStatus" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.UploadDataStatus" >
        INSERT INTO 
@@ -43,6 +43,11 @@
        WHERE 
             scanStatus = 0  and (complete=1 or  createTimeSS<![CDATA[<]]>#{createTimeSS})
     </update>
+    <!-- 调试使用的接口 -->
+     <select id="getUploadDataDemo"  resultMap="uploadDataStatusMap" parameterType="java.util.HashMap">
+		SELECT *  from uploadDataStatus where userId=#{userId} order by id desc limit 50
+	 </select>
+    
     
 	<!-- 获取任务 -->
 	 <select id="getUploadDataStatusTask"  resultMap="uploadDataStatusMap" parameterType="com.idata365.col.entity.UploadDataStatus">
