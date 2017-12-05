@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.app.entity.UserEntity;
+import com.idata365.app.entity.VerifyCode;
 import com.idata365.app.enums.UserSexEnum;
 import com.idata365.app.remote.DemoService;
+import com.idata365.app.service.LoginRegService;
 
 
 @RestController
@@ -26,6 +29,8 @@ public class DemoController {
 
     @Autowired
     DemoService demoService;
+    @Autowired
+    LoginRegService loginRegService;
     @RequestMapping(value = "/hi",method = RequestMethod.GET)
     public String sayHi(@RequestParam String name){
 //    	return name;
@@ -50,6 +55,12 @@ public class DemoController {
     	user.setUserSex(UserSexEnum.WOMAN);
          demoService.save(user);
          return String.valueOf(user.getId());
+    }
+    @RequestMapping(value = "/account/getVerifyCodeTest")
+    public List<VerifyCode> getVerifyCodeTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+//    	return name;
+ 
+         return loginRegService.getVerifyCodeTest();
     }
     
     @RequestMapping(value = "/insertUserRemoteMap")
