@@ -4,5 +4,11 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.UserLoginSession" >
     </resultMap>
 
-  
+      <insert id="insertToken" parameterType="com.idata365.app.entity.UserLoginSession" >
+       INSERT INTO 
+            userLoginSession
+            (userId,createTimeLong,token) 
+        VALUES
+            (#{userId},#{createTimeLong},#{token})
+    </insert>
 </mapper>

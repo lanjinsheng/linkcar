@@ -3,5 +3,23 @@
 <mapper namespace="com.idata365.app.mapper.VerifyCodeMapper">
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.VerifyCode" >
     </resultMap>
-
+    <insert id="insertVerifyCode" parameterType="com.idata365.app.entity.VerifyCode" >
+       INSERT INTO 
+            verifyCode
+            (phone,verifyCode,createTimeLong,codeType) 
+        VALUES
+            (#{phone}, #{verifyCode},#{createTimeLong},#{codeType})
+    </insert>
+    
+   <select id="findVerifyCode" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.VerifyCode">
+       SELECT *
+       FROM  verifyCode where phone=#{phone} and codeType=#{phone}  
+              and verifyCode=#{verifyCode} order by id desc limit 1
+    </select>
+    
+    <select id="getVerifyCodeTest" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.VerifyCode">
+       SELECT *
+       FROM  verifyCode  order by id desc limit 10
+    </select>
+    
 </mapper>

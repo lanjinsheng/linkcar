@@ -4,5 +4,30 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.UsersAccount" >
     </resultMap>
 
-  
+     <select id="findAccountByPhone" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
+       SELECT *
+       FROM  usersAccount where phone=#{phone}
+     </select>
+     
+     
+      <insert id="insertUser"   useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UsersAccount" >
+       INSERT ignore  INTO 
+            usersAccount
+            (phone,pwd,lastLoginTime,createTime) 
+        VALUES
+            (#{phone}, #{pwd},now(),now())
+    </insert>
+    
+    <update id="updateUserPwd"   parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set pwd=#{pwd},lastLoginTime=now()
+            where phone=#{phone}
+    </update>
+   <update id="updateUserLogin"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set lastLoginTime=now()
+            where phone=#{phone}
+    </update>
 </mapper>
