@@ -89,7 +89,17 @@ public class ResultUtils {
 		result.put("datas", datas);
 		return result;
 	}
-
+	public static Map<String, Object> rtFailParam(Object datas,String msg) {
+		if (datas == null) {
+			datas =new HashMap<String, Object>();
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("status", STATUS_FAIL);
+		result.put("msg", msg);
+		result.put("code", CODE_PARAM_ERROR);
+		result.put("datas", datas);
+		return result;
+	}
 	public static Map<String, Object> rtFail(Object datas, String msg, String code) {
 		if (datas == null) {
 			datas =new HashMap<String, Object>();

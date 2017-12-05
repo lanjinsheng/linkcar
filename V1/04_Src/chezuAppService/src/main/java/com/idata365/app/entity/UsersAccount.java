@@ -11,9 +11,17 @@ public class UsersAccount implements Serializable {
 	private String phone;
 	private String pwd;
 	private Date lastLoginTime;
-    
+    private Date createTime;
 	public UsersAccount() {
 		super();
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public Long getId() {
