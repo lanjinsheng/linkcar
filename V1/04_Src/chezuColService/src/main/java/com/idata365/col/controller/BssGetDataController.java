@@ -3,6 +3,7 @@ package com.idata365.col.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
@@ -26,6 +27,7 @@ import com.idata365.col.api.SSOTools;
 import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.SensorDataLog;
+import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.service.DataService;
 import com.idata365.col.util.ExcelUtils;
 import com.idata365.col.util.GsonUtils;
@@ -228,4 +230,39 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 		      }
 	  return null;
     }
+    
+    
+    //以下接口仅供调试使用
+    @RequestMapping(value = "/v1/getDriveDemo")
+    public List<UploadDataStatus> getDriveDemo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	Map<String,Object> map=new HashMap<String,Object>();
+    	map.putAll(allRequestParams);
+    	return dataService.getUploadDataDemo(map);
+    }
+    
+    @RequestMapping(value = "/v1/getDriveGpsDemo")
+    public List<Map<String,Object>> getDriveGpsDemo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	  LOG.info("start");
+		  DriveDataLog driveLog=  new DriveDataLog();
+		  driveLog.setUserId(Long.valueOf(allRequestParams.get("userId")));
+		  driveLog.setHabitId(Long.valueOf(allRequestParams.get("habitId")));
+		  List<DriveDataLog> drives=dataService.listDriveLogByUH(driveLog);
+	         List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+	         try {
+		         for(DriveDataLog drive:drives) {
+		        	  StringBuffer json=new StringBuffer();
+				         SSOTools.getSSOFile(json,drive.getFilePath());
+				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+				         if(jMap.get("gpsInfos")!=null) {
+				        	 list.addAll((List)jMap.get("gpsInfos"));
+				         }
+			   	 }
+			  }catch(Exception e) {
+				  e.printStackTrace();
+			  }finally{
+				  
+		      }
+			return list;
+    }
+    //以上接口仅供调试使用
 }

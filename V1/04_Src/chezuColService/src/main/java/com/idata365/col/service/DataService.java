@@ -55,6 +55,20 @@ public class DataService extends BaseService<DataService>{
 	}
 	
 	
+	public List<UploadDataStatus> getUploadDataDemo(Map<String,Object> m){
+		return uploadDataStatusMapper.getUploadDataDemo(m);
+	}
+	
+	/**
+	 * 
+	    * @Title: listDriveLogByUH
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param log
+	    * @param @return    参数
+	    * @return List<DriveDataLog>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	public List<DriveDataLog>  listDriveLogByUH(DriveDataLog log) {
 		  List<DriveDataLog> list= driveDataLogMapper.listDriveLogByUH(log);
 		  return list;

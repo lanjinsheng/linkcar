@@ -30,6 +30,7 @@ public class SignUtils {
 		  String sign;
 		try {
 			sign = HMAC.encryptHMAC("小波1000aaabbbccc", "sj3iUJ1C3lt74qe9LANPmILlsUT4UyX3In7YNRbujlI");
+//			String	sign2=("小波1000aaabbbccc", "sj3iUJ1C3lt74qe9LANPmILlsUT4UyX3In7YNRbujlI");
 			System.out.println(sign);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
