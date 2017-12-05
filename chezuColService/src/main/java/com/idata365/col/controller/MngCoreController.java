@@ -60,4 +60,6 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	    	  return ResultUtils.rtSuccess(null);
 
 	    }
+	  
+	  
 }
