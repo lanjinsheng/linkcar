@@ -66,6 +66,7 @@ public class UserController {
     		if(status.equals(loginRegService.OK)) {//账号通过
     			token=UUID.randomUUID().toString().replaceAll("-", "");
     			loginRegService.insertToken(account.getId(),token);
+    			rtMap.put("userId", account.getId());
     		}else {
     			
     		}
@@ -108,7 +109,7 @@ public class UserController {
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String password=String.valueOf(requestBodyParams.get("password"));
-    	String token=loginRegService.regUser(phone, password);
+    	String token=loginRegService.regUser(phone, password,rtMap);
     	if(token==null) {
     		return ResultUtils.rtFailRequest(null);
     	}
@@ -150,7 +151,7 @@ public class UserController {
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String password=String.valueOf(requestBodyParams.get("password"));
-    	String token=loginRegService.updateUserPwd(phone, password);
+    	String token=loginRegService.updateUserPwd(phone, password,rtMap);
     	if(token==null) {
     		return ResultUtils.rtFailRequest(null);
     	}
