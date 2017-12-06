@@ -9,6 +9,6 @@
             userLoginSession
             (userId,createTimeLong,token) 
         VALUES
-            (#{userId},#{createTimeLong},#{token})
+            (#{userId},#{createTimeLong},#{token}) ON DUPLICATE KEY UPDATE createTimeLong=#{createTimeLong},token=#{token}
     </insert>
 </mapper>

@@ -13,7 +13,7 @@
     
    <select id="findVerifyCode" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.VerifyCode">
        SELECT *
-       FROM  verifyCode where phone=#{phone} and codeType=#{phone}  
+       FROM  verifyCode where phone=#{phone} and codeType=#{codeType}  
               and verifyCode=#{verifyCode} order by id desc limit 1
     </select>
     
