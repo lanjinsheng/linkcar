@@ -129,7 +129,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		LOG.info("id:"+account.getId());
 		return null;
 	}
-	public String regUser(String phone,String pwd) {
+	public String regUser(String phone,String pwd,Map<String,Object> rtMap) {
 		UsersAccount account=new UsersAccount();
 		account.setPhone(phone);
 		account.setPwd(pwd);
@@ -142,12 +142,13 @@ public class LoginRegService extends BaseService<LoginRegService>{
 			loginSession.setUserId(account.getId());
 			loginSession.setToken(token);
 			userLoginSessionMapper.insertToken(loginSession);
+			rtMap.put("userId", account.getId());
 			return token;
 		}
 		return null;
 	}
 	
-	public String updateUserPwd(String phone,String pwd) {
+	public String updateUserPwd(String phone,String pwd,Map<String,Object> rtMap) {
 		UsersAccount account=new UsersAccount();
 		account.setPhone(phone);
 		account.setPwd(pwd);
@@ -159,6 +160,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		loginSession.setUserId(dbAccount.getId());
 		loginSession.setToken(token);
 		userLoginSessionMapper.insertToken(loginSession);
+	    rtMap.put("userId", dbAccount.getId());
 		return token;
  
 	}
