@@ -32,7 +32,7 @@ public class SignUtils {
 	 public static void main(String []args) {
 		  String sign;
 		try {
-			sign = getMD5MD5Password("123456abc");
+			sign = HMAC.encryptHMAC("18795860371", key);
 			System.out.println(sign);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

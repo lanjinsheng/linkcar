@@ -59,8 +59,15 @@ public class DemoController {
     @RequestMapping(value = "/account/getVerifyCodeTest")
     public List<VerifyCode> getVerifyCodeTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 //    	return name;
- 
+//    	int i=1/0;
          return loginRegService.getVerifyCodeTest();
+    }
+    
+    @RequestMapping(value = "/account/regUserTest")
+    public String regUserTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+//    	return name;
+//    	int i=1/0;
+         return loginRegService.regUserTest("15851850579","sfsfsfsfsfsfsf");
     }
     
     @RequestMapping(value = "/insertUserRemoteMap")

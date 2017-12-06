@@ -29,11 +29,29 @@ public class UserController {
 	public UserController() {
 		System.out.println("UserController");
 	}
- 
+
+    @RequestMapping("/account/loginTest")
+    public Map<String,Object> loginTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	Map<String,Object> rtMap=new HashMap<String,Object>();
+    	 String phone="15802187691";
+    	 String password="14e1b600b1fd579f47433b88e8d85291";
+    	String token="";
+    		 UsersAccount account=new UsersAccount();
+    		 String status=loginRegService.validAccount(phone, password,account);
+    		if(status.equals(loginRegService.OK)) {//账号通过
+    			token=UUID.randomUUID().toString().replaceAll("-", "");
+    			loginRegService.insertToken(account.getId(),token);
+    		}else {
+    			
+    		}
+    	rtMap.put("status", status);
+    	rtMap.put("token", token);
+    	return ResultUtils.rtSuccess(rtMap);
+    }
     @RequestMapping("/account/login")
     public Map<String,Object> login(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	if(ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode"))
+    	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode"))
     		||	ValidTools.isBlank(requestBodyParams.get("password"))	
     			)
           return ResultUtils.rtFailParam(null);
@@ -62,7 +80,7 @@ public class UserController {
     }
     @RequestMapping("/account/registerStep1")
     public Map<String,Object> registerStep1(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-    	if(ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode")))
+    	if(requestBodyParams==null || ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode")))
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
@@ -86,7 +104,7 @@ public class UserController {
     @RequestMapping("/account/registerStep2")
     public Map<String,Object> registerStep2(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	if(ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("password")))
+    	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("password")))
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String password=String.valueOf(requestBodyParams.get("password"));
@@ -101,7 +119,7 @@ public class UserController {
     
     @RequestMapping("/account/findPasswordStep1")
     public Map<String,Object> findPasswordStep1(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-    	if(ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode")))
+    	if(requestBodyParams==null || ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode")))
             return ResultUtils.rtFailParam(null);
       	String phone=String.valueOf(requestBodyParams.get("phone"));
       	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
@@ -128,7 +146,7 @@ public class UserController {
     @RequestMapping("/account/findPasswordStep2")
     public Map<String,Object> findPasswordStep2(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	if(ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("password")))
+    	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("password")))
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String password=String.valueOf(requestBodyParams.get("password"));
@@ -147,7 +165,7 @@ public class UserController {
     	 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
    	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
          String sign=request.getHeader("sign");
-    	if(ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("codeType")))
+    	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("codeType")))
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	boolean signValid=SignUtils.security(phone, sign);

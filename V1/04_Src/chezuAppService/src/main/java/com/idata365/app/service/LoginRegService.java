@@ -97,7 +97,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		    	  return PWD_ERR;
 		    	  }
 		      }
-		      pAccount=dbAccount;
+		      pAccount.setId(dbAccount.getId());
 		      return OK;
 	}	
 	
@@ -121,13 +121,20 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		userLoginSessionMapper.insertToken(loginSession);
 		//更新登入时间
 	}
-	
+	public String regUserTest(String phone,String pwd) {
+		UsersAccount account=new UsersAccount();
+		account.setPhone(phone);
+		account.setPwd(pwd);
+		usersAccountMapper.insertUser(account);
+		LOG.info("id:"+account.getId());
+		return null;
+	}
 	public String regUser(String phone,String pwd) {
 		UsersAccount account=new UsersAccount();
 		account.setPhone(phone);
 		account.setPwd(pwd);
 		usersAccountMapper.insertUser(account);
-		if(account.getId()>0) {
+		if(account!=null && account.getId()!=null && account.getId()>0) {
 			//增加token信息并登入
 			String token=UUID.randomUUID().toString().replaceAll("-", "");
 			UserLoginSession loginSession=new UserLoginSession();
