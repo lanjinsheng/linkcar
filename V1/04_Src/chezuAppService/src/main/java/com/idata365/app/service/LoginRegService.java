@@ -9,6 +9,7 @@ package com.idata365.app.service;
  */
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -18,13 +19,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.UserDeviceLogs;
 import com.idata365.app.entity.UserLoginSession;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.VerifyCode;
+import com.idata365.app.mapper.UserDeviceLogsMapper;
 import com.idata365.app.mapper.UserLoginSessionMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.mapper.VerifyCodeMapper;
+import com.idata365.app.remote.ChezuColService;
+import com.idata365.app.util.DateTools;
 
  
 
@@ -37,7 +43,10 @@ public class LoginRegService extends BaseService<LoginRegService>{
 	 UserLoginSessionMapper userLoginSessionMapper;
 	@Autowired
 	 VerifyCodeMapper verifyCodeMapper;
-	 
+	@Autowired
+	 UserDeviceLogsMapper userDeviceLogsMapper;
+	@Autowired
+	ChezuColService  chezuColService;
 	
 	public LoginRegService() {
 		LOG.info("DataService DataService DataService");
@@ -62,6 +71,48 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		 verifyCode.setPhone(phone);
 		 verifyCodeMapper.insertVerifyCode(verifyCode);
 		 return null;
+	}
+	/**
+	 * 
+	    * @Title: addDeviceUserInfo
+	    * @Description: TODO(添加用户设备信息)
+	    * @param @param phone
+	    * @param @param codeType
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public String addDeviceUserInfo(String deviceToken,long userId){
+		 UserDeviceLogs dl=new UserDeviceLogs();
+		  String date=DateTools.getCurDate();
+		 String remark= "{%s 用户:%s 设备号:%s 别名:%s}";
+		 String alias="";
+		 if(userId>0) {
+			 alias=userId+"_"+0;
+		 }else {
+			 alias=0+"_"+System.currentTimeMillis();
+		 }
+		 remark=String.format(remark, date,String.valueOf(userId),deviceToken,alias);
+		 dl.setAlias(alias);
+		 dl.setRemark(remark);
+		 dl.setDeviceToken(deviceToken);
+		 dl.setUserId(userId);
+		 userDeviceLogsMapper.insertUserDeviceLogs(dl);
+		 if(userId>0) {
+			//请求远程采集进行设备号与用户的更新处理
+			 Map<String,Object> map=new HashMap<String,Object>();
+			 map.put("userId", userId);
+			 map.put("deviceToken", deviceToken);
+			boolean b= chezuColService.updateUserDevice(map);
+			if(b==false) {
+				LOG.info("远程调用出错"+userId+"--"+deviceToken);
+				return null;
+			}
+			LOG.info("发送远程请求！！！更新设备与用户信息"); 
+		 }
+		 return alias;
 	}
 	public static final String PHONE_ERR="PHONE_ERR";
 	public static final String PWD_ERR="PWD_ERR";

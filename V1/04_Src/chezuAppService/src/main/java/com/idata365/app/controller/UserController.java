@@ -30,24 +30,17 @@ public class UserController {
 		System.out.println("UserController");
 	}
 
-    @RequestMapping("/account/loginTest")
-    public Map<String,Object> loginTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-    	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	 String phone="15802187691";
-    	 String password="14e1b600b1fd579f47433b88e8d85291";
-    	String token="";
-    		 UsersAccount account=new UsersAccount();
-    		 String status=loginRegService.validAccount(phone, password,account);
-    		if(status.equals(loginRegService.OK)) {//账号通过
-    			token=UUID.randomUUID().toString().replaceAll("-", "");
-    			loginRegService.insertToken(account.getId(),token);
-    		}else {
-    			
-    		}
-    	rtMap.put("status", status);
-    	rtMap.put("token", token);
-    	return ResultUtils.rtSuccess(rtMap);
-    }
+ /**
+  * 
+     * @Title: login
+     * @Description: TODO(登录)
+     * @param @param allRequestParams
+     * @param @param requestBodyParams
+     * @param @return    参数
+     * @return Map<String,Object>    返回类型
+     * @throws
+     * @author LanYeYe
+  */
     @RequestMapping("/account/login")
     public Map<String,Object> login(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
@@ -60,10 +53,10 @@ public class UserController {
     	String password=String.valueOf(requestBodyParams.get("password"));
     	String  status=loginRegService.validVerifyCode(phone,2,verifyCode);
     	String token="";
-    	if(status.equals(loginRegService.OK)) {//校验码通过
+    	if(status.equals(LoginRegService.OK)) {//校验码通过
     		 UsersAccount account=new UsersAccount();
     		 status=loginRegService.validAccount(phone, password,account);
-    		if(status.equals(loginRegService.OK)) {//账号通过
+    		if(status.equals(LoginRegService.OK)) {//账号通过
     			token=UUID.randomUUID().toString().replaceAll("-", "");
     			loginRegService.insertToken(account.getId(),token);
     			rtMap.put("userId", account.getId());
@@ -79,6 +72,17 @@ public class UserController {
     	rtMap.put("token", token);
     	return ResultUtils.rtSuccess(rtMap);
     }
+    /**
+     * 
+        * @Title: registerStep1
+        * @Description: TODO(注册校验1)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping("/account/registerStep1")
     public Map<String,Object> registerStep1(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	if(requestBodyParams==null || ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode")))
@@ -86,7 +90,7 @@ public class UserController {
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
     	String  status=loginRegService.validVerifyCode(phone,1,verifyCode);
-    	if(status.equals(loginRegService.OK)) {//校验码通过
+    	if(status.equals(LoginRegService.OK)) {//校验码通过
     		boolean isAccountExist=loginRegService.isPhoneExist(phone);
     		if(isAccountExist) {
     			return ResultUtils.rtFailParam(null, "账号已注册");
@@ -95,13 +99,24 @@ public class UserController {
     		}
     	}
     	else {
-    		if(status.equals(loginRegService.VC_ERR)) 
+    		if(status.equals(LoginRegService.VC_ERR)) 
     		return ResultUtils.rtFailParam(null, "校验码无效");
-    		if(status.equals(loginRegService.VC_EX)) 
+    		if(status.equals(LoginRegService.VC_EX)) 
     		return ResultUtils.rtFailParam(null, "校验码过期");
     	}
     	return ResultUtils.rtSuccess(null);
     }
+    /**
+     * 
+        * @Title: registerStep2
+        * @Description: TODO(注册提交2)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping("/account/registerStep2")
     public Map<String,Object> registerStep2(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
@@ -117,7 +132,17 @@ public class UserController {
     	return ResultUtils.rtSuccess(rtMap);
     }
     
-    
+    /**
+     * 
+        * @Title: findPasswordStep1
+        * @Description: TODO(找回密码校验1)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping("/account/findPasswordStep1")
     public Map<String,Object> findPasswordStep1(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	if(requestBodyParams==null || ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("verifyCode")))
@@ -125,7 +150,7 @@ public class UserController {
       	String phone=String.valueOf(requestBodyParams.get("phone"));
       	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
       	String  status=loginRegService.validVerifyCode(phone,3,verifyCode);
-      	if(status.equals(loginRegService.OK)) {//校验码通过
+      	if(status.equals(LoginRegService.OK)) {//校验码通过
       		boolean isAccountExist=loginRegService.isPhoneExist(phone);
     		if(isAccountExist) {
     			return ResultUtils.rtSuccess(null);
@@ -135,15 +160,25 @@ public class UserController {
     		}
       	}
       	else {
-      		if(status.equals(loginRegService.VC_ERR)) 
+      		if(status.equals(LoginRegService.VC_ERR)) 
       		return ResultUtils.rtFailParam(null, "校验码无效");
-      		if(status.equals(loginRegService.VC_EX)) 
+      		if(status.equals(LoginRegService.VC_EX)) 
       		return ResultUtils.rtFailParam(null, "校验码过期");
       	}
       	return ResultUtils.rtSuccess(null);
     }
     
-    
+    /**
+     * 
+        * @Title: findPasswordStep2
+        * @Description: TODO(找回密码提交2)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     @RequestMapping("/account/findPasswordStep2")
     public Map<String,Object> findPasswordStep2(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
@@ -159,7 +194,17 @@ public class UserController {
     	return ResultUtils.rtSuccess(rtMap);
     } 
     
-    
+    /**
+     * 
+        * @Title: sendVerifyCode
+        * @Description: TODO(发送校验码)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
     
     @RequestMapping("/account/sendVerifyCode")
     public Map<String,Object> sendVerifyCode(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
@@ -177,5 +222,33 @@ public class UserController {
     	return ResultUtils.rtSuccess(null);
     }
    
+    /**
+     * 
+        * @Title: addDeviceUserInfo
+        * @Description: TODO(增加设备信息)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * @throws
+        * @author LanYeYe
+     */
+    @RequestMapping("/account/addDeviceUserInfo")
+    public Map<String,Object> addDeviceUserInfo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	Map<String,Object> rtMap=new HashMap<String,Object>();
+    	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("deviceToken")))
+          return ResultUtils.rtFailParam(null);
+    	String deviceInfo=String.valueOf(requestBodyParams.get("deviceToken"));
+    	long userId=0;
+    	if( ValidTools.isNotBlank(requestBodyParams.get("userId"))){
+    		 userId=Long.valueOf(requestBodyParams.get("userId").toString());
+    	}
+    	String alias=loginRegService.addDeviceUserInfo(deviceInfo, userId);
+    	if(alias==null) {
+    		return ResultUtils.rtFail(null);
+    	}
+    	rtMap.put("alias", alias);
+    	return ResultUtils.rtSuccess(rtMap);
+    }
     
 }

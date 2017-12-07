@@ -10,4 +10,7 @@ public class ValidTools {
 	public static boolean isNotBlank(String str) {
 		return (str!=null && !("").equals(str));
 	}
+	public static boolean isNotBlank(Object str) {
+		return (str!=null && !("").equals(str));
+	}
 }
