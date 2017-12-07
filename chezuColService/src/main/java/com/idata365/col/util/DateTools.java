@@ -19,7 +19,13 @@ public class DateTools
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
 	}
-	
+	public static String getCurDate()
+	{
+		String customDate = "";
+		Date curdate = new Date();
+		customDate = yyMMddHHmmssSSS.format(curdate);
+		return customDate;
+	}
     public static long getDiffTimeS(String dateTime1,String dateTime2) throws ParseException {
 	       
         Date d1 = DateUtils.parseDate(dateTime1,yyMMddHHmmssSSS.getPattern());
