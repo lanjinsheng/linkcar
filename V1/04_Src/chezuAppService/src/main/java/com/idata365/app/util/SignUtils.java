@@ -1,7 +1,5 @@
 package com.idata365.app.util;
 
-import java.io.UnsupportedEncodingException;
-
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
