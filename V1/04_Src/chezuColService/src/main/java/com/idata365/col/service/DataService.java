@@ -24,11 +24,14 @@ import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.entity.UploadDataStatus;
+import com.idata365.col.entity.UserDevice;
 import com.idata365.col.mapper.DriveDataEventMapper;
 import com.idata365.col.mapper.DriveDataLogMapper;
 import com.idata365.col.mapper.DriveDataMainMapper;
 import com.idata365.col.mapper.SensorDataLogMapper;
 import com.idata365.col.mapper.UploadDataStatusMapper;
+import com.idata365.col.mapper.UserDeviceMapper;
+import com.idata365.col.util.DateTools;
 import com.idata365.col.util.ResultUtils;
 
 @Service
@@ -45,7 +48,8 @@ public class DataService extends BaseService<DataService>{
 	DriveDataMainMapper driveDataMainMapper;
 	@Autowired
 	DriveDataEventMapper driveDataEventMapper;
-	
+	@Autowired
+	UserDeviceMapper userDeviceMapper;
 	
 	public DataService() {
 		LOG.info("DataService DataService DataService DataService");
@@ -58,6 +62,20 @@ public class DataService extends BaseService<DataService>{
 	public List<UploadDataStatus> getUploadDataDemo(Map<String,Object> m){
 		return uploadDataStatusMapper.getUploadDataDemo(m);
 	}
+	
+	@Transactional
+	public boolean addDeviceUserInfo(String deviceToken,long userId){
+		 UserDevice dl=new UserDevice();
+		 String date=DateTools.getCurDate();
+		 String remark= "{%s 用户:%s 设备号:%s}";
+		 remark=String.format(remark, date,String.valueOf(userId),deviceToken);
+		 dl.setRemark(remark);
+		 dl.setDeviceToken(deviceToken);
+		 dl.setUserId(userId);
+		 userDeviceMapper.insertUserDevice(dl);
+		 return true;
+	}
+	
 	
 	/**
 	 * 
