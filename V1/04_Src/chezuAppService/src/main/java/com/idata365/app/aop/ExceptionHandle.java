@@ -12,7 +12,7 @@ import com.idata365.app.util.ResultUtils;
 @ControllerAdvice
 public class ExceptionHandle {
 
-  private final static Logger LOGGER = LoggerFactory.getLogger(ExceptionHandle.class);
+ private final static Logger LOGGER = LoggerFactory.getLogger(ExceptionHandle.class);
 
   /**
    * 
