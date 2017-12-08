@@ -12,8 +12,26 @@ public class UsersAccount implements Serializable {
 	private String pwd;
 	private Date lastLoginTime;
     private Date createTime;
+    private String imgUrl;
+    private String nickName;
 	public UsersAccount() {
 		super();
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public Date getCreateTime() {
