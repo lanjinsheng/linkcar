@@ -28,7 +28,6 @@
     </property>  
   </bean>  
  <!-- 延迟40s加载，并且每隔1秒进行开始比赛的扫描 -->
-   
   <bean id="scanTask" class="com.idata365.app.schedule.ScanTask">  
     <property name="threadPool" ref="threadPool"></property>
   </bean>  
