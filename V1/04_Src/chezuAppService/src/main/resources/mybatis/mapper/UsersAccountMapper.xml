@@ -9,6 +9,10 @@
        FROM  usersAccount where phone=#{phone}
      </select>
      
+     <select id="findAccountById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  usersAccount where id=#{id}
+     </select>
      
       <insert id="insertUser"   useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UsersAccount" >
        INSERT ignore  INTO 

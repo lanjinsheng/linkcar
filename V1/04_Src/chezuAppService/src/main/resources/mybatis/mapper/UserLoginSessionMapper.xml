@@ -11,4 +11,9 @@
         VALUES
             (#{userId},#{createTimeLong},#{token}) ON DUPLICATE KEY UPDATE createTimeLong=#{createTimeLong},token=#{token}
     </insert>
+    
+         <select id="findToken" resultMap="BaseResultMap" parameterType="String">
+       SELECT *
+       FROM  userLoginSession where token=#{token} order by createTimeLong desc limit 1
+     </select>
 </mapper>
