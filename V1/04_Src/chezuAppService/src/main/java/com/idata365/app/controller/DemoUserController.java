@@ -22,7 +22,7 @@ import com.idata365.app.util.ValidTools;
 
 
 @RestController
-public class DemoUserController {
+public class DemoUserController  extends BaseController {
 
 	@Autowired
 	private UserMapper userMapper;
