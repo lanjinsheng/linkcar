@@ -152,6 +152,16 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		      return OK;
 	}	
 	
+	public UsersAccount validToken(String token) {
+		 
+		UserLoginSession  session=userLoginSessionMapper.findToken(token);
+		if(session==null) {
+			return null;
+		}
+		UsersAccount account=usersAccountMapper.findAccountById(session.getUserId());
+		     return account;
+	}	
+	
 	
 	public boolean isPhoneExist(String phone) {
 		 UsersAccount account=new UsersAccount();

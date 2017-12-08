@@ -15,6 +15,8 @@ public class ResultUtils {
 	public static final String CODE_PARAM_VERIFICATION = "3";
 
 	public static final String CODE_ERROR = "100";
+	
+	public static final String CODE_ERROR_TOKEN_INVALID = "1000";
 
 	public static String toJson(Object object) {
 		return GsonUtils.toJson(object,false);
@@ -31,7 +33,17 @@ public class ResultUtils {
 		map.put("rtData", rtData);
 		return GsonUtils.toJson(map,false);
 	}
-	
+	public static Map<String, Object> rtFailTokenInvalid(Object datas,String msg) {
+		if (datas == null) {
+			datas =new HashMap<String, Object>();
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("status", STATUS_FAIL);
+		result.put("msg", msg);
+		result.put("code", CODE_ERROR_TOKEN_INVALID);
+		result.put("datas", datas);
+		return result;
+	}
 	public static Map<String, Object> rtSuccess(Object datas) {
 		if (datas == null) {
 			datas = new HashMap<String, Object>();
