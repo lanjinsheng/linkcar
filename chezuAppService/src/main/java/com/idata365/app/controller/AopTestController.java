@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/aop")
-public class AopTestController {
+public class AopTestController  extends BaseController {
 
     @RequestMapping("/testBeforeService.do")
     public String testBeforeService(String key,String value){

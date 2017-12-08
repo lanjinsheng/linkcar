@@ -1,0 +1,6 @@
+package com.idata365.app.enums;
+
+
+public enum UserImgsEnum {
+	HEADER,DRIVING_LICENSE1,DRIVING_LICENSE2,DRIVER_LICENSE1,DRIVER_LICENSE2,ID_CARD1,ID_CARD2
+}

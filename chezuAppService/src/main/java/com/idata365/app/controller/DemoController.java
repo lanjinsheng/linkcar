@@ -25,7 +25,7 @@ import com.idata365.app.service.LoginRegService;
 
 
 @RestController
-public class DemoController {
+public class DemoController  extends BaseController {
 
     @Autowired
     DemoService demoService;
