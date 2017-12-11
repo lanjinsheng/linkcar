@@ -1,12 +1,7 @@
-package com.idata365.app.controller;
+package com.idata365.app.controller.security;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.idata365.app.entity.SignatureLogBean;
-import com.idata365.app.entity.UsersAccount;
-import com.idata365.app.service.LoginRegService;
+import com.idata365.app.controller.BaseController;
+import com.idata365.app.entity.SignInResultBean;
+import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.service.SignInService;
 import com.idata365.app.util.ResultUtils;
-import com.idata365.app.util.ValidTools;
 
 @RestController
 public class SignInController extends BaseController
@@ -28,17 +22,17 @@ public class SignInController extends BaseController
 	private SignInService signInService;
 	
 	/**
-	 * 最近已经连续签到的日期，格式：yyyyMMdd
+	 * 查询签到记录，格式：yyyyMMdd
 	 * @param allRequestParams
 	 * @param reqBean
 	 * @return
 	 */
 	@RequestMapping("/om/query")
-	public Map<String, Object> query(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) SignatureLogBean reqBean)
+	public Map<String, Object> query(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) SignatureDayLogBean reqBean)
 	{
 		LOG.debug("query param==={}", JSON.toJSONString(reqBean));
-		List<String> resultList = this.signInService.query(reqBean);
-		return ResultUtils.rtSuccess(resultList);
+		SignInResultBean resultBean = this.signInService.query(reqBean);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 	
 	/**
@@ -48,7 +42,7 @@ public class SignInController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/om/signatureAim")
-	public Map<String, Object> signatureAim(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) SignatureLogBean reqBean)
+	public Map<String, Object> signatureAim(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) SignatureDayLogBean reqBean)
 	{
 		LOG.debug("query param==={}", JSON.toJSONString(reqBean));
 		this.signInService.sign(reqBean);

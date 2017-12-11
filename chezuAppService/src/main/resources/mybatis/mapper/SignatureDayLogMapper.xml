@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.SignatureDayLogMapper">
+    
+    <select id="query" resultType="java.lang.String"
+    	parameterType="com.idata365.app.entity.SignatureDayLogBean">
+    	select sigTimestamp from signatureDayLog where userId=#{userId} and month=#{month} order by sigTimestamp desc
+    </select>
+    
+    <insert id="save" parameterType="com.idata365.app.entity.SignatureDayLogBean">
+    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+    		select count(*) from signatureDayLog where userId=#{userId} and sigTimestamp=#{sigTimestamp}
+    	</selectKey>
+    	<if test="count == 0">
+    		insert into signatureDayLog(userId, sigTimestamp, month) values(#{userId}, #{sigTimestamp}, #{month})
+    	</if>
+    </insert>
+    
+</mapper>

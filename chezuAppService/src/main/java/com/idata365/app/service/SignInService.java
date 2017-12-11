@@ -1,125 +1,93 @@
 package com.idata365.app.service;
 
-import static org.mockito.Matchers.endsWith;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.mockito.asm.tree.IntInsnNode;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ctc.wstx.util.StringUtil;
 import com.idata365.app.constant.DateConstant;
-import com.idata365.app.entity.SignatureLogBean;
-import com.idata365.app.mapper.SignatureLogMapper;
+import com.idata365.app.entity.SignInResultBean;
+import com.idata365.app.entity.SignatureDayLogBean;
+import com.idata365.app.mapper.SignatureDayLogMapper;
 
 
 public class SignInService extends BaseService<SignInService>
 {
 	@Autowired
-	private SignatureLogMapper signatureLogMapper;
+	private SignatureDayLogMapper signatureDayLogMapper;
 	
 	/**
-	 * 最近已经连续签到的日期，格式：yyyyMMdd
+	 * 查询签到记录，格式：yyyyMMdd
 	 * @param bean
 	 * @return
 	 */
-	public List<String> query(SignatureLogBean bean)
+	public SignInResultBean query(SignatureDayLogBean bean)
 	{
-		SignatureLogBean logBean = this.signatureLogMapper.query(bean);
-		if (null == logBean)
-			return null;
-		int sigCount = logBean.getSigCount();
-		String lastSigDay = logBean.getLastSigDay();
+		SignInResultBean resultBean = new SignInResultBean();
 		
-		Calendar todayCalendar = Calendar.getInstance();
-		String todayStr = DateFormatUtils.format(todayCalendar, DateConstant.DAY_PATTERN);
-		Date yesterday = DateUtils.addDays(todayCalendar.getTime(), -1);
-		String yesterdayStr = DateFormatUtils.format(yesterday, DateConstant.DAY_PATTERN);
+		List<String> sigDaysList = this.signatureDayLogMapper.query(bean);
+		resultBean.setSigDays(sigDaysList);
 		
-		List<String> resultList = new ArrayList<String>();
-		if (StringUtils.equals(lastSigDay, todayStr)
-				|| StringUtils.equals(lastSigDay, yesterdayStr))
+		int continueCount = 0;
+		Date prevDate = null;
+		for (int i = 0; i < sigDaysList.size(); i++)
 		{
-			resultList.add(lastSigDay);
-		}
-		else
-		{
-			return null;
-		}
-		
-		if (1 == sigCount)
-		{
-			return resultList;
-		}
-		else
-		{
-			Date lastSigDate = parseStrToDate(lastSigDay);
+			String sigDay = sigDaysList.get(i);
+			Date tempDate = parseStrToDate(sigDay);
 			
-			for (int i = 1; i < sigCount; i++)
+			if (null == prevDate)
 			{
-				Date tempDate = DateUtils.addDays(lastSigDate, -i);
-				String tempDayStr = DateFormatUtils.format(tempDate, DateConstant.DAY_PATTERN);
-				resultList.add(tempDayStr);
+				continueCount = 1;
+				prevDate = tempDate;
 			}
-			
-			return resultList;
+			else
+			{
+				Date addedDays = DateUtils.addDays(tempDate, 1);
+				if (addedDays.equals(prevDate))
+				{
+					continueCount++;
+				}
+				else
+				{
+					break;
+				}
+			}
 		}
+		resultBean.setSigCount(continueCount);
+		
+		return resultBean;
+	}
+
+	private Date parseStrToDate(String sigDay)
+	{
+		Date tempDate = null;
+		try
+		{
+			tempDate = DateUtils.parseDate(sigDay, DateConstant.DAY_PATTERN);
+		} catch (ParseException e)
+		{
+			throw new RuntimeException(e);
+		}
+		return tempDate;
 	}
 
 	/**
 	 * 签到
 	 * @param bean
 	 */
-	public void sign(SignatureLogBean bean)
+	public void sign(SignatureDayLogBean bean)
 	{
-		SignatureLogBean logBean = this.signatureLogMapper.query(bean);
-		Calendar todayCalendar = Calendar.getInstance();
-		String todayStr = DateFormatUtils.format(todayCalendar, DateConstant.DAY_PATTERN);
-		if (null == logBean)
-		{
-			bean.setLastSigDay(todayStr);
-			bean.setSigCount(1);
-		}
-		else
-		{
-			Date yesterday = DateUtils.addDays(todayCalendar.getTime(), -1);
-			String yesterdayStr = DateFormatUtils.format(yesterday, DateConstant.DAY_PATTERN);
-			String lastSigDay = logBean.getLastSigDay();
-			if (StringUtils.equals(lastSigDay, todayStr))
-			{
-				return;
-			}
-			else if (StringUtils.equals(lastSigDay, yesterdayStr))
-			{
-				bean.setLastSigDay(todayStr);
-				int sigCount = bean.getSigCount();
-				sigCount++;
-				bean.setSigCount(sigCount);
-			}
-		}
+		Calendar curDay = Calendar.getInstance();
+		String curDayStr = DateFormatUtils.format(curDay, DateConstant.DAY_PATTERN);
+		String month = DateFormatUtils.format(curDay, DateConstant.MONTH_PATTERN);
+		bean.setSigTimestamp(curDayStr);
+		bean.setMonth(month);
 		
-		this.signatureLogMapper.saveOrUpdate(bean);
+		this.signatureDayLogMapper.save(bean);;
 	}
 	
-	
-	private Date parseStrToDate(String lastSigDay)
-	{
-		Date date = null;
-		try
-		{
-			date = DateUtils.parseDate(lastSigDay, DateConstant.DAY_PATTERN);
-		} catch (ParseException e)
-		{
-			throw new RuntimeException(e);
-		}
-		return date;
-	}
 }
