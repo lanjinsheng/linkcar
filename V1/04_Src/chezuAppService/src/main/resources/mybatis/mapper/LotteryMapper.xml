@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.LotteryMapper">
+    
+    <select id="query" resultType="com.idata365.app.entity.LotteryBean"
+    	parameterType="com.idata365.app.entity.LotteryBean">
+    	select * from lottery where userId=#{userId} order by awardId asc;
+    </select>
+    
+    <insert id="saveOrUpdate" parameterType="com.idata365.app.entity.LotteryBean">
+    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+    		select count(*) from lottery where userId=#{userId} and awardId=#{awardId}
+    	</selectKey>
+    	<if test="count > 0">
+    		update lottery set awardCount=awardCount+1 where userId=#{userId}
+    	</if>
+    	<if test="count == 0">
+    		insert into lottery(userid, awardId, awardCount) values(#{userid}, #{awardId}, 1)
+    	</if>
+    </insert>
+    
+</mapper>

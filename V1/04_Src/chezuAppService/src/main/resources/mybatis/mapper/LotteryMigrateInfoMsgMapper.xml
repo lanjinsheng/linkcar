@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.LotteryMigrateInfoMsgMapper">
+    
+    <select id="query" resultType="com.idata365.app.entity.LotteryMigrateInfoMsgBean"
+    	parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
+    	select t1.id as id, userId, awardId, awardCount, date_format(str_to_date(givenTime, '%Y%m%d%H%I%S'), '%Y-%m-%d') as day, status, if (t2.nickName is null, t2.phone, t2.nickName) as name 
+	from lotteryMigrateInfoMsg t1 
+	join usersAccount t2 on (t1.userId=t2.id) where t1.toUserId=#{userId} order by t1.id desc limit #{start}, 5
+    </select>
+    
+    <insert id="save" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgBean">
+    	insert into lotteryMigrateInfoMsg(userId, toUserId, awardId, awardCount, givenTime, status) values(#{userId}, #{toUserId}, #{awardId}, #{awardCount}, #{givenTime}, 'UN_RECV')
+    </insert>
+    
+	<update id="updateStatus" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean" >
+		update lotteryMigrateInfoMsg set status='RECV' where id=#{givenId} 
+    </update>
+    
+</mapper>
