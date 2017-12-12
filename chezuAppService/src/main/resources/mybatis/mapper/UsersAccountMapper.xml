@@ -13,6 +13,10 @@
        SELECT *
        FROM  usersAccount where id=#{id}
      </select>
+      <select id="findAccountByIdAndPwd" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
+       SELECT *
+       FROM  usersAccount where id=#{id} and pwd=#{pwd}
+     </select>
      
       <insert id="insertUser"   useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UsersAccount" >
        INSERT ignore  INTO 
@@ -28,10 +32,36 @@
              set pwd=#{pwd},lastLoginTime=now()
             where phone=#{phone}
     </update>
+    <update id="updatePwdByUserIdAndOldPwd"   parameterType="java.util.HashMap" >
+       update  
+            usersAccount
+             set pwd=#{newPwd}
+            where id=#{userId} and pwd=#{orgPwd}
+    </update>
    <update id="updateUserLogin"  parameterType="com.idata365.app.entity.UsersAccount" >
        update  
             usersAccount
              set lastLoginTime=now()
             where phone=#{phone}
     </update>
+   <update id="updateNickName"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set nickName=#{nickName}
+            where id=#{id}
+    </update>    
+       <update id="updateImgUrl"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set imgUrl=#{imgUrl}
+            where id=#{id}
+    </update> 
+    
+    <update id="updatePhone"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set phone=#{phone}
+            where id=#{id}
+    </update>  
+    
 </mapper>
