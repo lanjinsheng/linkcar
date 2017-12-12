@@ -7,6 +7,7 @@ import java.util.Date;
 public class UserDeviceLogs implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String deviceToken;
 	private Long userId;
