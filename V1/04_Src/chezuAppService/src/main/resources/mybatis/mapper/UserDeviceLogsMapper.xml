@@ -9,8 +9,8 @@
             (userId,deviceToken,createTime,updateTime,remark,alias) 
         VALUES
             (#{userId}, #{deviceToken},now(),now(),#{remark},#{alias})  
-            ON DUPLICATE KEY UPDATE alias=#{alias},userId=#{userId},updateTime=now(),deviceToken=#{deviceToken},remark=concat(remark,#{remark})
+            ON DUPLICATE KEY UPDATE alias=#{alias},userId=#{userId},updateTime=now(),
+            deviceToken=#{deviceToken},
+            remark=concat(remark,#{remark})
     </insert>
-    
-    
 </mapper>
