@@ -19,6 +19,7 @@ import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.RandUtils;
 
 public class LotteryService extends BaseService<LotteryService>
 {
@@ -51,12 +52,21 @@ public class LotteryService extends BaseService<LotteryService>
 	}
 	
 	/**
-	 * 记录抽中道具
+	 * 抽奖获得道具
 	 * @param bean
 	 */
-	public void doLottery(LotteryBean bean)
+	public LotteryResultBean doLottery(LotteryBean bean)
 	{
+		//随机生成出抽奖奖品
+		int awardId = RandUtils.generateRand();
+		bean.setAwardId(awardId);
+		bean.setAwardCount(1);
 		this.lotteryMapper.saveOrUpdate(bean);
+		
+		LotteryResultBean resultBean = new LotteryResultBean();
+		resultBean.setAwardId(String.valueOf(awardId));
+		resultBean.setAwardCount("1");
+		return resultBean;
 	}
 	
 	/**
