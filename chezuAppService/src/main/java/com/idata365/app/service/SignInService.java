@@ -8,13 +8,14 @@ import java.util.List;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.SignInResultBean;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.mapper.SignatureDayLogMapper;
 
-
+@Service
 public class SignInService extends BaseService<SignInService>
 {
 	@Autowired
@@ -87,7 +88,11 @@ public class SignInService extends BaseService<SignInService>
 		bean.setSigTimestamp(curDayStr);
 		bean.setMonth(month);
 		
-		this.signatureDayLogMapper.save(bean);;
+		int count = this.signatureDayLogMapper.countByUserId(bean);
+		if (0 == count)
+		{
+			this.signatureDayLogMapper.save(bean);;
+		}
 	}
 	
 }

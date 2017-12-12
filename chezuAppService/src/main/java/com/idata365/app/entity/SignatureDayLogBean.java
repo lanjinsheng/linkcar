@@ -10,6 +10,8 @@ public class SignatureDayLogBean
 	
 	//签到月份，格式：yyyyMM
 	private String month;
+	
+	private int count;
 
 	public int getUserId()
 	{
@@ -39,6 +41,16 @@ public class SignatureDayLogBean
 	public void setMonth(String month)
 	{
 		this.month = month;
+	}
+
+	public int getCount()
+	{
+		return count;
+	}
+
+	public void setCount(int count)
+	{
+		this.count = count;
 	}
 	
 }

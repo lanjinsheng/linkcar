@@ -8,6 +8,8 @@ public class LotteryBean
 	
 	private int awardCount;
 	
+	private int count;
+	
 	public int getUserId()
 	{
 		return userId;
@@ -36,6 +38,16 @@ public class LotteryBean
 	public void setAwardCount(int awardCount)
 	{
 		this.awardCount = awardCount;
+	}
+
+	public int getCount()
+	{
+		return count;
+	}
+
+	public void setCount(int count)
+	{
+		this.count = count;
 	}
 		
 }
