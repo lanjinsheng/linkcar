@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.partnerApi.SSOTools;
-import com.idata365.app.util.ResultUtils;
-
-import ch.qos.logback.classic.pattern.Util;
 
  
 @RestController
@@ -30,11 +27,10 @@ public class ImgsInfoController extends BaseController {
     @Autowired
 	SystemProperties systemProperties;
 	
-	@RequestMapping(value = "/userFiles/imgs",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
-    public ResponseEntity<InputStreamResource> downloadDriveData(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	@RequestMapping(value = "/userFiles/getImgs",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+    public ResponseEntity<InputStreamResource> getImgs(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 	    LOG.info("start");
 		  String  key=allRequestParams.get("key");
-		   
 	        HttpHeaders headers = new HttpHeaders();  
 	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
 	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", key));  

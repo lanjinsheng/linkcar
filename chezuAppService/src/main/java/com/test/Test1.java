@@ -2,9 +2,6 @@ package com.test;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.idata365.app.util.AdBeanUtils;
-
 public class Test1
 {
 

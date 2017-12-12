@@ -1,7 +1,5 @@
 package com.idata365.app.util;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
