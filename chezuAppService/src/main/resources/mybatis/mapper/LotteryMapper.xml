@@ -15,7 +15,7 @@
     		update lottery set awardCount=awardCount+1 where userId=#{userId}
     	</if>
     	<if test="count == 0">
-    		insert into lottery(userid, awardId, awardCount) values(#{userid}, #{awardId}, 1)
+    		insert into lottery(userid, awardId, awardCount) values(#{userid}, #{awardId}, #{awardCount})
     	</if>
     </insert>
     

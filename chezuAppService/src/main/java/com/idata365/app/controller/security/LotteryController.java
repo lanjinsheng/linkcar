@@ -33,12 +33,18 @@ public class LotteryController extends BaseController
 		return ResultUtils.rtSuccess(listLottery);
 	}
 	
+	/**
+	 * 抽奖获得道具
+	 * @param allRequestParams
+	 * @param bean
+	 * @return
+	 */
 	@RequestMapping("/om/doLottery")
 	public Map<String, Object> doLottery(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) LotteryBean bean)
 	{
 		LOG.debug("param==={}", JSON.toJSONString(bean));
-		this.lotteryService.doLottery(bean);
-		return ResultUtils.rtSuccess(null);
+		LotteryResultBean lotteryResultBean = this.lotteryService.doLottery(bean);
+		return ResultUtils.rtSuccess(lotteryResultBean);
 	}
 	
 	@RequestMapping("/om/givenLottery")
