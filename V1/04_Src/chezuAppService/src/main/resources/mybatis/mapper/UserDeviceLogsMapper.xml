@@ -3,13 +3,15 @@
 <mapper namespace="com.idata365.app.mapper.UserDeviceLogsMapper">
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.UserDeviceLogs" >
     </resultMap>
-    <insert id="insertUserDeviceLogs"  useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.app.entity.UserDeviceLogs" >
+    <insert id="insertUserDeviceLogs" useGeneratedKeys="true" keyProperty="id" 
+    parameterType="com.idata365.app.entity.UserDeviceLogs" >
        INSERT INTO 
             userDeviceLogs
             (userId,deviceToken,createTime,updateTime,remark,alias) 
         VALUES
             (#{userId}, #{deviceToken},now(),now(),#{remark},#{alias})  
-            ON DUPLICATE KEY UPDATE alias=#{alias},userId=#{userId},updateTime=now(),
+            ON DUPLICATE KEY UPDATE alias=#{alias},userId=#{userId},
+            updateTime=now(),
             deviceToken=#{deviceToken},
             remark=concat(remark,#{remark})
     </insert>
