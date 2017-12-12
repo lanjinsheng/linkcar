@@ -34,7 +34,8 @@ public class SSOTools {
     private static String bucketName_userInfo="app-users-imgs-info";
    // private static String bucketName = "driveDatas";
     public static String createSSOUsersImgInfoKey(long userId,UserImgsEnum type) {
-    	return null;
+    	String key=userId+"/"+type+"_"+userId+System.currentTimeMillis();
+    	return key;
     }
     public static String getSSOUsersImgInfoKey(long userId,String key) {
     	return userId+"/"+key;

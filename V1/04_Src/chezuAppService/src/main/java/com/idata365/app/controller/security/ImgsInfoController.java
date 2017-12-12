@@ -21,7 +21,6 @@ public class ImgsInfoController extends BaseController {
 	private final static Logger LOG = LoggerFactory.getLogger(ImgsInfoController.class);
     @Autowired
 	SystemProperties systemProperties;
-	
  
     @RequestMapping("/userFiles/test")
     public Map<String,Object> test(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
