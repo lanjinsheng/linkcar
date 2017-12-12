@@ -7,13 +7,14 @@
     	select sigTimestamp from signatureDayLog where userId=#{userId} and month=#{month} order by sigTimestamp desc
     </select>
     
+    <select id="countByUserId" resultType="int"
+    	parameterType="com.idata365.app.entity.SignatureDayLogBean">
+    	select count(*) from signatureDayLog where userId=#{userId} and sigTimestamp=#{sigTimestamp}
+    </select>
+    
+    
     <insert id="save" parameterType="com.idata365.app.entity.SignatureDayLogBean">
-    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
-    		select count(*) from signatureDayLog where userId=#{userId} and sigTimestamp=#{sigTimestamp}
-    	</selectKey>
-    	<if test="count == 0">
-    		insert into signatureDayLog(userId, sigTimestamp, month) values(#{userId}, #{sigTimestamp}, #{month})
-    	</if>
+    	insert into signatureDayLog(userId, sigTimestamp, month) values(#{userId}, #{sigTimestamp}, #{month})
     </insert>
     
 </mapper>

@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.LotteryBean;
@@ -21,6 +22,7 @@ import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.RandUtils;
 
+@Service
 public class LotteryService extends BaseService<LotteryService>
 {
 	@Autowired

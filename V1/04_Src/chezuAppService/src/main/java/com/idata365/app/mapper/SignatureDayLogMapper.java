@@ -8,5 +8,7 @@ public interface SignatureDayLogMapper
 {
 	List<String> query(SignatureDayLogBean bean);
 	
+	int countByUserId(SignatureDayLogBean bean);
+	
 	void save(SignatureDayLogBean bean);
 }

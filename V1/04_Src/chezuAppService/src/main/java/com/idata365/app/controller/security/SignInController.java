@@ -23,12 +23,11 @@ public class SignInController extends BaseController
 	
 	/**
 	 * 查询签到记录，格式：yyyyMMdd
-	 * @param allRequestParams
 	 * @param reqBean
 	 * @return
 	 */
 	@RequestMapping("/om/query")
-	public Map<String, Object> query(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) SignatureDayLogBean reqBean)
+	public Map<String, Object> query(SignatureDayLogBean reqBean)
 	{
 		LOG.debug("param==={}", JSON.toJSONString(reqBean));
 		SignInResultBean resultBean = this.signInService.query(reqBean);
@@ -42,7 +41,7 @@ public class SignInController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/om/signatureAim")
-	public Map<String, Object> signatureAim(@RequestParam(required = false) Map<String, String> allRequestParams, @RequestBody(required = false) SignatureDayLogBean reqBean)
+	public Map<String, Object> signatureAim(SignatureDayLogBean reqBean)
 	{
 		LOG.debug("param==={}", JSON.toJSONString(reqBean));
 		this.signInService.sign(reqBean);
