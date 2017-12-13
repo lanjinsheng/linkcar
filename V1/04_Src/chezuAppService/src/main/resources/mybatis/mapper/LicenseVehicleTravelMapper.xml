@@ -22,7 +22,7 @@
             licenseVehicleTravel
              set plateNo=#{plateNo},carType=#{carType},useType=#{useType},modelType=#{modelType},
              vin=#{vin},
-            engineNo=#{engineNo},
+             issueDate=#{issueDate},regDate=#{regDate},engineNo=#{engineNo},
              frontImgUrl=#{key},
              updateTime=now()
              where userId=#{userId}
@@ -38,5 +38,8 @@
              ON DUPLICATE KEY UPDATE backImgUrl=#{key},
              updateTime=now()
     </insert>  
-    
+    <select id="findLicenseVehicleTravelByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  licenseVehicleTravel where userId=#{userId}
+     </select>
 </mapper>

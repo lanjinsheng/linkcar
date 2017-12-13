@@ -35,5 +35,8 @@
              ON DUPLICATE KEY UPDATE backImgUrl=#{key},
              updateTime=now()
     </insert>
-    
+        <select id="findLicenseDriverByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  licenseDriver where userId=#{userId}
+     </select>
 </mapper>
