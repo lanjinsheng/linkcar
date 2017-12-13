@@ -22,6 +22,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.controller.BaseController;
+import com.idata365.app.entity.LicenseDriver;
+import com.idata365.app.entity.LicenseVehicleTravel;
+import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.LoginRegService;
@@ -30,6 +33,7 @@ import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.ImageUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
+import com.idata365.app.util.StaticDatas;
 import com.idata365.app.util.ValidTools;
 @RestController
 public class UserInfoController extends BaseController{
@@ -59,33 +63,80 @@ public class UserInfoController extends BaseController{
 		  userInfoService.updateNickName(userId, nickName);
 		  return ResultUtils.rtSuccess(null);
 	  }
-	  
+	  /**
+	   * 
+	      * @Title: getUserInfo
+	      * @Description: TODO(获取证件信息)
+	      * @param @param allRequestParams
+	      * @param @param requestBodyParams
+	      * @param @return    参数
+	      * @return Map<String,Object>    返回类型
+	      * @throws
+	      * @author LanYeYe
+	   */
 	  @RequestMapping("/user/getUserInfo")	  
 	  public Map<String,Object> getUserInfo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-//		  name	姓名	String	
-//		  gender	性别	String	男：M；女：F
-//		  nation	国籍	String	中国：C；其他：B
-//		  driveCardType	驾驶证	String	C1;C2;C3;C4;B1;B2;A1;A2;A3
-//		  birthday	生日	String	1990-09-04
-//		  virginDay	初次领证日期	String	19900904
-//		  validDay	有效起始日期	String	19900904
-//		  validYears	有效年限	int	
-//		  plateNo	车牌	String	
-//		  cardTypeDesc	汽车类型	String	
-//		  userTypeDesc	营运类型	String	
-//		  modelTypeDesc	车辆类型	String	
-//		  vin	vin码	String	
-//		  engineNo	发动机号	String	
-//		  frontDrivingImg	驾驶证正面	String	
-//		  backDrivingImg	驾驶证背面	String	
-//		  frontTravelImg	行驶证正面	String	
-//		  backTravelImg	行驶证背面	String	
-		  
+		  String imgBase=getImgBasePath();
+		  Map<String,String> rtMap=new HashMap<String,String>();
 		  Long userId=Long.valueOf(requestBodyParams.get("userId").toString());
-		  getImgBasePath();
-		  return ResultUtils.rtSuccess(null);
+		  LicenseDriver licenseDrive=userInfoService.getLicenseDriver(userId);
+		  LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(userId);
+		  if(licenseDrive!=null) {
+			  rtMap.put("userName", licenseDrive.getUserName());
+			  rtMap.put("gender",licenseDrive.getGender());
+			  rtMap.put("nation",licenseDrive.getNation());
+			  rtMap.put("driveCardType",licenseDrive.getDriveCardType());
+			  rtMap.put("birthday",licenseDrive.getBirthday());
+			  rtMap.put("virginDay",licenseDrive.getVirginDay());
+			  rtMap.put("validYears",String.valueOf(licenseDrive.getValidYears()));
+			  rtMap.put("frontDrivingImg",imgBase+licenseDrive.getFrontImgUrl());
+			  rtMap.put("backDrivingImg",imgBase+licenseDrive.getBackImgUrl());
+		  }else {
+			  rtMap.put("userName", "");
+			  rtMap.put("gender","");
+			  rtMap.put("nation","");
+			  rtMap.put("driveCardType","");
+			  rtMap.put("birthday","");
+			  rtMap.put("virginDay","");
+			  rtMap.put("validYears","");
+			  rtMap.put("frontDrivingImg","");
+			  rtMap.put("backDrivingImg","");
+		  }
+		  if(licenseVehicleTravel!=null) {
+			  rtMap.put("plateNo",licenseVehicleTravel.getPlateNo());
+			  rtMap.put("cardTypeDesc",StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
+			  rtMap.put("userTypeDesc",StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
+			  rtMap.put("modelTypeDesc",licenseVehicleTravel.getModelType());
+			  rtMap.put("vin",licenseVehicleTravel.getVin());
+			  rtMap.put("engineNo",licenseVehicleTravel.getEngineNo());
+			  rtMap.put("frontTravelImg",imgBase+licenseVehicleTravel.getFrontImgUrl());
+			  rtMap.put("backTravelImg",imgBase+licenseVehicleTravel.getBackImgUrl());
+			  rtMap.put("issueDate",licenseVehicleTravel.getIssueDate());
+			  rtMap.put("regDate",licenseVehicleTravel.getRegDate());
+		  }else {
+			  rtMap.put("plateNo","");
+			  rtMap.put("cardTypeDesc","");
+			  rtMap.put("userTypeDesc","");
+			  rtMap.put("modelTypeDesc","");
+			  rtMap.put("vin","");
+			  rtMap.put("engineNo","");
+			  rtMap.put("frontTravelImg","");
+			  rtMap.put("backTravelImg","");
+			  rtMap.put("issueDate","");
+			  rtMap.put("regDate",""); 
+		  }
+		  return ResultUtils.rtSuccess(rtMap);
 	  }
-	  
+	  @RequestMapping("/user/getUserBaseInfo")	  
+	  public Map<String,Object> getUserBaseInfo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+		  String imgBase=getImgBasePath();
+		  Map<String,String> rtMap=new HashMap<String,String>();
+		  UserInfo userInfo=this.getUserInfo();
+		  rtMap.put("phone", userInfo.getPhone());
+		  rtMap.put("nickName", userInfo.getNickName());
+		  rtMap.put("headImg", imgBase+userInfo.getImgUrl());
+		  return ResultUtils.rtSuccess(rtMap);
+	  }
 	    @RequestMapping("/user/uploadHeadImg")
 	    public Map<String,Object>  uploadHeadImg(@RequestParam CommonsMultipartFile file,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) throws IOException {
 	    	Long userId=this.getUserId();

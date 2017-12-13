@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.entity.LicenseDriver;
+import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.LicenseDriverMapper;
 import com.idata365.app.mapper.LicenseVehicleTravelMapper;
@@ -37,6 +38,14 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	public UserInfoService() {
 	}
 	 
+	
+	public LicenseVehicleTravel getLicenseVehicleTravel(Long userId) {
+		return licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
+	}
+	public LicenseDriver getLicenseDriver(Long userId) {
+		return licenseDriverMapper.findLicenseDriverByUserId(userId);
+	}
+	
 	public void updateNickName(Long userId,String nickName) {
 		UsersAccount account=new UsersAccount();
 		account.setId(userId);
