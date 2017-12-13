@@ -18,8 +18,10 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
+import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
+import com.idata365.app.mapper.SignatureDayLogMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.RandUtils;
 
@@ -31,6 +33,9 @@ public class LotteryService extends BaseService<LotteryService>
 	
 	@Autowired
 	private LotteryMigrateInfoMsgMapper lotteryMigrateInfoMsgMapper;
+	
+	@Autowired
+	private SignatureDayLogMapper signatureDayLogMapper;
 	
 	/**
 	 * 道具列表
@@ -58,6 +63,7 @@ public class LotteryService extends BaseService<LotteryService>
 	 * 抽奖获得道具
 	 * @param bean
 	 */
+	@Transactional
 	public LotteryResultBean doLottery(LotteryBean bean)
 	{
 		//随机生成出抽奖奖品
@@ -65,6 +71,13 @@ public class LotteryService extends BaseService<LotteryService>
 		bean.setAwardId(awardId);
 		bean.setAwardCount(1);
 		this.lotteryMapper.saveOrUpdate(bean);
+		
+		Calendar todayCal = Calendar.getInstance();
+		String todayStr = DateFormatUtils.format(todayCal, DateConstant.DAY_PATTERN);
+		SignatureDayLogBean signatureDayLogBean = new SignatureDayLogBean();
+		signatureDayLogBean.setUserId(bean.getUserId());
+		signatureDayLogBean.setSigTimestamp(todayStr);
+		this.signatureDayLogMapper.updateSigStatus(signatureDayLogBean);
 		
 		LotteryResultBean resultBean = new LotteryResultBean();
 		resultBean.setAwardId(String.valueOf(awardId));
