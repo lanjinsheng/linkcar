@@ -55,6 +55,15 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
         	LOG.info("end");
         	return s;
     }
+    @RequestMapping(value = "/v1/listPageDriveLogTest",produces = "application/json;charset=UTF-8")
+    public String listPageDriveLogTest(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	    LOG.info("start");
+    	    Map<String,Object> pageMap=this.getPagerMap(allRequestParams);
+        	String s=dataService.listPageDriveLogTest(pageMap);
+        	LOG.info("end");
+        	return s;
+    } 
+    
     @RequestMapping(value = "/v1/downLoadDrive",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
     public ResponseEntity<InputStreamResource> downloadDriveData(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 	    LOG.info("start");
