@@ -13,4 +13,6 @@ public interface SignatureDayLogMapper
 	void save(SignatureDayLogBean bean);
 	
 	List<SignatureDayLogBean> querySigStatus(SignatureDayLogBean bean);
+	
+	void updateSigStatus(SignatureDayLogBean bean);
 }
