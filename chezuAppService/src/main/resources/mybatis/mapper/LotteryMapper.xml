@@ -12,7 +12,7 @@
     		select count(*) from lottery where userId=#{userId} and awardId=#{awardId}
     	</selectKey>
     	<if test="count > 0">
-    		update lottery set awardCount=awardCount+1 where userId=#{userId}
+    		update lottery set awardCount=awardCount+#{awardCount} where userId=#{userId} and awardId=#{awardId}
     	</if>
     	<if test="count == 0">
     		insert into lottery(userId, awardId, awardCount) values(#{userId}, #{awardId}, #{awardCount})

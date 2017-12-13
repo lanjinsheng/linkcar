@@ -12,4 +12,6 @@ public interface LotteryMigrateInfoMsgMapper
 	public void save(LotteryMigrateInfoMsgBean bean);
 	
 	public void updateStatus(LotteryMigrateInfoMsgParamBean bean);
+	
+	public LotteryMigrateInfoMsgBean queryById(LotteryMigrateInfoMsgParamBean bean);
 }

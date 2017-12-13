@@ -17,4 +17,8 @@
     	insert into signatureDayLog(userId, sigTimestamp, month) values(#{userId}, #{sigTimestamp}, #{month})
     </insert>
     
+    <select id="querySigStatus" resultType="com.idata365.app.entity.SignatureDayLogBean"
+    	parameterType="com.idata365.app.entity.SignatureDayLogBean">
+    	select sigTimestamp, awardStatus from signatureDayLog where userId=#{userId} and sigTimestamp>=#{sigTimestamp} order by sigTimestamp desc
+    </select>
 </mapper>

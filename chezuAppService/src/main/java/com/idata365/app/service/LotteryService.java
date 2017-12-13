@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.LotteryBean;
@@ -117,8 +118,20 @@ public class LotteryService extends BaseService<LotteryService>
 	 * 领取赠送道具
 	 * @param bean
 	 */
+	@Transactional
 	public void receiveLottery(LotteryMigrateInfoMsgParamBean bean)
 	{
+		LotteryMigrateInfoMsgBean migrateInfoMsgBean = this.lotteryMigrateInfoMsgMapper.queryById(bean);
+		int toUserId = migrateInfoMsgBean.getToUserId();
+		int awardId = migrateInfoMsgBean.getAwardId();
+		int awardCount = migrateInfoMsgBean.getAwardCount();
+		
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(toUserId);
+		lotteryBean.setAwardId(awardId);
+		lotteryBean.setAwardCount(awardCount);
+		this.lotteryMapper.saveOrUpdate(lotteryBean);
+		
 		this.lotteryMigrateInfoMsgMapper.updateStatus(bean);
 	}
 }

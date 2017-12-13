@@ -2,18 +2,18 @@ package com.idata365.app.entity;
 
 public class LotteryMigrateInfoMsgParamBean
 {
-	private int userId;
+	private long userId;
 	
 	private int start;
 
 	private int givenId;
 	
-	public int getUserId()
+	public long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(int userId)
+	public void setUserId(long userId)
 	{
 		this.userId = userId;
 	}

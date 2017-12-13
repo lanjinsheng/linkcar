@@ -6,7 +6,7 @@ public class LotteryMigrateInfoMsgBean
 	private int id;
 	
 	//赠送用户id
-	private int userId;
+	private long userId;
 	
 	//被赠送用户id
 	private int toUserId;
@@ -38,12 +38,12 @@ public class LotteryMigrateInfoMsgBean
 		this.id = id;
 	}
 
-	public int getUserId()
+	public long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(int userId)
+	public void setUserId(long userId)
 	{
 		this.userId = userId;
 	}
