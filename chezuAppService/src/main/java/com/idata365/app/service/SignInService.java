@@ -125,6 +125,7 @@ public class SignInService extends BaseService<SignInService>
 							if (addedDays.equals(prevDate))
 							{
 								continueCount++;
+								prevDate = tempDate;
 							}
 							else
 							{
@@ -172,8 +173,12 @@ public class SignInService extends BaseService<SignInService>
 		{
 			SignatureDayLogBean firstLogBean = sigStatusList.get(0);
 			String awardStatus = firstLogBean.getAwardStatus();
-			if (StringUtils.equals("OK", awardStatus))
+			String firstLogDateStr = firstLogBean.getSigTimestamp();
+			String todayDateStr = DateFormatUtils.format(todayDate, DateConstant.DAY_PATTERN);
+			if (StringUtils.equals("OK", awardStatus)
+					&& StringUtils.equals(firstLogDateStr, todayDateStr))
 			{
+				continueCount = 7;
 				return continueCount;
 			}
 			else
@@ -203,6 +208,7 @@ public class SignInService extends BaseService<SignInService>
 							if (addedDays.equals(prevDate))
 							{
 								continueCount++;
+								prevDate = tempDate;
 							}
 							else
 							{
