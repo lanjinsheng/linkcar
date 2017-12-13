@@ -3,7 +3,7 @@ package com.idata365.app.entity;
 public class SignatureDayLogBean
 {
 	//用户id
-	private int userId;
+	private long userId;
 		
 	//签到时间戳，格式：yyyyMMdd
 	private String sigTimestamp;
@@ -12,13 +12,16 @@ public class SignatureDayLogBean
 	private String month;
 	
 	private int count;
+	
+	//抽奖状态
+	private String awardStatus;
 
-	public int getUserId()
+	public long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(int userId)
+	public void setUserId(long userId)
 	{
 		this.userId = userId;
 	}
@@ -51,6 +54,16 @@ public class SignatureDayLogBean
 	public void setCount(int count)
 	{
 		this.count = count;
+	}
+
+	public String getAwardStatus()
+	{
+		return awardStatus;
+	}
+
+	public void setAwardStatus(String awardStatus)
+	{
+		this.awardStatus = awardStatus;
 	}
 	
 }

@@ -17,4 +17,8 @@
 		update lotteryMigrateInfoMsg set status='RECV' where id=#{givenId} 
     </update>
     
+    <select id="queryById" resultType="com.idata365.app.entity.LotteryMigrateInfoMsgBean"
+    	parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
+    	select toUserId, awardId, awardCount from lotteryMigrateInfoMsg where id=#{givenId}
+    </select>
 </mapper>

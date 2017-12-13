@@ -11,4 +11,6 @@ public interface SignatureDayLogMapper
 	int countByUserId(SignatureDayLogBean bean);
 	
 	void save(SignatureDayLogBean bean);
+	
+	List<SignatureDayLogBean> querySigStatus(SignatureDayLogBean bean);
 }

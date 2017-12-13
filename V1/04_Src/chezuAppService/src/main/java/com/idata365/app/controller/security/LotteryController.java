@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +25,9 @@ public class LotteryController extends BaseController
 	private LotteryService lotteryService;
 	
 	@RequestMapping("/om/listLottery")
-	public Map<String, Object> listLottery(LotteryBean bean)
+	public Map<String, Object> listLottery(@RequestBody LotteryBean bean)
 	{
-		LOG.debug("param==={}", JSON.toJSONString(bean));
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<LotteryResultBean> listLottery = this.lotteryService.listLottery(bean);
 		return ResultUtils.rtSuccess(listLottery);
 	}
@@ -38,33 +39,33 @@ public class LotteryController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/om/doLottery")
-	public Map<String, Object> doLottery(LotteryBean bean)
+	public Map<String, Object> doLottery(@RequestBody LotteryBean bean)
 	{
-		LOG.debug("param==={}", JSON.toJSONString(bean));
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		LotteryResultBean lotteryResultBean = this.lotteryService.doLottery(bean);
 		return ResultUtils.rtSuccess(lotteryResultBean);
 	}
 	
 	@RequestMapping("/om/givenLottery")
-	public Map<String, Object> givenLottery(LotteryMigrateInfoMsgBean bean)
+	public Map<String, Object> givenLottery(@RequestBody LotteryMigrateInfoMsgBean bean)
 	{
-		LOG.debug("param==={}", JSON.toJSONString(bean));
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		this.lotteryService.givenLottery(bean);
 		return ResultUtils.rtSuccess(null);
 	}
 	
 	@RequestMapping("/om/listFriendList")
-	public Map<String, Object> listFriendList(LotteryMigrateInfoMsgParamBean bean)
+	public Map<String, Object> listFriendList(@RequestBody LotteryMigrateInfoMsgParamBean bean)
 	{
-		LOG.debug("param==={}", JSON.toJSONString(bean));
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		LotteryMigrateInfoAllResultBean listFriendList = this.lotteryService.listFriendList(bean);
 		return ResultUtils.rtSuccess(listFriendList);
 	}
 	
 	@RequestMapping("/om/receiveLottery")
-	public Map<String, Object> receiveLottery(LotteryMigrateInfoMsgParamBean bean)
+	public Map<String, Object> receiveLottery(@RequestBody LotteryMigrateInfoMsgParamBean bean)
 	{
-		LOG.debug("param==={}", JSON.toJSONString(bean));
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		this.lotteryService.receiveLottery(bean);;
 		return ResultUtils.rtSuccess(null);
 	}
