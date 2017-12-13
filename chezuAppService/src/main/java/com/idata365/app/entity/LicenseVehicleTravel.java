@@ -15,7 +15,28 @@ public class LicenseVehicleTravel implements Serializable {
 	private String engineNo;
 	private String frontImgUrl;
 	private String backImgUrl;
-	
+	private String issueDate;
+	private String regDate;
+	private String remark;
+	 
+	public String getIssueDate() {
+		return issueDate;
+	}
+	public void setIssueDate(String issueDate) {
+		this.issueDate = issueDate;
+	}
+	public String getRegDate() {
+		return regDate;
+	}
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 	public Long getUserId() {
 		return userId;
 	}
