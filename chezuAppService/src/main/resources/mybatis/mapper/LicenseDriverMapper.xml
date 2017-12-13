@@ -4,6 +4,36 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.LicenseDriver" >
     </resultMap>
 
-     
+  <insert id="insertImgDriverFrontImg"   parameterType="java.util.HashMap" >
+       INSERT INTO 
+            licenseDriver
+            (userId,gender,nation,driveCardType,birthday,virginDay,validDay,validYears,frontImgUrl,licenseNumber,remark,createTime,userName) 
+        VALUES
+            (#{userId},#{gender},#{nation},#{driveCardType},#{birthday},#{virginDay},#{validDay},#{validYears},
+            #{key},#{licenseNumber},#{remark},now(),#{userName})
+             ON DUPLICATE KEY UPDATE frontImgUrl=#{key},remark=#{remark},
+             updateTime=now()
+    </insert>
+
+   <update id="modifyImgDriverFront"   parameterType="java.util.HashMap" >
+     update
+            licenseDriver
+             set gender=#{gender},nation=#{nation},driveCardType=#{driveCardType},birthday=#{birthday},
+             virginDay=#{virginDay},
+             validDay=#{validDay},validYears=#{validYears},userName=#{userName},
+             updateTime=now()
+             where userId=#{userId}
+    </update>
+    
+    
+     <insert id="insertImgDriverBackImg"   parameterType="java.util.HashMap" >
+       INSERT INTO 
+            licenseDriver
+            (userId,backImgUrl,createTime) 
+        VALUES
+            (#{userId},#{key},now())
+             ON DUPLICATE KEY UPDATE backImgUrl=#{key},
+             updateTime=now()
+    </insert>
     
 </mapper>
