@@ -4,6 +4,39 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.LicenseVehicleTravel" >
     </resultMap>
 
-     
+    <insert id="insertImgVehicleFrontImg"   parameterType="java.util.HashMap" >
+       INSERT INTO 
+            licenseVehicleTravel
+            (userId,plateNo,carType,useType,modelType,vin,
+            issueDate,regDate,engineNo,frontImgUrl,remark,createTime,ownerName) 
+        VALUES
+            (#{userId},#{plateNo},#{carType},#{useType},#{modelType},#{vin},#{issueDate},#{regDate},
+            #{engineNo},#{key},#{remark},now(),#{ownerName})
+             ON DUPLICATE KEY UPDATE 
+             frontImgUrl=#{key},remark=#{remark},ownerName=#{ownerName}
+             updateTime=now()
+    </insert>
+
+   <update id="modifyImgVehicleFront"   parameterType="java.util.HashMap" >
+     update
+            licenseVehicleTravel
+             set plateNo=#{plateNo},carType=#{carType},useType=#{useType},modelType=#{modelType},
+             vin=#{vin},
+            engineNo=#{engineNo},
+             frontImgUrl=#{key},
+             updateTime=now()
+             where userId=#{userId}
+    </update>
+    
+    
+     <insert id="insertImgVehicleBackImg"   parameterType="java.util.HashMap" >
+       INSERT INTO 
+            licenseVehicleTravel
+            (userId,backImgUrl,createTime) 
+        VALUES
+            (#{userId},#{key},now())
+             ON DUPLICATE KEY UPDATE backImgUrl=#{key},
+             updateTime=now()
+    </insert>  
     
 </mapper>
