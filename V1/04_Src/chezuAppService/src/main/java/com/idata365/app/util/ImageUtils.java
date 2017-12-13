@@ -13,16 +13,24 @@ import javax.imageio.ImageIO;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.idata365.app.controller.security.UserInfoController;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 /**
- * @author zxn
- * @version 创建时间：2014-7-2 上午11:40:40
  * 
+    * @ClassName: ImageUtils
+    * @Description: TODO(这里用一句话描述这个类的作用)
+    * @author LanYeYe
+    * @date 2017年12月13日
+    *
  */
 public class ImageUtils {
+	private final static Logger LOG = LoggerFactory.getLogger(ImageUtils.class);
     /**
      * 将网络图片进行Base64位编码
      * 
@@ -124,7 +132,7 @@ public class ImageUtils {
 	    }
     }
     public static void test2() {
-    	 String host = "http://xingshi.market.alicloudapi.com";
+    	String host = "http://xingshi.market.alicloudapi.com";
  	    String path = "/drivinglicenserecognition/recognize";
  	    String method = "POST";
  	    String appcode = "4f9695958725417d83a47ac66358fe24";
@@ -135,7 +143,7 @@ public class ImageUtils {
  	    headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
  	    Map<String, String> querys = new HashMap<String, String>();
  	    Map<String, String> bodys = new HashMap<String, String>();
- 	    bodys.put("pic", encodeImgageToBase64(new File("C:\\Users\\jinsheng\\Desktop\\行驶证demo.jpg")).replaceAll("\r\n", ""));
+ 	    bodys.put("pic", encodeImgageToBase64(new File("C:\\Users\\jinsheng\\Desktop\\行驶证demo.jpg")));
 
 
  	    try {
@@ -156,8 +164,162 @@ public class ImageUtils {
  	    	e.printStackTrace();
  	    }
  	}
+    /**
+     * 
+        * @Title: dealImg
+        * @Description: TODO(这里用一句话描述这个方法的作用)
+        * @param @param file
+        * @param @return    参数
+        * @return String    返回类型
+        * {
+			    "status": "0",
+			    "msg": "ok",
+			    "result": {
+			        "realname": "",
+			        "engineno": "605911334FG",
+			        "cartype": "京牌SAJAA22H",
+			        "issuedate": "2013-01-21",
+			        "regdate": "2012-05-10",
+			        "frameno": "9AJAA22H6CFV34381",
+			        "lstypename": "",
+			        "lsprefix": "粤",
+			        "lsnum": "AU3F61",
+			        "lstype": ""
+			    }
+			}
+        * @throws
+        * @author LanYeYe
+     */
+    public static void dealImgXSZ(File file,Map<String,Object> map) {
+    	String host = "http://xingshi.market.alicloudapi.com";
+ 	    String path = "/drivinglicenserecognition/recognize";
+ 	    String method = "POST";
+ 	    String appcode = "4f9695958725417d83a47ac66358fe24";
+ 	    Map<String, String> headers = new HashMap<String, String>();
+ 	    //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+ 	    headers.put("Authorization", "APPCODE " + appcode);
+ 	    //根据API的要求，定义相对应的Content-Type
+ 	    headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+ 	    Map<String, String> querys = new HashMap<String, String>();
+ 	    Map<String, String> bodys = new HashMap<String, String>();
+ 	    bodys.put("pic", encodeImgageToBase64(file));
+ 	    try {
+ 	    	/**
+ 	    	* 重要提示如下:
+ 	    	* HttpUtils请从
+ 	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+ 	    	* 下载
+ 	    	*
+ 	    	* 相应的依赖请参照
+ 	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+ 	    	*/
+ 	    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+ 	    	//获取response的body
+ 	    	String rtStr=(EntityUtils.toString(response.getEntity()));
+ 	    	LOG.info(rtStr);
+ 	    	Map<String,Object> jsonMap=GsonUtils.fromJson(rtStr);
+ 	    	if(jsonMap.get("status").toString().equals("1")) {
+ 	    		Map<String,Object> result=(Map<String,Object>)(jsonMap.get("result"));
+ 	    		if(result!=null) {
+ 	    			map.put("engineNo", result.get("engineno"));
+// 	    			map.put("carType", "");
+// 	    			map.put("useType", "");
+ 	    			map.put("ownerName", result.get("realname"));
+ 	    			map.put("modelType", result.get("cartype"));
+ 	    			map.put("issueDate",result.get("issuedate"));
+ 	    			map.put("regDate",result.get("regdate"));
+ 	    			map.put("vin",result.get("frameno"));
+ 	    			map.put("plateNo", String.valueOf(result.get("lsprefix"))+result.get("lsnum"));
+ 	    			map.put("remark", rtStr);
+ 	    		}
+ 	    	}
+ 	    } catch (Exception e) {
+ 	    	e.printStackTrace();
+ 	    }
+ 	}
+    /**
+     *     
+        * @Title: dealImgJSZ
+        * @Description: TODO(这里用一句话描述这个方法的作用)
+        * @param     参数
+        * @return void    返回类型
+        * {
+		    {
+	    "status": "0",
+	    "msg": "ok",
+	    "result": {
+        "realname": "郭敏",
+        "licensenumber": "342221199005032081",
+        "startdate": "2014-12-25",
+        "enddate": "2020-12-25",
+        "type": "C2",
+        "sex": "女",
+        "birth": "1990-05-03"
+    }
+}
+		}
+        * @throws
+        * @author LanYeYe
+     */
+    public static void dealImgJSZ(File file,Map<String,Object> map) {
+    	 String host = "http://jiashi.market.alicloudapi.com";
+ 	    String path = "/driverlicenserecognition/recognize";
+ 	    String method = "POST";
+ 	    String appcode = "4f9695958725417d83a47ac66358fe24";
+ 	    Map<String, String> headers = new HashMap<String, String>();
+ 	    //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+ 	    headers.put("Authorization", "APPCODE " + appcode);
+ 	    //根据API的要求，定义相对应的Content-Type
+ 	    headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+ 	    Map<String, String> querys = new HashMap<String, String>();
+ 	    Map<String, String> bodys = new HashMap<String, String>();
+ 	    bodys.put("pic",encodeImgageToBase64(file));
+ 	    try {
+ 	    	/**
+ 	    	* 重要提示如下:
+ 	    	* HttpUtils请从
+ 	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+ 	    	* 下载
+ 	    	*
+ 	    	* 相应的依赖请参照
+ 	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+ 	    	*/
+ 	    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+ 	    	//获取response的body
+ 	    	String rtStr=(EntityUtils.toString(response.getEntity()));
+ 	    	LOG.info(rtStr);
+ 	    	Map<String,Object> jsonMap=GsonUtils.fromJson(rtStr);
+ 	    	if(jsonMap.get("status").toString().equals("1")) {
+ 	    		Map<String,Object> result=(Map<String,Object>)(jsonMap.get("result"));
+ 	    		if(result!=null) {
+ 	    			map.put("userName", result.get("realname"));
+ 	    			map.put("licenseNumber", result.get("licensenumber"));
+ 	    			String sd=result.get("startdate").toString();
+ 	    			String ed=result.get("enddate").toString();
+ 	    			map.put("validDay", result.get("startdate"));
+ 	    			map.put("validYears", getValidYears(sd,ed));
+ 	    			map.put("driveCardType", result.get("type"));
+ 	    			map.put("gender", result.get("sex").equals("女")?"F":"M");
+ 	    			map.put("birthday", result.get("birth"));
+ 	    			map.put("remark", rtStr);
+ 	    		}
+ 	    	}
+ 	    } catch (Exception e) {
+ 	    	e.printStackTrace();
+ 	    }
+    }
+    private static int getValidYears(String sd,String ed) {
+    	try {
+    	int sdInt=Integer.valueOf(sd.substring(0, 4));
+    	int edInt=Integer.valueOf(ed.substring(0, 4));
+    	return (edInt-sdInt);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return 0;
+    }
     public static void main(String []args) {
-    	test();
+//    	dealImgJSZ();
 //    	System.out.print(encodeImgageToBase64(new File("C:\\Users\\jinsheng\\Desktop\\行驶证demo.jpg")).replaceAll("\r\n", ""));
     }
 }

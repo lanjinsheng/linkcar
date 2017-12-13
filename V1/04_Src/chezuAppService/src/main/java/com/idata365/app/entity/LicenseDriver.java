@@ -17,6 +17,22 @@ public class LicenseDriver implements Serializable {
 	private int  validYears;
 	private String frontImgUrl;
 	private String backImgUrl;
+	private String  remark;
+	private String licenseNumber;
+	
+	
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getLicenseNumber() {
+		return licenseNumber;
+	}
+	public void setLicenseNumber(String licenseNumber) {
+		this.licenseNumber = licenseNumber;
+	}
 	public Long getUserId() {
 		return userId;
 	}
