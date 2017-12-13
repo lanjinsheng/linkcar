@@ -237,6 +237,103 @@ public class ImageUtils {
  	    	e.printStackTrace();
  	    }
  	}
+    
+    public static void testAliXSZ() {
+    	String host = "https://dm-53.data.aliyun.com";
+	    String path = "/rest/160601/ocr/ocr_vehicle.json";
+	    String method = "POST";
+	    String appcode = "4f9695958725417d83a47ac66358fe24";
+	    Map<String, String> headers = new HashMap<String, String>();
+	    //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+	    headers.put("Authorization", "APPCODE " + appcode);
+	    //根据API的要求，定义相对应的Content-Type
+	    headers.put("Content-Type", "application/json; charset=UTF-8");
+	    Map<String, String> querys = new HashMap<String, String>();
+	    StringBuffer sb=new StringBuffer();
+	    sb.append( "{");
+	    sb.append("\"inputs\": [{");
+                
+	    sb.append("\"image\":{");
+	    sb.append("\"dataType\":50,");
+	    sb.append("\"dataValue\":\"");
+	   sb.append(encodeImgageToBase64(new File("C:\\Users\\jinsheng\\Desktop\\行驶证demo.jpg")));
+	    sb.append("\"}}]}");
+
+	    try {
+	    	/**
+	    	* 重要提示如下:
+	    	* HttpUtils请从
+	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+	    	* 下载
+	    	*
+	    	* 相应的依赖请参照
+	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+	    	*/
+	    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, sb.toString());
+	    	System.out.println(response.toString());
+	    	//获取response的body
+	    	System.out.println(EntityUtils.toString(response.getEntity()));
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+	}
+    
+    public static void testAliJSZ() {
+    	  String host = "https://dm-52.data.aliyun.com";
+  	    String path = "/rest/160601/ocr/ocr_driver_license.json";
+  	    String method = "POST";
+  	    String appcode = "4f9695958725417d83a47ac66358fe24";
+  	    Map<String, String> headers = new HashMap<String, String>();
+  	    //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+  	    headers.put("Authorization", "APPCODE " + appcode);
+  	    //根据API的要求，定义相对应的Content-Type
+  	    headers.put("Content-Type", "application/json; charset=UTF-8");
+  	    Map<String, String> querys = new HashMap<String, String>();
+//  	    String bodys = "{
+//      \"inputs\": [
+//          {
+//              \"image\": {
+//                  \"dataType\": 50,
+//                  \"dataValue\": \"图片以Base64编码的字符串\"
+//              },
+//             \"configure\": {
+//                  \"dataType\": 50,
+//                  \"dataValue\": \"{\\\"side\\\":\\\"face\\\"}\"  #驾驶证首页/副页:face/back
+//              }
+//          }
+//      ]
+//  }";
+  StringBuffer sb=new StringBuffer();
+  sb.append( "{");
+  sb.append("\"inputs\": [{");
+          
+  sb.append("\"image\":{");
+  sb.append("\"dataType\":50,");
+  sb.append("\"dataValue\":\"");
+ sb.append(encodeImgageToBase64(new File("C:\\Users\\jinsheng\\Desktop\\驾驶证demo.jpg")));
+ sb.append("\"}");
+// sb.append(", \"configure\": {\"dataType\": 50,\"dataValue\": \"{\"side\":\"face\"}\"");
+  sb.append("}]}");
+
+
+  	    try {
+  	    	/**
+  	    	* 重要提示如下:
+  	    	* HttpUtils请从
+  	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+  	    	* 下载
+  	    	*
+  	    	* 相应的依赖请参照
+  	    	* https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+  	    	*/
+  	    	HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, sb.toString());
+  	    	System.out.println(response.toString());
+  	    	//获取response的body
+  	    	System.out.println(EntityUtils.toString(response.getEntity()));
+  	    } catch (Exception e) {
+  	    	e.printStackTrace();
+  	    }
+    }
     /**
      *     
         * @Title: dealImgJSZ
@@ -319,6 +416,7 @@ public class ImageUtils {
     	return 0;
     }
     public static void main(String []args) {
+    	testAliJSZ();
 //    	dealImgJSZ();
 //    	System.out.print(encodeImgageToBase64(new File("C:\\Users\\jinsheng\\Desktop\\行驶证demo.jpg")).replaceAll("\r\n", ""));
     }
