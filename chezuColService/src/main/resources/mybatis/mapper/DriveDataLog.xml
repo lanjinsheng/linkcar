@@ -33,6 +33,9 @@
     <select id="listPageDriveLog"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
 		SELECT *  from driveDataLog order by id desc
 	</select>
+	<select id="listPageDriveLogTest"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT *  from driveDataLog where userId in ${usersArray} order by id desc
+	</select>
 	 <select id="getDriveDataLog"  resultType="com.idata365.col.entity.DriveDataLog" parameterType="Long">
 		SELECT *  from driveDataLog where id=#{id}
 	</select>
