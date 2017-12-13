@@ -18,6 +18,9 @@ public interface DriveDataLogMapper {
     void delDataLog(DriveDataLog log);
     DriveDataLog getDriveDataLog(Long id);
     List<DriveDataLog> listPageDriveLog(Map<String,Object> map);
+    
+    List<DriveDataLog> listPageDriveLogTest(Map<String,Object> map);
+    
     List<DriveDataLog> listDriveLogByUH(DriveDataLog log);
     
     
