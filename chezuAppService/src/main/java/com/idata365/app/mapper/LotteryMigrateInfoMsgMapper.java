@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
+import com.idata365.app.entity.LotteryUser;
 
 public interface LotteryMigrateInfoMsgMapper
 {
@@ -14,4 +15,6 @@ public interface LotteryMigrateInfoMsgMapper
 	public void updateStatus(LotteryMigrateInfoMsgParamBean bean);
 	
 	public LotteryMigrateInfoMsgBean queryById(LotteryMigrateInfoMsgParamBean bean);
+	
+	public List<LotteryUser> findUserList(long userId);
 }

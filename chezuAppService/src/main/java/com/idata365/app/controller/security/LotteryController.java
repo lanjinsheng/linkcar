@@ -15,6 +15,7 @@ import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
 import com.idata365.app.entity.LotteryResultBean;
+import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.service.LotteryService;
 import com.idata365.app.util.ResultUtils;
 
@@ -60,6 +61,14 @@ public class LotteryController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		LotteryMigrateInfoAllResultBean listFriendList = this.lotteryService.listFriendList(bean);
 		return ResultUtils.rtSuccess(listFriendList);
+	}
+	
+	@RequestMapping("/om/findUserList")
+	public Map<String, Object> findUserList(@RequestBody LotteryMigrateInfoMsgParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		List<LotteryResultUser> userList = this.lotteryService.findUserList(bean);
+		return ResultUtils.rtSuccess(userList);
 	}
 	
 	@RequestMapping("/om/receiveLottery")

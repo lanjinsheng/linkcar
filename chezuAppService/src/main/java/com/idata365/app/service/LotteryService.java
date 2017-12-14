@@ -18,6 +18,8 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
+import com.idata365.app.entity.LotteryResultUser;
+import com.idata365.app.entity.LotteryUser;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
@@ -125,6 +127,27 @@ public class LotteryService extends BaseService<LotteryService>
 		resultBean.setGivenLottery(givenLotteryList);
 		resultBean.setStart(String.valueOf(newStart));
 		return resultBean;
+	}
+	
+	/**
+	 * 可以接收赠送道具的用户
+	 * @param userId
+	 * @return
+	 */
+	public List<LotteryResultUser> findUserList(LotteryMigrateInfoMsgParamBean bean)
+	{
+		List<LotteryResultUser> resultList = new ArrayList<>();
+		List<LotteryUser> userList = this.lotteryMigrateInfoMsgMapper.findUserList(bean.getUserId());
+		for (int i = 0; i < userList.size(); i++)
+		{
+			LotteryResultUser tempUser = new LotteryResultUser();
+			LotteryUser lotteryUser = userList.get(i);
+			AdBeanUtils.copyOtherPropToStr(tempUser, lotteryUser);
+			tempUser.setTodayRole("1");
+			resultList.add(tempUser);
+		}
+		
+		return resultList;
 	}
 	
 	/**
