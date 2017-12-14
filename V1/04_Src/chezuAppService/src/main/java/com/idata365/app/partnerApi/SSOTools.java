@@ -24,14 +24,15 @@ import com.idata365.app.util.ZipUtils;
  * using the OSS SDK for Java.
  */
 public class SSOTools {
+	
       //内网
 //  private static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";
     //外网
-    private static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    private static String accessKeyId = "LTAIwwEJMzKOaDtT";
-    private static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
-//    private static String bucketName = "softtootest1";
-    private static String bucketName_userInfo="app-users-imgs-info";
+    public static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+    public static String accessKeyId = "LTAIwwEJMzKOaDtT";
+    public static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
+    public static String bucketName_userInfo="app-users-imgs-info";
+    
    // private static String bucketName = "driveDatas";
     public static String createSSOUsersImgInfoKey(long userId,UserImgsEnum type) {
     	String key=userId+"/"+type+"_"+userId+System.currentTimeMillis();
