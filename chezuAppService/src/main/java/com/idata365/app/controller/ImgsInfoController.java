@@ -36,7 +36,7 @@ public class ImgsInfoController extends BaseController {
 	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", key));  
 	        headers.add("Pragma", "no-cache");  
 	        headers.add("Expires", "0");  
-	        FileSystemResource   file = new FileSystemResource(systemProperties.getFileTmpDir()+key);
+	        FileSystemResource   file = new FileSystemResource(systemProperties.getFileTmpDir()+key.replaceAll("/", ""));
 	        
 	         try {
 	        	 OutputStream os=file.getOutputStream();
@@ -59,4 +59,8 @@ public class ImgsInfoController extends BaseController {
 		        
 		      }
     }
+	public static void main(String []args) {
+		System.out.println("12/HEADER_121513230107926".replaceAll("/", ""));
+	}
+	
 }
