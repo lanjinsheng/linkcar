@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.idata365.col.entity.UserDevice" >
     </resultMap>
     <insert id="insertUserDevice"  useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.UserDevice" >
-       INSERT INTO 
+       INSERT IGNORE  INTO 
             userDevice
             (userId,deviceToken,createTime,updateTime,remark) 
         VALUES
