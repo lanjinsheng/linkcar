@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
@@ -137,8 +138,8 @@ public class UserInfoController extends BaseController{
 		  rtMap.put("headImg", imgBase+userInfo.getImgUrl());
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
-	    @RequestMapping("/user/uploadHeadImg")
-	    public Map<String,Object>  uploadHeadImg(@RequestParam CommonsMultipartFile file,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) throws IOException {
+	    @RequestMapping(value = "/user/uploadHeadImg",method = RequestMethod.POST)
+	    public Map<String,Object>  uploadHeadImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
 	    	Long userId=this.getUserId();
 	    	Map<String,String> rtMap=new HashMap<String,String>();
 	    	try {
@@ -269,7 +270,7 @@ public class UserInfoController extends BaseController{
 	      * @author LanYeYe
 	   */
 	  @RequestMapping("/user/uploadFrontDrivingLicenseImg")
-	  public  Map<String,Object>  uploadFrontDrivingLicenseImg(@RequestParam CommonsMultipartFile file,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) {
+	  public  Map<String,Object>  uploadFrontDrivingLicenseImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) {
 	    	 Long userId=this.getUserId();
 	    	 if(file==null) {
 	    		 return ResultUtils.rtFailParam(null,"附件为空");
@@ -321,7 +322,7 @@ public class UserInfoController extends BaseController{
 	      * @author LanYeYe
 	   */
 	  @RequestMapping("/user/uploadBackDrivingLicenseImg")
-	  public  Map<String,Object>  uploadBackDrivingLicenseImg(@RequestParam CommonsMultipartFile file,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) {
+	  public  Map<String,Object>  uploadBackDrivingLicenseImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) {
 	    	 Long userId=this.getUserId();
 	    	 if(file==null) {
 	    		 return ResultUtils.rtFailParam(null,"附件为空");
@@ -377,7 +378,7 @@ public class UserInfoController extends BaseController{
 	   */
 	  
 	  @RequestMapping("/user/uploadFrontTravelLicenseImg")
-	  public  Map<String,Object>  uploadFrontTravelLicenseImg(@RequestParam CommonsMultipartFile file,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
+	  public  Map<String,Object>  uploadFrontTravelLicenseImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) {
 	    	 Long userId=this.getUserId();
 	    	 if(file==null) {
 	    		 return ResultUtils.rtFailParam(null,"附件为空");
@@ -416,7 +417,7 @@ public class UserInfoController extends BaseController{
 		       return ResultUtils.rtSuccess(rtMap);
 	    }
 	  @RequestMapping("/user/uploadBackTravelLicenseImg")
-	  public  Map<String,Object>  uploadBackTravelLicenseImg(@RequestParam CommonsMultipartFile file,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) {
+	  public  Map<String,Object>  uploadBackTravelLicenseImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) {
 	    	 Long userId=this.getUserId();
 	    	 if(file==null) {
 	    		 return ResultUtils.rtFailParam(null,"附件为空");
