@@ -8,6 +8,9 @@ public class LotteryMigrateInfoMsgBean
 	//赠送用户id
 	private long userId;
 	
+	//用户头像url
+	private String imgUrl;
+	
 	//被赠送用户id
 	private int toUserId;
 	
@@ -46,6 +49,16 @@ public class LotteryMigrateInfoMsgBean
 	public void setUserId(long userId)
 	{
 		this.userId = userId;
+	}
+
+	public String getImgUrl()
+	{
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl)
+	{
+		this.imgUrl = imgUrl;
 	}
 
 	public int getToUserId()
