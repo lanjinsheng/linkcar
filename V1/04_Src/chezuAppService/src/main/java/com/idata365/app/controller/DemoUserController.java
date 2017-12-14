@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.entity.UserEntity;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.UserMapper;
+import com.idata365.app.partnerApi.ManagePushApi;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
@@ -28,6 +29,9 @@ public class DemoUserController  extends BaseController {
 	private UserMapper userMapper;
     @Autowired
     LoginRegService loginRegService;
+    @Autowired
+    ManagePushApi managePushApi;
+    
 	public DemoUserController() {
 		System.out.println("dsfsfsf");
 	}
@@ -75,9 +79,9 @@ public class DemoUserController  extends BaseController {
         return user;
     }
     @RequestMapping(value = "/mytest",method = RequestMethod.GET)
-    public String mytest(@RequestParam String hi) {
-    	UserEntity user=userMapper.getOne(1L);
-        return "ok";
+    public String mytest() {
+    	managePushApi.SendMsgToOne("fuck me now", "17_0", ManagePushApi.PLATFORM_IOS, 1);
+    	return "ok";
     }
     @RequestMapping("/add")
     public void save(UserEntity user) {
