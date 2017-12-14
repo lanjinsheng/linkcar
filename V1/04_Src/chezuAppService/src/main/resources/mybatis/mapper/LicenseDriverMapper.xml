@@ -5,7 +5,7 @@
     </resultMap>
 
   <insert id="insertImgDriverFrontImg"   parameterType="java.util.HashMap" >
-       INSERT INTO 
+       INSERT IGNORE   INTO 
             licenseDriver
             (userId,gender,nation,driveCardType,birthday,virginDay,validDay,validYears,frontImgUrl,licenseNumber,remark,createTime,userName) 
         VALUES
@@ -27,7 +27,7 @@
     
     
      <insert id="insertImgDriverBackImg"   parameterType="java.util.HashMap" >
-       INSERT INTO 
+       INSERT IGNORE   INTO 
             licenseDriver
             (userId,backImgUrl,createTime) 
         VALUES

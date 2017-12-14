@@ -5,7 +5,7 @@
     </resultMap>
 
       <insert id="insertToken" parameterType="com.idata365.app.entity.UserLoginSession" >
-       INSERT INTO 
+       INSERT IGNORE   INTO 
             userLoginSession
             (userId,createTimeLong,token) 
         VALUES

@@ -5,7 +5,7 @@
     </resultMap>
 
     <insert id="insertImgVehicleFrontImg"   parameterType="java.util.HashMap" >
-       INSERT INTO 
+       INSERT IGNORE INTO 
             licenseVehicleTravel
             (userId,plateNo,carType,useType,modelType,vin,
             issueDate,regDate,engineNo,frontImgUrl,remark,createTime,ownerName) 
@@ -30,7 +30,7 @@
     
     
      <insert id="insertImgVehicleBackImg"   parameterType="java.util.HashMap" >
-       INSERT INTO 
+       INSERT IGNORE  INTO 
             licenseVehicleTravel
             (userId,backImgUrl,createTime) 
         VALUES
