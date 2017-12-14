@@ -67,7 +67,17 @@ public class LotteryController extends BaseController
 	public Map<String, Object> findUserList(@RequestBody LotteryMigrateInfoMsgParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<LotteryResultUser> userList = this.lotteryService.findUserList(bean);
+		long tempUserId = 0;
+		Long userId = super.getUserId();
+		if (userId != 0)
+		{
+			tempUserId = userId;
+		}
+		else
+		{
+			tempUserId = bean.getUserId();
+		}
+		List<LotteryResultUser> userList = this.lotteryService.findUserList(tempUserId);
 		return ResultUtils.rtSuccess(userList);
 	}
 	
