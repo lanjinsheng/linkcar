@@ -8,7 +8,7 @@
     
     <insert id="insertUserDeviceLogs" useGeneratedKeys="true" keyProperty="id" 
     parameterType="com.idata365.app.entity.UserDeviceLogs" >
-       INSERT INTO 
+       INSERT IGNORE  INTO 
             userDeviceLogs
             (userId,deviceToken,createTime,updateTime,remark,alias) 
        VALUES
