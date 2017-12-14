@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.druid.sql.ast.statement.SQLForeignKeyImpl.On;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
@@ -134,10 +135,10 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param userId
 	 * @return
 	 */
-	public List<LotteryResultUser> findUserList(LotteryMigrateInfoMsgParamBean bean)
+	public List<LotteryResultUser> findUserList(long userId)
 	{
 		List<LotteryResultUser> resultList = new ArrayList<>();
-		List<LotteryUser> userList = this.lotteryMigrateInfoMsgMapper.findUserList(bean.getUserId());
+		List<LotteryUser> userList = this.lotteryMigrateInfoMsgMapper.findUserList(userId);
 		for (int i = 0; i < userList.size(); i++)
 		{
 			LotteryResultUser tempUser = new LotteryResultUser();

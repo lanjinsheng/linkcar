@@ -24,6 +24,8 @@ abstract public class BaseController {
 		   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 	  	   HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
 	  	   UserInfo userInfo=(UserInfo)  request.getAttribute("userInfo");
+	  	   if (null == userInfo)
+	  		   return new Long(0);
 		   return userInfo.getId();
 	}
 }
