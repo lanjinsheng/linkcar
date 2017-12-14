@@ -21,4 +21,8 @@
     	parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
     	select toUserId, awardId, awardCount from lotteryMigrateInfoMsg where id=#{givenId}
     </select>
+    
+    <select id="findUserList" resultType="com.idata365.app.entity.LotteryUser" parameterType="int">
+    	select id as userId, nickName as name, imgUrl from usersAccount order by id desc limit 0, 12;
+    </select>
 </mapper>
