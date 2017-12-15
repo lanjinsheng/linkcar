@@ -16,6 +16,7 @@ public interface UsersAccountMapper {
 	 UsersAccount  findAccountById(@Param("id")  Long id);
 	 UsersAccount  findAccountByIdAndPwd(UsersAccount account);
 	 void  updateNickName(UsersAccount account);
+	 void  updateEnableStranger(UsersAccount account);
 	 void  updateImgUrl(UsersAccount account);
 	 void  updatePhone(UsersAccount account);
 	 void  updatePwdByUserIdAndOldPwd(Map<String,Object> account);
