@@ -36,6 +36,7 @@ public class DemoController   {
 //    	return name;
         return demoService.sayHiFromClientOne(name);
     }
+    
     @RequestMapping(value = "/getDemoUser")
     public String getUser(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 //    	return name;
