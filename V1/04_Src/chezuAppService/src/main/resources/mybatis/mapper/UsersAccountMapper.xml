@@ -49,7 +49,16 @@
             usersAccount
              set nickName=#{nickName}
             where id=#{id}
-    </update>    
+    </update>   
+    
+       <update id="updateEnableStranger"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set enableStranger=#{enableStranger}
+            where id=#{id}
+     </update> 
+    
+     
        <update id="updateImgUrl"  parameterType="com.idata365.app.entity.UsersAccount" >
        update  
             usersAccount
