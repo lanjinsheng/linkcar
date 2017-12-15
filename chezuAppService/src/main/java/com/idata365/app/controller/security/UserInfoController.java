@@ -58,11 +58,32 @@ public class UserInfoController extends BaseController{
 	 */
 	  @RequestMapping("/user/updateNickName")
 	  public Map<String,Object> updateNickName(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-		  Long userId=Long.valueOf(requestBodyParams.get("userId").toString());
-		  String nickName=String.valueOf(requestBodyParams.get("userId").toString());
+		  Long userId=this.getUserId();
+		  String nickName=String.valueOf(requestBodyParams.get("nickName"));
 		  userInfoService.updateNickName(userId, nickName);
 		  return ResultUtils.rtSuccess(null);
 	  }
+	  /**
+	   * 
+	      * @Title: enableStranger
+	      * @Description: TODO(这里用一句话描述这个方法的作用)
+	      * @param @param allRequestParams
+	      * @param @param requestBodyParams
+	      * @param @return    参数
+	      * @return Map<String,Object>    返回类型
+	      * @throws
+	      * @author LanYeYe
+	   */
+	  
+	  @RequestMapping("/user/enableStranger")
+	  public Map<String,Object> enableStranger(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+		  Long userId=this.getUserId();
+		  String enableStranger=String.valueOf(requestBodyParams.get("enableStranger"));
+		  userInfoService.updateEnableStranger(userId, Integer.valueOf(enableStranger));
+		  return ResultUtils.rtSuccess(null);
+	  }  
+	  
+	  
 	  /**
 	   * 
 	      * @Title: getUserInfo
@@ -81,6 +102,7 @@ public class UserInfoController extends BaseController{
 		  Long userId=Long.valueOf(requestBodyParams.get("userId").toString());
 		  LicenseDriver licenseDrive=userInfoService.getLicenseDriver(userId);
 		  LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(userId);
+		  rtMap.put("enableStranger",String.valueOf(userInfoService.getEnableStranger(userId)));
 		  if(licenseDrive!=null) {
 			  rtMap.put("userName", licenseDrive.getUserName());
 			  rtMap.put("gender",licenseDrive.getGender());

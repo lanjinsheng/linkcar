@@ -53,6 +53,13 @@ public class UserInfoService extends BaseService<UserInfoService>{
 		usersAccountMapper.updateNickName(account);
  
 	}
+	public void updateEnableStranger(Long userId,int enableStranger) {
+		UsersAccount account=new UsersAccount();
+		account.setId(userId);
+		account.setEnableStranger(enableStranger);
+		usersAccountMapper.updateEnableStranger(account);
+ 
+	}
 	public void updateImgUrl(String key,Long userId) {
 		UsersAccount account=new UsersAccount();
 		account.setImgUrl(key);
@@ -166,8 +173,10 @@ public class UserInfoService extends BaseService<UserInfoService>{
 		return true;
  
 	}
-	
-	
+   public int getEnableStranger(Long userId) {
+	   UsersAccount account= usersAccountMapper.findAccountById(userId);
+	   return account.getEnableStranger();
+   }
 	public void updatePwd(String orgPwd,String newPwd,Long userId) {
 		 Map<String,Object> account=new HashMap<String,Object>();
 		 account.put("orgPwd", orgPwd);
