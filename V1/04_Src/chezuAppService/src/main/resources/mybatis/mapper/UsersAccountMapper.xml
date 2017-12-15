@@ -4,6 +4,13 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.UsersAccount" >
     </resultMap>
 
+
+<!-- 临时使用的，转移到家族逻辑中 -->
+     <select id="getFamilyByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  familyInfo where createUserId=#{userId}
+     </select>
+
      <select id="findAccountByPhone" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
        SELECT *
        FROM  usersAccount where phone=#{phone}

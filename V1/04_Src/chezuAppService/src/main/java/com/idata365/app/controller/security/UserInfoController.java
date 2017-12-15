@@ -269,16 +269,6 @@ public class UserInfoController extends BaseController{
 	    	 return ResultUtils.rtSuccess(null);
 	    }
 	      
-	  private String getImgBasePath() {
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-//	   	     LOG.info(request.getRequestURI());
-//	   	     LOG.info(request.getRequestURL().toString());
-//	   	     LOG.info(request.getServletPath());  
-//	   	     LOG.info(request.getServerName()+"--"+request.getServerPort());
-	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/userFiles/getImgs?key=";
-
-	  }
 	  /**
 	   * 
 	      * @Title: uploadFrontDrivingLicenseImg

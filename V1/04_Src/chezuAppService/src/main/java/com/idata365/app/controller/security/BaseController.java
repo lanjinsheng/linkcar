@@ -26,4 +26,25 @@ abstract  class BaseController {
 	  	   UserInfo userInfo=(UserInfo)  request.getAttribute("userInfo");
 		   return userInfo.getId();
 	}
+	protected String getImgBasePath() {
+		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+//	   	     LOG.info(request.getRequestURI());
+//	   	     LOG.info(request.getRequestURL().toString());
+//	   	     LOG.info(request.getServletPath());  
+//	   	     LOG.info(request.getServerName()+"--"+request.getServerPort());
+	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/userFiles/getImgs?key=";
+
+	  }
+	
+	protected String getFamilyInviteBasePath() {
+		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+//	   	     LOG.info(request.getRequestURI());
+//	   	     LOG.info(request.getRequestURL().toString());
+//	   	     LOG.info(request.getServletPath());  
+//	   	     LOG.info(request.getServerName()+"--"+request.getServerPort());
+	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/share/goInvite?key=";
+
+	  }
 }
