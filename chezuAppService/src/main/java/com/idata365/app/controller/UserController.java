@@ -22,7 +22,7 @@ import com.idata365.app.util.ValidTools;
 
 
 @RestController
-public class UserController  extends BaseController {
+public class UserController {
 
 	@Autowired
 	private LoginRegService loginRegService;
