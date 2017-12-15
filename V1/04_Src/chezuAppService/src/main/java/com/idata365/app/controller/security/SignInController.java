@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.idata365.app.controller.BaseController;
 import com.idata365.app.entity.SigAwardStatBean;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.service.SignInService;

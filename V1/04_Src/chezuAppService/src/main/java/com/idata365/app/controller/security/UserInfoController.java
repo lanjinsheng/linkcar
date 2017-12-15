@@ -22,7 +22,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.app.config.SystemProperties;
-import com.idata365.app.controller.BaseController;
 import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.bean.UserInfo;
