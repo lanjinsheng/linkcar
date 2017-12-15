@@ -20,4 +20,6 @@ public interface UsersAccountMapper {
 	 void  updateImgUrl(UsersAccount account);
 	 void  updatePhone(UsersAccount account);
 	 void  updatePwdByUserIdAndOldPwd(Map<String,Object> account);
+	 
+	 Map<String,Object> getFamilyByUserId(@Param("userId") Long userId);
 }
