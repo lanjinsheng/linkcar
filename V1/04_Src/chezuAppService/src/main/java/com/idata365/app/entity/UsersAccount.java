@@ -14,6 +14,20 @@ public class UsersAccount implements Serializable {
     private Date createTime;
     private String imgUrl;
     private String nickName;
+    private int enableStranger;
+    
+	public int getEnableStranger() {
+		return enableStranger;
+	}
+
+	public void setEnableStranger(int enableStranger) {
+		this.enableStranger = enableStranger;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public UsersAccount() {
 		super();
 	}
