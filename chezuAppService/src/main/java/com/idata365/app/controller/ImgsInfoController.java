@@ -22,7 +22,7 @@ import com.idata365.app.partnerApi.SSOTools;
 
  
 @RestController
-public class ImgsInfoController extends BaseController {
+public class ImgsInfoController {
 	private final static Logger LOG = LoggerFactory.getLogger(ImgsInfoController.class);
     @Autowired
 	SystemProperties systemProperties;
