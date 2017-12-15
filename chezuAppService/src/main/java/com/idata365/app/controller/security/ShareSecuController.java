@@ -20,8 +20,8 @@ public class ShareSecuController  extends BaseController {
 	}
 
  
-    @RequestMapping("/share/goInvite")
-    public Map<String,Object> goInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    @RequestMapping("/share/createInvite")
+    public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	return null;
     }
      
