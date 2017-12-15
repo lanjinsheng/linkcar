@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.idata365.app.controller.BaseController;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgBean;

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.config.SystemProperties;
-import com.idata365.app.controller.BaseController;
 import com.idata365.app.util.ResultUtils;
 
  
