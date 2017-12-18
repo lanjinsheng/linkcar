@@ -143,12 +143,17 @@ public class ShareCommController extends BaseController {
     			rtMap.put("familyCode", inviteCode);
     			familyInvite.setMemberUserId(user.getId());
           		familyInvite.setSendInviteMsg(1);
-          		Long inviteId=familyInviteService.insertInviteFamily(familyInvite);
-          		Map<String,Object> family=familyService.findFamilyByFamilyId(familyId);
+        		Map<String,Object> family=familyService.findFamilyByFamilyId(familyId);
           		Long toUserId=Long.valueOf(family.get("createUserId").toString());
-          		Message message=messageService.buildInviteMessage(user.getId(), user.getPhone(), user.getNickName(), toUserId, inviteId);
-          		//插入消息，并发送
+          		
+          		//插入业务关联信息
+          		Long inviteId=familyInviteService.insertInviteFamily(familyInvite);
+           		//构建成员加入消息
+          		Message message=messageService.buildMessage(user.getId(), user.getPhone(), user.getNickName(), toUserId, inviteId, MessageEnum.INVITE_FAMILY);
+          		//插入消息
           		messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
+          		//推送消息
+          		messageService.pushMessage(message,MessageEnum.INVITE_FAMILY);
           		
     			return ResultUtils.rtSuccess(rtMap);
     		}else {

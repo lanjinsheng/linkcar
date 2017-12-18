@@ -25,6 +25,7 @@ import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.MessageMapper;
+import com.idata365.app.partnerApi.ManagePushApi;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ValidTools;
 
@@ -34,7 +35,7 @@ import com.idata365.app.util.ValidTools;
 public class MessageService extends BaseService<MessageService>{
 	private final static Logger LOG = LoggerFactory.getLogger(MessageService.class);
 	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
-	public static final String  InviteMessageUrl="com.shujin.shuzan://inviteId=%s";
+	public static final String  InviteMessageUrl="com.shujin.shuzan://invite.push?inviteId=%s";
 	public static final Map<String,String> MessageImgs=new HashMap<String,String>();
 	static {
 		MessageImgs.put("1", "http://apph5.idata365.com/appImgs/xitong.png");
@@ -44,6 +45,8 @@ public class MessageService extends BaseService<MessageService>{
 	}
 	@Autowired
 	MessageMapper messageMapper;
+	@Autowired
+	ManagePushApi  managePushApi;
 	public MessageService() {
 	}
 	 /**
@@ -60,21 +63,29 @@ public class MessageService extends BaseService<MessageService>{
 	     * @throws
 	     * @author LanYeYe
 	  */
-	public Message buildInviteMessage(Long fromUserId,String fromUserPhone,String fromUserNick,Long toUserId,Long familyInviteId) {
+	public Message buildMessage(Long fromUserId,String fromUserPhone,String fromUserNick,Long toUserId,Long familyInviteId,MessageEnum type) {
 		Message message=new Message();
-		message.setFromUserId(fromUserId==null?0:fromUserId);
-		message.setBottomText("点击审核");
-		message.setChildType(1);
-		message.setContent(getInviteMessageDesc(fromUserPhone,fromUserNick));
-		message.setCreateTime(new Date());
-		message.setIcon("");
-		message.setIsPush(1);
-		message.setParentType(2);
-		message.setPicture("");
-		message.setTitle("玩家申请");
-		message.setToUserId(toUserId);
-		message.setUrlType(0);
-		message.setToUrl(getInviteMessageUrl(familyInviteId));
+		switch(type) {
+		case SYSTEM:
+			break;
+		case INVITE_FAMILY:
+			message.setFromUserId(fromUserId==null?0:fromUserId);
+			message.setBottomText("点击审核");
+			message.setChildType(1);
+			message.setContent(getInviteMessageDesc(fromUserPhone,fromUserNick));
+			message.setCreateTime(new Date());
+			message.setIcon("");
+			message.setIsPush(1);
+			message.setParentType(2);
+			message.setPicture("");
+			message.setTitle("玩家申请");
+			message.setToUserId(toUserId);
+			message.setUrlType(0);
+			message.setToUrl(getInviteMessageUrl(familyInviteId));
+			break;
+		 default:
+			break;
+		}
 		return message;
 	}
 	/**
@@ -100,6 +111,28 @@ public class MessageService extends BaseService<MessageService>{
 		}
 		return msg.getId();
 	}
+	
+	/**
+	 * 
+	    * @Title: pushMessage
+	    * @Description: TODO(推送消息)
+	    * @param @param msg
+	    * @param @param type
+	    * @param @return    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public void pushMessage(Message msg,MessageEnum type) {
+		String alias=msg.getToUserId()+"_0";
+		 Map<String,String> extraMap = new HashMap<String, String>();
+	        extraMap.put("parentType", String.valueOf(msg.getParentType()));
+	        extraMap.put("childType", String.valueOf(msg.getChildType()));
+	        extraMap.put("msgId",String.valueOf(msg.getId()));
+	        extraMap.put("toUrl", msg.getToUrl());
+		 	managePushApi.SendMsgToOne(msg.getContent(), alias, ManagePushApi.PLATFORM_IOS, extraMap);
+	}
+	
 	/**
 	 * 
 	    * @Title: getMsgMainTypes
