@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.FamilyMapper">
+
+	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.FamilyResultBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+		select id as myFamilyId, familyName as myFamilyName, imgUrl as myFamilyImgUrl, memberNum, inviteCode from familyInfo where createUserId=#{userId}
+	</select>
+
+	<delete id="deleteUserFamilyRelation" parameterType="com.idata365.app.entity.FamilyParamBean" >
+       delete from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
+    </delete>
+
+	<insert id="save" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into familyInfo(createUserId, familyName, provinceId, cityId, memberNum) values(#{userId}, #{familyName}, #{provinceId}, #{cityId}, 1)
+	</insert>
+	 	
+ 	<update id="updateUserStraner" parameterType="com.idata365.app.entity.UsersAccountParamBean">
+ 		update usersAccount set enableStranger=#{enableStranger} where id=#{userId}
+ 	</update>
+	
+	<select id="queryFamilys" resultType="com.idata365.app.entity.FamilyRandBean">
+       select imgUrl, memberNum as num, familyName as name, id as familyId from familyInfo order by familyId asc
+	</select>
+     
+	<insert id="saveUserFamily" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into userFamilyRelation(userId, familyId) values(#{userId}, #{familyId})
+	</insert>
+     
+    <select id="queryFamilyByCode" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+    	select imgUrl, memberNum as num, familyName as name, id as familyId from familyInfo where inviteCode=#{inviteCode}
+    </select>
+ 
+ 	<insert id="saveFamilyInvite" parameterType="com.idata365.app.entity.FamilyInviteParamBean" useGeneratedKeys="true" keyProperty="id" >
+ 		insert into familyInvite(familyId, memberUserId, sendInviteMsg, createTime, leaveWord) values(#{familyId}, #{userId}, 1, #{createTime}, #{msgStr})
+ 	</insert>
+ 	
+    <select id="queryApplyInfo" resultType="com.idata365.app.entity.FamilyInviteBean" parameterType="com.idata365.app.entity.FamilyInviteParamBean">
+    	select t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, sendInviteMsg as userSource, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, leaveWord as msgStr from familyInvite t1 
+			join usersAccount t2 on (t1.memberUserId = t2.id) where t1.id=#{msgId}
+    </select>
+ 
+    <select id="countByName" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+    	select count(1) from familyInfo where familyName=#{familyName}
+    </select>
+ 	
+ 	<update id="updateInviteCode" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		update familyInfo set inviteCode=#{inviteCode} where id=#{familyId}
+ 	</update>
+ 	
+ 	<select id="queryFamilyIdByUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select familyId from userFamilyRelation where userId=#{userId}
+ 	</select>
+ 	
+ 	<select id="countUsersByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select count(id) from userFamilyRelation where familyId=#{familyId}
+ 	</select>
+</mapper>
