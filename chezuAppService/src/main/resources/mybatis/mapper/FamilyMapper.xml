@@ -19,7 +19,7 @@
  	</update>
 	
 	<select id="queryFamilys" resultType="com.idata365.app.entity.FamilyRandBean">
-       select imgUrl, memberNum as num, familyName as name, id as familyId from familyInfo order by familyId asc
+       select imgUrl, memberNum as num, familyName as name, id as familyId from familyInfo order by familyId asc limit 0, 5;
 	</select>
      
 	<insert id="saveUserFamily" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
@@ -27,7 +27,7 @@
 	</insert>
      
     <select id="queryFamilyByCode" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
-    	select imgUrl, memberNum as num, familyName as name, id as familyId from familyInfo where inviteCode=#{inviteCode}
+    	select imgUrl, memberNum as num, familyName as name, id as familyId, createUserId as userId from familyInfo where inviteCode=#{inviteCode}
     </select>
  
  	<insert id="saveFamilyInvite" parameterType="com.idata365.app.entity.FamilyInviteParamBean" useGeneratedKeys="true" keyProperty="id" >
@@ -53,5 +53,9 @@
  	
  	<select id="countUsersByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select count(id) from userFamilyRelation where familyId=#{familyId}
+ 	</select>
+ 	
+ 	<select id="countInviteByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId}
  	</select>
 </mapper>

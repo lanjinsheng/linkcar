@@ -156,14 +156,29 @@ public class FamilyService extends BaseService<FamilyService>
 	 * 显示可以加入的家族
 	 * @return
 	 */
-	public List<FamilyRandResultBean> listRecruFamily()
+	public List<FamilyRandResultBean> listRecruFamily(long userId)
 	{
+		//暂时不用随机算法查询家族
 		List<FamilyRandBean> familys = this.familyMapper.queryFamilys();
 		List<FamilyRandResultBean> resultList = new ArrayList<>();
 		for (FamilyRandBean tempBean : familys)
 		{
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			
+			FamilyParamBean fParamBean = new FamilyParamBean();
+			fParamBean.setUserId(userId);
+			fParamBean.setFamilyId(tempBean.getFamilyId());
+			int inviteCount = this.familyMapper.countInviteByUserId(fParamBean);
+			if (inviteCount > 0)
+			{
+				tempResultBean.setIsAlreadyRecommend("1");
+			}
+			else
+			{
+				tempResultBean.setIsAlreadyRecommend("0");
+			}
+			
 			resultList.add(tempResultBean);
 		}
 		return resultList;
@@ -172,13 +187,29 @@ public class FamilyService extends BaseService<FamilyService>
 	/**
 	 * 根据邀请码查询家族
 	 * @param bean
+	 * @param userId
 	 * @return
 	 */
-	public FamilyRandResultBean findFamilyByCode(FamilyParamBean bean)
+	public FamilyRandResultBean findFamilyByCode(FamilyParamBean bean, long userId)
 	{
 		FamilyRandBean tempRandBean = this.familyMapper.queryFamilyByCode(bean);
 		FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 		AdBeanUtils.copyOtherPropToStr(tempResultBean, tempRandBean);
+		
+		long familyId = tempRandBean.getFamilyId();
+		FamilyParamBean paramBean = new FamilyParamBean();
+		paramBean.setUserId(userId);
+		paramBean.setFamilyId(familyId);
+		int inviteCount = this.familyMapper.countInviteByUserId(paramBean);
+		if (inviteCount > 0)
+		{
+			tempResultBean.setIsAlreadyRecommend("1");
+		}
+		else
+		{
+			tempResultBean.setIsAlreadyRecommend("0");
+		}
+		
 		return tempResultBean;
 	}
 	

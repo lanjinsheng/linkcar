@@ -33,4 +33,6 @@ public interface FamilyMapper
 	public Long queryFamilyIdByUserId(FamilyParamBean bean);
 	
 	public int countUsersByFamilyId(FamilyParamBean bean);
+	
+	public int countInviteByUserId(FamilyParamBean bean);
 }
