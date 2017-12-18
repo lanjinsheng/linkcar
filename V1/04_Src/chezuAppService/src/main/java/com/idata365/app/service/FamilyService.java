@@ -39,12 +39,12 @@ public class FamilyService extends BaseService<FamilyService>
 	    * @throws
 	    * @author LanYeYe
 	 */
-	public Long findFamilyIdByUserId(long userId)
+	public Map<String,Object> findFamilyIdByUserId(long userId)
 	{
 		Map<String,Object> rtMap=usersAccountMapper.getFamilyByUserId(userId);
 		if(rtMap==null || rtMap.size()==0) {
-			return 0L;
+			return null;
 		}
-		return Long.valueOf(rtMap.get("id").toString());
+		return rtMap;
 	}
 }

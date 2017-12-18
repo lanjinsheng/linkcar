@@ -1,5 +1,6 @@
 package com.idata365.app.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,15 +10,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.idata365.app.entity.FamilyInvite;
+import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.LoginRegService;
+import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
 
 @Controller
-public class ShareCommController{
+public class ShareCommController extends BaseController {
 	private final static Logger LOG = LoggerFactory.getLogger(ShareCommController.class);
+    
+    @Autowired
+	private FamilyService familyService;
 	@Autowired
+	private LoginRegService loginRegService;
 	public ShareCommController() {
 	}
 
@@ -25,25 +35,24 @@ public class ShareCommController{
     @RequestMapping("/share/goInvite")
     public String goInvite(@RequestParam (required = false) Map<String, String> allRequestParams,Map<String, Object> model){
     	String content=allRequestParams.get("key");
-//    	if(content==null) {
-//    		return "error";
-//    	}
+    	if(content==null) {
+    		return "error";
+    	}
     	try {
-//    	String key=SignUtils.decryptDataAes(content);
-//    	String []arrayString = key.split(":");
-//    	Long familyId=Long.valueOf(arrayString[0]);
-//    	Long createTimeLong=Long.valueOf(arrayString[1]);
-//    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
-//    	if(now>createTimeLong) {
-//    		LOG.info("过期的数据 key："+key);
-//    		return "error";
-//    	}
-//    	//跳转到加盟页面
+    	String key=SignUtils.decryptDataAes(content);
+    	String []arrayString = key.split(":");
+    	Long familyId=Long.valueOf(arrayString[0]);
+    	Long createTimeLong=Long.valueOf(arrayString[2]);
+    	String inviteCode=arrayString[1];
+    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
+    	if(now>createTimeLong) {
+    		LOG.info("过期的数据 key："+key);
+    		return "error";
+    	}
+    	//跳转到加盟页面
 //    	
-//    	String datas=familyId+":"+System.currentTimeMillis();
-
-//			String sign=SignUtils.encryptDataAes(datas);
-    	String sign=SignUtils.encryptDataAes("23r23234234");
+    	    String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+			String sign=SignUtils.encryptDataAes(datas);
 			model.put("sign", sign);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -52,5 +61,129 @@ public class ShareCommController{
 		}
     	return "invite1";
     }
+
+    
+    @RequestMapping("/share/getCode")
+    @ResponseBody
+    public Map<String,Object> getCode(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, String> requestBodyParams){
+    	String content=requestBodyParams.get("sign");
+    	String phone=requestBodyParams.get("phone");
+    	if(content==null || phone==null) {
+    		return ResultUtils.rtFailParam(null, "无效参数");
+    	}
+    	try {
+    	String key=SignUtils.decryptDataAes(content);
+    	String []arrayString = key.split(":");
+    	Long familyId=Long.valueOf(arrayString[0]);
+    	Long createTimeLong=Long.valueOf(arrayString[2]);
+    	String inviteCode=arrayString[1];
+    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
+    	if(now>createTimeLong) {
+    		LOG.info("过期的数据 key："+key);
+    		return ResultUtils.rtFailParam(null, "过期数据");
+    	}
+    	//跳转到加盟页面
+           //    	判断并给出code
+    	    loginRegService.getVerifyCode(phone, 4);//分享校验码类型4
+    	    return ResultUtils.rtSuccess(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 return ResultUtils.rtFail(null);
+		}
+    }
+    
+    
+    @RequestMapping("/share/submitInvite")
+    @ResponseBody
+    public Map<String,Object> submitInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, String> requestBodyParams){
+    	
+    	Map<String,String> rtMap=new HashMap<String,String>();
+    	String content=requestBodyParams.get("sign");
+    	String phone=requestBodyParams.get("phone");
+    	String code=requestBodyParams.get("code");
+    	if(content==null || phone==null) {
+    		return ResultUtils.rtFailParam(null, "无效参数");
+    	}
+    	try {
+    	String key=SignUtils.decryptDataAes(content);
+    	String []arrayString = key.split(":");
+    	Long familyId=Long.valueOf(arrayString[0]);
+    	Long createTimeLong=Long.valueOf(arrayString[2]);
+    	String inviteCode=arrayString[1];
+    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
+    	if(now>createTimeLong) {
+    		LOG.info("过期的数据 key："+key);
+    		return ResultUtils.rtFailParam(null, "过期数据");
+    	}
+    	//判断验证码是否正常
+    	String  status=LoginRegService.VC_ERR;
+    	if(code.equals("010101")) {//测试万能验证码
+    		status=LoginRegService.OK;
+    	}else {
+    		status=loginRegService.validVerifyCode(phone, 4, code);
+    	}
+      	if(status.equals(LoginRegService.OK)) {//校验码通过
+      		//插入关联信息 待写入
+      		FamilyInvite familyInvite=new FamilyInvite();
+      		familyInvite.setFamilyId(familyId);
+      		familyInvite.setMemberPhone(phone);
+      		UsersAccount user=loginRegService.getUserByPhone(phone);
+      		familyInvite.setMemberUserId(user==null?0:user.getId());
+      		familyInvite.setSendInviteMsg(user==null?0:1);
+      		
+      		
+    		if(user!=null) {
+    			//提交审核消息,待写
+    			rtMap.put("userExist", "1");
+    			rtMap.put("familyCode", inviteCode);
+    			return ResultUtils.rtSuccess(rtMap);
+    		}else {
+    			rtMap.put("userExist", "0");
+    			rtMap.put("familyCode", inviteCode);
+    			return ResultUtils.rtSuccess(rtMap);
+    		}
+      	}
+      	else {
+      		if(status.equals(LoginRegService.VC_ERR)) 
+      		return ResultUtils.rtFailParam(null, "校验码无效");
+      		if(status.equals(LoginRegService.VC_EX)) 
+      		return ResultUtils.rtFailParam(null, "校验码过期");
+      	}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 return ResultUtils.rtFail(null);
+		}
+    	 return ResultUtils.rtFail(null);
+    }
+    
+    
+    
+	 @RequestMapping("/share/createInviteTest")
+	 @ResponseBody
+	    public Map<String,Object> createInviteTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	      Long userId=	Long.valueOf(allRequestParams.get("userId"));
+		 Map<String,Object> rtMap=new HashMap<String,Object>();
+	    	Map<String,Object>  family=familyService.findFamilyIdByUserId(userId);
+	    	if(family==null) {
+	    		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建");
+	    	}
+	    	try {
+	    		Long familyId=Long.valueOf(rtMap.get("id").toString());
+	    		String inviteCode=rtMap.get("inviteCode").toString();
+	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+				String key=SignUtils.encryptDataAes(String.valueOf(datas));
+				String shareUrl=this.getFamilyInviteBasePath()+key;
+				rtMap.put("shareUrl", shareUrl);
+				return ResultUtils.rtSuccess(rtMap);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return ResultUtils.rtFail(null);
+			}
+	    }
+	 public static void main(String []args) {
+		 System.out.println("112:345353".split(":")[0]);
+	 }
      
 }

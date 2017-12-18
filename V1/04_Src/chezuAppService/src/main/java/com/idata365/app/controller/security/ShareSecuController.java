@@ -29,12 +29,14 @@ public class ShareSecuController  extends BaseController {
     @RequestMapping("/share/createInvite")
     public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	Long  familyId=familyService.findFamilyIdByUserId(this.getUserId());
-    	if(familyId==0) {
+    	Map<String,Object>  family=familyService.findFamilyIdByUserId(this.getUserId());
+    	if(family==null) {
     		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建\"");
     	}
     	try {
-    		String datas=familyId+":"+System.currentTimeMillis();
+    		Long familyId=Long.valueOf(rtMap.get("id").toString());
+    		String inviteCode=rtMap.get("inviteCode").toString();
+    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 			String key=SignUtils.encryptDataAes(String.valueOf(datas));
 			String shareUrl=this.getFamilyInviteBasePath()+key;
 			rtMap.put("shareUrl", shareUrl);
