@@ -25,7 +25,7 @@ public class ProvinceController extends BaseController
 	 * 省市区json信息
 	 * @return
 	 */
-	@RequestMapping("/om/findProvince")
+	@RequestMapping("/district/findProvince")
 	public Map<String, Object> findProvince()
 	{
 		List<Province> resultList = this.provinceService.findProvince();
