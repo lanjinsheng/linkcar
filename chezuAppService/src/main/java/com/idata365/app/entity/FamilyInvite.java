@@ -10,6 +10,14 @@ public class FamilyInvite {
 	private int sendInviteMsg;
 	private Date createTime;
 	private Date sendTime;
+	private String leaveWord;
+	
+	public String getLeaveWord() {
+		return leaveWord;
+	}
+	public void setLeaveWord(String leaveWord) {
+		this.leaveWord = leaveWord;
+	}
 	public Long getId() {
 		return id;
 	}

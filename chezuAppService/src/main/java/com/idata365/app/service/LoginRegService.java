@@ -29,6 +29,7 @@ import com.idata365.app.mapper.UserDeviceLogsMapper;
 import com.idata365.app.mapper.UserLoginSessionMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.mapper.VerifyCodeMapper;
+import com.idata365.app.partnerApi.PhoneMsgTools;
 import com.idata365.app.remote.ChezuColService;
 import com.idata365.app.util.DateTools;
 
@@ -69,6 +70,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		 verifyCode.setVerifyCode(code);
 		 verifyCode.setCreateTimeLong(System.currentTimeMillis());
 		 verifyCode.setPhone(phone);
+		 PhoneMsgTools.sendCodeMsg(phone,code);//发送短信
 		 verifyCodeMapper.insertVerifyCode(verifyCode);
 		 return null;
 	}
@@ -173,6 +175,13 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		    	   return true;
 		      }
 	}	
+	public UsersAccount getUserByPhone(String phone) {
+		 UsersAccount account=new UsersAccount();
+		 account.setPhone(phone);
+		 UsersAccount dbAccount=usersAccountMapper.findAccountByPhone(account);
+		      return dbAccount;
+	}	
+	
 	
 	public void insertToken(Long userId,String token) {
 		UserLoginSession loginSession=new UserLoginSession();
