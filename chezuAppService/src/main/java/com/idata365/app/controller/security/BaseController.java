@@ -1,6 +1,11 @@
 package com.idata365.app.controller.security;
 
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -47,4 +52,15 @@ abstract  class BaseController {
 	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/share/goInvite?key=";
 
 	  }
+	protected void dealListObect2String(List<Map<String,Object>> list) {
+		for(Map<String,Object> m: list) {
+			Set<String> keySet=m.keySet();
+			Iterator<String> it=keySet.iterator();
+			while(it.hasNext()) {
+				String key=it.next();
+				String value=m.get(key)==null?"":String.valueOf(m.get(key));
+				m.put(key,value );
+			}
+		}
+	}
 }
