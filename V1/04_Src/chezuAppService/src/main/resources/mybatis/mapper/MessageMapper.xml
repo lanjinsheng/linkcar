@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.MessageMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.Message" >
+    </resultMap>
+    <insert id="insertMessage" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.Message" >
+       INSERT INTO 
+            message
+            (parentType,childType,title,createTime,icon,picture,content,urlType,toUrl,toUserId,fromUserId,bottomText,isPush) 
+        VALUES
+            (#{parentType}, #{childType},#{title},now(),#{icon},#{picture},#{content},#{urlType},#{toUrl},#{toUserId},#{fromUserId},#{bottomText},#{isPush}))
+    </insert>
+ 
+    
+</mapper>

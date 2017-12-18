@@ -10,7 +10,12 @@
        SELECT *
        FROM  familyInfo where createUserId=#{userId}
      </select>
-
+     <select id="getFamilyByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  familyInfo where id=#{familyId}
+     </select>
+     
+     
      <select id="findAccountByPhone" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
        SELECT *
        FROM  usersAccount where phone=#{phone}
