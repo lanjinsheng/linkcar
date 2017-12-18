@@ -11,5 +11,42 @@
             (#{parentType}, #{childType},#{title},now(),#{icon},#{picture},#{content},#{urlType},#{toUrl},#{toUserId},#{fromUserId},#{bottomText},#{isPush}))
     </insert>
  
+    <select id="getMsgMainTypes" resultType="java.util.HashMap" parameterType="java.lang.Long">
+    
+    select count(parentType) typeCount,parentType from message where isRead=0 and toUserId=#{toUserId}  group by parentType order by parentType
+    </select>
+     
+    <update id="updateRead"    parameterType="java.lang.Long" >
+      update
+            message
+             set isRead=1,readTime=now() where id=#{msgId} and isRead=0;
+    </update>
+ 
+     
+     
+    <select id="getMsgMainTypeTime" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+      select DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime from message where  
+     parentType=#{parentType} order by id desc limit 1
+    </select>
+    
+    
+    <select id="getMsgListByType" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+   	 select id msgId,icon,parentType,childType,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,title,picture,content,bottomText,urlType,toUrl,isRead
+   	 from message where parentType=#{msgType} and <![CDATA[ id>=${startMsgId}]]> 
+   	 
+   	  <if test='readStatus != null and readStatus != "0"'>
+          <choose>  
+			<when test='readStatus == "1"'>  
+				AND isRead=0
+			</when>  
+			<otherwise>   
+		        AND isRead=1 
+			</otherwise>  
+	  </choose> 
+      </if>
+       limit 10
+    </select>
+    
+    
     
 </mapper>
