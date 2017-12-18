@@ -1,5 +1,7 @@
 package com.idata365.app.controller.security;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,15 +10,21 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
+import com.idata365.app.enums.UserImgsEnum;
+import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.FamilyService;
+import com.idata365.app.util.ImageUtils;
 import com.idata365.app.util.ResultUtils;
 
 @RestController
@@ -24,7 +32,8 @@ public class FamilyController extends BaseController
 {
 	@Autowired
 	private FamilyService familyService;
-	
+	@Autowired
+	SystemProperties systemProperties;
 	@RequestMapping("/family/removeMember")
 	public Map<String, Object> removeMember(@RequestBody FamilyParamBean reqBean)
 	{
@@ -139,5 +148,38 @@ public class FamilyController extends BaseController
 		resultList.add(resultBean);
 		return ResultUtils.rtSuccess(resultList);
 	}
+	/**
+	 * 
+	    * @Title: generateInviteInfo
+	    * @Description: TODO(家族头像)
+	    * @param @param reqBean
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@RequestMapping("/family/updateFamilyImg")
+    public  Map<String,Object>  updateFamilyImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) {
+	   	 Long userId=this.getUserId();
+	   	 if(file==null) {
+	   		 return ResultUtils.rtFailParam(null,"附件为空");
+	   	 }
+     	Map<String,Object> rtMap=new HashMap<String,Object>();
+	    try {
+	               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+	    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.FAMILY_HEADER);
+	               InputStream is=file.getInputStream();
+	               SSOTools.saveOSS(is,key);
+	               rtMap.put("allImgUrl", getImgBasePath()+key);
+	               rtMap.put("imgUrl", key);
+	               is.close();
+	        }catch (Exception e) {
+	               // TODO Auto-generated catch block
+	            e.printStackTrace();
+	            return ResultUtils.rtFail(null); 
+	        }
+	       return ResultUtils.rtSuccess(rtMap);
+   }
+	
 	
 }
