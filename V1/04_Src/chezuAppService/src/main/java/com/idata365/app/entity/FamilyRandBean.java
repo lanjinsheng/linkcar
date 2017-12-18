@@ -8,7 +8,9 @@ public class FamilyRandBean
 	
 	private String name;
 	
-	private int familyId;
+	private long familyId;
+	
+	private long userId;
 	
 	//是否已经申请标记
 	private String isAlreadyRecommend;
@@ -43,12 +45,12 @@ public class FamilyRandBean
 		this.name = name;
 	}
 
-	public int getFamilyId()
+	public long getFamilyId()
 	{
 		return familyId;
 	}
 
-	public void setFamilyId(int familyId)
+	public void setFamilyId(long familyId)
 	{
 		this.familyId = familyId;
 	}
@@ -62,4 +64,15 @@ public class FamilyRandBean
 	{
 		this.isAlreadyRecommend = isAlreadyRecommend;
 	}
+
+	public long getUserId()
+	{
+		return userId;
+	}
+
+	public void setUserId(long userId)
+	{
+		this.userId = userId;
+	}
+	
 }

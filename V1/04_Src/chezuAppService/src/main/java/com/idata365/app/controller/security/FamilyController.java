@@ -72,14 +72,16 @@ public class FamilyController extends BaseController
 	@RequestMapping("/family/listRecruFamily")
 	public Map<String, Object> listRecruFamily()
 	{
-		List<FamilyRandResultBean> resutList = this.familyService.listRecruFamily();
+		Long userId = super.getUserId();
+		List<FamilyRandResultBean> resutList = this.familyService.listRecruFamily(userId);
 		return ResultUtils.rtSuccess(resutList);
 	}
 	
 	@RequestMapping("/family/findFamilyByCode")
 	public Map<String, Object> findFamilyByCode(@RequestBody FamilyParamBean reqBean)
 	{
-		FamilyRandResultBean resultBean = this.familyService.findFamilyByCode(reqBean);
+		Long userId = super.getUserId();
+		FamilyRandResultBean resultBean = this.familyService.findFamilyByCode(reqBean, userId);
 		return ResultUtils.rtSuccess(resultBean);
 	}
 	
