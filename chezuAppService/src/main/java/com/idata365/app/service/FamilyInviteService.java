@@ -27,7 +27,15 @@ public class FamilyInviteService extends BaseService<FamilyInviteService>{
 	 FamilyInviteMapper familyInviteMapper;
 	public FamilyInviteService() {
 	}
-	 
+	 /**
+	  * 
+	     * @Title: insertInviteFamily
+	     * @Description: TODO(网页插入家族邀请表)
+	     * @param @param familyInvite    参数
+	     * @return void    返回类型
+	     * @throws
+	     * @author LanYeYe
+	  */
 	 public void  insertInviteFamily(FamilyInvite familyInvite) {
 		 if(familyInvite.getMemberUserId()>0) {
 			 familyInviteMapper.insertFamilyInviteHadReg(familyInvite);
