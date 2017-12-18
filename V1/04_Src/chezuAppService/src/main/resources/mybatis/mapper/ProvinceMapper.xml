@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.ProvinceMapper">
+
+	<select id="findProvince" resultType="com.idata365.app.entity.Province">
+		select provinceId as upareaid, province as upareaname from provinces order by provinceid
+	</select>
+
+	<select id="findCity" resultType="com.idata365.app.entity.City" parameterType="java.lang.String">
+		select cityid as upareaid, city as upareaname from cities where provinceid=#{provinceid} order by cityid
+	</select>
+
+	<select id="findArea" resultType="com.idata365.app.entity.Area" parameterType="java.lang.String">
+		select areaid as upareaid, area as upareaname from areas where cityId=#{cityId} order by areaid
+	</select>
+</mapper>
