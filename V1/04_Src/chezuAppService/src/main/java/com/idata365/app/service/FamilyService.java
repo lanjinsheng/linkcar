@@ -47,4 +47,24 @@ public class FamilyService extends BaseService<FamilyService>
 		}
 		return rtMap;
 	}
+	
+	/**
+	 * 
+	    * @Title: findFamilyIdByUserId
+	    * @Description: TODO(暂时通过usersAccountMapper来处理，等小明接口完整了转移查询mapper)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return Long    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Map<String,Object> findFamilyByFamilyId(long family)
+	{
+		Map<String,Object> rtMap=usersAccountMapper.getFamilyByFamilyId(family);
+		if(rtMap==null || rtMap.size()==0) {
+			return null;
+		}
+		return rtMap;
+	}
+	
 }

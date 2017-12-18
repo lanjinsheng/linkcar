@@ -18,6 +18,14 @@ public class Message {
 	private Integer isRead;
 	private Integer isPush;
 	private Date readTime;
+	private String toUrl;
+	
+	public String getToUrl() {
+		return toUrl;
+	}
+	public void setToUrl(String toUrl) {
+		this.toUrl = toUrl;
+	}
 	public Long getId() {
 		return id;
 	}

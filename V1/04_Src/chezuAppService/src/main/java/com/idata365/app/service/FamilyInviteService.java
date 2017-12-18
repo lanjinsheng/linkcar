@@ -36,12 +36,13 @@ public class FamilyInviteService extends BaseService<FamilyInviteService>{
 	     * @throws
 	     * @author LanYeYe
 	  */
-	 public void  insertInviteFamily(FamilyInvite familyInvite) {
+	 public Long  insertInviteFamily(FamilyInvite familyInvite) {
 		 if(familyInvite.getMemberUserId()>0) {
 			 familyInviteMapper.insertFamilyInviteHadReg(familyInvite);
 		 }else {
 			 familyInviteMapper.insertFamilyInviteNoReg(familyInvite);
 		 }
+		 return familyInvite.getId();
 	 }
 	 
 }

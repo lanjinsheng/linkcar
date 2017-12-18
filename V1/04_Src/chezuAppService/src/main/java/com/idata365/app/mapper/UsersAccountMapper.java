@@ -22,4 +22,5 @@ public interface UsersAccountMapper {
 	 void  updatePwdByUserIdAndOldPwd(Map<String,Object> account);
 	 
 	 Map<String,Object> getFamilyByUserId(@Param("userId") Long userId);
+	 Map<String,Object> getFamilyByFamilyId(@Param("familyId") Long familyId);
 }
