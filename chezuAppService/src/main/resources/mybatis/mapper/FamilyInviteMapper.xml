@@ -3,14 +3,14 @@
 <mapper namespace="com.idata365.app.mapper.FamilyInviteMapper">
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.FamilyInvite" >
     </resultMap>
-    <insert id="insertFamilyInviteHadReg" parameterType="com.idata365.app.entity.FamilyInvite" >
+    <insert id="insertFamilyInviteHadReg" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyInvite" >
        INSERT INTO 
             familyInvite
             (familyId,memberPhone,memberUserId,sendInviteMsg,createTime,sendTime) 
         VALUES
             (#{familyId}, #{memberPhone},#{memberUserId},1,now(),now())
     </insert>
-     <insert id="insertFamilyInviteNoReg" parameterType="com.idata365.app.entity.FamilyInvite" >
+     <insert id="insertFamilyInviteNoReg" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyInvite" >
        INSERT INTO 
             familyInvite
             (familyId,memberPhone,memberUserId,sendInviteMsg,createTime) 
