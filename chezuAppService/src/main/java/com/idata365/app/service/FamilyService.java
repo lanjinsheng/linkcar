@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
@@ -19,7 +20,10 @@ import com.idata365.app.entity.FamilyRandBean;
 import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UsersAccountParamBean;
+import com.idata365.app.entity.bean.UserInfo;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
@@ -32,7 +36,10 @@ public class FamilyService extends BaseService<FamilyService>
 	
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
-	 
+	
+	@Autowired
+	private MessageService messageService;
+	
 	public FamilyResultBean findFamily(long userId)
 	{
 //		FamilyResultBean resultBean = new FamilyResultBean();
@@ -124,6 +131,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @param bean
 	 * @return
 	 */
+	@Transactional
 	public int permitApply(FamilyParamBean bean)
 	{
 		Long tempFamilyId = this.familyMapper.queryFamilyIdByUserId(bean);
@@ -156,6 +164,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * 显示可以加入的家族
 	 * @return
 	 */
+	@Transactional
 	public List<FamilyRandResultBean> listRecruFamily(long userId)
 	{
 		//暂时不用随机算法查询家族
@@ -190,6 +199,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @param userId
 	 * @return
 	 */
+	@Transactional
 	public FamilyRandResultBean findFamilyByCode(FamilyParamBean bean, long userId)
 	{
 		FamilyRandBean tempRandBean = this.familyMapper.queryFamilyByCode(bean);
@@ -217,12 +227,24 @@ public class FamilyService extends BaseService<FamilyService>
 	 * 申请加入指定家族
 	 * @param bean
 	 */
-	public void applyByFamily(FamilyInviteParamBean bean)
+	@Transactional
+	public void applyByFamily(FamilyInviteParamBean bean, UserInfo userInfo)
 	{
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, "yyyy-MM-dd HH:mm:ss");
 		bean.setCreateTime(dayStr);
-		this.familyMapper.saveFamilyInvite(bean);
+		long inviteId = this.familyMapper.saveFamilyInvite(bean);
+		
+		FamilyParamBean fParamBean = new FamilyParamBean();
+		fParamBean.setFamilyId(bean.getFamilyId());
+		long toUserId = this.familyMapper.queryCreateUserId(fParamBean);
+		
+		//构建成员加入消息
+  		Message message=messageService.buildMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(), toUserId, inviteId, MessageEnum.INVITE_FAMILY);
+  		//插入消息
+  		messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
+  		//推送消息
+  		messageService.pushMessage(message,MessageEnum.INVITE_FAMILY);
 	}
 	
 	/**
@@ -247,6 +269,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @param bean
 	 * @return
 	 */
+	@Transactional
 	public long createFamily(FamilyParamBean bean)
 	{
 		this.familyMapper.save(bean);
@@ -268,6 +291,7 @@ public class FamilyService extends BaseService<FamilyService>
 		{
 			usersAccountParamBean.setEnableStranger(0);
 		}
+		this.familyMapper.updateUserStraner(usersAccountParamBean);
 		
 		return familyId;
 	}
@@ -277,6 +301,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @param bean
 	 * @return
 	 */
+	@Transactional
 	public InviteInfoResultBean generateInviteInfo(FamilyParamBean bean)
 	{
 		UUID uuid = UUID.randomUUID();

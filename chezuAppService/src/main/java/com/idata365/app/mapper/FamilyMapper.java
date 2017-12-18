@@ -7,20 +7,25 @@ import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.UsersAccountParamBean;
 
 public interface FamilyMapper
 {
 	public FamilyResultBean queryFamilyByUserId(FamilyParamBean bean);
 	
+	public long queryCreateUserId(FamilyParamBean bean);
+	
 	public void deleteUserFamilyRelation(FamilyParamBean bean);
 	
 	public void save(FamilyParamBean bean);
 
+	public void updateUserStraner(UsersAccountParamBean bean);
+	
 	public List<FamilyRandBean> queryFamilys();
 	
 	public FamilyRandBean queryFamilyByCode(FamilyParamBean bean);
 	
-	public void saveFamilyInvite(FamilyInviteParamBean bean);
+	public long saveFamilyInvite(FamilyInviteParamBean bean);
 
 	public void saveUserFamily(FamilyParamBean bean);
 	

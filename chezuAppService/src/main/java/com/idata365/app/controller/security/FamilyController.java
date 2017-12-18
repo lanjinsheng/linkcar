@@ -1,6 +1,5 @@
 package com.idata365.app.controller.security;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +20,10 @@ import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
+import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.FamilyService;
-import com.idata365.app.util.ImageUtils;
 import com.idata365.app.util.ResultUtils;
 
 @RestController
@@ -52,6 +51,12 @@ public class FamilyController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<FamilyInviteResultBean> resutList = this.familyService.getApplyInfo(bean);
+		String imgBasePath = super.getImgBasePath();
+		for (FamilyInviteResultBean tempBean : resutList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			tempBean.setImgUrl(imgBasePath + imgUrl);
+		}
 		return ResultUtils.rtSuccess(resutList);
 	}
 	
@@ -82,8 +87,14 @@ public class FamilyController extends BaseController
 	public Map<String, Object> listRecruFamily()
 	{
 		Long userId = super.getUserId();
-		List<FamilyRandResultBean> resutList = this.familyService.listRecruFamily(userId);
-		return ResultUtils.rtSuccess(resutList);
+		List<FamilyRandResultBean> resultList = this.familyService.listRecruFamily(userId);
+		String imgBasePath = super.getImgBasePath();
+		for (FamilyRandResultBean tempBean : resultList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			tempBean.setImgUrl(imgBasePath + imgUrl);
+		}
+		return ResultUtils.rtSuccess(resultList);
 	}
 	
 	@RequestMapping("/family/findFamilyByCode")
@@ -91,13 +102,18 @@ public class FamilyController extends BaseController
 	{
 		Long userId = super.getUserId();
 		FamilyRandResultBean resultBean = this.familyService.findFamilyByCode(reqBean, userId);
+		String imgBasePath = super.getImgBasePath();
+		String imgUrl = resultBean.getImgUrl();
+		resultBean.setImgUrl(imgBasePath + imgUrl);
 		return ResultUtils.rtSuccess(resultBean);
 	}
 	
 	@RequestMapping("/family/applyByFamily")
 	public Map<String, Object> applyByFamily(@RequestBody FamilyInviteParamBean bean)
 	{
-		this.familyService.applyByFamily(bean);
+		UserInfo userInfo = super.getUserInfo();
+		
+		this.familyService.applyByFamily(bean, userInfo);
 		return ResultUtils.rtSuccess(null);
 	}
 	
