@@ -6,12 +6,16 @@
 		select id as myFamilyId, familyName as myFamilyName, imgUrl as myFamilyImgUrl, memberNum, inviteCode from familyInfo where createUserId=#{userId}
 	</select>
 
+	<select id="queryCreateUserId" resultType="long" parameterType="com.idata365.app.entity.FamilyParamBean">
+		select createUserId as userId from familyInfo where id=#{familyId}
+	</select>
+
 	<delete id="deleteUserFamilyRelation" parameterType="com.idata365.app.entity.FamilyParamBean" >
        delete from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
     </delete>
 
 	<insert id="save" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
-		insert into familyInfo(createUserId, familyName, provinceId, cityId, memberNum) values(#{userId}, #{familyName}, #{provinceId}, #{cityId}, 1)
+		insert into familyInfo(createUserId, familyName, provinceId, cityId, memberNum, imgUrl) values(#{userId}, #{familyName}, #{provinceId}, #{cityId}, 1, #{imgUrl})
 	</insert>
 	 	
  	<update id="updateUserStraner" parameterType="com.idata365.app.entity.UsersAccountParamBean">
