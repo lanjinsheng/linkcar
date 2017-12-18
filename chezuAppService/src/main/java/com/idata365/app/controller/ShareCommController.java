@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.idata365.app.entity.FamilyInvite;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.service.FamilyInviteService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.LoginRegService;
+import com.idata365.app.service.MessageService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -26,8 +30,11 @@ public class ShareCommController extends BaseController {
     
     @Autowired
 	private FamilyService familyService;
+    private FamilyInviteService familyInviteService;
 	@Autowired
 	private LoginRegService loginRegService;
+	@Autowired
+	private MessageService messageService;
 	public ShareCommController() {
 	}
 
@@ -124,23 +131,32 @@ public class ShareCommController extends BaseController {
     		status=loginRegService.validVerifyCode(phone, 4, code);
     	}
       	if(status.equals(LoginRegService.OK)) {//校验码通过
-      		//插入关联信息 待写入
+      		//插入关联信息  
       		FamilyInvite familyInvite=new FamilyInvite();
       		familyInvite.setFamilyId(familyId);
       		familyInvite.setMemberPhone(phone);
       		UsersAccount user=loginRegService.getUserByPhone(phone);
-      		familyInvite.setMemberUserId(user==null?0:user.getId());
-      		familyInvite.setSendInviteMsg(user==null?0:1);
-      		
-      		
+      	
     		if(user!=null) {
     			//提交审核消息,待写
     			rtMap.put("userExist", "1");
     			rtMap.put("familyCode", inviteCode);
+    			familyInvite.setMemberUserId(user.getId());
+          		familyInvite.setSendInviteMsg(1);
+          		Long inviteId=familyInviteService.insertInviteFamily(familyInvite);
+          		Map<String,Object> family=familyService.findFamilyByFamilyId(familyId);
+          		Long toUserId=Long.valueOf(family.get("createUserId").toString());
+          		Message message=messageService.buildInviteMessage(user.getId(), user.getPhone(), user.getNickName(), toUserId, inviteId);
+          		//插入消息，并发送
+          		messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
+          		
     			return ResultUtils.rtSuccess(rtMap);
     		}else {
+    			familyInvite.setMemberUserId(0L);
+          		familyInvite.setSendInviteMsg(0);
     			rtMap.put("userExist", "0");
     			rtMap.put("familyCode", inviteCode);
+    			familyInviteService.insertInviteFamily(familyInvite);
     			return ResultUtils.rtSuccess(rtMap);
     		}
       	}
