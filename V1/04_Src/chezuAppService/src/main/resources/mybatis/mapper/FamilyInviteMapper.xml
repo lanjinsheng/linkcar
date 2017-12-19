@@ -17,7 +17,7 @@
         VALUES
             (#{familyId}, #{memberPhone},0,0,now())
     </insert>
-         <update id="updateFamilyInviteWhenReg"   parameterType="com.idata365.app.entity.FamilyInvite" >
+    <update id="updateFamilyInviteWhenReg"   parameterType="com.idata365.app.entity.FamilyInvite" >
       update
             familyInvite
             set memberUserId=#{memberUserId},sendTime=now() where id=#{id}
