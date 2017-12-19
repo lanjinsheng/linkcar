@@ -6,9 +6,9 @@
     <insert id="insertFamilyInviteHadReg" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyInvite" >
        INSERT INTO 
             familyInvite
-            (familyId,memberPhone,memberUserId,sendInviteMsg,createTime,sendTime) 
+            (familyId,memberPhone,memberUserId,sendInviteMsg,createTime,sendTime,leaveWord) 
         VALUES
-            (#{familyId}, #{memberPhone},#{memberUserId},1,now(),now())
+            (#{familyId}, #{memberPhone},#{memberUserId},1,now(),now(),#{leaveWord})
     </insert>
      <insert id="insertFamilyInviteNoReg" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyInvite" >
        INSERT INTO 
@@ -17,5 +17,14 @@
         VALUES
             (#{familyId}, #{memberPhone},0,0,now())
     </insert>
+         <update id="updateFamilyInviteWhenReg"   parameterType="com.idata365.app.entity.FamilyInvite" >
+      update
+            familyInvite
+            set memberUserId=#{memberUserId},sendTime=now() where id=#{id}
+    </update>
     
+     <select id="getFamilyInviteByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+       SELECT *
+       FROM  familyInvite where memberPhone=#{phone} and memberUserId=0
+     </select>
 </mapper>
