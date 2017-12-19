@@ -21,7 +21,9 @@ public interface FamilyMapper
 
 	public void updateUserStraner(UsersAccountParamBean bean);
 	
-	public List<FamilyRandBean> queryFamilys();
+	public List<FamilyRandBean> queryFamilys(FamilyParamBean bean);
+	
+	public int countStranger();
 	
 	public FamilyRandBean queryFamilyByCode(FamilyParamBean bean);
 	
@@ -34,6 +36,8 @@ public interface FamilyMapper
 	public int countByName(FamilyParamBean bean);
 	
 	public void updateInviteCode(FamilyParamBean bean);
+	
+	public int countByCode(FamilyParamBean bean);
 	
 	public Long queryFamilyIdByUserId(FamilyParamBean bean);
 	

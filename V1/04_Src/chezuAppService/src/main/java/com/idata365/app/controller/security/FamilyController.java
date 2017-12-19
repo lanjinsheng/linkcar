@@ -68,12 +68,26 @@ public class FamilyController extends BaseController
 	@RequestMapping("/family/permitApply")
 	public Map<String, Object> permitApply(@RequestBody FamilyParamBean reqBean)
 	{
-		int msgType = this.familyService.permitApply(reqBean);
+		UserInfo userInfo = super.getUserInfo();
+		int msgType = this.familyService.permitApply(reqBean, userInfo);
 		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("msgType", String.valueOf(msgType));
 		List<Map<String, String>> resultList = new ArrayList<>();
 		resultList.add(resultMap);
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 拒绝用户加入
+	 * @param reqBean
+	 * @return
+	 */
+	@RequestMapping("/family/rejectApply")
+	public Map<String, Object> rejectApply(@RequestBody FamilyParamBean reqBean)
+	{
+		UserInfo userInfo = super.getUserInfo();
+		this.familyService.rejectApply(reqBean, userInfo);
+		return ResultUtils.rtSuccess(null);
 	}
 	
 	@RequestMapping("/family/quitFromFamily")

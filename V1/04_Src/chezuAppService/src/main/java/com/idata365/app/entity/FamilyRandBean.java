@@ -14,7 +14,7 @@ public class FamilyRandBean
 	
 	//是否已经申请标记
 	private String isAlreadyRecommend;
-
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -74,5 +74,5 @@ public class FamilyRandBean
 	{
 		this.userId = userId;
 	}
-	
+
 }

@@ -20,6 +20,8 @@ public class FamilyParamBean
 	
 	private String imgUrl;
 
+	private int startPos;
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -108,6 +110,16 @@ public class FamilyParamBean
 	public void setInviteCode(String inviteCode)
 	{
 		this.inviteCode = inviteCode;
+	}
+
+	public int getStartPos()
+	{
+		return startPos;
+	}
+
+	public void setStartPos(int startPos)
+	{
+		this.startPos = startPos;
 	}
 	
 }

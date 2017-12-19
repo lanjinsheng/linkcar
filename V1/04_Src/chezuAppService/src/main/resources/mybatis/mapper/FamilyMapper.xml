@@ -22,9 +22,17 @@
  		update usersAccount set enableStranger=#{enableStranger} where id=#{userId}
  	</update>
 	
-	<select id="queryFamilys" resultType="com.idata365.app.entity.FamilyRandBean">
-       select imgUrl, memberNum as num, familyName as name, id as familyId from familyInfo order by familyId asc limit 0, 5;
+	<select id="queryFamilys" parameterType="com.idata365.app.entity.FamilyParamBean" resultType="com.idata365.app.entity.FamilyRandBean">
+       select t1.imgUrl as imgUrl, memberNum as num, familyName as name, t1.id as familyId from familyInfo t1 
+			join usersAccount t2 on (t1.createUserId=t2.id) where t2.enableStranger=1
+			order by familyId asc 
+       limit #{startPos}, 10;
 	</select>
+	
+	<select id="countStranger" resultType="int">
+    	select count(*) from familyInfo t1 
+			join usersAccount t2 on (t1.createUserId=t2.id) where t2.enableStranger=1
+    </select>
      
 	<insert id="saveUserFamily" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into userFamilyRelation(userId, familyId) values(#{userId}, #{familyId})
@@ -50,6 +58,10 @@
  	<update id="updateInviteCode" parameterType="com.idata365.app.entity.FamilyParamBean">
  		update familyInfo set inviteCode=#{inviteCode} where id=#{familyId}
  	</update>
+ 
+    <select id="countByCode" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+    	select count(id) from familyInfo where inviteCode=#{inviteCode}
+    </select>
  	
  	<select id="queryFamilyIdByUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select familyId from userFamilyRelation where userId=#{userId}
