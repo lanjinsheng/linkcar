@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.entity.FamilyInvite;
+import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.MessageMapper;
@@ -35,7 +36,11 @@ import com.idata365.app.util.ValidTools;
 public class MessageService extends BaseService<MessageService>{
 	private final static Logger LOG = LoggerFactory.getLogger(MessageService.class);
 	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
-	public static final String  InviteMessageUrl="com.shujin.shuzan://invite.push?inviteId=%s";
+	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
+	public static final String  FailFamilyMessage="抱歉，您申请加入【xxxx】家族失败！";
+	
+	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
+	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	public static final Map<String,String> MessageImgs=new HashMap<String,String>();
 	static {
 		MessageImgs.put("1", "http://apph5.idata365.com/appImgs/xitong.png");
@@ -47,6 +52,8 @@ public class MessageService extends BaseService<MessageService>{
 	MessageMapper messageMapper;
 	@Autowired
 	ManagePushApi  managePushApi;
+	@Autowired
+	FamilyService familyService;
 	public MessageService() {
 	}
 	 /**
@@ -82,6 +89,38 @@ public class MessageService extends BaseService<MessageService>{
 			message.setToUserId(toUserId);
 			message.setUrlType(0);
 			message.setToUrl(getInviteMessageUrl(familyInviteId));
+			break;
+		case PASS_FAMILY:{
+			FamilyResultBean f=familyService.findFamily(fromUserId); 
+			message.setFromUserId(fromUserId==null?0:fromUserId);
+			message.setBottomText("");
+			message.setChildType(2);
+			message.setContent(getPassMessageDesc(fromUserPhone,fromUserNick,f.getMyFamilyName()));
+			message.setCreateTime(new Date());
+			message.setIcon("");
+			message.setIsPush(1);
+			message.setParentType(2);
+			message.setPicture("");
+			message.setTitle("族长审核");
+			message.setToUserId(toUserId);
+			message.setUrlType(0);
+			message.setToUrl(getPassMessageUrl(f.getMyFamilyId()));
+			break;}
+		case FAIL_FAMILY:
+			FamilyResultBean ff=familyService.findFamily(fromUserId); 
+			message.setFromUserId(fromUserId==null?0:fromUserId);
+			message.setBottomText("");
+			message.setChildType(3);
+			message.setContent(getFailMessageDesc(ff.getMyFamilyName()));
+			message.setCreateTime(new Date());
+			message.setIcon("");
+			message.setIsPush(1);
+			message.setParentType(2);
+			message.setPicture("");
+			message.setTitle("族长审核");
+			message.setToUserId(toUserId);
+			message.setUrlType(2);
+			message.setToUrl("");
 			break;
 		 default:
 			break;
@@ -308,18 +347,30 @@ public class MessageService extends BaseService<MessageService>{
 		return list;
 		
 	}
-	public String getInviteMessageDesc(String fromUserPhone,String fromUserNick) {
+	//处理私有逻辑
+	private String getInviteMessageDesc(String fromUserPhone,String fromUserNick) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
 			return String.format(InviteMessage, fromUserNick+fromUserPhone);
 		}else {
 			return String.format(InviteMessage, fromUserPhone);
 		}
 	}
+	private String getPassMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
+			return String.format(PassFamilyMessage, fromUserNick+fromUserPhone,familyName);
+	}
 	
-	public String getInviteMessageUrl(Long familyInviteId) {
-	 
+	private String getFailMessageDesc(String familyName) {
+		return String.format(FailFamilyMessage, familyName);
+}
+	
+	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
 	}
+	
+	private String getPassMessageUrl(int familyId) {
+		return String.format(InvitePassMessageUrl, String.valueOf(familyId));
+    }
+	
 	public static void main(String []args) {
 		System.out.println(new MessageService().getMsgTyoeTimes("2016-12-17 11:30"));
 	}
