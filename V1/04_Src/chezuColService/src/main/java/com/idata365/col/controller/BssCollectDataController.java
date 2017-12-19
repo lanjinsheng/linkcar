@@ -23,6 +23,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.entity.DriveDataLog;
+import com.idata365.col.entity.DriveDataStartLog;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.service.DataService;
@@ -73,6 +74,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         int seq=Integer.valueOf(identificationM.get("seq").toString());
         int hadSensorData=Integer.valueOf(identificationM.get("hadSensorData").toString());
         String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
+        String deviceToken=String.valueOf(identificationM.get("deviceToken"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
         String filePath=userId+"/"+YYYYMMDD+"/A"+seq+"_"+System.currentTimeMillis();
         LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
@@ -95,7 +97,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         log.setSeq(seq);
         log.setEquipmentInfo(equipmentInfo);
         log.setHadSensorData(hadSensorData);
-        dataService.insertDriveLog(log);
+        dataService.insertDriveLog(log,deviceToken);
         long  endTime=System.currentTimeMillis();
         LOG.info("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return ResultUtils.rtSuccess(null); 
@@ -186,6 +188,42 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
           if(!SignUtils.security(identificationJson,sign)) {
         	  return ResultUtils.rtFailVerification(null);
           }
+          return ResultUtils.rtSuccess(StaticDatas.UserConfigDefault);
+    } 
+    
+    
+    @RequestMapping(value = "/v1/vehicleStart",method = { RequestMethod.POST,RequestMethod.GET})
+    public Map<String,Object>  vehicleStart(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) {
+          //获取RequestAttributes
+    	  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+    	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+          String identificationJson=request.getHeader("identification");
+          String sign=request.getHeader("sign");
+          LOG.info("identification="+identificationJson);
+          LOG.info("sign="+sign);
+          if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
+        	  return ResultUtils.rtFailParam(null);
+          }
+          if(!SignUtils.security(identificationJson,sign)) {
+        	  return ResultUtils.rtFailVerification(null);
+          }
+          Map<String,Object> identificationM=GsonUtils.fromJson(identificationJson);
+          long userId=Long.valueOf(identificationM.get("userId").toString());
+          long habitId=Long.valueOf(identificationM.get("habitId").toString());
+          String startTime=(identificationM.get("startTime").toString());
+          int isEnd=Integer.valueOf(identificationM.get("isEnd").toString());
+          int seq=Integer.valueOf(identificationM.get("seq").toString());
+          int hadSensorData=Integer.valueOf(identificationM.get("hadSensorData").toString());
+          String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
+          String deviceToken=String.valueOf(identificationM.get("deviceToken"));
+          
+          DriveDataStartLog startLog=new DriveDataStartLog();
+          startLog.setDeviceToken(deviceToken);
+          startLog.setEquipmentInfo(equipmentInfo);
+          startLog.setHabitId(habitId);
+          startLog.setStartTime(startTime);
+          startLog.setUserId(userId);
+          dataService.insertStartEventLog(startLog);
           return ResultUtils.rtSuccess(StaticDatas.UserConfigDefault);
     } 
     

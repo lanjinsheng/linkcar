@@ -18,11 +18,17 @@ public class UploadDataStatus implements Serializable {
 	private Long taskFlag;
 	private Long createTimeSS;
 	private int complete;
-	
+	private String deviceToken;
 	private int inValid;
 	private Long dealTimes;
 	private Long scanTime;
 	
+	public String getDeviceToken() {
+		return deviceToken;
+	}
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
+	}
 	public Long getId() {
 		return id;
 	}
