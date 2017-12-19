@@ -8,10 +8,14 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.druid.support.logging.Log;
+import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyInviteResultBean;
@@ -27,10 +31,13 @@ import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.RandUtils;
 
 @Service
 public class FamilyService extends BaseService<FamilyService>
 {
+	private static final Logger LOG = LoggerFactory.getLogger(FamilyService.class);
+	
 	@Autowired
 	private FamilyMapper familyMapper;
 	
@@ -132,23 +139,37 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @return
 	 */
 	@Transactional
-	public int permitApply(FamilyParamBean bean)
+	public int permitApply(FamilyParamBean bean, UserInfo userInfo)
 	{
 		Long tempFamilyId = this.familyMapper.queryFamilyIdByUserId(bean);
 		if (null != tempFamilyId && tempFamilyId > 0)
 		{
+			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 1;
 		}
 		
 		int tempCount = this.familyMapper.countUsersByFamilyId(bean);
 		if (8 == tempCount)
 		{
+			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 2;
 		}
 		
 		this.familyMapper.saveUserFamily(bean);
 		
+		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
+		
 		return 3;
+	}
+	
+	/**
+	 * 拒绝用户加入
+	 * @param bean
+	 * @param userInfo
+	 */
+	public void rejectApply(FamilyParamBean bean, UserInfo userInfo)
+	{
+		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 	}
 	
 	/**
@@ -164,11 +185,14 @@ public class FamilyService extends BaseService<FamilyService>
 	 * 显示可以加入的家族
 	 * @return
 	 */
-	@Transactional
 	public List<FamilyRandResultBean> listRecruFamily(long userId)
 	{
-		//暂时不用随机算法查询家族
-		List<FamilyRandBean> familys = this.familyMapper.queryFamilys();
+		int countStranger = this.familyMapper.countStranger();
+		int startPos = RandUtils.generateRand(0, countStranger-1);
+		
+		FamilyParamBean bean = new FamilyParamBean();
+		bean.setStartPos(startPos);
+		List<FamilyRandBean> familys = this.familyMapper.queryFamilys(bean);
 		List<FamilyRandResultBean> resultList = new ArrayList<>();
 		for (FamilyRandBean tempBean : familys)
 		{
@@ -239,12 +263,21 @@ public class FamilyService extends BaseService<FamilyService>
 		fParamBean.setFamilyId(bean.getFamilyId());
 		long toUserId = this.familyMapper.queryCreateUserId(fParamBean);
 		
+		dealtMsg(userInfo, inviteId, toUserId, MessageEnum.INVITE_FAMILY);
+	}
+
+	private void dealtMsg(UserInfo userInfo, Long inviteId, Long toUserId, MessageEnum messageEnum)
+	{
+		LOGGER.info("userInfo={}", JSON.toJSONString(userInfo));
+		LOGGER.info("inviteId={}\ttoUserId={}", inviteId, toUserId);
+		LOGGER.info("messageEnum={}", messageEnum);
+		
 		//构建成员加入消息
-  		Message message=messageService.buildMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(), toUserId, inviteId, MessageEnum.INVITE_FAMILY);
+  		Message message=messageService.buildMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(), toUserId, inviteId, messageEnum);
   		//插入消息
-  		messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
+  		messageService.insertMessage(message, messageEnum);
   		//推送消息
-  		messageService.pushMessage(message,MessageEnum.INVITE_FAMILY);
+  		messageService.pushMessage(message, messageEnum);
 	}
 	
 	/**
@@ -308,6 +341,13 @@ public class FamilyService extends BaseService<FamilyService>
 		String uuidStr = uuid.toString();
 		String inviteCode = StringUtils.substring(uuidStr, 0, 8).toUpperCase();
 		bean.setInviteCode(inviteCode);
+		
+		int tempCount = this.familyMapper.countByCode(bean);
+		if (tempCount > 0)
+		{
+			return generateInviteInfo(bean);
+		}
+		
 		this.familyMapper.updateInviteCode(bean);
 		
 		FamilyRandBean familyResultBean = this.familyMapper.queryFamilyByCode(bean);

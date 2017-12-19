@@ -8,7 +8,7 @@
             message
             (parentType,childType,title,createTime,icon,picture,content,urlType,toUrl,toUserId,fromUserId,bottomText,isPush) 
         VALUES
-            (#{parentType}, #{childType},#{title},now(),#{icon},#{picture},#{content},#{urlType},#{toUrl},#{toUserId},#{fromUserId},#{bottomText},#{isPush}))
+            (#{parentType}, #{childType},#{title},now(),#{icon},#{picture},#{content},#{urlType},#{toUrl},#{toUserId},#{fromUserId},#{bottomText},#{isPush})
     </insert>
  
     <select id="getMsgMainTypes" resultType="java.util.HashMap" parameterType="java.lang.Long">
