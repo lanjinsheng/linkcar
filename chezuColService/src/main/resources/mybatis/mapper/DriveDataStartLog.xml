@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.col.mapper.DriveDataStartLogMapper">
+    <resultMap id="driveDataStartLogMap" type="com.idata365.col.entity.DriveDataStartLog" >
+    </resultMap>
+
+    <insert id="insertStartData" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.DriveDataStartLog" >
+       INSERT INTO 
+            driveDataStartLog
+            (userId,habitId,startTimeLong,createTime,equipmentInfo,deviceToken) 
+        VALUES
+            (#{userId}, #{habitId}, #{startTimeLong},now(), #{equipmentInfo}, #{deviceToken})
+    </insert>
+</mapper>
