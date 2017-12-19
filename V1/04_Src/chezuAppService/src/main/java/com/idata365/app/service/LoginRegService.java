@@ -21,10 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.FamilyInvite;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UserDeviceLogs;
 import com.idata365.app.entity.UserLoginSession;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.VerifyCode;
+import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.mapper.FamilyInviteMapper;
 import com.idata365.app.mapper.UserDeviceLogsMapper;
 import com.idata365.app.mapper.UserLoginSessionMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
@@ -48,6 +52,10 @@ public class LoginRegService extends BaseService<LoginRegService>{
 	 UserDeviceLogsMapper userDeviceLogsMapper;
 	@Autowired
 	ChezuColService  chezuColService;
+	@Autowired
+	FamilyInviteMapper familyInviteMapper;
+	@Autowired
+	MessageService messageService;
 	
 	public LoginRegService() {
 		LOG.info("DataService DataService DataService");
@@ -213,6 +221,33 @@ public class LoginRegService extends BaseService<LoginRegService>{
 			loginSession.setToken(token);
 			userLoginSessionMapper.insertToken(loginSession);
 			rtMap.put("userId", account.getId());
+			try {
+				//进行家族绑定的检索，如果存在家族邀请，则发送申请消息
+				List<FamilyInvite> list= familyInviteMapper.getFamilyInviteByPhone(phone);
+				for(FamilyInvite invite:list) {
+					Map<String,Object> m=usersAccountMapper.getFamilyByFamilyId(invite.getFamilyId());
+					//构建成员加入消息
+	          		Message message=messageService.buildMessage(account.getId(), phone, "",Long.valueOf(m.get("createUserId").toString()), invite.getId(), MessageEnum.INVITE_FAMILY);
+	          		//插入消息
+	          		messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
+	          		//推送消息
+	          		messageService.pushMessage(message,MessageEnum.INVITE_FAMILY);
+	          		//更新invite
+	          		invite.setMemberUserId(account.getId());
+	          		familyInviteMapper.updateFamilyInviteWhenReg(invite);
+	          		
+				}
+				//发送注册消息
+				Message message=messageService.buildMessage(0L, "", "",account.getId(), null, MessageEnum.SYSTEM_REG);
+				//插入消息
+          		messageService.insertMessage(message, MessageEnum.SYSTEM_REG);
+          		//推送消息
+          		messageService.pushMessage(message,MessageEnum.SYSTEM_REG);
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
 			return token;
 		}
 		return null;
