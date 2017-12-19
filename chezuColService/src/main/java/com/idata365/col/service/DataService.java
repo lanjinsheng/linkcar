@@ -22,12 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.col.entity.DriveDataEvent;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
+import com.idata365.col.entity.DriveDataStartLog;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.entity.UserDevice;
 import com.idata365.col.mapper.DriveDataEventMapper;
 import com.idata365.col.mapper.DriveDataLogMapper;
 import com.idata365.col.mapper.DriveDataMainMapper;
+import com.idata365.col.mapper.DriveDataStartLogMapper;
 import com.idata365.col.mapper.SensorDataLogMapper;
 import com.idata365.col.mapper.UploadDataStatusMapper;
 import com.idata365.col.mapper.UserDeviceMapper;
@@ -50,6 +52,9 @@ public class DataService extends BaseService<DataService>{
 	DriveDataEventMapper driveDataEventMapper;
 	@Autowired
 	UserDeviceMapper userDeviceMapper;
+	@Autowired
+	DriveDataStartLogMapper driveDataStartLogMapper;
+	
 	
 	public DataService() {
 		LOG.info("DataService DataService DataService DataService");
@@ -75,7 +80,18 @@ public class DataService extends BaseService<DataService>{
 		 userDeviceMapper.insertUserDevice(dl);
 		 return true;
 	}
-	
+	/**
+	 * 
+	    * @Title: insertStartEventLog
+	    * @Description: TODO(插入行程开始事件)
+	    * @param     参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+   public void insertStartEventLog(DriveDataStartLog startLog) {
+	   driveDataStartLogMapper.insertStartData(startLog);
+   }
 	
 	/**
 	 * 
@@ -107,7 +123,7 @@ public class DataService extends BaseService<DataService>{
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public void insertDriveLog(DriveDataLog log) {
+	public void insertDriveLog(DriveDataLog log,String deviceToken) {
 		driveDataLogMapper.insertDataLog(log);
 		if(log.getIsEnd()==1) {
 			//插入结束任务
@@ -120,6 +136,7 @@ public class DataService extends BaseService<DataService>{
 			status.setTaskFlag(0L);
 			status.setCreateTimeSS(System.currentTimeMillis());
 			status.setSensorUploadStatus(0);
+			status.setDeviceToken(deviceToken);
 			if(status.getHadSensorData()==0) {
 				status.setComplete(1);
 			}else {
