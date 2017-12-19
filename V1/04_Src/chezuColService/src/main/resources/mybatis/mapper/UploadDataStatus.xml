@@ -17,9 +17,9 @@
     <insert id="insertUploadDataStatus" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.UploadDataStatus" >
        INSERT INTO 
             uploadDataStatus
-            (userId,habitId,createTime,scanStatus,hadSensorData,createTimeSS,complete) 
+            (userId,habitId,createTime,scanStatus,hadSensorData,createTimeSS,complete,deviceToken) 
         VALUES
-            (#{userId}, #{habitId},#{createTime},#{scanStatus},#{hadSensorData},#{createTimeSS},#{complete})
+            (#{userId}, #{habitId},#{createTime},#{scanStatus},#{hadSensorData},#{createTimeSS},#{complete},#{deviceToken})
     </insert>
  
  
