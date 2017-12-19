@@ -37,7 +37,8 @@ public class MessageService extends BaseService<MessageService>{
 	private final static Logger LOG = LoggerFactory.getLogger(MessageService.class);
 	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
 	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
-	public static final String  FailFamilyMessage="抱歉，您申请加入【xxxx】家族失败！";
+	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
+	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
 	
 	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
@@ -74,6 +75,21 @@ public class MessageService extends BaseService<MessageService>{
 		Message message=new Message();
 		switch(type) {
 		case SYSTEM:
+			break;
+		case SYSTEM_REG:
+			message.setFromUserId(fromUserId==null?0:fromUserId);
+			message.setBottomText("");
+			message.setChildType(1);
+			message.setContent(getRegMessageDesc());
+			message.setCreateTime(new Date());
+			message.setIcon("");
+			message.setIsPush(1);
+			message.setParentType(1);
+			message.setPicture("");
+			message.setTitle("欢迎您!");
+			message.setToUserId(toUserId);
+			message.setUrlType(1);
+			message.setToUrl(getH5RegMessageUrl());
 			break;
 		case INVITE_FAMILY:
 			message.setFromUserId(fromUserId==null?0:fromUserId);
@@ -365,6 +381,13 @@ public class MessageService extends BaseService<MessageService>{
 	
 	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
+	}
+	
+	private String getH5RegMessageUrl(){
+		return "http://www.idata365.com";
+	}
+	private String getRegMessageDesc() {
+		 return RegMessage;
 	}
 	
 	private String getPassMessageUrl(int familyId) {

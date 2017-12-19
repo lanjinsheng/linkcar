@@ -10,6 +10,8 @@ package com.idata365.app.service;
 
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,10 @@ public class FamilyInviteService extends BaseService<FamilyInviteService>{
 			 familyInviteMapper.insertFamilyInviteNoReg(familyInvite);
 		 }
 		 return familyInvite.getId();
+	 }
+	 
+	 public List<FamilyInvite> getFamilyInviteByPhone(String phone){
+		 return familyInviteMapper.getFamilyInviteByPhone(phone);
 	 }
 	 
 }
