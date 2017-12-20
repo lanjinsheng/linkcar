@@ -253,7 +253,7 @@ public class UserInfoController extends BaseController{
 	    	 String currentPwd=String.valueOf(requestBodyParams.get("currentPwd"));
 	    	 boolean b=userInfoService.validPwd(currentPwd, userId);
 	    	 if(b) {
-	    		 ResultUtils.rtSuccess(null);
+	    	    return	 ResultUtils.rtSuccess(null);
 	    	 }
 	    	 return ResultUtils.rtFailParam(null, "密码错误");
 	    }
