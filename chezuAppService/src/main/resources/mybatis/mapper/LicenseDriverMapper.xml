@@ -21,7 +21,7 @@
              set gender=#{gender},nation=#{nation},driveCardType=#{driveCardType},birthday=#{birthday},
              virginDay=#{virginDay},
              validDay=#{validDay},validYears=#{validYears},userName=#{userName},
-             updateTime=now()
+             updateTime=now(),isDrivingEdit=#{isDrivingEdit}
              where userId=#{userId}
     </update>
     
