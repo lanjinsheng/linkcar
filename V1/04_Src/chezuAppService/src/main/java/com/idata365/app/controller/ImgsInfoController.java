@@ -64,8 +64,5 @@ public class ImgsInfoController {
 		        
 		      }
     }
-	public static void main(String []args) {
-		System.out.println("12/HEADER_121513230107926".replaceAll("/", ""));
-	}
 	
 }
