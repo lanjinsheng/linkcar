@@ -351,6 +351,10 @@ public class MessageService extends BaseService<MessageService>{
        * @author LanYeYe
     */
 	public List<Map<String,Object>> getMsgListByType(Map<String,Object> map){
+		long msgId=Long.valueOf(map.get("startMsgId").toString());
+		if(msgId<0) {
+			map.put("startMsgId", 999999999999999L);
+		}
 		List<Map<String,Object>>  list=messageMapper.getMsgListByType(map);
 		for(Map<String,Object> m:list) {
 			int urtType=Integer.valueOf(m.get("urlType").toString());
