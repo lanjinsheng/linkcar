@@ -6,6 +6,7 @@ import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandBean;
+import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 
@@ -13,7 +14,11 @@ public interface FamilyMapper
 {
 	public FamilyResultBean queryFamilyByUserId(FamilyParamBean bean);
 	
-	public long queryCreateUserId(FamilyParamBean bean);
+	public FamilyResultBean queryFamilyById(FamilyParamBean bean);
+	
+	public FamilyRelationBean queryFamilyIdByCompetitorId(FamilyRelationBean bean);
+	
+	public Long queryCreateUserId(FamilyParamBean bean);
 	
 	public void deleteUserFamilyRelation(FamilyParamBean bean);
 	

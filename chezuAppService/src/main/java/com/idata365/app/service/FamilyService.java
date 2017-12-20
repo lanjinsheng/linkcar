@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import com.alibaba.druid.support.logging.Log;
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
@@ -22,9 +22,11 @@ import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandBean;
 import com.idata365.app.entity.FamilyRandResultBean;
+import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.Message;
+import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
@@ -355,6 +357,41 @@ public class FamilyService extends BaseService<FamilyService>
 		resultBean.setInviteCode(inviteCode);
 		resultBean.setOrderNo("100");
 		resultBean.setFamilyName(familyResultBean.getName());
+		return resultBean;
+	}
+	
+	/**
+	 * 查询自己创建的家族
+	 * @param reqBean
+	 * @return
+	 */
+	public MyFamilyInfoResultBean findMyFamily(FamilyParamBean reqBean)
+	{
+		MyFamilyInfoResultBean resultBean = new MyFamilyInfoResultBean();
+		
+		FamilyResultBean familyResultBean = this.familyMapper.queryFamilyByUserId(reqBean);
+		AdBeanUtils.copyOtherPropToStr(resultBean, familyResultBean);
+		
+		FamilyRelationBean relationBean = new FamilyRelationBean();
+		int myFamilyId = familyResultBean.getMyFamilyId();
+		relationBean.setFamilyId(myFamilyId);
+		FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
+		long familyId1 = relationResultBean.getFamilyId1();
+		long familyId2 = relationResultBean.getFamilyId2();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		if (myFamilyId != familyId1)
+		{
+			familyParamBean.setFamilyId(familyId1);
+		}
+		else
+		{
+			familyParamBean.setFamilyId(familyId2);
+		}
+		FamilyResultBean competitorFamily = this.familyMapper.queryFamilyById(familyParamBean);
+		resultBean.setCompetitorId(String.valueOf(competitorFamily.getMyFamilyId()));
+		resultBean.setCompetitorName(competitorFamily.getMyFamilyName());
+		resultBean.setCompetitorImgUrl(competitorFamily.getCompetitorImgUrl());
+		
 		return resultBean;
 	}
 }

@@ -20,6 +20,7 @@ import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
+import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.SSOTools;
@@ -209,7 +210,22 @@ public class FamilyController extends BaseController
 	            return ResultUtils.rtFail(null); 
 	        }
 	       return ResultUtils.rtSuccess(rtMap);
-   }
+	}
 	
-	
+	/**
+	 * 查询自己创建的家族
+	 * @param reqBean
+	 * @return
+	 */
+	@RequestMapping("/family/findMyFamily")
+	public Map<String, Object> findMyFamily(@RequestBody FamilyParamBean reqBean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(reqBean));
+		
+		MyFamilyInfoResultBean resultBean = this.familyService.findMyFamily(reqBean);
+		List<MyFamilyInfoResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
 }
