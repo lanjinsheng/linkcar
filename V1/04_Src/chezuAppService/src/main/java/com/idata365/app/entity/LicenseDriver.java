@@ -19,8 +19,14 @@ public class LicenseDriver implements Serializable {
 	private String backImgUrl;
 	private String  remark;
 	private String licenseNumber;
+	private int isDrivingEdit;
 	
-	
+	public int getIsDrivingEdit() {
+		return isDrivingEdit;
+	}
+	public void setIsDrivingEdit(int isDrivingEdit) {
+		this.isDrivingEdit = isDrivingEdit;
+	}
 	public String getRemark() {
 		return remark;
 	}
