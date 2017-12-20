@@ -113,6 +113,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("validYears",String.valueOf(licenseDrive.getValidYears()));
 			  rtMap.put("frontDrivingImg",imgBase+licenseDrive.getFrontImgUrl());
 			  rtMap.put("backDrivingImg",imgBase+licenseDrive.getBackImgUrl());
+			  rtMap.put("isDrivingEdit", String.valueOf(licenseDrive.getIsDrivingEdit()));
 		  }else {
 			  rtMap.put("userName", "");
 			  rtMap.put("gender","");
@@ -123,6 +124,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("validYears","");
 			  rtMap.put("frontDrivingImg","");
 			  rtMap.put("backDrivingImg","");
+			  rtMap.put("isDrivingEdit", "1");
 		  }
 		  if(licenseVehicleTravel!=null) {
 			  rtMap.put("plateNo",licenseVehicleTravel.getPlateNo());
@@ -135,6 +137,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("backTravelImg",imgBase+licenseVehicleTravel.getBackImgUrl());
 			  rtMap.put("issueDate",licenseVehicleTravel.getIssueDate());
 			  rtMap.put("regDate",licenseVehicleTravel.getRegDate());
+			  rtMap.put("isTravelEdit",String.valueOf(licenseVehicleTravel.getIsTravelEdit()));
 		  }else {
 			  rtMap.put("plateNo","");
 			  rtMap.put("cardTypeDesc","");
@@ -146,6 +149,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("backTravelImg","");
 			  rtMap.put("issueDate","");
 			  rtMap.put("regDate",""); 
+			  rtMap.put("isTravelEdit","1");
 		  }
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
@@ -371,6 +375,7 @@ public class UserInfoController extends BaseController{
 	  public  Map<String,Object>  modifydrivingLicense(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
 		  Map<String,Object> rtMap=new HashMap<String,Object>();
 		  requestBodyParams.put("userId", this.getUserId());
+		  requestBodyParams.put("isDrivingEdit", 0);
 		  userInfoService.modifydrivingLicense(requestBodyParams);
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
@@ -465,6 +470,7 @@ public class UserInfoController extends BaseController{
 	  public  Map<String,Object>  modifyVehicleTravelLicense(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
 		  Map<String,Object> rtMap=new HashMap<String,Object>();
 		  requestBodyParams.put("userId", this.getUserId());
+		  requestBodyParams.put("isTravelEdit", 0);
 		  userInfoService.modifyVehicleLicense(requestBodyParams);
 		  return ResultUtils.rtSuccess(rtMap);
 	  }

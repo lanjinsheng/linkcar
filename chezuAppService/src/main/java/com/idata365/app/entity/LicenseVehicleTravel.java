@@ -18,7 +18,14 @@ public class LicenseVehicleTravel implements Serializable {
 	private String issueDate;
 	private String regDate;
 	private String remark;
-	 
+	private int isTravelEdit;
+	
+	public int getIsTravelEdit() {
+		return isTravelEdit;
+	}
+	public void setIsTravelEdit(int isTravelEdit) {
+		this.isTravelEdit = isTravelEdit;
+	}
 	public String getIssueDate() {
 		return issueDate;
 	}
