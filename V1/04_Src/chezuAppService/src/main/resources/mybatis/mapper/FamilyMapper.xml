@@ -6,7 +6,15 @@
 		select id as myFamilyId, familyName as myFamilyName, imgUrl as myFamilyImgUrl, memberNum, inviteCode from familyInfo where createUserId=#{userId}
 	</select>
 
-	<select id="queryCreateUserId" resultType="long" parameterType="com.idata365.app.entity.FamilyParamBean">
+	<select id="queryFamilyById" resultType="com.idata365.app.entity.FamilyResultBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+		select id as myFamilyId, familyName as myFamilyName, imgUrl as myFamilyImgUrl, memberNum, inviteCode from familyInfo where id=#{familyId}
+	</select>
+
+	<select id="queryFamilyIdByCompetitorId" resultType="com.idata365.app.entity.FamilyRelationBean" parameterType="com.idata365.app.entity.FamilyRelationBean">
+		select selfFamilyId as familyId1, competitorFamilyId as familyId2 from familyRelation where selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}
+	</select>
+
+	<select id="queryCreateUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
 		select createUserId as userId from familyInfo where id=#{familyId}
 	</select>
 
@@ -41,6 +49,12 @@
     <select id="queryFamilyByCode" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
     	select imgUrl, memberNum as num, familyName as name, id as familyId, createUserId as userId from familyInfo where inviteCode=#{inviteCode}
     </select>
+     
+     <!-- 
+    <select id="queryFamilyByCreateUserId" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+    	select id as familyId, familyName as name, imgUrl from familyInfo where createUserId=#{userId}
+    </select>
+      -->
  
  	<insert id="saveFamilyInvite" parameterType="com.idata365.app.entity.FamilyInviteParamBean" useGeneratedKeys="true" keyProperty="id" >
  		insert into familyInvite(familyId, memberUserId, sendInviteMsg, createTime, leaveWord) values(#{familyId}, #{userId}, 1, #{createTime}, #{msgStr})
