@@ -24,7 +24,7 @@
              vin=#{vin},
              issueDate=#{issueDate},regDate=#{regDate},engineNo=#{engineNo},
              frontImgUrl=#{key},
-             updateTime=now()
+             updateTime=now(),isTravelEdit=#{isTravelEdit}
              where userId=#{userId}
     </update>
     
