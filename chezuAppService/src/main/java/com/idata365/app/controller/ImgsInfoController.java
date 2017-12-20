@@ -36,7 +36,7 @@ public class ImgsInfoController {
 	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", key));  
 	        headers.add("Pragma", "no-cache");  
 	        headers.add("Expires", "0");  
-	        FileSystemResource   file = new FileSystemResource(systemProperties.getFileTmpDir()+key.replaceAll("/", ""));
+	        FileSystemResource   file = new FileSystemResource(systemProperties.getFileTmpDir()+key.replaceAll("/", "")+".jpg");
 	        
 	         try {
 	        	 OutputStream os=file.getOutputStream();
@@ -45,7 +45,7 @@ public class ImgsInfoController {
 		        return ResponseEntity  
 		                .ok().contentLength(file.contentLength())
 		                .headers(headers)  
-		                .contentType(MediaType.parseMediaType("application/octet-stream"))  
+		                .contentType(MediaType.parseMediaType("image/jpeg"))  
 		                .body(new InputStreamResource(file.getInputStream())); 
 			  }catch(Exception e) {
 				  e.printStackTrace();
@@ -53,7 +53,7 @@ public class ImgsInfoController {
 				  return ResponseEntity  
 			                .ok().contentLength(0)
 			                .headers(headers)  
-			                .contentType(MediaType.parseMediaType("application/octet-stream"))  
+			                .contentType(MediaType.parseMediaType("image/jpeg"))  
 			                .body(null); 
 			  }finally{
 		        
