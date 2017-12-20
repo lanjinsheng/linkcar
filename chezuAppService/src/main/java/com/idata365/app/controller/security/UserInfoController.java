@@ -110,6 +110,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("driveCardType",licenseDrive.getDriveCardType());
 			  rtMap.put("birthday",licenseDrive.getBirthday());
 			  rtMap.put("virginDay",licenseDrive.getVirginDay());
+			  rtMap.put("validDay",licenseDrive.getValidDay());
 			  rtMap.put("validYears",String.valueOf(licenseDrive.getValidYears()));
 			  rtMap.put("frontDrivingImg",imgBase+licenseDrive.getFrontImgUrl());
 			  rtMap.put("backDrivingImg",imgBase+licenseDrive.getBackImgUrl());
@@ -122,6 +123,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("birthday","");
 			  rtMap.put("virginDay","");
 			  rtMap.put("validYears","");
+			  rtMap.put("validDay","");
 			  rtMap.put("frontDrivingImg","");
 			  rtMap.put("backDrivingImg","");
 			  rtMap.put("isDrivingEdit", "1");
