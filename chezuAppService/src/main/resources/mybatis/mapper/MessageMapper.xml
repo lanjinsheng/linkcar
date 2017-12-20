@@ -32,7 +32,7 @@
     
     <select id="getMsgListByType" resultType="java.util.HashMap" parameterType="java.util.HashMap">
    	 select id msgId,icon,parentType,childType,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,title,picture,content,bottomText,urlType,toUrl,isRead
-   	 from message where parentType=#{msgType} and <![CDATA[ id>=${startMsgId}]]> 
+   	 from message where parentType=#{msgType} and <![CDATA[ id<=${startMsgId}]]> 
    	 
    	  <if test='readStatus != null and readStatus != "0"'>
           <choose>  
@@ -44,6 +44,7 @@
 			</otherwise>  
 	  </choose> 
       </if>
+      order by id desc
        limit 10
     </select>
     
