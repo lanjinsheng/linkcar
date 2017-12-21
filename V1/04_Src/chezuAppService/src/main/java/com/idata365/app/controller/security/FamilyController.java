@@ -15,6 +15,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.config.SystemProperties;
+import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
@@ -224,6 +225,23 @@ public class FamilyController extends BaseController
 		
 		MyFamilyInfoResultBean resultBean = this.familyService.findMyFamily(reqBean);
 		List<MyFamilyInfoResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 查询用户创建的家族及加入的家族信息
+	 * @param reqBean
+	 * @return
+	 */
+	@RequestMapping("/family/queryFamilyRelationInfo")
+	public Map<String, Object> queryFamilyRelationInfo(@RequestBody FamilyParamBean reqBean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(reqBean));
+		
+		FamilyInfoScoreAllBean resultBean = this.familyService.queryFamilyRelationInfo(reqBean);
+		List<FamilyInfoScoreAllBean> resultList = new ArrayList<>();
 		resultList.add(resultBean);
 		
 		return ResultUtils.rtSuccess(resultList);

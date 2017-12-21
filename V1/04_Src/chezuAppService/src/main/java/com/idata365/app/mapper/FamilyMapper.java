@@ -2,6 +2,7 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyParamBean;
@@ -49,4 +50,8 @@ public interface FamilyMapper
 	public int countUsersByFamilyId(FamilyParamBean bean);
 	
 	public int countInviteByUserId(FamilyParamBean bean);
+	
+	public FamilyInfoScoreBean queryOwnFamily(FamilyParamBean bean);
+	
+	public FamilyInfoScoreBean queryJoinFamily(FamilyParamBean bean);
 }

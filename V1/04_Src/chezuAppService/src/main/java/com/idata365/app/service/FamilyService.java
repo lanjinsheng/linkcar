@@ -13,9 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.entity.FamilyInfoScoreAllBean;
+import com.idata365.app.entity.FamilyInfoScoreBean;
+import com.idata365.app.entity.FamilyInfoScoreResultBean;
 import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyInviteResultBean;
@@ -259,7 +261,8 @@ public class FamilyService extends BaseService<FamilyService>
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, "yyyy-MM-dd HH:mm:ss");
 		bean.setCreateTime(dayStr);
-		long inviteId = this.familyMapper.saveFamilyInvite(bean);
+		this.familyMapper.saveFamilyInvite(bean);
+		long inviteId = bean.getId();
 		
 		FamilyParamBean fParamBean = new FamilyParamBean();
 		fParamBean.setFamilyId(bean.getFamilyId());
@@ -320,11 +323,13 @@ public class FamilyService extends BaseService<FamilyService>
 		usersAccountParamBean.setUserId(bean.getUserId());
 		if (inviteCodeFlag)
 		{
-			usersAccountParamBean.setEnableStranger(1);
+			//仅通过邀请码加入
+			usersAccountParamBean.setEnableStranger(0);
 		}
 		else
 		{
-			usersAccountParamBean.setEnableStranger(0);
+			//可以通过首页推荐加入
+			usersAccountParamBean.setEnableStranger(1);
 		}
 		this.familyMapper.updateUserStraner(usersAccountParamBean);
 		
@@ -392,6 +397,28 @@ public class FamilyService extends BaseService<FamilyService>
 		resultBean.setCompetitorName(competitorFamily.getMyFamilyName());
 		resultBean.setCompetitorImgUrl(competitorFamily.getCompetitorImgUrl());
 		
+		return resultBean;
+	}
+	
+	public FamilyInfoScoreAllBean queryFamilyRelationInfo(FamilyParamBean bean)
+	{
+		FamilyInfoScoreAllBean resultBean = new FamilyInfoScoreAllBean();
+		FamilyInfoScoreBean ownFamilyBean = this.familyMapper.queryOwnFamily(bean);
+		FamilyInfoScoreBean joinFamilyBean = this.familyMapper.queryJoinFamily(bean);
+		
+		FamilyInfoScoreResultBean ownResultBean = new FamilyInfoScoreResultBean();
+		if (null != ownFamilyBean)
+		{
+			AdBeanUtils.copyOtherPropToStr(ownResultBean, ownFamilyBean);
+		}
+		FamilyInfoScoreResultBean joinResultBean = new FamilyInfoScoreResultBean();
+		if (null != joinFamilyBean)
+		{
+			AdBeanUtils.copyOtherPropToStr(joinResultBean, joinFamilyBean);
+		}
+		
+		resultBean.setOrigFamily(ownResultBean);
+		resultBean.setJoinFamily(joinResultBean);
 		return resultBean;
 	}
 }
