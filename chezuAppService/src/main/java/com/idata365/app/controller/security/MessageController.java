@@ -57,7 +57,7 @@ public class MessageController  extends BaseController {
         		||	ValidTools.isBlank(requestBodyParams.get("readStatus"))	
         			)
               return ResultUtils.rtFailParam(null);
-    	
+    	requestBodyParams.put("toUserId", this.getUserId());
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	List<Map<String,Object>> list=messageService.getMsgListByType(requestBodyParams);
     	this.dealListObect2String(list);

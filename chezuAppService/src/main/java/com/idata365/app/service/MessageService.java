@@ -199,6 +199,8 @@ public class MessageService extends BaseService<MessageService>{
 	    * @author LanYeYe
 	 */
 	public List<Map<String,String>> getMsgMainTypes(Long userId){
+		Map<String,Object> paramMap=new HashMap<String,Object>();
+		paramMap.put("toUserId", userId);
 		boolean hadXT=false,hadSP=false,hadTT=false,hadKJ=false;
 		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 		Map<String,String>  rtMap1=new HashMap<String,String>();
@@ -244,7 +246,10 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap1.put("icon",MessageImgs.get("1"));
 			rtMap1.put("title", "系统消息");
 		}
-		Map<String,Object> timeMsg=messageMapper.getMsgMainTypeTime(1);
+		
+		paramMap.put("parentType", 1);
+		Map<String,Object> timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
+		
 		if(timeMsg!=null && timeMsg.size()>0) {
 			String time=String.valueOf(timeMsg.get("createTime"));
 			rtMap1.put("lastMsgTime", getMsgTyoeTimes(time));
@@ -259,7 +264,8 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap2.put("icon",MessageImgs.get("2"));
 			rtMap2.put("title", "审批消息");
 		} 
-		timeMsg=messageMapper.getMsgMainTypeTime(2);
+		paramMap.put("parentType", 2);
+		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
 		if(timeMsg!=null && timeMsg.size()>0) {
 			String time=String.valueOf(timeMsg.get("createTime"));
 			rtMap2.put("lastMsgTime", getMsgTyoeTimes(time));
@@ -272,7 +278,8 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap3.put("icon",MessageImgs.get("3"));
 			rtMap3.put("title", "贴条消息");
 		}
-		timeMsg=messageMapper.getMsgMainTypeTime(3);
+		paramMap.put("parentType", 3);
+		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
 		if(timeMsg!=null && timeMsg.size()>0) {
 			String time=String.valueOf(timeMsg.get("createTime"));
 			rtMap3.put("lastMsgTime", getMsgTyoeTimes(time));
@@ -285,7 +292,8 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap4.put("icon",MessageImgs.get("4"));
 			rtMap4.put("title", "开奖消息");	
 		}
-		timeMsg=messageMapper.getMsgMainTypeTime(4);
+		paramMap.put("parentType", 4);
+		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
 		if(timeMsg!=null && timeMsg.size()>0) {
 			String time=String.valueOf(timeMsg.get("createTime"));
 			rtMap4.put("lastMsgTime", getMsgTyoeTimes(time));
@@ -399,7 +407,7 @@ public class MessageService extends BaseService<MessageService>{
     }
 	
 	public static void main(String []args) {
-		System.out.println(new MessageService().getMsgTyoeTimes("2016-12-17 11:30"));
+		System.out.println(String.format(InviteMessageUrl, String.valueOf(20)));
 	}
 	 
 }

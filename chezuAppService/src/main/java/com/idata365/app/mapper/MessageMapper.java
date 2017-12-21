@@ -15,7 +15,7 @@ public interface MessageMapper {
 	
 	List<Map<String,Object>> getMsgListByType(Map<String,Object> map);
 	
-	Map<String,Object> getMsgMainTypeTime(@Param("parentType") int parentType);
+	Map<String,Object> getMsgMainTypeTime(Map<String,Object> map);
 	
 	void updateRead(@Param("msgId") Long msgId);
 }
