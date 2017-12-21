@@ -407,7 +407,11 @@ public class MessageService extends BaseService<MessageService>{
     }
 	
 	public static void main(String []args) {
-		System.out.println(String.format(InviteMessageUrl, String.valueOf(20)));
+		MessageService service=new MessageService();
+		System.out.println(service.getInviteMessageUrl(80L));
+		System.out.println(InviteMessageUrl);
+		System.out.println(service.getInviteMessageUrl(20L));
+		System.out.println(InviteMessageUrl);
 	}
 	 
 }
