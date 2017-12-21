@@ -173,6 +173,8 @@ public class FamilyService extends BaseService<FamilyService>
 	 */
 	public void rejectApply(FamilyParamBean bean, UserInfo userInfo)
 	{
+		//删除邀请消息
+		this.familyMapper.delInviteByUserId(bean);
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 	}
 	
