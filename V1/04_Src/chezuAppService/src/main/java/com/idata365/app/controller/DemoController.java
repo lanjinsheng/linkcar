@@ -25,4 +25,13 @@ public class DemoController extends BaseController {
 		 List<FamilyInvite> list= familyInviteService.getFamilyInviteByPhone("15851750576");
 		return ResultUtils.rtSuccess(null);
 	}
+	 
+	 @RequestMapping("/test/insertInvite")
+	public Map<String,Object> insertInvite(){
+		FamilyInvite familyInvite=new FamilyInvite();
+		familyInvite.setMemberUserId(10000L);
+		 Long inviteId=familyInviteService.insertInviteFamily(familyInvite);
+		 System.out.println(inviteId);
+		 return ResultUtils.rtSuccess(null);
+	}
 }

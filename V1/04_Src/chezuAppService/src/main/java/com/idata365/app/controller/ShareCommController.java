@@ -150,6 +150,7 @@ public class ShareCommController extends BaseController {
           		Long inviteId=familyInviteService.insertInviteFamily(familyInvite);
            		//构建成员加入消息
           		Message message=messageService.buildMessage(user.getId(), user.getPhone(), user.getNickName(), toUserId, inviteId, MessageEnum.INVITE_FAMILY);
+          		LOG.info("message.getToUrl():"+message.getToUrl());
           		//插入消息
           		messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
           		//推送消息
