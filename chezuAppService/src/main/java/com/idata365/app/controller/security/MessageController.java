@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.entity.Message;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.service.MessageService;
 import com.idata365.app.util.ResultUtils;
+import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.ValidTools;
 
 
@@ -23,6 +26,35 @@ public class MessageController  extends BaseController {
 	public MessageController() {
 	}
 
+    @RequestMapping("/msg/sendRegMsg")
+    public Map<String,Object> sendRegMsg(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	if(allRequestParams==null ||  ValidTools.isBlank(allRequestParams.get("key")))
+            return ResultUtils.rtFailParam(null);
+    	String key=allRequestParams.get("key");
+    	long now=System.currentTimeMillis()-(5*60*1000);
+    	try {
+			long eventTime=Long.valueOf(SignUtils.decryptDataAes(key));
+			if(eventTime<(now)) {//超时失效
+				 return ResultUtils.rtFailParam(null,"链接地址已经失效了");
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 return ResultUtils.rtFail(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 return ResultUtils.rtFail(null);
+		}
+        Long userId=this.getUserId();
+        Message message=messageService.buildMessage(0L, "", "",userId, null, MessageEnum.SYSTEM_REG);
+		//插入消息
+  		messageService.insertMessage(message, MessageEnum.SYSTEM_REG);
+  		//推送消息 极光还没绑定设备，此时不宜推送
+         messageService.pushMessage(message,MessageEnum.SYSTEM_REG);
+    	return ResultUtils.rtSuccess(null);
+    }
+	
    /**
     * 
        * @Title: getMsgMainTypes

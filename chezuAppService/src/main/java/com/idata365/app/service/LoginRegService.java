@@ -237,12 +237,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 	          		familyInviteMapper.updateFamilyInviteWhenReg(invite);
 	          		
 				}
-				//发送注册消息
-				Message message=messageService.buildMessage(0L, "", "",account.getId(), null, MessageEnum.SYSTEM_REG);
-				//插入消息
-          		messageService.insertMessage(message, MessageEnum.SYSTEM_REG);
-          		//推送消息 极光还没绑定设备，此时不宜推送
-                // messageService.pushMessage(message,MessageEnum.SYSTEM_REG);
+				//发送注册消息由app端绑定回调message接口
 				
 			}catch(Exception e) {
 				e.printStackTrace();
