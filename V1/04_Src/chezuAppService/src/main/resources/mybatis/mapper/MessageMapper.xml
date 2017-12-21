@@ -24,15 +24,15 @@
  
      
      
-    <select id="getMsgMainTypeTime" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+    <select id="getMsgMainTypeTime" resultType="java.util.HashMap" parameterType="java.util.HashMap">
       select DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime from message where  
-     parentType=#{parentType} order by id desc limit 1
+     parentType=#{parentType} and toUserId=#{toUserId} order by id desc limit 1
     </select>
     
     
     <select id="getMsgListByType" resultType="java.util.HashMap" parameterType="java.util.HashMap">
    	 select id msgId,icon,parentType,childType,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,title,picture,content,bottomText,urlType,toUrl,isRead
-   	 from message where parentType=#{msgType} and <![CDATA[ id<=${startMsgId}]]> 
+   	 from message where parentType=#{msgType} and <![CDATA[ id<=${startMsgId}]]> and toUserId=#{toUserId}
    	 
    	  <if test='readStatus != null and readStatus != "0"'>
           <choose>  
