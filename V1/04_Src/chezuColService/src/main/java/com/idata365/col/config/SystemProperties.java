@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "system")
 public class SystemProperties {
 	private String fileTmpDir;
-
+	private String ssoQQ;
 	public String getFileTmpDir() {
 		return fileTmpDir;
 	}
@@ -16,5 +16,14 @@ public class SystemProperties {
 	public void setFileTmpDir(String fileTmpDir) {
 		this.fileTmpDir = fileTmpDir;
 	}
-	
+
+	public String getSsoQQ() {
+		return ssoQQ;
+	}
+
+	public void setSsoQQ(String ssoQQ) {
+		this.ssoQQ = ssoQQ;
+	}
+
+ 
 }

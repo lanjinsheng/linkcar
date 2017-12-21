@@ -15,8 +15,26 @@ public class ChezuServiceHystric implements ChezuDriveService {
 	@Override
 	public boolean recieveDrive(List<Map<String,Object>> postList) {
 		// TODO Auto-generated method stub
-		LOG.info("挂了 recieveDrive");
+		LOG.error("挂了 recieveDrive");
 		return false;
+	}
+	@Override
+	public Map<String, Object> addPoint(Map<String, String> point) {
+		// TODO Auto-generated method stub
+		LOG.error("挂了 addPoint");
+		return null;
+	}
+	@Override
+	public Map<String, Object> addPointList(List<Map<String, String>> pointList) {
+		// TODO Auto-generated method stub
+		LOG.error("挂了 addPointList");
+		return null;
+	}
+	@Override
+	public Map<String, Object> analysis(Map<String, String> param) {
+		// TODO Auto-generated method stub
+		LOG.error("挂了 analysis");
+		return null;
 	}
  
 }

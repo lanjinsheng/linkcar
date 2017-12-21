@@ -30,49 +30,49 @@ public class SSOTools {
     private static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
     private static String bucketName = "softtootest1";
    // private static String bucketName = "driveDatas";
-    public static void saveOSS(File file) throws IOException {
-        /*
-         * Constructs a client instance with your account for accessing OSS
-         */
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-        
-        System.out.println("Getting Started with OSS SDK for Java\n");
-        
-        try {
-
-            /*
-             * Determine whether the bucket exists
-             */
-            if (!ossClient.doesBucketExist(bucketName)) {
-                /*
-                 * Create a new OSS bucket
-                 */
-                System.out.println("Creating bucket " + bucketName + "\n");
-                ossClient.createBucket(bucketName);
-                CreateBucketRequest createBucketRequest= new CreateBucketRequest(bucketName);
-                createBucketRequest.setCannedACL(CannedAccessControlList.PublicRead);
-                ossClient.createBucket(createBucketRequest);
-            }
-
-       
-            /*
-             * Upload an object to your bucket
-             */
-            String key=String.valueOf(System.currentTimeMillis());
-            System.out.println("Uploading a new object to OSS from a file\n");
-            ossClient.putObject(new PutObjectRequest(bucketName, key, file));
-            
-        } catch (OSSException oe) {
-        	oe.printStackTrace();
-        } catch (ClientException ce) {
-           ce.printStackTrace();
-        } finally {
-            /*
-             * Do not forget to shut down the client finally to release all allocated resources.
-             */
-            ossClient.shutdown();
-        }
-    }
+//    public static void saveOSS(File file) throws IOException {
+//        /*
+//         * Constructs a client instance with your account for accessing OSS
+//         */
+//        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+//        
+//        System.out.println("Getting Started with OSS SDK for Java\n");
+//        
+//        try {
+//
+//            /*
+//             * Determine whether the bucket exists
+//             */
+//            if (!ossClient.doesBucketExist(bucketName)) {
+//                /*
+//                 * Create a new OSS bucket
+//                 */
+//                System.out.println("Creating bucket " + bucketName + "\n");
+//                ossClient.createBucket(bucketName);
+//                CreateBucketRequest createBucketRequest= new CreateBucketRequest(bucketName);
+//                createBucketRequest.setCannedACL(CannedAccessControlList.PublicRead);
+//                ossClient.createBucket(createBucketRequest);
+//            }
+//
+//       
+//            /*
+//             * Upload an object to your bucket
+//             */
+//            String key=String.valueOf(System.currentTimeMillis());
+//            System.out.println("Uploading a new object to OSS from a file\n");
+//            ossClient.putObject(new PutObjectRequest(bucketName, key, file));
+//            
+//        } catch (OSSException oe) {
+//        	oe.printStackTrace();
+//        } catch (ClientException ce) {
+//           ce.printStackTrace();
+//        } finally {
+//            /*
+//             * Do not forget to shut down the client finally to release all allocated resources.
+//             */
+//            ossClient.shutdown();
+//        }
+//    }
     
  
     public static void saveOSS(InputStream is,String dir) throws IOException,OSSException,ClientException {

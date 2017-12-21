@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
@@ -83,13 +84,21 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 	        	 os= new ZipOutputStream(file.getOutputStream());
 		         for(DriveDataLog drive:drives) {
 				   	 String name="drive"+drive.getSeq();
-			         SSOTools.getSSOFile(drive.getFilePath(),os,name);
+				   	 if(drive.getFilePath().endsWith("_Q")) {
+				   		 QQSSOTools.getSSOFile(drive.getFilePath(),os,name);
+				   	 }else {
+				   		 SSOTools.getSSOFile(drive.getFilePath(),os,name);
+				   	 }
 			   	 }
 			   	 if(driveLog.getHadSensorData()==1) {
 					  List<SensorDataLog> sensors=dataService.listSensorByUH(driveLog);
 					  for(SensorDataLog sensor:sensors) {
 						   	 String name="sensor"+driveLog.getSeq();
-					         SSOTools.getSSOFile(sensor.getFilePath(),os,name);
+						   	 if(sensor.getFilePath().endsWith("_Q")) {
+						   		QQSSOTools.getSSOFile(sensor.getFilePath(),os,name);
+						   	 }else {
+						   		 SSOTools.getSSOFile(sensor.getFilePath(),os,name);
+						   	 }
 					  }
 				  }
 			   	 
@@ -129,7 +138,11 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 	         try {
 		         for(DriveDataLog drive:drives) {
 		        	  StringBuffer json=new StringBuffer();
-				         SSOTools.getSSOFile(json,drive.getFilePath());
+		        	     if(drive.getFilePath().endsWith("_Q")) {
+		        	    	 QQSSOTools.getSSOFile(json,drive.getFilePath());
+		        	     }else {
+		        	    	 SSOTools.getSSOFile(json,drive.getFilePath());
+		        	     }
 				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
 				         if(jMap.get("gpsInfos")!=null) {
 				        	 list.addAll((List)jMap.get("gpsInfos"));
@@ -167,7 +180,11 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 	         try {
 	        	 for(SensorDataLog sensor:sensors) {
 	        		  StringBuffer json=new StringBuffer();
-				         SSOTools.getSSOFile(json,sensor.getFilePath());
+	        		     if(sensor.getFilePath().endsWith("_Q")) {
+	        		    	 QQSSOTools.getSSOFile(json,sensor.getFilePath());
+	        		     }else {
+	        		    	 SSOTools.getSSOFile(json,sensor.getFilePath());
+	        		     }
 				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
 				         if(jMap.get("sensorInfos")!=null) {
 				        	 list.addAll((List)jMap.get("sensorInfos"));
@@ -208,7 +225,11 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 	         try {
 		    	  for(DriveDataLog drive:drives) {
 		    		     StringBuffer json=new StringBuffer();
-				         SSOTools.getSSOFile(json,drive.getFilePath());
+		    		     if(drive.getFilePath().endsWith("_Q")) {
+				           QQSSOTools.getSSOFile(json,drive.getFilePath());
+		    		     }else {
+		    		    	 SSOTools.getSSOFile(json,drive.getFilePath()); 
+		    		     }
 				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
 				         if(jMap.get("gpsInfos")!=null) {
 				        	 list.addAll((List)jMap.get("gpsInfos"));
@@ -260,7 +281,11 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 	         try {
 		         for(DriveDataLog drive:drives) {
 		        	  StringBuffer json=new StringBuffer();
-				         SSOTools.getSSOFile(json,drive.getFilePath());
+		        	     if(drive.getFilePath().endsWith("_Q")) {
+		        	    	 
+		        	     }else {
+		        	    	 SSOTools.getSSOFile(json,drive.getFilePath());
+		        	     }
 				         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
 				         if(jMap.get("gpsInfos")!=null) {
 				        	 list.addAll((List)jMap.get("gpsInfos"));
