@@ -51,6 +51,8 @@ public interface FamilyMapper
 	
 	public int countInviteByUserId(FamilyParamBean bean);
 	
+	public void delInviteByUserId(FamilyParamBean bean);
+	
 	public FamilyInfoScoreBean queryOwnFamily(FamilyParamBean bean);
 	
 	public FamilyInfoScoreBean queryJoinFamily(FamilyParamBean bean);

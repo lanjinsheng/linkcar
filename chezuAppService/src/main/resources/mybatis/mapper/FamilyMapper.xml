@@ -89,6 +89,10 @@
  		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId}
  	</select>
  	
+ 	<delete id="delInviteByUserId" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		delete from familyInvite where memberUserId=#{userId} and familyId=#{familyId}
+ 	</delete>
+ 	
  	<select id="queryOwnFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select id as familyId, familyName as name from familyInfo where createUserId=#{userId}
  	</select>
