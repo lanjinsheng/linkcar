@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.ScoreMapper">
+
+	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select imgUrl, t1.familyId as familyId, t1.orderNo as orderNo, t2.familyName as name from familyScore t1 
+join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId}
+	</select>
+
+	<select id="queryFamilyByFamilyId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select imgUrl, t1.familyId as familyId, t1.orderNo as orderNo, t2.familyName as name from familyScore t1 
+join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
+	</select>
+
+	<select id="queryFamilyOrderInfo" resultType="com.idata365.app.entity.ScoreFamilyOrderBean">
+	select imgUrl, t1.familyId as familyId, t1.orderNo as orderNo, t2.familyName as name, t3.score as score from familyDriveDayStat t1 
+		join familyInfo t2 on (t1.familyId=t2.id) 
+		join familyScore t3 on (t1.familyId=t3.familyId) 
+		where t1.daystamp=DATE_FORMAT(now(), '%Y%m%d') 
+		order by t3.score desc limit 0, 100;
+	</select>
+
+	<select id="queryFamilyDetail" resultType="com.idata365.app.entity.ScoreFamilyDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select imgUrl, familyName, t2.orderNo as orderNo from familyInfo t1 join familyScore t2 on (t1.id=t2.familyId) where t1.id=#{familyId}
+	</select>
+
+	<select id="queryFamilyRecords" resultType="java.lang.String" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select record from familyHistory where familyId=#{familyId} order by id desc
+	</select>
+
+	<select id="queryMemberByFamilyId" resultType="com.idata365.app.entity.ScoreMemberInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select imgUrl, t1.nickName as name, t1.id as userId, t3.role as role, DATE_FORMAT(joinTime, '%Y-%m-%d %H:%i:%S') as joinTime from usersAccount t1 
+join userFamilyRelation t2 on (t1.id=t2.userId) 
+join userScoreDayStat t3 on (t1.id=t3.userId) 
+where t2.familyId = #{familyId}
+	</select>
+	
+</mapper>
