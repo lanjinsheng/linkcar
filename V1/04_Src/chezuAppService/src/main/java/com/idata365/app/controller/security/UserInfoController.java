@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,10 +25,10 @@ import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
+import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.UserInfoService;
-import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.ImageUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
@@ -170,12 +169,24 @@ public class UserInfoController extends BaseController{
 	    	Long userId=this.getUserId();
 	    	Map<String,String> rtMap=new HashMap<String,String>();
 	    	try {
+	    		 String key="";
+	    	      if(systemProperties.getSsoQQ().equals("1")) {//走qq
+	    	    	  key=QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.HEADER);
+	    	    	  File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+	        		  File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
+	                  file.transferTo(dealFile);
+	                  QQSSOTools.saveOSS(dealFile,key);
+	    	      }else {//走阿里
 	               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-	    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.HEADER);
+	    		     key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.HEADER);
 	               InputStream is=file.getInputStream();
 	               SSOTools.saveOSS(is,key);
-	               rtMap.put("imgUrl", getImgBasePath()+key);
 	               is.close();
+	    	      }
+	               rtMap.put("imgUrl", getImgBasePath()+key);
 	               userInfoService.updateImgUrl(key, userId);
 	           }catch (Exception e) {
 	               // TODO Auto-generated catch block
@@ -303,13 +314,26 @@ public class UserInfoController extends BaseController{
 	    			rtMap.put("gender", "");
 	    			rtMap.put("nation", "C");
 		    try {
+		    	 String key="";
+	    	      if(systemProperties.getSsoQQ().equals("1")) {//走qq
+	    	    	  key=QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE1);
+	    	    	  File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+	        		  File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
+	                  file.transferTo(dealFile);
+	                  QQSSOTools.saveOSS(dealFile,key);
+	    	      }else {//走阿里
 		               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-		    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE1);
+		    		   key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE1);
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
+		               is.close();
+	    	      }
 		               rtMap.put("imgUrl", getImgBasePath()+key);
 		               rtMap.put("key", key);
-		               is.close();
+		              
 		               //处理图片
 		               File   dealFile = new File(systemProperties.getFileTmpDir()+key);
 		               file.transferTo(dealFile);
@@ -349,13 +373,26 @@ public class UserInfoController extends BaseController{
 	            	rtMap.put("imgUrl", "");
 	    		 
 		    try {
+		    	 String key="";
+	    	      if(systemProperties.getSsoQQ().equals("1")) {//走qq
+	    	    	  key=QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE2);
+	    	    	  File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+	        		  File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
+	                  file.transferTo(dealFile);
+	                  QQSSOTools.saveOSS(dealFile,key);
+	    	      }else {//走阿里
 		               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-		    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE2);
+		    		   key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE2);
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
+		               is.close();
+	    	      }
 		               rtMap.put("imgUrl", getImgBasePath()+key);
 		               rtMap.put("key", key);
-		               is.close();
+		               
 		               //处理图片
 //		               File   dealFile = new File(systemProperties.getFileTmpDir()+key);
 //		               file.transferTo(dealFile);
@@ -411,13 +448,26 @@ public class UserInfoController extends BaseController{
 	    			rtMap.put("vin", "");
 	    			rtMap.put("plateNo", "");
 		    try {
+		    	 String key="";
+	    	      if(systemProperties.getSsoQQ().equals("1")) {//走qq
+	    	    	  key=QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE1);
+	    	    	  File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+	        		  File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
+	                  file.transferTo(dealFile);
+	                  QQSSOTools.saveOSS(dealFile,key);
+	    	      }else {//走阿里
 		               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-		    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE1);
+		    		     key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE1);
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
+		               is.close();
+	    	      }
 		               rtMap.put("imgUrl", getImgBasePath()+key);
 		               rtMap.put("key", key);
-		               is.close();
+
 		               //处理图片
 		               File   dealFile = new File(systemProperties.getFileTmpDir()+key);
 		               file.transferTo(dealFile);
@@ -445,13 +495,26 @@ public class UserInfoController extends BaseController{
 	            	rtMap.put("imgUrl", "");
 	    		 
 		    try {
+		    	 String key="";
+	    	      if(systemProperties.getSsoQQ().equals("1")) {//走qq
+	    	    	  key=QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE2);
+	    	    	  File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+	        		  File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
+	                  file.transferTo(dealFile);
+	                  QQSSOTools.saveOSS(dealFile,key);
+	    	      }else {//走阿里
 		               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-		    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE2);
+		    		   key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE2);
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
+		               is.close();
+	    	      }
 		               rtMap.put("imgUrl", getImgBasePath()+key);
 		               rtMap.put("key", key);
-		               is.close();
+		               
 		               //处理图片
 //		               File   dealFile = new File(systemProperties.getFileTmpDir()+key);
 //		               file.transferTo(dealFile);

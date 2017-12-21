@@ -1,5 +1,6 @@
 package com.idata365.app.controller.security;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
+import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.util.ResultUtils;
@@ -198,13 +200,26 @@ public class FamilyController extends BaseController
 	   	 }
      	Map<String,Object> rtMap=new HashMap<String,Object>();
 	    try {
+	    	 String key="";
+	    	      if(systemProperties.getSsoQQ().equals("1")) {//走qq
+	    	    	  key=QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.FAMILY_HEADER);
+	    	    	  File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+	        		  File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
+	                  file.transferTo(dealFile);
+	                  QQSSOTools.saveOSS(dealFile,key);
+	    	      }else {//走阿里
 	               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-	    		   String key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.FAMILY_HEADER);
+	    		   key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.FAMILY_HEADER);
 	               InputStream is=file.getInputStream();
 	               SSOTools.saveOSS(is,key);
-	               rtMap.put("allImgUrl", getImgBasePath()+key);
-	               rtMap.put("imgUrl", key);
+	      
 	               is.close();
+	    	      }
+	    	        rtMap.put("allImgUrl", getImgBasePath()+key);
+		            rtMap.put("imgUrl", key);
 	        }catch (Exception e) {
 	               // TODO Auto-generated catch block
 	            e.printStackTrace();

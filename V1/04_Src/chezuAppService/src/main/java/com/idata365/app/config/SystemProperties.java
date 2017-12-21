@@ -18,7 +18,16 @@ public class SystemProperties {
     private String product;
     private  String ssoAccessKeyId;
     private  String ssoAccessKeySecret;
-    
+	private String ssoQQ;
+	
+	public String getSsoQQ() {
+		return ssoQQ;
+	}
+
+	public void setSsoQQ(String ssoQQ) {
+		this.ssoQQ = ssoQQ;
+	}
+
 	public String getSsoAccessKeyId() {
 		return ssoAccessKeyId;
 	}
