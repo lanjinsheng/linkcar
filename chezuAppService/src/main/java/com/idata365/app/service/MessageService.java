@@ -155,15 +155,15 @@ public class MessageService extends BaseService<MessageService>{
 	    * @author LanYeYe
 	 */
 	public Long insertMessage(Message msg,MessageEnum type) {
-		switch(type) {
-		case SYSTEM:
-			break;
-		case INVITE_FAMILY:
-			messageMapper.insertMessage(msg);
-			break;
-		 default:
-			break;
-		}
+		messageMapper.insertMessage(msg);
+//		switch(type) {
+//		case SYSTEM:
+//			break;
+//		case INVITE_FAMILY:
+//			break;
+//		 default:
+//			break;
+//		}
 		return msg.getId();
 	}
 	
