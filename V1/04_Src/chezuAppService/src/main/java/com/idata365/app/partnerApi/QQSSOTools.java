@@ -39,11 +39,11 @@ public class QQSSOTools {
     private static String accessKeySecret = "Rhsw9C3h9ORN8h5JOHyXu53rWyPvHVXf";
     private static String bucketName_userInfo = "app-users-imgs-info-1252395822";
     public static String createSSOUsersImgInfoKey(long userId,UserImgsEnum type) {
-    	String key=userId+"/Q_"+type+"_"+userId+System.currentTimeMillis();
+    	String key=userId+"/"+type+"_"+userId+System.currentTimeMillis()+"_Q";
     	return key;
     }
     public static String getSSOUsersImgInfoKey(long userId,String key) {
-    	return userId+"/Q_"+key;
+    	return userId+"/"+key+"_Q";
     } 
    
     public static void saveOSS(File file,String key) throws IOException{
