@@ -88,4 +88,13 @@
  	<select id="countInviteByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId}
  	</select>
+ 	
+ 	<select id="queryOwnFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select id as familyId, familyName as name from familyInfo where createUserId=#{userId}
+ 	</select>
+ 	
+ 	<select id="queryJoinFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select t1.id as familyId, t1.familyName as name from familyInfo t1 
+join userFamilyRelation t2 on(t1.id=t2.familyId) where t1.createUserId=#{userId} and t2.userId!=#{userId}
+ 	</select>
 </mapper>
