@@ -37,7 +37,7 @@ import com.qcloud.cos.region.Region;
 public class QQSSOTools {
     private static String accessKeyId = "AKIDAbwBJFoY4SdeVC4SHyW3OWRAi4QiBrFf";
     private static String accessKeySecret = "Rhsw9C3h9ORN8h5JOHyXu53rWyPvHVXf";
-    private static String bucketName_userInfo = "app-users-imgs-info";
+    private static String bucketName_userInfo = "app-users-imgs-info-1252395822";
     public static String createSSOUsersImgInfoKey(long userId,UserImgsEnum type) {
     	String key=userId+"/Q_"+type+"_"+userId+System.currentTimeMillis();
     	return key;
