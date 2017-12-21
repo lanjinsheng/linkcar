@@ -1,6 +1,6 @@
 package com.idata365.app.controller;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.config.SystemProperties;
+import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
 
  
@@ -42,11 +43,19 @@ public class ImgsInfoController {
 	        headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", key+".jpeg"));  
 	        headers.add("Pragma", "no-cache");  
 	        headers.add("Expires", "0");  
-	        FileSystemResource   file = new FileSystemResource(systemProperties.getFileTmpDir()+key.replaceAll("/", "")+".jpeg");
-	        
+	        FileSystemResource   file = new FileSystemResource(systemProperties.getFileTmpDir()+key+".jpeg");
+	        File fileParent = file.getFile().getParentFile();  
+			if(!fileParent.exists()){  
+			    fileParent.mkdirs();  
+			} 
 	         try {
 	        	 OutputStream os=file.getOutputStream();
-	        	 SSOTools.getSSOFile(key,os);
+	        	 if(key.startsWith("Q")) {//走qq
+	        		 QQSSOTools.getSSOFile(key, os);
+	        	 }else {
+	        	
+	        	  SSOTools.getSSOFile(key,os);
+	        	 }
 	        	 InputStream inputStream = file.getInputStream();
 	             byte[] data = new byte[(int)file.contentLength()];
 	             int length = inputStream.read(data);

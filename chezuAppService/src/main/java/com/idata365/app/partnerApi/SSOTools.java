@@ -74,69 +74,6 @@ public class SSOTools {
             ossClient.shutdown();
         }
     }
-    public static void  addOSSTest(String path) {
-    	File f=new File(path);
-    	OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-    	  ossClient.putObject(new PutObjectRequest(bucketName_userInfo, "1000/3_1000_32423242424.jpg", f));
-    	  ossClient.shutdown();
-    }
-    public static void main(String []args) {
-    	addOSSTest("C:\\Users\\jinsheng\\Desktop\\1首页1.jpg");
-    }
-    public static boolean getSSOFile(StringBuffer json,String key) {
-    	 OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-         try {
-             /*
-              * Determine whether the bucket exists
-              */
-             if (!ossClient.doesBucketExist(bucketName_userInfo)) {
-            	 return false;
-             }
-             /*
-              */
-             OSSObject object = ossClient.getObject(bucketName_userInfo, key);
-             ZipUtils.uncompressToString(object.getObjectContent(),json);
-             return true;
-             
-         } catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				  return false;
-			}finally {
-             /*
-              * Do not forget to shut down the client finally to release all allocated resources.
-              */
-             ossClient.shutdown();
-         }
-    }
-    public static long getSSOFile(String key, InputStreamResource inResource) {
-    	OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-//  	 String tmpPath="/usr/local/datas/";
-	   	InputStream inputStream=null;
-	        try {
-	            /*
-	             * Determine whether the bucket exists
-	             */
-	            if (!ossClient.doesBucketExist(bucketName_userInfo)) {
-	           	    return 0;
-	            }
-	            /*
-	             */
-	            OSSObject object = ossClient.getObject(bucketName_userInfo, key);
-	            
-	           inResource=new InputStreamResource(object.getObjectContent());
-	          return inResource.contentLength(); 
-	        } catch (IOException e) {
-	  	      e.printStackTrace();
-	  	    } catch (Exception e) {
-	  	      e.printStackTrace();
-	  	    } finally {
-	  	      // 完毕，关闭所有链接
-	  	   
-	  	       ossClient.shutdown();
-	  	    } 
-	        return 0;
-   }
     public static void getSSOFile(String key, OutputStream os) {
     	OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 //  	 String tmpPath="/usr/local/datas/";
@@ -176,18 +113,6 @@ public class SSOTools {
 	  	    ossClient.shutdown();
 	  	    } 
    } 
-    private static void displayTextInputStream(InputStream input,StringBuffer json) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        while (true) {
-            String line = reader.readLine();
-            if (line == null) break;
-            json.append(line);
-        }
-        reader.close();
-    }
     
-    private static void displayTextInputStream2(InputStream input,StringBuffer jsonSB) throws IOException {
-    	 
-    }
 
 }
