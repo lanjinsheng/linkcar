@@ -7,6 +7,8 @@ import com.idata365.app.entity.ScoreFamilyInfoBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreMemberInfoBean;
+import com.idata365.app.entity.ScoreUserHistoryBean;
+import com.idata365.app.entity.ScoreUserHistoryParamBean;
 
 public interface ScoreMapper
 {
@@ -21,4 +23,6 @@ public interface ScoreMapper
 	public List<String> queryFamilyRecords(ScoreFamilyInfoParamBean bean);
 	
 	public List<ScoreMemberInfoBean> queryMemberByFamilyId(ScoreFamilyInfoParamBean bean);
+	
+	public List<ScoreUserHistoryBean> queryHistoryOrder(ScoreUserHistoryParamBean bean);
 }

@@ -16,6 +16,10 @@ import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreMemberInfoBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
+import com.idata365.app.entity.ScoreUserHistoryBean;
+import com.idata365.app.entity.ScoreUserHistoryParamBean;
+import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
+import com.idata365.app.entity.ScoreUserHistoryResultBean;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
 
@@ -88,5 +92,33 @@ public class ScoreService extends BaseService<ScoreService>
 		}
 		
 		return resultList;
+	}
+	
+	/**
+	 * 历史得分（显示指定用户的）
+	 * @param bean
+	 * @return
+	 */
+	public ScoreUserHistoryResultAllBean listHistoryOrder(ScoreUserHistoryParamBean bean)
+	{
+		List<ScoreUserHistoryBean> tempList = this.scoreMapper.queryHistoryOrder(bean);
+		
+		List<ScoreUserHistoryResultBean> resultList = new ArrayList<>();
+		
+		for (ScoreUserHistoryBean tempBean : tempList)
+		{
+			ScoreUserHistoryResultBean tempResultBean = new ScoreUserHistoryResultBean();
+			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			resultList.add(tempResultBean);
+		}
+		
+		int start = bean.getStart();
+		int newStart = start + tempList.size();
+		
+		ScoreUserHistoryResultAllBean resultBean = new ScoreUserHistoryResultAllBean();
+		resultBean.setHistoryScores(resultList);
+		resultBean.setStart(String.valueOf(newStart));
+		
+		return resultBean;
 	}
 }

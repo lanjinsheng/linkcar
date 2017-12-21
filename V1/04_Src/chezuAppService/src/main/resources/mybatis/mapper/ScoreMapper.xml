@@ -34,5 +34,9 @@ join userFamilyRelation t2 on (t1.id=t2.userId)
 join userScoreDayStat t3 on (t1.id=t3.userId) 
 where t2.familyId = #{familyId}
 	</select>
+
+	<select id="queryHistoryOrder" resultType="com.idata365.app.entity.ScoreUserHistoryBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
+		select score, role, daystamp as dayStr from userScoreDayStat where userId=#{userId} order by daystamp desc limit #{start}, 10
+	</select>
 	
 </mapper>
