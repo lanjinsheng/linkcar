@@ -1,5 +1,6 @@
 package com.idata365.col.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +23,9 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
+import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataStartLog;
 import com.idata365.col.entity.SensorDataLog;
@@ -40,6 +44,8 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
 	private final static Logger LOG = LoggerFactory.getLogger(BssCollectDataController.class);
     @Autowired
     DataService dataService;
+    @Autowired
+	SystemProperties systemProPerties;
     /**
      * 
         * @Title: uploadDriveData
@@ -77,12 +83,24 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         String deviceToken=String.valueOf(identificationM.get("deviceToken"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
         String filePath=userId+"/"+YYYYMMDD+"/A"+seq+"_"+System.currentTimeMillis();
-        LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
         try {
+        	if(systemProPerties.getSsoQQ().equals("1")) {//走腾讯
+        		  filePath=userId+"/"+YYYYMMDD+"/A"+seq+"_"+System.currentTimeMillis()+"_Q";
+        		  LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
+        		  File   dealFile = new File(systemProPerties.getFileTmpDir()+"/"+filePath);
+        		  File fileParent = dealFile.getParentFile();  
+        			if(!fileParent.exists()){  
+        			    fileParent.mkdirs();  
+        			} 
+                  file.transferTo(dealFile);
+                  QQSSOTools.saveOSS(dealFile,filePath);
+        	}else {//走阿里
+                LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
             //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-            InputStream is=file.getInputStream();
-            SSOTools.saveOSS(is,filePath);
-            is.close();
+	            InputStream is=file.getInputStream();
+	            SSOTools.saveOSS(is,filePath);
+	            is.close();
+        	}
         }catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -97,7 +115,18 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         log.setSeq(seq);
         log.setEquipmentInfo(equipmentInfo);
         log.setHadSensorData(hadSensorData);
+        try {
         dataService.insertDriveLog(log,deviceToken);
+		}catch(Exception e) {
+			e.printStackTrace();
+			if(e instanceof DuplicateKeyException) {
+				LOG.error("数据又重复上传了："+log.getUserId()+"=="+log.getHabitId()+"=="+log.getSeq());
+//				throw e;
+			}else {
+				throw e;
+			}
+		
+		}
         long  endTime=System.currentTimeMillis();
         LOG.info("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return ResultUtils.rtSuccess(null); 
@@ -137,12 +166,28 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
         String filePath=userId+"/"+YYYYMMDD+"/B"+seq+"_"+System.currentTimeMillis();
-        LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
+//        LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
         try {
-            //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-            InputStream is=file.getInputStream();
-            SSOTools.saveOSS(is,filePath);
-            is.close();
+        	if(systemProPerties.getSsoQQ().equals("1")) {//走腾讯
+       		  filePath=userId+"/"+YYYYMMDD+"/B"+seq+"_"+System.currentTimeMillis()+"_Q";
+       		  LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
+       		  File   dealFile = new File(systemProPerties.getFileTmpDir()+"/"+filePath);
+       		  File fileParent = dealFile.getParentFile();  
+       			if(!fileParent.exists()){  
+       			    fileParent.mkdirs();  
+       			} 
+                 file.transferTo(dealFile);
+                 QQSSOTools.saveOSS(dealFile,filePath);
+       	}else {//走阿里
+               LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
+               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+               InputStream is=file.getInputStream();
+               SSOTools.saveOSS(is,filePath);
+               is.close();
+       	}
+        	
+        	
+     
         }catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.idata365.col.controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,12 +21,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
+import com.idata365.col.config.SystemProperties;
+import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.entity.UserEntity;
 import com.idata365.col.enums.UserSexEnum;
 import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.remote.DemoService;
+import com.idata365.col.service.DataService;
 
 
 @RestController
@@ -34,7 +39,25 @@ public class DemoController {
     @Autowired
     DemoService demoService;
     @Autowired
+    DataService dataService;
+    @Autowired
     ChezuDriveService chezuDriveService;
+    @Autowired
+	SystemProperties systemProperties;
+    @RequestMapping(value = "/testDbEception",method = RequestMethod.GET)
+    public String testDbEception(){
+    	DriveDataLog log=new DriveDataLog();
+    	log.setEquipmentInfo("");
+    	log.setFilePath("17/20171211/A1_1512998450660");
+    	log.setHabitId(1513689569L);
+    	log.setUserId(17L);
+    	log.setSeq(1);
+    	log.setIsEnd(1);
+    	dataService.insertDriveLog(log, "ewrwrwere");
+    	return "aaa";
+    }
+      
+    
     @RequestMapping(value = "/hi",method = RequestMethod.GET)
     public String sayHi(@RequestParam String name){
 //    	return name;
@@ -84,7 +107,7 @@ public class DemoController {
     }
     
 
-    @RequestMapping("fileUpload")
+    @RequestMapping("/fileUpload")
     public String  fileUpload(@RequestParam CommonsMultipartFile file) throws IOException {
          
          
@@ -116,7 +139,7 @@ public class DemoController {
         return "/success"; 
     }  
 
-    @RequestMapping("fileUploadSSO")
+    @RequestMapping("/fileUploadSSO")
     public String  fileUploadSSO(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
          
          
@@ -127,7 +150,9 @@ public class DemoController {
         try {
             //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
             InputStream is=file.getInputStream();
-            SSOTools.saveOSS(is,"1000/20171123/");
+            File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+System.currentTimeMillis());
+            file.transferTo(dealFile);
+            QQSSOTools.saveOSS(dealFile,"1000/20171123/"+System.currentTimeMillis());
             is.close();
          
         } catch (FileNotFoundException e) {
@@ -138,6 +163,18 @@ public class DemoController {
         System.out.println("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return "/success"; 
     } 
-    
+   public static void main(String []args) {
+	File file=new File("d:\\aa\\bb\\cc\\dd\\ddfd22.jgp");  
+	File fileParent = file.getParentFile();  
+	if(!fileParent.exists()){  
+	    fileParent.mkdirs();  
+	} 
+	try {
+		file.createNewFile();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+   }
     
 }
