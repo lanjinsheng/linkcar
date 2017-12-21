@@ -22,7 +22,7 @@ import com.idata365.app.util.ValidTools;
 
 
 @RestController
-public class UserController {
+public class UserController extends BaseController{
 
 	@Autowired
 	private LoginRegService loginRegService;
@@ -253,6 +253,7 @@ public class UserController {
     	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("deviceToken")))
           return ResultUtils.rtFailParam(null);
     	String deviceInfo=String.valueOf(requestBodyParams.get("deviceToken"));
+    	String eventType=String.valueOf(requestBodyParams.get("eventType"));
     	long userId=0;
     	if( ValidTools.isNotBlank(requestBodyParams.get("userId"))){
     		 userId=Long.valueOf(requestBodyParams.get("userId").toString());
@@ -262,6 +263,18 @@ public class UserController {
     		return ResultUtils.rtFail(null);
     	}
     	rtMap.put("alias", alias);
+    	if(eventType.equals("1")) {//1为注册事件
+    		String toUrl=this.getRegSendMsgUrl();
+    		try {
+				toUrl=toUrl+SignUtils.encryptDataAes(String.valueOf(System.currentTimeMillis()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		rtMap.put("toUrl", toUrl);
+    	}else {
+    		rtMap.put("toUrl", "");
+    	}
     	return ResultUtils.rtSuccess(rtMap);
     }
     

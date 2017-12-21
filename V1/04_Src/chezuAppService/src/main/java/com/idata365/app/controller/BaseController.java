@@ -20,4 +20,10 @@ abstract  class BaseController {
 	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/share/goInvite?key=";
 
 	  }
+	protected String getRegSendMsgUrl() {
+		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/msg/sendRegMsg?key=";
+
+	}
 }
