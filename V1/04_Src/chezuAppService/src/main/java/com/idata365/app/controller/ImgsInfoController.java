@@ -50,7 +50,7 @@ public class ImgsInfoController {
 			} 
 	         try {
 	        	 OutputStream os=file.getOutputStream();
-	        	 if(key.startsWith("Q")) {//走qq
+	        	 if(key.endsWith("_Q")) {//走qq
 	        		 QQSSOTools.getSSOFile(key, os);
 	        	 }else {
 	        	
