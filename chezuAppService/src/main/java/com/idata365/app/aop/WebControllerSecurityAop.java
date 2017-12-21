@@ -49,6 +49,14 @@ public WebControllerSecurityAop() {
     	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
     	    String token= request.getHeader("token");
     	   LOG.info("拦截到了" + proceedingJoinPoint.getSignature().getName() +"方法...");    
+    	   
+//	    	try {//obj之前可以写目标方法执行前的逻辑
+//	            Object obj = proceedingJoinPoint.proceed();//调用执行目标方法
+//	            return obj;
+//	        } catch (Throwable throwable) {
+//	            throwable.printStackTrace();
+//	        }
+	    	
     	    Signature signature = proceedingJoinPoint.getSignature();    
     	    MethodSignature methodSignature = (MethodSignature)signature;    
     	    Method targetMethod = methodSignature.getMethod();  

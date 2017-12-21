@@ -17,6 +17,8 @@ import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
+import com.idata365.app.entity.ScoreUserHistoryParamBean;
+import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.util.ResultUtils;
 
@@ -63,6 +65,7 @@ public class ScoreController extends BaseController
 	@RequestMapping("/score/queryFamilyDetail")
 	public Map<String, Object> queryFamilyDetail(@RequestBody ScoreFamilyInfoParamBean bean)
 	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		ScoreFamilyDetailResultBean resultBean = this.scoreService.queryFamilyDetail(bean);
 		List<ScoreFamilyDetailResultBean> resultList = new ArrayList<>();
 		resultList.add(resultBean);
@@ -76,7 +79,22 @@ public class ScoreController extends BaseController
 	@RequestMapping("/score/listFamilyMember")
 	public Map<String, Object> listFamilyMember(@RequestBody ScoreFamilyInfoParamBean bean)
 	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<ScoreMemberInfoResultBean> resultList = this.scoreService.listFamilyMember(bean);
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 历史得分（显示指定用户的）
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/listHistoryOrder")
+	public Map<String, Object> listHistoryOrder(@RequestBody ScoreUserHistoryParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		ScoreUserHistoryResultAllBean resultBean = this.scoreService.listHistoryOrder(bean);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 }
