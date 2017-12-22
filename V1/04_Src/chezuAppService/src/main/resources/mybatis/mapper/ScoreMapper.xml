@@ -25,7 +25,7 @@ join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
 
 	<select id="queryFamilyRecords" resultType="java.lang.String" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select record from familyHistory where familyId=#{familyId} order by id desc
+		select record from familyHistory where familyId=#{familyId} order by id desc limit 0, 3
 	</select>
 
 	<select id="queryMemberByFamilyId" resultType="com.idata365.app.entity.ScoreMemberInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
