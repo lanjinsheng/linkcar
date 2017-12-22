@@ -6,6 +6,8 @@ public class ScoreFamilyInfoParamBean
 
 	private long familyId;
 	
+	private String daystamp;
+	
 	public long getUserId()
 	{
 		return userId;
@@ -24,6 +26,16 @@ public class ScoreFamilyInfoParamBean
 	public void setFamilyId(long familyId)
 	{
 		this.familyId = familyId;
+	}
+
+	public String getDaystamp()
+	{
+		return daystamp;
+	}
+
+	public void setDaystamp(String daystamp)
+	{
+		this.daystamp = daystamp;
 	}
 	
 }

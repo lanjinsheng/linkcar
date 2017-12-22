@@ -3,13 +3,17 @@
 <mapper namespace="com.idata365.app.mapper.ScoreMapper">
 
 	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select imgUrl, t1.familyId as familyId, t1.orderNo as orderNo, t2.familyName as name from familyScore t1 
-join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId}
+		select imgUrl, t2.id as familyId, t1.orderNo as orderNo, t2.familyName as name from familyScore t1 
+right join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId}
 	</select>
 
+	<select id="queryFamilyIds" resultType="java.lang.Long" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select familyId from userFamilyRelation where userId=#{userId} order by id asc
+	</select>
+	
 	<select id="queryFamilyByFamilyId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select imgUrl, t1.familyId as familyId, t1.orderNo as orderNo, t2.familyName as name from familyScore t1 
-join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
+		select imgUrl, t2.id as familyId, t1.orderNo as orderNo, t2.familyName as name from familyScore t1 
+right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
 
 	<select id="queryFamilyOrderInfo" resultType="com.idata365.app.entity.ScoreFamilyOrderBean">
@@ -41,5 +45,12 @@ where t2.familyId = #{familyId}
 	
 	<select id="queryScoreByDay" resultType="com.idata365.app.entity.ScoreByDayBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
 		select score, speedingState, driveState, creditState, steadyState, mileageState from userScoreDayStat where userId=#{userId} and daystamp=#{day}
+	</select>
+	
+	<select id="queryUserDayScoreByFamily" resultType="com.idata365.app.entity.ScoreUserBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select t1.userId as userId, imgUrl, nickName as name, phone, t3.score as score from userFamilyRelation t1 
+			join usersAccount t2 on (t1.userId=t2.id) 
+			left join userScoreDayStat t3 on (t1.userId=t3.userId) 
+			where t1.familyId=#{familyId} and t3.daystamp=#{daystamp};
 	</select>
 </mapper>
