@@ -22,6 +22,8 @@ public class FamilyParamBean
 
 	private int startPos;
 	
+	private String joinTime;
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -120,6 +122,16 @@ public class FamilyParamBean
 	public void setStartPos(int startPos)
 	{
 		this.startPos = startPos;
+	}
+
+	public String getJoinTime()
+	{
+		return joinTime;
+	}
+
+	public void setJoinTime(String joinTime)
+	{
+		this.joinTime = joinTime;
 	}
 	
 }

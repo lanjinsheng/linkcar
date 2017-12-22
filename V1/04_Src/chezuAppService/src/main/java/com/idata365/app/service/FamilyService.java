@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInfoScoreResultBean;
@@ -159,6 +160,8 @@ public class FamilyService extends BaseService<FamilyService>
 			return 2;
 		}
 		
+		String timeStamp = generateTimeStamp();
+		bean.setJoinTime(timeStamp);
 		this.familyMapper.saveUserFamily(bean);
 		
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
@@ -317,6 +320,8 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		//组长自己绑定新创建的家族
 		bean.setFamilyId(familyId);
+		String timeStamp = generateTimeStamp();
+		bean.setJoinTime(timeStamp);
 		this.familyMapper.saveUserFamily(bean);
 		
 		//更新是否通过邀请码加入状态
@@ -336,6 +341,13 @@ public class FamilyService extends BaseService<FamilyService>
 		this.familyMapper.updateUserStraner(usersAccountParamBean);
 		
 		return familyId;
+	}
+
+	private String generateTimeStamp()
+	{
+		Calendar todayCal = Calendar.getInstance();
+		String timeStamp = DateFormatUtils.format(todayCal, DateConstant.SECOND_FORMAT_PATTERN);
+		return timeStamp;
 	}
 	
 	/**
