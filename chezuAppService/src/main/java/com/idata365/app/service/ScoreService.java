@@ -1,5 +1,6 @@
 package com.idata365.app.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
@@ -119,10 +121,29 @@ public class ScoreService extends BaseService<ScoreService>
 				tempResultBean.setIsCaptainFlag("1");
 			}
 			
+			String tempJoinTime = tempBean.getJoinTime();
+			String formatJoinTime = formatTime(tempJoinTime);
+			tempResultBean.setJoinTime(formatJoinTime);
+			
 			resultList.add(tempResultBean);
 		}
 		
 		return resultList;
+	}
+
+	private String formatTime(String tempJoinTime)
+	{
+		Date tempDate = null;
+		try
+		{
+			tempDate = DateUtils.parseDate(tempJoinTime, DateConstant.SECOND_FORMAT_PATTERN);
+		} catch (ParseException e)
+		{
+			throw new RuntimeException(e);
+		}
+		
+		String resultDateStr = DateFormatUtils.format(tempDate, "yyyy.MM.dd");
+		return resultDateStr;
 	}
 	
 	public static String hidePhone(String phone)
