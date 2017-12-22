@@ -30,6 +30,7 @@ import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
+import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
@@ -52,14 +53,24 @@ public class ScoreService extends BaseService<ScoreService>
 	 */
 	public ScoreFamilyInfoAllBean queryFamily(ScoreFamilyInfoParamBean bean)
 	{
-		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
-		ScoreFamilyInfoParamBean tempParamBean = new ScoreFamilyInfoParamBean();
-		tempParamBean.setFamilyId(oriFamilyBean.getFamilyId());
-		ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
-		
 		ScoreFamilyInfoAllBean resultBean = new ScoreFamilyInfoAllBean();
+		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
 		resultBean.setOriFamily(oriFamilyBean);
-		resultBean.setJoinFamily(joinFamilyBean);
+		
+		long origFamilyId = oriFamilyBean.getFamilyId();
+		List<Long> familyIdList = this.scoreMapper.queryFamilyIds(bean);
+		for (Long tempFamilyId : familyIdList)
+		{
+			if (tempFamilyId.longValue() != origFamilyId)
+			{
+				ScoreFamilyInfoParamBean tempParamBean = new ScoreFamilyInfoParamBean();
+				tempParamBean.setFamilyId(tempFamilyId);
+				ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
+				resultBean.setJoinFamily(joinFamilyBean);
+				break;
+			}
+		}
+		
 		return resultBean;
 	}
 	
@@ -214,6 +225,19 @@ public class ScoreService extends BaseService<ScoreService>
 			AdBeanUtils.copyOtherPropToStr(resultBean, tempBean);
 			resultList.add(resultBean);
 		}
+		
+		return resultList;
+	}
+	
+	/**
+	 * 昨日得分
+	 * @param bean
+	 * @return
+	 */
+	public List<ScoreUserResultBean> findYesterdayScore(ScoreFamilyInfoParamBean bean)
+	{
+		
+		List<ScoreUserResultBean> resultList = new ArrayList<>();
 		
 		return resultList;
 	}
