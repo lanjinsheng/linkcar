@@ -21,7 +21,7 @@ join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
 
 	<select id="queryFamilyDetail" resultType="com.idata365.app.entity.ScoreFamilyDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select imgUrl, familyName, t2.orderNo as orderNo from familyInfo t1 join familyScore t2 on (t1.id=t2.familyId) where t1.id=#{familyId}
+		select imgUrl, familyName, t2.orderNo as orderNo from familyInfo t1 left join familyScore t2 on (t1.id=t2.familyId) where t1.id=#{familyId}
 	</select>
 
 	<select id="queryFamilyRecords" resultType="java.lang.String" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
@@ -29,9 +29,9 @@ join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
 
 	<select id="queryMemberByFamilyId" resultType="com.idata365.app.entity.ScoreMemberInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select imgUrl, t1.nickName as name, t1.id as userId, t3.role as role, DATE_FORMAT(joinTime, '%Y-%m-%d %H:%i:%S') as joinTime from usersAccount t1 
+		select imgUrl, t1.nickName as name, t1.phone as phone, t1.id as userId, t3.role as role, joinTime from usersAccount t1 
 join userFamilyRelation t2 on (t1.id=t2.userId) 
-join userScoreDayStat t3 on (t1.id=t3.userId) 
+left join userScoreDayStat t3 on (t1.id=t3.userId) 
 where t2.familyId = #{familyId}
 	</select>
 
@@ -39,4 +39,7 @@ where t2.familyId = #{familyId}
 		select score, role, daystamp as dayStr from userScoreDayStat where userId=#{userId} order by daystamp desc limit #{start}, 10
 	</select>
 	
+	<select id="queryScoreByDay" resultType="com.idata365.app.entity.ScoreByDayBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
+		select score, speedingState, driveState, creditState, steadyState, mileageState from userScoreDayStat where userId=#{userId} and daystamp=#{day}
+	</select>
 </mapper>
