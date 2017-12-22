@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
@@ -47,7 +48,11 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 	    	  for(DriveDataLog drive:drives) {
 	    		     StringBuffer json=new StringBuffer();
-			         SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     if(drive.getFilePath().endsWith("_Q")) {
+	    		    	 QQSSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }else {
+	    		    	 SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }
 			         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
 			         if(jMap.get("gpsInfos")!=null) {
 			        	 list.addAll((List)jMap.get("gpsInfos"));
