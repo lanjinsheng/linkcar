@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.entity.ScoreByDayResultBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
@@ -81,6 +82,14 @@ public class ScoreController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<ScoreMemberInfoResultBean> resultList = this.scoreService.listFamilyMember(bean);
+		
+		String imgBasePath = super.getImgBasePath();
+		for (ScoreMemberInfoResultBean tempBean : resultList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			tempBean.setImgUrl(imgBasePath + imgUrl);
+		}
+		
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -96,5 +105,19 @@ public class ScoreController extends BaseController
 		
 		ScoreUserHistoryResultAllBean resultBean = this.scoreService.listHistoryOrder(bean);
 		return ResultUtils.rtSuccess(resultBean);
+	}
+	
+	/**
+	 * 历史驾驶得分
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/getScoreByDay")
+	public Map<String, Object> getScoreByDay(@RequestBody ScoreUserHistoryParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		List<ScoreByDayResultBean> resultList = this.scoreService.getScoreByDay(bean);
+		return ResultUtils.rtSuccess(resultList);
 	}
 }

@@ -6,6 +6,8 @@ public class ScoreMemberInfoBean
 	
 	private String name;
 	
+	private String phone;
+	
 	private long userId;
 	
 	private int role;
@@ -38,6 +40,16 @@ public class ScoreMemberInfoBean
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	public String getPhone()
+	{
+		return phone;
+	}
+
+	public void setPhone(String phone)
+	{
+		this.phone = phone;
 	}
 
 	public long getUserId()

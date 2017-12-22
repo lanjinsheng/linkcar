@@ -7,6 +7,8 @@ public class ScoreUserHistoryParamBean
 	private long userId;
 	
 	private int start;
+	
+	private String day;
 
 	public String getStartDay()
 	{
@@ -36,6 +38,16 @@ public class ScoreUserHistoryParamBean
 	public void setStart(int start)
 	{
 		this.start = start;
+	}
+
+	public String getDay()
+	{
+		return day;
+	}
+
+	public void setDay(String day)
+	{
+		this.day = day;
 	}
 	
 }

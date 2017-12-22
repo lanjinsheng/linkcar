@@ -1,13 +1,21 @@
 package com.idata365.app.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.idata365.app.entity.FamilyParamBean;
+import com.idata365.app.entity.ScoreByDayBean;
+import com.idata365.app.entity.ScoreByDayResultBean;
 import com.idata365.app.entity.ScoreFamilyDetailBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
@@ -20,6 +28,7 @@ import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
+import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
 
@@ -30,6 +39,9 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	@Autowired
 	private ScoreMapper scoreMapper;
+	
+	@Autowired
+	private FamilyMapper familyMapper;
 	
 	/**
 	 * 发起家族、参与家族查询
@@ -82,18 +94,47 @@ public class ScoreService extends BaseService<ScoreService>
 	public List<ScoreMemberInfoResultBean> listFamilyMember(ScoreFamilyInfoParamBean bean)
 	{
 		List<ScoreMemberInfoBean> tempList = this.scoreMapper.queryMemberByFamilyId(bean);
+		
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(bean.getFamilyId());
+		long createUserId = this.familyMapper.queryCreateUserId(familyParamBean);
+		
 		List<ScoreMemberInfoResultBean> resultList = new ArrayList<>();
 		
 		for (ScoreMemberInfoBean tempBean : tempList)
 		{
 			ScoreMemberInfoResultBean tempResultBean = new ScoreMemberInfoResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			
+			String name = tempBean.getName();
+			if (StringUtils.isBlank(name))
+			{
+				String phone = tempBean.getPhone();
+				String hidePhoneResult = hidePhone(phone);
+				tempResultBean.setName(hidePhoneResult);
+			}
+			
+			if (createUserId == tempBean.getUserId())
+			{
+				tempResultBean.setIsCaptainFlag("1");
+			}
+			
 			resultList.add(tempResultBean);
 		}
 		
 		return resultList;
 	}
 	
+	public static String hidePhone(String phone)
+	{
+		String prefixPhone = StringUtils.substring(phone, 0, 3);
+		String suffixPhone = StringUtils.substring(phone, 7);
+		
+		String tempNewPhone = prefixPhone + "****" + suffixPhone;
+		return tempNewPhone;
+	}
+	
+	private static final String DAY_PATTERN = "yyyy-MM-dd";
 	/**
 	 * 历史得分（显示指定用户的）
 	 * @param bean
@@ -103,12 +144,26 @@ public class ScoreService extends BaseService<ScoreService>
 	{
 		List<ScoreUserHistoryBean> tempList = this.scoreMapper.queryHistoryOrder(bean);
 		
-		List<ScoreUserHistoryResultBean> resultList = new ArrayList<>();
+		Date todayDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
+		String todayStr = DateFormatUtils.format(todayDate, DAY_PATTERN);
+		String yesterdayStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
 		
+		List<ScoreUserHistoryResultBean> resultList = new ArrayList<>();
 		for (ScoreUserHistoryBean tempBean : tempList)
 		{
 			ScoreUserHistoryResultBean tempResultBean = new ScoreUserHistoryResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			String dayStr = tempBean.getDayStr();
+			if (StringUtils.equals(dayStr, todayStr))
+			{
+				tempResultBean.setDayStr(dayStr + "（今日）");
+			}
+			else if (StringUtils.equals(dayStr, yesterdayStr))
+			{
+				tempResultBean.setDayStr(dayStr + "（昨日）");
+			}
+			
 			resultList.add(tempResultBean);
 		}
 		
@@ -120,5 +175,25 @@ public class ScoreService extends BaseService<ScoreService>
 		resultBean.setStart(String.valueOf(newStart));
 		
 		return resultBean;
+	}
+	
+	/**
+	 * 历史驾驶得分
+	 * @param bean
+	 * @return
+	 */
+	public List<ScoreByDayResultBean> getScoreByDay(ScoreUserHistoryParamBean bean)
+	{
+		List<ScoreByDayBean> tempList = this.scoreMapper.queryScoreByDay(bean);
+		
+		List<ScoreByDayResultBean> resultList = new ArrayList<>();
+		for (ScoreByDayBean tempBean : tempList)
+		{
+			ScoreByDayResultBean resultBean = new ScoreByDayResultBean();
+			AdBeanUtils.copyOtherPropToStr(resultBean, tempBean);
+			resultList.add(resultBean);
+		}
+		
+		return resultList;
 	}
 }
