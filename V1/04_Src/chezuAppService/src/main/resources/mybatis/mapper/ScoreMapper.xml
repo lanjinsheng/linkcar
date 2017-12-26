@@ -53,4 +53,16 @@ where t2.familyId = #{familyId}
 			left join userScoreDayStat t3 on (t1.userId=t3.userId) 
 			where t1.familyId=#{familyId} and t3.daystamp=#{daystamp};
 	</select>
+	
+	<select id="queryYesterdayFamilyScore" resultType="com.idata365.app.entity.YesterdayScoreBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select t1.id as userId, t1.nickName as name, t1.phone as phone, t1.imgUrl as imgUrl, t3.score as score, t3.role as role from usersAccount t1 
+			join userFamilyRelation t2 on (t1.id=t2.userId) 
+			left join userScoreDayStat t3 on (t1.id=t3.userId) where familyId=#{familyId} and t3.daystamp=#{daystamp}
+	</select>
+	
+	<select id="queryYesterdayMemberScore" resultType="com.idata365.app.entity.FamilyMemberBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select t1.id as userId, t1.nickName as name, t1.phone as phone, t1.imgUrl as imgUrl, t3.score as score, t3.role as realRole from usersAccount t1 
+			join userFamilyRelation t2 on (t1.id=t2.userId) 
+			left join userScoreDayStat t3 on (t1.id=t3.userId) where familyId=#{familyId} and t3.daystamp=#{daystamp}
+	</select>
 </mapper>

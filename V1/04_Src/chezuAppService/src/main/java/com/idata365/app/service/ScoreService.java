@@ -1,5 +1,7 @@
 package com.idata365.app.service;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -15,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.entity.FamilyMemberAllResultBean;
+import com.idata365.app.entity.FamilyMemberBean;
+import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
@@ -26,14 +32,19 @@ import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreMemberInfoBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
+import com.idata365.app.entity.ScoreUserBean;
 import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
 import com.idata365.app.entity.ScoreUserResultBean;
+import com.idata365.app.entity.YesterdayContributionResultBean;
+import com.idata365.app.entity.YesterdayScoreBean;
+import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.RandUtils;
 
 @Service
 public class ScoreService extends BaseService<ScoreService>
@@ -230,15 +241,128 @@ public class ScoreService extends BaseService<ScoreService>
 	}
 	
 	/**
+	 * !!!!drop
 	 * 昨日得分
 	 * @param bean
 	 * @return
 	 */
 	public List<ScoreUserResultBean> findYesterdayScore(ScoreFamilyInfoParamBean bean)
 	{
+		Date todayDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
+		bean.setDaystamp(yesterdayDateStr);
 		
+		List<ScoreUserBean> tempList = this.scoreMapper.queryUserDayScoreByFamily(bean);
 		List<ScoreUserResultBean> resultList = new ArrayList<>();
+		for (ScoreUserBean tempBean : tempList)
+		{
+			ScoreUserResultBean tempResultBean = new ScoreUserResultBean();
+			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			resultList.add(tempResultBean);
+		}
 		
 		return resultList;
+	}
+	
+	/**
+	 * 昨日得分
+	 * @param bean
+	 * @return
+	 */
+	public List<YesterdayScoreResultBean> findYesterdayFamilyScore(ScoreFamilyInfoParamBean bean)
+	{
+		Date todayDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
+		bean.setDaystamp(yesterdayDateStr);
+		
+		List<YesterdayScoreBean> tempList = this.scoreMapper.queryYesterdayFamilyScore(bean);
+		
+		double tempTotalScore = 0;
+		List<YesterdayScoreResultBean> resultList = new ArrayList<>();
+		for (YesterdayScoreBean tempBean : tempList)
+		{
+			YesterdayScoreResultBean tempResultBean = new YesterdayScoreResultBean();
+			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
+			resultList.add(tempResultBean);
+			
+			tempTotalScore += tempBean.getScore();
+		}
+		
+		int totalSize = tempList.size();
+		if (totalSize > 0)
+		{
+			for (YesterdayScoreResultBean tempBean : resultList)
+			{
+				BigDecimal resultBd = BigDecimal.valueOf(NumberUtils.toDouble(tempBean.getScore())).divide(BigDecimal.valueOf(tempTotalScore), 2, BigDecimal.ROUND_HALF_UP);
+				double resultD = resultBd.doubleValue();
+				String percent = formattedDecimalToPercentage(resultD);
+				tempBean.setPercent(percent);
+			}
+		}
+		
+		return resultList;
+	}
+	
+	private static String formattedDecimalToPercentage(double decimal)  
+    {  
+        //获取格式化对象  
+        NumberFormat nt = NumberFormat.getPercentInstance();  
+        //设置百分数精确度2即保留两位小数  
+        nt.setMinimumFractionDigits(2);  
+        return nt.format(decimal);  
+    }  
+	
+	//
+	public List<YesterdayContributionResultBean> familyContribution(ScoreFamilyInfoParamBean bean)
+	{
+		
+		Date todayDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
+		bean.setDaystamp(yesterdayDateStr);
+		
+		List<YesterdayScoreBean> tempList = this.scoreMapper.queryYesterdayFamilyScore(bean);
+		
+		List<YesterdayContributionResultBean> resultList = new ArrayList<>();
+		for (YesterdayScoreBean tempBean : tempList)
+		{
+			YesterdayContributionResultBean tempResultBean = new YesterdayContributionResultBean();
+			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
+			//temp settings contribution start
+			tempResultBean.setContribution(String.valueOf(tempBean.getScore()));
+			//temp settings end
+			resultList.add(tempResultBean);
+		}
+		
+		return resultList;
+	}
+	
+	/**
+	 * 获得家族及成员昨日理论得分
+	 * @param bean
+	 * @return
+	 */
+	public FamilyMemberAllResultBean generateYesterdayFamilyScore(ScoreFamilyInfoParamBean bean)
+	{
+		FamilyMemberAllResultBean resultBean = new FamilyMemberAllResultBean();
+		
+		List<FamilyMemberBean> tempList = this.scoreMapper.queryYesterdayMemberScore(bean);
+		
+		List<FamilyMemberResultBean> scoreList = new ArrayList<>();
+		for (FamilyMemberBean tempBean : tempList)
+		{
+			FamilyMemberResultBean tempResultBean = new FamilyMemberResultBean();
+			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			//temp settings  percent score supposeRole start
+			tempResultBean.setPercent("20%");
+			tempResultBean.setSupposeRole(String.valueOf(RandUtils.generateRand(1, 5)));
+			//temp settings  percent score supposeRole end
+			scoreList.add(tempResultBean);
+		}
+		
+		
+		return resultBean;
 	}
 }

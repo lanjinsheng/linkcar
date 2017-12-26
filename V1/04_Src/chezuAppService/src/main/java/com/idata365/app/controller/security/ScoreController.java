@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.entity.FamilyMemberAllResultBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
@@ -20,6 +21,9 @@ import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
+import com.idata365.app.entity.ScoreUserResultBean;
+import com.idata365.app.entity.YesterdayContributionResultBean;
+import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.util.ResultUtils;
 
@@ -119,5 +123,47 @@ public class ScoreController extends BaseController
 		
 		List<ScoreByDayResultBean> resultList = this.scoreService.getScoreByDay(bean);
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 昨日得分
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/findYesterdayScore")
+	public Map<String, Object> findYesterdayScore(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		List<YesterdayScoreResultBean> resultList = this.scoreService.findYesterdayFamilyScore(bean);
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 族内贡献榜(昨日得分)
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/familyContribution")
+	public Map<String, Object> familyContribution(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		List<YesterdayContributionResultBean> resultList = this.scoreService.familyContribution(bean);
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 获得家族及成员昨日理论得分
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/generateYesterdayFamilyScore")
+	public Map<String, Object> generateYesterdayFamilyScore(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		FamilyMemberAllResultBean resultBean = this.scoreService.generateYesterdayFamilyScore(bean);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 }
