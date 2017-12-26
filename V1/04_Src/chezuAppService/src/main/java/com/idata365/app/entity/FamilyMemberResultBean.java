@@ -4,6 +4,8 @@ public class FamilyMemberResultBean
 {
 	private String name;
 	
+	private String imgUrl;
+	
 	private String score;
 	
 	private String percent;
@@ -20,6 +22,16 @@ public class FamilyMemberResultBean
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	public String getImgUrl()
+	{
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl)
+	{
+		this.imgUrl = imgUrl;
 	}
 
 	public String getScore()

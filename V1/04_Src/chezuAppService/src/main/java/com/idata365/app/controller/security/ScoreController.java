@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.entity.CompetitorResultBean;
 import com.idata365.app.entity.FamilyMemberAllResultBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
@@ -165,5 +166,22 @@ public class ScoreController extends BaseController
 		
 		FamilyMemberAllResultBean resultBean = this.scoreService.generateYesterdayFamilyScore(bean);
 		return ResultUtils.rtSuccess(resultBean);
+	}
+	
+	/**
+	 * 昨日赛果
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/showGameResult")
+	public Map<String, Object> showGameResult(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		CompetitorResultBean resultBean = this.scoreService.showGameResult(bean);
+		List<CompetitorResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
 	}
 }

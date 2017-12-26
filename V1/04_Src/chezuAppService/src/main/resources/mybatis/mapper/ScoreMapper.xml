@@ -65,4 +65,8 @@ where t2.familyId = #{familyId}
 			join userFamilyRelation t2 on (t1.id=t2.userId) 
 			left join userScoreDayStat t3 on (t1.id=t3.userId) where familyId=#{familyId} and t3.daystamp=#{daystamp}
 	</select>
+	
+	<select id="queryFamilyDriveStat" resultType="com.idata365.app.entity.FamilyDriveDayStatBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select orderNo, mileage, time, speedTimes from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
 </mapper>
