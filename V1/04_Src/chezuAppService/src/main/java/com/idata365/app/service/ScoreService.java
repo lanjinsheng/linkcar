@@ -43,6 +43,7 @@ import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
 import com.idata365.app.entity.ScoreUserResultBean;
+import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
@@ -442,5 +443,21 @@ public class ScoreService extends BaseService<ScoreService>
 		resultBean.setCompetitorObj(competitorObj);
 		
 		return resultBean;
+	}
+	
+	public List<SimulationScoreResultBean> generateYesterdaySimulationScore(ScoreFamilyInfoParamBean bean)
+	{
+		List<SimulationScoreResultBean> resultList = new ArrayList<>();
+		
+		//temp settsing score roleId
+		for (int i = 1; i <= 7; i++)
+		{
+			SimulationScoreResultBean tempBean0 = new SimulationScoreResultBean();
+			tempBean0.setRoleId(String.valueOf(i));
+			tempBean0.setScore("50");
+			resultList.add(tempBean0);
+		}
+		
+		return resultList;
 	}
 }

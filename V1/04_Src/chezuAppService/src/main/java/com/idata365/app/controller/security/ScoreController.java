@@ -22,7 +22,7 @@ import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
-import com.idata365.app.entity.ScoreUserResultBean;
+import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.service.ScoreService;
@@ -181,6 +181,20 @@ public class ScoreController extends BaseController
 		CompetitorResultBean resultBean = this.scoreService.showGameResult(bean);
 		List<CompetitorResultBean> resultList = new ArrayList<>();
 		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 获得昨日理论得分(用户所有角色)
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/generateYesterdaySimulationScore")
+	public Map<String, Object> generateYesterdaySimulationScore(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		List<SimulationScoreResultBean> resultList = this.scoreService.generateYesterdaySimulationScore(bean);
 		
 		return ResultUtils.rtSuccess(resultList);
 	}
