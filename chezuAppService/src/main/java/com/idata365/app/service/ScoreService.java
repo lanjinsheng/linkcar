@@ -18,10 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.entity.CompetitorResultBean;
+import com.idata365.app.entity.FamilyCompetitorResultBean;
+import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyMemberAllResultBean;
 import com.idata365.app.entity.FamilyMemberBean;
 import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
+import com.idata365.app.entity.FamilyRelationBean;
+import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
 import com.idata365.app.entity.ScoreFamilyDetailBean;
@@ -362,6 +367,79 @@ public class ScoreService extends BaseService<ScoreService>
 			scoreList.add(tempResultBean);
 		}
 		
+		//temp settings start
+		resultBean.setSimulationScore("83");
+		resultBean.setScoreArr(scoreList);
+		//temp settings end
+		return resultBean;
+	}
+	
+	/**
+	 * 昨日赛果
+	 * @param bean
+	 * @return
+	 */
+	public CompetitorResultBean showGameResult(ScoreFamilyInfoParamBean bean)
+	{
+		Date todayDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
+		
+		long familyId = bean.getFamilyId();
+		
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		
+		FamilyResultBean selfFamilybean = this.familyMapper.queryFamilyById(familyParamBean);
+		
+		FamilyCompetitorResultBean gameObj = new FamilyCompetitorResultBean();
+		gameObj.setFamilyId(String.valueOf(selfFamilybean.getMyFamilyId()));
+		gameObj.setName(selfFamilybean.getMyFamilyName());
+		gameObj.setImgUrl(selfFamilybean.getMyFamilyImgUrl());
+		
+		ScoreFamilyInfoParamBean gameObjParamBean = new ScoreFamilyInfoParamBean();
+		gameObjParamBean.setFamilyId(familyId);
+		gameObjParamBean.setDaystamp(yesterdayDateStr);
+		FamilyDriveDayStatBean gameObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(gameObjParamBean);
+		AdBeanUtils.copyOtherPropToStr(gameObj, gameObjFamilyStatBean);
+		//temp settsing competitingResult orderNo==========start
+		gameObj.setCompetitingResult("FAILURE");
+		gameObj.setOrderNo("10");
+		
+		FamilyRelationBean relationParamBean = new FamilyRelationBean();
+		relationParamBean.setFamilyId(familyId);
+		List<FamilyRelationBean> familyRelationList = this.familyMapper.queryFamilyIdByCompetitorId(relationParamBean);
+		FamilyRelationBean familyRelationBean = familyRelationList.get(0);
+		
+		long competitorFamilyId;
+		long familyId1 = familyRelationBean.getFamilyId1();
+		if (familyId == familyId1)
+		{
+			competitorFamilyId = familyRelationBean.getFamilyId2();
+		}
+		else
+		{
+			competitorFamilyId = familyId1;
+		}
+		familyParamBean.setFamilyId(competitorFamilyId);
+		FamilyResultBean competitorFamilybean = this.familyMapper.queryFamilyById(familyParamBean);
+		FamilyCompetitorResultBean competitorObj = new FamilyCompetitorResultBean();
+		competitorObj.setFamilyId(String.valueOf(competitorFamilybean.getMyFamilyId()));
+		competitorObj.setName(competitorFamilybean.getMyFamilyName());
+		competitorObj.setImgUrl(competitorFamilybean.getMyFamilyImgUrl());
+		
+		ScoreFamilyInfoParamBean competitorObjParamBean = new ScoreFamilyInfoParamBean();
+		competitorObjParamBean.setFamilyId(competitorFamilybean.getMyFamilyId());
+		competitorObjParamBean.setDaystamp(yesterdayDateStr);
+		FamilyDriveDayStatBean competitorObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(competitorObjParamBean);
+		AdBeanUtils.copyOtherPropToStr(competitorObj, competitorObjFamilyStatBean);
+		//temp settsing competitingResult orderNo==========start
+		competitorObj.setCompetitingResult("SUCCESS");
+		competitorObj.setOrderNo("15");
+		
+		CompetitorResultBean resultBean = new CompetitorResultBean();
+		resultBean.setGameObj(gameObj);
+		resultBean.setCompetitorObj(competitorObj);
 		
 		return resultBean;
 	}

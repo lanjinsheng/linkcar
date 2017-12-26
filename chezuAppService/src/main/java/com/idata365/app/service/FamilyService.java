@@ -394,7 +394,7 @@ public class FamilyService extends BaseService<FamilyService>
 		FamilyRelationBean relationBean = new FamilyRelationBean();
 		int myFamilyId = familyResultBean.getMyFamilyId();
 		relationBean.setFamilyId(myFamilyId);
-		FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
+		FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean).get(0);
 		long familyId1 = relationResultBean.getFamilyId1();
 		long familyId2 = relationResultBean.getFamilyId2();
 		FamilyParamBean familyParamBean = new FamilyParamBean();

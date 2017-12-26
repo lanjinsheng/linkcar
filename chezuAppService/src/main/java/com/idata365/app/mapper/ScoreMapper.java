@@ -2,6 +2,7 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyMemberBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreFamilyDetailBean;
@@ -39,4 +40,6 @@ public interface ScoreMapper
 	public List<YesterdayScoreBean> queryYesterdayFamilyScore(ScoreFamilyInfoParamBean bean);
 	
 	public List<FamilyMemberBean> queryYesterdayMemberScore(ScoreFamilyInfoParamBean bean);
+	
+	public FamilyDriveDayStatBean queryFamilyDriveStat(ScoreFamilyInfoParamBean bean);
 }
