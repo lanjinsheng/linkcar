@@ -9,4 +9,6 @@ public class DateConstant
 	public static final String DAY_PATTERN = "yyyyMMdd";
 	
 	public static final String MONTH_PATTERN = "yyyyMM";
+	
+	public static final String DAY_PATTERN_DELIMIT = "yyyy-MM-dd";
 }
