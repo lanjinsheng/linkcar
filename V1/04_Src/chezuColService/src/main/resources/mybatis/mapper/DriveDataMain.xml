@@ -22,14 +22,14 @@
             driveDataMain
             (userId,habitId,driveStartTime,driveEndTime,driveTimes,driveDistance,
             maxSpeed,createTime,validStatus,avgSpeed,
-            speedUpTimes,brakeTimes,turnTimes,speed120To129Times,speed130To139Times,
+            speedUpTimes,brakeTimes,turnTimes,overspeedTimes,speed120To129Times,speed130To139Times,
             speed140To149Times,speed150To159Times,speed160UpTimes) 
         VALUES
             (#{userId}, #{habitId}, #{driveStartTime}, #{driveEndTime}, 
             #{driveTimes},#{driveDistance}, 
             #{maxSpeed},now(), #{validStatus}, #{avgSpeed},
-             #{speedUpTimes} #{brakeTimes} #{turnTimes} #{speed120To129Times},
-              #{speed130To139Times} #{speed140To149Times} #{speed150To159Times} #{speed160UpTimes})
+             #{speedUpTimes}, #{brakeTimes}, #{turnTimes},#{overspeedTimes}, #{speed120To129Times},
+              #{speed130To139Times}, #{speed140To149Times}, #{speed150To159Times},#{speed160UpTimes})
     </insert>
 
 
