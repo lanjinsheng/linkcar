@@ -28,4 +28,5 @@ public class YingyanBaiduController {
 	    Map<String,Object> analysis(@RequestBody  (required = false) Map<String,String> param) {
 		   return yingyanService.analysis(param);
 	    }
+	   
 }

@@ -9,13 +9,15 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
+import com.idata365.col.entity.DriveScore;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.service.DataService;
 import com.idata365.col.service.SpringContextUtil;
-import com.idata365.col.util.DateTools;
+import com.idata365.col.service.YingyanService;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.PhoneGpsUtil;
 
@@ -41,6 +43,7 @@ public class DatasDealTask implements Runnable
 	{
 		 log.info("start=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
 		 DataService dataService=SpringContextUtil.getBean("dataService", DataService.class);
+		 YingyanService yingyanService=SpringContextUtil.getBean("yingyanService", YingyanService.class);
 		 UploadDataStatus status=new UploadDataStatus();
 		 status.setTaskFlag(taskId);
 		 status.setId(id);
@@ -52,7 +55,11 @@ public class DatasDealTask implements Runnable
 	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 	    	  for(DriveDataLog drive:drives) {
 	    		     StringBuffer json=new StringBuffer();
-			         SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     if(drive.getFilePath().endsWith("_Q")) {
+	    		    	 QQSSOTools.getSSOFile(json, drive.getFilePath());
+	    		     }else {
+	    		    	 SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }
 			         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
 			         if(jMap.get("gpsInfos")!=null) {
 			        	 list.addAll((List)jMap.get("gpsInfos"));
@@ -64,9 +71,11 @@ public class DatasDealTask implements Runnable
 	    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 	    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
 	    		 List<Map<String,Object>> alarmListZhuan= (List<Map<String,Object>>)datasMap.get("alarmListZhuan");
+	    		  List<Map<String,Object>> alarmListChao=yingyanService.dealListGaode(list);
 	    		 eventList.addAll(alarmListJia);
 	    		 eventList.addAll(alarmListJian);
 	    		 eventList.addAll(alarmListZhuan);
+	    		 eventList.addAll(alarmListChao);
 	    		 String startTime=String.valueOf(datasMap.get("startTime"));
 	    		 String endTime=String.valueOf(datasMap.get("endTime"));
 	    		 Double maxSpeed=Double.valueOf(datasMap.get("maxSpeed").toString());
@@ -86,8 +95,17 @@ public class DatasDealTask implements Runnable
 	    		 data.setAvgSpeed(BigDecimal.valueOf(avgSpeed));
 	    		 data.setValidStatus(1);
 	    		 data.setDriveDistance(BigDecimal.valueOf(distance));
+	    		 data.setSpeed120To129Times(Integer.valueOf(datasMap.get("speed120To129Times").toString()));
+	    		 data.setSpeed130To139Times(Integer.valueOf(datasMap.get("speed130To139Times").toString()));
+	    		 data.setSpeed140To149Times(Integer.valueOf(datasMap.get("speed140To149Times").toString()));
+	    		 data.setSpeed150To159Times(Integer.valueOf(datasMap.get("speed150To159Times").toString()));
+	    		 data.setSpeed160UpTimes(Integer.valueOf(datasMap.get("speed160UpTimes").toString()));
+	    		 data.setSpeedUpTimes(alarmListJia.size());
+	    		 data.setBrakeTimes(alarmListJian.size());
+	    		 data.setTurnTimes(alarmListZhuan.size());
 	    		  //插入数据
 	    		 dataService.insertEvents(data, eventList);
+	    
 	    		 //更新任务数据
 	    		 status.setScanStatus(1);
 	    		 dataService.updateDataStatusTask(status);	    		 

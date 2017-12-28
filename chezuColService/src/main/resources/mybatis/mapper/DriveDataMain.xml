@@ -20,9 +20,16 @@
     <insert id="insertDataLog" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.DriveDataMain" >
        INSERT ignore INTO 
             driveDataMain
-            (userId,habitId,driveStartTime,driveEndTime,driveTimes,driveDistance,maxSpeed,createTime,validStatus,avgSpeed) 
+            (userId,habitId,driveStartTime,driveEndTime,driveTimes,driveDistance,
+            maxSpeed,createTime,validStatus,avgSpeed,
+            speedUpTimes,brakeTimes,turnTimes,speed120To129Times,speed130To139Times,
+            speed140To149Times,speed150To159Times,speed160UpTimes) 
         VALUES
-            (#{userId}, #{habitId}, #{driveStartTime}, #{driveEndTime}, #{driveTimes}, #{driveDistance}, #{maxSpeed},now(), #{validStatus}, #{avgSpeed})
+            (#{userId}, #{habitId}, #{driveStartTime}, #{driveEndTime}, 
+            #{driveTimes},#{driveDistance}, 
+            #{maxSpeed},now(), #{validStatus}, #{avgSpeed},
+             #{speedUpTimes} #{brakeTimes} #{turnTimes} #{speed120To129Times},
+              #{speed130To139Times} #{speed140To149Times} #{speed150To159Times} #{speed160UpTimes})
     </insert>
 
 
@@ -71,5 +78,11 @@
        WHERE 
               isPost=-1 and taskFlag<![CDATA[<]]>${compareTimes}
      </update>
+ 
+ 
+ 	<!-- 获取行程 -->
+	 <select id="getDriveDataMainByUH"  resultMap="driveDataMainMap" parameterType="com.idata365.col.entity.DriveDataMain">
+		SELECT *  from driveDataMain where  userId=#{userId} and habitId=#{habitId}
+	 </select>
  
 </mapper>

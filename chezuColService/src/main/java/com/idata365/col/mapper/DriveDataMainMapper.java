@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.idata365.col.entity.DriveDataMain;
-import com.idata365.col.entity.UploadDataStatus;
 /**
  * 
     * @ClassName: DriveDataLogMapper
@@ -24,5 +23,5 @@ public interface DriveDataMainMapper {
 	 void  updateFailSendDriveTask(DriveDataMain drive);
 	 
 	 void  clearLockTask(@Param("compareTimes") long compareTimes);
-	 
+	 DriveDataMain getDriveDataMainByUH(DriveDataMain drive);
 }

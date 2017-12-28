@@ -8,15 +8,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.col.entity.bean.SpeedBean;
+
 
 public class PhoneGpsUtil {
 	
 	public static void main(String []args){
 	}
+	final static double speed120=33.33;
+	final static double speed130=36.11;
+	final static double speed140=38.89;
+	final static double speed150=41.67;
+	final static double speed160=44.44;
+	private static void setSpeedBean(SpeedBean speedBean,double speed) {
+		if(speed>=speed120 && speed<speed130) {
+			speedBean.setSpeed120To129Times(speedBean.getSpeed120To129Times()+1);
+		}else if(speed>=speed130 && speed<speed140) {
+			speedBean.setSpeed130To139Times(speedBean.getSpeed130To139Times()+1);
+		}else if(speed>=speed140 && speed<speed150) {
+			speedBean.setSpeed140To149Times(speedBean.getSpeed140To149Times()+1);
+		}else if(speed>=speed150 && speed<speed160) {
+			speedBean.setSpeed150To159Times(speedBean.getSpeed150To159Times()+1);
+		}else if(speed>=speed160) {
+			speedBean.setSpeed160UpTimes(speedBean.getSpeed160UpTimes()+1);
+		}
+	}
 	public static Map<String,Object> getGpsValues(List<Map<String,String>> list){
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		Double distance=0d;//距离值测算
 		double avgSpeed=0;
+		SpeedBean speedBean=new SpeedBean();
 		int size=list.size();
 		Map<String,String> first=list.get(0);
 		List<Map<String,Object>> alarmListJia=new ArrayList<Map<String,Object>>();
@@ -30,6 +51,13 @@ public class PhoneGpsUtil {
 		rtMap.put("maxSpeed", 0);
 		rtMap.put("avgSpeed", avgSpeed);
 		rtMap.put("distance", distance);
+		rtMap.put("speed120To129Times", 0);
+		rtMap.put("speed130To139Times", 0);
+		rtMap.put("speed140To149Times", 0);
+		rtMap.put("speed150To159Times", 0);
+		rtMap.put("speed160UpTimes", 0);
+		
+		
 		rtMap.put("driveTimes", 0);
 		int i=0;
 		String st=first.get("t");
@@ -39,11 +67,14 @@ public class PhoneGpsUtil {
 		double lat1=Double.valueOf(first.get("x"));
 		double lng1=Double.valueOf(first.get("y"));
 		double maxSpeed=Double.valueOf(first.get("s"));
+		setSpeedBean(speedBean,maxSpeed);
 		Gps Gps1=PositionUtil.gcj02ToGps84(Double.valueOf(lat1), Double.valueOf(lng1));
 		for(i=1;i<size;i++){
 			Map<String,String> gps=list.get(i);
 			double lat2=Double.valueOf(gps.get("x"));
 			double lng2=Double.valueOf(gps.get("y"));
+			double s=Double.valueOf(gps.get("s"));
+			setSpeedBean(speedBean,s);
 			Gps Gps2=PositionUtil.gcj02ToGps84(lat2, lng2);
 		    Double d=PositionUtil.distance(Gps1.getLng(),Gps1.getLat(),Gps2.getLng(),Gps2.getLat());
 			   distance+=d;
@@ -75,6 +106,13 @@ public class PhoneGpsUtil {
 		rtMap.put("maxSpeed", maxSpeed);
 		rtMap.put("avgSpeed", avgSpeed);
 		rtMap.put("distance", distance);
+		
+		rtMap.put("speed120To129Times", speedBean.getSpeed120To129Times());
+		rtMap.put("speed130To139Times", speedBean.getSpeed130To139Times());
+		rtMap.put("speed140To149Times", speedBean.getSpeed140To149Times());
+		rtMap.put("speed150To159Times", speedBean.getSpeed150To159Times());
+		rtMap.put("speed160UpTimes", speedBean.getSpeed160UpTimes());
+		
 		return rtMap;
 	}
 	

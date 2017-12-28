@@ -2,7 +2,6 @@ package com.idata365.col.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class DriveDataEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +13,14 @@ public class DriveDataEvent implements Serializable {
 	private BigDecimal lng;
 	private String startTime;
 	private String endTime;
+	private BigDecimal maxspeed;
+	
+	public BigDecimal getMaxspeed() {
+		return maxspeed;
+	}
+	public void setMaxspeed(BigDecimal maxspeed) {
+		this.maxspeed = maxspeed;
+	}
 	public Long getId() {
 		return id;
 	}

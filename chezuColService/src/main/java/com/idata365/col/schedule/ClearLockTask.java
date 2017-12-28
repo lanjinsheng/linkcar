@@ -1,17 +1,10 @@
 package com.idata365.col.schedule;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.idata365.col.entity.DriveDataEvent;
-import com.idata365.col.entity.DriveDataMain;
-import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.service.DataService;
 

@@ -11,9 +11,9 @@
     </resultMap>
 
    <insert id="insertDriveEvent" parameterType="java.util.HashMap">
-		 INSERT INTO  driveDataEvent (driveDataMainId,alarmType,alarmValue,lat,lng,startTime,endTime) VALUES
+		 INSERT INTO  driveDataEvent (driveDataMainId,alarmType,alarmValue,lat,lng,startTime,endTime,maxspeed) VALUES
     	<foreach collection="list" item="item" index="index" separator=",">
-    		(#{driveDataMainId},#{item.alarmType},#{item.alarmValue},#{item.lat},#{item.lng},#{item.startTime},#{item.endTime}) 
+    		(#{driveDataMainId},#{item.alarmType},#{item.alarmValue},#{item.lat},#{item.lng},#{item.startTime},#{item.endTime},#{item.maxspeed}) 
     	</foreach>
 	</insert>
 	

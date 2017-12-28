@@ -3,6 +3,8 @@ package com.idata365.col.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.col.entity.DriveDataLog;
 /**
  * 
@@ -16,7 +18,7 @@ public interface DriveDataLogMapper {
 
     void insertDataLog(DriveDataLog log);
     void delDataLog(DriveDataLog log);
-    DriveDataLog getDriveDataLog(Long id);
+    DriveDataLog getDriveDataLog(@Param("id") Long id);
     List<DriveDataLog> listPageDriveLog(Map<String,Object> map);
     
     List<DriveDataLog> listPageDriveLogTest(Map<String,Object> map);

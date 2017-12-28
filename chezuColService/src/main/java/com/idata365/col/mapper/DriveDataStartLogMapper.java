@@ -1,9 +1,5 @@
 package com.idata365.col.mapper;
 
-import java.util.List;
-import java.util.Map;
-
-import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataStartLog;
 /**
  * 
