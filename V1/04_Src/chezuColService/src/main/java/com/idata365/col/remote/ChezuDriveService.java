@@ -19,12 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @FeignClient(value = "service-chezu",fallback = ChezuServiceHystric.class)
 public interface ChezuDriveService {
-    @RequestMapping(value = "/recieveDrive",method = RequestMethod.POST)
-    boolean recieveDrive(@RequestBody (required = false) List<Map<String,Object>> postList);
-    
     @RequestMapping(value = "/yingyan/addPoint",method = RequestMethod.POST)
     Map<String,Object> addPoint(@RequestBody  (required = false) Map<String,String> point) ;
-   @RequestMapping(value = "/yingyan/addPoint",method = RequestMethod.POST)
+   @RequestMapping(value = "/yingyan/addPointList",method = RequestMethod.POST)
     Map<String,Object> addPointList(@RequestBody  (required = false) List<Map<String,String>> pointList);
    @RequestMapping(value = "/yingyan/analysis",method = RequestMethod.POST)
     Map<String,Object> analysis(@RequestBody  (required = false) Map<String,String> param);

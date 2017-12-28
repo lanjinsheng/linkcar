@@ -1,6 +1,8 @@
 package com.idata365.col.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,8 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.mortbay.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,13 +85,12 @@ public class HttpUtils {
 	}
 	public static String postYingyanEntityList(List<Map<String,String>> pointList) {
 		HttpClient httpClient = new HttpClient();
-		GetMethod method = new GetMethod("http://yingyan.baidu.com/api/v3/track/addpoint");
+		PostMethod method = new PostMethod("http://yingyan.baidu.com/api/v3/track/addpoints");
 		method.setRequestHeader("Content-Type",
 				"application/x-www-form-urlencoded;charset=utf-8");
-		HttpMethodParams params=new HttpMethodParams();
-		params.setParameter("ak", AK);
-		params.setParameter("service_id", SERVICE_ID);
-		params.setParameter("point_list", GsonUtils.toJson(pointList, false));
+		method.setParameter("ak", AK);
+		method.setParameter("service_id", SERVICE_ID);
+		method.setParameter("point_list", GsonUtils.toJson(pointList, false));
 		int statusCode;
 		try {
 			statusCode = httpClient.executeMethod(method);
@@ -111,6 +113,74 @@ public class HttpUtils {
 		return null;
 		 
 	}
+ 
+	
+	public static String getYingyanAnalysis(Map<String,String> param) {
+		HttpClient httpClient = new HttpClient();
+		GetMethod method = new GetMethod("http://yingyan.baidu.com/api/v3/analysis/drivingbehavior?ak="+AK+"&service_id="+SERVICE_ID
+				+"&start_time="+param.get("start_time")+"&end_time="+param.get("end_time")+"&entity_name="+param.get("entity_name")+"&coord_type_output="+param.get("coord_type_output"));
+		int statusCode;
+		try {
+			statusCode = httpClient.executeMethod(method);
+		
+			if (statusCode == 200) {
+				// 更新数据
+				String s = method.getResponseBodyAsString();
+				LOG.info(s);
+				return s;
+			} 
+		} catch (HttpException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			LOG.error(e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+		 
+	}
+	public final static String  KEY="4d4d6fd740c72fe1eacc4eb830cda65d";
+	
+	public static String getGaoDeZhualu(Map<String,String> param) {
+		HttpClient httpClient = new HttpClient();
+		String url="http://restapi.amap.com/v3/autograsp?key="+KEY+"&carid=a65d"+param.get("userId");
+				 String subUrl=null;
+				 LOG.info(url+"&locations="+param.get("locations")+"&time="+param.get("time")+"&direction="+param.get("direction")+"&speed="+param.get("speed"));
+		try {
+			subUrl = url+"&locations="+URLEncoder.encode(param.get("locations"),"UTF-8")+"&time="+URLEncoder.encode(param.get("time"),"UTF-8")+"&direction="+URLEncoder.encode(param.get("direction"),"UTF-8")+"&speed="+URLEncoder.encode(param.get("speed"),"UTF-8");
+
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		GetMethod method = new GetMethod(subUrl);
+	  
+		int statusCode;
+		try {
+			statusCode = httpClient.executeMethod(method);
+		
+			if (statusCode == 200) {
+				// 更新数据
+				String s = method.getResponseBodyAsString();
+				LOG.info(s);
+				return s;
+			} 
+		} catch (HttpException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			LOG.error(e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+		 
+	}
+	
+		
 	public static void main(String []args) {
 	}
 }

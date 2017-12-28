@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,8 +18,12 @@ import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
+import com.idata365.col.entity.DriveScore;
+import com.idata365.col.service.CalScoreService;
 import com.idata365.col.service.DataService;
+import com.idata365.col.service.YingyanService;
 import com.idata365.col.util.GsonUtils;
+import com.idata365.col.util.HttpUtils;
 import com.idata365.col.util.PhoneGpsUtil;
 import com.idata365.col.util.ResultUtils;
 
@@ -27,8 +33,13 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	private final static Logger LOG = LoggerFactory.getLogger(MngCoreController.class);
     @Autowired
     DataService dataService;
+    @Autowired
+    YingyanService yingyanService;
 	@Autowired  
 	SystemProperties systemProPerties; 
+	@Autowired  
+	CalScoreService calScoreService; 
+	
 	/**
 	 * 
 	    * @Title: getDriveResultByUH
@@ -60,11 +71,106 @@ public class MngCoreController extends BaseController<MngCoreController> {
 			 }
 	    	  if(list.size()>0) {
 	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
+	    		  List<Map<String,Object>> alarmList=yingyanService.dealListGaode(list);
+	    		  datasMap.put("alarmListChao", alarmList);
 	    		  return ResultUtils.rtSuccess(datasMap);
 	    	  }
 	    	  return ResultUtils.rtSuccess(null);
 
 	    }
-	  
-	  
+
+	   @RequestMapping(value = "/yingyan/analysisByUH",method = RequestMethod.POST)
+	    Map<String,Object> analysisBySSOPath(@RequestBody  (required = false) Map<String,String> param) {
+		   DriveDataLog d=new DriveDataLog();	
+	    	  d.setUserId(Long.valueOf(param.get("userId").toString()));
+	    	  d.setHabitId(Long.valueOf(param.get("habitId").toString()));
+	    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
+	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+	    	  for(DriveDataLog drive:drives) {
+	    		     StringBuffer json=new StringBuffer();
+	    		     if(drive.getFilePath().endsWith("_Q")) {
+	    		    	 QQSSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }else {
+	    		    	 SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }
+			         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+			         if(jMap.get("gpsInfos")!=null) {
+			        	 list.addAll((List)jMap.get("gpsInfos"));
+			         }
+			 }
+	    	  if(list.size()>0) {
+	    		  yingyanService.dealList(list,param.get("userId").toString());
+	    		  LOG.info(GsonUtils.toJson(list,true));
+	    		  Map<String, Object> datasMap= yingyanService.getYingyanAnalysis(list, param.get("userId"));
+	    		  if(datasMap==null) {
+	    			  return ResultUtils.rtFail(datasMap);
+	    		  }
+	    		  return ResultUtils.rtSuccess(datasMap);
+	    	  }
+	    	  return ResultUtils.rtSuccess(null);
+		  
+	    } 
+	   /**
+	    * 
+	       * @Title: getGpsByUH
+	       * @Description: TODO(高德超速接口)
+	       * @param @param param
+	       * @param @return    参数
+	       * @return Map<String,Object>    返回类型
+	       * @throws
+	       * @author LanYeYe
+	    */
+	   @RequestMapping(value = "/gaode/getGpsByUH",method = RequestMethod.POST)
+	    Map<String,Object> getGpsByUH(@RequestBody  (required = false) Map<String,String> param) {
+		   DriveDataLog d=new DriveDataLog();	
+	    	  d.setUserId(Long.valueOf(param.get("userId").toString()));
+	    	  d.setHabitId(Long.valueOf(param.get("habitId").toString()));
+	    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
+	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+	    	  for(DriveDataLog drive:drives) {
+	    		     StringBuffer json=new StringBuffer();
+	    		     if(drive.getFilePath().endsWith("_Q")) {
+	    		    	 QQSSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }else {
+	    		    	 SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }
+			         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+			         if(jMap.get("gpsInfos")!=null) {
+			        	 list.addAll((List)jMap.get("gpsInfos"));
+			         }
+			 }
+	    	
+	    	  List<Map<String,Object>> alarmList=yingyanService.dealListGaode(list);
+	    	  return ResultUtils.rtSuccess(alarmList);
+		  
+	    } 
+	   
+	   @RequestMapping(value = "/mng/getScoreByUHMap",method = RequestMethod.POST)
+	    Map<String,Object> getScoreByUHMap(@RequestBody Map<String,Object> param) {
+		      Long userId=Long.valueOf(param.get("userId").toString());
+		      Long habitId=Long.valueOf(param.get("habitId").toString());
+		      String sign=param.get("sign").toString();
+		      boolean s=com.idata365.col.util.SignUtils.security(""+userId+habitId, sign);
+		      if(!s) {
+		    	  return ResultUtils.rtFailVerification(param);
+		      }
+		   	  LOG.info(userId+"======"+habitId);
+	    	  return ResultUtils.rtSuccess(null);
+		  
+	    } 
+	   @RequestMapping(value = "/mng/getScoreByUH",method = RequestMethod.POST)
+	    Map<String,Object> getScoreByUH(@RequestParam Long userId,@RequestParam Long habitId,@RequestParam String sign) {
+//		      Long userId=Long.valueOf(param.get("userId").toString());
+//		      Long habitId=Long.valueOf(param.get("habitId").toString());
+//		      String sign=param.get("sign").toString();
+		      boolean s=com.idata365.col.util.SignUtils.security(""+userId+habitId, sign);
+		      if(!s) {
+		    	  return ResultUtils.rtFailVerification(null);
+		      }
+		      //先从数据库缓存获取,如果无数据，则进行重新计算。
+		      DriveScore ds=calScoreService.calScoreByUH(userId, habitId);
+		   	  LOG.info(userId+"======"+habitId);
+	    	  return ResultUtils.rtSuccess(ds);
+		  
+	    } 
 }
