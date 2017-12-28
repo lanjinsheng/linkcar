@@ -9,6 +9,18 @@ public class FamilyRelationParamBean
 	private long competitorFamilyId;
 	
 	private String daystamp;
+	
+	private long familyRelationId;
+
+	public long getFamilyRelationId()
+	{
+		return familyRelationId;
+	}
+
+	public void setFamilyRelationId(long familyRelationId)
+	{
+		this.familyRelationId = familyRelationId;
+	}
 
 	public int getId()
 	{

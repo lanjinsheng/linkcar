@@ -14,5 +14,15 @@
 		insert into familyRelation(selfFamilyId, competitorFamilyId, daystamp) values(#{selfFamilyId}, #{competitorFamilyId}, #{daystamp});
 	</insert>
 	
+	<select id="queryStations" resultType="com.idata365.app.entity.StationBean" parameterType="com.idata365.app.entity.FamilyRelationParamBean">
+		select id as stationId, status from parkStation where familyRelationId=#{familyRelationId} order by id asc
+	</select>
 	
+	<update id="updateToStopParkStation" parameterType="com.idata365.app.entity.GameFamilyParamBean">
+		update parkStation set userId=#{userId}, familyId=#{familyId}, status='STOP' where id=#{stationId} and (status='NO_PEOPLE' or (familyId=#{familyId} and status='HOLD'))
+	</update>
+	
+	<update id="updateToHoldParkStation" parameterType="com.idata365.app.entity.GameFamilyParamBean">
+		update parkStation set familyId=#{familyId}, status='HOLD' where id=#{stationId} and status='NO_PEOPLE'
+	</update>
 </mapper>

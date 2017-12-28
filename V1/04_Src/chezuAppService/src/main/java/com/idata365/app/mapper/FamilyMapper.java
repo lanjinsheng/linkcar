@@ -19,6 +19,8 @@ public interface FamilyMapper
 	
 	public List<FamilyRelationBean> queryFamilyIdByCompetitorId(FamilyRelationBean bean);
 	
+	public List<Long> queryFamilyRelationIds(FamilyRelationBean bean);
+	
 	public Long queryCreateUserId(FamilyParamBean bean);
 	
 	public void deleteUserFamilyRelation(FamilyParamBean bean);

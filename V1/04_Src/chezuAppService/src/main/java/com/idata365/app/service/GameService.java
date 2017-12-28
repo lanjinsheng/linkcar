@@ -1,6 +1,6 @@
 package com.idata365.app.service;
 
-import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +22,8 @@ import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.PenalResultBean;
+import com.idata365.app.entity.StationBean;
+import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
@@ -67,6 +69,7 @@ public class GameService extends BaseService<GameService>
 		long myFamilyId = bean.getFamilyId();
 		FamilyRelationBean familyRelationParamBean = new FamilyRelationBean();
 		familyRelationParamBean.setFamilyId(myFamilyId);
+		familyRelationParamBean.setDaystamp(getCurrentDayStr());
 		List<FamilyRelationBean> relationList = this.familyMapper.queryFamilyIdByCompetitorId(familyRelationParamBean);
 		if (CollectionUtils.isNotEmpty(relationList))
 		{
@@ -110,11 +113,11 @@ public class GameService extends BaseService<GameService>
 		bean1.setDaystamp(todayStr);
 		this.gameMapper.saveFamilyRelation(bean1);
 		
-		FamilyRelationParamBean bean2 = new FamilyRelationParamBean();
+/*		FamilyRelationParamBean bean2 = new FamilyRelationParamBean();
 		bean2.setSelfFamilyId(selFamilyId);
 		bean2.setCompetitorFamilyId(familyId);
 		bean2.setDaystamp(todayStr);
-		this.gameMapper.saveFamilyRelation(bean2);
+		this.gameMapper.saveFamilyRelation(bean2);*/
 	}
 	
 	public PenalResultBean penalSpeed(GameFamilyParamBean bean, long userId)
@@ -404,7 +407,57 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
-
+	/**
+	 * 显示停车位
+	 * @param bean
+	 * @return
+	 */
+	public List<StationResultBean> listStations(GameFamilyParamBean bean)
+	{
+		FamilyRelationBean familyRelationBean = new FamilyRelationBean();
+		familyRelationBean.setFamilyId(bean.getFamilyId());
+		familyRelationBean.setDaystamp(getCurrentDayStr());
+		List<Long> relationIdList = this.familyMapper.queryFamilyRelationIds(familyRelationBean);
+		if (CollectionUtils.isEmpty(relationIdList))
+			return null;
+		
+		long familyRelationId = relationIdList.get(0);
+		
+		FamilyRelationParamBean familyRelationParamBean = new FamilyRelationParamBean();
+		familyRelationParamBean.setFamilyRelationId(familyRelationId);
+		List<StationBean> stationList = this.gameMapper.queryStations(familyRelationParamBean);
+		
+		List<StationResultBean> resultList = new ArrayList<>();
+		for (StationBean tempBean : stationList)
+		{
+			StationResultBean tempResulBean = new StationResultBean();
+			AdBeanUtils.copyOtherPropToStr(tempResulBean, tempBean);
+			resultList.add(tempResulBean);
+		}
+		
+		return resultList;
+	}
+	
+	/**
+	 * 停车到指定车位
+	 * @param bean
+	 */
+	public int stopAtStation(GameFamilyParamBean bean)
+	{
+		int result = this.gameMapper.updateToStopParkStation(bean);
+		return result;
+	}
+	
+	/**
+	 * 使用小马扎占车位
+	 * @param bean
+	 * @return
+	 */
+	public int holdAtStation(GameFamilyParamBean bean)
+	{
+		int result = this.gameMapper.updateToHoldParkStation(bean);
+		return result;
+	}
 	
 	private String getCurrentDayStr()
 	{

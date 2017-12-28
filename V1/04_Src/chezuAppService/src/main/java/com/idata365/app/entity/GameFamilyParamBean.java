@@ -5,6 +5,10 @@ public class GameFamilyParamBean
 	private long familyId;
 	
 	private String familyType;
+	
+	private long userId;
+	
+	private long stationId;
 
 	public long getFamilyId()
 	{
@@ -25,4 +29,25 @@ public class GameFamilyParamBean
 	{
 		this.familyType = familyType;
 	}
+
+	public long getUserId()
+	{
+		return userId;
+	}
+
+	public void setUserId(long userId)
+	{
+		this.userId = userId;
+	}
+
+	public long getStationId()
+	{
+		return stationId;
+	}
+
+	public void setStationId(long stationId)
+	{
+		this.stationId = stationId;
+	}
+
 }

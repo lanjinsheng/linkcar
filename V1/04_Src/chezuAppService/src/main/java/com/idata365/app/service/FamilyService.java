@@ -394,6 +394,7 @@ public class FamilyService extends BaseService<FamilyService>
 		FamilyRelationBean relationBean = new FamilyRelationBean();
 		int myFamilyId = familyResultBean.getMyFamilyId();
 		relationBean.setFamilyId(myFamilyId);
+		relationBean.setDaystamp(getCurrentDayStr());
 		FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean).get(0);
 		long familyId1 = relationResultBean.getFamilyId1();
 		long familyId2 = relationResultBean.getFamilyId2();
@@ -434,5 +435,12 @@ public class FamilyService extends BaseService<FamilyService>
 		resultBean.setOrigFamily(ownResultBean);
 		resultBean.setJoinFamily(joinResultBean);
 		return resultBean;
+	}
+	
+	private String getCurrentDayStr()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
+		return dayStr;
 	}
 }

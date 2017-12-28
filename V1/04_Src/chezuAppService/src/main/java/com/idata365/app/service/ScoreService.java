@@ -412,6 +412,7 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		FamilyRelationBean relationParamBean = new FamilyRelationBean();
 		relationParamBean.setFamilyId(familyId);
+		relationParamBean.setDaystamp(getCurrentDayStr());
 		List<FamilyRelationBean> familyRelationList = this.familyMapper.queryFamilyIdByCompetitorId(relationParamBean);
 		FamilyRelationBean familyRelationBean = familyRelationList.get(0);
 		
@@ -462,5 +463,12 @@ public class ScoreService extends BaseService<ScoreService>
 		}
 		
 		return resultList;
+	}
+	
+	private String getCurrentDayStr()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
+		return dayStr;
 	}
 }
