@@ -103,6 +103,7 @@ public class DatasDealTask implements Runnable
 	    		 data.setSpeedUpTimes(alarmListJia.size());
 	    		 data.setBrakeTimes(alarmListJian.size());
 	    		 data.setTurnTimes(alarmListZhuan.size());
+	    		 data.setOverspeedTimes(alarmListChao.size());
 	    		  //插入数据
 	    		 dataService.insertEvents(data, eventList);
 	    
