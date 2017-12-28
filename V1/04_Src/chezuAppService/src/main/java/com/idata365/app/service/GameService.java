@@ -1,5 +1,6 @@
 package com.idata365.app.service;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,16 +11,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.LotteryConstant;
+import com.idata365.app.constant.ResultConstant;
+import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
+import com.idata365.app.entity.FamilyRelationParamBean;
+import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.LotteryBean;
+import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.entity.ViolationStatResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
+import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.RandUtils;
 
 @Service
 public class GameService extends BaseService<GameService>
@@ -31,6 +42,9 @@ public class GameService extends BaseService<GameService>
 	
 	@Autowired
 	private FamilyMapper familyMapper;
+	
+	@Autowired
+	private LotteryMapper lotteryMapper;
 	
 	/**
 	 * 违规情况
@@ -75,5 +89,327 @@ public class GameService extends BaseService<GameService>
 		}
 		
 		return resultAllBean;
+	}
+	
+	@Transactional
+	public void challengeFamily(GameFamilyParamBean bean)
+	{
+		List<Long> familyIdList = this.gameMapper.queryIdleFamily(bean);
+		int size = familyIdList.size();
+		int idx = RandUtils.generateRand(0, size-1);
+		Long selFamilyId = familyIdList.get(idx);
+		
+		long familyId = bean.getFamilyId();
+
+		Date todayDate = Calendar.getInstance().getTime();
+		String todayStr = DateFormatUtils.format(todayDate, DateConstant.DAY_PATTERN_DELIMIT);
+		
+		FamilyRelationParamBean bean1 = new FamilyRelationParamBean();
+		bean1.setSelfFamilyId(familyId);
+		bean1.setCompetitorFamilyId(selFamilyId);
+		bean1.setDaystamp(todayStr);
+		this.gameMapper.saveFamilyRelation(bean1);
+		
+		FamilyRelationParamBean bean2 = new FamilyRelationParamBean();
+		bean2.setSelfFamilyId(selFamilyId);
+		bean2.setCompetitorFamilyId(familyId);
+		bean2.setDaystamp(todayStr);
+		this.gameMapper.saveFamilyRelation(bean2);
+	}
+	
+	public PenalResultBean penalSpeed(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithSpeedPenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateSpeedPenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+	public PenalResultBean penalBrake(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithBrakePenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateSpeedPenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+	public PenalResultBean penalTurn(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithTurnPenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateTurnPenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+	public PenalResultBean penalOverspeed(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithOverspeedPenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateOverspeedPenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+	public PenalResultBean penalNightDrive(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithNightDrivePenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateNightDrivePenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+	public PenalResultBean penalTiredDrive(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithTiredDrivePenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateTiredDrivePenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+	public PenalResultBean penalIllegalStop(GameFamilyParamBean bean, long userId)
+	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(userId);
+		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		
+		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		PenalResultBean resultBean = new PenalResultBean();
+		//纸条用光
+		if (countLottery == 0)
+		{
+			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
+			return resultBean;
+		}
+		
+		long familyId = bean.getFamilyId();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(familyId);
+		String currentDayStr = getCurrentDayStr();
+		familyParamBean.setDaystamp(currentDayStr);
+		
+		List<Long> userIds = this.familyMapper.queryUserIdsWithIllegalStopPenal(familyParamBean);
+		if (CollectionUtils.isEmpty(userIds))
+		{
+			resultBean.setPenalStatus(ResultConstant.PENAL_OUT);
+			return resultBean;
+		}
+		int idx = RandUtils.generateRand(0, userIds.size());
+		
+		FamilyParamBean penalBean = new FamilyParamBean();
+		penalBean.setDaystamp(currentDayStr);
+		penalBean.setUserId(userIds.get(idx));
+		this.familyMapper.updateIllegalStopPenalTimes(penalBean);
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		return resultBean;
+	}
+	
+
+	
+	private String getCurrentDayStr()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
+		return dayStr;
 	}
 }

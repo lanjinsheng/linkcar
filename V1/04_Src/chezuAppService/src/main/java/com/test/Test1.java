@@ -33,9 +33,22 @@ public class Test1
 		
 //		calBatch(100, 3);
 		
-		int generateRand = RandUtils.generateRand(1, 200);
+//		int generateRand = RandUtils.generateRand(1, 200);
+		
+		hidePhone();
 	}
 
+	public static String hidePhone()
+	{
+		String phone = "18795860371";
+		String prefixPhone = StringUtils.substring(phone, 0, 3);
+		String suffixPhone = StringUtils.substring(phone, 7);
+		
+		String tempNewPhone = prefixPhone + "****" + suffixPhone;
+		return tempNewPhone;
+//		LOGGER.info(tempUserName);
+	}
+	
 	public static void calBatch(int totalNum, int batchNUm)
 	{
 		BigDecimal totalNumBd = BigDecimal.valueOf(totalNum);

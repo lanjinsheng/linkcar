@@ -56,4 +56,32 @@ public interface FamilyMapper
 	public FamilyInfoScoreBean queryOwnFamily(FamilyParamBean bean);
 	
 	public FamilyInfoScoreBean queryJoinFamily(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithSpeedPenal(FamilyParamBean bean);
+	
+	public void updateSpeedPenalTimes(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithBrakePenal(FamilyParamBean bean);
+	
+	public void updateBrakePenalTimes(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithTurnPenal(FamilyParamBean bean);
+	
+	public void updateTurnPenalTimes(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithOverspeedPenal(FamilyParamBean bean);
+	
+	public void updateOverspeedPenalTimes(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithNightDrivePenal(FamilyParamBean bean);
+	
+	public void updateNightDrivePenalTimes(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithTiredDrivePenal(FamilyParamBean bean);
+	
+	public void updateTiredDrivePenalTimes(FamilyParamBean bean);
+	
+	public List<Long> queryUserIdsWithIllegalStopPenal(FamilyParamBean bean);
+	
+	public void updateIllegalStopPenalTimes(FamilyParamBean bean);
 }

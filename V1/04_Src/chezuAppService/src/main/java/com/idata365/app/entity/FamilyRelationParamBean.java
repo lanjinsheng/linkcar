@@ -1,0 +1,53 @@
+package com.idata365.app.entity;
+
+public class FamilyRelationParamBean
+{
+	private int id;
+	
+	private long selfFamilyId;
+	
+	private long competitorFamilyId;
+	
+	private String daystamp;
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public long getSelfFamilyId()
+	{
+		return selfFamilyId;
+	}
+
+	public void setSelfFamilyId(long selfFamilyId)
+	{
+		this.selfFamilyId = selfFamilyId;
+	}
+
+	public long getCompetitorFamilyId()
+	{
+		return competitorFamilyId;
+	}
+
+	public void setCompetitorFamilyId(long competitorFamilyId)
+	{
+		this.competitorFamilyId = competitorFamilyId;
+	}
+
+	public String getDaystamp()
+	{
+		return daystamp;
+	}
+
+	public void setDaystamp(String daystamp)
+	{
+		this.daystamp = daystamp;
+	}
+	
+}
