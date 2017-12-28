@@ -8,10 +8,6 @@ package com.idata365.service;
     *
  */
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.UserEntity;
 import com.idata365.enums.UserSexEnum;
-import com.idata365.mapper.app.DriveDataEventMapper;
-import com.idata365.mapper.app.DriveDataMapper;
 
 
 @Service

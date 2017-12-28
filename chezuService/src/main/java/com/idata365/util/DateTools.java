@@ -192,8 +192,33 @@ public class DateTools
 		customDate = formatter.format(curdate);
 		return customDate;
 	}
-
-	/**
+	
+	public static long changeDateTimeToSecond(String dateTimeStr)
+	{
+		
+		java.util.Date da = null;
+		try
+		{
+			da = yyMMddHHmmssSSS.parse(dateTimeStr);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return da.getTime()/1000;
+		/*
+		 * Date date = Date.valueOf(dateStr); return new
+		 * Timestamp(date.getTime());
+		 */
+	}
+		public static String getCurDate()
+		{
+			String customDate = "";
+			Date curdate = new Date();
+			customDate = yyMMddHHmmssSSS.format(curdate);
+			return customDate;
+		}
+		/**
 	 * 把yyyy-MM-dd格式的字符串转换成Date
 	 * 
 	 * @param dateStr
