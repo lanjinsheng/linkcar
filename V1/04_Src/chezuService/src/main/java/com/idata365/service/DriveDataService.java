@@ -18,9 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.entity.DriveData;
-import com.idata365.mapper.DriveDataEventMapper;
-import com.idata365.mapper.DriveDataMapper;
+import com.idata365.entity.UserEntity;
+import com.idata365.enums.UserSexEnum;
+import com.idata365.mapper.app.DriveDataEventMapper;
+import com.idata365.mapper.app.DriveDataMapper;
 
 
 @Service
@@ -30,8 +31,6 @@ public class DriveDataService extends BaseService<DriveDataService>{
 	DriveDataMapper driveDataMainMapper;
 	@Autowired
 	DriveDataEventMapper driveDataEventMapper;
-	
-	
 	public DriveDataService() {
 		LOG.info("DriveDataService DriveDataService DriveDataService DriveDataService");
 	}
@@ -62,4 +61,5 @@ public class DriveDataService extends BaseService<DriveDataService>{
 		}
 		
 	}
+	
 }

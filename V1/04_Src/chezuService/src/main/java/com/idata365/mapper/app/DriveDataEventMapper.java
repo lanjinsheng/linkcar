@@ -1,8 +1,7 @@
-package com.idata365.mapper;
+package com.idata365.mapper.app;
 
 import java.util.Map;
 
-import com.idata365.entity.DriveData;
 /**
  * 
     * @ClassName: DriveDataLogMapper
@@ -11,7 +10,6 @@ import com.idata365.entity.DriveData;
     * @date 2017年11月23日
     *
  */
-public interface DriveDataMapper {
-
-    void insertDriveMain(Map<String,Object> data);
+public interface DriveDataEventMapper {
+    void insertDriveEvent(Map<String,Object> alarmMap);
 }
