@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 
-    * @ClassName: DemoService
-    * @Description: TODO(这里用一句话描述这个类的作用)
+    * @ClassName: ChezuColService
+    * @Description: TODO(远程调用更新userId 与 deviceToken)
     * @author LanYeYe
-    * @date 2017年11月29日
+    * @date 2017年12月28日
     *
  */
-@FeignClient(value = "service-col-chezu",fallback = ChezuColHystric.class)
+@FeignClient(value = "service-chezu",fallback = ChezuColHystric.class)
 public interface ChezuColService {
     @RequestMapping(value = "/v1/updateUserDevice",method = RequestMethod.POST)
     boolean updateUserDevice(@RequestParam  Map<String,Object>  map);
