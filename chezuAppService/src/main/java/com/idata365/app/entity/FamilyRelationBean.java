@@ -12,6 +12,8 @@ public class FamilyRelationBean
 	
 	private long familyId2;
 
+	private String daystamp;
+	
 	public long getFamilyId()
 	{
 		return familyId;
@@ -60,6 +62,16 @@ public class FamilyRelationBean
 	public void setFamilyId2(long familyId2)
 	{
 		this.familyId2 = familyId2;
+	}
+
+	public String getDaystamp()
+	{
+		return daystamp;
+	}
+
+	public void setDaystamp(String daystamp)
+	{
+		this.daystamp = daystamp;
 	}
 	
 }
