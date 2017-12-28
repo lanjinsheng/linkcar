@@ -101,7 +101,7 @@ public class ManagePushApi {
     /**
      * 极光推送，ios平台   生产模式：true 测试模式：false
      */
-    private static final Boolean IOS_MODEL = true;
+    private static final Boolean IOS_MODEL = false;
 
     /**
      * 对所有用户进行推送
@@ -241,7 +241,7 @@ public class ManagePushApi {
             return PushPayload.newBuilder()
                     .setPlatform(Platform.ios())
                     .setAudience(Audience.newBuilder()
-                            .addAudienceTarget(AudienceTarget.tag(userId)).build())
+                            .addAudienceTarget(AudienceTarget.alias(userId)).build())
                     .setNotification(Notification.newBuilder()
                             .addPlatformNotification(IosNotification.newBuilder()
                                     .setAlert(message)
@@ -284,10 +284,10 @@ public class ManagePushApi {
 
         String msg = "您的本次行程结束，用时8分钟，里程2.52公里，驾驶评分：97.0";
         Map<String,String> extraMap = new HashMap<String, String>();
-//        extraMap.put("type", "9");
-//        extraMap.put("url_type", CommonConstant.URL_OWN_TYPE);
-//        extraMap.put("url", "CBModule://DrivingDetail?json={\"start_time\":\"2016-09-09 09:14:46\",\"end_time\":\"2016-09-09 09:23:36\"}");
-        SendMsgToOne(msg,"99999",PLATFORM_IOS,extraMap);
+        extraMap.put("type", "9");
+        extraMap.put("url_type", "1");
+        extraMap.put("url", "CBModule://DrivingDetail?json={\"start_time\":\"2016-09-09 09:14:46\",\"end_time\":\"2016-09-09 09:23:36\"}");
+        SendMsgToOne(msg,"17_0",PLATFORM_IOS,extraMap);
     }
 
 }

@@ -1,10 +1,10 @@
-package com.idata365.mapper;
+package com.idata365.mapper.col;
 
 import java.util.List;
 
 import com.idata365.entity.UserEntity;
 
-public interface UserMapper {
+public interface UserColMapper {
 
     List<UserEntity> getAll();
 
