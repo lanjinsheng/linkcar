@@ -17,12 +17,14 @@ spring:
     name: service-chezu
   datasource:
     app:
+      type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
       url: jdbc:mysql://115.159.216.58:6633/sjtest?useUnicode=true&characterEncoding=utf-8&useSSL=false
       username: sjTest
       password: sjTest2962143!
     
     col:
+      type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
       url: jdbc:mysql://115.159.216.58:6633/sjdrivetest?useUnicode=true&characterEncoding=utf-8&useSSL=false
       username: sjTest

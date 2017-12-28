@@ -1,19 +1,14 @@
 package com.idata365.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.entity.DriveDataLog;
 import com.idata365.entity.UserEntity;
-import com.idata365.enums.UserSexEnum;
 import com.idata365.mapper.app.UserMapper;
-import com.idata365.mapper.col.DriveDataLogMapper;
 import com.idata365.service.DemoService;
-import com.idata365.service.DriveDataService;
 
 @RestController
 public class DemoController {
