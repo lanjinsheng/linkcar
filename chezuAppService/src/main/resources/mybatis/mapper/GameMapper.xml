@@ -6,4 +6,13 @@
 		select * from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
+	<select id="queryIdleFamily" resultType="java.lang.Long" parameterType="com.idata365.app.entity.GameFamilyParamBean">
+		select t1.id as familyId from familyInfo t1 join familyScore t2 on (t1.id=t2.familyId) where familyType=#{familyType} and t1.id!=#{familyId} and t1.id not in(select distinct selfFamilyId from familyRelation) order by t1.id asc
+	</select>
+	
+	<insert id="saveFamilyRelation" parameterType="com.idata365.app.entity.FamilyRelationParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into familyRelation(selfFamilyId, competitorFamilyId, daystamp) values(#{selfFamilyId}, #{competitorFamilyId}, #{daystamp});
+	</insert>
+	
+	
 </mapper>

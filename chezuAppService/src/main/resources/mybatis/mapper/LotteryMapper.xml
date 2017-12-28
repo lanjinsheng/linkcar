@@ -19,4 +19,12 @@
     	</if>
     </insert>
     
+    <select id="countLottery" resultType="int" parameterType="com.idata365.app.entity.LotteryBean">
+    	select awardCount from lottery where userId=#{userId} and awardId=#{awardId}
+    </select>
+    
+    <update id="updateLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
 </mapper>

@@ -150,8 +150,11 @@ public class ScoreService extends BaseService<ScoreService>
 			}
 			
 			String tempJoinTime = tempBean.getJoinTime();
-			String formatJoinTime = formatTime(tempJoinTime);
-			tempResultBean.setJoinTime(formatJoinTime);
+			if (StringUtils.isNotBlank(tempJoinTime))
+			{
+				String formatJoinTime = formatTime(tempJoinTime);
+				tempResultBean.setJoinTime(formatJoinTime);
+			}
 			
 			resultList.add(tempResultBean);
 		}

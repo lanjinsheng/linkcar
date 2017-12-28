@@ -9,4 +9,8 @@ public interface LotteryMapper
 	public List<LotteryBean> query(LotteryBean bean);
 	
 	public void saveOrUpdate(LotteryBean bean);
+	
+	public int countLottery(LotteryBean bean);
+	
+	public void updateLotteryCount(LotteryBean bean);
 }

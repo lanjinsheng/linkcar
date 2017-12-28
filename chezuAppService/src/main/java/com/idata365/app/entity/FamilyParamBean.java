@@ -24,6 +24,8 @@ public class FamilyParamBean
 	
 	private String joinTime;
 	
+	private String daystamp;
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -132,6 +134,16 @@ public class FamilyParamBean
 	public void setJoinTime(String joinTime)
 	{
 		this.joinTime = joinTime;
+	}
+
+	public String getDaystamp()
+	{
+		return daystamp;
+	}
+
+	public void setDaystamp(String daystamp)
+	{
+		this.daystamp = daystamp;
 	}
 	
 }

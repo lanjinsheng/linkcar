@@ -2,20 +2,20 @@ package com.idata365.app.entity;
 
 public class LotteryBean
 {
-	private int userId;
+	private long userId;
 	
 	private int awardId;
 	
 	private int awardCount;
 	
 	private int count;
-	
-	public int getUserId()
+
+	public long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(int userId)
+	public void setUserId(long userId)
 	{
 		this.userId = userId;
 	}
@@ -49,5 +49,5 @@ public class LotteryBean
 	{
 		this.count = count;
 	}
-		
+	
 }

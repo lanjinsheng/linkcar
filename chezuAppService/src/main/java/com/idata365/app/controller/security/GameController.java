@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.service.GameService;
@@ -40,5 +41,19 @@ public class GameController extends BaseController
 		resultList.add(resultBean);
 		
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 挑战家族
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/challengeFamily")
+	public Map<String, Object> challengeFamily(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		this.gameService.challengeFamily(bean);
+		return ResultUtils.rtSuccess(null);
 	}
 }
