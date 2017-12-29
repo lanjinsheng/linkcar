@@ -239,6 +239,10 @@ public class FamilyService extends BaseService<FamilyService>
 	public FamilyRandResultBean findFamilyByCode(FamilyParamBean bean, long userId)
 	{
 		FamilyRandBean tempRandBean = this.familyMapper.queryFamilyByCode(bean);
+		if (null == tempRandBean)
+		{
+			return null;
+		}
 		FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 		AdBeanUtils.copyOtherPropToStr(tempResultBean, tempRandBean);
 		
