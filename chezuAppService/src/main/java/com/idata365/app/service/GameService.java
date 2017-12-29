@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -415,7 +416,8 @@ public class GameService extends BaseService<GameService>
 	public List<StationResultBean> listStations(GameFamilyParamBean bean)
 	{
 		FamilyRelationBean familyRelationBean = new FamilyRelationBean();
-		familyRelationBean.setFamilyId(bean.getFamilyId());
+		long familyId = bean.getFamilyId();
+		familyRelationBean.setFamilyId(familyId);
 		familyRelationBean.setDaystamp(getCurrentDayStr());
 		List<Long> relationIdList = this.familyMapper.queryFamilyRelationIds(familyRelationBean);
 		if (CollectionUtils.isEmpty(relationIdList))
@@ -432,8 +434,36 @@ public class GameService extends BaseService<GameService>
 		{
 			StationResultBean tempResulBean = new StationResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResulBean, tempBean);
+			
+			long tempFamilyId = tempBean.getFamilyId();
+			String status = tempBean.getStatus();
+			if (tempFamilyId == familyId)
+			{
+				if (StringUtils.equals(status, "STOP"))
+				{
+					tempResulBean.setStatus("MINE_STOP");
+				}
+				else if (StringUtils.equals(status, "HOLD"))
+				{
+					tempResulBean.setStatus("MINE_HOLD");
+				}
+			}
+			else
+			{
+				if (StringUtils.equals(status, "STOP"))
+				{
+					tempResulBean.setStatus("COMPETITOR_STOP");
+				}
+				else if (StringUtils.equals(status, "HOLD"))
+				{
+					tempResulBean.setStatus("COMPETITOR_HOLD");
+				}
+			}
+			
 			resultList.add(tempResulBean);
 		}
+		
+		
 		
 		return resultList;
 	}
