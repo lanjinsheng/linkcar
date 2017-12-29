@@ -196,11 +196,14 @@ public class FamilyService extends BaseService<FamilyService>
 	 */
 	public List<FamilyRandResultBean> listRecruFamily(long userId)
 	{
-		int countStranger = this.familyMapper.countStranger();
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setUserId(userId);
+		int countStranger = this.familyMapper.countStranger(familyParamBean);
 		int startPos = RandUtils.generateRand(0, countStranger-1);
 		
 		FamilyParamBean bean = new FamilyParamBean();
 		bean.setStartPos(startPos);
+		bean.setUserId(userId);
 		List<FamilyRandBean> familys = this.familyMapper.queryFamilys(bean);
 		List<FamilyRandResultBean> resultList = new ArrayList<>();
 		for (FamilyRandBean tempBean : familys)

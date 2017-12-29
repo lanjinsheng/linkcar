@@ -35,15 +35,15 @@
  	</update>
 	
 	<select id="queryFamilys" parameterType="com.idata365.app.entity.FamilyParamBean" resultType="com.idata365.app.entity.FamilyRandBean">
-       select t1.imgUrl as imgUrl, memberNum as num, familyName as name, t1.id as familyId from familyInfo t1 
-			join usersAccount t2 on (t1.createUserId=t2.id) where t2.enableStranger=1
-			order by familyId asc 
+		select t1.imgUrl as imgUrl, memberNum as num, familyName as name, t1.id as familyId from familyInfo t1 
+			join usersAccount t2 on (t1.createUserId=t2.id) where t2.enableStranger=1 and t1.createUserId!=#{userId}
+			order by familyId asc
        limit #{startPos}, 10;
 	</select>
 	
-	<select id="countStranger" resultType="int">
-    	select count(*) from familyInfo t1 
-			join usersAccount t2 on (t1.createUserId=t2.id) where t2.enableStranger=1
+	<select id="countStranger" parameterType="com.idata365.app.entity.FamilyParamBean" resultType="int">
+			select count(*) from familyInfo t1 
+			join usersAccount t2 on (t1.createUserId=t2.id) where t2.enableStranger=1 and t1.createUserId!=#{userId}
     </select>
      
 	<insert id="saveUserFamily" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >

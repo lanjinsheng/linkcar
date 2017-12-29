@@ -31,7 +31,7 @@ public interface FamilyMapper
 	
 	public List<FamilyRandBean> queryFamilys(FamilyParamBean bean);
 	
-	public int countStranger();
+	public int countStranger(FamilyParamBean bean);
 	
 	public FamilyRandBean queryFamilyByCode(FamilyParamBean bean);
 	
