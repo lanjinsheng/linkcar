@@ -15,12 +15,12 @@ import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.StationResultBean;
+import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.GameService;
 import com.idata365.app.util.ResultUtils;
-import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_return;
 
 @RestController
 public class GameController extends BaseController
@@ -257,5 +257,26 @@ public class GameController extends BaseController
 		UserInfo userInfo = super.getUserInfo();
 		this.gameService.informOtherToPenalty(bean, userInfo);
 		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 隐藏该段行程
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/hiddenTravel")
+	public Map<String, Object> hiddenTravel(@RequestBody TravelHistoryParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		int result = this.gameService.hiddenTravel(bean);
+		if (result > 0)
+		{
+			return ResultUtils.rtSuccess(null);
+		}
+		else
+		{
+			return ResultUtils.rtFail(null);
+		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.StationBean;
+import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 
@@ -23,4 +24,6 @@ public interface GameMapper
 	public int updateToHoldParkStation(GameFamilyParamBean bean);
 	
 	public List<Long> queryFamilyOtherUserId(GameFamilyParamBean bean);
+	
+	public int updateTravelHistoryHidden(TravelHistoryParamBean bean);
 }
