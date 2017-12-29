@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.ResultConstant;
@@ -22,6 +23,7 @@ import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.LotteryBean;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
@@ -29,6 +31,8 @@ import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.entity.ViolationStatResultBean;
+import com.idata365.app.entity.bean.UserInfo;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.LotteryMapper;
@@ -48,6 +52,9 @@ public class GameService extends BaseService<GameService>
 	
 	@Autowired
 	private LotteryMapper lotteryMapper;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	/**
 	 * 违规情况
@@ -487,6 +494,34 @@ public class GameService extends BaseService<GameService>
 	{
 		int result = this.gameMapper.updateToHoldParkStation(bean);
 		return result;
+	}
+	
+	/**
+	 * 通知家族内其他人去贴条
+	 * @param bean
+	 * @param userInfo
+	 */
+	public void informOtherToPenalty(GameFamilyParamBean bean, UserInfo userInfo)
+	{
+		List<Long> userIdList = this.gameMapper.queryFamilyOtherUserId(bean);
+		for (Long tempUserId : userIdList)
+		{
+			dealtMsg(userInfo, null, tempUserId, MessageEnum.INFORM_PENALTY);
+		}
+	}
+	
+	private void dealtMsg(UserInfo userInfo, Long inviteId, Long toUserId, MessageEnum messageEnum)
+	{
+		LOGGER.info("userInfo={}", JSON.toJSONString(userInfo));
+		LOGGER.info("inviteId={}\ttoUserId={}", inviteId, toUserId);
+		LOGGER.info("messageEnum={}", messageEnum);
+		
+		//构建成员加入消息
+  		Message message=messageService.buildMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(), toUserId, inviteId, messageEnum);
+  		//插入消息
+  		messageService.insertMessage(message, messageEnum);
+  		//推送消息
+  		messageService.pushMessage(message, messageEnum);
 	}
 	
 	private String getCurrentDayStr()

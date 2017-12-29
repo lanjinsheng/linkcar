@@ -25,4 +25,8 @@
 	<update id="updateToHoldParkStation" parameterType="com.idata365.app.entity.GameFamilyParamBean">
 		update parkStation set familyId=#{familyId}, status='HOLD' where id=#{stationId} and status='NO_PEOPLE'
 	</update>
+	
+	<select id="queryFamilyOtherUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.GameFamilyParamBean">
+		select userId from userFamilyRelation where familyId=#{familyId} and userId!=#{userId} order by id asc
+	</select>
 </mapper>

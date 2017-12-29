@@ -21,4 +21,6 @@ public interface GameMapper
 	public int updateToStopParkStation(GameFamilyParamBean bean);
 	
 	public int updateToHoldParkStation(GameFamilyParamBean bean);
+	
+	public List<Long> queryFamilyOtherUserId(GameFamilyParamBean bean);
 }

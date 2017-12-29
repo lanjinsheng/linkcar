@@ -17,6 +17,7 @@ import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
+import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.GameService;
 import com.idata365.app.util.ResultUtils;
 import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_return;
@@ -241,5 +242,20 @@ public class GameController extends BaseController
 		{
 			return ResultUtils.rtFail(null);
 		}
+	}
+	
+	/**
+	 * 通知家族内其他人去贴条
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/informOtherToPenalty")
+	public Map<String, Object> informOtherToPenalty(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		UserInfo userInfo = super.getUserInfo();
+		this.gameService.informOtherToPenalty(bean, userInfo);
+		return ResultUtils.rtSuccess(null);
 	}
 }
