@@ -120,10 +120,17 @@ public class FamilyController extends BaseController
 	{
 		Long userId = super.getUserId();
 		FamilyRandResultBean resultBean = this.familyService.findFamilyByCode(reqBean, userId);
-		String imgBasePath = super.getImgBasePath();
-		String imgUrl = resultBean.getImgUrl();
-		resultBean.setImgUrl(imgBasePath + imgUrl);
-		return ResultUtils.rtSuccess(resultBean);
+		if (null == resultBean)
+		{
+			return ResultUtils.rtSuccess(null);
+		}
+		else
+		{
+			String imgBasePath = super.getImgBasePath();
+			String imgUrl = resultBean.getImgUrl();
+			resultBean.setImgUrl(imgBasePath + imgUrl);
+			return ResultUtils.rtSuccess(resultBean);
+		}
 	}
 	
 	@RequestMapping("/family/applyByFamily")
