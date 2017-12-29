@@ -1,6 +1,7 @@
 package com.idata365.app.controller.security;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,23 @@ public class GameController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
 		this.gameService.challengeFamily(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 查询家族是否已经发起挑战
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/judgeChallengeFlag")
+	public Map<String, Object> judgeChallengeFlag(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		String judgeFlag = this.gameService.judgeChallengeFlag(bean);
+		Map<String, String> resultMap = new HashMap<>();
+		resultMap.put("judgeFlag", judgeFlag);
+		
 		return ResultUtils.rtSuccess(null);
 	}
 	
