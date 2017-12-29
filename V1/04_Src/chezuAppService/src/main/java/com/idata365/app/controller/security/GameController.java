@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.PenalResultBean;
+import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.service.GameService;
 import com.idata365.app.util.ResultUtils;
+import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_return;
 
 @RestController
 public class GameController extends BaseController
@@ -55,5 +58,188 @@ public class GameController extends BaseController
 		
 		this.gameService.challengeFamily(bean);
 		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalSpeed")
+	public Map<String, Object> penalSpeed(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalSpeed(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalBrake")
+	public Map<String, Object> penalBrake(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalBrake(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalTurn")
+	public Map<String, Object> penalTurn(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalTurn(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalOverspeed")
+	public Map<String, Object> penalOverspeed(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalOverspeed(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalNightDrive")
+	public Map<String, Object> penalNightDrive(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalNightDrive(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalTiredDrive")
+	public Map<String, Object> penalTiredDrive(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalTiredDrive(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/penalIllegalStop")
+	public Map<String, Object> penalIllegalStop(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		Long userId = super.getUserId();
+		PenalResultBean resultBean = this.gameService.penalIllegalStop(bean, userId);
+		List<PenalResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/listStations")
+	public Map<String, Object> listStations(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		List<StationResultBean> resultList = this.gameService.listStations(bean);
+		
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/stopAtStation")
+	public Map<String, Object> stopAtStation(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		int result = this.gameService.stopAtStation(bean);
+		if (result > 0)
+		{
+			return ResultUtils.rtSuccess(null);
+		}
+		else
+		{
+			return ResultUtils.rtFail(null);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/holdAtStation")
+	public Map<String, Object> holdAtStation(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		int result = this.gameService.holdAtStation(bean);
+		if (result > 0)
+		{
+			return ResultUtils.rtSuccess(null);
+		}
+		else
+		{
+			return ResultUtils.rtFail(null);
+		}
 	}
 }

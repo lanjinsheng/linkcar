@@ -15,7 +15,7 @@
 	</insert>
 	
 	<select id="queryStations" resultType="com.idata365.app.entity.StationBean" parameterType="com.idata365.app.entity.FamilyRelationParamBean">
-		select id as stationId, status from parkStation where familyRelationId=#{familyRelationId} order by id asc
+		select id as stationId, status, familyId from parkStation where familyRelationId=#{familyRelationId} order by id asc
 	</select>
 	
 	<update id="updateToStopParkStation" parameterType="com.idata365.app.entity.GameFamilyParamBean">
