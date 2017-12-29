@@ -27,6 +27,7 @@ import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
+import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
@@ -522,6 +523,16 @@ public class GameService extends BaseService<GameService>
   		messageService.insertMessage(message, messageEnum);
   		//推送消息
   		messageService.pushMessage(message, messageEnum);
+	}
+	
+	/**
+	 * 隐藏该段行程
+	 * @param bean
+	 * @return
+	 */
+	public int hiddenTravel(TravelHistoryParamBean bean)
+	{
+		return this.gameMapper.updateTravelHistoryHidden(bean);
 	}
 	
 	private String getCurrentDayStr()

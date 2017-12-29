@@ -29,4 +29,8 @@
 	<select id="queryFamilyOtherUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.GameFamilyParamBean">
 		select userId from userFamilyRelation where familyId=#{familyId} and userId!=#{userId} order by id asc
 	</select>
+	
+	<update id="updateTravelHistoryHidden" parameterType="com.idata365.app.entity.TravelHistoryParamBean">
+		update userTravelHistory set hiddenFlag=1 where id=#{travelId}
+	</update>
 </mapper>
