@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.antlr.runtime.tree.RewriteRuleNodeStream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -129,6 +130,24 @@ public class GameService extends BaseService<GameService>
 		this.gameMapper.saveFamilyRelation(bean2);*/
 	}
 	
+	public String judgeChallengeFlag(GameFamilyParamBean bean)
+	{
+		long familyId = bean.getFamilyId();
+		FamilyRelationBean familyRelationBean = new FamilyRelationBean();
+		familyRelationBean.setFamilyId(familyId);
+		List<Long> familyIdList = this.familyMapper.queryFamilyRelationIds(familyRelationBean);
+		
+		if (CollectionUtils.isEmpty(familyIdList))
+		{
+			return "0";
+		}
+		else
+		{
+			return "1";
+		}
+	}
+	
+	@Transactional
 	public PenalResultBean penalSpeed(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
@@ -170,6 +189,7 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
+	@Transactional
 	public PenalResultBean penalBrake(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
@@ -211,6 +231,7 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
+	@Transactional
 	public PenalResultBean penalTurn(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
@@ -252,6 +273,7 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
+	@Transactional
 	public PenalResultBean penalOverspeed(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
@@ -293,6 +315,7 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
+	@Transactional
 	public PenalResultBean penalNightDrive(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
@@ -334,6 +357,7 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
+	@Transactional
 	public PenalResultBean penalTiredDrive(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
@@ -375,6 +399,7 @@ public class GameService extends BaseService<GameService>
 		return resultBean;
 	}
 	
+	@Transactional
 	public PenalResultBean penalIllegalStop(GameFamilyParamBean bean, long userId)
 	{
 		LotteryBean lotteryBean = new LotteryBean();
