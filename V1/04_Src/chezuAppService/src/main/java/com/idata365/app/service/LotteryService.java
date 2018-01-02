@@ -81,7 +81,7 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param consumeCount
 	 * @return	
 	 */
-	public boolean consumeLottery(long userId, int awardId, int consumeCount)
+	public boolean consumeLottery(List<LotteryBean> lotteryBean)
 	{
 		return true;
 	}
