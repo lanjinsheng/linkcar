@@ -75,6 +75,18 @@ public class LotteryService extends BaseService<LotteryService>
 	}
 	
 	/**
+	 * 消耗已装配的道具接口
+	 * @param userId
+	 * @param awardId
+	 * @param consumeCount
+	 * @return	
+	 */
+	public boolean consumeLottery(long userId, int awardId, int consumeCount)
+	{
+		return true;
+	}
+	
+	/**
 	 * 抽奖获得道具
 	 * @param bean
 	 */
