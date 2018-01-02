@@ -27,4 +27,11 @@
     	update lottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId}
     </update>
     
+    <select id="queryReadyLottery" resultType="com.idata365.app.entity.LotteryBean" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	select id, userId, awardId, awardCount from readyLottery where userId=#{userId} and daystamp=#{daystamp}
+    </select>
+    
+    <update id="updateReadyLotteryStatus" parameterType="com.idata365.app.entity.LotteryBean">
+    	update readyLottery set awardCount=awardCount-#{awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </update>
 </mapper>
