@@ -63,6 +63,18 @@ public class LotteryService extends BaseService<LotteryService>
 	}
 	
 	/**
+	 * 查询装配的道具列表
+	 * @param userId
+	 * @return
+	 */
+	public List<LotteryBean> queryReadyLottery(long userId)
+	{
+		List<LotteryBean> resultList = new ArrayList<>();
+		
+		return resultList;
+	}
+	
+	/**
 	 * 抽奖获得道具
 	 * @param bean
 	 */
