@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.druid.sql.ast.statement.SQLForeignKeyImpl.On;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
@@ -21,6 +20,7 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.LotteryUser;
+import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
@@ -69,10 +69,22 @@ public class LotteryService extends BaseService<LotteryService>
 	 */
 	public List<LotteryBean> queryReadyLottery(long userId)
 	{
-		List<LotteryBean> resultList = new ArrayList<>();
+		ReadyLotteryBean paramBean = new ReadyLotteryBean();
+		paramBean.setUserId(userId);
+		paramBean.setDaystamp(getCurrentDayStr());
+		
+		List<LotteryBean> resultList = this.lotteryMapper.queryReadyLottery(paramBean);
 		
 		return resultList;
 	}
+	
+	private String getCurrentDayStr()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN);
+		return dayStr;
+	}
+	
 	
 	/**
 	 * 消耗已装配的道具接口
@@ -81,8 +93,16 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param consumeCount
 	 * @return	
 	 */
-	public boolean consumeLottery(List<LotteryBean> lotteryBean)
+	public boolean consumeLottery(List<LotteryBean> paramList)
 	{
+		String currentDayStr = getCurrentDayStr();
+		
+		for (LotteryBean tempBean : paramList)
+		{
+			tempBean.setDaystamp(currentDayStr);
+			this.lotteryMapper.updateReadyLotteryStatus(tempBean);
+		}
+		
 		return true;
 	}
 	

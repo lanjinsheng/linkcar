@@ -1,16 +1,26 @@
 package com.idata365.app.entity;
 
-public class LotteryBean
+public class ReadyLotteryBean
 {
+	private long id;
+	
 	private long userId;
 	
 	private int awardId;
 	
 	private int awardCount;
 	
-	private int count;
-	
 	private String daystamp;
+
+	public long getId()
+	{
+		return id;
+	}
+
+	public void setId(long id)
+	{
+		this.id = id;
+	}
 
 	public long getUserId()
 	{
@@ -40,16 +50,6 @@ public class LotteryBean
 	public void setAwardCount(int awardCount)
 	{
 		this.awardCount = awardCount;
-	}
-
-	public int getCount()
-	{
-		return count;
-	}
-
-	public void setCount(int count)
-	{
-		this.count = count;
 	}
 
 	public String getDaystamp()
