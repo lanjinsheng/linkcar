@@ -13,7 +13,6 @@ import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
-import com.idata365.col.entity.DriveScore;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.service.DataService;
 import com.idata365.col.service.SpringContextUtil;

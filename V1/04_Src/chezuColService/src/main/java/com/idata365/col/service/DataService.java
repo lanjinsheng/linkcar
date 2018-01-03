@@ -23,7 +23,6 @@ import com.idata365.col.entity.DriveDataEvent;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
 import com.idata365.col.entity.DriveDataStartLog;
-import com.idata365.col.entity.DriveScore;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.entity.UserDevice;
@@ -31,7 +30,6 @@ import com.idata365.col.mapper.DriveDataEventMapper;
 import com.idata365.col.mapper.DriveDataLogMapper;
 import com.idata365.col.mapper.DriveDataMainMapper;
 import com.idata365.col.mapper.DriveDataStartLogMapper;
-import com.idata365.col.mapper.DriveScoreMapper;
 import com.idata365.col.mapper.SensorDataLogMapper;
 import com.idata365.col.mapper.UploadDataStatusMapper;
 import com.idata365.col.mapper.UserDeviceMapper;
@@ -56,9 +54,6 @@ public class DataService extends BaseService<DataService>{
 	UserDeviceMapper userDeviceMapper;
 	@Autowired
 	DriveDataStartLogMapper driveDataStartLogMapper;
-	
-	@Autowired
-	DriveScoreMapper driveScoreMapper;
 	
 	public DataService() {
 		LOG.info("DataService DataService DataService DataService");
@@ -251,14 +246,6 @@ public class DataService extends BaseService<DataService>{
 				alarmMap.put("list", eventList);
 				driveDataEventMapper.insertDriveEvent(alarmMap);
 			}
-			 //插入计分项目
-	   		 DriveScore ds=new DriveScore();
-	   		 ds.setUserId(data.getUserId());
-	   		 ds.setHabitId(data.getHabitId());
-	   		 ds.setDriveDataMainId(data.getId());
-	   	     ds.setCalStatus(0);
-	   	     ds.setTaskFlag("0");
-	   		 driveScoreMapper.insertScoreUB(ds);
 		}
 	}
 	
