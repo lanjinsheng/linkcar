@@ -31,7 +31,17 @@ public class SignUtils {
 		 }
 		 return false;
 	}
-	
+	 public static String encryptHMAC(String args) {
+		  String sign=null;
+		try {
+			sign = HMAC.encryptHMAC(args, key);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sign;
+		 
+	 }
 	  /** 
 	    * 对字符串md5加密(小写+字母) 
 	    * 
