@@ -25,17 +25,18 @@ public interface ChezuService {
      * 
         * @Title: getGpsByUH
         * @Description: TODO(sign是通过SignUtils.encryptHMAC(userId+habitId)所得)
+        * @param  map 里放 userId  habitId  sign
         * @param @param userId
         * @param @param habitId
         * @param @param sign
         * @param @return    参数
         * @return Map<String,Object>    返回类型
         * 	  Map<String,Object> datas=new HashMap<String,Object>();
-	    	  datas.put("gpsInfo", list);
-	    	  datas.put("alarmInfo", events);
+	    *	  datas.put("gpsInfo", list);
+	    *	  datas.put("alarmInfo", events);
         * @throws
         * @author LanYeYe
      */
    @RequestMapping(value = "/drive/getGpsByUH",method = RequestMethod.POST)
-   Map<String,Object> getGpsByUH(@RequestParam Long userId,@RequestParam Long habitId,@RequestParam String sign);
+   Map<String,Object> getGpsByUH(@RequestParam  Map<String,Object>  map);
 }
