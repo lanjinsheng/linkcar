@@ -14,14 +14,10 @@ import com.idata365.entity.DriveDataMain;
     *
  */
 public interface DriveDataMainMapper {
-
-    void insertDataLog(DriveDataMain data);
-    
 	 List<DriveDataMain>  getSendDriveTask(DriveDataMain drive);
 	 void  lockSendDriveTask(DriveDataMain drive);
 	 void  updateSuccSendDriveTask(DriveDataMain drive);
 	 void  updateFailSendDriveTask(DriveDataMain drive);
-	 
 	 void  clearLockTask(@Param("compareTimes") long compareTimes);
 	 DriveDataMain getDriveDataMainByUH(DriveDataMain drive);
 }

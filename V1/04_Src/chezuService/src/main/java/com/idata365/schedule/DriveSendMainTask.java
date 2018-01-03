@@ -57,16 +57,9 @@ public class DriveSendMainTask extends TimerTask {
 			try {
 				List<DriveDataMain> list=dataService.getSendDriveTask(drive);
 				log.info("DriveSendMainTask do--list.size="+list.size());
-				for(DriveDataMain dm:list) {
-					Map<String,Object> map=new HashMap<String,Object>();
-					map.put("drive", dm);
-					List<DriveDataEvent> events=dataService.listDriveEventByMainId(dm);
-					map.put("events", events);
-					postList.add(map);
-					
-				}
-				boolean b=dataService.recieveDrive(postList);
+				boolean b=dataService.recieveDrive(list);
 				if(b) {
+					dataService.addCalTask(list);
 					dataService.updateSuccSendDriveTask(drive);
 				}else {
 					dataService.updateFailSendDriveTask(drive);
