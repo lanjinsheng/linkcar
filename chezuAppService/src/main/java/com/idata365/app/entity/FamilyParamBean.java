@@ -26,6 +26,8 @@ public class FamilyParamBean
 	
 	private String daystamp;
 	
+	private int role;
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -144,6 +146,16 @@ public class FamilyParamBean
 	public void setDaystamp(String daystamp)
 	{
 		this.daystamp = daystamp;
+	}
+
+	public int getRole()
+	{
+		return role;
+	}
+
+	public void setRole(int role)
+	{
+		this.role = role;
 	}
 	
 }
