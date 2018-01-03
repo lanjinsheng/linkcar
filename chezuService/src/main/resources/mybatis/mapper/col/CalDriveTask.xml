@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.col.CalDriveTaskMapper">
+    <resultMap id="calDriveTaskMap" type="com.idata365.entity.CalDriveTask" >
+    </resultMap>
+      <insert id="batchInsertCalTask" parameterType="java.util.HashMap">
+       INSERT ignore INTO 
+            calDriveTask
+            (driveDataMainId,userId,habitId,taskFlag,calStatus)  VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+    		(#{item.id},#{item.userId},#{item.habitId},0,0) 
+    	    </foreach>
+    </insert>
+    
+    
+<!-- 定时处理行程逻辑 -->
+    <update id="lockCalScoreTask" parameterType="com.idata365.entity.CalDriveTask" >
+       UPDATE 
+            calDriveTask 
+       SET 
+        calStatus=-1,taskFlag=#{taskFlag},calTime=now()
+       WHERE 
+            calStatus = 0  and taskFlag=0
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getCalScoreTask"  resultMap="calDriveTaskMap" parameterType="com.idata365.entity.CalDriveTask">
+		SELECT *  from calDriveTask where calStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateSuccCalScoreTask" parameterType="com.idata365.entity.CalDriveTask" >
+     update calDriveTask set
+        calStatus=1 
+        where  userId=#{userId} and habitId=#{habitId} and taskFlag=#{taskFlag}
+     </update>
+     <!-- 失败的calStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会 -->
+    <update id="updateFailCalScoreTask" parameterType="com.idata365.entity.CalDriveTask" >
+       UPDATE 
+           calDriveTask 
+       SET 
+           calStatus=#{calStatus},taskFlag=0,calTime=now(),calFailTimes=calFailTimes+1
+       WHERE 
+              userId=#{userId} and habitId=#{habitId} and taskFlag=#{taskFlag}
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           calDriveTask 
+       SET 
+           calStatus=0,taskFlag=0,calFailTimes=calFailTimes+1
+       WHERE 
+              calStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理行程逻辑 结束-->		
+</mapper>
