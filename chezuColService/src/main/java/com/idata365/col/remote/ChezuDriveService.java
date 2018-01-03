@@ -1,12 +1,7 @@
 package com.idata365.col.remote;
 
 
-import java.util.Map;
-
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 
@@ -18,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient(value = "service-chezu",fallback = ChezuServiceHystric.class)
 public interface ChezuDriveService {
- 
-    
-   @RequestMapping(value = "/drive/getGpsByUH",method = RequestMethod.POST)
-   Map<String,Object> getScoreByUH(@RequestParam Long userId,@RequestParam Long habitId,@RequestParam String sign);
-
-    
+//    @RequestMapping(value = "/yingyan/addPoint",method = RequestMethod.POST)
+//    Map<String,Object> addPoint(@RequestBody  (required = false) Map<String,String> point) ;
+//   @RequestMapping(value = "/yingyan/addPointList",method = RequestMethod.POST)
+//    Map<String,Object> addPointList(@RequestBody  (required = false) List<Map<String,String>> pointList);
+//   @RequestMapping(value = "/yingyan/analysis",method = RequestMethod.POST)
+//    Map<String,Object> analysis(@RequestBody  (required = false) Map<String,String> param);
+//    
+//    
 }
