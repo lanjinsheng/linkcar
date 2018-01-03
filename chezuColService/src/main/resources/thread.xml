@@ -58,8 +58,8 @@
     <bean id="springScheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">  
     <property name="scheduledExecutorTasks">  
       <list>  
-		<!-- <ref bean="driveUploadScanTaskExe" />-->
-		<!--<ref bean="clearLockTaskExe"/> -->
+		 <ref bean="driveUploadScanTaskExe" />
+		 <ref bean="clearLockTaskExe"/> 
       </list>  
     </property>  
   </bean>  
