@@ -25,7 +25,6 @@ public class SignUtils {
 		 }
 		 return false;
 	  }
-	 
 	 public static void main(String []args) {
 		  String sign;
 		try {

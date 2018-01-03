@@ -258,20 +258,20 @@ public class DataService extends BaseService<DataService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	public List<DriveDataMain>  getSendDriveTask(DriveDataMain drive) {
-		    driveDataMainMapper.lockSendDriveTask(drive);
-		  List<DriveDataMain> list= driveDataMainMapper.getSendDriveTask(drive);
-		  return list;
-	}
-	
-	public void updateSuccSendDriveTask(DriveDataMain drive) {
-		drive.setIsPost(1);
-		driveDataMainMapper.updateSuccSendDriveTask(drive);
-	}
-	public void updateFailSendDriveTask(DriveDataMain drive) {
-		drive.setIsPost(0);
-		driveDataMainMapper.updateFailSendDriveTask(drive);
-	}
+//	public List<DriveDataMain>  getSendDriveTask(DriveDataMain drive) {
+//		    driveDataMainMapper.lockSendDriveTask(drive);
+//		  List<DriveDataMain> list= driveDataMainMapper.getSendDriveTask(drive);
+//		  return list;
+//	}
+//	
+//	public void updateSuccSendDriveTask(DriveDataMain drive) {
+//		drive.setIsPost(1);
+//		driveDataMainMapper.updateSuccSendDriveTask(drive);
+//	}
+//	public void updateFailSendDriveTask(DriveDataMain drive) {
+//		drive.setIsPost(0);
+//		driveDataMainMapper.updateFailSendDriveTask(drive);
+//	}
 	
 	
 	public List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive){
