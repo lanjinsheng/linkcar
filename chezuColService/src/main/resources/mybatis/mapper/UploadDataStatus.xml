@@ -76,7 +76,7 @@
        UPDATE 
            uploadDataStatus 
        SET 
-           scanStatus=0,dealTimes=dealTimes+1
+           scanStatus=0,taskFlag=0,dealTimes=dealTimes+1
        WHERE 
               scanStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
      </update>
