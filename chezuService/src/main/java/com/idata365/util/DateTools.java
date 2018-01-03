@@ -218,6 +218,15 @@ public class DateTools
 			customDate = yyMMddHHmmssSSS.format(curdate);
 			return customDate;
 		}
+		public static String getCurDateYYYYMMddHHmmss()
+		{
+			String customDate = "";
+			Date curdate = new Date();
+			customDate = yyMMddHHmmss.format(curdate);
+			return customDate;
+		}
+		
+		
 		/**
 	 * 把yyyy-MM-dd格式的字符串转换成Date
 	 * 
