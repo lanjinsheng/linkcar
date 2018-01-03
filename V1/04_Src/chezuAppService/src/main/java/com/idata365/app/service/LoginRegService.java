@@ -34,7 +34,7 @@ import com.idata365.app.mapper.UserLoginSessionMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.mapper.VerifyCodeMapper;
 import com.idata365.app.partnerApi.PhoneMsgTools;
-import com.idata365.app.remote.ChezuColService;
+import com.idata365.app.remote.ChezuService;
 import com.idata365.app.util.DateTools;
 
  
@@ -51,7 +51,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 	@Autowired
 	 UserDeviceLogsMapper userDeviceLogsMapper;
 	@Autowired
-	ChezuColService  chezuColService;
+	ChezuService  chezuColService;
 	@Autowired
 	FamilyInviteMapper familyInviteMapper;
 	@Autowired
