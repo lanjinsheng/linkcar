@@ -1,5 +1,6 @@
 package com.idata365.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -30,9 +31,13 @@ public class CalScoreController extends BaseController<CalScoreController> {
 		    	  return ResultUtils.rtFailVerification(null);
 		      }
 		      //先从数据库缓存获取,如果无数据，则进行重新计算。
-		      DriveScore ds=calScoreService.calScoreByUH(userId, habitId);
+		      List<DriveScore> dsList=calScoreService.getDriveScoreByUH(userId, habitId);
+		      if(dsList==null || dsList.size()==0) {
+		    	  Map<String,Object> rtMap=calScoreService.calScoreByUH(userId, habitId);
+		    	  return ResultUtils.rtSuccess(rtMap);
+		      }
 		   	  LOG.info(userId+"======"+habitId);
-	    	  return ResultUtils.rtSuccess(ds);
+	    	  return ResultUtils.rtSuccess(dsList);
 		  
 	    } 
 }
