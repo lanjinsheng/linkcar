@@ -34,4 +34,16 @@
     <update id="updateReadyLotteryStatus" parameterType="com.idata365.app.entity.LotteryBean">
     	update readyLottery set awardCount=awardCount-#{awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
     </update>
+    
+    <insert id="saveOrUpdateReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+    		select count(id) from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    	</selectKey>
+    	<if test="count > 0">
+    		update readyLottery set awardCount=awardCount+1 where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    	</if>
+    	<if test="count == 0">
+    		insert into readyLottery(userId, awardId, awardCount, daystamp) values(#{userId}, #{awardId}, 1, #{daystamp})
+    	</if>
+    </insert>
 </mapper>

@@ -19,4 +19,6 @@ public interface LotteryMapper
 	
 	public int updateReadyLotteryStatus(LotteryBean bean);
 	
+	public void saveOrUpdateReadyLottery(ReadyLotteryBean bean);
+	
 }

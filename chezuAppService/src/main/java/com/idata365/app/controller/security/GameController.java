@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.PenalResultBean;
+import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
+import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.entity.bean.UserInfo;
@@ -296,5 +298,69 @@ public class GameController extends BaseController
 		{
 			return ResultUtils.rtFail(null);
 		}
+	}
+	
+	/**
+	 * 切换明日角色
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/switchRole")
+	public Map<String, Object> switchRole(@RequestBody UserFamilyRoleLogParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.gameService.switchRole(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 查询明日角色
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/findTomorrowRole")
+	public Map<String, Object> findTomorrowRole(@RequestBody UserFamilyRoleLogParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		int role = this.gameService.findTomorrowRole(bean);
+		Map<String, Object> resultMap = new HashMap<>();
+		if (role > 0)
+		{
+			resultMap.put("flag", 1);
+			resultMap.put("role", role);
+		}
+		else
+		{
+			resultMap.put("flag", 0);
+		}
+		return ResultUtils.rtSuccess(resultMap);
+	}
+	
+	/**
+	 * 查询今日角色
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/findTodayRole")
+	public Map<String, Object> findTodayRole(@RequestBody UserFamilyRoleLogParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		int role = this.gameService.findTodayRole(bean);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("role", role);
+		return ResultUtils.rtSuccess(resultMap);
+	}
+	
+	/**
+	 * 装备道具
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/getReadyLottery")
+	public Map<String, Object> getReadyLottery(@RequestBody ReadyLotteryBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.gameService.getReadyLottery(bean);
+		return ResultUtils.rtSuccess(null);
 	}
 }
