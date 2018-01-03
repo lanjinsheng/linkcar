@@ -7,33 +7,55 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.HttpUtils;
 
 @Service
 public class YingyanService {
-@Autowired
-ChezuDriveService chezuDriveService;
 
-public Map<String,Object> addPoint(Map<String,String> point){
-	return chezuDriveService.addPoint(point);
-}
+ 
 
-public Map<String,Object> addPointList(List<Map<String,String>> pointList){
-	Map<String,Object> rtMap=chezuDriveService.addPointList(pointList);
-	return rtMap;
-}
 
-public Map<String,Object> analysis(Map<String,String> param){
-	return chezuDriveService.analysis(param);
-}
+//public Map<String,Object> getYingyanAnalysis(List<Map<String,String>> pointList,String userId){
+//	  int size=pointList.size();
+//	  int times=size/100+1;
+//	  Map<String,Object> addPointResult=null;
+//	  for(int i=1;i<=times;i++) {
+//		  int fromIndex=(i-1)*100;
+//		  int toIndex=i*100;
+//		  if(fromIndex>=(size-1)) {
+//			  break;
+//		  }
+//		  
+//		  if(toIndex>=(size)) {
+//			  toIndex=size;
+//		  }
+//		  List<Map<String,String>> list= pointList.subList(fromIndex, toIndex);
+//		  addPointResult=addPointList(list);
+//		  if(addPointResult!=null &&  addPointResult.get("status").toString().equals("0")) {
+//			  continue;
+//		  }else {
+//			  break;
+//		  }
+//	  }
+//	if(addPointResult!=null &&  addPointResult.get("status").toString().equals("0")) {
+//		Map<String,String> param=new HashMap<String,String>();
+//		param.put("start_time", pointList.get(0).get("loc_time"));
+//		param.put("end_time", pointList.get(pointList.size()-1).get("loc_time"));
+//		param.put("coord_type_output","gcj02");
+//		param.put("entity_name",userId);
+////		Map<String,Object> analysis=analysis(param);
+////		return analysis;
+//		return null;
+//	}else {
+//		return addPointResult;
+//	}
+//}
 
-public Map<String,Object> getYingyanAnalysis(List<Map<String,String>> pointList,String userId){
+public Map<String,Object> addPointsList(List<Map<String,String>> pointList,String userId){
 	  int size=pointList.size();
 	  int times=size/100+1;
 	  Map<String,Object> addPointResult=null;
@@ -48,30 +70,22 @@ public Map<String,Object> getYingyanAnalysis(List<Map<String,String>> pointList,
 			  toIndex=size;
 		  }
 		  List<Map<String,String>> list= pointList.subList(fromIndex, toIndex);
-		  addPointResult=addPointList(list);
+		  String s= HttpUtils.postYingyanEntityList(list);
+		  addPointResult= (Map<String,Object>)GsonUtils.fromJson(s);
 		  if(addPointResult!=null &&  addPointResult.get("status").toString().equals("0")) {
 			  continue;
 		  }else {
 			  break;
 		  }
 	  }
-	if(addPointResult!=null &&  addPointResult.get("status").toString().equals("0")) {
-		Map<String,String> param=new HashMap<String,String>();
-		param.put("start_time", pointList.get(0).get("loc_time"));
-		param.put("end_time", pointList.get(pointList.size()-1).get("loc_time"));
-		param.put("coord_type_output","gcj02");
-		param.put("entity_name",userId);
-		Map<String,Object> analysis=analysis(param);
-		return analysis;
-	}else {
-		return addPointResult;
-	}
+	 return addPointResult;
 }
 
-public void dealList(List<Map<String,String>> list,String userId) {
+
+public void dealList(List<Map<String,String>> list,String userId,String habitId) {
 	int i=1;
 	for(Map<String,String> map:list) {
-		map.put("entity_name", userId);
+		map.put("entity_name", userId+"_"+habitId);
 	    map.put("latitude", map.get("x"));
 	    map.put("longitude", map.get("y"));
 	    long time=DateTools.changeDateTimeToSecond( map.get("t"));
