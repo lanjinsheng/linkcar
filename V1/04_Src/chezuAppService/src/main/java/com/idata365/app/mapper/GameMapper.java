@@ -6,6 +6,7 @@ import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
+import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 
@@ -26,4 +27,12 @@ public interface GameMapper
 	public List<Long> queryFamilyOtherUserId(GameFamilyParamBean bean);
 	
 	public int updateTravelHistoryHidden(TravelHistoryParamBean bean);
+	
+	public int countTomorrowRole(UserFamilyRoleLogParamBean bean);
+	
+	public int updateUserFamilyRole(UserFamilyRoleLogParamBean bean);
+	
+	public void saveUserFamilyRole(UserFamilyRoleLogParamBean bean);
+	
+	public List<Integer> queryRoleByDay(UserFamilyRoleLogParamBean bean);
 }

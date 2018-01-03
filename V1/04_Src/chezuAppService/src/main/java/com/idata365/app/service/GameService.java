@@ -5,10 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.antlr.runtime.tree.RewriteRuleNodeStream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,11 @@ import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
+import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
+import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
@@ -496,8 +498,6 @@ public class GameService extends BaseService<GameService>
 			resultList.add(tempResulBean);
 		}
 		
-		
-		
 		return resultList;
 	}
 	
@@ -560,10 +560,125 @@ public class GameService extends BaseService<GameService>
 		return this.gameMapper.updateTravelHistoryHidden(bean);
 	}
 	
+	private String getCurrentDayStrUnDelimiter()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN);
+		return dayStr;
+	}
+	
 	private String getCurrentDayStr()
 	{
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
+	}
+	
+	/**
+	 * 切换明日角色
+	 * @param bean
+	 */
+	@Transactional
+	public void switchRole(UserFamilyRoleLogParamBean bean)
+	{
+		bean.setDaystamp(getCurrentDayStrUnDelimiter());
+		int roleCount = this.gameMapper.countTomorrowRole(bean);
+		if (roleCount > 0)
+		{
+			this.gameMapper.updateUserFamilyRole(bean);
+		}
+		else
+		{
+			String tomorrowDateStr = getTomorrowDateStr();
+			String startTime = tomorrowDateStr + " 00:00:00";
+			String endTime = tomorrowDateStr + " 23:59:59";
+			bean.setStartTime(startTime);
+			bean.setEndTime(endTime);
+			
+			this.gameMapper.saveUserFamilyRole(bean);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	public int findTomorrowRole(UserFamilyRoleLogParamBean bean)
+	{
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		List<Integer> roleList = this.gameMapper.queryRoleByDay(bean);
+		if (CollectionUtils.isNotEmpty(roleList))
+		{
+			return roleList.get(0);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	public int findTodayRole(UserFamilyRoleLogParamBean bean)
+	{
+		bean.setDaystamp(getTodayDateUndelimiterStr());
+		List<Integer> roleList = this.gameMapper.queryRoleByDay(bean);
+		if (CollectionUtils.isNotEmpty(roleList))
+		{
+			return roleList.get(0);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	/**
+	 * 装备道具
+	 * @param bean
+	 */
+	@Transactional
+	public void getReadyLottery(ReadyLotteryBean bean)
+	{
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		this.lotteryMapper.saveOrUpdateReadyLottery(bean);
+		
+		LotteryBean lotteryParamBean = new LotteryBean();
+		lotteryParamBean.setUserId(bean.getUserId());
+		lotteryParamBean.setAwardId(bean.getAwardId());
+		this.lotteryMapper.updateLotteryCount(lotteryParamBean);
+	}
+	
+	public String getTodayDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		
+		String todayDateStr = DateFormatUtils.format(curDate, "yyyyMMdd");
+		LOGGER.info(todayDateStr);
+		return todayDateStr;
+	}
+	
+	public String getTomorrowDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date tomorrowDate = DateUtils.addDays(curDate, 1);
+		
+		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
+		LOGGER.info(tomorrowDateStr);
+		return tomorrowDateStr;
+	}
+	
+	public String getTomorrowDateStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date tomorrowDate = DateUtils.addDays(curDate, 1);
+		
+		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
+		LOGGER.info(tomorrowDateStr);
+		return tomorrowDateStr;
 	}
 }
