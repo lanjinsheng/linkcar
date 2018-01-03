@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInfoScoreResultBean;
@@ -162,6 +163,7 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
+		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
@@ -329,6 +331,7 @@ public class FamilyService extends BaseService<FamilyService>
 		bean.setFamilyId(familyId);
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
+		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
 		//更新是否通过邀请码加入状态
