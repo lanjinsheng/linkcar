@@ -30,7 +30,14 @@ public class DriveOpenController extends BaseController<DriveOpenController> {
 	@Autowired  
 	DriveOpenService driveOpenService; 
 	   @RequestMapping(value = "/drive/getGpsByUH",method = RequestMethod.POST)
-	    Map<String,Object> getGpsByUH(@RequestParam Long userId,@RequestParam Long habitId,@RequestParam String sign) {
+	    Map<String,Object> getGpsByUH(@RequestParam Map<String,Object> map) {
+		   if(map.get("userId")==null || map.get("habitId")==null || map.get("sign")==null) {
+			   return ResultUtils.rtFailParam(null);
+		   }
+		   Long userId=Long.valueOf(map.get("userId").toString());
+		   Long habitId=Long.valueOf(map.get("habitId").toString());
+		   String sign=String.valueOf(map.get("sign"));
+		   
 		      boolean s=com.idata365.util.SignUtils.security(""+userId+habitId, sign);
 		      if(!s) {
 		    	  return ResultUtils.rtFailVerification(null);

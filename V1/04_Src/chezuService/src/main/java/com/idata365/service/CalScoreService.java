@@ -980,7 +980,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 //	
 	@Transactional(value="colTransactionManager")
 	public	void clearLockTask() {
-		long compareTimes=System.currentTimeMillis();
+		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		calDriveTaskMapper.clearLockTask(compareTimes);
 	}
 //	
