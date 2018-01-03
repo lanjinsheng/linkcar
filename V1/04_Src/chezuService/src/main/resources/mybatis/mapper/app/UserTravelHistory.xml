@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.UserTravelHistoryMapper">
+   <insert id="batchInsert" parameterType="java.util.HashMap">
+		 INSERT IGNORE INTO  userTravelHistory
+		 (createTime,userId,startTime,endTime,mileage,time,brakeTimes,speedTimes,turnTimes,overspeedTimes,maxspeed,habitId)
+		  VALUES
+    	<foreach collection="list" item="item" index="index" separator=",">
+    		(#{item.createTime},#{item.userId},#{item.startTime},#{item.endTime},#{item.mileage},#{item.time},#{item.brakeTimes},
+    		#{item.speedTimes},#{item.turnTimes},#{item.overspeedTimes},#{item.maxspeed},#{item.habitId}
+    		) 
+    	</foreach>
+	</insert>
+	
+	 <update id="updateTravelHistory" parameterType="com.idata365.entity.UserTravelHistory">
+		update  userTravelHistory set nightDrive=#{nightDrive},tiredDrive=#{tiredDrive},
+		brakeTimesOffset=#{brakeTimesOffset},speedTimesOffset=#{speedTimesOffset},turnTimesOffset=#{turnTimesOffset},
+		overspeedTimesOffset=#{overspeedTimesOffset},nightDriveOffset=#{nightDriveOffset},
+		tiredDriveOffset=#{tiredDriveOffset},highSpeedTimesOffset=#{highSpeedTimesOffset} where userId=#{userId} and habitId=#{habitId}
+	 </update>
+	
+	
+</mapper>
