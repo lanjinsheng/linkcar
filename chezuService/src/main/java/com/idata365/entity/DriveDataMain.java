@@ -24,6 +24,8 @@ public class DriveDataMain implements Serializable {
 	private int speedUpTimes=0;
 	private int brakeTimes=0;
 	private int turnTimes=0;
+	private int overspeedTimes=0;
+	
 	private int speed120To129Times=0;
 	private int speed130To139Times=0;
 	private int speed140To149Times=0;
@@ -31,6 +33,12 @@ public class DriveDataMain implements Serializable {
 	private int speed160UpTimes=0;
 	
 	
+	public int getOverspeedTimes() {
+		return overspeedTimes;
+	}
+	public void setOverspeedTimes(int overspeedTimes) {
+		this.overspeedTimes = overspeedTimes;
+	}
 	public Long getId() {
 		return id;
 	}
