@@ -38,7 +38,6 @@ import com.idata365.app.remote.ChezuService;
 import com.idata365.app.util.DateTools;
 
  
-
 @Service
 public class LoginRegService extends BaseService<LoginRegService>{
 	private final static Logger LOG = LoggerFactory.getLogger(LoginRegService.class);
@@ -51,14 +50,14 @@ public class LoginRegService extends BaseService<LoginRegService>{
 	@Autowired
 	 UserDeviceLogsMapper userDeviceLogsMapper;
 	@Autowired
-	ChezuService  chezuColService;
+	ChezuService  chezuService;
 	@Autowired
 	FamilyInviteMapper familyInviteMapper;
 	@Autowired
 	MessageService messageService;
 	
 	public LoginRegService() {
-		LOG.info("DataService DataService DataService");
+		LOG.info("LoginRegService LoginRegService LoginRegService");
 	}
 	/**
 	 * 
@@ -115,7 +114,7 @@ public class LoginRegService extends BaseService<LoginRegService>{
 			 Map<String,Object> map=new HashMap<String,Object>();
 			 map.put("userId", userId);
 			 map.put("deviceToken", deviceToken);
-			boolean b= chezuColService.updateUserDevice(map);
+			boolean b= chezuService.updateUserDevice(map);
 			if(b==false) {
 				LOG.info("远程调用出错"+userId+"--"+deviceToken);
 				return null;

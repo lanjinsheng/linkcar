@@ -16,11 +16,13 @@ public class ChezuHystric implements ChezuService {
 		LOG.info("updateUserDevice 挂了 service-chezu");
 		return false;
 	}
+	
 	@Override
-	public Map<String, Object> getGpsByUH(Long userId, Long habitId, String sign) {
+	public Map<String, Object> getGpsByUH(Map<String,Object> map) {
 		// TODO Auto-generated method stub
 		LOG.info(" getGpsByUH 挂了   service-chezu");
 		return null;
 	}
+	
  
 }
