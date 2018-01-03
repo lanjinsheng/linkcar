@@ -1,10 +1,12 @@
 package com.idata365.entity;
 
+import java.io.Serializable;
+
 /**
  * 分页参数类
  * 
  */
-public class PageParameter {
+public class PageParameter implements Serializable {
     public static final int DEFAULT_PAGE_SIZE = 10;
 
     private int pageSize;
