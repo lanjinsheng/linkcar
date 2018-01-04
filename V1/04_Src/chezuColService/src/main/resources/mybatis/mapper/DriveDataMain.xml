@@ -10,13 +10,13 @@
             (userId,habitId,driveStartTime,driveEndTime,driveTimes,driveDistance,
             maxSpeed,createTime,validStatus,avgSpeed,
             speedUpTimes,brakeTimes,turnTimes,overspeedTimes,speed120To129Times,speed130To139Times,
-            speed140To149Times,speed150To159Times,speed160UpTimes) 
+            speed140To149Times,speed150To159Times,speed160UpTimes,labelFlag) 
         VALUES
             (#{userId}, #{habitId}, #{driveStartTime}, #{driveEndTime}, 
             #{driveTimes},#{driveDistance}, 
             #{maxSpeed},now(), #{validStatus}, #{avgSpeed},
              #{speedUpTimes}, #{brakeTimes}, #{turnTimes},#{overspeedTimes}, #{speed120To129Times},
-              #{speed130To139Times}, #{speed140To149Times}, #{speed150To159Times},#{speed160UpTimes})
+              #{speed130To139Times}, #{speed140To149Times}, #{speed150To159Times},#{speed160UpTimes},#{labelFlag})
     </insert>
 
  	<!-- 获取行程 -->
