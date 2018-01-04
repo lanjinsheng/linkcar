@@ -65,7 +65,7 @@ public class DatasDealTask implements Runnable
 			         }
 			 }
 	    	  if(list.size()>0) {
-	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
+	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+userId+"==habitId="+habitId);
 	    		  List<Map<String,Object>> eventList=new ArrayList<Map<String,Object>>();
 	    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 	    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
@@ -81,7 +81,23 @@ public class DatasDealTask implements Runnable
 	    		 Double avgSpeed=Double.valueOf(datasMap.get("avgSpeed").toString());
 	    		 Double distance=Double.valueOf(datasMap.get("distance").toString());
 	    		 long driveTimes=Long.valueOf(datasMap.get("driveTimes").toString());
+	    		 
 	    		 DriveDataMain data=new DriveDataMain();
+	    		 //识别驾驶标签
+	    		 if(driveTimes<180) {//180s内的驾驶行为忽略
+	    			 data.setValidStatus(1);
+	    		 }
+	    		 
+	    		 if(maxSpeed<7 && driveTimes<900) {
+	    			 data.setValidStatus(1);
+	    			 data.setLabelFlag("电动车/自行车");
+	    		 }
+	    		 
+	    		 if(avgSpeed>41){
+	    			 data.setValidStatus(1);
+	    			 data.setLabelFlag("高铁");
+	    		 }
+	    		 
 	    		 data.setCreateTime(new Date());
 	    		 data.setDriveEndTime(endTime);
 	    		 data.setDriveStartTime(startTime);
@@ -92,7 +108,6 @@ public class DatasDealTask implements Runnable
 	    		 data.setPostTime(null);
 	    		 data.setUserId(userId);
 	    		 data.setAvgSpeed(BigDecimal.valueOf(avgSpeed));
-	    		 data.setValidStatus(1);
 	    		 data.setDriveDistance(BigDecimal.valueOf(distance));
 	    		 data.setSpeed120To129Times(Integer.valueOf(datasMap.get("speed120To129Times").toString()));
 	    		 data.setSpeed130To139Times(Integer.valueOf(datasMap.get("speed130To139Times").toString()));

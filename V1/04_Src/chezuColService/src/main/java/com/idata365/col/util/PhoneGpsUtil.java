@@ -8,11 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.idata365.col.entity.bean.SpeedBean;
+import com.idata365.col.schedule.DatasDealTask;
 
 
 public class PhoneGpsUtil {
-	
+	private static Logger log = Logger.getLogger(PhoneGpsUtil.class);
 	public static void main(String []args){
 	}
 	final static double speed120=33.33;
@@ -33,7 +36,7 @@ public class PhoneGpsUtil {
 			speedBean.setSpeed160UpTimes(speedBean.getSpeed160UpTimes()+1);
 		}
 	}
-	public static Map<String,Object> getGpsValues(List<Map<String,String>> list){
+	public static Map<String,Object> getGpsValues(List<Map<String,String>> list,String uhIDs){
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		Double distance=0d;//距离值测算
 		double avgSpeed=0;
@@ -62,6 +65,13 @@ public class PhoneGpsUtil {
 		int i=0;
 		String st=first.get("t");
 		StringBuffer et=new StringBuffer(first.get("t"));
+		while(st.equals("")) {
+			  i++;
+			  first=list.get(i);
+			  st=first.get("t");
+			  et=new StringBuffer(first.get("t"));
+			  log.error("时间为空====错误行程号："+uhIDs);
+		} 
 		addJia(first,i,size,list,alarmListJia);
 		addJian(first, i, size, list,  alarmListJian,alarmListZhuan);
 		double lat1=Double.valueOf(first.get("x"));
@@ -69,8 +79,16 @@ public class PhoneGpsUtil {
 		double maxSpeed=Double.valueOf(first.get("s"));
 		setSpeedBean(speedBean,maxSpeed);
 		Gps Gps1=PositionUtil.gcj02ToGps84(Double.valueOf(lat1), Double.valueOf(lng1));
-		for(i=1;i<size;i++){
+		i++;
+		for(;i<size;i++){
 			Map<String,String> gps=list.get(i);
+			 if(!gps.get("t").equals("")) {
+				   et.setLength(0);
+				   et.append(gps.get("t"));
+			   }else {
+				   log.error("时间为空====错误行程号："+uhIDs);
+				   continue;
+			   }
 			double lat2=Double.valueOf(gps.get("x"));
 			double lng2=Double.valueOf(gps.get("y"));
 			double s=Double.valueOf(gps.get("s"));
@@ -84,8 +102,7 @@ public class PhoneGpsUtil {
 			   if(!isTurn){
 				   addJian(gps, i, size, list, alarmListJian,alarmListZhuan);
 			   }
-			   et.setLength(0);
-			   et.append(gps.get("t"));
+			  
 			   if(maxSpeed<Double.valueOf(gps.get("s"))){
 				   maxSpeed=Double.valueOf(gps.get("s"));
 			   }
@@ -194,6 +211,7 @@ public class PhoneGpsUtil {
 				 BigDecimal  ss= BigDecimal.valueOf(s2);
 				long dif=1;
 				try {
+					  if(t2==null || t1==null || t2.equals("") || t1.equals("")) { return false;}
 					  dif=DateTools.getDiffTimeS(t2, t1);
 					  if(dif==0)
 						  {j++;continue;}
@@ -285,6 +303,9 @@ public class PhoneGpsUtil {
 				return false;
 			}
 			double s2=Double.valueOf(list.get(now+1).get("s"));
+			if(s2==0) {
+				return false;
+			}
 			Double ds=BigDecimal.valueOf(s).divide(BigDecimal.valueOf(s2),3,RoundingMode.HALF_UP).doubleValue();
 			
 			if(ds<1.3) {

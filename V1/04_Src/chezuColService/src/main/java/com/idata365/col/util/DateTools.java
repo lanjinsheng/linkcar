@@ -28,7 +28,6 @@ public class DateTools
 		return customDate;
 	}
     public static long getDiffTimeS(String dateTime1,String dateTime2) throws ParseException {
-	    System.out.println(dateTime1+"---"+dateTime2);
         Date d1 = DateUtils.parseDate(dateTime1,yyMMddHHmmssSSS.getPattern());
         Date d2 = DateUtils.parseDate(dateTime2,yyMMddHHmmssSSS.getPattern());
        return (long)((d1.getTime()-d2.getTime())/1000);
