@@ -403,6 +403,6 @@ public class GameController extends BaseController
 		Map<String, List<String>> resultMap = new HashMap<>();
 		List<String> resultList = this.gameService.queryReadyLotteryAwardId(bean);
 		resultMap.put("readyLottery", resultList);
-		return ResultUtils.rtSuccess(resultList);
+		return ResultUtils.rtSuccess(resultMap);
 	}
 }
