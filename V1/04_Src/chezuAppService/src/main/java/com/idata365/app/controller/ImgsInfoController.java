@@ -37,6 +37,7 @@ public class ImgsInfoController {
     public void  getImgs(@RequestParam (required = false) Map<String, String> allRequestParams,HttpServletResponse response){
 	    LOG.info("start");
 		  String  key=allRequestParams.get("key");
+		  LOG.info("key="+key);
 //		  key=key.split(".")[0];
 	        HttpHeaders headers = new HttpHeaders();  
 	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
