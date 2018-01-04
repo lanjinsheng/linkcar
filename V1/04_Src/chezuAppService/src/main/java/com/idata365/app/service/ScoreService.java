@@ -27,8 +27,11 @@ import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.GameHistoryResultBean;
+import com.idata365.app.entity.GameResultWithFamilyResultBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
+import com.idata365.app.entity.ScoreDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyDetailBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
@@ -44,6 +47,8 @@ import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
 import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
+import com.idata365.app.entity.TravelDetailResultBean;
+import com.idata365.app.entity.TravelResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
@@ -461,6 +466,135 @@ public class ScoreService extends BaseService<ScoreService>
 			tempBean0.setScore("50");
 			resultList.add(tempBean0);
 		}
+		
+		return resultList;
+	}
+	
+	//temp settings
+	public List<TravelResultBean> showTravels(ScoreFamilyInfoParamBean bean)
+	{
+		List<TravelResultBean> resultList = new ArrayList<>();
+		
+		TravelResultBean bean1 = new TravelResultBean();
+		bean1.setTime("60:12:12");
+		bean1.setMileage("60.87");
+		bean1.setStartToEnd("13:00-14:00");
+		bean1.setTravelId("5521");
+		resultList.add(bean1);
+		
+		TravelResultBean bean2 = new TravelResultBean();
+		bean2.setTime("60:12:12");
+		bean2.setMileage("60.87");
+		bean2.setStartToEnd("13:00-14:00");
+		bean2.setTravelId("5521");
+		resultList.add(bean2);
+		
+		return resultList;
+	}
+	
+	//temp settings
+	public List<TravelDetailResultBean> showTravelDetail(ScoreFamilyInfoParamBean bean)
+	{
+		List<TravelDetailResultBean> resultList = new ArrayList<>();
+		
+		TravelDetailResultBean bean1 = new TravelDetailResultBean();
+		bean1.setTime("60:12:12");
+		bean1.setMileage("60.87");
+		bean1.setNightDrive("3.5");
+		bean1.setTurnTimes("5");
+		bean1.setTiredDrive("0.5");
+		bean1.setSpeedTimes("4");
+		bean1.setBrakeTimes("3");
+		bean1.setMaxspeed("102");
+		bean1.setOverspeedTimes("4");
+		resultList.add(bean1);
+		
+		return resultList;
+	}
+	
+	//temp settings
+	public List<ScoreDetailResultBean> scoreDetail(ScoreFamilyInfoParamBean bean)
+	{
+		ScoreDetailResultBean resultBean = new ScoreDetailResultBean();
+		
+		List<String> arr = new ArrayList<>();
+		arr.add("100");
+		arr.add("50");
+		arr.add("80");
+		resultBean.setMileageArr(arr);
+		resultBean.setTimeArr(arr);
+		resultBean.setBrakeTimesArr(arr);
+		resultBean.setTurnTimesArr(arr);
+		resultBean.setSpeedTimesArr(arr);
+		resultBean.setOverspeedArr(arr);
+		resultBean.setMaxspeedArr(arr);
+		resultBean.setTiredDriveArr(arr);
+		resultBean.setPhoneTimesArr(arr);
+		resultBean.setWeatherArr(arr);
+		resultBean.setWalkArr(arr);
+		
+		List<ScoreDetailResultBean> resultList = new ArrayList<>();
+		resultList.add(resultBean);
+		return resultList;
+	}
+	
+	//temp settings
+	public List<GameResultWithFamilyResultBean> showGameResultWithFamily(ScoreFamilyInfoParamBean bean)
+	{
+		List<GameResultWithFamilyResultBean> resultList = new ArrayList<>();
+		
+		GameResultWithFamilyResultBean bean0 = new GameResultWithFamilyResultBean();
+		bean0.setTodayRole("1");
+		bean0.setNameUrl("http://www.baidu.com/1.jpg");
+		bean0.setName("xiaomao");
+		bean0.setUserId("5");
+		bean0.setScore("55");
+		bean0.setRole("3");
+		bean0.setTomorrowRole("4");
+		resultList.add(bean0);
+		
+		GameResultWithFamilyResultBean bean1 = new GameResultWithFamilyResultBean();
+		bean1.setTodayRole("1");
+		bean1.setNameUrl("http://www.baidu.com/1.jpg");
+		bean1.setName("xiaomao");
+		bean1.setUserId("5");
+		bean1.setScore("55");
+		bean1.setRole("3");
+		bean1.setTomorrowRole("4");
+		resultList.add(bean1);
+		
+		GameResultWithFamilyResultBean bean2 = new GameResultWithFamilyResultBean();
+		bean2.setTodayRole("1");
+		bean2.setNameUrl("http://www.baidu.com/1.jpg");
+		bean2.setName("xiaomao");
+		bean2.setUserId("5");
+		bean2.setScore("55");
+		bean2.setRole("3");
+		bean2.setTomorrowRole("4");
+		resultList.add(bean2);
+		
+		return resultList;
+	}
+	
+	//temp settings
+	public List<GameHistoryResultBean> gameHistory(ScoreFamilyInfoParamBean bean)
+	{
+		List<GameHistoryResultBean> resultList = new ArrayList<>();
+		
+		GameHistoryResultBean bean1 = new GameHistoryResultBean();
+		bean1.setOrderNo("10");
+		bean1.setDaystamp("2017-12-01");
+		resultList.add(bean1);
+		
+		GameHistoryResultBean bean2 = new GameHistoryResultBean();
+		bean2.setOrderNo("10");
+		bean2.setDaystamp("2017-12-01");
+		resultList.add(bean2);
+		
+		GameHistoryResultBean bean3 = new GameHistoryResultBean();
+		bean3.setOrderNo("10");
+		bean3.setDaystamp("2017-12-01");
+		resultList.add(bean3);
 		
 		return resultList;
 	}
