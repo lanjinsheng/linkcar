@@ -55,6 +55,7 @@ import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
 
 @Service
@@ -145,7 +146,7 @@ public class ScoreService extends BaseService<ScoreService>
 			if (StringUtils.isBlank(name))
 			{
 				String phone = tempBean.getPhone();
-				String hidePhoneResult = hidePhone(phone);
+				String hidePhoneResult = PhoneUtils.hidePhone(phone);
 				tempResultBean.setName(hidePhoneResult);
 			}
 			
@@ -180,15 +181,6 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		String resultDateStr = DateFormatUtils.format(tempDate, "yyyy.MM.dd");
 		return resultDateStr;
-	}
-	
-	public static String hidePhone(String phone)
-	{
-		String prefixPhone = StringUtils.substring(phone, 0, 3);
-		String suffixPhone = StringUtils.substring(phone, 7);
-		
-		String tempNewPhone = prefixPhone + "****" + suffixPhone;
-		return tempNewPhone;
 	}
 	
 	private static final String DAY_PATTERN = "yyyy-MM-dd";
