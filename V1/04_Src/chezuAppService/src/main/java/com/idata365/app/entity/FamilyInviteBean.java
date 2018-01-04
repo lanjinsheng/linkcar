@@ -10,6 +10,8 @@ public class FamilyInviteBean
 	
 	private String name;
 	
+	private String phone;
+	
 	private String userSource;
 	
 	private String applyDate;
@@ -56,6 +58,16 @@ public class FamilyInviteBean
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	public String getPhone()
+	{
+		return phone;
+	}
+
+	public void setPhone(String phone)
+	{
+		this.phone = phone;
 	}
 
 	public String getUserSource()

@@ -37,6 +37,7 @@ import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
 
 @Service
@@ -134,6 +135,12 @@ public class FamilyService extends BaseService<FamilyService>
 		{
 			FamilyInviteResultBean tempResultBean = new FamilyInviteResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			String name = tempBean.getName();
+			if (StringUtils.isBlank(name))
+			{
+				String tempName = PhoneUtils.hidePhone(tempBean.getPhone());
+				tempResultBean.setName(tempName);
+			}
 			resultList.add(tempResultBean);
 		}
 		return resultList;
@@ -148,7 +155,7 @@ public class FamilyService extends BaseService<FamilyService>
 	public int permitApply(FamilyParamBean bean, UserInfo userInfo)
 	{
 		Long tempFamilyId = this.familyMapper.queryFamilyIdByUserId(bean);
-		if (null != tempFamilyId && tempFamilyId > 0)
+		if (null != tempFamilyId && tempFamilyId > 0 && tempFamilyId != bean.getFamilyId())
 		{
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 1;
