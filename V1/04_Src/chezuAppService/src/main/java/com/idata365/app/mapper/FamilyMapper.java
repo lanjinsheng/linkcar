@@ -49,7 +49,7 @@ public interface FamilyMapper
 	
 	public int countByCode(FamilyParamBean bean);
 	
-	public Long queryFamilyIdByUserId(FamilyParamBean bean);
+	public List<Long> queryFamilyIdByUserId(FamilyParamBean bean);
 	
 	public int countUsersByFamilyId(FamilyParamBean bean);
 	
@@ -59,7 +59,11 @@ public interface FamilyMapper
 	
 	public FamilyInfoScoreBean queryOwnFamily(FamilyParamBean bean);
 	
+	public Integer queryOwnFamilyOrderNo(FamilyParamBean bean);
+	
 	public FamilyInfoScoreBean queryJoinFamily(FamilyParamBean bean);
+	
+	public Integer queryJoinFamilyOrderNo(FamilyParamBean bean);
 	
 	public List<Long> queryUserIdsWithSpeedPenal(FamilyParamBean bean);
 	

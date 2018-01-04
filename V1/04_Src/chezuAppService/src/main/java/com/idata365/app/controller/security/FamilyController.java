@@ -17,6 +17,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
+import com.idata365.app.entity.FamilyInfoScoreResultBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
 import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
@@ -72,6 +73,7 @@ public class FamilyController extends BaseController
 	@RequestMapping("/family/permitApply")
 	public Map<String, Object> permitApply(@RequestBody FamilyParamBean reqBean)
 	{
+		LOG.info("param==permitApply====={}", JSON.toJSONString(reqBean));
 		UserInfo userInfo = super.getUserInfo();
 		int msgType = this.familyService.permitApply(reqBean, userInfo);
 		Map<String, String> resultMap = new HashMap<>();
@@ -267,6 +269,12 @@ public class FamilyController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(reqBean));
 		
 		FamilyInfoScoreAllBean resultBean = this.familyService.queryFamilyRelationInfo(reqBean);
+		String imgBasePath = super.getImgBasePath();
+		FamilyInfoScoreResultBean joinFamily = resultBean.getJoinFamily();
+		FamilyInfoScoreResultBean origFamily = resultBean.getOrigFamily();
+		joinFamily.setImgUrl(imgBasePath + joinFamily.getImgUrl());
+		origFamily.setImgUrl(imgBasePath + origFamily.getImgUrl());
+		
 		List<FamilyInfoScoreAllBean> resultList = new ArrayList<>();
 		resultList.add(resultBean);
 		

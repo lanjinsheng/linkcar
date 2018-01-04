@@ -65,7 +65,7 @@
       -->
  
  	<insert id="saveFamilyInvite" parameterType="com.idata365.app.entity.FamilyInviteParamBean" useGeneratedKeys="true" keyProperty="id" >
- 		insert into familyInvite(familyId, memberUserId, sendInviteMsg, createTime, leaveWord) values(#{familyId}, #{userId}, 1, #{createTime}, #{msgStr})
+ 		insert into familyInvite(familyId, memberUserId, sendInviteMsg, createTime, leaveWord) values(#{familyId}, #{userId}, #{sendInviteMsg}, #{createTime}, #{msgStr})
  	</insert>
  	
     <select id="queryApplyInfo" resultType="com.idata365.app.entity.FamilyInviteBean" parameterType="com.idata365.app.entity.FamilyInviteParamBean">
@@ -102,12 +102,23 @@
  	</delete>
  	
  	<select id="queryOwnFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select id as familyId, familyName as name from familyInfo where createUserId=#{userId}
+ 		select t1.id as familyId, imgUrl, familyName as name, t2.role as role from familyInfo t1 
+			 join userFamilyRelation t2 on(t1.id=t2.familyId)
+			where t1.createUserId=#{userId} and t2.userId=#{userId}
+ 	</select>
+ 	
+ 	<select id="queryOwnFamilyOrderNo" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
  	<select id="queryJoinFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select t1.id as familyId, t1.familyName as name from familyInfo t1 
-join userFamilyRelation t2 on(t1.id=t2.familyId) where t1.createUserId=#{userId} and t2.userId!=#{userId}
+		select t1.id as familyId, imgUrl, familyName as name, t2.role as role from familyInfo t1 
+		 join userFamilyRelation t2 on(t1.id=t2.familyId)
+		where t1.id=#{familyId} and t2.userId=#{userId}
+ 	</select>
+ 	
+ 	<select id="queryJoinFamilyOrderNo" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
  	<select id="queryUserIdsWithSpeedPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">

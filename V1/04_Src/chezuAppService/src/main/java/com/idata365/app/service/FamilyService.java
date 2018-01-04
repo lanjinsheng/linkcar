@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -154,8 +155,10 @@ public class FamilyService extends BaseService<FamilyService>
 	@Transactional
 	public int permitApply(FamilyParamBean bean, UserInfo userInfo)
 	{
-		Long tempFamilyId = this.familyMapper.queryFamilyIdByUserId(bean);
-		if (null != tempFamilyId && tempFamilyId > 0 && tempFamilyId != bean.getFamilyId())
+		List<Long> familyIdList = this.familyMapper.queryFamilyIdByUserId(bean);
+		
+		if (CollectionUtils.isNotEmpty(familyIdList)
+				&& familyIdList.size() > 1)
 		{
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 1;
@@ -441,24 +444,76 @@ public class FamilyService extends BaseService<FamilyService>
 	
 	public FamilyInfoScoreAllBean queryFamilyRelationInfo(FamilyParamBean bean)
 	{
-		FamilyInfoScoreAllBean resultBean = new FamilyInfoScoreAllBean();
 		FamilyInfoScoreBean ownFamilyBean = this.familyMapper.queryOwnFamily(bean);
-		FamilyInfoScoreBean joinFamilyBean = this.familyMapper.queryJoinFamily(bean);
 		
 		FamilyInfoScoreResultBean ownResultBean = new FamilyInfoScoreResultBean();
 		if (null != ownFamilyBean)
 		{
 			AdBeanUtils.copyOtherPropToStr(ownResultBean, ownFamilyBean);
+			
+			FamilyParamBean ownOrderParamBean = new FamilyParamBean();
+			ownOrderParamBean.setFamilyId(ownOrderParamBean.getFamilyId());
+			ownOrderParamBean.setMonth(getCurrentMonthStr());
+			Integer ownOrderNo = this.familyMapper.queryOwnFamilyOrderNo(ownOrderParamBean);
+			if (null != ownOrderNo)
+			{
+				ownResultBean.setOrderNo(String.valueOf(ownOrderNo));
+			}
 		}
+		
+		List<Long> familyIdList = this.familyMapper.queryFamilyIdByUserId(bean);
+		Long joinFamilyId = null;
+		if (familyIdList.size() > 1)
+		{
+			for (Long tempFamilyId : familyIdList)
+			{
+				if (tempFamilyId == ownFamilyBean.getFamilyId())
+				{
+					continue;
+				}
+				else
+				{
+					joinFamilyId = tempFamilyId;
+					break;
+				}
+			}
+		}
+		
+		FamilyInfoScoreBean joinFamilyBean = null;
 		FamilyInfoScoreResultBean joinResultBean = new FamilyInfoScoreResultBean();
+		if (joinFamilyId != null)
+		{
+			FamilyParamBean joinParamBean = new FamilyParamBean();
+			joinParamBean.setFamilyId(joinFamilyId);
+			joinParamBean.setUserId(bean.getUserId());
+			joinFamilyBean = this.familyMapper.queryJoinFamily(joinParamBean);
+			
+		}
 		if (null != joinFamilyBean)
 		{
 			AdBeanUtils.copyOtherPropToStr(joinResultBean, joinFamilyBean);
+			
+			FamilyParamBean joinFamilyParamBean = new FamilyParamBean();
+			joinFamilyParamBean.setFamilyId(joinFamilyBean.getFamilyId());
+			joinFamilyParamBean.setMonth(getCurrentMonthStr());
+			Integer joinOrderNo = this.familyMapper.queryJoinFamilyOrderNo(joinFamilyParamBean);
+			if (null != joinOrderNo)
+			{
+				joinResultBean.setOrderNo(String.valueOf(joinOrderNo));
+			}
 		}
 		
+		FamilyInfoScoreAllBean resultBean = new FamilyInfoScoreAllBean();
 		resultBean.setOrigFamily(ownResultBean);
 		resultBean.setJoinFamily(joinResultBean);
 		return resultBean;
+	}
+	
+	private String getCurrentMonthStr()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.MONTH_PATTERN);
+		return dayStr;
 	}
 	
 	private String getCurrentDayStr()
