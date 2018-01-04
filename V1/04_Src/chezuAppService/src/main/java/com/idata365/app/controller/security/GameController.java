@@ -327,12 +327,12 @@ public class GameController extends BaseController
 		Map<String, Object> resultMap = new HashMap<>();
 		if (role > 0)
 		{
-			resultMap.put("flag", 1);
-			resultMap.put("role", role);
+			resultMap.put("flag", String.valueOf(1));
+			resultMap.put("role", String.valueOf(role));
 		}
 		else
 		{
-			resultMap.put("flag", 0);
+			resultMap.put("flag", "0");
 		}
 		return ResultUtils.rtSuccess(resultMap);
 	}
