@@ -324,7 +324,14 @@ public class FamilyService extends BaseService<FamilyService>
 	@Transactional
 	public long createFamily(FamilyParamBean bean)
 	{
+		int tempCounts = this.familyMapper.countByCreateUser(bean);
+		if (tempCounts > 0)
+		{
+			return -1;
+		}
+		
 		this.familyMapper.save(bean);
+		
 		long familyId = bean.getId();
 		
 		//组长自己绑定新创建的家族

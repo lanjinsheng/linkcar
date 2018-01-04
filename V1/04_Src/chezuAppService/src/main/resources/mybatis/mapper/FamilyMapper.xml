@@ -26,6 +26,10 @@
        delete from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
     </delete>
 
+	<select id="countByCreateUser" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+		select count(*) from familyInfo where createUserId=#{userId}
+	</select>
+
 	<insert id="save" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into familyInfo(createUserId, familyName, provinceId, cityId, memberNum, imgUrl) values(#{userId}, #{familyName}, #{provinceId}, #{cityId}, 1, #{imgUrl})
 	</insert>
