@@ -324,20 +324,20 @@ public class UserInfoController extends BaseController{
 	        			} 
 	                  file.transferTo(dealFile);
 	                  QQSSOTools.saveOSS(dealFile,key);
+	                  ImageUtils.dealImgJSZ(dealFile,rtMap);
 	    	      }else {//走阿里
 		               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
 		    		   key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE1);
+		    		      //处理图片
+		               File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
 		               is.close();
+		               file.transferTo(dealFile);
+		               ImageUtils.dealImgJSZ(dealFile,rtMap);
 	    	      }
 		               rtMap.put("imgUrl", getImgBasePath()+key);
 		               rtMap.put("key", key);
-		              
-		               //处理图片
-		               File   dealFile = new File(systemProperties.getFileTmpDir()+key);
-		               file.transferTo(dealFile);
-		               ImageUtils.dealImgJSZ(dealFile,rtMap);
 		              //插入更新驾驶证
 		               userInfoService.insertImgDriver1(rtMap);
 		               
@@ -458,20 +458,20 @@ public class UserInfoController extends BaseController{
 	        			} 
 	                  file.transferTo(dealFile);
 	                  QQSSOTools.saveOSS(dealFile,key);
+	                  ImageUtils.dealImgXSZ(dealFile,rtMap);
 	    	      }else {//走阿里
 		               //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
 		    		     key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.VEHICLE_LICENSE1);
+		    		    
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
+		               File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+		               file.transferTo(dealFile);
+		               ImageUtils.dealImgXSZ(dealFile,rtMap);
 		               is.close();
 	    	      }
 		               rtMap.put("imgUrl", getImgBasePath()+key);
 		               rtMap.put("key", key);
-
-		               //处理图片
-		               File   dealFile = new File(systemProperties.getFileTmpDir()+key);
-		               file.transferTo(dealFile);
-		               ImageUtils.dealImgXSZ(dealFile,rtMap);
 		              //插入更新驾驶证
 		               userInfoService.insertImgVehicle1(rtMap);
 		               
