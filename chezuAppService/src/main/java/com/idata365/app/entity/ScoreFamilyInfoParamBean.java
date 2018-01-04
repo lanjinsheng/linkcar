@@ -8,6 +8,12 @@ public class ScoreFamilyInfoParamBean
 	
 	private String daystamp;
 	
+	private String day;
+	
+	private long travelId;
+	
+	private String month;
+	
 	public long getUserId()
 	{
 		return userId;
@@ -36,6 +42,36 @@ public class ScoreFamilyInfoParamBean
 	public void setDaystamp(String daystamp)
 	{
 		this.daystamp = daystamp;
+	}
+
+	public String getDay()
+	{
+		return day;
+	}
+
+	public void setDay(String day)
+	{
+		this.day = day;
+	}
+
+	public long getTravelId()
+	{
+		return travelId;
+	}
+
+	public void setTravelId(long travelId)
+	{
+		this.travelId = travelId;
+	}
+
+	public String getMonth()
+	{
+		return month;
+	}
+
+	public void setMonth(String month)
+	{
+		this.month = month;
 	}
 	
 }

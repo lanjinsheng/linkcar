@@ -27,6 +27,22 @@
     	update lottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId}
     </update>
     
+    <update id="increLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount+11 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <delete id="decreLotteryCount" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	delete from readyLottery where id=#{id}
+    </delete>
+    
+    <select id="queryReadyLotteryId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	 select id from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp} order by id desc
+    </select>
+    
+    <select id="queryReadyLotteryAwardId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	 select awardId from readyLottery where userId=#{userId} and daystamp=#{daystamp} order by id desc
+    </select>
+    
     <select id="queryReadyLottery" resultType="com.idata365.app.entity.LotteryBean" parameterType="com.idata365.app.entity.ReadyLotteryBean">
     	select id, userId, awardId, awardCount from readyLottery where userId=#{userId} and daystamp=#{daystamp}
     </select>
@@ -36,14 +52,6 @@
     </update>
     
     <insert id="saveOrUpdateReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
-    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
-    		select count(id) from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
-    	</selectKey>
-    	<if test="count > 0">
-    		update readyLottery set awardCount=awardCount+1 where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
-    	</if>
-    	<if test="count == 0">
-    		insert into readyLottery(userId, awardId, awardCount, daystamp) values(#{userId}, #{awardId}, 1, #{daystamp})
-    	</if>
+    	insert into readyLottery(userId, awardId, awardCount, daystamp) values(#{userId}, #{awardId}, 1, #{daystamp})
     </insert>
 </mapper>

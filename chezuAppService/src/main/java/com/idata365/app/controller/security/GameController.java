@@ -17,6 +17,7 @@ import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.StationResultBean;
+import com.idata365.app.entity.SwitchLotteryParamBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.ViolationStatParamBean;
@@ -362,5 +363,46 @@ public class GameController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		this.gameService.getReadyLottery(bean);
 		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 移除道具
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/dropReadyLottery")
+	public Map<String, Object> dropReadyLottery(@RequestBody ReadyLotteryBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.gameService.dropReadyLottery(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 替换道具
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/switchLottery")
+	public Map<String, Object> switchLottery(@RequestBody SwitchLotteryParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.gameService.switchLottery(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 查询选择角色明日已装备装备
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/findTomorrowReadyLottery")
+	public Map<String, Object> findTomorrowReadyLottery(@RequestBody ReadyLotteryBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		Map<String, List<String>> resultMap = new HashMap<>();
+		List<String> resultList = this.gameService.queryReadyLotteryAwardId(bean);
+		resultMap.put("readyLottery", resultList);
+		return ResultUtils.rtSuccess(resultList);
 	}
 }

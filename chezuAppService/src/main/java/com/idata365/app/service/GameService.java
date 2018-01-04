@@ -29,6 +29,7 @@ import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
+import com.idata365.app.entity.SwitchLotteryParamBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.ViolationStatBean;
@@ -644,6 +645,11 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public void getReadyLottery(ReadyLotteryBean bean)
 	{
+		getReadyLotteryB(bean);
+	}
+
+	private void getReadyLotteryB(ReadyLotteryBean bean)
+	{
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
 		this.lotteryMapper.saveOrUpdateReadyLottery(bean);
 		
@@ -651,6 +657,60 @@ public class GameService extends BaseService<GameService>
 		lotteryParamBean.setUserId(bean.getUserId());
 		lotteryParamBean.setAwardId(bean.getAwardId());
 		this.lotteryMapper.updateLotteryCount(lotteryParamBean);
+	}
+	
+	/**
+	 * 移除道具
+	 * @param bean
+	 */
+	@Transactional
+	public void dropReadyLottery(ReadyLotteryBean bean)
+	{
+		dropReadyLotteryB(bean);
+	}
+
+	private void dropReadyLotteryB(ReadyLotteryBean bean)
+	{
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		Long readyLotteryId = this.lotteryMapper.queryReadyLotteryId(bean);
+		
+		bean.setId(readyLotteryId);
+		this.lotteryMapper.decreLotteryCount(bean);
+		
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(bean.getUserId());
+		lotteryBean.setAwardId(bean.getAwardId());
+		this.lotteryMapper.increLotteryCount(lotteryBean);
+	}
+	
+	public List<String> queryReadyLotteryAwardId(ReadyLotteryBean bean)
+	{
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		List<Long> awarIdList = this.lotteryMapper.queryReadyLotteryAwardId(bean);
+		List<String> resultList = new ArrayList<>();
+		for (Long tempAwardid : awarIdList)
+		{
+			resultList.add(String.valueOf(tempAwardid));
+		}
+		return resultList;
+	}
+	
+	/**
+	 * 替换道具
+	 * @param bean
+	 */
+	@Transactional
+	public void switchLottery(SwitchLotteryParamBean bean)
+	{
+		ReadyLotteryBean onBean = new ReadyLotteryBean();
+		onBean.setUserId(bean.getUserId());
+		onBean.setAwardId(bean.getOnAwardId());
+		getReadyLotteryB(onBean);
+		
+		ReadyLotteryBean offBean = new ReadyLotteryBean();
+		offBean.setUserId(bean.getUserId());
+		offBean.setAwardId(bean.getOffAwardId());
+		dropReadyLotteryB(offBean);
 	}
 	
 	public String getTodayDateUndelimiterStr()
