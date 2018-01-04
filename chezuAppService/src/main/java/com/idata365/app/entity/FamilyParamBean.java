@@ -28,6 +28,8 @@ public class FamilyParamBean
 	
 	private int role;
 	
+	private String month;
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -156,6 +158,16 @@ public class FamilyParamBean
 	public void setRole(int role)
 	{
 		this.role = role;
+	}
+
+	public String getMonth()
+	{
+		return month;
+	}
+
+	public void setMonth(String month)
+	{
+		this.month = month;
 	}
 	
 }

@@ -13,6 +13,8 @@ public class FamilyInviteParamBean
 	private String msgStr;
 	
 	private String createTime;
+	
+	private int sendInviteMsg;	//1：通过邀请码加入；2：通过首页推荐加入
 
 	public long getMsgId()
 	{
@@ -72,6 +74,16 @@ public class FamilyInviteParamBean
 	public void setCreateTime(String createTime)
 	{
 		this.createTime = createTime;
+	}
+
+	public int getSendInviteMsg()
+	{
+		return sendInviteMsg;
+	}
+
+	public void setSendInviteMsg(int sendInviteMsg)
+	{
+		this.sendInviteMsg = sendInviteMsg;
 	}
 	
 }
