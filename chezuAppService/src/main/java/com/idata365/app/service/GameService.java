@@ -683,6 +683,7 @@ public class GameService extends BaseService<GameService>
 		this.lotteryMapper.increLotteryCount(lotteryBean);
 	}
 	
+	//temp settings start
 	public List<String> queryReadyLotteryAwardId(ReadyLotteryBean bean)
 	{
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
@@ -692,8 +693,13 @@ public class GameService extends BaseService<GameService>
 		{
 			resultList.add(String.valueOf(tempAwardid));
 		}
+		
+//		resultList.add("3");
+//		resultList.add("2");
+//		resultList.add("1");
 		return resultList;
 	}
+	//temp settings end
 	
 	/**
 	 * 替换道具

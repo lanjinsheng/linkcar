@@ -168,6 +168,10 @@ public class FamilyController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(reqBean));
 		long familyId = this.familyService.createFamily(reqBean);
+		if (-1 == familyId)
+		{
+			return ResultUtils.rtFailRequest(null);
+		}
 		Map<String, Long> resultMap = new HashMap<>();
 		resultMap.put("familyId", familyId);
 		List<Map<String, Long>> resultList = new ArrayList<>();
