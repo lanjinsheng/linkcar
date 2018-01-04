@@ -34,6 +34,7 @@ import com.idata365.col.mapper.SensorDataLogMapper;
 import com.idata365.col.mapper.UploadDataStatusMapper;
 import com.idata365.col.mapper.UserDeviceMapper;
 import com.idata365.col.util.DateTools;
+import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.ResultUtils;
 
 @Service
@@ -244,7 +245,12 @@ public class DataService extends BaseService<DataService>{
 				Map<String,Object> alarmMap=new HashMap<String,Object>();
 				alarmMap.put("driveDataMainId", data.getId());
 				alarmMap.put("list", eventList);
+				try {
 				driveDataEventMapper.insertDriveEvent(alarmMap);
+				}catch(Exception e) {
+					System.out.println(GsonUtils.toJson(alarmMap,true));
+					e.printStackTrace();
+				}
 			}
 		}
 	}

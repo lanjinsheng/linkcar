@@ -236,7 +236,7 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 				 }
 		    	  List<Map<String,Object>> eventList=new ArrayList<Map<String,Object>>();
 		    	  if(list.size()>0) {
-		    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
+		    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+driveLog.getUserId()+"==habitId="+driveLog.getHabitId());
 		    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 		    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
 		    		 List<Map<String,Object>> alarmListZhuan= (List<Map<String,Object>>)datasMap.get("alarmListZhuan");

@@ -64,7 +64,7 @@ public class MngCoreController extends BaseController<MngCoreController> {
 			         }
 			 }
 	    	  if(list.size()>0) {
-	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list);
+	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
 	    		  List<Map<String,Object>> alarmList=yingyanService.dealListGaode(list);
 	    		  datasMap.put("alarmListChao", alarmList);
 	    		  return ResultUtils.rtSuccess(datasMap);
