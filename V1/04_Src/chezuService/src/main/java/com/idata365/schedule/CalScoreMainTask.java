@@ -61,9 +61,6 @@ public class CalScoreMainTask extends TimerTask {
 						List<DriveScore> scores=calScoreService.calScoreByUHInsertDb(calDriveTask.getUserId(), calDriveTask.getHabitId());
 					if(scores!=null) {
 						calScoreService.updateSuccCalScoreTask(calDriveTask);
-						for( DriveScore score:scores) {
-							calScoreService.insertScore(score);
-						}
 					}else {
 						if(calDriveTask.getCalFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
