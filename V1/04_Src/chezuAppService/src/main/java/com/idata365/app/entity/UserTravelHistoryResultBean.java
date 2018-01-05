@@ -1,6 +1,6 @@
 package com.idata365.app.entity;
 
-public class TravelResultBean
+public class UserTravelHistoryResultBean
 {
 	private String time;
 	
@@ -9,6 +9,8 @@ public class TravelResultBean
 	private String startToEnd;
 	
 	private String travelId;
+	
+	private String habitId;
 
 	public String getTime()
 	{
@@ -48,6 +50,16 @@ public class TravelResultBean
 	public void setTravelId(String travelId)
 	{
 		this.travelId = travelId;
+	}
+
+	public String getHabitId()
+	{
+		return habitId;
+	}
+
+	public void setHabitId(String habitId)
+	{
+		this.habitId = habitId;
 	}
 	
 }

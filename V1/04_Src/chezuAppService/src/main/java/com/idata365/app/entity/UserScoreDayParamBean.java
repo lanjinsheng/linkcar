@@ -9,6 +9,8 @@ public class UserScoreDayParamBean
 	private long userFamilyScoreId;
 	
 	private String daystamp;
+	
+	private String day;
 
 	public long getId()
 	{
@@ -48,5 +50,15 @@ public class UserScoreDayParamBean
 	public void setDaystamp(String daystamp)
 	{
 		this.daystamp = daystamp;
+	}
+
+	public String getDay()
+	{
+		return day;
+	}
+
+	public void setDay(String day)
+	{
+		this.day = day;
 	}
 }
