@@ -233,10 +233,12 @@ public class ScoreController extends BaseController
 	public Map<String, Object> showTravelDetail(@RequestBody ScoreFamilyInfoParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		Map<String, Object> gpsMap = getGps(bean.getUserId(), bean.getTravelId());
+		Map<String, Object> gpsMap = getGps(bean.getUserId(), bean.getHabitId());
 		List<TravelDetailResultBean> resultList = this.scoreService.showTravelDetail(bean);
 		//设置GPS
 		resultList.get(0).setGpsMap(gpsMap);
+		//获取行程道具
+		
 		
 		return ResultUtils.rtSuccess(resultList);
 	}
