@@ -49,4 +49,12 @@
 	<select id="queryRoleByDay" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp} order by id desc
 	</select>
+	
+	<select id="queryUserFamilyRelation" resultType="com.idata365.app.entity.UserFamilyRelationBean">
+		select userId, familyId, role, joinTime from userFamilyRelation where role is not NULL order by id asc
+	</select>
+	
+	<insert id="saveUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into userScoreDayStat(userId, userFamilyScoreId, daystamp) values(#{userId}, #{userFamilyScoreId}, #{daystamp})
+	</insert>
 </mapper>

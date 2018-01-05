@@ -66,7 +66,7 @@
 	<bean id="cronTriggerFactoryBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">  
 	    <property name="jobDetail" ref="SpringQtzJobMethod"></property>  
 	    <!-- 每5s执行一次 -->
-	    <property name="cronExpression" value="0/5 * * * * ?"></property>  
+	    <property name="cronExpression" value="0/20 * * * * ?"></property>  
 	</bean>  
 	
 	<bean id="SpringJobSchedulerFactoryBean"  

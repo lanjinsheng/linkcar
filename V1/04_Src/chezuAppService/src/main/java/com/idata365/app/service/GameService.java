@@ -31,7 +31,9 @@ import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
+import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
+import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
@@ -43,6 +45,8 @@ import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.RandUtils;
+
+import net.minidev.json.writer.BeansMapper.Bean;
 
 @Service
 public class GameService extends BaseService<GameService>
@@ -733,7 +737,7 @@ public class GameService extends BaseService<GameService>
 		Date curDate = Calendar.getInstance().getTime();
 		Date tomorrowDate = DateUtils.addDays(curDate, 1);
 		
-		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
+		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyyMMdd");
 		LOGGER.info(tomorrowDateStr);
 		return tomorrowDateStr;
 	}
@@ -746,5 +750,37 @@ public class GameService extends BaseService<GameService>
 		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
 		LOGGER.info(tomorrowDateStr);
 		return tomorrowDateStr;
+	}
+	
+	@Transactional
+	public void syncTomorrowRole()
+	{
+		List<UserFamilyRelationBean> tempList = this.gameMapper.queryUserFamilyRelation();
+		//格式：yyyyMMdd
+		String tomorrowDayStrUndelimiter = getTomorrowDateUndelimiterStr();
+		String tomorrowDateStr = getTomorrowDateStr();
+		String startTime = tomorrowDateStr + " 00:00:00";
+		String endTime = tomorrowDateStr + " 23:59:59";
+		for (UserFamilyRelationBean tempBean : tempList)
+		{
+			UserFamilyRoleLogParamBean tempParamBean = new UserFamilyRoleLogParamBean();
+			AdBeanUtils.copyNotNullProperties(tempParamBean, tempBean);;
+			tempParamBean.setDaystamp(tomorrowDayStrUndelimiter);
+			tempParamBean.setStartTime(startTime);
+			tempParamBean.setEndTime(endTime);
+			int roleCount = this.gameMapper.countTomorrowRole(tempParamBean);
+			if (0 == roleCount)
+			{
+				this.gameMapper.saveUserFamilyRole(tempParamBean);
+				long userFamilyRoleLogId = tempParamBean.getId();
+				
+				UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
+				tempScoreDayParamBean.setUserId(tempBean.getUserId());
+				tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogId);
+				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
+				
+				this.gameMapper.saveUserScoreDay(tempScoreDayParamBean);
+			}
+		}
 	}
 }

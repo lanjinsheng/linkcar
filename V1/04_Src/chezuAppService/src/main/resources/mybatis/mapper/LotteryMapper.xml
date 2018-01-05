@@ -48,7 +48,7 @@
     </select>
     
     <update id="updateReadyLotteryStatus" parameterType="com.idata365.app.entity.LotteryBean">
-    	update readyLottery set awardCount=awardCount-#{awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    	update readyLottery set awardCount=awardCount-${awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
     </update>
     
     <insert id="saveOrUpdateReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
