@@ -9,11 +9,11 @@
        INSERT ignore INTO 
             driveScore
             (tiredDrivingScore,nightDrivingScore,maxSpeedScore,overSpeedScore,brakeScore,speedUpScore,turnScore,
-            distanceScore,phonePlayScore,userId,habitId,role,familyId,createTime) 
+            distanceScore,phonePlayScore,userId,habitId,role,familyId,createTime,userFamilyRoleLogId) 
         VALUES
             (#{tiredDrivingScore},#{nightDrivingScore}, #{maxSpeedScore}, #{overSpeedScore}, 
             #{brakeScore}, #{speedUpScore},#{turnScore}, #{distanceScore}, #{phonePlayScore}, #{userId}, #{habitId}
-            , #{role}, #{familyId},now())
+            , #{role}, #{familyId},now(),#{userFamilyRoleLogId})
         ON DUPLICATE KEY UPDATE 
         tiredDrivingScore=#{tiredDrivingScore},
         nightDrivingScore=#{nightDrivingScore},

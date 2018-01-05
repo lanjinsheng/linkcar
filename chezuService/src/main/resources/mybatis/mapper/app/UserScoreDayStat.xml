@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.UserScoreDayStatMapper">
+   <resultMap id="BaseUserScoreDayStatMap" type="com.idata365.entity.UserScoreDayStat" >
+   </resultMap>
+	
+	<update id="updateUserScoreDayStat" parameterType="com.idata365.entity.UserScoreDayStat" >
+       update userScoreDayStat
+       set brakeTimes=brakeTimes+${brakeTimes},
+        brakeTimesUpdateTime=#{brakeTimesUpdateTime},
+         turnTimes=turnTimes+${turnTimes},
+         turnTimesUpdateTime=#{turnTimesUpdateTime},
+       speedTimes=speedTimes+${speedTimes},
+          speedTimesUpdateTime=#{speedTimesUpdateTime},
+          overspeedTimes=overspeedTimes+${overspeedTimes}, 
+         overspeedTimesUpdateTime= #{overspeedTimesUpdateTime}, 
+         tiredDrive= tiredDrive+${tiredDrive}, 
+         tiredDriveTimes= tiredDriveTimes+${tiredDriveTimes},
+         tiredDriveTimesUpdateTime= #{tiredDriveTimesUpdateTime},
+            nightDriveTimes=nightDriveTimes+${nightDriveTimes},
+         nightDriveTimesUpdateTime= #{nightDriveTimesUpdateTime},
+         maxspeed=GREATEST(maxspeed,${maxspeed})
+     where userId=#{userId} and  daystamp=#{daystamp} and userFamilyScoreId=#{userFamilyScoreId}
+    </update>
+    
+	<insert id="insertOrUpdateUserDayStat" parameterType="com.idata365.entity.UserScoreDayStat" >
+	       INSERT ignore INTO 
+            userScoreDayStat
+            (userId,daystamp,userFamilyScoreId,brakeTimes,brakeTimesUpdateTime,turnTimes,turnTimesUpdateTime,
+            speedTimes,speedTimesUpdateTime,overspeedTimes,overspeedTimesUpdateTime,
+            tiredDrive,tiredDriveTimes,tiredDriveTimesUpdateTime,nightDriveTimes,nightDriveTimesUpdateTime,
+            maxspeed) 
+        VALUES
+            (#{userId},#{daystamp}, #{userFamilyScoreId}, #{brakeTimes}, #{brakeTimesUpdateTime},#{turnTimes},
+            #{turnTimesUpdateTime},
+            #{speedTimes}, #{speedTimesUpdateTime},#{overspeedTimes}, #{overspeedTimesUpdateTime},
+             #{tiredDrive}, #{tiredDriveTimes}, #{tiredDriveTimesUpdateTime}
+            , #{nightDriveTimes}, #{nightDriveTimesUpdateTime},#{maxspeed})
+        ON DUPLICATE KEY UPDATE 
+        brakeTimes=brakeTimes+${brakeTimes},
+        brakeTimesUpdateTime=#{brakeTimesUpdateTime},
+         turnTimes=turnTimes+${turnTimes},
+         turnTimesUpdateTime=#{turnTimesUpdateTime},
+       speedTimes=speedTimes+${speedTimes},
+          speedTimesUpdateTime=#{speedTimesUpdateTime},
+          overspeedTimes=overspeedTimes+${overspeedTimes}, 
+         overspeedTimesUpdateTime= #{overspeedTimesUpdateTime}, 
+         tiredDrive= tiredDrive+${tiredDrive}, tiredDriveTimes= tiredDriveTimes+${tiredDriveTimes},
+         tiredDriveTimesUpdateTime= #{tiredDriveTimesUpdateTime},
+            nightDriveTimes=nightDriveTimes+${nightDriveTimes},
+         nightDriveTimesUpdateTime= #{nightDriveTimesUpdateTime},
+         maxspeed=GREATEST(maxspeed,${maxspeed})
+    </insert>
+	
+	
+</mapper>
