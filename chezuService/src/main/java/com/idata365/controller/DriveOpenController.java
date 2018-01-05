@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataLog;
-import com.idata365.entity.DriveScore;
 import com.idata365.partnerApi.QQSSOTools;
 import com.idata365.partnerApi.SSOTools;
-import com.idata365.service.CalScoreService;
 import com.idata365.service.DriveOpenService;
 import com.idata365.util.GsonUtils;
 import com.idata365.util.ResultUtils;

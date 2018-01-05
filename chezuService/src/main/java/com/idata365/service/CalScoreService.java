@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import com.idata365.entity.CalDriveTask;
 import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.DriveScore;
-import com.idata365.entity.LotteryBean;
 import com.idata365.entity.ReadyLotteryBean;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserTravelHistory;
@@ -59,13 +57,13 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	 * @param userId
 	 * @return
 	 */
-	public List<LotteryBean> queryReadyLottery(long userId)
+	public List<ReadyLotteryBean> queryReadyLottery(long userId)
 	{
 		ReadyLotteryBean paramBean = new ReadyLotteryBean();
 		paramBean.setUserId(userId);
 		paramBean.setDaystamp(getCurrentDayStr());
 		
-		List<LotteryBean> resultList = this.lotteryMapper.queryReadyLottery(paramBean);
+		List<ReadyLotteryBean> resultList = this.lotteryMapper.queryReadyLottery(paramBean);
 		
 		return resultList;
 	}
@@ -85,11 +83,11 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	 * @param consumeCount
 	 * @return	
 	 */
-	public boolean consumeLottery(List<LotteryBean> paramList,Long userId)
+	public boolean consumeLottery(List<ReadyLotteryBean> paramList,Long userId)
 	{
 		String currentDayStr = getCurrentDayStr();
 		
-		for (LotteryBean tempBean : paramList)
+		for (ReadyLotteryBean tempBean : paramList)
 		{
 			tempBean.setDaystamp(currentDayStr);
 			tempBean.setUserId(userId);
@@ -179,7 +177,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	private int calMaxSpeedScore(UserTravelHistory userTravelHistory,List<LotteryBean> loteryBeans,int fadongji,DriveDataMain dm) {
+	private int calMaxSpeedScore(UserTravelHistory userTravelHistory,List<ReadyLotteryBean> loteryBeans,int fadongji,DriveDataMain dm) {
 		int maxSpeedScore=10;
 		//====最大速度得分计算，3分钟,按180个点来计算====
 		int useFadongji=0;//使用发动机
@@ -197,8 +195,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 				  highSpeedTimesOffset=fadongjiSecond;
 			}
 			if(useFadongji>0){
-				LotteryBean loteryBean=new LotteryBean();
-				loteryBean.setAwardCount(useFadongji);
+				ReadyLotteryBean loteryBean=new ReadyLotteryBean();
+				loteryBean.setUsedCount(useFadongji);
 				loteryBean.setAwardId(FADONGJI);
 				loteryBeans.add(loteryBean);
 			}
@@ -283,7 +281,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	private int calTriedScore(UserTravelHistory userTravelHistory,DriveDataMain dm,List<LotteryBean> loteryBeans,int hongniu,TiredCalBean tiredCalBean) {
+	private int calTriedScore(UserTravelHistory userTravelHistory,DriveDataMain dm,List<ReadyLotteryBean> loteryBeans,int hongniu,TiredCalBean tiredCalBean) {
 		int triedScore=10;
 		int useHongniu=0;//使用红牛
 		int tiredDriveOffset=0;
@@ -307,8 +305,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			 tiredDriveOffset=hongniu*3600;
 		 }
 		 if(useHongniu>0) {
-		 LotteryBean loteryBean=new LotteryBean();
-			loteryBean.setAwardCount(useHongniu);
+			 ReadyLotteryBean loteryBean=new ReadyLotteryBean();
+			loteryBean.setUsedCount(useHongniu);
 			loteryBean.setAwardId(HONGNIU);
 			loteryBeans.add(loteryBean);
 		 }
@@ -339,7 +337,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	private int calNightScore(UserTravelHistory userTravelHistory,DriveDataMain dm,List<LotteryBean> loteryBeans,int yeshijing,TiredCalBean tiredCalBean) {
+	private int calNightScore(UserTravelHistory userTravelHistory,DriveDataMain dm,List<ReadyLotteryBean> loteryBeans,int yeshijing,TiredCalBean tiredCalBean) {
 		int nightScore=10;
 		int useYeshijing=0;
 		int nightDriveOffset=0;
@@ -458,8 +456,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 					  nightDriveOffset=yeshijing*3600;
 				}
 				if(useYeshijing>0) {
-				 LotteryBean loteryBean=new LotteryBean();
-				 loteryBean.setAwardCount(useYeshijing);
+					ReadyLotteryBean loteryBean=new ReadyLotteryBean();
+				 loteryBean.setUsedCount(useYeshijing);
 				 loteryBean.setAwardId(YESHIJING);
 				 loteryBeans.add(loteryBean);
 				}
@@ -485,7 +483,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
     * @author LanYeYe
  */
 	
-	private void calFourAlarm(UserTravelHistory userTravelHistory,DriveDataMain dm,FourAlarmBean fourAlarmBean,List<LotteryBean> loteryBeans,int shachepian,int cheluntai,int zengyaqi ) {
+	private void calFourAlarm(UserTravelHistory userTravelHistory,DriveDataMain dm,FourAlarmBean fourAlarmBean,List<ReadyLotteryBean> loteryBeans,int shachepian,int cheluntai,int zengyaqi ) {
 		int jiaScore=5;int jianScore=5;int zhuanScore=5;int chaoScore=6;
 		int brakeTimesOffset=0;
 		int useShachepian=0;//使用刹车片
@@ -657,20 +655,20 @@ public class CalScoreService extends BaseService<CalScoreService>{
 					}
 				}
 				if(useCheluntai>0) {
-					 LotteryBean loteryBean=new LotteryBean();
-					 loteryBean.setAwardCount(useCheluntai);
+					ReadyLotteryBean loteryBean=new ReadyLotteryBean();
+					 loteryBean.setUsedCount(useCheluntai);
 					 loteryBean.setAwardId(CHELUNTAI);
 					 loteryBeans.add(loteryBean);
 				}
 				if(useShachepian>0) {
-					 LotteryBean loteryBean=new LotteryBean();
-					 loteryBean.setAwardCount(useShachepian);
+					ReadyLotteryBean loteryBean=new ReadyLotteryBean();
+					 loteryBean.setUsedCount(useShachepian);
 					 loteryBean.setAwardId(SHACHEPIAN);
 					 loteryBeans.add(loteryBean);
 				}
 				if(useZengyaqi>0) {
-					 LotteryBean loteryBean=new LotteryBean();
-					 loteryBean.setAwardCount(useZengyaqi);
+					ReadyLotteryBean loteryBean=new ReadyLotteryBean();
+					 loteryBean.setUsedCount(useZengyaqi);
 					 loteryBean.setAwardId(ZENGYAQI);
 					 loteryBeans.add(loteryBean);
 				}
@@ -700,7 +698,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	 */
 	public List<DriveScore> calScoreByUHInsertDb(Long userId,Long habitId){
 		List<DriveScore> driveScoreList=new ArrayList<DriveScore>();
-		List<LotteryBean> loteryBeans=new ArrayList<LotteryBean>();
+		List<ReadyLotteryBean> loteryBeans=new ArrayList<ReadyLotteryBean>();
 		DriveScore ds=new DriveScore();
 		ds.setUserId(userId);
 		ds.setHabitId(habitId);
@@ -718,27 +716,26 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		//通过driveEndTime 获取用户的角色与familyId
 		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
 		//通过userId,获取装配的道具
-		List<LotteryBean> lotterys=queryReadyLottery(userId);
+		List<ReadyLotteryBean> lotterys=queryReadyLottery(userId);
 		int shachepian=0;//急刹
 		int cheluntai=0;//急转
 		int zengyaqi=0;//超速点
 		int fadongji=0;//高速点
 		int hongniu=0;//疲劳
 		int yeshijing=0;//夜间驾驶
-		
-		for(LotteryBean lottery:lotterys) {
-			if(lottery.getAwardId()==1) {
-				shachepian=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==2) {
-				cheluntai=lottery.getAwardCount();
+		for(ReadyLotteryBean lottery:lotterys) {
+			if(lottery.getAwardId()==SHACHEPIAN) {
+				shachepian=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==CHELUNTAI) {
+				cheluntai=lottery.getAwardCount()-lottery.getUsedCount();
 			}else if(lottery.getAwardId()==FADONGJI) {
-				fadongji=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==4) {
-				hongniu=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==5) {
-				yeshijing=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==6) {
-				zengyaqi=lottery.getAwardCount();
+				fadongji=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==HONGNIU) {
+				hongniu=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==YESHIJING) {
+				yeshijing=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==ZENGYAQI) {
+				zengyaqi=lottery.getAwardCount()-lottery.getUsedCount();
 			}
 			
 		}
@@ -835,7 +832,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	public Map<String,Object> calScoreByUH(Long userId,Long habitId){
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		List<DriveScore> driveScoreList=new ArrayList<DriveScore>();
-		List<LotteryBean> loteryBeans=new ArrayList<LotteryBean>();
+		List<ReadyLotteryBean> loteryBeans=new ArrayList<ReadyLotteryBean>();
 		DriveScore ds=new DriveScore();
 		ds.setUserId(userId);
 		ds.setHabitId(habitId);
@@ -853,7 +850,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		//通过driveEndTime 获取用户的角色与familyId
 		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
 		//通过userId,获取装配的道具
-		List<LotteryBean> lotterys=queryReadyLottery(userId);
+		List<ReadyLotteryBean> lotterys=queryReadyLottery(userId);
 		int shachepian=0;//急刹
 		int cheluntai=0;//急转
 		int zengyaqi=0;//超速点
@@ -861,19 +858,19 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		int hongniu=0;//疲劳
 		int yeshijing=0;//夜间驾驶
 		
-		for(LotteryBean lottery:lotterys) {
-			if(lottery.getAwardId()==1) {
-				shachepian=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==2) {
-				cheluntai=lottery.getAwardCount();
+		for(ReadyLotteryBean lottery:lotterys) {
+			if(lottery.getAwardId()==SHACHEPIAN) {
+				shachepian=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==CHELUNTAI) {
+				cheluntai=lottery.getAwardCount()-lottery.getUsedCount();
 			}else if(lottery.getAwardId()==FADONGJI) {
-				fadongji=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==4) {
-				hongniu=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==5) {
-				yeshijing=lottery.getAwardCount();
-			}else if(lottery.getAwardId()==6) {
-				zengyaqi=lottery.getAwardCount();
+				fadongji=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==HONGNIU) {
+				hongniu=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==YESHIJING) {
+				yeshijing=lottery.getAwardCount()-lottery.getUsedCount();
+			}else if(lottery.getAwardId()==ZENGYAQI) {
+				zengyaqi=lottery.getAwardCount()-lottery.getUsedCount();
 			}
 			
 		}

@@ -10,7 +10,6 @@ package com.idata365.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +19,9 @@ import org.springframework.stereotype.Service;
 import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataLog;
 import com.idata365.entity.DriveDataMain;
-import com.idata365.entity.UserTravelHistory;
-import com.idata365.mapper.app.UserTravelHistoryMapper;
-import com.idata365.mapper.col.CalDriveTaskMapper;
 import com.idata365.mapper.col.DriveDataEventMapper;
 import com.idata365.mapper.col.DriveDataLogMapper;
 import com.idata365.mapper.col.DriveDataMainMapper;
-import com.idata365.util.DateTools;
 
 
 @Service

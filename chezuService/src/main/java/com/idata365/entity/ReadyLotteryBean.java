@@ -12,6 +12,15 @@ public class ReadyLotteryBean implements Serializable {
 	private int awardCount;
 	
 	private String daystamp;
+	private int usedCount;
+
+	public int getUsedCount() {
+		return usedCount;
+	}
+
+	public void setUsedCount(int usedCount) {
+		this.usedCount = usedCount;
+	}
 
 	public long getId()
 	{
