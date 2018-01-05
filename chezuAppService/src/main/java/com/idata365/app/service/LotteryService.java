@@ -127,7 +127,7 @@ public class LotteryService extends BaseService<LotteryService>
 //			m.put("habitId", String.valueOf(u.getHabitId()));
 			m.put("awardId", String.valueOf(u.getAwardId()));
 			m.put("awardCount", String.valueOf(u.getAwardCount()));
-			m.put("hadGet", String.valueOf(u.getHadGet()));
+//			m.put("hadGet", String.valueOf(u.getHadGet()));
 			rtList.add(m);
 		}
 		return rtList;
