@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.mapper.app.LotteryMapper">
-    
-    
     <select id="queryReadyLottery" resultType="com.idata365.entity.LotteryBean" parameterType="com.idata365.entity.ReadyLotteryBean">
-    	select id, userId, awardId, awardCount from readyLottery where userId=#{userId} and daystamp=#{daystamp}
+    	select id, userId, awardId, awardCount,usedCount from readyLottery where userId=#{userId} and daystamp=#{daystamp}
     </select>
     
     <update id="updateReadyLotteryStatus" parameterType="com.idata365.entity.LotteryBean">
-    	update readyLottery set awardCount=awardCount-#{awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    	update readyLottery set usedCount=usedCount+${usedCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
     </update>
+    
 </mapper>
