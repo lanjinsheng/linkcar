@@ -67,24 +67,24 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param userId
 	 * @return
 	 */
-	public List<LotteryBean> queryReadyLottery(long userId)
-	{
-		ReadyLotteryBean paramBean = new ReadyLotteryBean();
-		paramBean.setUserId(userId);
-		paramBean.setDaystamp(getCurrentDayStr());
-		
-		List<LotteryBean> resultList = this.lotteryMapper.queryReadyLottery(paramBean);
-		
-		return resultList;
-	}
-	
-	private String getCurrentDayStr()
-	{
-		Calendar cal = Calendar.getInstance();
-		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN);
-		return dayStr;
-	}
-	
+//	public List<LotteryBean> queryReadyLottery(long userId)
+//	{
+//		ReadyLotteryBean paramBean = new ReadyLotteryBean();
+//		paramBean.setUserId(userId);
+//		paramBean.setDaystamp(getCurrentDayStr());
+//		
+//		List<LotteryBean> resultList = this.lotteryMapper.queryReadyLottery(paramBean);
+//		
+//		return resultList;
+//	}
+//	
+//	private String getCurrentDayStr()
+//	{
+//		Calendar cal = Calendar.getInstance();
+//		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN);
+//		return dayStr;
+//	}
+//	
 	
 	/**
 	 * 消耗已装配的道具接口
@@ -93,19 +93,19 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param consumeCount
 	 * @return	
 	 */
-	public boolean consumeLottery(List<LotteryBean> paramList)
-	{
-		String currentDayStr = getCurrentDayStr();
-		
-		for (LotteryBean tempBean : paramList)
-		{
-			tempBean.setDaystamp(currentDayStr);
-			this.lotteryMapper.updateReadyLotteryStatus(tempBean);
-		}
-		
-		return true;
-	}
-	
+//	public boolean consumeLottery(List<LotteryBean> paramList)
+//	{
+//		String currentDayStr = getCurrentDayStr();
+//		
+//		for (LotteryBean tempBean : paramList)
+//		{
+//			tempBean.setDaystamp(currentDayStr);
+//			this.lotteryMapper.updateReadyLotteryStatus(tempBean);
+//		}
+//		
+//		return true;
+//	}
+//	
 	/**
 	 * 抽奖获得道具
 	 * @param bean
