@@ -10,7 +10,7 @@ package com.idata365.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.UserTravelHistory;
+import com.idata365.entity.UserTravelLottery;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
+import com.idata365.mapper.app.UserTravelLotteryMapper;
 import com.idata365.mapper.col.CalDriveTaskMapper;
 import com.idata365.mapper.col.DriveDataEventMapper;
 import com.idata365.mapper.col.DriveDataMainMapper;
@@ -39,6 +41,8 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 	UserTravelHistoryMapper userTravelHistoryMapper;
 	@Autowired
 	CalDriveTaskMapper calDriveTaskMapper;
+	@Autowired
+	UserTravelLotteryMapper userTravelLotteryMapper;
 	
 	/**
 	 * 
@@ -54,12 +58,32 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 		  List<DriveDataMain> list= driveDataMainMapper.getSendDriveTask(drive);
 		  return list;
 	}
-
-
+	/**
+	 * 生成随机数，范围[min, max]
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static int generateRand(int min, int max)
+	{
+		int randNum = ThreadLocalRandom.current().nextInt(max - min + 1) + min;
+		return randNum;
+	}
+	private  UserTravelLottery getTravelLottery(Long userId,Long habitId) {
+		int awardId=generateRand(1,8);
+		UserTravelLottery lottery=new UserTravelLottery();
+		lottery.setAwardCount(1);
+		lottery.setAwardId(awardId);
+		lottery.setHabitId(habitId);
+		lottery.setUserId(userId);
+		lottery.setHadGet(0);
+		return lottery;
+	}
 	public boolean recieveDrive(List<DriveDataMain> driveList){
 		//进行驾驶数据同步到业务层，逻辑待写入
 		List<UserTravelHistory>  list=new ArrayList<UserTravelHistory>();
 		String createTime=DateTools.getCurDateYYYYMMddHHmmss();
+		List<UserTravelLottery> lotterys=new ArrayList<UserTravelLottery>();
 		for( DriveDataMain drive:driveList) {
 			UserTravelHistory uth=new UserTravelHistory();
 			uth.setUserId(drive.getUserId());
@@ -75,9 +99,13 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 			uth.setOverspeedTimes(drive.getOverspeedTimes());
 			uth.setMaxspeed(drive.getMaxSpeed().doubleValue());
 			list.add(uth);
+			lotterys.add(getTravelLottery(uth.getUserId(),uth.getHabitId()));
 		}
 		if(list.size()>0) {
 			userTravelHistoryMapper.batchInsert(list);
+		}
+		if(lotterys.size()>0) {
+			userTravelLotteryMapper.batchInsert(lotterys);
 		}
 		return true;
 	}
