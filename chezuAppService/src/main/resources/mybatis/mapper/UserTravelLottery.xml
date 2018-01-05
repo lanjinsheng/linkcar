@@ -9,4 +9,10 @@
        FROM  userTravelLottery where userId=#{userId} and habitId=#{habitId}
      </select>
 	
+	  <update id="recievedUserTravelLottery"   parameterType="com.idata365.app.entity.UserTravelLottery" >
+       update  
+            userTravelLottery
+             set hadGet=1 
+            where id=#{id}
+    </update>
 </mapper>
