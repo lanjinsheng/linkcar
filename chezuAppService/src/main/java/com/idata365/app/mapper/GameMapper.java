@@ -9,6 +9,8 @@ import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
+import com.idata365.app.entity.UserTravelHistoryBean;
+import com.idata365.app.entity.UserTravelHistoryResultBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 
@@ -41,4 +43,5 @@ public interface GameMapper
 	public List<UserFamilyRelationBean> queryUserFamilyRelation();
 	
 	public void saveUserScoreDay(UserScoreDayParamBean bean);
+	
 }

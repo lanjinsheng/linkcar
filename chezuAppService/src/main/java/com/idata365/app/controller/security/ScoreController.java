@@ -28,7 +28,7 @@ import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
-import com.idata365.app.entity.TravelResultBean;
+import com.idata365.app.entity.UserTravelHistoryResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.remote.ChezuService;
@@ -223,7 +223,7 @@ public class ScoreController extends BaseController
 	public Map<String, Object> showTravels(@RequestBody ScoreFamilyInfoParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<TravelResultBean> resultList = this.scoreService.showTravels(bean);
+		List<UserTravelHistoryResultBean> resultList = this.scoreService.showTravels(bean);
 		
 		return ResultUtils.rtSuccess(resultList);
 	}

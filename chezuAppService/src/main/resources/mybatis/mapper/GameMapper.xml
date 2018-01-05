@@ -57,4 +57,5 @@
 	<insert id="saveUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into userScoreDayStat(userId, userFamilyScoreId, daystamp) values(#{userId}, #{userFamilyScoreId}, #{daystamp})
 	</insert>
+	
 </mapper>

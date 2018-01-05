@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,8 @@ import com.idata365.app.entity.ScoreUserHistoryResultBean;
 import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
-import com.idata365.app.entity.TravelResultBean;
+import com.idata365.app.entity.UserTravelHistoryBean;
+import com.idata365.app.entity.UserTravelHistoryResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
@@ -463,25 +465,51 @@ public class ScoreService extends BaseService<ScoreService>
 	}
 	
 	//temp settings
-	public List<TravelResultBean> showTravels(ScoreFamilyInfoParamBean bean)
+	public List<UserTravelHistoryResultBean> showTravels(ScoreFamilyInfoParamBean bean)
 	{
-		List<TravelResultBean> resultList = new ArrayList<>();
+		List<UserTravelHistoryBean> travelList = this.scoreMapper.queryTravels(bean);
+		List<UserTravelHistoryResultBean> resultList = new ArrayList<>();
 		
-		TravelResultBean bean1 = new TravelResultBean();
-		bean1.setTime("60:12:12");
-		bean1.setMileage("60.87");
-		bean1.setStartToEnd("13:00-14:00");
-		bean1.setTravelId("5521");
-		resultList.add(bean1);
-		
-		TravelResultBean bean2 = new TravelResultBean();
-		bean2.setTime("60:12:12");
-		bean2.setMileage("60.87");
-		bean2.setStartToEnd("13:00-14:00");
-		bean2.setTravelId("5521");
-		resultList.add(bean2);
+		for (UserTravelHistoryBean tempBean : travelList)
+		{
+			UserTravelHistoryResultBean tempResultBean = new UserTravelHistoryResultBean();
+			tempResultBean.setTravelId(String.valueOf(tempBean.getTravelId()));
+			tempResultBean.setHabitId(String.valueOf(tempBean.getHabitId()));
+			
+			int time = tempBean.getTime();
+			double mileage = tempBean.getMileage();
+			String startTime = tempBean.getStartTime();
+			String endTime = tempBean.getEndTime();
+			
+			String timeStr = DurationFormatUtils.formatDuration(time*1000L, "HH:mm:ss");
+			tempResultBean.setTime(timeStr);
+			
+			double mileageD = BigDecimal.valueOf(mileage).divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			tempResultBean.setMileage(String.valueOf(mileageD));
+			
+			String startTimeStr = grabHourStr(startTime);
+			String endTimeStr = grabHourStr(endTime);
+			tempResultBean.setStartToEnd(startTimeStr + "-" + endTimeStr);
+			
+			resultList.add(tempResultBean);
+		}
 		
 		return resultList;
+	}
+	
+	//从yyyy-MM-dd HH:mm:ss中抓取 HH:mm
+	private static String grabHourStr(String ts)
+	{
+		Date date = null;
+		try
+		{
+			date = DateUtils.parseDate(ts, "yyyy-MM-dd HH:mm:ss.SSS");
+		} catch (ParseException e)
+		{
+			throw new RuntimeException(e);
+		}
+		String hourStr = DateFormatUtils.format(date, "HH:mm");
+		return hourStr;
 	}
 	
 	//temp settings
