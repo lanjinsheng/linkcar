@@ -6,7 +6,7 @@
 	 
 	<select id="getUserTravelLotterys" resultType="java.util.HashMap" parameterType="com.idata365.app.entity.UserTravelLottery">
        SELECT *
-       FROM  userTravelLottery where userId=#{userId} and habitId=#{habitId}
+       FROM  userTravelLottery where userId=#{userId} and habitId=#{habitId} and hadGet=0
      </select>
 	
 	  <update id="recievedUserTravelLottery"   parameterType="com.idata365.app.entity.UserTravelLottery" >
