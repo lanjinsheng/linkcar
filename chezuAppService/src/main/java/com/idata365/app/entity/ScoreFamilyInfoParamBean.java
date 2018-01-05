@@ -12,8 +12,20 @@ public class ScoreFamilyInfoParamBean
 	
 	private long travelId;
 	
+	private long habitId;
+	
 	private String month;
 	
+	
+	
+	public long getHabitId() {
+		return habitId;
+	}
+
+	public void setHabitId(long habitId) {
+		this.habitId = habitId;
+	}
+
 	public long getUserId()
 	{
 		return userId;
