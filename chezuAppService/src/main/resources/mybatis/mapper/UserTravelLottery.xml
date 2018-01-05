@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserTravelLotteryMapper">
+   <resultMap id="BaseTravelLotteryMap" type="com.idata365.app.entity.UserTravelLottery" >
+    </resultMap>
+	 
+	<select id="getUserTravelLotterys" resultType="java.util.HashMap" parameterType="com.idata365.app.entity.UserTravelLottery">
+       SELECT *
+       FROM  userTravelLottery where userId=#{userId} and habitId=#{habitId}
+     </select>
+	
+</mapper>
