@@ -586,7 +586,7 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public void switchRole(UserFamilyRoleLogParamBean bean)
 	{
-		bean.setDaystamp(getCurrentDayStrUnDelimiter());
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
 		int roleCount = this.gameMapper.countTomorrowRole(bean);
 		if (roleCount > 0)
 		{
