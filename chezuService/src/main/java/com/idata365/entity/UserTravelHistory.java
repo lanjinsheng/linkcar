@@ -31,9 +31,80 @@ public class UserTravelHistory implements Serializable {
 	int tiredDriveOffset;
 	int highSpeedTimesOffset;
 	
+	private int addDayStatFlag;
+	private String taskFlag;
+	private Date taskDealTime;
+	private int failTimes;
+	
+	public int getUseShachepian() {
+		return useShachepian;
+	}
+	public void setUseShachepian(int useShachepian) {
+		this.useShachepian = useShachepian;
+	}
+	public int getUseHongniu() {
+		return useHongniu;
+	}
+	public void setUseHongniu(int useHongniu) {
+		this.useHongniu = useHongniu;
+	}
+	public int getUseYeshijing() {
+		return useYeshijing;
+	}
+	public void setUseYeshijing(int useYeshijing) {
+		this.useYeshijing = useYeshijing;
+	}
+	public int getUseFadongji() {
+		return useFadongji;
+	}
+	public void setUseFadongji(int useFadongji) {
+		this.useFadongji = useFadongji;
+	}
+	public int getUseCheluntai() {
+		return useCheluntai;
+	}
+	public void setUseCheluntai(int useCheluntai) {
+		this.useCheluntai = useCheluntai;
+	}
+	public int getUseZengyaqi() {
+		return useZengyaqi;
+	}
+	public void setUseZengyaqi(int useZengyaqi) {
+		this.useZengyaqi = useZengyaqi;
+	}
+	private int useShachepian;
+	private int useHongniu;
+	private int useYeshijing;
+	private int useFadongji;
+	private int useCheluntai;
+	private int useZengyaqi;
 	
 	
 	
+	public int getAddDayStatFlag() {
+		return addDayStatFlag;
+	}
+	public void setAddDayStatFlag(int addDayStatFlag) {
+		this.addDayStatFlag = addDayStatFlag;
+	}
+	public String getTaskFlag() {
+		return taskFlag;
+	}
+	public void setTaskFlag(String taskFlag) {
+		this.taskFlag = taskFlag;
+	}
+	public Date getTaskDealTime() {
+		return taskDealTime;
+	}
+	public void setTaskDealTime(Date taskDealTime) {
+		this.taskDealTime = taskDealTime;
+	}
+	public int getFailTimes() {
+		return failTimes;
+	}
+	public void setFailTimes(int failTimes) {
+		this.failTimes = failTimes;
+	}
 	public int getBrakeTimesOffset() {
 		return brakeTimesOffset;
 	}

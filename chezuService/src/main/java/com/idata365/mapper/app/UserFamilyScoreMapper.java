@@ -7,7 +7,7 @@ import com.idata365.entity.UserFamilyRoleLog;
 
 /**
  * 
-    * @ClassName: DriveDataLogMapper
+    * @ClassName: UserFamilyScoreMapper
     * @Description: TODO(这里用一句话描述这个类的作用)
     * @author LanYeYe
     * @date 2017年11月23日

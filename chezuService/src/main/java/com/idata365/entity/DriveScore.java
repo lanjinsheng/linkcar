@@ -25,7 +25,7 @@ public class DriveScore implements Serializable,Cloneable{
 	private Date createTime;
 	private Integer role;
 	private Long familyId;
-	
+	private Long userFamilyRoleLogId;
 	
 	 @Override  
 	public Object clone() {  
@@ -38,6 +38,14 @@ public class DriveScore implements Serializable,Cloneable{
 	        return score;  
    }  
 	
+	public Long getUserFamilyRoleLogId() {
+		return userFamilyRoleLogId;
+	}
+
+	public void setUserFamilyRoleLogId(Long userFamilyRoleLogId) {
+		this.userFamilyRoleLogId = userFamilyRoleLogId;
+	}
+
 	public Long getId() {
 		return id;
 	}

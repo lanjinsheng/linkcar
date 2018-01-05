@@ -108,12 +108,12 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		return dsList;
 	}
 	
-	
-	public void insertScore(DriveScore driveScore) {
-		driveScoreMapper.insertScore(driveScore);
-	}
-	
-	
+//	
+//	public void insertScore(DriveScore driveScore) {
+//		driveScoreMapper.insertScore(driveScore);
+//	}
+//	
+//	
 	
 	public List<UserFamilyRoleLog> getRolesByUserIdTime(Long userId,String driveEndTime){
 		Map<String,Object> m=new HashMap<String,Object>();
@@ -221,6 +221,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 				maxSpeedScore=8;
 			}
 			userTravelHistory.setHighSpeedTimesOffset(highSpeedTimesOffset);
+			userTravelHistory.setUseFadongji(useFadongji);
 			return maxSpeedScore;
 	}
 	/**
@@ -322,6 +323,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		}
 		userTravelHistory.setTiredDrive(allSecond);
 		userTravelHistory.setTiredDriveOffset(tiredDriveOffset);
+		userTravelHistory.setUseHongniu(useHongniu);
 		return triedScore;
 	}
 	/**
@@ -466,6 +468,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 				tiredCalBean.setTiredSecond(tiredSecond);
 				userTravelHistory.setNightDrive(tiredSecond);
 				userTravelHistory.setNightDriveOffset(nightDriveOffset);
+				userTravelHistory.setUseYeshijing(useYeshijing);
 				return nightScore;
 	}
 /**
@@ -674,10 +677,15 @@ public class CalScoreService extends BaseService<CalScoreService>{
 				userTravelHistory.setBrakeTimesOffset(brakeTimesOffset);
 				userTravelHistory.setTurnTimesOffset(turnTimesOffset);
 				userTravelHistory.setOverspeedTimesOffset(overspeedTimesOffset);
+				userTravelHistory.setUseShachepian(useShachepian);
+				userTravelHistory.setUseCheluntai(useCheluntai);
+				userTravelHistory.setUseZengyaqi(useZengyaqi);
 				fourAlarmBean.setChaoScore(chaoScore);
 				fourAlarmBean.setJianScore(jianScore);
 				fourAlarmBean.setJiaScore(jiaScore);
 				fourAlarmBean.setZhuanScore(zhuanScore);
+				
+				
 	}
 	/**
 	 * 
@@ -706,7 +714,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		main.setUserId(userId);
 		main.setHabitId(habitId);
 		DriveDataMain dm=driveDataMainMapper.getDriveDataMainByUH(main);
-		String driveEndTime=dm.getDriveEndTime();
+		String driveEndTime=dm.getDriveEndTime().substring(0, 19);
 		//通过driveEndTime 获取用户的角色与familyId
 		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
 		//通过userId,获取装配的道具
@@ -793,12 +801,14 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			}
 			nDs.setRole(role.getRole());
 			nDs.setFamilyId(role.getFamilyId());
-			 driveScoreMapper.insertScore(nDs);
+			nDs.setUserFamilyRoleLogId(role.getId());
+			driveScoreMapper.insertScore(nDs);
 			driveScoreList.add(nDs);
 		}
 		if(roles==null || roles.size()==0) {
 			ds.setFamilyId(0L);
 			ds.setRole(0);
+			ds.setUserFamilyRoleLogId(0L);
 		    driveScoreMapper.insertScore(ds);
 		}
 		
@@ -839,7 +849,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		main.setUserId(userId);
 		main.setHabitId(habitId);
 		DriveDataMain dm=driveDataMainMapper.getDriveDataMainByUH(main);
-		String driveEndTime=dm.getDriveEndTime();
+		String driveEndTime=dm.getDriveEndTime().substring(0, 19);
 		//通过driveEndTime 获取用户的角色与familyId
 		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
 		//通过userId,获取装配的道具
@@ -988,6 +998,6 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	
 	public static void main(String []args)
 	{
-		System.out.println("2017-11-24 10:47:32.336".substring(0,10));
+		System.out.println("2017-11-24 10:47:32.336".substring(0,19));
 	}
 }

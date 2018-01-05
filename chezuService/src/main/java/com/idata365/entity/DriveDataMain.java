@@ -31,8 +31,14 @@ public class DriveDataMain implements Serializable {
 	private int speed140To149Times=0;
 	private int speed150To159Times=0;
 	private int speed160UpTimes=0;
+	private String  labelFlag;
 	
-	
+	public String getLabelFlag() {
+		return labelFlag;
+	}
+	public void setLabelFlag(String labelFlag) {
+		this.labelFlag = labelFlag;
+	}
 	public int getOverspeedTimes() {
 		return overspeedTimes;
 	}
