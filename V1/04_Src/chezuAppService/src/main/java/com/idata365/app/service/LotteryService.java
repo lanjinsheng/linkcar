@@ -2,7 +2,9 @@ package com.idata365.app.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +24,11 @@ import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.LotteryUser;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.SignatureDayLogBean;
+import com.idata365.app.entity.UserTravelLottery;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.mapper.SignatureDayLogMapper;
+import com.idata365.app.mapper.UserTravelLotteryMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.RandUtils;
 
@@ -40,6 +44,8 @@ public class LotteryService extends BaseService<LotteryService>
 	@Autowired
 	private SignatureDayLogMapper signatureDayLogMapper;
 	
+	@Autowired
+	UserTravelLotteryMapper  userTravelLotteryMapper;
 	/**
 	 * 道具列表
 	 * @param bean
@@ -106,6 +112,26 @@ public class LotteryService extends BaseService<LotteryService>
 //		return true;
 //	}
 //	
+	
+	
+	public List<Map<String,String>> getUserTravelLotterys(Long userId,Long habitId){
+		List<Map<String,String>>  rtList=new ArrayList<Map<String,String>>();
+		UserTravelLottery userTravelLottery=new UserTravelLottery();
+		userTravelLottery.setUserId(userId);
+		userTravelLottery.setHabitId(habitId);
+		List<UserTravelLottery> list=userTravelLotteryMapper.getUserTravelLotterys(userTravelLottery);
+		for(UserTravelLottery u:list) {
+			Map<String,String> m=new HashMap<String,String>();
+			m.put("id", String.valueOf(u.getId()));
+//			m.put("userId", String.valueOf(u.getUserId()));
+//			m.put("habitId", String.valueOf(u.getHabitId()));
+			m.put("awardId", String.valueOf(u.getAwardId()));
+			m.put("awardCount", String.valueOf(u.getAwardCount()));
+			m.put("hadGet", String.valueOf(u.getHadGet()));
+			rtList.add(m);
+		}
+		return rtList;
+	}
 	/**
 	 * 抽奖获得道具
 	 * @param bean

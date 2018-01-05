@@ -1,5 +1,8 @@
 package com.idata365.app.entity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TravelDetailResultBean
@@ -22,7 +25,16 @@ public class TravelDetailResultBean
 	
 	private String overspeedTimes;
 	
-	private Map<String,Object> gpsMap;
+	private Map<String,Object> gpsMap=new HashMap<String,Object>();
+	private List<Map<String,String>> userTravelLotterys=new ArrayList<Map<String,String>>();;
+
+	public List<Map<String, String>> getUserTravelLotterys() {
+		return userTravelLotterys;
+	}
+
+	public void setUserTravelLotterys(List<Map<String, String>> userTravelLotterys) {
+		this.userTravelLotterys = userTravelLotterys;
+	}
 
 	public String getTime()
 	{
