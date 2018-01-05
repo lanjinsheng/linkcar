@@ -32,6 +32,7 @@ import com.idata365.app.entity.TravelResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.remote.ChezuService;
+import com.idata365.app.service.LotteryService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
@@ -46,6 +47,9 @@ public class ScoreController extends BaseController
 	
 	@Autowired
 	private ChezuService chezuService;
+	
+	@Autowired
+	private LotteryService lotteryService;
 	
 	/**
 	 * 发起家族、参与家族查询
@@ -238,8 +242,8 @@ public class ScoreController extends BaseController
 		//设置GPS
 		resultList.get(0).setGpsMap(gpsMap);
 		//获取行程道具
-		
-		
+		List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
+		resultList.get(0).setUserTravelLotterys(userTravelLotterys);
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
