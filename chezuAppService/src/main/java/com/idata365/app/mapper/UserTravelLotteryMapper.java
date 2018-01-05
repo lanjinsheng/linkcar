@@ -14,5 +14,5 @@ import com.idata365.app.entity.UserTravelLottery;
 public interface UserTravelLotteryMapper {
  
 	 List<UserTravelLottery>  getUserTravelLotterys(UserTravelLottery userTravelLottery);
-
+     int recievedUserTravelLottery(UserTravelLottery userTravelLottery);
 }

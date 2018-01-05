@@ -132,6 +132,12 @@ public class LotteryService extends BaseService<LotteryService>
 		}
 		return rtList;
 	}
+	@Transactional
+	public void receiveTravelLottery(UserTravelLottery bean)
+	{
+		userTravelLotteryMapper.recievedUserTravelLottery(bean);
+	}
+		
 	/**
 	 * 抽奖获得道具
 	 * @param bean

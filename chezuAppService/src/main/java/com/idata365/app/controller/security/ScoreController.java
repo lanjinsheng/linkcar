@@ -247,6 +247,9 @@ public class ScoreController extends BaseController
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
+	
+ 
+	
 	public Map<String, Object> getGps(long userId, long habitId)
 	{
 		//temp settsing

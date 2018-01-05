@@ -15,6 +15,7 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
 import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
+import com.idata365.app.entity.UserTravelLottery;
 import com.idata365.app.service.LotteryService;
 import com.idata365.app.util.ResultUtils;
 
@@ -87,4 +88,14 @@ public class LotteryController extends BaseController
 		this.lotteryService.receiveLottery(bean);;
 		return ResultUtils.rtSuccess(null);
 	}
+	
+	@RequestMapping("/om/receiveTravelLottery")
+	public Map<String, Object> receiveTravelLottery(@RequestBody UserTravelLottery bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.lotteryService.receiveTravelLottery(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	
 }
