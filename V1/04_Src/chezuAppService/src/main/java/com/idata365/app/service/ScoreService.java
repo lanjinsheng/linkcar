@@ -50,6 +50,7 @@ import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
 import com.idata365.app.entity.UserTravelHistoryBean;
+import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
@@ -515,19 +516,51 @@ public class ScoreService extends BaseService<ScoreService>
 	//temp settings
 	public List<TravelDetailResultBean> showTravelDetail(ScoreFamilyInfoParamBean bean)
 	{
-		List<TravelDetailResultBean> resultList = new ArrayList<>();
+//		TravelDetailResultBean bean1 = new TravelDetailResultBean();
+//		bean1.setTime("60:12:12");
+//		bean1.setMileage("60.87");
+//		bean1.setNightDrive("3.5");
+//		bean1.setTurnTimes("5");
+//		bean1.setTiredDrive("0.5");
+//		bean1.setSpeedTimes("4");
+//		bean1.setBrakeTimes("3");
+//		bean1.setMaxspeed("102");
+//		bean1.setOverspeedTimes("4");
 		
-		TravelDetailResultBean bean1 = new TravelDetailResultBean();
-		bean1.setTime("60:12:12");
-		bean1.setMileage("60.87");
-		bean1.setNightDrive("3.5");
-		bean1.setTurnTimes("5");
-		bean1.setTiredDrive("0.5");
-		bean1.setSpeedTimes("4");
-		bean1.setBrakeTimes("3");
-		bean1.setMaxspeed("102");
-		bean1.setOverspeedTimes("4");
-		resultList.add(bean1);
+		UserTravelHistoryDetailBean tempBean = this.scoreMapper.queryTravelDetail(bean);
+		
+		TravelDetailResultBean tempResultBean = new TravelDetailResultBean();
+		
+		int time = tempBean.getTime();
+		String timeStr = DurationFormatUtils.formatDuration(time*1000L, "HH:mm:ss");
+		tempResultBean.setTime(timeStr);
+		
+		double mileage = tempBean.getMileage();
+		double mileageD = BigDecimal.valueOf(mileage).divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		tempResultBean.setMileage(String.valueOf(mileageD));
+		
+		long nightDrive = (long)tempBean.getNightDrive();
+		String nightDriveStr = DurationFormatUtils.formatDuration(nightDrive*1000L, "HH:mm:ss");
+		tempResultBean.setNightDrive(nightDriveStr);
+		
+		tempResultBean.setTurnTimes(String.valueOf(tempBean.getTurnTimes()));
+		
+		long tiredDrive = (long)tempBean.getTiredDrive();
+		String tiredDriveStr = DurationFormatUtils.formatDuration(tiredDrive*1000L, "HH:mm:ss");
+		tempResultBean.setTiredDrive(tiredDriveStr);
+		
+		tempResultBean.setSpeedTimes(String.valueOf(tempBean.getSpeedTimes()));
+		
+		tempResultBean.setBrakeTimes(String.valueOf(tempBean.getBrakeTimes()));
+		
+		double maxspeed = tempBean.getMaxspeed();
+		String maxspeedStr = BigDecimal.valueOf(maxspeed).multiply(BigDecimal.valueOf(3600)).divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_UP).toString();
+		tempResultBean.setMaxspeed(maxspeedStr);
+		
+		tempResultBean.setOverspeedTimes(String.valueOf(tempBean.getOverspeedTimes()));
+		
+		List<TravelDetailResultBean> resultList = new ArrayList<>();
+		resultList.add(tempResultBean);
 		
 		return resultList;
 	}

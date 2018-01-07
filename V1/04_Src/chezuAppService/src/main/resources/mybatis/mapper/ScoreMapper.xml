@@ -73,4 +73,8 @@ where t2.familyId = #{familyId}
 	<select id="queryTravels" resultType="com.idata365.app.entity.UserTravelHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select time, mileage, startTime, endTime, id as travelId, habitId, userId, createTime from userTravelHistory where userId=#{userId} and DATE_FORMAT(str_to_date(createTime, '%Y-%m-%d %H:%i:%s'), '%Y-%m-%d')=#{day} order by id asc
 	</select>
+	
+	<select id="queryTravelDetail" resultType="com.idata365.app.entity.UserTravelHistoryDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select time, mileage, nightDrive, turnTimes, tiredDrive, speedTimes, brakeTimes, maxspeed, overspeedTimes from userTravelHistory where id=#{travelId}
+	</select>
 </mapper>

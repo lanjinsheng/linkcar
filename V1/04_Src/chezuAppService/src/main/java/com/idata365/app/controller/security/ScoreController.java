@@ -1,10 +1,12 @@
 package com.idata365.app.controller.security;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,11 +241,16 @@ public class ScoreController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		Map<String, Object> gpsMap = getGps(bean.getUserId(), bean.getHabitId());
 		List<TravelDetailResultBean> resultList = this.scoreService.showTravelDetail(bean);
-		//设置GPS
-		resultList.get(0).setGpsMap(gpsMap);
-		//获取行程道具
-		List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
-		resultList.get(0).setUserTravelLotterys(userTravelLotterys);
+		
+		if (CollectionUtils.isNotEmpty(resultList))
+		{
+			//设置GPS
+			resultList.get(0).setGpsMap(gpsMap);
+			//获取行程道具
+			List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
+			resultList.get(0).setUserTravelLotterys(userTravelLotterys);
+		}
+		
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -252,24 +259,22 @@ public class ScoreController extends BaseController
 	
 	public Map<String, Object> getGps(long userId, long habitId)
 	{
-		//temp settsing
-//		 String args=userId+""+habitId;
-//		 String sign=SignUtils.encryptHMAC(args);
-//		 Map<String,Object> map=new HashMap<String,Object> ();
-//		 map.put("userId", userId);
-//		 map.put("habitId", habitId);
-//		 map.put("sign", sign);
-//		 Map<String,Object> datas=chezuService.getGpsByUH(map);
-		
-		 String args=28+""+1514160360;
+		 String args=userId+""+habitId;
 		 String sign=SignUtils.encryptHMAC(args);
 		 Map<String,Object> map=new HashMap<String,Object> ();
-		 map.put("userId", 28);
-		 map.put("habitId", 1514160360);
+		 map.put("userId", userId);
+		 map.put("habitId", habitId);
 		 map.put("sign", sign);
 		 Map<String,Object> datas=chezuService.getGpsByUH(map);
-
 		
+//		 String args=28+""+1514160360;
+//		 String sign=SignUtils.encryptHMAC(args);
+//		 Map<String,Object> map=new HashMap<String,Object> ();
+//		 map.put("userId", 28);
+//		 map.put("habitId", 1514160360);
+//		 map.put("sign", sign);
+//		 Map<String,Object> datas=chezuService.getGpsByUH(map);
+
 		 return datas;
 
 	}
