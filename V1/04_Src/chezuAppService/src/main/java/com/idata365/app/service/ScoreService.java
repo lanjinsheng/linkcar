@@ -32,7 +32,8 @@ import com.idata365.app.entity.GameHistoryResultBean;
 import com.idata365.app.entity.GameResultWithFamilyResultBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
-import com.idata365.app.entity.ScoreDetailResultBean;
+import com.idata365.app.entity.ScoreDetailBean;
+import com.idata365.app.entity.ScoreDetailUnitBean;
 import com.idata365.app.entity.ScoreFamilyDetailBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
@@ -465,7 +466,6 @@ public class ScoreService extends BaseService<ScoreService>
 		return resultList;
 	}
 	
-	//temp settings
 	public List<UserTravelHistoryResultBean> showTravels(ScoreFamilyInfoParamBean bean)
 	{
 		List<UserTravelHistoryBean> travelList = this.scoreMapper.queryTravels(bean);
@@ -513,7 +513,6 @@ public class ScoreService extends BaseService<ScoreService>
 		return hourStr;
 	}
 	
-	//temp settings
 	public List<TravelDetailResultBean> showTravelDetail(ScoreFamilyInfoParamBean bean)
 	{
 //		TravelDetailResultBean bean1 = new TravelDetailResultBean();
@@ -565,29 +564,91 @@ public class ScoreService extends BaseService<ScoreService>
 		return resultList;
 	}
 	
-	//temp settings
-	public List<ScoreDetailResultBean> scoreDetail(ScoreFamilyInfoParamBean bean)
+	public List<ScoreDetailUnitBean> scoreDetail(ScoreFamilyInfoParamBean bean)
 	{
-		ScoreDetailResultBean resultBean = new ScoreDetailResultBean();
+		List<ScoreDetailBean> detailList = this.scoreMapper.queryScoreDetail(bean);
 		
-		List<String> arr = new ArrayList<>();
-		arr.add("100");
-		arr.add("50");
-		arr.add("80");
-		resultBean.setMileageArr(arr);
-		resultBean.setTimeArr(arr);
-		resultBean.setBrakeTimesArr(arr);
-		resultBean.setTurnTimesArr(arr);
-		resultBean.setSpeedTimesArr(arr);
-		resultBean.setOverspeedArr(arr);
-		resultBean.setMaxspeedArr(arr);
-		resultBean.setTiredDriveArr(arr);
-		resultBean.setPhoneTimesArr(arr);
-		resultBean.setWeatherArr(arr);
-		resultBean.setWalkArr(arr);
+		ScoreDetailBean tempBean = detailList.get(0);
 		
-		List<ScoreDetailResultBean> resultList = new ArrayList<>();
-		resultList.add(resultBean);
+		List<ScoreDetailUnitBean> resultList = new ArrayList<>();
+		
+		ScoreDetailUnitBean mileageBean = new ScoreDetailUnitBean();
+		mileageBean.setFactor("MILEAGE");
+		mileageBean.setValue(String.valueOf(tempBean.getMileage()));
+		mileageBean.setWeight(formattedDecimalToPercentage(tempBean.getMileageProportion()));
+		mileageBean.setScore(String.valueOf(tempBean.getMileageScore()));
+		resultList.add(mileageBean);
+		
+		ScoreDetailUnitBean timeBean = new ScoreDetailUnitBean();
+		timeBean.setFactor("TIME");
+		timeBean.setValue(String.valueOf(tempBean.getTime()));
+		timeBean.setWeight(formattedDecimalToPercentage(tempBean.getTimeProportion()));
+		timeBean.setScore(String.valueOf(tempBean.getTimeScore()));
+		resultList.add(timeBean);
+		
+		ScoreDetailUnitBean brakeTimesBean = new ScoreDetailUnitBean();
+		brakeTimesBean.setFactor("BRAKE_TIMES");
+		brakeTimesBean.setValue(String.valueOf(tempBean.getBrakeTimes()));
+		brakeTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getBrakeTimesProportion()));
+		brakeTimesBean.setScore(String.valueOf(tempBean.getBrakeTimesScore()));
+		resultList.add(brakeTimesBean);
+		
+		ScoreDetailUnitBean turnTimesBean = new ScoreDetailUnitBean();
+		turnTimesBean.setFactor("TURN_TIMES");
+		turnTimesBean.setValue(String.valueOf(tempBean.getTurnTimes()));
+		turnTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getTurnTimesProportion()));
+		turnTimesBean.setScore(String.valueOf(tempBean.getTurnTimesScore()));
+		resultList.add(turnTimesBean);
+		
+		ScoreDetailUnitBean speedTimesBean = new ScoreDetailUnitBean();
+		speedTimesBean.setFactor("SPEED_TIMES");
+		speedTimesBean.setValue(String.valueOf(tempBean.getSpeedTimes()));
+		speedTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getSpeedTimesProportion()));
+		speedTimesBean.setScore(String.valueOf(tempBean.getSpeedTimesScore()));
+		resultList.add(speedTimesBean);
+		
+		ScoreDetailUnitBean overspeedTimesBean = new ScoreDetailUnitBean();
+		overspeedTimesBean.setFactor("OVERSPEED_TIMES");
+		overspeedTimesBean.setValue(String.valueOf(tempBean.getOverspeedTimes()));
+		overspeedTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getOverspeedTimesProportion()));
+		overspeedTimesBean.setScore(String.valueOf(tempBean.getOverspeedTimesScore()));
+		resultList.add(overspeedTimesBean);
+		
+		ScoreDetailUnitBean maxspeedBean = new ScoreDetailUnitBean();
+		maxspeedBean.setFactor("MAX_SPEED");
+		maxspeedBean.setValue(String.valueOf(tempBean.getMaxspeed()));
+		maxspeedBean.setWeight(formattedDecimalToPercentage(tempBean.getMaxspeedProportion()));
+		maxspeedBean.setScore(String.valueOf(tempBean.getMaxspeedScore()));
+		resultList.add(maxspeedBean);
+		
+		ScoreDetailUnitBean tiredDriveBean = new ScoreDetailUnitBean();
+		tiredDriveBean.setFactor("TIRED_DRIVE");
+		tiredDriveBean.setValue(String.valueOf(tempBean.getTiredDrive()));
+		tiredDriveBean.setWeight(formattedDecimalToPercentage(tempBean.getTiredDriveProportion()));
+		tiredDriveBean.setScore(String.valueOf(tempBean.getTiredDriveScore()));
+		resultList.add(tiredDriveBean);
+		
+		ScoreDetailUnitBean phoneTimesBean = new ScoreDetailUnitBean();
+		phoneTimesBean.setFactor("PHONE_TIMES");
+		phoneTimesBean.setValue(String.valueOf(tempBean.getPhoneTimes()));
+		phoneTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getPhoneTimesProportion()));
+		phoneTimesBean.setScore(String.valueOf(tempBean.getPhoneTimesScore()));
+		resultList.add(phoneTimesBean);
+		
+		ScoreDetailUnitBean weatherBean = new ScoreDetailUnitBean();
+		weatherBean.setFactor("WEATHER");
+		weatherBean.setValue(String.valueOf(tempBean.getWeather()));
+		weatherBean.setWeight(formattedDecimalToPercentage(tempBean.getWeatherProportion()));
+		weatherBean.setScore(String.valueOf(tempBean.getWeatherScore()));
+		resultList.add(weatherBean);
+		
+		ScoreDetailUnitBean walkBean = new ScoreDetailUnitBean();
+		walkBean.setFactor("WALK");
+		walkBean.setValue(String.valueOf(tempBean.getWalk()));
+		walkBean.setWeight(formattedDecimalToPercentage(tempBean.getWalkProportion()));
+		walkBean.setScore(String.valueOf(tempBean.getWalkScore()));
+		resultList.add(walkBean);
+		
 		return resultList;
 	}
 	

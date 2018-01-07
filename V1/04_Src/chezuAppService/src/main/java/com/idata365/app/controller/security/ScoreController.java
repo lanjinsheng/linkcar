@@ -1,7 +1,6 @@
 package com.idata365.app.controller.security;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ import com.idata365.app.entity.FamilyMemberAllResultBean;
 import com.idata365.app.entity.GameHistoryResultBean;
 import com.idata365.app.entity.GameResultWithFamilyResultBean;
 import com.idata365.app.entity.ScoreByDayResultBean;
-import com.idata365.app.entity.ScoreDetailResultBean;
+import com.idata365.app.entity.ScoreDetailUnitBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
@@ -293,12 +292,11 @@ public class ScoreController extends BaseController
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
-	//temp settings
 	@RequestMapping("/score/scoreDetail")
 	public Map<String, Object> scoreDetail(@RequestBody ScoreFamilyInfoParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<ScoreDetailResultBean> resultList = this.scoreService.scoreDetail(bean);
+		List<ScoreDetailUnitBean> resultList = this.scoreService.scoreDetail(bean);
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
