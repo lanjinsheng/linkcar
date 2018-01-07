@@ -6,6 +6,8 @@ public class ScoreUserHistoryParamBean
 	
 	private long userId;
 	
+	private long familyId;
+	
 	private int start;
 	
 	private String day;
@@ -28,6 +30,16 @@ public class ScoreUserHistoryParamBean
 	public void setUserId(long userId)
 	{
 		this.userId = userId;
+	}
+
+	public long getFamilyId()
+	{
+		return familyId;
+	}
+
+	public void setFamilyId(long familyId)
+	{
+		this.familyId = familyId;
 	}
 
 	public int getStart()
