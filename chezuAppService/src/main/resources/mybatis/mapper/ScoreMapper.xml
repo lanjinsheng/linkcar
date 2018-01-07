@@ -77,4 +77,9 @@ where t2.familyId = #{familyId}
 	<select id="queryTravelDetail" resultType="com.idata365.app.entity.UserTravelHistoryDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select time, mileage, nightDrive, turnTimes, tiredDrive, speedTimes, brakeTimes, maxspeed, overspeedTimes from userTravelHistory where id=#{travelId}
 	</select>
+	
+	<select id="queryScoreDetail" resultType="com.idata365.app.entity.ScoreDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select t1.* from userScoreDayStat t1
+			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t1.daystamp=#{day} and t2.familyId=#{familyId}
+	</select>
 </mapper>
