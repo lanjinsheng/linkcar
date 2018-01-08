@@ -3,6 +3,8 @@ package com.idata365.mapper.app;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.entity.UserFamilyRoleLog;
 
 /**
@@ -16,5 +18,7 @@ import com.idata365.entity.UserFamilyRoleLog;
 public interface UserFamilyScoreMapper {
  
 	 List<UserFamilyRoleLog>   getUserRoles(Map<String,Object> map);
+	 
+	 UserFamilyRoleLog getUserRoleById(@Param("id") long id);
  
 }

@@ -19,4 +19,7 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getSystemScoreFlagList(TaskSystemScoreFlag systemScoreFlag);
 	 List<TaskSystemScoreFlag> getUnInitSystemScoreFlagList();
 	 int  updateSystemScoreFlag(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 
+	 List<TaskSystemScoreFlag> getUnFinishDayScoreList();
 }
