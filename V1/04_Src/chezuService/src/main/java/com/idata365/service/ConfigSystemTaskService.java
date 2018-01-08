@@ -52,4 +52,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		 
 	}
 	
+	public List<TaskSystemScoreFlag> getUnFinishUserDayScore(){
+		return taskSystemScoreFlagMapper.getUnFinishDayScoreList();
+	}
+	
 }

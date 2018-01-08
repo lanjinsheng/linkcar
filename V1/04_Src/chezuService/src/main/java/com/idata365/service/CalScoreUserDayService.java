@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.entity.DriveScore;
+import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
+import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.mapper.col.DriveScoreMapper;
 
@@ -16,6 +18,8 @@ import com.idata365.mapper.col.DriveScoreMapper;
 public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>{
 	@Autowired
 	UserScoreDayStatMapper userScoreDayStatMapper;
+	@Autowired
+	UserFamilyScoreMapper userFamilyScoreMapper;
 	@Autowired
 	DriveScoreMapper driveScoreMapper;
 	public boolean calScoreUserDay(UserScoreDayStat userScoreDayStat) {
@@ -26,8 +30,10 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		List<DriveScore> driveScores=driveScoreMapper.getDriveScoreByUR(driveScore);
 //		score   mileageScore  timeScore(无) brakeTimesScore   turnTimesScore  speedTimesScore 
 //		 overspeedTimesScore   maxspeedScore   tiredDriveScore  phoneTimesScore  nightDriveScore
-		
+		UserFamilyRoleLog userRoleLog=userFamilyScoreMapper.getUserRoleById(userScoreDayStat.getUserFamilyScoreId());
+		role=userRoleLog.getRole();
 		Double score=0D;
+		Double roleScore=0D;
 		Double mileageScore=0D;
 		Double timeScore=0D;
 		Double brakeTimesScore=0D;
@@ -38,7 +44,13 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		Double tiredDriveScore=0D;
 		Double phoneTimesScore=0D;
 		Double nightDriveScore=0D;
-
+		if(role>=1 && role<=6) {
+			roleScore=10d;
+		}else {
+			roleScore=5d;
+		}
+		
+		
 		for(DriveScore ds:driveScores) {
 			role=ds.getRole();
 			mileageScore+=ds.getDistanceScore().doubleValue();
@@ -74,8 +86,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			phoneTimesScore=BigDecimal.valueOf(phoneTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 		}
 		if(role>=1 && role<=6) {
-			score+=10;//增加角色分
-			userScoreDayStat.setScore(score);
+			userScoreDayStat.setScore(score+roleScore);
 			userScoreDayStat.setMileageScore(mileageScore);
 			userScoreDayStat.setBrakeTimesScore(brakeTimesScore);
 			userScoreDayStat.setTurnTimesScore(turnTimesScore);
@@ -86,12 +97,15 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setNightDriveScore(nightDriveScore);
 			userScoreDayStat.setTimeScore(timeScore);
 		}else {
-			score=5d;//增加角色分
-			userScoreDayStat.setScore(score);
+			userScoreDayStat.setScore(score+roleScore);
 		}
 		//增加其他加分项目:贴条等，待定
 		
 		return true;
+	}
+	
+	public void updateUserDayScore(UserScoreDayStat userScoreDayStat) {
+		userScoreDayStatMapper.updateUserScoreDayById(userScoreDayStat);
 	}
 	
 	public List<UserScoreDayStat> getUserScoreDayTask(UserScoreDayStat userScoreDayStat){
