@@ -36,6 +36,8 @@ public interface ScoreMapper
 	
 	public List<ScoreUserHistoryBean> queryHistoryOrder(ScoreUserHistoryParamBean bean);
 	
+	public int queryCurrentRole(ScoreUserHistoryParamBean bean);
+	
 	public List<ScoreByDayBean> queryScoreByDay(ScoreUserHistoryParamBean bean);
 	
 	public List<ScoreUserBean> queryUserDayScoreByFamily(ScoreFamilyInfoParamBean bean);
