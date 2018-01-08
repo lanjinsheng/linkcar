@@ -8,5 +8,9 @@
         SELECT 
       * from userFamilyRoleLog where userId=#{userId} and startTime<![CDATA[<=]]>#{driveEndTime} and endTime<![CDATA[>=]]>#{driveEndTime}
     </select>
+      <select id="getUserRoleById" parameterType="java.lang.Long" resultMap="BaseUserFamilyRoleLogMap" >
+        SELECT 
+      * from userFamilyRoleLog where id=#{id}
+    </select>
   
 </mapper>
