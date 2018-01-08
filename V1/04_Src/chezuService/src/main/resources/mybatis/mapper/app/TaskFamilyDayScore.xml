@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.TaskFamilyDayScoreMapper">
+   <resultMap id="BaseTaskFamilyDayScoreMap" type="com.idata365.entity.TaskFamilyDayScore" >
+    </resultMap>
+   <insert id="insertTaskFamilyDayScore" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 INSERT IGNORE INTO  taskFamilyDayScore
+		 (daystamp,familyId,taskFlag,taskStatus,failTimes)
+         select #{daystamp},id as familyId,0,0,0 from familyInfo
+	</insert>
+    <insert id="insertTaskFamilyDayScoreByTime" parameterType="java.util.HashMap">
+		 INSERT IGNORE INTO  taskFamilyDayScore
+		 (daystamp,familyId,taskFlag,taskStatus,failTimes)
+         select #{daystamp},id as familyId,0,0,0 from familyInfo where createTimeStr<![CDATA[<=]]>#{endTime}
+	</insert>
+	
+</mapper>

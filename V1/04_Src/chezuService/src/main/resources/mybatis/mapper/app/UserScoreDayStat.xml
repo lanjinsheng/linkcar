@@ -53,4 +53,47 @@
     </insert>
 	
 	
+		<!-- 定时处理行程逻辑 -->
+    <update id="lockUserDayScoreTask" parameterType="com.idata365.entity.UserScoreDayStat" >
+       UPDATE 
+            userScoreDayStat 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
+       WHERE 
+            taskStatus = 0  and taskFlag='0'
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getUserDayScoreTask"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">
+		SELECT *  from userScoreDayStat where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateUserDayScoreSuccTask" parameterType="com.idata365.entity.UserScoreDayStat" >
+        update userScoreDayStat set
+        taskStatus=1,taskDealTime=now()
+        where  id=#{id}
+     </update>
+     <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,addDayStatFlag=2为失败-->
+    <update id="updateUserDayScoreFailTask" parameterType="com.idata365.entity.UserScoreDayStat" >
+       UPDATE 
+           userScoreDayStat 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskDealTime=now(),taskFailTimes=taskFailTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           userScoreDayStat 
+       SET 
+           taskStatus=0,taskFlag='0',taskFailTimes=taskFailTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理行程逻辑 结束-->		
+	
+	
 </mapper>
