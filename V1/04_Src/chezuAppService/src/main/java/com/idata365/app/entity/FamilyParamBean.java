@@ -30,6 +30,8 @@ public class FamilyParamBean
 	
 	private String month;
 	
+	private String createTimeStr;
+	
 	public String getImgUrl()
 	{
 		return imgUrl;
@@ -168,6 +170,16 @@ public class FamilyParamBean
 	public void setMonth(String month)
 	{
 		this.month = month;
+	}
+
+	public String getCreateTimeStr()
+	{
+		return createTimeStr;
+	}
+
+	public void setCreateTimeStr(String createTimeStr)
+	{
+		this.createTimeStr = createTimeStr;
 	}
 	
 }

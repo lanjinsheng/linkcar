@@ -340,6 +340,7 @@ public class FamilyService extends BaseService<FamilyService>
 			return -1;
 		}
 		
+		bean.setCreateTimeStr(generateTimeStampUndelimiter());
 		this.familyMapper.save(bean);
 		
 		long familyId = bean.getId();
@@ -368,6 +369,13 @@ public class FamilyService extends BaseService<FamilyService>
 		this.familyMapper.updateUserStraner(usersAccountParamBean);
 		
 		return familyId;
+	}
+	
+	private String generateTimeStampUndelimiter()
+	{
+		Calendar todayCal = Calendar.getInstance();
+		String timeStamp = DateFormatUtils.format(todayCal, DateConstant.SECOND_PATTERN);
+		return timeStamp;
 	}
 
 	private String generateTimeStamp()
