@@ -206,7 +206,7 @@ public class ScoreService extends BaseService<ScoreService>
 		ScoreUserHistoryResultBean todayResultBean = new ScoreUserHistoryResultBean();
 		int currentRole = this.scoreMapper.queryCurrentRole(bean);
 		todayResultBean.setRole(String.valueOf(currentRole));
-		todayResultBean.setDayStr(todayStr);
+		todayResultBean.setDayStr(todayStr + "(今日)");
 		todayResultBean.setScore("暂无评分");
 		
 		List<ScoreUserHistoryResultBean> resultList = new ArrayList<>();
@@ -221,11 +221,11 @@ public class ScoreService extends BaseService<ScoreService>
 			
 			if (StringUtils.equals(tempDayStr, todayStr))
 			{
-				tempResultBean.setDayStr(tempDayStr + "（今日）");
+				tempResultBean.setDayStr(tempDayStr + "(今日)");
 			}
 			else if (StringUtils.equals(dayStr, yesterdayStr))
 			{
-				tempResultBean.setDayStr(dayStr + "（昨日）");
+				tempResultBean.setDayStr(dayStr + "(昨日)");
 			}
 			else
 			{
