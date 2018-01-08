@@ -203,19 +203,33 @@ public class ScoreService extends BaseService<ScoreService>
 		String todayStr = DateFormatUtils.format(todayDate, DAY_PATTERN);
 		String yesterdayStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
 		
+		ScoreUserHistoryResultBean todayResultBean = new ScoreUserHistoryResultBean();
+		int currentRole = this.scoreMapper.queryCurrentRole(bean);
+		todayResultBean.setRole(String.valueOf(currentRole));
+		todayResultBean.setDayStr(todayStr);
+		todayResultBean.setScore("暂无评分");
+		
 		List<ScoreUserHistoryResultBean> resultList = new ArrayList<>();
+		resultList.add(todayResultBean);
 		for (ScoreUserHistoryBean tempBean : tempList)
 		{
 			ScoreUserHistoryResultBean tempResultBean = new ScoreUserHistoryResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
 			String dayStr = tempBean.getDayStr();
-			if (StringUtils.equals(dayStr, todayStr))
+			
+			String tempDayStr = formatDayStr(dayStr);
+			
+			if (StringUtils.equals(tempDayStr, todayStr))
 			{
-				tempResultBean.setDayStr(dayStr + "（今日）");
+				tempResultBean.setDayStr(tempDayStr + "（今日）");
 			}
 			else if (StringUtils.equals(dayStr, yesterdayStr))
 			{
 				tempResultBean.setDayStr(dayStr + "（昨日）");
+			}
+			else
+			{
+				tempResultBean.setDayStr(tempDayStr);
 			}
 			
 			resultList.add(tempResultBean);
@@ -229,6 +243,21 @@ public class ScoreService extends BaseService<ScoreService>
 		resultBean.setStart(String.valueOf(newStart));
 		
 		return resultBean;
+	}
+
+	private String formatDayStr(String dayStr)
+	{
+		Date tempDate = null;
+		try
+		{
+			tempDate = DateUtils.parseDate(dayStr, "yyyyMMdd");
+		} catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String tempDayStr = DateFormatUtils.format(tempDate, "yyyy-MM-dd");
+		return tempDayStr;
 	}
 	
 	/**

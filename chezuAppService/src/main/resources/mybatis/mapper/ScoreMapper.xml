@@ -42,7 +42,10 @@ where t2.familyId = #{familyId}
 	<select id="queryHistoryOrder" resultType="com.idata365.app.entity.ScoreUserHistoryBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
 		select t1.score as score, t2.role as role, t2.daystamp as dayStr from userScoreDayStat t1
 			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t2.familyId=#{familyId} order by t2.daystamp desc limit #{start}, 10
-		
+	</select>
+
+	<select id="queryCurrentRole" resultType="int" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
+		select role from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
 	</select>
 	
 	<select id="queryScoreByDay" resultType="com.idata365.app.entity.ScoreByDayBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
