@@ -23,6 +23,23 @@
      where userId=#{userId} and  daystamp=#{daystamp} and userFamilyScoreId=#{userFamilyScoreId}
     </update>
     
+    <update id="updateUserScoreDayById" parameterType="com.idata365.entity.UserScoreDayStat" >
+       update userScoreDayStat
+       set score=#{score},
+        mileageScore=#{mileageScore},
+         timeScore=#{timeScore},
+         brakeTimesScore=#{brakeTimesScore},
+       turnTimesScore=#{turnTimesScore},
+          speedTimesScore=#{speedTimesScore},
+          overspeedTimesScore=#{overspeedTimesScore}, 
+         maxspeedScore= #{maxspeedScore}, 
+         tiredDriveScore= #{tiredDriveScore}, 
+         phoneTimesScore= #{phoneTimesScore},
+         nightDriveScore= #{nightDriveScore}
+     where id=#{id}
+    </update>
+    
+    
 	<insert id="insertOrUpdateUserDayStat" parameterType="com.idata365.entity.UserScoreDayStat" >
 	       INSERT ignore INTO 
             userScoreDayStat
@@ -60,7 +77,7 @@
        SET 
         taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
        WHERE 
-            taskStatus = 0  and taskFlag='0'
+            taskStatus = 0  and taskFlag='0' and daystamp=#{daystamp} LIMIT 10  
     </update>	
 	<!-- 获取任务 -->
 	 <select id="getUserDayScoreTask"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">

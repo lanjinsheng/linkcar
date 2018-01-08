@@ -21,6 +21,9 @@
 	   select * from taskSystemScoreFlag where taskFamilyInit=0
 	</select>
 	
+	 <select id="getUnFinishDayScoreList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where userDayScoreFlag=0
+	</select>
 	
     <update id="updateSystemScoreFlag" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
