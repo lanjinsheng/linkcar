@@ -6,10 +6,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.service.AddUserDayStatService;
 import com.idata365.service.CalScoreUserDayService;
+import com.idata365.service.ConfigSystemTaskService;
 
 
 
@@ -30,7 +32,8 @@ public class CalUserDayScoreTask extends TimerTask {
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
     CalScoreUserDayService calScoreUserDayService;
- 
+    @Autowired
+    ConfigSystemTaskService configSystemTaskService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -47,8 +50,15 @@ public class CalUserDayScoreTask extends TimerTask {
 		synchronized (lock){
 		if(pd){
 			pd=false;
+			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishUserDayScore();
+			for(TaskSystemScoreFlag tf:taskList) {
+				String timestamp=tf.getDaystamp();
+				String yyyy=timestamp.substring(0, 4);
+				String mm=timestamp.substring(4, 6);
+				String dd=timestamp.substring(6, 8);
 			long taskFlag=System.currentTimeMillis();
 			UserScoreDayStat task=new UserScoreDayStat();
+			task.setDaystamp(yyyy+"-"+mm+"-"+dd);
 			task.setTaskFlag(String.valueOf(taskFlag));
 			List<UserScoreDayStat> list=calScoreUserDayService.getUserScoreDayTask(task);
 			log.info("CalUserDayScoreTask do--list.size="+list.size());
@@ -56,6 +66,7 @@ public class CalUserDayScoreTask extends TimerTask {
 					try {
 						boolean result=calScoreUserDayService.calScoreUserDay(userScoreDayStat);
 					if(result) {
+						calScoreUserDayService.updateUserDayScore(userScoreDayStat);
 						calScoreUserDayService.updateSuccUserScoreDayTask(userScoreDayStat);
 						 
 					}else {
@@ -75,10 +86,19 @@ public class CalUserDayScoreTask extends TimerTask {
 						calScoreUserDayService.updateFailUserScoreDayTask(userScoreDayStat);
 					}
 				}
+			}
 			pd=true;
 		}
 			
 		}
 		log.info("CalUserDayScoreTask end--");
 	}  
+	
+	public static void main(String []args) {
+		String timestamp="20180125";
+		String yyyy=timestamp.substring(0, 4);
+		String mm=timestamp.substring(4, 6);
+		String dd=timestamp.substring(6, 8);
+		System.out.println(yyyy+"-"+mm+"-"+dd);
+	}
 }
