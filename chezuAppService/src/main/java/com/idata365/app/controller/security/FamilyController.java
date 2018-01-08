@@ -28,6 +28,7 @@ import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
+import com.idata365.app.service.BusinessDatasService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.util.ResultUtils;
 
@@ -36,6 +37,8 @@ public class FamilyController extends BaseController
 {
 	@Autowired
 	private FamilyService familyService;
+	@Autowired
+	BusinessDatasService businessDatasService;
 	@Autowired
 	SystemProperties systemProperties;
 	@RequestMapping("/family/removeMember")
@@ -267,7 +270,8 @@ public class FamilyController extends BaseController
 	public Map<String, Object> queryFamilyRelationInfo(@RequestBody FamilyParamBean reqBean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(reqBean));
-		
+		//插入活跃日志
+		businessDatasService.insertActiveLogs(this.getUserId());
 		FamilyInfoScoreAllBean resultBean = this.familyService.queryFamilyRelationInfo(reqBean);
 		String imgBasePath = super.getImgBasePath();
 		
