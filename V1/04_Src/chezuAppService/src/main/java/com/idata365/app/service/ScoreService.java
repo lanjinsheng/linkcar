@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -386,9 +387,11 @@ public class ScoreService extends BaseService<ScoreService>
 	 */
 	public CompetitorResultBean showGameResult(ScoreFamilyInfoParamBean bean)
 	{
+		CompetitorResultBean resultBean = new CompetitorResultBean();
+		
 		Date todayDate = Calendar.getInstance().getTime();
 		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
-		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyyMMdd");
 		
 		long familyId = bean.getFamilyId();
 		
@@ -406,15 +409,24 @@ public class ScoreService extends BaseService<ScoreService>
 		gameObjParamBean.setFamilyId(familyId);
 		gameObjParamBean.setDaystamp(yesterdayDateStr);
 		FamilyDriveDayStatBean gameObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(gameObjParamBean);
+		if (null == gameObjFamilyStatBean)
+			return resultBean;
 		AdBeanUtils.copyOtherPropToStr(gameObj, gameObjFamilyStatBean);
-		//temp settsing competitingResult orderNo==========start
-		gameObj.setCompetitingResult("FAILURE");
-		gameObj.setOrderNo("10");
+		//temp settsing competitingResult ord erNo==========start
+//		gameObj.setCompetitingResult("FAILURE");
+//		gameObj.setOrderNo("10");
+		
+		resultBean.setGameObj(gameObj);
 		
 		FamilyRelationBean relationParamBean = new FamilyRelationBean();
 		relationParamBean.setFamilyId(familyId);
 		relationParamBean.setDaystamp(getCurrentDayStr());
 		List<FamilyRelationBean> familyRelationList = this.familyMapper.queryFamilyIdByCompetitorId(relationParamBean);
+		if (CollectionUtils.isEmpty(familyRelationList))
+		{
+			return resultBean;
+		}
+		
 		FamilyRelationBean familyRelationBean = familyRelationList.get(0);
 		
 		long competitorFamilyId;
@@ -440,11 +452,27 @@ public class ScoreService extends BaseService<ScoreService>
 		FamilyDriveDayStatBean competitorObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(competitorObjParamBean);
 		AdBeanUtils.copyOtherPropToStr(competitorObj, competitorObjFamilyStatBean);
 		//temp settsing competitingResult orderNo==========start
-		competitorObj.setCompetitingResult("SUCCESS");
-		competitorObj.setOrderNo("15");
+//		competitorObj.setCompetitingResult("SUCCESS");
+//		competitorObj.setOrderNo("15");
 		
-		CompetitorResultBean resultBean = new CompetitorResultBean();
-		resultBean.setGameObj(gameObj);
+		double myFamilyScore = gameObjFamilyStatBean.getScore();
+		double competitorScore = competitorObjFamilyStatBean.getScore();
+		if (myFamilyScore > competitorScore)
+		{
+			gameObj.setCompetitingResult("SUCCESS");
+			competitorObj.setCompetitingResult("FAILURE");
+		}
+		else if (myFamilyScore == competitorScore)
+		{
+			gameObj.setCompetitingResult("SAME_SCORE");
+			competitorObj.setCompetitingResult("SAME_SCORE");
+		}
+		else
+		{
+			gameObj.setCompetitingResult("FAILURE");
+			competitorObj.setCompetitingResult("SUCCESS");
+		}
+		
 		resultBean.setCompetitorObj(competitorObj);
 		
 		return resultBean;
