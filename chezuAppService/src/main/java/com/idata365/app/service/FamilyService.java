@@ -463,11 +463,16 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		List<Long> familyIdList = this.familyMapper.queryFamilyIdByUserId(bean);
 		Long joinFamilyId = null;
-		if (familyIdList.size() > 1)
+		if (CollectionUtils.isNotEmpty(familyIdList))
 		{
 			for (Long tempFamilyId : familyIdList)
 			{
-				if (tempFamilyId == ownFamilyBean.getFamilyId())
+				if (null == ownFamilyBean)
+				{
+					joinFamilyId = tempFamilyId;
+					break;
+				}
+				else if (tempFamilyId == ownFamilyBean.getFamilyId())
 				{
 					continue;
 				}
@@ -504,8 +509,14 @@ public class FamilyService extends BaseService<FamilyService>
 		}
 		
 		FamilyInfoScoreAllBean resultBean = new FamilyInfoScoreAllBean();
-		resultBean.setOrigFamily(ownResultBean);
-		resultBean.setJoinFamily(joinResultBean);
+		if (StringUtils.isNotBlank(ownResultBean.getFamilyId()))
+		{
+			resultBean.setOrigFamily(ownResultBean);
+		}
+		if (StringUtils.isNotBlank(joinResultBean.getFamilyId()))
+		{
+			resultBean.setJoinFamily(joinResultBean);
+		}
 		return resultBean;
 	}
 	

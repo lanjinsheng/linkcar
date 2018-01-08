@@ -270,10 +270,18 @@ public class FamilyController extends BaseController
 		
 		FamilyInfoScoreAllBean resultBean = this.familyService.queryFamilyRelationInfo(reqBean);
 		String imgBasePath = super.getImgBasePath();
+		
 		FamilyInfoScoreResultBean joinFamily = resultBean.getJoinFamily();
+		if (null != joinFamily)
+		{
+			joinFamily.setImgUrl(imgBasePath + joinFamily.getImgUrl());
+		}
+		
 		FamilyInfoScoreResultBean origFamily = resultBean.getOrigFamily();
-		joinFamily.setImgUrl(imgBasePath + joinFamily.getImgUrl());
-		origFamily.setImgUrl(imgBasePath + origFamily.getImgUrl());
+		if (null != origFamily)
+		{
+			origFamily.setImgUrl(imgBasePath + origFamily.getImgUrl());
+		}
 		
 		List<FamilyInfoScoreAllBean> resultList = new ArrayList<>();
 		resultList.add(resultBean);
