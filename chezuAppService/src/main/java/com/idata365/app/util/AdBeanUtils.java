@@ -5,13 +5,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AdBeanUtils extends BeanUtils {
 
-//	private static final Logger LOGGER = LoggerFactory.getLogger(AdBeanUtils.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdBeanUtils.class);
 	
 	public static void copyOtherPropToStr(Object dest, Object orig)
 	{
+		if (null == orig)
+		{
+			LOGGER.error("orig bean is null");
+			return;
+		}
 		AdBeanUtilsBean.getInstance().copyOtherPropToStr(dest, orig);
 	}
 	

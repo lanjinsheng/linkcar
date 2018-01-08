@@ -69,7 +69,7 @@ where t2.familyId = #{familyId}
 	</select>
 	
 	<select id="queryFamilyDriveStat" resultType="com.idata365.app.entity.FamilyDriveDayStatBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select orderNo, mileage, time, speedTimes from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+		select * from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
 	<select id="queryTravels" resultType="com.idata365.app.entity.UserTravelHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">

@@ -11,7 +11,7 @@
 	</select>
 
 	<select id="queryFamilyIdByCompetitorId" resultType="com.idata365.app.entity.FamilyRelationBean" parameterType="com.idata365.app.entity.FamilyRelationBean">
-		 select selfFamilyId as familyId1, competitorFamilyId as familyId2 from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}
+		 select selfFamilyId as familyId1, competitorFamilyId as familyId2 from familyRelation where selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}
 	</select>
 
 	<select id="queryFamilyRelationIds" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyRelationBean">

@@ -33,7 +33,8 @@ public class AdBeanUtilsBean extends BeanUtilsBean {
                     ("No destination bean specified");
         }
         if (orig == null) {
-            throw new IllegalArgumentException("No origin bean specified");
+        	LOGGER.error("No origin bean specified null");
+//            throw new IllegalArgumentException("No origin bean specified");
         }
 
         LOGGER.debug("BeanUtils.copyProperties({}, {})", dest, orig);

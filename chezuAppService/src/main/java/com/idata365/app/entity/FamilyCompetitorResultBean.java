@@ -19,6 +19,28 @@ public class FamilyCompetitorResultBean
 	private String time;
 	
 	private String speedTimes;
+	
+	private String brakeTimes;
+	
+	private String turnTimes;
+	
+	private String overspeedTimes;
+	
+	private String nightDriveTimes;
+	
+	private String illegalStopTimes;
+	
+	private String usePhoneTimes;
+	
+	private String maxspeed;
+	
+	private String familyNumFactor;
+	
+	private String roleFactor;
+	
+	private String memberFactor;
+	
+	private String familyLevelFactor;
 
 	public String getName()
 	{
@@ -108,6 +130,116 @@ public class FamilyCompetitorResultBean
 	public void setSpeedTimes(String speedTimes)
 	{
 		this.speedTimes = speedTimes;
+	}
+
+	public String getBrakeTimes()
+	{
+		return brakeTimes;
+	}
+
+	public void setBrakeTimes(String brakeTimes)
+	{
+		this.brakeTimes = brakeTimes;
+	}
+
+	public String getTurnTimes()
+	{
+		return turnTimes;
+	}
+
+	public void setTurnTimes(String turnTimes)
+	{
+		this.turnTimes = turnTimes;
+	}
+
+	public String getOverspeedTimes()
+	{
+		return overspeedTimes;
+	}
+
+	public void setOverspeedTimes(String overspeedTimes)
+	{
+		this.overspeedTimes = overspeedTimes;
+	}
+
+	public String getNightDriveTimes()
+	{
+		return nightDriveTimes;
+	}
+
+	public void setNightDriveTimes(String nightDriveTimes)
+	{
+		this.nightDriveTimes = nightDriveTimes;
+	}
+
+	public String getIllegalStopTimes()
+	{
+		return illegalStopTimes;
+	}
+
+	public void setIllegalStopTimes(String illegalStopTimes)
+	{
+		this.illegalStopTimes = illegalStopTimes;
+	}
+
+	public String getUsePhoneTimes()
+	{
+		return usePhoneTimes;
+	}
+
+	public void setUsePhoneTimes(String usePhoneTimes)
+	{
+		this.usePhoneTimes = usePhoneTimes;
+	}
+
+	public String getMaxspeed()
+	{
+		return maxspeed;
+	}
+
+	public void setMaxspeed(String maxspeed)
+	{
+		this.maxspeed = maxspeed;
+	}
+
+	public String getFamilyNumFactor()
+	{
+		return familyNumFactor;
+	}
+
+	public void setFamilyNumFactor(String familyNumFactor)
+	{
+		this.familyNumFactor = familyNumFactor;
+	}
+
+	public String getRoleFactor()
+	{
+		return roleFactor;
+	}
+
+	public void setRoleFactor(String roleFactor)
+	{
+		this.roleFactor = roleFactor;
+	}
+
+	public String getMemberFactor()
+	{
+		return memberFactor;
+	}
+
+	public void setMemberFactor(String memberFactor)
+	{
+		this.memberFactor = memberFactor;
+	}
+
+	public String getFamilyLevelFactor()
+	{
+		return familyLevelFactor;
+	}
+
+	public void setFamilyLevelFactor(String familyLevelFactor)
+	{
+		this.familyLevelFactor = familyLevelFactor;
 	}
 	
 }

@@ -46,8 +46,6 @@ import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.RandUtils;
 
-import net.minidev.json.writer.BeansMapper.Bean;
-
 @Service
 public class GameService extends BaseService<GameService>
 {
@@ -129,12 +127,6 @@ public class GameService extends BaseService<GameService>
 		bean1.setCompetitorFamilyId(selFamilyId);
 		bean1.setDaystamp(todayStr);
 		this.gameMapper.saveFamilyRelation(bean1);
-		
-/*		FamilyRelationParamBean bean2 = new FamilyRelationParamBean();
-		bean2.setSelfFamilyId(selFamilyId);
-		bean2.setCompetitorFamilyId(familyId);
-		bean2.setDaystamp(todayStr);
-		this.gameMapper.saveFamilyRelation(bean2);*/
 	}
 	
 	public String judgeChallengeFlag(GameFamilyParamBean bean)
@@ -687,7 +679,6 @@ public class GameService extends BaseService<GameService>
 		this.lotteryMapper.increLotteryCount(lotteryBean);
 	}
 	
-	//temp settings start
 	public List<String> queryReadyLotteryAwardId(ReadyLotteryBean bean)
 	{
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
@@ -697,13 +688,8 @@ public class GameService extends BaseService<GameService>
 		{
 			resultList.add(String.valueOf(tempAwardid));
 		}
-		
-//		resultList.add("3");
-//		resultList.add("2");
-//		resultList.add("1");
 		return resultList;
 	}
-	//temp settings end
 	
 	/**
 	 * 替换道具
