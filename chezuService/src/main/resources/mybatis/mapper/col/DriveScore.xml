@@ -33,6 +33,10 @@
 	</select>
 
 
+    <select id="getDriveScoreByUR"  resultMap="driveScoreMap" parameterType="com.idata365.entity.DriveScore">
+		SELECT *  from driveScore where userId=#{userId} and userFamilyRoleLogId=#{userFamilyRoleLogId};
+	</select>
+
 
 	
 </mapper>

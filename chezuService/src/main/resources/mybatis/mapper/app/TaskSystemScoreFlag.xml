@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.TaskSystemScoreFlagMapper">
+   <resultMap id="BaseTaskSystemScoreMap" type="com.idata365.entity.TaskSystemScoreFlag" >
+    </resultMap>
+   <insert id="insertSystemScoreFlag" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 INSERT IGNORE INTO  taskSystemScoreFlag
+		 (daystamp)
+		  VALUES
+    	(#{daystamp})
+	</insert>
+	<select id="getSystemScoreFlag" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where daystamp=#{daystamp}
+	</select>
+	
+	<select id="getSystemScoreFlagList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag
+	</select>
+	
+	 <select id="getUnInitSystemScoreFlagList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyInit=0
+	</select>
+	
+	
+    <update id="updateSystemScoreFlag" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyInit=${taskFamilyInit} where  daystamp=#{daystamp}
+	</update>
+	
+	
+</mapper>
