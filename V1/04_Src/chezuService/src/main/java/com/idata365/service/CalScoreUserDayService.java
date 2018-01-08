@@ -110,17 +110,17 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 	
 	public List<UserScoreDayStat> getUserScoreDayTask(UserScoreDayStat userScoreDayStat){
 		//先锁定任务
-		userScoreDayStatMapper.lockUserScoreDayTask(userScoreDayStat);
+		userScoreDayStatMapper.lockUserDayScoreTask(userScoreDayStat);
 		//返回任务列表
-		return userScoreDayStatMapper.getUserScoreDayTask(userScoreDayStat);
+		return userScoreDayStatMapper.getUserDayScoreTask(userScoreDayStat);
 	}
 	
 	public	void updateSuccUserScoreDayTask(UserScoreDayStat userScoreDayStat) {
-		userScoreDayStatMapper.updateUserScoreDaySuccTask(userScoreDayStat);
+		userScoreDayStatMapper.updateUserDayScoreSuccTask(userScoreDayStat);
 	}
 //	
 	public void updateFailUserScoreDayTask(UserScoreDayStat userScoreDayStat) {
-		userScoreDayStatMapper.updateUserScoreDayFailTask(userScoreDayStat);
+		userScoreDayStatMapper.updateUserDayScoreFailTask(userScoreDayStat);
 	}
 //	
 	public	void clearLockTask() {

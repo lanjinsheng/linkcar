@@ -13,13 +13,13 @@ public interface  UserScoreDayStatMapper {
 	int insertOrUpdateUserDayStat(UserScoreDayStat userScoreDayStat);
 	
 	
-	void lockUserScoreDayTask(UserScoreDayStat userScoreDayStat);
+	void lockUserDayScoreTask(UserScoreDayStat userScoreDayStat);
 	
-	List<UserScoreDayStat> getUserScoreDayTask(UserScoreDayStat userScoreDayStat);
+	List<UserScoreDayStat> getUserDayScoreTask(UserScoreDayStat userScoreDayStat);
 	
-	void updateUserScoreDaySuccTask(UserScoreDayStat userScoreDayStat);
+	void updateUserDayScoreSuccTask(UserScoreDayStat userScoreDayStat);
 	
-	void updateUserScoreDayFailTask(UserScoreDayStat userScoreDayStat);
+	void updateUserDayScoreFailTask(UserScoreDayStat userScoreDayStat);
 	
 	void clearLockTask(@Param("compareTimes") Long compareTimes);
 	
