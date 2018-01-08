@@ -31,7 +31,7 @@
 	</select>
 
 	<insert id="save" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
-		insert into familyInfo(createUserId, familyName, provinceId, cityId, memberNum, imgUrl) values(#{userId}, #{familyName}, #{provinceId}, #{cityId}, 1, #{imgUrl})
+		insert into familyInfo(createUserId, familyName, provinceId, cityId, memberNum, imgUrl, createTimeStr) values(#{userId}, #{familyName}, #{provinceId}, #{cityId}, 1, #{imgUrl}, #{createTimeStr})
 	</insert>
 	 	
  	<update id="updateUserStraner" parameterType="com.idata365.app.entity.UsersAccountParamBean">
