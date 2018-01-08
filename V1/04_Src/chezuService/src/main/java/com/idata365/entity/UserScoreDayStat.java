@@ -1,6 +1,7 @@
 package com.idata365.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserScoreDayStat implements Serializable {
 
@@ -59,6 +60,7 @@ public class UserScoreDayStat implements Serializable {
 	private Double phoneTimesScore;
 	private Integer nightDriveTimes;
 	private Integer nightDrivePenalTimes;
+	private Double nightDriveScore;
 	private String nightDriveTimesUpdateTime;
 	private Integer illegalStopTimes;
 	private Integer illegalStopPenalTimes;
@@ -69,6 +71,43 @@ public class UserScoreDayStat implements Serializable {
 	private Integer walk;
 	private Double walkProportion;
 	private Double walkScore;
+	
+	private String taskFlag;
+	private Integer taskStatus;
+	private Integer taskFailTimes;
+	private Date taskDealTime;
+	
+	
+	public String getTaskFlag() {
+		return taskFlag;
+	}
+	public void setTaskFlag(String taskFlag) {
+		this.taskFlag = taskFlag;
+	}
+	public Integer getTaskStatus() {
+		return taskStatus;
+	}
+	public void setTaskStatus(Integer taskStatus) {
+		this.taskStatus = taskStatus;
+	}
+	public Integer getTaskFailTimes() {
+		return taskFailTimes;
+	}
+	public void setTaskFailTimes(Integer taskFailTimes) {
+		this.taskFailTimes = taskFailTimes;
+	}
+	public Date getTaskDealTime() {
+		return taskDealTime;
+	}
+	public void setTaskDealTime(Date taskDealTime) {
+		this.taskDealTime = taskDealTime;
+	}
+	public Double getNightDriveScore() {
+		return nightDriveScore;
+	}
+	public void setNightDriveScore(Double nightDriveScore) {
+		this.nightDriveScore = nightDriveScore;
+	}
 	public Long getUserId() {
 		return userId;
 	}
