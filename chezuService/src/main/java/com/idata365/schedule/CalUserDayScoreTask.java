@@ -50,6 +50,7 @@ public class CalUserDayScoreTask extends TimerTask {
 		synchronized (lock){
 		if(pd){
 			pd=false;
+			try {
 			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishUserDayScore();
 			for(TaskSystemScoreFlag tf:taskList) {
 				String timestamp=tf.getDaystamp();
@@ -86,6 +87,10 @@ public class CalUserDayScoreTask extends TimerTask {
 						calScoreUserDayService.updateFailUserScoreDayTask(userScoreDayStat);
 					}
 				}
+			}
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.info("CalUserDayScoreTask 异常--");
 			}
 			pd=true;
 		}
