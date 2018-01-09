@@ -16,6 +16,8 @@
             (#{daystamp}, #{userId},now())  
             ON DUPLICATE KEY UPDATE updateTime=now() 
     </insert>
-
+<update id="updateUserFamilyActiveLogs"  parameterType="com.idata365.app.entity.UserActiveLogs">
+	update userFamilyRoleLog set activeFlag=1 where userId=#{userId} and daystamp=#{daystamp}
+</update>
 </mapper>
 
