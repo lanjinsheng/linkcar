@@ -30,5 +30,59 @@
 		  set taskFamilyInit=${taskFamilyInit} where  daystamp=#{daystamp}
 	</update>
 	
+		
+    <update id="finishUserDayScoreTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set userDayScoreFlag=${userDayScoreFlag} where  id=#{id}
+	</update>
 	
+	<select id="getUnFinishFamilyScoreList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where familyDayScoreFlag=0
+	</select>
+	
+	<update id="finishFamilyDayScoreTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set familyDayScoreFlag=${familyDayScoreFlag} where  id=#{id}
+	</update>
+	
+	
+	<!--begin 初始化Pk任务关系 -->
+	 <select id="getUnInitPkFlagList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyPkInit=0
+	</select>
+	<update id="updatePkInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyPkInit=${taskFamilyPkInit} where  daystamp=#{daystamp}
+	</update>
+	
+	<select id="getUnFinishFamilyPkList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyPkInit=1 and familyDayScoreFlag=1 and taskFamilyPk=0
+	</select>
+	<update id="finishFamilyPkTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyPk=${taskFamilyPk} where  daystamp=#{daystamp}
+	</update>
+	
+   <!--end 初始化Pk任务关系 -->
+   
+   	
+	<!--begin 初始化Order任务关系 -->
+	 <select id="getUnInitOrderFlagList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=0
+	</select>
+	<update id="updateOrderInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyOrderInit=${taskFamilyOrderInit} where  daystamp=#{daystamp}
+	</update>
+	
+	<select id="getUnFinishFamilyOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyOrder=0
+	</select>
+	<update id="finishFamilyOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyOrder=${taskFamilyOrder} where  daystamp=#{daystamp}
+	</update>
+	
+   <!--end 初始化Order任务关系 -->
+   
 </mapper>

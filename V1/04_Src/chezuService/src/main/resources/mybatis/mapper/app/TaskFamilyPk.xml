@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.TaskFamilyPkMapper">
+   <resultMap id="BaseTaskFamilyPkMap" type="com.idata365.entity.TaskFamilyPk" >
+    </resultMap>
+   <insert id="initTaskFamilyPk" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+      		 INSERT IGNORE INTO  taskFamilyPk
+		 (selfFamilyLevel,competitorFamilyLevel,selfFamilyId,competitorFamilyId,daystamp)
+        select b.familyType as selfFamilyLevel,c.familyType competitorFamilyLevel,a.* from 
+         (select selfFamilyId,competitorFamilyId,#{daystamp} as daystamp from familyRelation where daystamp=#{daystamp})
+           a left join familyInfo b 
+              on a.selfFamilyId=b.id left join familyInfo c on a.competitorFamilyId=c.id
+	</insert>
+ 
+	
+ <!-- 定时处理 -->
+    <update id="lockFamilyPkTask" parameterType="com.idata365.entity.TaskFamilyPk" >
+       UPDATE 
+            taskFamilyPk 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
+       WHERE 
+            taskStatus = 0  and taskFlag='0' and daystamp=#{daystamp} LIMIT 500  
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getFamilyPkTask"  resultMap="BaseTaskFamilyPkMap" parameterType="com.idata365.entity.TaskFamilyPk">
+		SELECT *  from taskFamilyPk where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateFamilyPkSuccTask" parameterType="com.idata365.entity.TaskFamilyPk" >
+        update taskFamilyPk set
+        taskStatus=1,taskDealTime=now()
+        where  id=#{id}
+     </update>
+     <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,addDayStatFlag=2为失败-->
+    <update id="updateFamilyPkFailTask" parameterType="com.idata365.entity.TaskFamilyPk" >
+       UPDATE 
+           taskFamilyPk 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskDealTime=now(),failTimes=failTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           taskFamilyPk 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理结束-->		
+	
+	
+</mapper>

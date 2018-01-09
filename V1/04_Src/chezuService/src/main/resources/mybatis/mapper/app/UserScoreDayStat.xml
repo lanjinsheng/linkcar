@@ -68,6 +68,11 @@
          nightDriveTimesUpdateTime= #{nightDriveTimesUpdateTime},
          maxspeed=GREATEST(maxspeed,${maxspeed})
     </insert>
+    
+    <select id="getUserDayScoreByUserFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserFamilyRoleLog">
+		SELECT *  from userScoreDayStat where userFamilyScoreId=#{id} and userId=#{userId}
+	 </select>
+    
 	
 	
 		<!-- 定时处理行程逻辑 -->
@@ -77,7 +82,7 @@
        SET 
         taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
        WHERE 
-            taskStatus = 0  and taskFlag='0' and daystamp=#{daystamp} LIMIT 10  
+            taskStatus = 0  and taskFlag='0' and daystamp=#{daystamp} LIMIT 500  
     </update>	
 	<!-- 获取任务 -->
 	 <select id="getUserDayScoreTask"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">
