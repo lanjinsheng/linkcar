@@ -28,8 +28,7 @@ public class BusinessDatasService extends BaseService<BusinessDatasService>
 		userActiveLogsMapper.insertUserActiveLogs(log);
 		
 	}
-	
-	
+
 	
 	private String getCurrentDayStr()
 	{
