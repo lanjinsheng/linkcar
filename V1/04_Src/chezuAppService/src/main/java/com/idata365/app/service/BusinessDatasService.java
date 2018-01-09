@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.UserActiveLogs;
+import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.mapper.UserActiveLogsMapper;
 
 @Service
@@ -19,6 +20,7 @@ public class BusinessDatasService extends BaseService<BusinessDatasService>
 	
 	 @Autowired
 	UserActiveLogsMapper userActiveLogsMapper;
+	
 	public void insertActiveLogs(long userId)
 	{
 		UserActiveLogs log=new UserActiveLogs();
@@ -26,6 +28,7 @@ public class BusinessDatasService extends BaseService<BusinessDatasService>
 		String dayStr=getCurrentDayStr();
 		log.setDaystamp(dayStr);
 		userActiveLogsMapper.insertUserActiveLogs(log);
+		userActiveLogsMapper.updateUserFamilyActiveLogs(log);
 		
 	}
 
