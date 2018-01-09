@@ -12,9 +12,40 @@ public class TaskSystemScoreFlag implements Serializable {
 	
 	private Long id;
 	private Integer taskFamilyInit;
+	private Integer taskFamilyPkInit;
+	private Integer taskFamilyOrderInit;
+	private Integer taskFamilyPk;
+	private Integer taskFamilyOrder;
 	private Integer userDayScoreFlag;
 	private Integer familyDayScoreFlag;
 	private String daystamp;
+	
+	
+	
+	public Integer getTaskFamilyPkInit() {
+		return taskFamilyPkInit;
+	}
+	public void setTaskFamilyPkInit(Integer taskFamilyPkInit) {
+		this.taskFamilyPkInit = taskFamilyPkInit;
+	}
+	public Integer getTaskFamilyOrderInit() {
+		return taskFamilyOrderInit;
+	}
+	public void setTaskFamilyOrderInit(Integer taskFamilyOrderInit) {
+		this.taskFamilyOrderInit = taskFamilyOrderInit;
+	}
+	public Integer getTaskFamilyPk() {
+		return taskFamilyPk;
+	}
+	public void setTaskFamilyPk(Integer taskFamilyPk) {
+		this.taskFamilyPk = taskFamilyPk;
+	}
+	public Integer getTaskFamilyOrder() {
+		return taskFamilyOrder;
+	}
+	public void setTaskFamilyOrder(Integer taskFamilyOrder) {
+		this.taskFamilyOrder = taskFamilyOrder;
+	}
 	public Long getId() {
 		return id;
 	}

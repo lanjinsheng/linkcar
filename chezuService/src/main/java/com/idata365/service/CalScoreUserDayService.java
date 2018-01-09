@@ -98,6 +98,15 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setTimeScore(timeScore);
 		}else {
 			userScoreDayStat.setScore(score+roleScore);
+			userScoreDayStat.setMileageScore(0d);
+			userScoreDayStat.setBrakeTimesScore(0d);
+			userScoreDayStat.setTurnTimesScore(0d);
+			userScoreDayStat.setSpeedTimesScore(0d);
+			userScoreDayStat.setOverspeedTimesScore(0d);
+			userScoreDayStat.setMaxspeedScore(0d);
+			userScoreDayStat.setTiredDriveScore(0d);
+			userScoreDayStat.setNightDriveScore(0d);
+			userScoreDayStat.setTimeScore(0d);
 		}
 		//增加其他加分项目:贴条等，待定
 		

@@ -19,6 +19,10 @@ public interface UserFamilyScoreMapper {
  
 	 List<UserFamilyRoleLog>   getUserRoles(Map<String,Object> map);
 	 
+	 List<UserFamilyRoleLog>   getUserRolesByFamilyId(@Param("familyId") long familyId);
+	 
 	 UserFamilyRoleLog getUserRoleById(@Param("id") long id);
+	 
+	
  
 }

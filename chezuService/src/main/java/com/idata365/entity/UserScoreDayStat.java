@@ -71,13 +71,19 @@ public class UserScoreDayStat implements Serializable {
 	private Integer walk;
 	private Double walkProportion;
 	private Double walkScore;
-	
+	private Integer useHoldNum;
 	private String taskFlag;
 	private Integer taskStatus;
 	private Integer taskFailTimes;
 	private Date taskDealTime;
 	
 	
+	public Integer getUseHoldNum() {
+		return useHoldNum;
+	}
+	public void setUseHoldNum(Integer useHoldNum) {
+		this.useHoldNum = useHoldNum;
+	}
 	public String getTaskFlag() {
 		return taskFlag;
 	}

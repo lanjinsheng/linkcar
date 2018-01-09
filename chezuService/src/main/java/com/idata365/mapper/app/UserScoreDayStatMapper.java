@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 
 public interface  UserScoreDayStatMapper {
@@ -11,6 +12,8 @@ public interface  UserScoreDayStatMapper {
 	int updateUserScoreDayById(UserScoreDayStat userScoreDayStat);//更新驾驶得分
 	
 	int insertOrUpdateUserDayStat(UserScoreDayStat userScoreDayStat);
+	
+	 UserScoreDayStat getUserDayScoreByUserFamily(UserFamilyRoleLog userFamilyRoleLog);
 	
 	
 	void lockUserDayScoreTask(UserScoreDayStat userScoreDayStat);

@@ -3,7 +3,6 @@ package com.idata365.mapper.app;
 import java.util.List;
 
 import com.idata365.entity.TaskSystemScoreFlag;
-import com.idata365.entity.UserTravelLottery;
 /**
  * 
     * @ClassName: TaskSystemScoreFlagMapper
@@ -19,7 +18,26 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getSystemScoreFlagList(TaskSystemScoreFlag systemScoreFlag);
 	 List<TaskSystemScoreFlag> getUnInitSystemScoreFlagList();
 	 int  updateSystemScoreFlag(TaskSystemScoreFlag systemScoreFlag);
-	 
+	 int finishUserDayScoreTask(TaskSystemScoreFlag systemScoreFlag);
 	 
 	 List<TaskSystemScoreFlag> getUnFinishDayScoreList();
+	 
+	 List<TaskSystemScoreFlag> getUnFinishFamilyScoreList();
+	 int finishFamilyDayScoreTask(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 
+	 List<TaskSystemScoreFlag> getUnInitPkFlagList(); 
+	 int  updatePkInit(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 List<TaskSystemScoreFlag> getUnInitOrderFlagList(); 
+	 int  updateOrderInit(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 List<TaskSystemScoreFlag> getUnFinishFamilyPkList();
+	 int finishFamilyPkTask(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 List<TaskSystemScoreFlag> getUnFinishFamilyOrderList();
+	 int finishFamilyOrderTask(TaskSystemScoreFlag systemScoreFlag);
+	 
+	
+	 
 }

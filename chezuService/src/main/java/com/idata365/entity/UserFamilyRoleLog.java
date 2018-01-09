@@ -11,6 +11,7 @@ public class UserFamilyRoleLog implements Serializable {
 	private String daystamp;
 	private Double score;
 	private Integer role;
+	private Integer activeFlag;
 	private String startTime;
 	private String endTime;
 	public Long getId() {
@@ -18,6 +19,15 @@ public class UserFamilyRoleLog implements Serializable {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+	
+	public Integer getActiveFlag() {
+		return activeFlag;
+	}
+	public void setActiveFlag(Integer activeFlag) {
+		this.activeFlag = activeFlag;
 	}
 	public Long getUserId() {
 		return userId;

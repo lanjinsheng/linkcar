@@ -1,14 +1,10 @@
 package com.idata365.schedule;
-import java.util.List;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.idata365.entity.CalDriveTask;
-import com.idata365.entity.DriveScore;
-import com.idata365.service.CalScoreService;
 import com.idata365.service.ConfigSystemTaskService;
 
 
