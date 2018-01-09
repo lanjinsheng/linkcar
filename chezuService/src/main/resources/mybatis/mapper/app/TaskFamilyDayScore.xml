@@ -14,4 +14,69 @@
          select #{daystamp},id as familyId,0,0,0 from familyInfo where createTimeStr<![CDATA[<=]]>#{endTime}
 	</insert>
 	
+	
+   <insert id="insertFamilyDriveDayStat" parameterType="com.idata365.entity.FamilyDriveDayStat">
+		 INSERT IGNORE INTO  familyDriveDayStat
+		 (familyId,daystamp,useHoldNum,score,scoreComm,scoreAdd,speedTimes,speedPenalTimes,
+		 speedTimesUpdateTime,brakeTimes,brakePenalTimes,brakeTimesUpdateTime,turnTimes,turnPenalTimes,turnTimesUpdateTime,
+		 overspeedTimes,overspeedPenalTimes,overspeedTimesUpdateTime,nightDriveTimes,nightDrivePenalTimes,nightDriveTimesUpdateTime,
+		 tiredDriveTimes,tiredDrivePenalTimes,tiredDriveTimesUpdateTime,illegalStopTimes,illegalStopPenalTimes,illegalStopUpdateTime,
+		 usePhoneTimes,maxspeed,familyNumFactor,roleFactor,memberFactor,familyLevelFactor,mileage,time)
+		 
+		 VALUES(
+		 #{familyId}, #{daystamp}, #{useHoldNum}, #{score}, #{scoreComm}, #{scoreAdd}, #{speedTimes}, #{speedPenalTimes},
+		  #{speedTimesUpdateTime}, #{brakeTimes}, #{brakePenalTimes}, #{brakeTimesUpdateTime}, #{turnTimes}, #{turnPenalTimes},
+		   #{turnTimesUpdateTime},
+		  #{overspeedTimes}, #{overspeedPenalTimes}, #{overspeedTimesUpdateTime}, #{nightDriveTimes}, #{nightDrivePenalTimes},
+		   #{nightDriveTimesUpdateTime},
+		  #{tiredDriveTimes}, #{tiredDrivePenalTimes}, #{tiredDriveTimesUpdateTime}, #{illegalStopTimes},
+		   #{illegalStopPenalTimes}, #{illegalStopUpdateTime},
+		  #{usePhoneTimes}, #{maxspeed}, #{familyNumFactor}, #{roleFactor}, #{memberFactor}, #{familyLevelFactor},
+		   #{mileage}, #{time}
+		 )
+	</insert>
+	
+ <!-- 定时处理行程逻辑 -->
+    <update id="lockFamilyDayScoreTask" parameterType="com.idata365.entity.TaskFamilyDayScore" >
+       UPDATE 
+            taskFamilyDayScore 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
+       WHERE 
+            taskStatus = 0  and taskFlag='0' and daystamp=#{daystamp} LIMIT 500  
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getFamilyDayScoreTask"  resultMap="BaseTaskFamilyDayScoreMap" parameterType="com.idata365.entity.TaskFamilyDayScore">
+		SELECT *  from taskFamilyDayScore where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateFamilyDayScoreSuccTask" parameterType="com.idata365.entity.TaskFamilyDayScore" >
+        update taskFamilyDayScore set
+        taskStatus=1,taskDealTime=now()
+        where  id=#{id}
+     </update>
+     <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,addDayStatFlag=2为失败-->
+    <update id="updateFamilyDayScoreFailTask" parameterType="com.idata365.entity.TaskFamilyDayScore" >
+       UPDATE 
+           taskFamilyDayScore 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskDealTime=now(),failTimes=failTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           taskFamilyDayScore 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理行程逻辑 结束-->		
+	
+	
 </mapper>
