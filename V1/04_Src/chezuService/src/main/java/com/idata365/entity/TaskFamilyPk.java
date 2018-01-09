@@ -2,7 +2,7 @@ package com.idata365.entity;
 
 import java.io.Serializable;
 
-public class TaskFamilyDayScore implements Serializable {
+public class TaskFamilyPk implements Serializable {
 
 	
 	    /**
@@ -11,10 +11,14 @@ public class TaskFamilyDayScore implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private Long familyId;
+	private Integer selfFamilyLevel;
+	private Integer competitorFamilyLevel;
+	private Long selfFamilyId;
+	private Long competitorFamilyId;
+	private String daystamp;
+	
 	private String taskFlag;
     private Integer taskStatus;
-	private String daystamp;
 	private Integer failTimes;
 	public Long getId() {
 		return id;
@@ -22,13 +26,31 @@ public class TaskFamilyDayScore implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getFamilyId() {
-		return familyId;
-	}
-	public void setFamilyId(Long familyId) {
-		this.familyId = familyId;
-	}
  
+	public Integer getSelfFamilyLevel() {
+		return selfFamilyLevel;
+	}
+	public void setSelfFamilyLevel(Integer selfFamilyLevel) {
+		this.selfFamilyLevel = selfFamilyLevel;
+	}
+	public Integer getCompetitorFamilyLevel() {
+		return competitorFamilyLevel;
+	}
+	public void setCompetitorFamilyLevel(Integer competitorFamilyLevel) {
+		this.competitorFamilyLevel = competitorFamilyLevel;
+	}
+	public Long getSelfFamilyId() {
+		return selfFamilyId;
+	}
+	public void setSelfFamilyId(Long selfFamilyId) {
+		this.selfFamilyId = selfFamilyId;
+	}
+	public Long getCompetitorFamilyId() {
+		return competitorFamilyId;
+	}
+	public void setCompetitorFamilyId(Long competitorFamilyId) {
+		this.competitorFamilyId = competitorFamilyId;
+	}
 	public String getTaskFlag() {
 		return taskFlag;
 	}

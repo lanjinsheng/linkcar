@@ -6,9 +6,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.idata365.entity.TaskFamilyDayScore;
+import com.idata365.entity.TaskFamilyOrder;
+import com.idata365.entity.TaskFamilyPk;
 import com.idata365.entity.TaskSystemScoreFlag;
-import com.idata365.entity.UserScoreDayStat;
-import com.idata365.service.CalScoreUserDayService;
+import com.idata365.service.CalFamilyOrderService;
+import com.idata365.service.CalFamilyPkService;
+import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.ConfigSystemTaskService;
 
 
@@ -21,15 +25,15 @@ import com.idata365.service.ConfigSystemTaskService;
     * @date 2017年12月31日
     *
  */
-public class CalUserDayScoreTask extends TimerTask { 
-	private static Logger log = Logger.getLogger(CalUserDayScoreTask.class);
+public class CalFamilyDayOrderTask extends TimerTask { 
+	private static Logger log = Logger.getLogger(CalFamilyDayOrderTask.class);
 	private static Object lock = new Object();
 	public static boolean pd=true;
 	
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
-    CalScoreUserDayService calScoreUserDayService;
+    CalFamilyOrderService calFamilyOrderService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
@@ -40,7 +44,7 @@ public class CalUserDayScoreTask extends TimerTask {
 	//在主线程中执行任务线程.....    
 	@Override  
 	public void run() {  
-		log.info("CalUserDayScoreTask start--");
+		log.info("CalFamilyDayOrderTask start--");
  
 		if(!pd){
 			return;
@@ -49,55 +53,54 @@ public class CalUserDayScoreTask extends TimerTask {
 		if(pd){
 			pd=false;
 			try {
-			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishUserDayScore();
+			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishFamilyOrder();
 			for(TaskSystemScoreFlag tf:taskList) {
 				String timestamp=tf.getDaystamp();
 //				String yyyy=timestamp.substring(0, 4);
 //				String mm=timestamp.substring(4, 6);
 //				String dd=timestamp.substring(6, 8);
 			long taskFlag=System.currentTimeMillis();
-			UserScoreDayStat task=new UserScoreDayStat();
+			TaskFamilyOrder task=new TaskFamilyOrder();
 			task.setDaystamp(timestamp);
 			task.setTaskFlag(String.valueOf(taskFlag));
-			List<UserScoreDayStat> list=calScoreUserDayService.getUserScoreDayTask(task);
+			List<TaskFamilyOrder> list=calFamilyOrderService.getFamilyOrderTask(task);
 			if(list.size()==0) {//无任务
-				configSystemTaskService.finishConfigSystemUserScoreTask(tf);
+				configSystemTaskService.finishConfigSystemFamilyOrderTask(tf);
 			}
-			log.info("CalUserDayScoreTask do--list.size="+list.size());
-				for(UserScoreDayStat userScoreDayStat:list) {
+			log.info("CalFamilyDayOrderTask do--list.size="+list.size());
+				for(TaskFamilyOrder taskFamilyOrder:list) {
 					try {
-						boolean result=calScoreUserDayService.calScoreUserDay(userScoreDayStat);
+						boolean result=calFamilyOrderService.calFamilyOrder(taskFamilyOrder);
 					if(result) {
-						calScoreUserDayService.updateUserDayScore(userScoreDayStat);
-						calScoreUserDayService.updateSuccUserScoreDayTask(userScoreDayStat);
+						calFamilyOrderService.updateSuccFamilyOrderTask(taskFamilyOrder);
 						 
 					}else {
-						if(userScoreDayStat.getTaskFailTimes()>100) {
+						if(taskFamilyOrder.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
-							userScoreDayStat.setTaskStatus(2);
+							taskFamilyOrder.setTaskStatus(2);
 						}
-						calScoreUserDayService.updateFailUserScoreDayTask(userScoreDayStat);
+						calFamilyOrderService.updateFailFamilyOrderTask(taskFamilyOrder);
 					}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
-						if(userScoreDayStat.getTaskFailTimes()>100) {
+						if(taskFamilyOrder.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
-							userScoreDayStat.setTaskStatus(2);
+							taskFamilyOrder.setTaskStatus(2);
 						}
-						calScoreUserDayService.updateFailUserScoreDayTask(userScoreDayStat);
+						calFamilyOrderService.updateFailFamilyOrderTask(taskFamilyOrder);
 					}
 				}
 			}
 			}catch(Exception e) {
 				e.printStackTrace();
-				log.info("CalUserDayScoreTask 异常");
+				log.info("CalFamilyDayOrderTask 异常");
 			}
 			pd=true;
 		}
 			
 		}
-		log.info("CalUserDayScoreTask end--");
+		log.info("CalFamilyDayOrderTask end--");
 	}  
 	
 	public static void main(String []args) {

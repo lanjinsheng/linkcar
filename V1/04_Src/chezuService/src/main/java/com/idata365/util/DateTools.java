@@ -61,7 +61,7 @@ public class DateTools
 
 	public static long getDateTimeOfLong(String dateTimeStr)
 	{
-		
+		if (dateTimeStr==null) return 0;
 		java.util.Date da = null;
 		try
 		{

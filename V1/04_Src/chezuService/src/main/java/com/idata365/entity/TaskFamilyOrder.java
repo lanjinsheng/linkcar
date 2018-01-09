@@ -2,7 +2,7 @@ package com.idata365.entity;
 
 import java.io.Serializable;
 
-public class TaskFamilyDayScore implements Serializable {
+public class TaskFamilyOrder implements Serializable {
 
 	
 	    /**
