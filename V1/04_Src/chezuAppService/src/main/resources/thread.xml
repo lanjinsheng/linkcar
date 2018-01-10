@@ -66,14 +66,33 @@
 	<bean id="cronTriggerFactoryBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">  
 	    <property name="jobDetail" ref="SpringQtzJobMethod"></property>  
 	    <!-- 每5s执行一次 -->
-	    <property name="cronExpression" value="0 50 23 * * ?"></property>  
+	    <property name="cronExpression" value="0 59 23 * * ?"></property>  
 	</bean>  
+	
+	<bean id="familyRelationTask" class="com.idata365.app.schedule.FamilyRelationTask"></bean>
+	
+	<bean id="familyRelationSpringQtzJobMethod"  
+	    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <property name="targetObject">  
+	        <ref bean="familyRelationTask" />  
+	    </property>  
+	    <property name="targetMethod">  <!-- 要执行的方法名称 -->  
+	        <value>run</value>  
+	    </property>  
+	</bean>  
+	
+	<bean id="familyRelationCronTriggerFactoryBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">  
+	    <property name="jobDetail" ref="familyRelationSpringQtzJobMethod"></property>  
+	    <!-- 每5s执行一次 -->
+	    <property name="cronExpression" value="0 01 12 * * ?"></property>  
+	</bean>
 	
 	<bean id="SpringJobSchedulerFactoryBean"  
 	    class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
 	    <property name="triggers">  
 	        <list>  
 	            <ref bean="cronTriggerFactoryBean" />  
+	            <ref bean="familyRelationCronTriggerFactoryBean" />  
 	        </list>  
 	    </property>  
 	</bean>  

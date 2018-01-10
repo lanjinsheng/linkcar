@@ -8,6 +8,8 @@ public class FamilyParamBean
 	
 	private long userId;
 	
+	private int familyType;
+	
 	private String provinceId;
 	
 	private String cityId;
@@ -31,16 +33,6 @@ public class FamilyParamBean
 	private String month;
 	
 	private String createTimeStr;
-	
-	public String getImgUrl()
-	{
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl)
-	{
-		this.imgUrl = imgUrl;
-	}
 
 	public long getId()
 	{
@@ -70,6 +62,16 @@ public class FamilyParamBean
 	public void setUserId(long userId)
 	{
 		this.userId = userId;
+	}
+
+	public int getFamilyType()
+	{
+		return familyType;
+	}
+
+	public void setFamilyType(int familyType)
+	{
+		this.familyType = familyType;
 	}
 
 	public String getProvinceId()
@@ -120,6 +122,16 @@ public class FamilyParamBean
 	public void setInviteCode(String inviteCode)
 	{
 		this.inviteCode = inviteCode;
+	}
+
+	public String getImgUrl()
+	{
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl)
+	{
+		this.imgUrl = imgUrl;
 	}
 
 	public int getStartPos()
@@ -181,5 +193,5 @@ public class FamilyParamBean
 	{
 		this.createTimeStr = createTimeStr;
 	}
-	
+		
 }

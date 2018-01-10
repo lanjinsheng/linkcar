@@ -10,7 +10,7 @@ public class MyFamilyInfoBean
 	
 	private int orderNo;
 	
-	private String familyType;
+	private int familyType;
 	
 	private int userRole;
 	
@@ -62,12 +62,12 @@ public class MyFamilyInfoBean
 		this.orderNo = orderNo;
 	}
 
-	public String getFamilyType()
+	public int getFamilyType()
 	{
 		return familyType;
 	}
 
-	public void setFamilyType(String familyType)
+	public void setFamilyType(int familyType)
 	{
 		this.familyType = familyType;
 	}

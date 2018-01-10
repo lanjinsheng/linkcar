@@ -3,12 +3,14 @@ package com.idata365.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.mockito.asm.tree.IntInsnNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.ResultConstant;
+import com.idata365.app.entity.FamilyChallengeLogBean;
+import com.idata365.app.entity.FamilyChallengeLogParamBean;
+import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
@@ -109,40 +115,98 @@ public class GameService extends BaseService<GameService>
 		return resultAllBean;
 	}
 	
+	/**
+	 * 1表成功；0表失败
+	 * @param bean
+	 * @return
+	 */
 	@Transactional
-	public void challengeFamily(GameFamilyParamBean bean)
+	public int challengeFamily(GameFamilyParamBean bean)
 	{
-		List<Long> familyIdList = this.gameMapper.queryIdleFamily(bean);
-		int size = familyIdList.size();
-		int idx = RandUtils.generateRand(0, size-1);
-		Long selFamilyId = familyIdList.get(idx);
+		String tomorrowDateStr = getTomorrowDateStr();
 		
-		long familyId = bean.getFamilyId();
-
-		Date todayDate = Calendar.getInstance().getTime();
-		String todayStr = DateFormatUtils.format(todayDate, DateConstant.DAY_PATTERN_DELIMIT);
+		FamilyChallengeLogParamBean saveChallgenParamBean = new FamilyChallengeLogParamBean();
+		saveChallgenParamBean.setFamilyId(bean.getFamilyId());
+		saveChallgenParamBean.setChallengeType(bean.getFamilyType());
+		saveChallgenParamBean.setChallengeDay(tomorrowDateStr);
 		
-		FamilyRelationParamBean bean1 = new FamilyRelationParamBean();
-		bean1.setSelfFamilyId(familyId);
-		bean1.setCompetitorFamilyId(selFamilyId);
-		bean1.setDaystamp(todayStr);
-		this.gameMapper.saveFamilyRelation(bean1);
+		//判断是否已经发起挑战
+		boolean challengeFlag = judgeChallenged(saveChallgenParamBean);
+		if (challengeFlag)
+		{
+			return 0;
+		}
+		
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(bean.getFamilyId());
+		//查询发起挑战的家族信息
+		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+		
+		//被挑战家族类型的总数
+		familyParamBean.setFamilyType(bean.getFamilyType());
+		int allFamilyTypeCount = this.familyMapper.countByType(familyParamBean);
+		
+		//指定类型家族已经被挑战的数量
+		FamilyChallengeLogParamBean beChallengedLogParamBean = new FamilyChallengeLogParamBean();
+		beChallengedLogParamBean.setChallengeType(bean.getFamilyType());
+		beChallengedLogParamBean.setChallengeDay(tomorrowDateStr);
+		int tomorrowBeChallengedCount = this.gameMapper.countBeChallenge(beChallengedLogParamBean);
+		
+		//指定类型家族已经发起挑战的数量
+		FamilyChallengeLogParamBean challengeLogParamBean = new FamilyChallengeLogParamBean();
+		challengeLogParamBean.setPrevType(bean.getFamilyType());
+		challengeLogParamBean.setChallengeDay(tomorrowDateStr);
+		int tomorrowChallengeCount = this.gameMapper.countChallenge(challengeLogParamBean);
+		
+		//如果指定家族类型的总数大于(这个类型家族挑战别人和被别人挑战数量的和)，则挑战成功
+		if (allFamilyTypeCount > tomorrowBeChallengedCount + tomorrowChallengeCount)
+		{
+			if (bean.getFamilyType() == familyInfoBean.getFamilyType())
+			{
+				if (allFamilyTypeCount - 1 == tomorrowBeChallengedCount + tomorrowChallengeCount)
+				{
+					return 0;
+				}
+			}
+			
+			saveChallgenParamBean.setPrevType(familyInfoBean.getFamilyType());
+			//记录挑战家族日志 
+			this.gameMapper.saveChallengeLog(saveChallgenParamBean);
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	//判断是否已经成功发起过挑战
+	public boolean judgeChallenged(FamilyChallengeLogParamBean bean)
+	{
+		int count = this.gameMapper.countChallengeByFamilyId(bean);
+		if (count > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public String judgeChallengeFlag(GameFamilyParamBean bean)
 	{
-		long familyId = bean.getFamilyId();
-		FamilyRelationBean familyRelationBean = new FamilyRelationBean();
-		familyRelationBean.setFamilyId(familyId);
-		List<Long> familyIdList = this.familyMapper.queryFamilyRelationIds(familyRelationBean);
+		FamilyChallengeLogParamBean familyChallengeLogParamBean = new FamilyChallengeLogParamBean();
+		familyChallengeLogParamBean.setFamilyId(bean.getFamilyId());
+		familyChallengeLogParamBean.setChallengeDay(getTomorrowDateStr());
 		
-		if (CollectionUtils.isEmpty(familyIdList))
+		if (judgeChallenged(familyChallengeLogParamBean))
 		{
-			return "0";
+			return "1";
 		}
 		else
 		{
-			return "1";
+			return "0";
 		}
 	}
 	
@@ -766,6 +830,190 @@ public class GameService extends BaseService<GameService>
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
 				
 				this.gameMapper.saveUserScoreDay(tempScoreDayParamBean);
+			}
+		}
+	}
+	
+	/**
+	 * 初始化第二天的家族PK关系
+	 */
+	@Transactional
+	public void initTodayFamilyRelation()
+	{
+		FamilyChallengeLogParamBean bean = new FamilyChallengeLogParamBean();
+		bean.setChallengeDay(getCurrentDayStr());
+		List<FamilyChallengeLogBean> tempList = this.gameMapper.queryChallengeLog(bean);
+		
+		FamilyParamBean bronzeParam = new FamilyParamBean();
+		bronzeParam.setFamilyType(FamilyConstant.BRONZE_TYPE);
+		List<FamilyInfoBean> bronzeList = this.familyMapper.queryFamilyByType(bronzeParam);
+		
+		FamilyParamBean silverParam = new FamilyParamBean();
+		silverParam.setFamilyType(FamilyConstant.SILVER_TYPE);
+		List<FamilyInfoBean> silverList = this.familyMapper.queryFamilyByType(bronzeParam);
+		
+		FamilyParamBean goldParam = new FamilyParamBean();
+		goldParam.setFamilyType(FamilyConstant.GOLD_TYPE);
+		List<FamilyInfoBean> goldList = this.familyMapper.queryFamilyByType(goldParam);
+		
+		//tempList中的家族全部都能匹配上挑战的家族
+		for (FamilyChallengeLogBean tempBean : tempList)
+		{
+			long familyId = tempBean.getFamilyId();
+			int prevType = tempBean.getPrevType();
+			int challengeType = tempBean.getChallengeType();
+
+			if (challengeType == FamilyConstant.BRONZE_TYPE && CollectionUtils.isNotEmpty(bronzeList))
+			{
+				//绑定并从***List移除被配对的家族
+				bindFamily(bronzeList, familyId);
+				
+				//移除familyId对应的家族
+				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
+			}
+			else if (challengeType == FamilyConstant.SILVER_TYPE && CollectionUtils.isNotEmpty(silverList))
+			{
+				bindFamily(silverList, familyId);
+				
+				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
+			}
+			else if (challengeType == FamilyConstant.GOLD_TYPE && CollectionUtils.isNotEmpty(goldList))
+			{
+				bindFamily(goldList, familyId);
+				
+				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
+			}
+		}
+		
+		List<FamilyInfoBean> leftFamilyList = new ArrayList<>();
+		if (CollectionUtils.isNotEmpty(bronzeList))
+		{
+			leftFamilyList.addAll(bronzeList);
+		}
+		if (CollectionUtils.isNotEmpty(silverList))
+		{
+			leftFamilyList.addAll(silverList);
+		}
+		if (CollectionUtils.isNotEmpty(goldList))
+		{
+			leftFamilyList.addAll(goldList);
+		}
+		
+		if (CollectionUtils.isNotEmpty(leftFamilyList))
+		{
+			if (leftFamilyList.size() == 1)
+			{
+				//temp settings robot
+				FamilyInfoBean lastFamilyInfo = leftFamilyList.get(0);
+				
+				FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
+				relationParamBean.setSelfFamilyId(lastFamilyInfo.getId());
+				relationParamBean.setCompetitorFamilyId(FamilyConstant.ROBOT_FAMILY_ID);
+				relationParamBean.setDaystamp(getTomorrowDateStr());
+				this.gameMapper.saveFamilyRelation(relationParamBean);
+			}
+			else
+			{
+				for (int i = 0; i < leftFamilyList.size(); i++)
+				{
+					if (i%2 == 1)
+					{
+						FamilyInfoBean firstFamily = leftFamilyList.get(i-1);
+						FamilyInfoBean secondFamily = leftFamilyList.get(i);
+						long firstFamilyId = firstFamily.getId();
+						long secondFamilyId = secondFamily.getId();
+						FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
+						relationParamBean.setSelfFamilyId(firstFamilyId);
+						relationParamBean.setCompetitorFamilyId(secondFamilyId);
+						relationParamBean.setDaystamp(getTomorrowDateStr());
+						this.gameMapper.saveFamilyRelation(relationParamBean);
+					}
+				}
+				
+				if (leftFamilyList.size() % 2 == 1)
+				{
+					FamilyInfoBean lastFamilyInfo = leftFamilyList.get(leftFamilyList.size() - 1);
+					//temp settings robot
+					FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
+					relationParamBean.setSelfFamilyId(lastFamilyInfo.getId());
+					relationParamBean.setCompetitorFamilyId(FamilyConstant.ROBOT_FAMILY_ID);
+					relationParamBean.setDaystamp(getTomorrowDateStr());
+					this.gameMapper.saveFamilyRelation(relationParamBean);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 随机familyList中的家族与familyId配对，并从familyList移除被配对的家族
+	 * @param familyList
+	 * @param familyId
+	 */
+	private void bindFamily(List<FamilyInfoBean> familyList, long familyId)
+	{
+		int size = familyList.size();
+		
+		while (true)
+		{
+			int idx = RandUtils.generateRand(0, size-1);
+			FamilyInfoBean familyInfoBean = familyList.get(idx);
+			long competitorFamilyId = familyInfoBean.getId();
+			
+			if (familyId == competitorFamilyId)
+			{
+				continue;
+			}
+			
+			FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
+			relationParamBean.setSelfFamilyId(familyId);
+			relationParamBean.setCompetitorFamilyId(competitorFamilyId);
+			relationParamBean.setDaystamp(getTomorrowDateStr());
+			this.gameMapper.saveFamilyRelation(relationParamBean);
+			
+			familyList.remove(idx);
+			break;
+		}
+	}
+	
+	private void getRidSelfFamily(List<FamilyInfoBean> bronzeList, List<FamilyInfoBean> silverList, List<FamilyInfoBean> goldList, long familyId, int prevType)
+	{
+		if (prevType == FamilyConstant.BRONZE_TYPE)
+		{
+			Iterator<FamilyInfoBean> iter = bronzeList.iterator();
+			while (iter.hasNext())
+			{
+				FamilyInfoBean tempFamilyInfo = iter.next();
+				if (tempFamilyInfo.getId() == familyId)
+				{
+					iter.remove();
+					break;
+				}
+			}
+		}
+		else if (prevType == FamilyConstant.SILVER_TYPE)
+		{
+			Iterator<FamilyInfoBean> iter = silverList.iterator();
+			while (iter.hasNext())
+			{
+				FamilyInfoBean tempFamilyInfo = iter.next();
+				if (tempFamilyInfo.getId() == familyId)
+				{
+					iter.remove();
+					break;
+				}
+			}
+		}
+		else
+		{
+			Iterator<FamilyInfoBean> iter = goldList.iterator();
+			while (iter.hasNext())
+			{
+				FamilyInfoBean tempFamilyInfo = iter.next();
+				if (tempFamilyInfo.getId() == familyId)
+				{
+					iter.remove();
+					break;
+				}
 			}
 		}
 	}

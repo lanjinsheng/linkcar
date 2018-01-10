@@ -2,6 +2,8 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.FamilyChallengeLogBean;
+import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.StationBean;
@@ -9,16 +11,12 @@ import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
-import com.idata365.app.entity.UserTravelHistoryBean;
-import com.idata365.app.entity.UserTravelHistoryResultBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 
 public interface GameMapper
 {
 	public ViolationStatBean queryFamilyDriveDayStat(ViolationStatParamBean bean);
-	
-	public List<Long> queryIdleFamily(GameFamilyParamBean bean);
 	
 	public void saveFamilyRelation(FamilyRelationParamBean bean);
 	
@@ -44,4 +42,13 @@ public interface GameMapper
 	
 	public void saveUserScoreDay(UserScoreDayParamBean bean);
 	
+	public int countBeChallenge(FamilyChallengeLogParamBean bean);
+	
+	public int countChallenge(FamilyChallengeLogParamBean bean);
+	
+	public void saveChallengeLog(FamilyChallengeLogParamBean bean);
+	
+	public int countChallengeByFamilyId(FamilyChallengeLogParamBean bean);
+	
+	public List<FamilyChallengeLogBean> queryChallengeLog(FamilyChallengeLogParamBean bean);
 }

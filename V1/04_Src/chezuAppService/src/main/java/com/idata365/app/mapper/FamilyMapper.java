@@ -2,6 +2,7 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInviteBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
@@ -92,4 +93,10 @@ public interface FamilyMapper
 	public List<Long> queryUserIdsWithIllegalStopPenal(FamilyParamBean bean);
 	
 	public void updateIllegalStopPenalTimes(FamilyParamBean bean);
+	
+	public FamilyInfoBean queryFamilyInfo(FamilyParamBean bean);
+	
+	public int countByType(FamilyParamBean bean);
+	
+	public List<FamilyInfoBean> queryFamilyByType(FamilyParamBean bean);
 }
