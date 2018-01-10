@@ -221,7 +221,8 @@ public class ScoreService extends BaseService<ScoreService>
 			
 			if (StringUtils.equals(tempDayStr, todayStr))
 			{
-				tempResultBean.setDayStr(tempDayStr + "(今日)");
+//				tempResultBean.setDayStr(tempDayStr + "(今日)");
+				continue;
 			}
 			else if (StringUtils.equals(dayStr, yesterdayStr))
 			{
@@ -420,7 +421,7 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		Date todayDate = Calendar.getInstance().getTime();
 		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
-		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyyMMdd");
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyy-MM-dd");
 		
 		long familyId = bean.getFamilyId();
 		

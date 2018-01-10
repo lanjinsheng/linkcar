@@ -4,7 +4,7 @@ public class GameFamilyParamBean
 {
 	private long familyId;
 	
-	private String familyType;
+	private int familyType;
 	
 	private long userId;
 	
@@ -20,12 +20,12 @@ public class GameFamilyParamBean
 		this.familyId = familyId;
 	}
 
-	public String getFamilyType()
+	public int getFamilyType()
 	{
 		return familyType;
 	}
 
-	public void setFamilyType(String familyType)
+	public void setFamilyType(int familyType)
 	{
 		this.familyType = familyType;
 	}

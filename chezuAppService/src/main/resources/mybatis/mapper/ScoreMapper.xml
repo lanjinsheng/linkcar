@@ -20,7 +20,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	select imgUrl, t1.familyId as familyId, t1.orderNo as orderNo, t2.familyName as name, t3.score as score from familyDriveDayStat t1 
 		join familyInfo t2 on (t1.familyId=t2.id) 
 		join familyScore t3 on (t1.familyId=t3.familyId) 
-		where t1.daystamp=DATE_FORMAT(now(), '%Y%m%d') 
+		where t1.daystamp=DATE_FORMAT(now(), '%Y-%m-%d') 
 		order by t3.score desc limit 0, 100;
 	</select>
 

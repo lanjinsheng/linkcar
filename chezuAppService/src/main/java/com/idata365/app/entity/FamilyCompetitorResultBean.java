@@ -30,6 +30,10 @@ public class FamilyCompetitorResultBean
 	
 	private String illegalStopTimes;
 	
+	private String tiredDriveTimes;	//疲劳驾驶次数
+	
+	private String useHoldNum;	//小马扎使用数量
+	
 	private String usePhoneTimes;
 	
 	private String maxspeed;
@@ -180,6 +184,26 @@ public class FamilyCompetitorResultBean
 	public void setIllegalStopTimes(String illegalStopTimes)
 	{
 		this.illegalStopTimes = illegalStopTimes;
+	}
+
+	public String getTiredDriveTimes()
+	{
+		return tiredDriveTimes;
+	}
+
+	public void setTiredDriveTimes(String tiredDriveTimes)
+	{
+		this.tiredDriveTimes = tiredDriveTimes;
+	}
+
+	public String getUseHoldNum()
+	{
+		return useHoldNum;
+	}
+
+	public void setUseHoldNum(String useHoldNum)
+	{
+		this.useHoldNum = useHoldNum;
 	}
 
 	public String getUsePhoneTimes()

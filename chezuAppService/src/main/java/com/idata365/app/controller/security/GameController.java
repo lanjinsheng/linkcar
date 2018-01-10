@@ -61,12 +61,14 @@ public class GameController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
-		this.gameService.challengeFamily(bean);
-		return ResultUtils.rtSuccess(null);
+		int resultFlag = this.gameService.challengeFamily(bean);
+		Map<String, String> resultMap = new HashMap<>();
+		resultMap.put("challengeFlag", String.valueOf(resultFlag));
+		return ResultUtils.rtSuccess(resultMap);
 	}
 	
 	/**
-	 * 查询家族是否已经发起挑战
+	 * 查询家族当天是否发起了第二天的挑战
 	 * @param bean
 	 * @return
 	 */

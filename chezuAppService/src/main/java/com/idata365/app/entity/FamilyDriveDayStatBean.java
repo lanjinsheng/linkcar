@@ -26,9 +26,13 @@ public class FamilyDriveDayStatBean
 	
 	private int illegalStopTimes;
 	
+	private int tiredDriveTimes;	//疲劳驾驶次数
+	
+	private int useHoldNum;	//小马扎使用数量
+	
 	private int usePhoneTimes;
 	
-	private int maxspeed;
+	private double maxspeed;
 	
 	private double familyNumFactor;
 	
@@ -37,7 +41,7 @@ public class FamilyDriveDayStatBean
 	private double memberFactor;
 	
 	private double familyLevelFactor;
-	
+
 	public int getOrderNo()
 	{
 		return orderNo;
@@ -138,6 +142,26 @@ public class FamilyDriveDayStatBean
 		this.illegalStopTimes = illegalStopTimes;
 	}
 
+	public int getTiredDriveTimes()
+	{
+		return tiredDriveTimes;
+	}
+
+	public void setTiredDriveTimes(int tiredDriveTimes)
+	{
+		this.tiredDriveTimes = tiredDriveTimes;
+	}
+
+	public int getUseHoldNum()
+	{
+		return useHoldNum;
+	}
+
+	public void setUseHoldNum(int useHoldNum)
+	{
+		this.useHoldNum = useHoldNum;
+	}
+
 	public int getUsePhoneTimes()
 	{
 		return usePhoneTimes;
@@ -148,12 +172,12 @@ public class FamilyDriveDayStatBean
 		this.usePhoneTimes = usePhoneTimes;
 	}
 
-	public int getMaxspeed()
+	public double getMaxspeed()
 	{
 		return maxspeed;
 	}
 
-	public void setMaxspeed(int maxspeed)
+	public void setMaxspeed(double maxspeed)
 	{
 		this.maxspeed = maxspeed;
 	}
@@ -197,4 +221,5 @@ public class FamilyDriveDayStatBean
 	{
 		this.familyLevelFactor = familyLevelFactor;
 	}
+
 }

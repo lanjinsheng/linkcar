@@ -10,7 +10,7 @@ public class FamilyResultBean
 	
 	private int orderNo;
 	
-	private String familyType;	//黄金家族：GOLD；白银家族：SILVER；青铜家族：BRONZE
+	private String familyType;
 	
 	private int userRole;	//老司机：1；漂移手：2；渣土车司机：3；点头司机：4；红眼司机：5；飙车党：6；煎饼侠：7
 	

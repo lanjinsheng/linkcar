@@ -6,10 +6,6 @@
 		select * from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
-	<select id="queryIdleFamily" resultType="java.lang.Long" parameterType="com.idata365.app.entity.GameFamilyParamBean">
-		select t1.id as familyId from familyInfo t1 join familyScore t2 on (t1.id=t2.familyId) where familyType=#{familyType} and t1.id!=#{familyId} and t1.id not in(select distinct selfFamilyId from familyRelation) order by t1.id asc
-	</select>
-	
 	<insert id="saveFamilyRelation" parameterType="com.idata365.app.entity.FamilyRelationParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into familyRelation(selfFamilyId, competitorFamilyId, daystamp) values(#{selfFamilyId}, #{competitorFamilyId}, #{daystamp});
 	</insert>
@@ -57,5 +53,25 @@
 	<insert id="saveUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into userScoreDayStat(userId, userFamilyScoreId, daystamp) values(#{userId}, #{userFamilyScoreId}, #{daystamp})
 	</insert>
+	
+	<select id="countBeChallenge" resultType="int" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
+		select count(id) from familyChallengeLog where challengeType=#{challengeType} and challengeDay=#{challengeDay}
+	</select>
+	
+	<select id="countChallenge" resultType="int" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
+		select count(id) from familyChallengeLog where prevType=#{prevType} and challengeDay=#{challengeDay}
+	</select>
+		
+	<insert id="saveChallengeLog" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into familyChallengeLog(familyId, prevType, challengeType, challengeDay) values(#{familyId}, #{prevType}, #{challengeType}, #{challengeDay})
+	</insert>
+	
+	<select id="countChallengeByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
+		select count(id) from familyChallengeLog where familyId=#{familyId} and challengeDay=#{challengeDay}
+	</select>
+	
+	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
+		select familyId, prevType, challengeType from familyChallengeLog where challengeDay=#{challengeDay} order by id asc
+	</select>
 	
 </mapper>
