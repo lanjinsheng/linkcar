@@ -17,6 +17,7 @@ import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
+import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
@@ -422,5 +423,18 @@ public class GameController extends BaseController
 		List<String> resultList = this.gameService.queryReadyLotteryAwardId(bean);
 		resultMap.put("readyLottery", resultList);
 		return ResultUtils.rtSuccess(resultMap);
+	}
+	
+	/**
+	 * 查询用户使用角色占比
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/queryRolePercent")
+	public Map<String, Object> queryRolePercent(@RequestBody UserFamilyRoleLogParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		List<RoleCountResultBean> resultList = this.gameService.queryRolePercent(bean);
+		return ResultUtils.rtSuccess(resultList);
 	}
 }

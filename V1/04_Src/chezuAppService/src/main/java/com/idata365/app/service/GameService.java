@@ -1,5 +1,6 @@
 package com.idata365.app.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +34,8 @@ import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
+import com.idata365.app.entity.RoleCountBean;
+import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
@@ -50,6 +53,7 @@ import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.NumUtils;
 import com.idata365.app.util.RandUtils;
 
 @Service
@@ -1050,8 +1054,30 @@ public class GameService extends BaseService<GameService>
 		}
 	}
 	
-	public void queryRolePercent()
+	public List<RoleCountResultBean> queryRolePercent(UserFamilyRoleLogParamBean bean)
 	{
+		List<RoleCountBean> tempList = this.gameMapper.countRoleByRole(bean);
+		BigDecimal totalRoleCount = BigDecimal.valueOf(0);
+		for (RoleCountBean tempBean : tempList)
+		{
+			int roleNum = tempBean.getRoleNum();
+			totalRoleCount = totalRoleCount.add(BigDecimal.valueOf(roleNum));
+		}
 		
+		List<RoleCountResultBean> resultList = new ArrayList<>();
+		for (RoleCountBean tempBean : tempList)
+		{
+			int roleNum = tempBean.getRoleNum();
+			BigDecimal percentBd = BigDecimal.valueOf(roleNum).divide(totalRoleCount, 2, BigDecimal.ROUND_HALF_UP);
+			String percent = NumUtils.formattedDecimalToPercentage(percentBd.doubleValue());
+			int role = tempBean.getRole();
+			
+			RoleCountResultBean tempResultBean = new RoleCountResultBean();
+			tempResultBean.setPercent(percent);
+			tempResultBean.setRole(String.valueOf(role));
+			resultList.add(tempResultBean);
+		}
+		
+		return resultList;
 	}
 }
