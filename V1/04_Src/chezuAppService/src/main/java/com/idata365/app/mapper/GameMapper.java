@@ -6,6 +6,7 @@ import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
@@ -51,4 +52,6 @@ public interface GameMapper
 	public int countChallengeByFamilyId(FamilyChallengeLogParamBean bean);
 	
 	public List<FamilyChallengeLogBean> queryChallengeLog(FamilyChallengeLogParamBean bean);
+	
+	public List<RoleCountBean> countRoleByRole(UserFamilyRoleLogParamBean bean);
 }

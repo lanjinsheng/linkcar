@@ -10,7 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.mockito.asm.tree.IntInsnNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.ResultConstant;
+import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -208,6 +208,37 @@ public class GameService extends BaseService<GameService>
 		{
 			return "0";
 		}
+	}
+	
+	//查询正在对战的家族系信息
+	public CompetitorFamilyInfoResultBean queryCompetitorFamilyInfo(GameFamilyParamBean bean)
+	{
+		FamilyRelationBean relationBean = new FamilyRelationBean();
+		long myFamilyId = bean.getFamilyId();
+		relationBean.setFamilyId(myFamilyId);
+		relationBean.setDaystamp(getCurrentDayStr());
+		FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean).get(0);
+		long familyId1 = relationResultBean.getFamilyId1();
+		long familyId2 = relationResultBean.getFamilyId2();
+		
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		if (myFamilyId != familyId1)
+		{
+			familyParamBean.setFamilyId(familyId1);
+		}
+		else
+		{
+			familyParamBean.setFamilyId(familyId2);
+		}
+		
+		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+
+		CompetitorFamilyInfoResultBean resultBean = new CompetitorFamilyInfoResultBean();
+		resultBean.setCompetitorFamilyId(String.valueOf(familyInfoBean.getId()));
+		resultBean.setFamilyName(familyInfoBean.getFamilyName());
+		resultBean.setImgUrl(familyInfoBean.getImgUrl());
+		
+		return resultBean;
 	}
 	
 	@Transactional
@@ -975,6 +1006,7 @@ public class GameService extends BaseService<GameService>
 		}
 	}
 	
+	//从前三个list中移除familyId对应的家族
 	private void getRidSelfFamily(List<FamilyInfoBean> bronzeList, List<FamilyInfoBean> silverList, List<FamilyInfoBean> goldList, long familyId, int prevType)
 	{
 		if (prevType == FamilyConstant.BRONZE_TYPE)
@@ -1016,5 +1048,10 @@ public class GameService extends BaseService<GameService>
 				}
 			}
 		}
+	}
+	
+	public void queryRolePercent()
+	{
+		
 	}
 }
