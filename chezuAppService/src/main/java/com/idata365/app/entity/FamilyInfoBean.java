@@ -10,6 +10,8 @@ public class FamilyInfoBean
 	
 	private String familyName;
 
+	private String imgUrl;
+	
 	public int getFamilyType()
 	{
 		return familyType;
@@ -48,5 +50,15 @@ public class FamilyInfoBean
 	public void setFamilyName(String familyName)
 	{
 		this.familyName = familyName;
+	}
+
+	public String getImgUrl()
+	{
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl)
+	{
+		this.imgUrl = imgUrl;
 	}
 }

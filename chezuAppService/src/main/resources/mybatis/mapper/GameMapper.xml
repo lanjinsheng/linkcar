@@ -74,4 +74,8 @@
 		select familyId, prevType, challengeType from familyChallengeLog where challengeDay=#{challengeDay} order by id asc
 	</select>
 	
+	<select id="countRoleByRole" resultType="com.idata365.app.entity.RoleCountBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select role, count(id) as roleNum from userFamilyRoleLog where userId=#{userId} group by role order by role asc
+	</select>
+	
 </mapper>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
@@ -65,6 +66,21 @@ public class GameController extends BaseController
 		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("challengeFlag", String.valueOf(resultFlag));
 		return ResultUtils.rtSuccess(resultMap);
+	}
+	
+	/**
+	 * 查询正在对战的家族系信息
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/queryCompetitorFamilyInfo")
+	public Map<String, Object> queryCompetitorFamilyInfo(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		
+		CompetitorFamilyInfoResultBean resultBean = this.gameService.queryCompetitorFamilyInfo(bean);
+		
+		return ResultUtils.rtSuccess(resultBean);
 	}
 	
 	/**
