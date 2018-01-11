@@ -70,8 +70,8 @@ public class ScoreDetailBean
 	//最大速度得分
 	private double maxspeedScore;
 	
-	//疲劳驾驶时长
-	private double tiredDrive;
+	//疲劳驾驶次数
+	private int tiredDriveTimes;
 	
 	//疲劳驾驶权重
 	private double tiredDriveProportion;
@@ -87,6 +87,30 @@ public class ScoreDetailBean
 	
 	//使用手机得分
 	private double phoneTimesScore;
+	
+	//夜间驾驶次数
+	private int nightDriveTimes;
+	
+	//夜间驾驶权重
+	private double nightDriveTimesProportion;
+	
+	//夜间驾驶得分
+	private double nightDriveScore;
+	
+	//违停次数
+	private int illegalStopTimes;
+	
+	//违停次数占比
+	private double illegalStopTimesProportion;
+	
+	//违停次数得分
+	private double illegalStopTimesScore;
+	
+	//小马扎使用次数占比
+	private double mazhaProportion;
+
+	//小马扎使用得分
+	private double mazhaScore;
 	
 	//天气
 	private String weather;
@@ -105,7 +129,29 @@ public class ScoreDetailBean
 	
 	//步行得分
 	private double walkScore;
+	
+	private long useShachepian;
+	
+	private long useHongniu;
+	
+	private long useYeshijing;
+	
+	private long useFadongji;
+	
+	private long useCheluntai;
+	
+	private long useZengyaqi;
+	
+	private long useMazha;
+	
+	private long useZhitiao;
 
+	private int extraPlus;
+	
+	private double extraPlusProportion;
+	
+	private int extraPlusScore;
+	
 	public double getMileage()
 	{
 		return mileage;
@@ -316,14 +362,14 @@ public class ScoreDetailBean
 		this.maxspeedScore = maxspeedScore;
 	}
 
-	public double getTiredDrive()
+	public int getTiredDriveTimes()
 	{
-		return tiredDrive;
+		return tiredDriveTimes;
 	}
 
-	public void setTiredDrive(double tiredDrive)
+	public void setTiredDriveTimes(int tiredDriveTimes)
 	{
-		this.tiredDrive = tiredDrive;
+		this.tiredDriveTimes = tiredDriveTimes;
 	}
 
 	public double getTiredDriveProportion()
@@ -434,6 +480,196 @@ public class ScoreDetailBean
 	public void setWalkScore(double walkScore)
 	{
 		this.walkScore = walkScore;
+	}
+
+	public long getUseShachepian()
+	{
+		return useShachepian;
+	}
+
+	public void setUseShachepian(long useShachepian)
+	{
+		this.useShachepian = useShachepian;
+	}
+
+	public long getUseHongniu()
+	{
+		return useHongniu;
+	}
+
+	public void setUseHongniu(long useHongniu)
+	{
+		this.useHongniu = useHongniu;
+	}
+
+	public long getUseYeshijing()
+	{
+		return useYeshijing;
+	}
+
+	public void setUseYeshijing(long useYeshijing)
+	{
+		this.useYeshijing = useYeshijing;
+	}
+
+	public long getUseFadongji()
+	{
+		return useFadongji;
+	}
+
+	public void setUseFadongji(long useFadongji)
+	{
+		this.useFadongji = useFadongji;
+	}
+
+	public long getUseCheluntai()
+	{
+		return useCheluntai;
+	}
+
+	public void setUseCheluntai(long useCheluntai)
+	{
+		this.useCheluntai = useCheluntai;
+	}
+
+	public long getUseZengyaqi()
+	{
+		return useZengyaqi;
+	}
+
+	public void setUseZengyaqi(long useZengyaqi)
+	{
+		this.useZengyaqi = useZengyaqi;
+	}
+
+	public long getUseMazha()
+	{
+		return useMazha;
+	}
+
+	public void setUseMazha(long useMazha)
+	{
+		this.useMazha = useMazha;
+	}
+
+	public long getUseZhitiao()
+	{
+		return useZhitiao;
+	}
+
+	public void setUseZhitiao(long useZhitiao)
+	{
+		this.useZhitiao = useZhitiao;
+	}
+
+	public int getNightDriveTimes()
+	{
+		return nightDriveTimes;
+	}
+
+	public void setNightDriveTimes(int nightDriveTimes)
+	{
+		this.nightDriveTimes = nightDriveTimes;
+	}
+
+	public double getNightDriveTimesProportion()
+	{
+		return nightDriveTimesProportion;
+	}
+
+	public void setNightDriveTimesProportion(double nightDriveTimesProportion)
+	{
+		this.nightDriveTimesProportion = nightDriveTimesProportion;
+	}
+
+	public double getNightDriveScore()
+	{
+		return nightDriveScore;
+	}
+
+	public void setNightDriveScore(double nightDriveScore)
+	{
+		this.nightDriveScore = nightDriveScore;
+	}
+
+	public int getIllegalStopTimes()
+	{
+		return illegalStopTimes;
+	}
+
+	public void setIllegalStopTimes(int illegalStopTimes)
+	{
+		this.illegalStopTimes = illegalStopTimes;
+	}
+
+	public double getIllegalStopTimesProportion()
+	{
+		return illegalStopTimesProportion;
+	}
+
+	public void setIllegalStopTimesProportion(double illegalStopTimesProportion)
+	{
+		this.illegalStopTimesProportion = illegalStopTimesProportion;
+	}
+
+	public double getIllegalStopTimesScore()
+	{
+		return illegalStopTimesScore;
+	}
+
+	public void setIllegalStopTimesScore(double illegalStopTimesScore)
+	{
+		this.illegalStopTimesScore = illegalStopTimesScore;
+	}
+
+	public double getMazhaProportion()
+	{
+		return mazhaProportion;
+	}
+
+	public void setMazhaProportion(double mazhaProportion)
+	{
+		this.mazhaProportion = mazhaProportion;
+	}
+
+	public double getMazhaScore()
+	{
+		return mazhaScore;
+	}
+
+	public void setMazhaScore(double mazhaScore)
+	{
+		this.mazhaScore = mazhaScore;
+	}
+
+	public int getExtraPlus()
+	{
+		return extraPlus;
+	}
+
+	public void setExtraPlus(int extraPlus)
+	{
+		this.extraPlus = extraPlus;
+	}
+
+	public double getExtraPlusProportion()
+	{
+		return extraPlusProportion;
+	}
+
+	public void setExtraPlusProportion(double extraPlusProportion)
+	{
+		this.extraPlusProportion = extraPlusProportion;
+	}
+
+	public int getExtraPlusScore()
+	{
+		return extraPlusScore;
+	}
+
+	public void setExtraPlusScore(int extraPlusScore)
+	{
+		this.extraPlusScore = extraPlusScore;
 	}
 	
 }
