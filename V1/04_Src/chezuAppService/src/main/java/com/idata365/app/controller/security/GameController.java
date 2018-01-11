@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,13 @@ public class GameController extends BaseController
 		
 		CompetitorFamilyInfoResultBean resultBean = this.gameService.queryCompetitorFamilyInfo(bean);
 		
+		String imgBasePath = super.getImgBasePath();
+		String imgUrl = resultBean.getImgUrl();
+		if (StringUtils.isNotBlank(imgUrl))
+		{
+			resultBean.setImgUrl(imgBasePath + imgUrl);
+		}
+		
 		return ResultUtils.rtSuccess(resultBean);
 	}
 	
@@ -98,7 +106,7 @@ public class GameController extends BaseController
 		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("judgeFlag", judgeFlag);
 		
-		return ResultUtils.rtSuccess(null);
+		return ResultUtils.rtSuccess(resultMap);
 	}
 	
 	/**

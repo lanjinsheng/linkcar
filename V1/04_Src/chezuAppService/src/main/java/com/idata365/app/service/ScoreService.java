@@ -430,6 +430,9 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		FamilyResultBean selfFamilybean = this.familyMapper.queryFamilyById(familyParamBean);
 		
+		if (null == selfFamilybean)
+			return null;
+		
 		FamilyCompetitorResultBean gameObj = new FamilyCompetitorResultBean();
 		gameObj.setFamilyId(String.valueOf(selfFamilybean.getMyFamilyId()));
 		gameObj.setName(selfFamilybean.getMyFamilyName());
@@ -451,6 +454,7 @@ public class ScoreService extends BaseService<ScoreService>
 		FamilyRelationBean relationParamBean = new FamilyRelationBean();
 		relationParamBean.setFamilyId(familyId);
 		relationParamBean.setDaystamp(getCurrentDayStr());
+//		relationParamBean.setDaystamp("2018-01-10");
 		List<FamilyRelationBean> familyRelationList = this.familyMapper.queryFamilyIdByCompetitorId(relationParamBean);
 		if (CollectionUtils.isEmpty(familyRelationList))
 		{
