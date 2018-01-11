@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
@@ -341,6 +342,7 @@ public class FamilyService extends BaseService<FamilyService>
 		}
 		
 		bean.setCreateTimeStr(generateTimeStampUndelimiter());
+		bean.setFamilyType(FamilyConstant.BRONZE_TYPE);
 		this.familyMapper.save(bean);
 		
 		long familyId = bean.getId();
