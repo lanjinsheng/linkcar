@@ -885,7 +885,7 @@ public class GameService extends BaseService<GameService>
 		
 		FamilyParamBean silverParam = new FamilyParamBean();
 		silverParam.setFamilyType(FamilyConstant.SILVER_TYPE);
-		List<FamilyInfoBean> silverList = this.familyMapper.queryFamilyByType(bronzeParam);
+		List<FamilyInfoBean> silverList = this.familyMapper.queryFamilyByType(silverParam);
 		
 		FamilyParamBean goldParam = new FamilyParamBean();
 		goldParam.setFamilyType(FamilyConstant.GOLD_TYPE);
