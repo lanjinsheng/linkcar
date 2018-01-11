@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.CompetitorResultBean;
+import com.idata365.app.entity.FamilyCompetitorResultBean;
 import com.idata365.app.entity.FamilyMemberAllResultBean;
 import com.idata365.app.entity.GameHistoryResultBean;
 import com.idata365.app.entity.GameResultWithFamilyResultBean;
@@ -153,6 +155,17 @@ public class ScoreController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
 		List<YesterdayScoreResultBean> resultList = this.scoreService.findYesterdayFamilyScore(bean);
+		
+		String imgBasePath = super.getImgBasePath();
+		for (YesterdayScoreResultBean tempBean : resultList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			if (StringUtils.isNotBlank(imgUrl))
+			{
+				tempBean.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
+		
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -167,6 +180,17 @@ public class ScoreController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
 		List<YesterdayContributionResultBean> resultList = this.scoreService.familyContribution(bean);
+		
+		String imgBasePath = super.getImgBasePath();
+		for (YesterdayContributionResultBean tempBean : resultList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			if (StringUtils.isNotBlank(imgUrl))
+			{
+				tempBean.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
+		
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -194,9 +218,28 @@ public class ScoreController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
-		CompetitorResultBean resultBean = this.scoreService.showGameResult(bean);
 		List<CompetitorResultBean> resultList = new ArrayList<>();
-		resultList.add(resultBean);
+		
+		CompetitorResultBean resultBean = this.scoreService.showGameResult(bean);
+		
+		if (null != resultBean)
+		{
+			String imgBasePath = super.getImgBasePath();
+			
+			FamilyCompetitorResultBean gameObj = resultBean.getGameObj();
+			if (StringUtils.isNotBlank(gameObj.getImgUrl()))
+			{
+				gameObj.setImgUrl(imgBasePath + gameObj.getImgUrl());
+			}
+			
+			FamilyCompetitorResultBean competitorObj = resultBean.getCompetitorObj();
+			if (null != competitorObj && StringUtils.isNotBlank(competitorObj.getImgUrl()))
+			{
+				competitorObj.setImgUrl(imgBasePath + competitorObj.getImgUrl());
+			}
+			
+			resultList.add(resultBean);
+		}
 		
 		return ResultUtils.rtSuccess(resultList);
 	}

@@ -221,7 +221,13 @@ public class GameService extends BaseService<GameService>
 		long myFamilyId = bean.getFamilyId();
 		relationBean.setFamilyId(myFamilyId);
 		relationBean.setDaystamp(getCurrentDayStr());
-		FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean).get(0);
+		List<FamilyRelationBean> competitorList = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
+		if (CollectionUtils.isEmpty(competitorList))
+		{
+			return null;
+		}
+		
+		FamilyRelationBean relationResultBean = competitorList.get(0);
 		long familyId1 = relationResultBean.getFamilyId1();
 		long familyId2 = relationResultBean.getFamilyId2();
 		
