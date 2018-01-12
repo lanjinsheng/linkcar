@@ -12,9 +12,9 @@
         SELECT 
       * from userFamilyRoleLog where id=#{id}
     </select>
-   <select id="getUserRolesByFamilyId" parameterType="java.lang.Long" resultMap="BaseUserFamilyRoleLogMap" >
+   <select id="getUserRolesByFamilyId" parameterType="java.util.HashMap" resultMap="BaseUserFamilyRoleLogMap" >
         SELECT 
-      * from userFamilyRoleLog where familyId=#{familyId}
+      * from userFamilyRoleLog where familyId=#{familyId}  and startTime<![CDATA[>=]]>#{startTime} and endTime<![CDATA[<=]]>#{endTime}
     </select>
   
 </mapper>

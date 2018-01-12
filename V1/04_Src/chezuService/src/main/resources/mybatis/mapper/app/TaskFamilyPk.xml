@@ -11,8 +11,25 @@
            a left join familyInfo b 
               on a.selfFamilyId=b.id left join familyInfo c on a.competitorFamilyId=c.id
 	</insert>
- 
 	
+ 	 <select id="getFamilyDayScoreByFD"  resultType="com.idata365.entity.FamilyDriveDayStat" parameterType="com.idata365.entity.FamilyDriveDayStat">
+		SELECT *  from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+	 </select>
+	<update id="updateFamilyDayScoreById" parameterType="com.idata365.entity.FamilyDriveDayStat" >
+       UPDATE 
+            familyDriveDayStat 
+       SET 
+        score=score+(${familyLevelFactor}),familyLevelFactor=${familyLevelFactor}
+       WHERE 
+            id=#{id}
+    </update>	
+	
+	   <insert id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
+         update
+            familyScore
+                set score=score+${familyLevelFactor} where familyId=#{familyId} and month=#{month}
+       </insert>	
+
  <!-- 定时处理 -->
     <update id="lockFamilyPkTask" parameterType="com.idata365.entity.TaskFamilyPk" >
        UPDATE 

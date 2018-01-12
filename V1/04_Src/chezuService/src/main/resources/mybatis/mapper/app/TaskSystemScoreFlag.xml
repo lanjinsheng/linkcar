@@ -68,19 +68,27 @@
    	
 	<!--begin 初始化Order任务关系 -->
 	 <select id="getUnInitOrderFlagList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where taskFamilyOrderInit=0
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=0 and familyDayScoreFlag=1 and taskFamilyPk=1
 	</select>
 	<update id="updateOrderInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
 		  set taskFamilyOrderInit=${taskFamilyOrderInit} where  daystamp=#{daystamp}
 	</update>
 	
-	<select id="getUnFinishFamilyOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyOrder=0
+	<select id="getUnFinishFamilyDayOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyDayOrder=0
 	</select>
-	<update id="finishFamilyOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	<update id="finishFamilyDayOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
-		  set taskFamilyOrder=${taskFamilyOrder} where  daystamp=#{daystamp}
+		  set taskFamilyDayOrder=${taskFamilyDayOrder} where  daystamp=#{daystamp}
+	</update>
+	
+		<select id="getUnFinishFamilyMonthOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyMonthOrder=0
+	</select>
+	<update id="finishFamilyMonthOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyMonthOrder=${taskFamilyMonthOrder} where  daystamp=#{daystamp}
 	</update>
 	
    <!--end 初始化Order任务关系 -->
