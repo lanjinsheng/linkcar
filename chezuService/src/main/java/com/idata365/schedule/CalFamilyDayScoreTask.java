@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.idata365.entity.TaskFamilyDayScore;
+import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.ConfigSystemTaskService;
+import com.idata365.service.TaskKeyLogService;
 
 
 
@@ -32,6 +34,8 @@ public class CalFamilyDayScoreTask extends TimerTask {
     CalScoreFamilyDayService calScoreFamilyDayService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
+    @Autowired
+    TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -56,6 +60,11 @@ public class CalFamilyDayScoreTask extends TimerTask {
 //				String mm=timestamp.substring(4, 6);
 //				String dd=timestamp.substring(6, 8);
 			long taskFlag=System.currentTimeMillis();
+			TaskKeyLog key=new TaskKeyLog();
+			key.setTaskFlag(String.valueOf(taskFlag));
+			key.setTaskName("CalFamilyDayScoreTask");
+		    int hadKey=	taskKeyLogService.insertAppKey(key);
+			if(hadKey==0) { pd=true;return;}
 			TaskFamilyDayScore task=new TaskFamilyDayScore();
 			task.setDaystamp(timestamp);
 			task.setTaskFlag(String.valueOf(taskFlag));

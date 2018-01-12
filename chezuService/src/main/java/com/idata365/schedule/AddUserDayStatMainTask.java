@@ -6,8 +6,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.service.AddUserDayStatService;
+import com.idata365.service.TaskKeyLogService;
 
 
 
@@ -28,7 +30,8 @@ public class AddUserDayStatMainTask extends TimerTask {
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
     AddUserDayStatService addUserDayStatService;
- 
+    @Autowired
+    TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -46,6 +49,12 @@ public class AddUserDayStatMainTask extends TimerTask {
 		if(pd){
 			pd=false;
 			long taskFlag=System.currentTimeMillis();
+			TaskKeyLog key=new TaskKeyLog();
+			key.setTaskFlag(String.valueOf(taskFlag));
+			key.setTaskName("AddUserDayStatMainTask");
+		    int hadKey=	taskKeyLogService.insertAppKey(key);
+			if(hadKey==0){ pd=true;return;}
+			
 			UserTravelHistory task=new UserTravelHistory();
 			task.setTaskFlag(String.valueOf(taskFlag));
 			List<UserTravelHistory> list=addUserDayStatService.getTravelTask(task);

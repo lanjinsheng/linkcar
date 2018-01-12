@@ -10,12 +10,14 @@ import com.idata365.entity.TaskFamilyDayScore;
 import com.idata365.entity.TaskFamilyMonthOrder;
 import com.idata365.entity.TaskFamilyDayOrder;
 import com.idata365.entity.TaskFamilyPk;
+import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.service.CalFamilyDayOrderService;
 import com.idata365.service.CalFamilyMonthOrderService;
 import com.idata365.service.CalFamilyPkService;
 import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.ConfigSystemTaskService;
+import com.idata365.service.TaskKeyLogService;
 
 
 
@@ -38,6 +40,8 @@ public class CalFamilyMonthOrderTask extends TimerTask {
    CalFamilyMonthOrderService calFamilyMonthOrderService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
+    @Autowired
+    TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -62,6 +66,11 @@ public class CalFamilyMonthOrderTask extends TimerTask {
 //				String mm=timestamp.substring(4, 6);
 //				String dd=timestamp.substring(6, 8);
 			long taskFlag=System.currentTimeMillis();
+			TaskKeyLog key=new TaskKeyLog();
+			key.setTaskFlag(String.valueOf(taskFlag));
+			key.setTaskName("CalFamilyMonthOrderTask");
+		    int hadKey=	taskKeyLogService.insertAppKey(key);
+			if(hadKey==0){ pd=true;return;}
 			TaskFamilyMonthOrder task=new TaskFamilyMonthOrder();
 			task.setMonth(tf.getDaystamp().replaceAll("-", "").substring(0,6));
 			task.setTaskFlag(String.valueOf(taskFlag));
