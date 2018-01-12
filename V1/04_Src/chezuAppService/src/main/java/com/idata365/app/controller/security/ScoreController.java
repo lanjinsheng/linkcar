@@ -91,6 +91,14 @@ public class ScoreController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		ScoreFamilyDetailResultBean resultBean = this.scoreService.queryFamilyDetail(bean);
+		
+		String imgBasePath = super.getImgBasePath();
+		String imgUrl = resultBean.getImgUrl();
+		if (StringUtils.isNotBlank(imgUrl))
+		{
+			resultBean.setImgUrl(imgBasePath + imgUrl);
+		}
+		
 		List<ScoreFamilyDetailResultBean> resultList = new ArrayList<>();
 		resultList.add(resultBean);
 		return ResultUtils.rtSuccess(resultList);
