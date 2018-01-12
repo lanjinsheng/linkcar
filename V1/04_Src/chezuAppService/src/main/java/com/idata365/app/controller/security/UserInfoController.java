@@ -111,8 +111,16 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("virginDay",licenseDrive.getVirginDay());
 			  rtMap.put("validDay",licenseDrive.getValidDay());
 			  rtMap.put("validYears",String.valueOf(licenseDrive.getValidYears()));
-			  rtMap.put("frontDrivingImg",imgBase+licenseDrive.getFrontImgUrl());
-			  rtMap.put("backDrivingImg",imgBase+licenseDrive.getBackImgUrl());
+			  if(ValidTools.isBlank(licenseDrive.getFrontImgUrl())) {
+				  rtMap.put("frontDrivingImg","");
+			  }else {
+				  rtMap.put("frontDrivingImg",imgBase+licenseDrive.getFrontImgUrl());
+			  }
+			  if(ValidTools.isBlank(licenseDrive.getBackImgUrl())) {
+			    rtMap.put("backDrivingImg","");
+			  }else {
+				  rtMap.put("backDrivingImg",imgBase+licenseDrive.getBackImgUrl());
+			  }
 			  rtMap.put("isDrivingEdit", String.valueOf(licenseDrive.getIsDrivingEdit()));
 		  }else {
 			  rtMap.put("userName", "");
@@ -134,8 +142,17 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("modelTypeDesc",licenseVehicleTravel.getModelType());
 			  rtMap.put("vin",licenseVehicleTravel.getVin());
 			  rtMap.put("engineNo",licenseVehicleTravel.getEngineNo());
-			  rtMap.put("frontTravelImg",imgBase+licenseVehicleTravel.getFrontImgUrl());
-			  rtMap.put("backTravelImg",imgBase+licenseVehicleTravel.getBackImgUrl());
+			  if(ValidTools.isBlank(licenseVehicleTravel.getFrontImgUrl())) {
+				  rtMap.put("frontTravelImg",""); 
+			  }else {
+				  rtMap.put("frontTravelImg",imgBase+licenseVehicleTravel.getFrontImgUrl());
+			  }
+			  
+			  if(ValidTools.isBlank(licenseVehicleTravel.getBackImgUrl())) {
+				  rtMap.put("backTravelImg","");
+			  }else {
+				  rtMap.put("backTravelImg",imgBase+licenseVehicleTravel.getBackImgUrl());
+			  }
 			  rtMap.put("issueDate",licenseVehicleTravel.getIssueDate());
 			  rtMap.put("regDate",licenseVehicleTravel.getRegDate());
 			  rtMap.put("isTravelEdit",String.valueOf(licenseVehicleTravel.getIsTravelEdit()));
