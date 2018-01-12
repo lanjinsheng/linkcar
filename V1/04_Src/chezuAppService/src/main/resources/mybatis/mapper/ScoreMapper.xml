@@ -34,9 +34,8 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 
 	<select id="queryMemberByFamilyId" resultType="com.idata365.app.entity.ScoreMemberInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select imgUrl, t1.nickName as name, t1.phone as phone, t1.id as userId, t2.role as role, joinTime from usersAccount t1 
-join userFamilyRelation t2 on (t1.id=t2.userId) 
-left join userScoreDayStat t3 on (t1.id=t3.userId) 
-where t2.familyId = #{familyId}
+	join userFamilyRelation t2 on (t1.id=t2.userId) 
+	where t2.familyId = #{familyId} order by joinTime asc
 	</select>
 
 	<select id="queryHistoryOrder" resultType="com.idata365.app.entity.ScoreUserHistoryBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
