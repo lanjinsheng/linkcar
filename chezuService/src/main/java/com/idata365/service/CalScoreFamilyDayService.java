@@ -281,10 +281,13 @@ public class CalScoreFamilyDayService {
 		}else {
 			fscore.setMemberFactor(0.8d);
 		}
-
+		if(familyPersonNum==0) {
+			scoreComm=0d;
+		}else {
 		scoreComm=BigDecimal.valueOf(scoreComm).divide(BigDecimal.valueOf(familyPersonNum),2,RoundingMode.HALF_UP)
 				.multiply(BigDecimal.valueOf(fscore.getRoleFactor()))
 				.multiply(BigDecimal.valueOf(fscore.getFamilyNumFactor())).doubleValue();
+		}
 		score=scoreComm;
 		fscore.setScore(score);
 		fscore.setScoreComm(scoreComm);

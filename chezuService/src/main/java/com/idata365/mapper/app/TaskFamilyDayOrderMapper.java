@@ -18,6 +18,9 @@ public interface TaskFamilyDayOrderMapper {
  
 	 int  initTaskFamilyDayOrder(TaskSystemScoreFlag task);
 	 int   updateFamilyDayOrder(TaskFamilyDayOrder taskFamilyOrder);
+	int  delTaskFamilyDayOrder(@Param("daystamp") String daystamp);
+	 
+	 
 	  TaskFamilyDayOrder  getPreTaskRecord(TaskFamilyDayOrder taskFamilyOrder);
 		void lockFamilyDayOrderTask(TaskFamilyDayOrder taskFamilyOrder);
 		

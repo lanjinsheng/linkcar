@@ -89,6 +89,9 @@ public class CalFamilyPkService {
         }
         taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
         taskFamilyPkMapper.updateFamilyDayScoreById(fdds2);
+        String month=taskFamilyPk.getDaystamp().replaceAll("-", "").substring(0,6);
+        fdds1.setMonth(month);
+        fdds2.setMonth(month);
         taskFamilyPkMapper.updateFamilyScore(fdds1);
         taskFamilyPkMapper.updateFamilyScore(fdds2);
 		return true;

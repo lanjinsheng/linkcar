@@ -73,7 +73,9 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		//order 任务是通过family日分与月分，pk分都统计好的情况下进行计算的。
 		List<TaskSystemScoreFlag> tasks3=taskSystemScoreFlagMapper.getUnInitOrderFlagList();
 		for (TaskSystemScoreFlag task:tasks3) {
+			taskFamilyDayOrderMapper.delTaskFamilyDayOrder(task.getDaystamp());
 			taskFamilyDayOrderMapper.initTaskFamilyDayOrder(task);
+			
 			String month=task.getDaystamp().replaceAll("-", "").substring(0,6);
 			taskFamilyMonthOrderMapper.delTaskFamilyMonthOrder(month);
 			taskFamilyMonthOrderMapper.initTaskFamilyMonthOrder(month);

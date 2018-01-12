@@ -35,7 +35,7 @@ public class CalFamilyDayOrderService {
 		{
 			taskFamilyOrder.setOrderNo(1);
 		}else {
-			if(preOrder.getScore()==taskFamilyOrder.getScore()) {
+			if(preOrder.getScore().doubleValue()==taskFamilyOrder.getScore().doubleValue()) {
 				taskFamilyOrder.setOrderNo(preOrder.getOrderNo());
 			}else {
 				taskFamilyOrder.setOrderNo(preOrder.getOrderNo()+1);
