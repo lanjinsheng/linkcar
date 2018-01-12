@@ -44,6 +44,8 @@ public interface FamilyMapper
 	
 	public List<FamilyInviteBean> queryApplyInfo(FamilyInviteParamBean bean);
 	
+	public void updateInviteStatus(FamilyParamBean bean);
+	
 	public int countByName(FamilyParamBean bean);
 	
 	public void updateInviteCode(FamilyParamBean bean);
