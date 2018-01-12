@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.idata365.entity.FamilyDriveDayStat;
+import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskFamilyDayScore;
 /**
  * 
@@ -18,9 +19,10 @@ import com.idata365.entity.TaskFamilyDayScore;
 public interface TaskFamilyDayScoreMapper {
  
 	 int  insertTaskFamilyDayScore(TaskFamilyDayScore taskFamilyDayScore);
-
 	 int  insertTaskFamilyDayScoreByTime(Map<String,Object> map);
 	 int insertFamilyDriveDayStat(FamilyDriveDayStat familyDriveDayStat);
+	 int  insertFamilyScore(FamilyScore task);
+	 
 	 
 		void lockFamilyDayScoreTask(TaskFamilyDayScore taskFamilyDayScore);
 		

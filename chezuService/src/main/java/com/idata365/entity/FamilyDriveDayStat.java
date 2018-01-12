@@ -18,7 +18,7 @@ public class FamilyDriveDayStat  implements Serializable {
 	private Double scoreComm;
 	private Double scoreAdd;
 	private Integer speedTimes;
-	private Integer  speedPenalTime;
+	private Integer  speedPenalTimes;
 	private String speedTimesUpdateTime;
 	private Integer brakeTimes;
 	private Integer brakePenalTimes;
@@ -100,11 +100,12 @@ public class FamilyDriveDayStat  implements Serializable {
 	public void setSpeedTimes(Integer speedTimes) {
 		this.speedTimes = speedTimes;
 	}
-	public Integer getSpeedPenalTime() {
-		return speedPenalTime;
+ 
+	public Integer getSpeedPenalTimes() {
+		return speedPenalTimes;
 	}
-	public void setSpeedPenalTime(Integer speedPenalTime) {
-		this.speedPenalTime = speedPenalTime;
+	public void setSpeedPenalTimes(Integer speedPenalTimes) {
+		this.speedPenalTimes = speedPenalTimes;
 	}
 	public String getSpeedTimesUpdateTime() {
 		return speedTimesUpdateTime;
