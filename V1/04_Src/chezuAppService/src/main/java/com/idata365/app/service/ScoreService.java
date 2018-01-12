@@ -224,9 +224,9 @@ public class ScoreService extends BaseService<ScoreService>
 //				tempResultBean.setDayStr(tempDayStr + "(今日)");
 				continue;
 			}
-			else if (StringUtils.equals(dayStr, yesterdayStr))
+			else if (StringUtils.equals(tempDayStr, yesterdayStr))
 			{
-				tempResultBean.setDayStr(dayStr + "(昨日)");
+				tempResultBean.setDayStr(tempDayStr + "(昨日)");
 			}
 			else
 			{
