@@ -351,7 +351,6 @@ public class ScoreController extends BaseController
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
-	//temp settings
 	@RequestMapping("/score/gameHistory")
 	public Map<String, Object> gameHistory(@RequestBody ScoreFamilyInfoParamBean bean)
 	{

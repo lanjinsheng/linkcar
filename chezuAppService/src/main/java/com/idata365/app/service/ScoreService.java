@@ -29,6 +29,7 @@ import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.GameHistoryBean;
 import com.idata365.app.entity.GameHistoryResultBean;
 import com.idata365.app.entity.GameResultWithFamilyResultBean;
 import com.idata365.app.entity.ScoreByDayBean;
@@ -788,25 +789,18 @@ public class ScoreService extends BaseService<ScoreService>
 		return resultList;
 	}
 	
-	//temp settings
 	public List<GameHistoryResultBean> gameHistory(ScoreFamilyInfoParamBean bean)
 	{
+		List<GameHistoryBean> tempList = this.scoreMapper.queryFamilyOrderByMonth(bean);
+		
 		List<GameHistoryResultBean> resultList = new ArrayList<>();
 		
-		GameHistoryResultBean bean1 = new GameHistoryResultBean();
-		bean1.setOrderNo("10");
-		bean1.setDaystamp("2017-12-01");
-		resultList.add(bean1);
-		
-		GameHistoryResultBean bean2 = new GameHistoryResultBean();
-		bean2.setOrderNo("10");
-		bean2.setDaystamp("2017-12-01");
-		resultList.add(bean2);
-		
-		GameHistoryResultBean bean3 = new GameHistoryResultBean();
-		bean3.setOrderNo("10");
-		bean3.setDaystamp("2017-12-01");
-		resultList.add(bean3);
+		for (GameHistoryBean tempBean : tempList)
+		{
+			GameHistoryResultBean tempResultBean = new GameHistoryResultBean();
+			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			resultList.add(tempResultBean);
+		}
 		
 		return resultList;
 	}

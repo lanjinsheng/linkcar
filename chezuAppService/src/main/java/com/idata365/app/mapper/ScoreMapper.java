@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyMemberBean;
+import com.idata365.app.entity.GameHistoryBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreDetailBean;
 import com.idata365.app.entity.ScoreFamilyDetailBean;
@@ -53,4 +54,6 @@ public interface ScoreMapper
 	public UserTravelHistoryDetailBean queryTravelDetail(ScoreFamilyInfoParamBean bean);
 	
 	public List<ScoreDetailBean> queryScoreDetail(ScoreFamilyInfoParamBean bean);
+	
+	public List<GameHistoryBean> queryFamilyOrderByMonth(ScoreFamilyInfoParamBean bean);
 }
