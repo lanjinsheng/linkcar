@@ -6,10 +6,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.service.CalScoreUserDayService;
 import com.idata365.service.ConfigSystemTaskService;
+import com.idata365.service.TaskKeyLogService;
 
 
 
@@ -32,6 +34,8 @@ public class CalUserDayScoreTask extends TimerTask {
     CalScoreUserDayService calScoreUserDayService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
+    @Autowired
+    TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -56,6 +60,11 @@ public class CalUserDayScoreTask extends TimerTask {
 //				String mm=timestamp.substring(4, 6);
 //				String dd=timestamp.substring(6, 8);
 			long taskFlag=System.currentTimeMillis();
+			TaskKeyLog key=new TaskKeyLog();
+			key.setTaskFlag(String.valueOf(taskFlag));
+			key.setTaskName("CalFamilyMonthOrderTask");
+		    int hadKey=	taskKeyLogService.insertAppKey(key);
+			if(hadKey==0) { pd=true;return;}
 			UserScoreDayStat task=new UserScoreDayStat();
 			task.setDaystamp(timestamp);
 			task.setTaskFlag(String.valueOf(taskFlag));

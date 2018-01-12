@@ -8,7 +8,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.idata365.entity.CalDriveTask;
 import com.idata365.entity.DriveScore;
+import com.idata365.entity.TaskKeyLog;
 import com.idata365.service.CalScoreService;
+import com.idata365.service.TaskKeyLogService;
 
 
 
@@ -29,7 +31,8 @@ public class CalScoreMainTask extends TimerTask {
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
     CalScoreService calScoreService;
- 
+    @Autowired
+    TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -48,6 +51,11 @@ public class CalScoreMainTask extends TimerTask {
 			pd=false;
 		
 			long taskFlag=System.currentTimeMillis();
+			TaskKeyLog key=new TaskKeyLog();
+			key.setTaskFlag(String.valueOf(taskFlag));
+			key.setTaskName("CalFamilyMonthOrderTask");
+		    int hadKey=	taskKeyLogService.insertColKey(key);
+			if(hadKey==0) { pd=true;return;}
 			CalDriveTask task=new CalDriveTask();
 			task.setTaskFlag(taskFlag);
 			List<CalDriveTask> list=calScoreService.getCalScoreTask(task);
