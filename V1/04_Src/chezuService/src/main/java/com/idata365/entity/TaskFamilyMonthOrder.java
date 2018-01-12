@@ -2,7 +2,7 @@ package com.idata365.entity;
 
 import java.io.Serializable;
 
-public class TaskFamilyOrder implements Serializable {
+public class TaskFamilyMonthOrder implements Serializable {
 
 	
 	    /**
@@ -14,8 +14,25 @@ public class TaskFamilyOrder implements Serializable {
 	private Long familyId;
 	private String taskFlag;
     private Integer taskStatus;
-	private String daystamp;
+	private String month;
 	private Integer failTimes;
+	private Double score;
+	private int orderNo;
+	
+	
+	
+	public int getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
+	}
+	public Double getScore() {
+		return score;
+	}
+	public void setScore(Double score) {
+		this.score = score;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -41,11 +58,12 @@ public class TaskFamilyOrder implements Serializable {
 	public void setTaskStatus(Integer taskStatus) {
 		this.taskStatus = taskStatus;
 	}
-	public String getDaystamp() {
-		return daystamp;
+ 
+	public String getMonth() {
+		return month;
 	}
-	public void setDaystamp(String daystamp) {
-		this.daystamp = daystamp;
+	public void setMonth(String month) {
+		this.month = month;
 	}
 	public Integer getFailTimes() {
 		return failTimes;

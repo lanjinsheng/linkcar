@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
-import com.idata365.mapper.app.TaskFamilyOrderMapper;
+import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
+import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
 import com.idata365.mapper.app.TaskSystemScoreFlagMapper;
 @Service
@@ -29,8 +31,9 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	TaskFamilyPkMapper taskFamilyPkMapper;
 	
 	@Autowired
-	TaskFamilyOrderMapper taskFamilyOrderMapper;
-	
+	TaskFamilyDayOrderMapper taskFamilyDayOrderMapper;
+	@Autowired
+	TaskFamilyMonthOrderMapper taskFamilyMonthOrderMapper;
 	
 	public String getDateStr(int diff)
 	{
@@ -41,6 +44,7 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		LOG.info(dayStr);
 		return dayStr;
 	}
+	@Transactional
 	public void configSystemTask(){
 		String dayStamp=getDateStr(-1);
 		TaskSystemScoreFlag taskSystemScoreFlag=new TaskSystemScoreFlag();
@@ -66,11 +70,15 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			taskSystemScoreFlagMapper.updatePkInit(task);
 		}
 		 
-		
+		//order 任务是通过family日分与月分，pk分都统计好的情况下进行计算的。
 		List<TaskSystemScoreFlag> tasks3=taskSystemScoreFlagMapper.getUnInitOrderFlagList();
 		for (TaskSystemScoreFlag task:tasks3) {
-			taskFamilyOrderMapper.initTaskFamilyOrder(task);
-			task.setTaskFamilyOrderInit(1);;
+			taskFamilyDayOrderMapper.initTaskFamilyDayOrder(task);
+			String month=task.getDaystamp().replaceAll("-", "").substring(0,6);
+			taskFamilyMonthOrderMapper.delTaskFamilyMonthOrder(month);
+			taskFamilyMonthOrderMapper.initTaskFamilyMonthOrder(month);
+			
+			task.setTaskFamilyOrderInit(1);
 			taskSystemScoreFlagMapper.updateOrderInit(task);
 		}
 		 
@@ -104,12 +112,20 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		
 	}
 	
-	public List<TaskSystemScoreFlag> getUnFinishFamilyOrder(){
-		return taskSystemScoreFlagMapper.getUnFinishFamilyOrderList();
+	public List<TaskSystemScoreFlag> getUnFinishFamilyDayOrder(){
+		return taskSystemScoreFlagMapper.getUnFinishFamilyDayOrderList();
 	}
-	public void finishConfigSystemFamilyOrderTask(TaskSystemScoreFlag task) {
-		task.setTaskFamilyOrder(1);
-		taskSystemScoreFlagMapper.finishFamilyOrderTask(task);
-		
+	public void finishConfigSystemFamilyDayOrderTask(TaskSystemScoreFlag task) {
+		task.setTaskFamilyDayOrder(1);
+		taskSystemScoreFlagMapper.finishFamilyDayOrderTask(task);
 	}
+	
+	public List<TaskSystemScoreFlag> getUnFinishFamilyMonthOrder(){
+		return taskSystemScoreFlagMapper.getUnFinishFamilyMonthOrderList();
+	}
+	public void finishConfigSystemFamilyMonthOrderTask(TaskSystemScoreFlag task) {
+		task.setTaskFamilyMonthOrder(1);
+		taskSystemScoreFlagMapper.finishFamilyMonthOrderTask(task);
+	}
+	
 }

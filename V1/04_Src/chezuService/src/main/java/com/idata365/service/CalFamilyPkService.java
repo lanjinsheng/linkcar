@@ -8,16 +8,17 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.entity.FamilyDriveDayStat;
 import com.idata365.entity.TaskFamilyPk;
+import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
 @Service
 public class CalFamilyPkService {
 
 	@Autowired
    TaskFamilyPkMapper taskFamilyPkMapper;
- 
-	
 	
 	public String getDateStr(int diff)
 	{
@@ -27,8 +28,69 @@ public class CalFamilyPkService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
+	@Transactional
 	public boolean calFamilyPk(TaskFamilyPk taskFamilyPk) {
+		//获取pk关系
+		Long selfFamilyId=taskFamilyPk.getSelfFamilyId();
+		Long competitorFamilyId= taskFamilyPk.getCompetitorFamilyId();
+		int level1=taskFamilyPk.getSelfFamilyLevel();
+		int level2=taskFamilyPk.getCompetitorFamilyLevel();
+		FamilyDriveDayStat fdds1=new FamilyDriveDayStat();
+		fdds1.setFamilyId(selfFamilyId);
+		fdds1.setDaystamp(taskFamilyPk.getDaystamp());
+		fdds1=taskFamilyPkMapper.getFamilyDayScoreByFD(fdds1);
 		
+		FamilyDriveDayStat fdds2=new FamilyDriveDayStat();
+		fdds2.setFamilyId(competitorFamilyId);
+		fdds2.setDaystamp(taskFamilyPk.getDaystamp());
+		fdds2=taskFamilyPkMapper.getFamilyDayScoreByFD(fdds2);
+		
+		int level1Sub2=level1-level2;
+		
+        if(fdds1.getScoreComm()>fdds2.getScoreComm()) {
+        	//PK等级得分
+        	if(level1Sub2==0) {
+        		fdds1.setFamilyLevelFactor(30d);
+        		fdds2.setFamilyLevelFactor(-30d);
+        	}else if(level1Sub2==10) {
+        		fdds1.setFamilyLevelFactor(20d);
+        		fdds2.setFamilyLevelFactor(-20d);
+        	}else if(level1Sub2==20) {
+        		fdds1.setFamilyLevelFactor(10d);
+        		fdds2.setFamilyLevelFactor(-10d);
+        	}else if(level1Sub2==-10) {
+        		fdds1.setFamilyLevelFactor(40d);
+        		fdds2.setFamilyLevelFactor(-40d);
+        	}else if(level1Sub2==-20) {
+        		fdds1.setFamilyLevelFactor(50d);
+        		fdds2.setFamilyLevelFactor(-50d);
+        	}
+        }else if(fdds2.getScoreComm()>fdds1.getScoreComm()) {
+        	//PK等级得分
+        	if(level1Sub2==0) {
+        		fdds2.setFamilyLevelFactor(30d);
+        		fdds1.setFamilyLevelFactor(-30d);
+        	}else if(level1Sub2==10) {
+        		fdds2.setFamilyLevelFactor(40d);
+        		fdds1.setFamilyLevelFactor(-40d);
+        	}else if(level1Sub2==20) {
+        		fdds2.setFamilyLevelFactor(50d);
+        		fdds1.setFamilyLevelFactor(-50d);
+        	}else if(level1Sub2==-10) {
+        		fdds2.setFamilyLevelFactor(20d);
+        		fdds1.setFamilyLevelFactor(-20d);
+        	}else if(level1Sub2==-20) {
+        		fdds2.setFamilyLevelFactor(10d);
+        		fdds1.setFamilyLevelFactor(-10d);
+        	}
+        }else {//不得分
+        	fdds2.setFamilyLevelFactor(0d);
+    		fdds1.setFamilyLevelFactor(0d);
+        }
+        taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
+        taskFamilyPkMapper.updateFamilyDayScoreById(fdds2);
+        taskFamilyPkMapper.updateFamilyScore(fdds1);
+        taskFamilyPkMapper.updateFamilyScore(fdds2);
 		return true;
 	}
 	

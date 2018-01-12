@@ -35,8 +35,11 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getUnFinishFamilyPkList();
 	 int finishFamilyPkTask(TaskSystemScoreFlag systemScoreFlag);
 	 
-	 List<TaskSystemScoreFlag> getUnFinishFamilyOrderList();
-	 int finishFamilyOrderTask(TaskSystemScoreFlag systemScoreFlag);
+	 List<TaskSystemScoreFlag> getUnFinishFamilyDayOrderList();
+	 int finishFamilyDayOrderTask(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 List<TaskSystemScoreFlag> getUnFinishFamilyMonthOrderList();
+	 int finishFamilyMonthOrderTask(TaskSystemScoreFlag systemScoreFlag);
 	 
 	
 	 

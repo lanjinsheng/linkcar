@@ -12,8 +12,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.FamilyDriveDayStat;
+import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskFamilyDayScore;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
@@ -40,14 +42,20 @@ public class CalScoreFamilyDayService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
+	@Transactional
 	public boolean calScoreFamilyDay(TaskFamilyDayScore taskFamilyDayScore) {
 		FamilyDriveDayStat fscore=new FamilyDriveDayStat();
 		Long familyId=taskFamilyDayScore.getFamilyId();
-		List<UserFamilyRoleLog> roleLogs=userFamilyScoreMapper.getUserRolesByFamilyId(familyId);
+		String daystamp=taskFamilyDayScore.getDaystamp();
+		Map<String,Object> roleMapParam=new HashMap<String,Object>();
+		roleMapParam.put("familyId", familyId);
+		roleMapParam.put("startTime", daystamp+" 00:00:00");
+		roleMapParam.put("endTime", daystamp+" 23:59:59");
+		List<UserFamilyRoleLog> roleLogs=userFamilyScoreMapper.getUserRolesByFamilyId(roleMapParam);
 		int familyPersonNum=roleLogs.size();
 		int familyRoleNum=0;
 		int activeNum=0;
-		String daystamp=getDateStr(-1);
+	
 		Map<Integer,Object> tempMap=new HashMap<Integer,Object>();
 		
 	   Integer useHoldNum=0;
@@ -111,7 +119,6 @@ public class CalScoreFamilyDayService {
 				if(userDayScore.getMaxspeed()>maxspeed) {
 					maxspeed=userDayScore.getMaxspeed();
 				}
-				daystamp=userDayScore.getDaystamp();
 				useHoldNum+=userDayScore.getUseHoldNum();
 				scoreComm+=userDayScore.getScore();
 				
@@ -185,7 +192,7 @@ public class CalScoreFamilyDayService {
 
 		fscore.setScoreAdd(scoreAdd);
 		fscore.setSpeedTimes(speedTimes);
-		fscore.setSpeedPenalTime(speedPenalTime);
+		fscore.setSpeedPenalTimes(speedPenalTime);
 		fscore.setSpeedTimesUpdateTime(speedTimesUpdateTime);
 		fscore.setBrakeTimes(brakeTimes);
 		fscore.setBrakePenalTimes(brakePenalTimes);
@@ -282,6 +289,11 @@ public class CalScoreFamilyDayService {
 		fscore.setScore(score);
 		fscore.setScoreComm(scoreComm);
 		taskFamilyDayScoreMapper.insertFamilyDriveDayStat(fscore);
+		FamilyScore fs=new FamilyScore();
+		fs.setFamilyId(familyId);
+		fs.setMonth(taskFamilyDayScore.getDaystamp().replaceAll("-", "").substring(0,6));
+		fs.setScore(score);
+		taskFamilyDayScoreMapper.insertFamilyScore(fs);
 		return true;
 	}
 	

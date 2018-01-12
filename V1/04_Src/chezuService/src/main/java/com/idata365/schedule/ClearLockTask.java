@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.idata365.service.AddUserDayStatService;
-import com.idata365.service.CalFamilyOrderService;
+import com.idata365.service.CalFamilyDayOrderService;
+import com.idata365.service.CalFamilyMonthOrderService;
 import com.idata365.service.CalFamilyPkService;
 import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.CalScoreService;
@@ -30,12 +31,13 @@ public class ClearLockTask extends TimerTask {
     AddUserDayStatService addUserDayStatService;
     
     @Autowired
-    CalFamilyOrderService calFamilyOrderService;
-    @Autowired
     CalScoreFamilyDayService calScoreFamilyDayService;
     @Autowired
     CalFamilyPkService calFamilyPkService;
- 
+    @Autowired
+    CalFamilyDayOrderService calFamilyDayOrderService;
+    @Autowired
+    CalFamilyMonthOrderService calFamilyMonthOrderService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -58,7 +60,8 @@ public class ClearLockTask extends TimerTask {
 				calScoreService.clearLockTask();
 				addUserDayStatService.clearLockTask();
 				calFamilyPkService.clearLockTask();
-				calFamilyOrderService.clearLockTask();
+				calFamilyDayOrderService.clearLockTask();
+				calFamilyMonthOrderService.clearLockTask();
 				calScoreFamilyDayService.clearLockTask();
 			}catch(Exception e) {
 				e.printStackTrace();

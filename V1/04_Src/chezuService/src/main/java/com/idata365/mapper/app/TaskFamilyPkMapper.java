@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.idata365.entity.FamilyDriveDayStat;
+import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskFamilyPk;
 import com.idata365.entity.TaskSystemScoreFlag;
 /**
@@ -16,8 +18,10 @@ import com.idata365.entity.TaskSystemScoreFlag;
  */
 public interface TaskFamilyPkMapper {
  
+	 FamilyDriveDayStat getFamilyDayScoreByFD(FamilyDriveDayStat familyDriveDayStat);
+	 int updateFamilyDayScoreById(FamilyDriveDayStat familyDriveDayStat);
 	 int  initTaskFamilyPk(TaskSystemScoreFlag task);
-
+	 int updateFamilyScore(FamilyDriveDayStat familyDriveDayStat);
 	 
 		void lockFamilyPkTask(TaskFamilyPk taskFamilyPk);
 		
