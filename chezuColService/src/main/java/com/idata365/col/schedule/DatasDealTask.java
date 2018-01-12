@@ -17,6 +17,7 @@ import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.service.DataService;
 import com.idata365.col.service.SpringContextUtil;
 import com.idata365.col.service.YingyanService;
+import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.PhoneGpsUtil;
 
@@ -81,24 +82,30 @@ public class DatasDealTask implements Runnable
 	    		 Double avgSpeed=Double.valueOf(datasMap.get("avgSpeed").toString());
 	    		 Double distance=Double.valueOf(datasMap.get("distance").toString());
 	    		 long driveTimes=Long.valueOf(datasMap.get("driveTimes").toString());
-	    		 
+	    		 String day1=endTime.substring(0,10).replaceAll("-", "");
+	    		 String day2=DateTools.getYYYYMMDD();
 	    		 DriveDataMain data=new DriveDataMain();
-	    		 //识别驾驶标签
-	    		 if(driveTimes<180) {//180s内的驾驶行为忽略
-	    			 data.setValidStatus(1);
-	    		 }
-	    		 
-	    		 if(maxSpeed<7 && driveTimes<900) {
+	    		 if(Integer.valueOf(day2).intValue()!=Integer.valueOf(day1)) {
 	    			 data.setValidStatus(-1);
-	    			 data.setLabelFlag("电动车/自行车");
-	    		 }else   if(avgSpeed>41){
-	    			 data.setValidStatus(-1);
-	    			 data.setLabelFlag("高铁");
+	    			 data.setLabelFlag("隔天数据");
 	    		 }else {
-	    			 data.setValidStatus(1);
-	    			 data.setLabelFlag("小车");
+		    		 //识别驾驶标签
+		    		 if(driveTimes<180) {//180s内的驾驶行为忽略
+		    			 data.setValidStatus(-1);
+		    			 data.setLabelFlag("短时");
+		    		 }
+		    		 
+		    		 if(maxSpeed<7 && driveTimes<900) {
+		    			 data.setValidStatus(-1);
+		    			 data.setLabelFlag("电动车/自行车");
+		    		 }else   if(avgSpeed>41){
+		    			 data.setValidStatus(-1);
+		    			 data.setLabelFlag("高铁");
+		    		 }else {
+		    			 data.setValidStatus(1);
+		    			 data.setLabelFlag("小车");
+		    		 }
 	    		 }
-	    		 
 	    		 data.setCreateTime(new Date());
 	    		 data.setDriveEndTime(endTime);
 	    		 data.setDriveStartTime(startTime);
@@ -140,5 +147,11 @@ public class DatasDealTask implements Runnable
 			}
 		 log.info("end=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
 	}
-
+public static void main(String []args) {
+	 String day1="2018-01-12 12:00:00.666".substring(0,10).replaceAll("-", "");
+	 String day2=DateTools.getYYYYMMDD();
+	 if(Integer.valueOf(day2).intValue()!=Integer.valueOf(day1)) {
+		System.out.println("隔天数据");
+	 }
+}
 }
