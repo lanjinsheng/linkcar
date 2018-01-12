@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.ParkStationMapper">
+   <resultMap id="BaseParkStationMap" type="com.idata365.entity.ParkStation" >
+    </resultMap>
+      <!-- 直接找车位-->
+     <update id="updateParkStation" parameterType="com.idata365.entity.ParkStation" >
+        update parkStation set userId=#{userId},updateTime=now(),status='STOP',habitId=#{habitId} 
+        where  familyId=1 and status='HOLD' and expireTime<![CDATA[>=]]>#{expireTime} limit 1
+     </update>
+	
+</mapper>
