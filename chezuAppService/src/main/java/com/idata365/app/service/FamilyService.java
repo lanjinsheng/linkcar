@@ -143,6 +143,13 @@ public class FamilyService extends BaseService<FamilyService>
 				String tempName = PhoneUtils.hidePhone(tempBean.getPhone());
 				tempResultBean.setName(tempName);
 			}
+			
+			long userId = tempBean.getUserId();
+			long familyId = tempBean.getFamilyId();
+			FamilyParamBean familyParamBean = new FamilyParamBean();
+			familyParamBean.setUserId(userId);
+			familyParamBean.setFamilyId(familyId);
+			
 			resultList.add(tempResultBean);
 		}
 		return resultList;
@@ -177,6 +184,11 @@ public class FamilyService extends BaseService<FamilyService>
 		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
+		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
+		familyParamStatusBean.setMsgId(bean.getMsgId());
+		familyParamStatusBean.setStatus(1);
+		this.familyMapper.updateInviteStatus(familyParamStatusBean);
+		
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
 		
 		return 3;
@@ -190,7 +202,13 @@ public class FamilyService extends BaseService<FamilyService>
 	public void rejectApply(FamilyParamBean bean, UserInfo userInfo)
 	{
 		//删除邀请消息
-		this.familyMapper.delInviteByUserId(bean);
+//		this.familyMapper.delInviteByUserId(bean);
+		
+		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
+		familyParamStatusBean.setMsgId(bean.getMsgId());
+		familyParamStatusBean.setStatus(-1);
+		this.familyMapper.updateInviteStatus(familyParamStatusBean);
+		
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 	}
 	

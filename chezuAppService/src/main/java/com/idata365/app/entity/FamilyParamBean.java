@@ -34,6 +34,10 @@ public class FamilyParamBean
 	
 	private String createTimeStr;
 
+	private long msgId;
+	
+	private int status;
+	
 	public long getId()
 	{
 		return id;
@@ -193,5 +197,25 @@ public class FamilyParamBean
 	{
 		this.createTimeStr = createTimeStr;
 	}
-		
+
+	public long getMsgId()
+	{
+		return msgId;
+	}
+
+	public void setMsgId(long msgId)
+	{
+		this.msgId = msgId;
+	}
+
+	public int getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(int status)
+	{
+		this.status = status;
+	}
+	
 }

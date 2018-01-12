@@ -637,14 +637,14 @@ public class ScoreService extends BaseService<ScoreService>
 		List<ScoreDetailUnitBean> resultList = new ArrayList<>();
 		
 		ScoreDetailUnitBean mileageBean = new ScoreDetailUnitBean();
-		mileageBean.setFactor("MILEAGE");
+		mileageBean.setFactor("里程");
 		mileageBean.setValue(String.valueOf(tempBean.getMileage()));
 		mileageBean.setWeight(formattedDecimalToPercentage(tempBean.getMileageProportion()));
 		mileageBean.setScore(String.valueOf(tempBean.getMileageScore()));
 		resultList.add(mileageBean);
 		
 		ScoreDetailUnitBean brakeTimesBean = new ScoreDetailUnitBean();
-		brakeTimesBean.setFactor("BRAKE_TIMES");
+		brakeTimesBean.setFactor("急刹车");
 		String brakeTimes1 = String.valueOf(tempBean.getBrakeTimes()) + "次";
 		String brakeTimes2 = String.valueOf(tempBean.getUseShachepian());
 		String brakeTottery = "刹车片";
@@ -655,7 +655,7 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(brakeTimesBean);
 		
 		ScoreDetailUnitBean turnTimesBean = new ScoreDetailUnitBean();
-		turnTimesBean.setFactor("TURN_TIMES");
+		turnTimesBean.setFactor("急转弯");
 		String turnTimes1 = String.valueOf(tempBean.getTurnTimes());
 		String turnTimes2 = String.valueOf(tempBean.getUseCheluntai());
 		String turnTottery = "车轮胎";
@@ -666,7 +666,7 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(turnTimesBean);
 		
 		ScoreDetailUnitBean overspeedTimesBean = new ScoreDetailUnitBean();
-		overspeedTimesBean.setFactor("OVERSPEED_TIMES");
+		overspeedTimesBean.setFactor("超速");
 		String overspeedTimes1 = String.valueOf(tempBean.getOverspeedTimes());
 		String zengyaqiTimes = String.valueOf(tempBean.getUseZengyaqi());
 		String overspeedTottery = "增压器";
@@ -677,7 +677,7 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(overspeedTimesBean);
 		
 		ScoreDetailUnitBean nightDriveTimesBean = new ScoreDetailUnitBean();
-		nightDriveTimesBean.setFactor("NIGHTDRIVE_TIMES");
+		nightDriveTimesBean.setFactor("夜间驾驶");
 		String nightDriveTimes1 = String.valueOf(tempBean.getNightDriveTimes());
 		String yeshijingTimes = String.valueOf(tempBean.getUseYeshijing());
 		String yeshijingTottery = "夜视镜";
@@ -688,7 +688,7 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(nightDriveTimesBean);
 		
 		ScoreDetailUnitBean tiredDriveTimesBean = new ScoreDetailUnitBean();
-		tiredDriveTimesBean.setFactor("TIRED_DRIVE_TIMES");
+		tiredDriveTimesBean.setFactor("疲劳驾驶");
 		String tiredDriveTimesStr = String.valueOf(tempBean.getTiredDriveTimes());
 		String hongniuTimes = String.valueOf(tempBean.getUseHongniu());
 		String hongniuTottery = "红牛";
@@ -699,7 +699,7 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(tiredDriveTimesBean);
 		
 		ScoreDetailUnitBean illegalStopTimesBean = new ScoreDetailUnitBean();
-		illegalStopTimesBean.setFactor("illegal_Stop_Times");
+		illegalStopTimesBean.setFactor("违停");
 		String illegalStopTimesStr = String.valueOf(tempBean.getIllegalStopTimes());
 		illegalStopTimesBean.setValue(illegalStopTimesStr);
 		illegalStopTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getIllegalStopTimesProportion()));
@@ -707,21 +707,21 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(illegalStopTimesBean);
 		
 		ScoreDetailUnitBean phoneTimesBean = new ScoreDetailUnitBean();
-		phoneTimesBean.setFactor("PHONE_TIMES");
+		phoneTimesBean.setFactor("使用手机次数");
 		phoneTimesBean.setValue(String.valueOf(tempBean.getPhoneTimes()));
 		phoneTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getPhoneTimesProportion()));
 		phoneTimesBean.setScore(String.valueOf(tempBean.getPhoneTimesScore()));
 		resultList.add(phoneTimesBean);
 		
 		ScoreDetailUnitBean mazhaTimesBean = new ScoreDetailUnitBean();
-		mazhaTimesBean.setFactor("MAZHA_TIMES");
+		mazhaTimesBean.setFactor("使用马扎");
 		mazhaTimesBean.setValue(String.valueOf(tempBean.getUseMazha()) + "次");
 		mazhaTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getMazhaProportion()));
 		mazhaTimesBean.setScore(String.valueOf(tempBean.getMazhaScore()));
 		resultList.add(mazhaTimesBean);
 		
 		ScoreDetailUnitBean maxspeedBean = new ScoreDetailUnitBean();
-		maxspeedBean.setFactor("MAX_SPEED");
+		maxspeedBean.setFactor("最高时速");
 		double maxspeed = tempBean.getMaxspeed();
 		BigDecimal maxspeedBd = BigDecimal.valueOf(maxspeed).multiply(BigDecimal.valueOf(3600)).divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_UP);
 		String maxspeedStr = maxspeedBd.toString() + "km/h";
@@ -734,7 +734,7 @@ public class ScoreService extends BaseService<ScoreService>
 		resultList.add(maxspeedBean);
 		
 		ScoreDetailUnitBean extraPlusBean = new ScoreDetailUnitBean();
-		extraPlusBean.setFactor("EXTRA_PLUS");
+		extraPlusBean.setFactor("额外加分");
 		int extraPlus = tempBean.getExtraPlus();
 		extraPlusBean.setValue(String.valueOf(extraPlus));
 		extraPlusBean.setWeight(formattedDecimalToPercentage(tempBean.getExtraPlusProportion()));

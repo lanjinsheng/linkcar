@@ -69,9 +69,13 @@
  	</insert>
  	
     <select id="queryApplyInfo" resultType="com.idata365.app.entity.FamilyInviteBean" parameterType="com.idata365.app.entity.FamilyInviteParamBean">
-    	select t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, t2.phone as phone, sendInviteMsg as userSource, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, leaveWord as msgStr from familyInvite t1 
+    	select t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, t2.phone as phone, sendInviteMsg as userSource, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, leaveWord as msgStr, t1.status as status from familyInvite t1 
 			join usersAccount t2 on (t1.memberUserId = t2.id) where t1.id=#{msgId}
     </select>
+ 	
+ 	<update id="updateInviteStatus" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		update familyInvite set status=#{status} where id=#{msgId}
+ 	</update>
  
     <select id="countByName" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
     	select count(1) from familyInfo where familyName=#{familyName}

@@ -18,6 +18,8 @@ public class FamilyInviteResultBean
 	
 	private String seqNo;
 
+	private String status;
+	
 	public String getUserId()
 	{
 		return userId;
@@ -96,6 +98,16 @@ public class FamilyInviteResultBean
 	public void setSeqNo(String seqNo)
 	{
 		this.seqNo = seqNo;
+	}
+
+	public String getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(String status)
+	{
+		this.status = status;
 	}
 	
 }

@@ -19,6 +19,8 @@ public class FamilyInviteBean
 	private String msgStr;
 	
 	private long seqNo;
+	
+	private int status;
 
 	public long getUserId()
 	{
@@ -108,6 +110,16 @@ public class FamilyInviteBean
 	public void setSeqNo(long seqNo)
 	{
 		this.seqNo = seqNo;
+	}
+
+	public int getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(int status)
+	{
+		this.status = status;
 	}
 	
 }
