@@ -32,18 +32,18 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 //		 overspeedTimesScore   maxspeedScore   tiredDriveScore  phoneTimesScore  nightDriveScore
 		UserFamilyRoleLog userRoleLog=userFamilyScoreMapper.getUserRoleById(userScoreDayStat.getUserFamilyScoreId());
 		role=userRoleLog.getRole();
-		Double score=0D;
-		Double roleScore=0D;
-		Double mileageScore=0D;
-		Double timeScore=0D;
-		Double brakeTimesScore=0D;
-		Double turnTimesScore=0D;
-		Double speedTimesScore=0D;
-		Double overspeedTimesScore=0D;
-		Double maxspeedScore=0D;
-		Double tiredDriveScore=0D;
-		Double phoneTimesScore=0D;
-		Double nightDriveScore=0D;
+		double score=0d;
+		double roleScore=0d;
+		double mileageScore=0d;
+		double timeScore=0d;
+		double brakeTimesScore=0d;
+		double turnTimesScore=0d;
+		double speedTimesScore=0d;
+		double overspeedTimesScore=0d;
+		double maxspeedScore=0d;
+		double tiredDriveScore=0d;
+		double phoneTimesScore=0d;
+		double nightDriveScore=0d;
 		int penalTimes=0;
 		
 		if(role>=1 && role<=6) {
