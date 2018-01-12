@@ -46,6 +46,15 @@ public class FamilyDriveDayStat  implements Serializable {
 	private Double familyLevelFactor;
 	private Double mileage;
 	private Double time;
+	
+	private String month;
+	
+	public String getMonth() {
+		return month;
+	}
+	public void setMonth(String month) {
+		this.month = month;
+	}
 	public Long getId() {
 		return id;
 	}

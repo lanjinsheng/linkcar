@@ -8,10 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.entity.ParkStation;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
+import com.idata365.mapper.app.ParkStationMapper;
 import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
@@ -26,6 +29,8 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	UserFamilyScoreMapper userFamilyScoreMapper;
 	@Autowired
 	UserScoreDayStatMapper userScoreDayStatMapper;
+	@Autowired
+	ParkStationMapper parkStationMapper;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	
@@ -50,6 +55,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	}
 //	
 	
+	@Transactional
    public boolean addUserDayStat(UserTravelHistory uth) {
 	   String driveEndTime=uth.getEndTime().substring(0,19);
 		Map<String,Object> m=new HashMap<String,Object>();
@@ -86,7 +92,8 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 				userScoreDayStat.setOverspeedTimesUpdateTime(driveEndTime);
 			}
 			int tiredDriveTimes=(uth.getTiredDrive()-uth.getTiredDriveOffset())>=120?1:0;
-			userScoreDayStat.setTiredDrive(uth.getTiredDrive()-uth.getTiredDriveOffset());
+			long tireTime =Double.valueOf(uth.getTiredDrive()-uth.getTiredDriveOffset()).longValue();
+			userScoreDayStat.setTiredDrive(tireTime);
 			userScoreDayStat.setTiredDriveTimes(tiredDriveTimes);
 			if(tiredDriveTimes>0) {
 				userScoreDayStat.setTiredDriveTimesUpdateTime(driveEndTime);
@@ -97,7 +104,24 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 				userScoreDayStat.setNightDriveTimesUpdateTime(driveEndTime);
 			 }
 			userScoreDayStat.setMaxspeed(uth.getMaxspeed());
-			//更新违规次数
+			userScoreDayStat.setUseCheluntai(uth.getUseCheluntai());
+			userScoreDayStat.setUseFadongji(uth.getUseFadongji());
+			userScoreDayStat.setUseHongniu(uth.getUseHongniu());
+			userScoreDayStat.setUseShachepian(uth.getUseShachepian());
+			userScoreDayStat.setUseYeshijing(uth.getUseYeshijing());
+			userScoreDayStat.setUseZengyaqi(uth.getUseZengyaqi());
+			userScoreDayStat.setTravelNum(1);
+			//更新车位
+			 ParkStation park=new ParkStation();
+			 park.setUserId(uth.getUserId());
+			 park.setFamilyId(role.getFamilyId());
+			 park.setExpireTime(driveEndTime);
+			 park.setHabitId(uth.getHabitId());
+			 int updatePark=parkStationMapper.updateParkStation(park);
+			 if(updatePark==0) {//违停
+				 userScoreDayStat.setIllegalStopTimes(1);
+				 userScoreDayStat.setIllegalStopUpdateTime(driveEndTime);
+			 }
 			 userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
 		}
 		LOG.info("UPDATE SUCCESS");

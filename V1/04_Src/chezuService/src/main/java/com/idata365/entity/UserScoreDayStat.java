@@ -49,7 +49,7 @@ public class UserScoreDayStat implements Serializable {
 	private  Double maxspeed;
 	private Double maxspeedProportion;
 	private Double maxspeedScore;
-	private Double tiredDrive;
+	private Long tiredDrive;
 	private Integer tiredDriveTimes;
 	private Integer tiredDrivePenalTimes;
 	private Double tiredDriveProportion;
@@ -65,6 +65,8 @@ public class UserScoreDayStat implements Serializable {
 	private Integer illegalStopTimes;
 	private Integer illegalStopPenalTimes;
 	private String illegalStopUpdateTime;
+	private Double illegalStopTimesScore;
+	private Double illegalStopTimesProportion;
 	private String weather;
 	private Double weatherProportion;
 	private Double weatherScore;
@@ -77,7 +79,98 @@ public class UserScoreDayStat implements Serializable {
 	private Integer taskFailTimes;
 	private Date taskDealTime;
 	
+	private int useShachepian;
+	private int useHongniu;
+	private int useYeshijing;
+	private int useFadongji;
+	private int useCheluntai;
+	private int useZengyaqi;
 	
+	private int useMazha;
+	private int useZhitiao;
+	private Double tietiaoTakeOffScore;
+	private Double extraPlusScore;
+	private int travelNum;
+	
+	
+	public Double getExtraPlusScore() {
+		return extraPlusScore;
+	}
+	public void setExtraPlusScore(Double extraPlusScore) {
+		this.extraPlusScore = extraPlusScore;
+	}
+	public int getTravelNum() {
+		return travelNum;
+	}
+	public void setTravelNum(int travelNum) {
+		this.travelNum = travelNum;
+	}
+	public Double getIllegalStopTimesScore() {
+		return illegalStopTimesScore;
+	}
+	public void setIllegalStopTimesScore(Double illegalStopTimesScore) {
+		this.illegalStopTimesScore = illegalStopTimesScore;
+	}
+	public Double getIllegalStopTimesProportion() {
+		return illegalStopTimesProportion;
+	}
+	public void setIllegalStopTimesProportion(Double illegalStopTimesProportion) {
+		this.illegalStopTimesProportion = illegalStopTimesProportion;
+	}
+	public int getUseMazha() {
+		return useMazha;
+	}
+	public void setUseMazha(int useMazha) {
+		this.useMazha = useMazha;
+	}
+	public int getUseZhitiao() {
+		return useZhitiao;
+	}
+	public void setUseZhitiao(int useZhitiao) {
+		this.useZhitiao = useZhitiao;
+	}
+	public Double getTietiaoTakeOffScore() {
+		return tietiaoTakeOffScore;
+	}
+	public void setTietiaoTakeOffScore(Double tietiaoTakeOffScore) {
+		this.tietiaoTakeOffScore = tietiaoTakeOffScore;
+	}
+	public int getUseShachepian() {
+		return useShachepian;
+	}
+	public void setUseShachepian(int useShachepian) {
+		this.useShachepian = useShachepian;
+	}
+	public int getUseHongniu() {
+		return useHongniu;
+	}
+	public void setUseHongniu(int useHongniu) {
+		this.useHongniu = useHongniu;
+	}
+	public int getUseYeshijing() {
+		return useYeshijing;
+	}
+	public void setUseYeshijing(int useYeshijing) {
+		this.useYeshijing = useYeshijing;
+	}
+	public int getUseFadongji() {
+		return useFadongji;
+	}
+	public void setUseFadongji(int useFadongji) {
+		this.useFadongji = useFadongji;
+	}
+	public int getUseCheluntai() {
+		return useCheluntai;
+	}
+	public void setUseCheluntai(int useCheluntai) {
+		this.useCheluntai = useCheluntai;
+	}
+	public int getUseZengyaqi() {
+		return useZengyaqi;
+	}
+	public void setUseZengyaqi(int useZengyaqi) {
+		this.useZengyaqi = useZengyaqi;
+	}
 	public Integer getUseHoldNum() {
 		return useHoldNum;
 	}
@@ -342,10 +435,11 @@ public class UserScoreDayStat implements Serializable {
 	public void setMaxspeedScore(Double maxspeedScore) {
 		this.maxspeedScore = maxspeedScore;
 	}
-	public Double getTiredDrive() {
+ 
+	public Long getTiredDrive() {
 		return tiredDrive;
 	}
-	public void setTiredDrive(Double tiredDrive) {
+	public void setTiredDrive(Long tiredDrive) {
 		this.tiredDrive = tiredDrive;
 	}
 	public Integer getTiredDriveTimes() {

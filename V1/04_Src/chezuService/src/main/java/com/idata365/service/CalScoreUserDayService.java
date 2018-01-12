@@ -44,6 +44,8 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		Double tiredDriveScore=0D;
 		Double phoneTimesScore=0D;
 		Double nightDriveScore=0D;
+		int penalTimes=0;
+		
 		if(role>=1 && role<=6) {
 			roleScore=10d;
 		}else {
@@ -96,6 +98,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setTiredDriveScore(tiredDriveScore);
 			userScoreDayStat.setNightDriveScore(nightDriveScore);
 			userScoreDayStat.setTimeScore(timeScore);
+			userScoreDayStat.setIllegalStopTimesScore(Double.valueOf(-userScoreDayStat.getIllegalStopTimes()));
 		}else {
 			userScoreDayStat.setScore(score+roleScore);
 			userScoreDayStat.setMileageScore(0d);
@@ -109,7 +112,38 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setTimeScore(0d);
 		}
 		//增加其他加分项目:贴条等，待定
+		penalTimes+=userScoreDayStat.getBrakePenalTimes();
+		penalTimes+=userScoreDayStat.getTurnPenalTimes();
+		penalTimes+=userScoreDayStat.getSpeedPenalTimes();
+		penalTimes+=userScoreDayStat.getOverspeedPenalTimes();
+		penalTimes+=userScoreDayStat.getTiredDrivePenalTimes();
+		penalTimes+=userScoreDayStat.getNightDrivePenalTimes();
+		penalTimes+=userScoreDayStat.getIllegalStopPenalTimes();
+		if(userScoreDayStat.getTravelNum()>0) {
+			int tietiaoFen=0;
+			
+			if(penalTimes>=7) {
+				tietiaoFen=-20;	
+			}else {
+				tietiaoFen=-penalTimes*3;
+				
+			}
+			Double illegalScore=BigDecimal.valueOf(tietiaoFen).divide(BigDecimal.valueOf(userScoreDayStat.getTravelNum()),2,RoundingMode.HALF_UP).doubleValue();
+			userScoreDayStat.setIllegalStopTimesScore(illegalScore);
+		}else {
+			userScoreDayStat.setIllegalStopTimesScore(0d);
+		}
 		
+		double endScore=userScoreDayStat.getScore().doubleValue()
+				+userScoreDayStat.getIllegalStopTimesScore().doubleValue()
+				+userScoreDayStat.getTietiaoTakeOffScore().doubleValue()
+				+userScoreDayStat.getExtraPlusScore();
+		//缺少个人成就分
+		if(endScore<0) {
+			userScoreDayStat.setScore(0d);
+		}else {
+			userScoreDayStat.setScore(endScore);
+		}
 		return true;
 	}
 	
