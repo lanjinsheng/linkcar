@@ -95,7 +95,7 @@
     <!-- 容器加载10秒后开始执行 -->  
     <property name="delay" value="10000" /> 
         <!-- 每次任务间隔10*60*1000毫秒-->  
-    <property name="period" value="600000" />   
+    <property name="period" value="20000" />   
   </bean> 
   <!--End#######################初始化家族计分任务数据#######################################################-->
  
@@ -127,7 +127,7 @@
     <!-- 容器加载10秒后开始执行 -->  
     <property name="delay" value="10000" /> 
         <!-- 每次任务间隔10*60*1000毫秒-->  
-    <property name="period" value="300000" />   
+    <property name="period" value="20000" />   
   </bean> 
   <!--End#######################计算家族日分数据#######################################################-->
  
@@ -142,24 +142,37 @@
     <!-- 容器加载10秒后开始执行 -->  
     <property name="delay" value="10000" /> 
         <!-- 每次任务间隔10*60*1000毫秒-->  
-    <property name="period" value="300000" />   
+    <property name="period" value="20000" />   
   </bean> 
   <!--End#######################计算家族PK数据#######################################################-->
  
   
     <!--Begin#######################计算家族Order数据#######################################################-->
   <!-- 延迟10s加载 -->
-  <bean id="calFamilyOrderTask" class="com.idata365.schedule.CalFamilyDayOrderTask">  
+  <bean id="calFamilyDayOrderTask" class="com.idata365.schedule.CalFamilyDayOrderTask">  
     <property name="threadPool" ref="threadPool"></property>
   </bean>  
    
   <bean id="calFamilyDayOrderTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
-    <property name="runnable" ref="calFamilyOrderTask" />  
+    <property name="runnable" ref="calFamilyDayOrderTask" />  
     <!-- 容器加载10秒后开始执行 -->  
     <property name="delay" value="10000" /> 
         <!-- 每次任务间隔10*60*1000毫秒-->  
-    <property name="period" value="300000" />   
+    <property name="period" value="20000" />   
   </bean> 
+  
+    <bean id="calFamilyMonthOrderTask" class="com.idata365.schedule.CalFamilyMonthOrderTask">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="calFamilyMonthOrderTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="calFamilyMonthOrderTask" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" /> 
+        <!-- 每次任务间隔10*60*1000毫秒-->  
+    <property name="period" value="20000" />   
+  </bean> 
+  
   <!--End#######################计算家族Order数据#######################################################-->
  
  
@@ -186,14 +199,13 @@
 	   <ref bean="driveSendMainTaskExe" />
 	   <ref bean="calScoreMainTaskExe"/>
 	   <ref bean="addUserDayStatTaskExe"/> 
-	   <ref bean="configInitTaskExe" /> 
 	   <ref bean="clearLockTaskExe" />
-	   
+	   <ref bean="configInitTaskExe" /> 
 	   <ref bean="calUserDayScoreTaskExe" /> 
 	   <ref bean="calFamilyDayScoreTaskExe" /> 
 	   <ref bean="calFamilyDayPkTaskExe" /> 
 	   <ref bean="calFamilyDayOrderTaskExe" /> 
-
+       <ref bean="calFamilyMonthOrderTaskExe" />
       </list>  
     </property>  
   </bean>  
