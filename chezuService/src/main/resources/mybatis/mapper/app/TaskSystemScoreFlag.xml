@@ -37,7 +37,7 @@
 	</update>
 	
 	<select id="getUnFinishFamilyScoreList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where familyDayScoreFlag=0
+	   select * from taskSystemScoreFlag where familyDayScoreFlag=0 and userDayScoreFlag=1 and taskFamilyInit=1
 	</select>
 	
 	<update id="finishFamilyDayScoreTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
