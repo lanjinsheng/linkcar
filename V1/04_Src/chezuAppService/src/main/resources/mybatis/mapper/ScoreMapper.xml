@@ -86,4 +86,9 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select t1.* from userScoreDayStat t1
 			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t1.daystamp=#{day} and t2.familyId=#{familyId}
 	</select>
+	
+	<select id="queryFamilyOrderByMonth" resultType="com.idata365.app.entity.GameHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as daystamp 
+			from familyDriveDayStat where date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y-%m')=#{month} and familyId=#{familyId} order by daystamp asc
+	</select>
 </mapper>
