@@ -17,16 +17,24 @@ public interface LotteryMapper
 	
 	public void increLotteryCount(LotteryBean bean);
 	
-	public void decreLotteryCount(ReadyLotteryBean bean);
-	
-	public Long queryReadyLotteryId(ReadyLotteryBean bean);
-	
-	public List<Long> queryReadyLotteryAwardId(ReadyLotteryBean bean);
+	public List<ReadyLotteryBean> queryReadyLotteryAwardId(ReadyLotteryBean bean);
 	
 	public List<LotteryBean> queryReadyLottery(ReadyLotteryBean bean);
 	
 	public int updateReadyLotteryStatus(LotteryBean bean);
 	
+	public void addLotteryCount(LotteryBean bean);
+	
+	public void delLotteryCount(LotteryBean bean);
+	
+	public void increReadyLotteryCount(LotteryBean bean);
+	
+	public void decreReadyLotteryCount(LotteryBean bean);
+	
 	public void saveOrUpdateReadyLottery(ReadyLotteryBean bean);
+	
+	public int countReadyLottery(ReadyLotteryBean bean);
+	
+	public void delReadyLottery(ReadyLotteryBean bean);
 	
 }

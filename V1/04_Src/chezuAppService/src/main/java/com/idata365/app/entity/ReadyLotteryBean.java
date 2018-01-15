@@ -10,6 +10,8 @@ public class ReadyLotteryBean
 	
 	private int awardCount;
 	
+	private int awardTotalCount;
+	
 	private String daystamp;
 
 	private int count;
@@ -52,6 +54,16 @@ public class ReadyLotteryBean
 	public void setAwardCount(int awardCount)
 	{
 		this.awardCount = awardCount;
+	}
+
+	public int getAwardTotalCount()
+	{
+		return awardTotalCount;
+	}
+
+	public void setAwardTotalCount(int awardTotalCount)
+	{
+		this.awardTotalCount = awardTotalCount;
 	}
 
 	public String getDaystamp()

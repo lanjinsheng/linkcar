@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.yaml.snakeyaml.introspector.BeanAccess;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
@@ -34,6 +35,7 @@ import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
+import com.idata365.app.entity.ReadyLotteryResultBean;
 import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationBean;
@@ -744,9 +746,11 @@ public class GameService extends BaseService<GameService>
 	 * @param bean
 	 */
 	@Transactional
-	public void getReadyLottery(ReadyLotteryBean bean)
+	public List<ReadyLotteryResultBean> getReadyLottery(ReadyLotteryBean bean)
 	{
 		getReadyLotteryB(bean);
+		List<ReadyLotteryResultBean> resultList = this.findTomorrowReadyLottery(bean);
+		return resultList;
 	}
 
 	private void getReadyLotteryB(ReadyLotteryBean bean)
@@ -773,26 +777,72 @@ public class GameService extends BaseService<GameService>
 	private void dropReadyLotteryB(ReadyLotteryBean bean)
 	{
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
-		Long readyLotteryId = this.lotteryMapper.queryReadyLotteryId(bean);
+		int readyLotteryCount = this.lotteryMapper.countReadyLottery(bean);
 		
-		bean.setId(readyLotteryId);
-		this.lotteryMapper.decreLotteryCount(bean);
-		
+		this.lotteryMapper.delReadyLottery(bean);
+				
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(bean.getUserId());
 		lotteryBean.setAwardId(bean.getAwardId());
+		lotteryBean.setAddedCount(readyLotteryCount);
 		this.lotteryMapper.increLotteryCount(lotteryBean);
 	}
 	
-	public List<String> queryReadyLotteryAwardId(ReadyLotteryBean bean)
+	public List<ReadyLotteryResultBean> findTomorrowReadyLottery(ReadyLotteryBean bean)
 	{
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
-		List<Long> awarIdList = this.lotteryMapper.queryReadyLotteryAwardId(bean);
-		List<String> resultList = new ArrayList<>();
-		for (Long tempAwardid : awarIdList)
+		List<ReadyLotteryBean> tempList = this.lotteryMapper.queryReadyLotteryAwardId(bean);
+		
+		List<ReadyLotteryResultBean> resultList = new ArrayList<>();
+		for (ReadyLotteryBean tempBean : tempList)
 		{
-			resultList.add(String.valueOf(tempAwardid));
+			ReadyLotteryResultBean resultBean = new ReadyLotteryResultBean();
+			int tempAwardId = tempBean.getAwardId();
+			resultBean.setAwardId(String.valueOf(tempBean.getAwardId()));
+			resultBean.setAwardCount(String.valueOf(tempBean.getAwardCount()));
+			
+			LotteryBean lotteryParamBean = new LotteryBean();
+			lotteryParamBean.setAwardId(tempAwardId);
+			lotteryParamBean.setUserId(bean.getUserId());
+			int tempTotalCount = this.lotteryMapper.countLottery(lotteryParamBean);
+			
+			resultBean.setAwardTotalCount(String.valueOf(tempTotalCount));
+			
+			resultList.add(resultBean);
 		}
+		
+		return resultList;
+	}
+	
+	@Transactional
+	public List<ReadyLotteryResultBean> increReadyLottery(ReadyLotteryBean bean)
+	{
+		LotteryBean lotteryParamBean = new LotteryBean();
+		lotteryParamBean.setUserId(bean.getUserId());
+		lotteryParamBean.setAwardId(bean.getAwardId());
+		lotteryParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
+		this.lotteryMapper.increReadyLotteryCount(lotteryParamBean);
+		
+		this.lotteryMapper.delLotteryCount(lotteryParamBean);
+		
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		List<ReadyLotteryResultBean> resultList = this.findTomorrowReadyLottery(bean);
+		return resultList;
+	}
+	
+	@Transactional
+	public List<ReadyLotteryResultBean> decreReadyLottery(ReadyLotteryBean bean)
+	{
+		LotteryBean lotteryParamBean = new LotteryBean();
+		lotteryParamBean.setUserId(bean.getUserId());
+		lotteryParamBean.setAwardId(bean.getAwardId());
+		lotteryParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
+		this.lotteryMapper.decreReadyLotteryCount(lotteryParamBean);
+		
+		this.lotteryMapper.addLotteryCount(lotteryParamBean);
+		
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		List<ReadyLotteryResultBean> resultList = this.findTomorrowReadyLottery(bean);
 		return resultList;
 	}
 	
@@ -801,7 +851,7 @@ public class GameService extends BaseService<GameService>
 	 * @param bean
 	 */
 	@Transactional
-	public void switchLottery(SwitchLotteryParamBean bean)
+	public List<ReadyLotteryResultBean> switchLottery(SwitchLotteryParamBean bean)
 	{
 		ReadyLotteryBean onBean = new ReadyLotteryBean();
 		onBean.setUserId(bean.getUserId());
@@ -812,6 +862,11 @@ public class GameService extends BaseService<GameService>
 		offBean.setUserId(bean.getUserId());
 		offBean.setAwardId(bean.getOffAwardId());
 		dropReadyLotteryB(offBean);
+		
+		ReadyLotteryBean tomorrowParamBean = new ReadyLotteryBean();
+		tomorrowParamBean.setUserId(bean.getUserId());
+		List<ReadyLotteryResultBean> resultList = findTomorrowReadyLottery(tomorrowParamBean);
+		return resultList;
 	}
 	
 	public String getTodayDateUndelimiterStr()
