@@ -83,6 +83,8 @@ public class CalFamilyDayScoreTask extends TimerTask {
 						if(taskFamilyDayScore.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							taskFamilyDayScore.setTaskStatus(2);
+						}else {
+							taskFamilyDayScore.setTaskStatus(0);
 						}
 						calScoreFamilyDayService.updateFailFamilyScoreDayTask(taskFamilyDayScore);
 					}
@@ -92,6 +94,8 @@ public class CalFamilyDayScoreTask extends TimerTask {
 						if(taskFamilyDayScore.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							taskFamilyDayScore.setTaskStatus(2);
+						}else {
+							taskFamilyDayScore.setTaskStatus(0);
 						}
 						calScoreFamilyDayService.updateFailFamilyScoreDayTask(taskFamilyDayScore);
 					}

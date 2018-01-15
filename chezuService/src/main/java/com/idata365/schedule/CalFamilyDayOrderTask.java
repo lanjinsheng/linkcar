@@ -96,6 +96,8 @@ public class CalFamilyDayOrderTask extends TimerTask {
 						if(taskFamilyOrder.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							taskFamilyOrder.setTaskStatus(2);
+						}else {
+							taskFamilyOrder.setTaskStatus(0);
 						}
 						calFamilyOrderService.updateFailFamilyDayOrderTask(taskFamilyOrder);
 					}
@@ -105,6 +107,8 @@ public class CalFamilyDayOrderTask extends TimerTask {
 						if(taskFamilyOrder.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							taskFamilyOrder.setTaskStatus(2);
+						}else {
+							taskFamilyOrder.setTaskStatus(0);
 						}
 						calFamilyOrderService.updateFailFamilyDayOrderTask(taskFamilyOrder);
 					}

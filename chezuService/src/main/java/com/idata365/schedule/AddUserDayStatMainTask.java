@@ -69,6 +69,8 @@ public class AddUserDayStatMainTask extends TimerTask {
 						if(userTravelHistory.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							userTravelHistory.setAddDayStatFlag(2);
+						}else {
+							userTravelHistory.setAddDayStatFlag(0);
 						}
 						addUserDayStatService.updateFailAddUserDayStatTask(userTravelHistory);
 					}
@@ -78,6 +80,8 @@ public class AddUserDayStatMainTask extends TimerTask {
 						if(userTravelHistory.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							userTravelHistory.setAddDayStatFlag(2);
+						}else {
+							userTravelHistory.setAddDayStatFlag(0);
 						}
 						addUserDayStatService.updateFailAddUserDayStatTask(userTravelHistory);
 					}

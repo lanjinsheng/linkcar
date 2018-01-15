@@ -69,6 +69,8 @@ public class CalScoreMainTask extends TimerTask {
 						if(calDriveTask.getCalFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							calDriveTask.setCalStatus(2);
+						}else {
+							calDriveTask.setCalStatus(0);
 						}
 						calScoreService.updateFailCalScoreTask(calDriveTask);
 					}
@@ -78,6 +80,8 @@ public class CalScoreMainTask extends TimerTask {
 						if(calDriveTask.getCalFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							calDriveTask.setCalStatus(2);
+						}else {
+							calDriveTask.setCalStatus(0);
 						}
 						calScoreService.updateFailCalScoreTask(calDriveTask);
 					}
