@@ -305,7 +305,26 @@ public class ScoreController extends BaseController
 	}
 	
 	
- 
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/showTravelDetailGps")
+	public Map<String, Object> showTravelDetailGps(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		Map<String,Object>  rtGps=new HashMap<String,Object>();
+		Map<String, Object> gpsMap = getGps(bean.getUserId(),bean.getHabitId());
+			//设置GPS
+			rtGps.put("gpsMap", gpsMap);
+			//获取行程道具
+			List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
+			rtGps.put("userTravelLotterys", userTravelLotterys);
+		return ResultUtils.rtSuccess(rtGps);
+	}
+	
+	
 	
 	public Map<String, Object> getGps(long userId, long habitId)
 	{
