@@ -10,6 +10,8 @@ public class LotteryBean
 	
 	private int count;
 	
+	private int addedCount;
+	
 	private String daystamp;
 
 	public long getUserId()
@@ -50,6 +52,16 @@ public class LotteryBean
 	public void setCount(int count)
 	{
 		this.count = count;
+	}
+
+	public int getAddedCount()
+	{
+		return addedCount;
+	}
+
+	public void setAddedCount(int addedCount)
+	{
+		this.addedCount = addedCount;
 	}
 
 	public String getDaystamp()

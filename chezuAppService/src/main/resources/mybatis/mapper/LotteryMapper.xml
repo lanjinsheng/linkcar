@@ -28,19 +28,11 @@
     </update>
     
     <update id="increLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
-    	update lottery set awardCount=awardCount+11 where userId=#{userId} and awardId=#{awardId}
+    	update lottery set awardCount=awardCount+${addedCount} where userId=#{userId} and awardId=#{awardId}
     </update>
     
-    <delete id="decreLotteryCount" parameterType="com.idata365.app.entity.ReadyLotteryBean">
-    	delete from readyLottery where id=#{id}
-    </delete>
-    
-    <select id="queryReadyLotteryId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.ReadyLotteryBean">
-    	 select id from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp} order by id desc
-    </select>
-    
-    <select id="queryReadyLotteryAwardId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.ReadyLotteryBean">
-    	 select awardId from readyLottery where userId=#{userId} and daystamp=#{daystamp} order by id desc
+    <select id="queryReadyLotteryAwardId" resultType="com.idata365.app.entity.ReadyLotteryBean" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	 select awardId, awardCount from readyLottery where userId=#{userId} and daystamp=#{daystamp} order by id desc
     </select>
     
     <select id="queryReadyLottery" resultType="com.idata365.app.entity.LotteryBean" parameterType="com.idata365.app.entity.ReadyLotteryBean">
@@ -51,7 +43,31 @@
     	update readyLottery set awardCount=awardCount-${awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
     </update>
     
+    <update id="addLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount+1 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <update id="delLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <update id="increReadyLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update readyLottery set awardCount=awardCount+1 where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </update>
+    
+    <update id="decreReadyLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update readyLottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </update>
+    
     <insert id="saveOrUpdateReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
     	insert into readyLottery(userId, awardId, awardCount, daystamp) values(#{userId}, #{awardId}, 1, #{daystamp})
     </insert>
+    
+    <select id="countReadyLottery" resultType="int" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	select awardCount from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </select>
+    
+    <delete id="delReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	delete from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </delete>
 </mapper>

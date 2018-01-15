@@ -18,6 +18,7 @@ import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
+import com.idata365.app.entity.ReadyLotteryResultBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
@@ -388,8 +389,8 @@ public class GameController extends BaseController
 	public Map<String, Object> getReadyLottery(@RequestBody ReadyLotteryBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		this.gameService.getReadyLottery(bean);
-		return ResultUtils.rtSuccess(null);
+		List<ReadyLotteryResultBean> resultList = this.gameService.getReadyLottery(bean);
+		return ResultUtils.rtSuccess(resultList);
 	}
 	
 	/**
@@ -414,8 +415,8 @@ public class GameController extends BaseController
 	public Map<String, Object> switchLottery(@RequestBody SwitchLotteryParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		this.gameService.switchLottery(bean);
-		return ResultUtils.rtSuccess(null);
+		List<ReadyLotteryResultBean> resultList = this.gameService.switchLottery(bean);
+		return ResultUtils.rtSuccess(resultList);
 	}
 	
 	/**
@@ -427,10 +428,34 @@ public class GameController extends BaseController
 	public Map<String, Object> findTomorrowReadyLottery(@RequestBody ReadyLotteryBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		Map<String, List<String>> resultMap = new HashMap<>();
-		List<String> resultList = this.gameService.queryReadyLotteryAwardId(bean);
-		resultMap.put("readyLottery", resultList);
-		return ResultUtils.rtSuccess(resultMap);
+		List<ReadyLotteryResultBean> resultList = this.gameService.findTomorrowReadyLottery(bean);
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 增加装备道具
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/increReadyLottery")
+	public Map<String, Object> increReadyLottery(@RequestBody ReadyLotteryBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		List<ReadyLotteryResultBean> resultList = this.gameService.increReadyLottery(bean);
+		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 减少装备道具
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/decreReadyLottery")
+	public Map<String, Object> decreReadyLottery(@RequestBody ReadyLotteryBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		List<ReadyLotteryResultBean> resultList = this.gameService.decreReadyLottery(bean);
+		return ResultUtils.rtSuccess(resultList);
 	}
 	
 	/**
