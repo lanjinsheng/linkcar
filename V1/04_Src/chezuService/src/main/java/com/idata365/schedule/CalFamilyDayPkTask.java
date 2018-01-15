@@ -85,6 +85,8 @@ public class CalFamilyDayPkTask extends TimerTask {
 						if(taskFamilyPk.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							taskFamilyPk.setTaskStatus(2);
+						}else {
+							taskFamilyPk.setTaskStatus(0);
 						}
 						calFamilyPkService.updateFailFamilyPkTask(taskFamilyPk);
 					}
@@ -94,6 +96,8 @@ public class CalFamilyDayPkTask extends TimerTask {
 						if(taskFamilyPk.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							taskFamilyPk.setTaskStatus(2);
+						}else {
+							taskFamilyPk.setTaskStatus(0);
 						}
 						calFamilyPkService.updateFailFamilyPkTask(taskFamilyPk);
 					}

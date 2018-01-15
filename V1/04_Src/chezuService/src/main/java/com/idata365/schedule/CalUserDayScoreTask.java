@@ -62,7 +62,7 @@ public class CalUserDayScoreTask extends TimerTask {
 			long taskFlag=System.currentTimeMillis();
 			TaskKeyLog key=new TaskKeyLog();
 			key.setTaskFlag(String.valueOf(taskFlag));
-			key.setTaskName("CalFamilyMonthOrderTask");
+			key.setTaskName("CalUserDayScoreTask");
 		    int hadKey=	taskKeyLogService.insertAppKey(key);
 			if(hadKey==0) { pd=true;return;}
 			UserScoreDayStat task=new UserScoreDayStat();
@@ -84,6 +84,8 @@ public class CalUserDayScoreTask extends TimerTask {
 						if(userScoreDayStat.getTaskFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							userScoreDayStat.setTaskStatus(2);
+						}else {
+							userScoreDayStat.setTaskStatus(0);
 						}
 						calScoreUserDayService.updateFailUserScoreDayTask(userScoreDayStat);
 					}
@@ -93,6 +95,8 @@ public class CalUserDayScoreTask extends TimerTask {
 						if(userScoreDayStat.getTaskFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
 							userScoreDayStat.setTaskStatus(2);
+						}else {
+							userScoreDayStat.setTaskStatus(0);
 						}
 						calScoreUserDayService.updateFailUserScoreDayTask(userScoreDayStat);
 					}
