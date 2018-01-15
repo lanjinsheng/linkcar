@@ -86,17 +86,26 @@ public class ScoreService extends BaseService<ScoreService>
 		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
 		resultBean.setOriFamily(oriFamilyBean);
 		
-		long origFamilyId = oriFamilyBean.getFamilyId();
-		List<Long> familyIdList = this.scoreMapper.queryFamilyIds(bean);
-		for (Long tempFamilyId : familyIdList)
+		long origFamilyId = 0;
+		if (null != oriFamilyBean)
 		{
-			if (tempFamilyId.longValue() != origFamilyId)
+			origFamilyId = oriFamilyBean.getFamilyId();
+		}
+		
+		List<Long> familyIdList = this.scoreMapper.queryFamilyIds(bean);
+		
+		if (CollectionUtils.isNotEmpty(familyIdList))
+		{
+			for (Long tempFamilyId : familyIdList)
 			{
-				ScoreFamilyInfoParamBean tempParamBean = new ScoreFamilyInfoParamBean();
-				tempParamBean.setFamilyId(tempFamilyId);
-				ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
-				resultBean.setJoinFamily(joinFamilyBean);
-				break;
+				if (tempFamilyId.longValue() != origFamilyId)
+				{
+					ScoreFamilyInfoParamBean tempParamBean = new ScoreFamilyInfoParamBean();
+					tempParamBean.setFamilyId(tempFamilyId);
+					ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
+					resultBean.setJoinFamily(joinFamilyBean);
+					break;
+				}
 			}
 		}
 		
