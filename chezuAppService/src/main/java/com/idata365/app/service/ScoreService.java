@@ -54,6 +54,7 @@ import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
 import com.idata365.app.entity.UserDetailResultBean;
+import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
@@ -62,6 +63,7 @@ import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.PhoneUtils;
@@ -71,6 +73,9 @@ import com.idata365.app.util.RandUtils;
 public class ScoreService extends BaseService<ScoreService>
 {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(ScoreService.class);
+	
+	@Autowired
+	private GameMapper gameMapper;
 	
 	@Autowired
 	private ScoreMapper scoreMapper;
@@ -155,10 +160,26 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		List<ScoreMemberInfoResultBean> resultList = new ArrayList<>();
 		
+//		this.gameMapper.queryRoleByDay(bean);
+		long familyId = bean.getFamilyId();
+		String tomorrowDateUndelimiterStr = getTomorrowDateUndelimiterStr();
+		
 		for (ScoreMemberInfoBean tempBean : tempList)
 		{
 			ScoreMemberInfoResultBean tempResultBean = new ScoreMemberInfoResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			
+			long userId = tempBean.getUserId();
+			
+			UserFamilyRoleLogParamBean  roleLogParamBean = new UserFamilyRoleLogParamBean();
+			roleLogParamBean.setUserId(userId);
+			roleLogParamBean.setFamilyId(familyId);
+			roleLogParamBean.setDaystamp(tomorrowDateUndelimiterStr);
+			List<Integer> roleList = this.gameMapper.queryRoleByDay(roleLogParamBean);
+			if (CollectionUtils.isNotEmpty(roleList))
+			{
+				tempResultBean.setTomorrowRole(String.valueOf(roleList.get(0)));
+			}
 			
 			String name = tempBean.getName();
 			if (StringUtils.isBlank(name))
@@ -186,6 +207,16 @@ public class ScoreService extends BaseService<ScoreService>
 		return resultList;
 	}
 
+	public String getTomorrowDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date tomorrowDate = DateUtils.addDays(curDate, 1);
+		
+		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyyMMdd");
+		LOGGER.info(tomorrowDateStr);
+		return tomorrowDateStr;
+	}
+	
 	private String formatTime(String tempJoinTime)
 	{
 		Date tempDate = null;
