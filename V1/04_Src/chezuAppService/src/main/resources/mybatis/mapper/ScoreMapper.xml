@@ -91,4 +91,17 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as daystamp 
 			from familyDriveDayStat where date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y-%m')=#{month} and familyId=#{familyId} order by daystamp asc
 	</select>
+	
+	<select id="queryUserInfo" resultType="com.idata365.app.entity.UsersAccountBean" parameterType="com.idata365.app.entity.UsersAccountBean">
+		select nickName, phone, imgUrl, createTime from usersAccount where id=#{id}
+	</select>
+	
+	<select id="statMileage" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select sum(mileage) as totalMileage from userScoreDayStat where userId=#{userId}
+	</select>
+	
+	<select id="statTime" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select sum(time) as totalTime from userScoreDayStat where userId=#{userId}
+	</select>
+	
 </mapper>

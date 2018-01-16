@@ -23,6 +23,7 @@ import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.CompetitorResultBean;
 import com.idata365.app.entity.FamilyCompetitorResultBean;
 import com.idata365.app.entity.FamilyDriveDayStatBean;
+import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyMemberAllResultBean;
 import com.idata365.app.entity.FamilyMemberBean;
 import com.idata365.app.entity.FamilyMemberResultBean;
@@ -52,9 +53,11 @@ import com.idata365.app.entity.ScoreUserHistoryResultBean;
 import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
+import com.idata365.app.entity.UserDetailResultBean;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
+import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
@@ -431,7 +434,9 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		Date todayDate = Calendar.getInstance().getTime();
 		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
+		Date beforeYesterdayDate = DateUtils.addDays(todayDate, -2);
 		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyy-MM-dd");
+		String beforeYesterdayDateStr = DateFormatUtils.format(beforeYesterdayDate, "yyyy-MM-dd");
 		
 		long familyId = bean.getFamilyId();
 		
@@ -454,10 +459,25 @@ public class ScoreService extends BaseService<ScoreService>
 		FamilyDriveDayStatBean gameObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(gameObjParamBean);
 		if (null == gameObjFamilyStatBean)
 			return resultBean;
+		
+		int gameObjYesterdayOrderNo = gameObjFamilyStatBean.getOrderNo();
+		
+		gameObjParamBean.setDaystamp(beforeYesterdayDateStr);
+		FamilyDriveDayStatBean beforeYesterdayGameObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(gameObjParamBean);
+		int gameObjBeforeYesterdayOrderNo;
+		if (null == beforeYesterdayGameObjFamilyStatBean)
+		{
+			gameObjBeforeYesterdayOrderNo = 0;
+		}
+		else
+		{
+			gameObjBeforeYesterdayOrderNo = beforeYesterdayGameObjFamilyStatBean.getOrderNo();
+		}
+		int gameObjOrderChange = gameObjYesterdayOrderNo - gameObjBeforeYesterdayOrderNo;
+		
 		AdBeanUtils.copyOtherPropToStr(gameObj, gameObjFamilyStatBean);
-		//temp settsing competitingResult ord erNo==========start
-//		gameObj.setCompetitingResult("FAILURE");
-//		gameObj.setOrderNo("10");
+		
+		gameObj.setOrderChange(String.valueOf(gameObjOrderChange));
 		
 		resultBean.setGameObj(gameObj);
 		
@@ -494,7 +514,18 @@ public class ScoreService extends BaseService<ScoreService>
 		competitorObjParamBean.setFamilyId(competitorFamilybean.getMyFamilyId());
 		competitorObjParamBean.setDaystamp(yesterdayDateStr);
 		FamilyDriveDayStatBean competitorObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(competitorObjParamBean);
+		
+		competitorObjParamBean.setDaystamp(beforeYesterdayDateStr);
+		FamilyDriveDayStatBean beforeYesterdayCompetitorObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(competitorObjParamBean);
+		int competitorYesterdayOrderNo = competitorObjFamilyStatBean.getOrderNo();
+		int competitorBeforeYesterdayOrderNo = beforeYesterdayCompetitorObjFamilyStatBean.getOrderNo();
+		
+		int competitorObjOrderChange = competitorYesterdayOrderNo - competitorBeforeYesterdayOrderNo;
+		
 		AdBeanUtils.copyOtherPropToStr(competitorObj, competitorObjFamilyStatBean);
+		
+		competitorObj.setOrderChange(String.valueOf(competitorObjOrderChange));
+		
 		//temp settsing competitingResult orderNo==========start
 //		competitorObj.setCompetitingResult("SUCCESS");
 //		competitorObj.setOrderNo("15");
@@ -756,6 +787,11 @@ public class ScoreService extends BaseService<ScoreService>
 
 	private String formatDetailValue(String times1, String times2, String lottery)
 	{
+		if (StringUtils.equals(times1, "0次"))
+		{
+			return times1;
+		}
+		
 		String brakeValue = StringUtils.replaceEach(VALUE_TEMPLATE, new String[]{"STR1", "STR2", "LOTTERY"}, new String[]{times1, times2, lottery});
 		return brakeValue;
 	}
@@ -819,5 +855,52 @@ public class ScoreService extends BaseService<ScoreService>
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
+	}
+	
+	/**
+	 * 查看玩家信息
+	 * @param bean
+	 * @return
+	 */
+	public UserDetailResultBean showUserDetail(ScoreFamilyInfoParamBean bean)
+	{
+		UserDetailResultBean resultBean = new UserDetailResultBean();
+		
+		UsersAccountBean userParamBean = new UsersAccountBean();
+		userParamBean.setId(bean.getUserId());
+		UsersAccountBean usersAccountBean = this.scoreMapper.queryUserInfo(userParamBean);
+		
+		String nickName = usersAccountBean.getNickName();
+		if (StringUtils.isNotBlank(nickName))
+		{
+			resultBean.setName(nickName);
+		}
+		else
+		{
+			String phone = usersAccountBean.getPhone();
+			String hidePhone = PhoneUtils.hidePhone(phone);
+			resultBean.setName(hidePhone);
+		}
+		resultBean.setUserImgUrl(usersAccountBean.getImgUrl());
+		
+		Date createTime = usersAccountBean.getCreateTime();
+		String createTimeStr = DateFormatUtils.format(createTime, "yyyy-MM-dd HH:mm:ss");
+		resultBean.setJoinTime(createTimeStr);
+		
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		familyParamBean.setFamilyId(bean.getFamilyId());
+		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+		resultBean.setFamilyName(familyInfoBean.getFamilyName());
+		resultBean.setFamilyImgUrl(familyInfoBean.getImgUrl());
+		
+		double statMileage = this.scoreMapper.statMileage(bean);
+		String mileageStr = BigDecimal.valueOf(statMileage).divide(BigDecimal.valueOf(1000), 1, BigDecimal.ROUND_HALF_UP).toString() + "km";
+		resultBean.setMileage(mileageStr);
+		
+		long statTime = (long)this.scoreMapper.statTime(bean);
+		String timeStr = DurationFormatUtils.formatDuration(statTime*1000L, "HH") + "小时";
+		resultBean.setDuration(timeStr);
+		
+		return resultBean;
 	}
 }

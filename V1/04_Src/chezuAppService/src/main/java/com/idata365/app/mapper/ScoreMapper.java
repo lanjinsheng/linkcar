@@ -17,6 +17,7 @@ import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
+import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 
 public interface ScoreMapper
@@ -56,4 +57,10 @@ public interface ScoreMapper
 	public List<ScoreDetailBean> queryScoreDetail(ScoreFamilyInfoParamBean bean);
 	
 	public List<GameHistoryBean> queryFamilyOrderByMonth(ScoreFamilyInfoParamBean bean);
+	
+	public UsersAccountBean queryUserInfo(UsersAccountBean bean);
+	
+	public double statMileage(ScoreFamilyInfoParamBean bean);
+	
+	public double statTime(ScoreFamilyInfoParamBean bean);
 }

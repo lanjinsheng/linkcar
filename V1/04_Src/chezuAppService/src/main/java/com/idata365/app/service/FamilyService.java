@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
+import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInfoScoreResultBean;
@@ -364,6 +365,11 @@ public class FamilyService extends BaseService<FamilyService>
 		this.familyMapper.save(bean);
 		
 		long familyId = bean.getId();
+		
+		FamilyHistoryParamBean tempHistoryParamBean = new FamilyHistoryParamBean();
+		tempHistoryParamBean.setFamilyId(familyId);
+		tempHistoryParamBean.setRecord("家族(" + bean.getFamilyName() + ")成立");
+		this.familyMapper.saveFamilyHistory(tempHistoryParamBean);
 		
 		//组长自己绑定新创建的家族
 		bean.setFamilyId(familyId);

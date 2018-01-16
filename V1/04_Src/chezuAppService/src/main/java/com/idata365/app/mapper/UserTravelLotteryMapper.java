@@ -15,4 +15,6 @@ public interface UserTravelLotteryMapper {
  
 	 List<UserTravelLottery>  getUserTravelLotterys(UserTravelLottery userTravelLottery);
      int recievedUserTravelLottery(UserTravelLottery userTravelLottery);
+     
+     public UserTravelLottery queryTravelLottery(UserTravelLottery bean);
 }

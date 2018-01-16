@@ -2,6 +2,7 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInviteBean;
@@ -101,4 +102,6 @@ public interface FamilyMapper
 	public int countByType(FamilyParamBean bean);
 	
 	public List<FamilyInfoBean> queryFamilyByType(FamilyParamBean bean);
+	
+	public void saveFamilyHistory(FamilyHistoryParamBean bean);
 }
