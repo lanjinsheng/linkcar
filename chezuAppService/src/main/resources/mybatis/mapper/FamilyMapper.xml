@@ -207,5 +207,7 @@
  		select id, familyType from familyInfo where familyType=#{familyType} order by id asc
  	</select>
  	
- 	
+ 	<insert id="saveFamilyHistory" parameterType="com.idata365.app.entity.FamilyHistoryParamBean" useGeneratedKeys="true" keyProperty="id" >
+ 		insert into familyHistory(familyId, record) values(#{familyId}, #{record})
+ 	</insert>
 </mapper>

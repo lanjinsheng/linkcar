@@ -31,6 +31,7 @@ import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
+import com.idata365.app.entity.UserDetailResultBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
@@ -376,5 +377,32 @@ public class ScoreController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<GameHistoryResultBean> resultList = this.scoreService.gameHistory(bean);
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 查看玩家信息
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/showUserDetail")
+	public Map<String, Object> showUserDetail(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		String imgBasePath = super.getImgBasePath();
+		UserDetailResultBean resultBean = this.scoreService.showUserDetail(bean);
+		
+		String userImgUrl = resultBean.getUserImgUrl();
+		if (StringUtils.isNotBlank(userImgUrl))
+		{
+			resultBean.setUserImgUrl(imgBasePath + userImgUrl);
+		}
+		
+		String familyImgUrl = resultBean.getFamilyImgUrl();
+		if (StringUtils.isNotBlank(familyImgUrl))
+		{
+			resultBean.setFamilyImgUrl(imgBasePath + familyImgUrl);
+		}
+		
+		return ResultUtils.rtSuccess(resultBean);
 	}
 }

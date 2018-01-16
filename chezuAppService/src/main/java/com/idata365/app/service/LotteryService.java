@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.LotteryLogConstant;
 import com.idata365.app.entity.LotteryBean;
+import com.idata365.app.entity.LotteryLogInfoParamBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
@@ -22,7 +24,6 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.LotteryUser;
-import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.entity.UserTravelLottery;
 import com.idata365.app.mapper.LotteryMapper;
@@ -60,6 +61,10 @@ public class LotteryService extends BaseService<LotteryService>
 		List<LotteryResultBean> list = new ArrayList<>();
 		for (LotteryBean tempBean : resultList)
 		{
+			if (0 == tempBean.getAwardCount())
+			{
+				continue;
+			}
 			LotteryResultBean tempResultBean = new LotteryResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
 			list.add(tempResultBean);
@@ -135,9 +140,37 @@ public class LotteryService extends BaseService<LotteryService>
 	@Transactional
 	public void receiveTravelLottery(UserTravelLottery bean)
 	{
-		userTravelLotteryMapper.recievedUserTravelLottery(bean);
+		int receiveCount = userTravelLotteryMapper.recievedUserTravelLottery(bean);
+		if (receiveCount > 0)
+		{
+			UserTravelLottery travelLotteryResultBean = this.userTravelLotteryMapper.queryTravelLottery(bean);
+			Long userId = travelLotteryResultBean.getUserId();
+			Integer awardId = travelLotteryResultBean.getAwardId();
+			Integer awardCount = travelLotteryResultBean.getAwardCount();
+			
+			LotteryBean tempParamBean = new LotteryBean();
+			tempParamBean.setUserId(userId);
+			tempParamBean.setAwardId(awardId);
+			tempParamBean.setAwardCount(awardCount);
+			
+			this.lotteryMapper.saveOrUpdate(tempParamBean);
+			
+			LotteryLogInfoParamBean lotteryLogParamBean = new LotteryLogInfoParamBean();
+			lotteryLogParamBean.setUserId(userId);
+			lotteryLogParamBean.setAwardId(awardId);
+			lotteryLogParamBean.setAwardCount(awardCount);
+			lotteryLogParamBean.setType(LotteryLogConstant.DRIVE_LOG);
+			lotteryLogParamBean.setTimestamp(getCurrentTs());
+			this.lotteryMapper.saveLotteryLog(lotteryLogParamBean);
+		}
 	}
-		
+	
+	private String getCurrentTs()
+	{
+		Calendar cal = Calendar.getInstance();
+		return DateFormatUtils.format(cal, "yyyy-MM-dd HH:mm:ss");
+	}
+	
 	/**
 	 * 抽奖获得道具
 	 * @param bean

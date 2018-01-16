@@ -70,4 +70,9 @@
     <delete id="delReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
     	delete from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
     </delete>
+    
+    <insert id="saveLotteryLog" parameterType="com.idata365.app.entity.LotteryLogInfoParamBean">
+    	insert into lotteryLogInfo(userId, awardId, awardCount, type, timestamp) values(#{userId}, #{awardId}, #{awardCount}, #{type}, #{timestamp})
+    </insert>
+
 </mapper>

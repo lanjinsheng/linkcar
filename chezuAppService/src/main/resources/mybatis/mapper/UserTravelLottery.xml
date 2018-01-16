@@ -15,4 +15,8 @@
              set hadGet=1 
             where id=#{id}
     </update>
+    
+    <select id="queryTravelLottery" parameterType="com.idata365.app.entity.UserTravelLottery" resultType="com.idata365.app.entity.UserTravelLottery">
+    	select userId, awardId, awardCount from userTravelLottery where id=#{id}
+    </select>
 </mapper>
