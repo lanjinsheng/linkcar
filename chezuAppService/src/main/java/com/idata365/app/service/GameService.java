@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -245,12 +246,68 @@ public class GameService extends BaseService<GameService>
 		
 		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
 
+		if (null == familyInfoBean)
+		{
+			return null;
+		}
+		
 		CompetitorFamilyInfoResultBean resultBean = new CompetitorFamilyInfoResultBean();
 		resultBean.setCompetitorFamilyId(String.valueOf(familyInfoBean.getId()));
 		resultBean.setFamilyName(familyInfoBean.getFamilyName());
 		resultBean.setImgUrl(familyInfoBean.getImgUrl());
+		resultBean.setCountdown(String.valueOf(calDown()));
 		
 		return resultBean;
+	}
+	
+	public static long calDown()
+	{
+		try
+		{
+			long calCountDown = calCountDown();
+			return calCountDown;
+		} catch (ParseException e)
+		{
+			LOGGER.error("", e);
+		}
+		
+		return 0;
+	}
+	
+	private static final String ZERO_POINT = "00:00:00";
+	
+	private static final String TEN_POINT = "10:00:00";
+	
+	private static final String SIXTEEN_POINT = "16:00:00";
+
+	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	
+	public static long calCountDown() throws ParseException
+	{
+		Date currentTs = Calendar.getInstance().getTime();
+		String prefixDayStr = DateFormatUtils.format(currentTs, "yyyy-MM-dd");
+		long currentSeconds = currentTs.getTime()/1000L;
+		
+		String zeroTsStr = prefixDayStr + " " + ZERO_POINT;
+		String tenTsStr = prefixDayStr + " " + TEN_POINT;
+		String sixteenTsStr = prefixDayStr + " " + SIXTEEN_POINT;
+		
+		Date zeroTs = DateUtils.parseDate(zeroTsStr, DATE_PATTERN);
+		Date tenTs = DateUtils.parseDate(tenTsStr, DATE_PATTERN);
+		Date sixteenTs = DateUtils.parseDate(sixteenTsStr, DATE_PATTERN);
+		
+		if (currentTs.compareTo(zeroTs) >= 0 && currentTs.compareTo(tenTs) < 0)
+		{
+			return currentSeconds - zeroTs.getTime()/1000;
+		}
+		else if (currentTs.compareTo(tenTs) >= 0 && currentTs.compareTo(sixteenTs) < 0)
+		{
+			return currentSeconds - tenTs.getTime()/1000;
+		}
+		else
+		{
+			return currentSeconds - sixteenTs.getTime()/1000;
+		}
 	}
 	
 	@Transactional

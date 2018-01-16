@@ -20,8 +20,8 @@ public class FamilyRelationTask
 
 	public void run()
 	{
-		LOG.info("begin init tomorrow log");
+		LOG.info("FamilyRelationTask===========begin init tomorrow log");
 		gameService.initTodayFamilyRelation();
-		LOG.info("end init tomorrow log");
+		LOG.info("FamilyRelationTask===========end init tomorrow log");
 	}
 }

@@ -787,10 +787,11 @@ public class ScoreService extends BaseService<ScoreService>
 
 	private String formatDetailValue(String times1, String times2, String lottery)
 	{
-		if (StringUtils.equals(times1, "0次"))
+		if (StringUtils.equals(times1, "0次") || StringUtils.equals(times2, "0"))
 		{
 			return times1;
 		}
+		
 		
 		String brakeValue = StringUtils.replaceEach(VALUE_TEMPLATE, new String[]{"STR1", "STR2", "LOTTERY"}, new String[]{times1, times2, lottery});
 		return brakeValue;

@@ -83,6 +83,11 @@ public class GameController extends BaseController
 		
 		CompetitorFamilyInfoResultBean resultBean = this.gameService.queryCompetitorFamilyInfo(bean);
 		
+		if (null == resultBean)
+		{
+			return ResultUtils.rtSuccess(null);
+		}
+		
 		String imgBasePath = super.getImgBasePath();
 		String imgUrl = resultBean.getImgUrl();
 		if (StringUtils.isNotBlank(imgUrl))
