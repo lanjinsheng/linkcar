@@ -7,6 +7,8 @@ public class CompetitorFamilyInfoResultBean
 	private String competitorFamilyId;
 	
 	private String familyName;
+	
+	private String countdown;
 
 	public String getImgUrl()
 	{
@@ -36,5 +38,15 @@ public class CompetitorFamilyInfoResultBean
 	public void setFamilyName(String familyName)
 	{
 		this.familyName = familyName;
+	}
+
+	public String getCountdown()
+	{
+		return countdown;
+	}
+
+	public void setCountdown(String countdown)
+	{
+		this.countdown = countdown;
 	}
 }
