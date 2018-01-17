@@ -218,7 +218,7 @@ public class ImageUtils {
  	    	String rtStr=(EntityUtils.toString(response.getEntity()));
  	    	LOG.info(rtStr);
  	    	Map<String,Object> jsonMap=GsonUtils.fromJson(rtStr);
- 	    	if(jsonMap.get("status").toString().equals("1")) {
+ 	    	if(jsonMap.get("status").toString().equals("0")) {
  	    		Map<String,Object> result=(Map<String,Object>)(jsonMap.get("result"));
  	    		if(result!=null) {
  	    			map.put("engineNo", result.get("engineno"));
@@ -386,7 +386,7 @@ public class ImageUtils {
  	    	String rtStr=(EntityUtils.toString(response.getEntity()));
  	    	LOG.info(rtStr);
  	    	Map<String,Object> jsonMap=GsonUtils.fromJson(rtStr);
- 	    	if(jsonMap.get("status").toString().equals("1")) {
+ 	    	if(jsonMap.get("status").toString().equals("0")) {
  	    		Map<String,Object> result=(Map<String,Object>)(jsonMap.get("result"));
  	    		if(result!=null) {
  	    			map.put("userName", result.get("realname"));
