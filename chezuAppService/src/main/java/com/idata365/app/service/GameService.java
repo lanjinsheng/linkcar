@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
@@ -284,27 +285,35 @@ public class GameService extends BaseService<GameService>
 	{
 		Date currentTs = Calendar.getInstance().getTime();
 		String prefixDayStr = DateFormatUtils.format(currentTs, "yyyy-MM-dd");
+		
+		Date tomorrowDate = DateUtils.addDays(currentTs, 1);
+		String tomorrowDayStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
+		
 		long currentSeconds = currentTs.getTime()/1000L;
 		
 		String zeroTsStr = prefixDayStr + " " + ZERO_POINT;
 		String tenTsStr = prefixDayStr + " " + TEN_POINT;
 		String sixteenTsStr = prefixDayStr + " " + SIXTEEN_POINT;
 		
+		String tomorrowTsTr = tomorrowDayStr + " " + ZERO_POINT;
+		
 		Date zeroTs = DateUtils.parseDate(zeroTsStr, DATE_PATTERN);
 		Date tenTs = DateUtils.parseDate(tenTsStr, DATE_PATTERN);
 		Date sixteenTs = DateUtils.parseDate(sixteenTsStr, DATE_PATTERN);
 		
+		Date tomorrowTs = DateUtils.parseDate(tomorrowTsTr, DATE_PATTERN);
+		
 		if (currentTs.compareTo(zeroTs) >= 0 && currentTs.compareTo(tenTs) < 0)
 		{
-			return currentSeconds - zeroTs.getTime()/1000;
+			return tenTs.getTime()/1000 - currentSeconds;
 		}
 		else if (currentTs.compareTo(tenTs) >= 0 && currentTs.compareTo(sixteenTs) < 0)
 		{
-			return currentSeconds - tenTs.getTime()/1000;
+			return sixteenTs.getTime()/1000 - currentSeconds;
 		}
 		else
 		{
-			return currentSeconds - sixteenTs.getTime()/1000;
+			return tomorrowTs.getTime()/1000 - currentSeconds;
 		}
 	}
 	

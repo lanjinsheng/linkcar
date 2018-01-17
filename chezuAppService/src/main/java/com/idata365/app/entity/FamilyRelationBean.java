@@ -2,6 +2,8 @@ package com.idata365.app.entity;
 
 public class FamilyRelationBean
 {
+	private long familyRelationId;
+	
 	private long familyId;
 	
 	private long selfFamilyId;
@@ -14,6 +16,16 @@ public class FamilyRelationBean
 
 	private String daystamp;
 	
+	public long getFamilyRelationId()
+	{
+		return familyRelationId;
+	}
+
+	public void setFamilyRelationId(long familyRelationId)
+	{
+		this.familyRelationId = familyRelationId;
+	}
+
 	public long getFamilyId()
 	{
 		return familyId;
