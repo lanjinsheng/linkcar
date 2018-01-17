@@ -173,6 +173,18 @@
     <property name="period" value="20000" />   
   </bean> 
   
+  
+      <bean id="calFamilyMonthAvgOrderTask" class="com.idata365.schedule.CalFamilyMonthAvgOrderTask">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="calFamilyMonthAvgOrderTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="calFamilyMonthAvgOrderTask" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" /> 
+        <!-- 每次任务间隔10*60*1000毫秒-->  
+    <property name="period" value="20000" />   
+  </bean> 
   <!--End#######################计算家族Order数据#######################################################-->
  
  
@@ -207,13 +219,14 @@
 	   <ref bean="driveSendMainTaskExe" />
 	   <ref bean="calScoreMainTaskExe"/>
 	   <ref bean="addUserDayStatTaskExe"/> 
-	   <ref bean="clearLockTaskExe" />
-	   <ref bean="configInitTaskExe" /> 
-	   <ref bean="calUserDayScoreTaskExe" /> 
-	   <ref bean="calFamilyDayScoreTaskExe" /> 
-	   <ref bean="calFamilyDayPkTaskExe" /> 
-	   <ref bean="calFamilyDayOrderTaskExe" /> 
-       <ref bean="calFamilyMonthOrderTaskExe" /> 
+	   <ref bean="clearLockTaskExe"/>
+	   <ref bean="configInitTaskExe"/> 
+	   <ref bean="calUserDayScoreTaskExe"/> 
+	   <ref bean="calFamilyDayScoreTaskExe"/> 
+	   <ref bean="calFamilyDayPkTaskExe"/> 
+	   <ref bean="calFamilyDayOrderTaskExe"/> 
+       <ref bean="calFamilyMonthOrderTaskExe"/>
+       <ref bean="calFamilyMonthAvgOrderTaskExe"/>  
       </list>  
     </property>  
   </bean>  
