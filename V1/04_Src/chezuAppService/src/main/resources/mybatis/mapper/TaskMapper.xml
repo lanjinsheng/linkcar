@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.TaskMapper">
+
+	<select id="queryFamilyRelations" resultType="com.idata365.app.entity.FamilyRelationBean" parameterType="com.idata365.app.entity.FamilyRelationBean">
+		 select id as familyRelationId, selfFamilyId as familyId1, competitorFamilyId as familyId2, daystamp from familyRelation where daystamp=#{daystamp} order by id desc
+	</select>
+
+	<select id="countByFamily" resultType="int" parameterType="com.idata365.app.entity.FamilyRelationBean">
+		 select count(id) from userFamilyRelation where familyId=#{familyId}
+	</select>
+
+	<delete id="delStations" parameterType="java.util.List">
+		delete from parkStation where familyRelationId in
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			${item}
+		</foreach>
+	</delete>
+	
+	<insert id="saveStations" parameterType="java.util.List">
+		insert into parkStation(familyRelationId, status, updateTime) values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.familyRelationId}, #{item.status}, #{item.updateTime})
+		</foreach>
+	</insert>
+	
+</mapper>
