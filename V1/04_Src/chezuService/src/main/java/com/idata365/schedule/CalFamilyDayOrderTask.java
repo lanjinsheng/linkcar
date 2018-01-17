@@ -21,8 +21,8 @@ import com.idata365.service.TaskKeyLogService;
 
 /**
  * 
-    * @ClassName: AddUserDayStatMainTask
-    * @Description: TODO(增加违章次数)
+    * @ClassName: CalFamilyDayOrderTask
+    * @Description: TODO(计算家族日排名任务)
     * @author LanYeYe
     * @date 2017年12月31日
     *

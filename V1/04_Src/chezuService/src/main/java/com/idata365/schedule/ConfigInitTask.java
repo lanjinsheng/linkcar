@@ -13,7 +13,7 @@ import com.idata365.service.TaskKeyLogService;
 /**
  * 
     * @ClassName: DriveSendMainTask
-    * @Description: TODO(同步行程任务给业务层)
+    * @Description: TODO(每日任务执行控制器)
     * @author LanYeYe
     * @date 2017年12月28日
     *

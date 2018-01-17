@@ -17,12 +17,19 @@ public class TaskSystemScoreFlag implements Serializable {
 	private Integer taskFamilyPk;
 	private Integer taskFamilyDayOrder;
 	private Integer taskFamilyMonthOrder;
+	private Integer taskFamilyMonthAvgOrder;
 	private Integer userDayScoreFlag;
 	private Integer familyDayScoreFlag;
 	private String daystamp;
 	
 	
 	
+	public Integer getTaskFamilyMonthAvgOrder() {
+		return taskFamilyMonthAvgOrder;
+	}
+	public void setTaskFamilyMonthAvgOrder(Integer taskFamilyMonthAvgOrder) {
+		this.taskFamilyMonthAvgOrder = taskFamilyMonthAvgOrder;
+	}
 	public Integer getTaskFamilyPkInit() {
 		return taskFamilyPkInit;
 	}

@@ -7,9 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.idata365.entity.TaskFamilyDayScore;
+import com.idata365.entity.TaskFamilyMonthAvgOrder;
+import com.idata365.entity.TaskFamilyMonthOrder;
+import com.idata365.entity.TaskFamilyDayOrder;
 import com.idata365.entity.TaskFamilyPk;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
+import com.idata365.service.CalFamilyDayOrderService;
+import com.idata365.service.CalFamilyMonthAvgOrderService;
+import com.idata365.service.CalFamilyMonthOrderService;
 import com.idata365.service.CalFamilyPkService;
 import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.ConfigSystemTaskService;
@@ -19,21 +25,21 @@ import com.idata365.service.TaskKeyLogService;
 
 /**
  * 
-    * @ClassName: CalFamilyDayPkTask
-    * @Description: TODO(家族pk结果统计并更新分数)
+    * @ClassName: CalFamilyMonthAvgOrderTask
+    * @Description: TODO(平均数)
     * @author LanYeYe
     * @date 2017年12月31日
     *
  */
-public class CalFamilyDayPkTask extends TimerTask { 
-	private static Logger log = Logger.getLogger(CalFamilyDayPkTask.class);
+public class CalFamilyMonthAvgOrderTask extends TimerTask { 
+	private static Logger log = Logger.getLogger(CalFamilyMonthAvgOrderTask.class);
 	private static Object lock = new Object();
 	public static boolean pd=true;
 	
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
-    CalFamilyPkService calFamilyPkService;
+   CalFamilyMonthAvgOrderService calFamilyMonthAvgOrderService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
     @Autowired
@@ -46,7 +52,7 @@ public class CalFamilyDayPkTask extends TimerTask {
 	//在主线程中执行任务线程.....    
 	@Override  
 	public void run() {  
-		log.info("CalFamilyDayPkTask start--");
+		log.info("CalFamilyMonthAvgOrderTask start--");
  
 		if(!pd){
 			return;
@@ -55,7 +61,7 @@ public class CalFamilyDayPkTask extends TimerTask {
 		if(pd){
 			pd=false;
 			try {
-			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishFamilyPk();
+			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishFamilyMonthAvgOrder();
 			for(TaskSystemScoreFlag tf:taskList) {
 				String timestamp=tf.getDaystamp();
 //				String yyyy=timestamp.substring(0, 4);
@@ -64,54 +70,63 @@ public class CalFamilyDayPkTask extends TimerTask {
 			long taskFlag=System.currentTimeMillis();
 			TaskKeyLog key=new TaskKeyLog();
 			key.setTaskFlag(String.valueOf(taskFlag));
-			key.setTaskName("CalFamilyDayPkTask");
+			key.setTaskName("CalFamilyMonthAvgOrderTask");
 		    int hadKey=	taskKeyLogService.insertAppKey(key);
-			if(hadKey==0) { pd=true;return;}
-			TaskFamilyPk task=new TaskFamilyPk();
-			task.setDaystamp(timestamp);
+			if(hadKey==0){ pd=true;return;}
+			TaskFamilyMonthAvgOrder task=new TaskFamilyMonthAvgOrder();
+			task.setMonth(tf.getDaystamp().replaceAll("-", "").substring(0,6));
 			task.setTaskFlag(String.valueOf(taskFlag));
-			List<TaskFamilyPk> list=calFamilyPkService.getFamilyPkTask(task);
+			List<TaskFamilyMonthAvgOrder> list=calFamilyMonthAvgOrderService.getFamilyMonthAvgOrderTask(task);
+			TaskFamilyMonthAvgOrder preOrder=null;
 			if(list.size()==0) {//无任务
-				configSystemTaskService.finishConfigSystemFamilyPkTask(tf);
+				configSystemTaskService.finishConfigSystemFamilyMonthAvgOrderTask(tf);
+				continue;
+			}else {
+				preOrder=calFamilyMonthAvgOrderService.getAvgPre(list.get(0));
+				if(preOrder!=null && preOrder.getTaskStatus()!=1) {
+					continue;
+				}
 			}
-			log.info("CalFamilyDayPkTask do--list.size="+list.size());
-				for(TaskFamilyPk taskFamilyPk:list) {
+			log.info("CalFamilyMonthAvgOrderTask do--list.size="+list.size());
+			
+				for(TaskFamilyMonthAvgOrder taskFamilyMonthAvgOrder:list) {
 					try {
-						boolean result=calFamilyPkService.calFamilyPk(taskFamilyPk);
+						boolean result=calFamilyMonthAvgOrderService.calFamilyMonthAvgOrder(preOrder,taskFamilyMonthAvgOrder);
+						preOrder=taskFamilyMonthAvgOrder;
 					if(result) {
-						calFamilyPkService.updateSuccFamilyPkTask(taskFamilyPk);
+						calFamilyMonthAvgOrderService.updateSuccFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
 						 
 					}else {
-						if(taskFamilyPk.getFailTimes()>100) {
+						if(taskFamilyMonthAvgOrder.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
-							taskFamilyPk.setTaskStatus(2);
+							taskFamilyMonthAvgOrder.setTaskStatus(2);
 						}else {
-							taskFamilyPk.setTaskStatus(0);
+							taskFamilyMonthAvgOrder.setTaskStatus(0);
 						}
-						calFamilyPkService.updateFailFamilyPkTask(taskFamilyPk);
+						calFamilyMonthAvgOrderService.updateFailFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
 					}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
-						if(taskFamilyPk.getFailTimes()>100) {
+						if(taskFamilyMonthAvgOrder.getFailTimes()>100) {
 							//状态置为2，代表计算次数已经极限
-							taskFamilyPk.setTaskStatus(2);
+							taskFamilyMonthAvgOrder.setTaskStatus(2);
 						}else {
-							taskFamilyPk.setTaskStatus(0);
+							taskFamilyMonthAvgOrder.setTaskStatus(0);
 						}
-						calFamilyPkService.updateFailFamilyPkTask(taskFamilyPk);
+						calFamilyMonthAvgOrderService.updateFailFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
 					}
 				}
 			}
 			}catch(Exception e) {
 				e.printStackTrace();
-				log.info("CalFamilyDayPkTask 异常");
+				log.info("CalFamilyMonthAvgOrderTask 异常");
 			}
 			pd=true;
 		}
 			
 		}
-		log.info("CalFamilyDayPkTask end--");
+		log.info("CalFamilyMonthAvgOrderTask end--");
 	}  
 	
 	public static void main(String []args) {
