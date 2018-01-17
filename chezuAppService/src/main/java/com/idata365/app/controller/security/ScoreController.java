@@ -25,7 +25,7 @@ import com.idata365.app.entity.ScoreDetailUnitBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
-import com.idata365.app.entity.ScoreFamilyOrderBean;
+import com.idata365.app.entity.ScoreFamilyOrderResultBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
@@ -79,7 +79,16 @@ public class ScoreController extends BaseController
 	@RequestMapping("/score/listFamily")
 	public Map<String, Object> listFamily()
 	{
-		List<ScoreFamilyOrderBean> resultList = this.scoreService.queryFamilyOrderInfo();
+		List<ScoreFamilyOrderResultBean> resultList = this.scoreService.queryFamilyOrderInfo();
+		String imgBasePath = super.getImgBasePath();
+		for (ScoreFamilyOrderResultBean tempBean : resultList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			if (StringUtils.isNoneBlank(imgUrl))
+			{
+				tempBean.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
 		return ResultUtils.rtSuccess(resultList);
 	}
 	

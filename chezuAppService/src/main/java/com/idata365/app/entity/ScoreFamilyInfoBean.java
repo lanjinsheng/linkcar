@@ -19,6 +19,8 @@ public class ScoreFamilyInfoBean
 	private double score;
 
 	private long createUserId;
+	
+	private int beforeYesterdayOrderNo;
 
 	public String getImgUrl()
 	{
@@ -108,5 +110,15 @@ public class ScoreFamilyInfoBean
 	public void setCreateUserId(long createUserId)
 	{
 		this.createUserId = createUserId;
+	}
+
+	public int getBeforeYesterdayOrderNo()
+	{
+		return beforeYesterdayOrderNo;
+	}
+
+	public void setBeforeYesterdayOrderNo(int beforeYesterdayOrderNo)
+	{
+		this.beforeYesterdayOrderNo = beforeYesterdayOrderNo;
 	}
 }

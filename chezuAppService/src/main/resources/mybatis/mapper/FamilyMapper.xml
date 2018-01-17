@@ -112,7 +112,7 @@
  	</select>
  	
  	<select id="queryOwnFamilyOrderNo" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select orderNo from familyScore where familyId=#{familyId} and month=#{month}
+ 		select yesterdayOrderNo as orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
  	<select id="queryJoinFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -122,7 +122,7 @@
  	</select>
  	
  	<select id="queryJoinFamilyOrderNo" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select orderNo from familyScore where familyId=#{familyId} and month=#{month}
+ 		select yesterdayOrderNo as orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
  	<select id="queryUserIdsWithSpeedPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -210,4 +210,8 @@
  	<insert id="saveFamilyHistory" parameterType="com.idata365.app.entity.FamilyHistoryParamBean" useGeneratedKeys="true" keyProperty="id" >
  		insert into familyHistory(familyId, record) values(#{familyId}, #{record})
  	</insert>
+ 	
+ 	<select id="countUsers" resultType="int">
+ 		select count(1) from usersAccount
+ 	</select>
 </mapper>

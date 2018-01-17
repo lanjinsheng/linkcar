@@ -6,6 +6,8 @@ public class FamilyInfoScoreAllBean
 	
 	private FamilyInfoScoreResultBean joinFamily;
 
+	private int gamerNumnicai;
+	
 	public FamilyInfoScoreResultBean getOrigFamily()
 	{
 		return origFamily;
@@ -24,6 +26,16 @@ public class FamilyInfoScoreAllBean
 	public void setJoinFamily(FamilyInfoScoreResultBean joinFamily)
 	{
 		this.joinFamily = joinFamily;
+	}
+
+	public int getGamerNumnicai()
+	{
+		return gamerNumnicai;
+	}
+
+	public void setGamerNumnicai(int gamerNumnicai)
+	{
+		this.gamerNumnicai = gamerNumnicai;
 	}
 	
 }
