@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
+import com.idata365.mapper.app.TaskFamilyMonthAvgOrderMapper;
 import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
 import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
@@ -34,7 +35,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	TaskFamilyDayOrderMapper taskFamilyDayOrderMapper;
 	@Autowired
 	TaskFamilyMonthOrderMapper taskFamilyMonthOrderMapper;
-	
+	@Autowired
+	TaskFamilyMonthAvgOrderMapper taskFamilyMonthAvgOrderMapper;
 	public String getDateStr(int diff)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -80,7 +82,12 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			taskFamilyMonthOrderMapper.delTaskFamilyMonthOrder(month);
 			taskFamilyMonthOrderMapper.initTaskFamilyMonthOrder(month);
 			
+			taskFamilyMonthAvgOrderMapper.delTaskFamilyMonthAvgOrder(month);
+			taskFamilyMonthAvgOrderMapper.initTaskFamilyMonthAvgOrder(month);
+			
 			task.setTaskFamilyOrderInit(1);
+			
+			
 			taskSystemScoreFlagMapper.updateOrderInit(task);
 		}
 		 
@@ -128,6 +135,15 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	public void finishConfigSystemFamilyMonthOrderTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyMonthOrder(1);
 		taskSystemScoreFlagMapper.finishFamilyMonthOrderTask(task);
+	}
+	
+	
+	public List<TaskSystemScoreFlag> getUnFinishFamilyMonthAvgOrder(){
+		return taskSystemScoreFlagMapper.getUnFinishFamilyMonthAvgOrderList();
+	}
+	public void finishConfigSystemFamilyMonthAvgOrderTask(TaskSystemScoreFlag task) {
+		task.setTaskFamilyMonthAvgOrder(1);
+		taskSystemScoreFlagMapper.finishFamilyMonthAvgOrderTask(task);
 	}
 	
 }

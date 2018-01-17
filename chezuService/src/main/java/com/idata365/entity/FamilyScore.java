@@ -7,12 +7,43 @@ public class FamilyScore implements Serializable{
 	    /**
 	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 	    */
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
+
 private Long id;
 private String month;
 private Long familyId;
 private Integer orderNo;
 private Double score;
+
+private Double averScore;
+private Integer yesterdayOrderNo;
+private Integer beforeYesterdayOrderNo;
+private Integer dayTimes;
+
+public Double getAverScore() {
+	return averScore;
+}
+public void setAverScore(Double averScore) {
+	this.averScore = averScore;
+}
+public Integer getYesterdayOrderNo() {
+	return yesterdayOrderNo;
+}
+public void setYesterdayOrderNo(Integer yesterdayOrderNo) {
+	this.yesterdayOrderNo = yesterdayOrderNo;
+}
+public Integer getBeforeYesterdayOrderNo() {
+	return beforeYesterdayOrderNo;
+}
+public void setBeforeYesterdayOrderNo(Integer beforeYesterdayOrderNo) {
+	this.beforeYesterdayOrderNo = beforeYesterdayOrderNo;
+}
+public Integer getDayTimes() {
+	return dayTimes;
+}
+public void setDayTimes(Integer dayTimes) {
+	this.dayTimes = dayTimes;
+}
 public Long getId() {
 	return id;
 }
