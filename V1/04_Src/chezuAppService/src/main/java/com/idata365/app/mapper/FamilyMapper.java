@@ -104,4 +104,6 @@ public interface FamilyMapper
 	public List<FamilyInfoBean> queryFamilyByType(FamilyParamBean bean);
 	
 	public void saveFamilyHistory(FamilyHistoryParamBean bean);
+	
+	public int countUsers();
 }

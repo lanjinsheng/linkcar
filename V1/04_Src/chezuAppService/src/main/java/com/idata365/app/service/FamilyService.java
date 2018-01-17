@@ -551,6 +551,10 @@ public class FamilyService extends BaseService<FamilyService>
 		{
 			resultBean.setJoinFamily(joinResultBean);
 		}
+		
+		int countUsers = this.familyMapper.countUsers();
+		resultBean.setGamerNumnicai(countUsers);
+		
 		return resultBean;
 	}
 	

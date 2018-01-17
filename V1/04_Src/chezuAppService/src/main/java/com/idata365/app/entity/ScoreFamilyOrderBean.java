@@ -10,6 +10,8 @@ public class ScoreFamilyOrderBean
 	
 	private int orderNo;
 	
+	private int beforeYesterdayOrderNo;
+	
 	private String name;
 	
 	private double score;
@@ -52,6 +54,16 @@ public class ScoreFamilyOrderBean
 	public void setOrderNo(int orderNo)
 	{
 		this.orderNo = orderNo;
+	}
+
+	public int getBeforeYesterdayOrderNo()
+	{
+		return beforeYesterdayOrderNo;
+	}
+
+	public void setBeforeYesterdayOrderNo(int beforeYesterdayOrderNo)
+	{
+		this.beforeYesterdayOrderNo = beforeYesterdayOrderNo;
 	}
 
 	public String getName()

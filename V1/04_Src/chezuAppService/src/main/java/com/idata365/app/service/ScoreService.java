@@ -43,6 +43,7 @@ import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.ScoreFamilyInfoBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.ScoreFamilyOrderBean;
+import com.idata365.app.entity.ScoreFamilyOrderResultBean;
 import com.idata365.app.entity.ScoreMemberInfoBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
 import com.idata365.app.entity.ScoreUserBean;
@@ -124,9 +125,25 @@ public class ScoreService extends BaseService<ScoreService>
 	 * 今日上榜家族
 	 * @return
 	 */
-	public List<ScoreFamilyOrderBean> queryFamilyOrderInfo()
+	public List<ScoreFamilyOrderResultBean> queryFamilyOrderInfo()
 	{
-		return this.scoreMapper.queryFamilyOrderInfo();
+		List<ScoreFamilyOrderResultBean> resultList = new ArrayList<>();
+		
+		List<ScoreFamilyOrderBean> tempList = this.scoreMapper.queryFamilyOrderInfo();
+		for (ScoreFamilyOrderBean tempBean : tempList)
+		{
+			ScoreFamilyOrderResultBean tempResultBean = new ScoreFamilyOrderResultBean();
+			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
+			
+			int orderNo = tempBean.getOrderNo();
+			int beforeYesterdayOrderNo = tempBean.getBeforeYesterdayOrderNo();
+			int orderChange = orderNo - beforeYesterdayOrderNo;
+			tempResultBean.setOrderChange(String.valueOf(orderChange));
+			
+			resultList.add(tempResultBean);
+		}
+		
+		return resultList;
 	}
 	
 	/**
