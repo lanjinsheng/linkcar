@@ -102,7 +102,7 @@ public class UserInfoController extends BaseController{
 		  LicenseDriver licenseDrive=userInfoService.getLicenseDriver(userId);
 		  LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(userId);
 		  rtMap.put("enableStranger",String.valueOf(userInfoService.getEnableStranger(userId)));
-		  if(licenseDrive!=null) {
+		  if(licenseDrive!=null) {//驾驶证
 			  rtMap.put("userName", licenseDrive.getUserName());
 			  rtMap.put("gender",licenseDrive.getGender());
 			  rtMap.put("nation",licenseDrive.getNation());
@@ -135,7 +135,7 @@ public class UserInfoController extends BaseController{
 			  rtMap.put("backDrivingImg","");
 			  rtMap.put("isDrivingEdit", "1");
 		  }
-		  if(licenseVehicleTravel!=null) {
+		  if(licenseVehicleTravel!=null) {//行驶证
 			  rtMap.put("plateNo",licenseVehicleTravel.getPlateNo());
 			  rtMap.put("cardTypeDesc",StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
 			  rtMap.put("userTypeDesc",StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
@@ -555,5 +555,34 @@ public class UserInfoController extends BaseController{
 		  requestBodyParams.put("isTravelEdit", 0);
 		  userInfoService.modifyVehicleLicense(requestBodyParams);
 		  return ResultUtils.rtSuccess(rtMap);
+	  }
+	  public static void main(String []args) {
+			Map<String,Object> rtMap=new HashMap<String,Object>();
+			rtMap.put("userId", 999999999);
+        	rtMap.put("birthday", "");
+			rtMap.put("validYears", "");
+			rtMap.put("validDay", "");
+			rtMap.put("virginDay", "");
+			rtMap.put("name", "");
+			rtMap.put("driveCardType", "");
+			rtMap.put("gender", "");
+			rtMap.put("nation", "C");
+    	 String key="";
+	    
+	    	  key=QQSSOTools.createSSOUsersImgInfoKey(999999999, UserImgsEnum.DRIVER_LICENSE1);
+	    	  File   dealFile = new File("D:/dev/1优数/红点抽奖/xszdemo.jpg");
+    		  File fileParent = dealFile.getParentFile();  
+    			if(!fileParent.exists()){  
+    			    fileParent.mkdirs();  
+    			} 
+              try {
+				QQSSOTools.saveOSS(dealFile,key);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//              ImageUtils.dealImgJSZ(dealFile,rtMap);
+              ImageUtils.dealImgJSZ(dealFile,rtMap);
+              System.out.println(rtMap.size());
 	  }
 }
