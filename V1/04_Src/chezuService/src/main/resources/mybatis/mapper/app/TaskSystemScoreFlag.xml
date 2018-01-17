@@ -91,6 +91,13 @@
 		  set taskFamilyMonthOrder=${taskFamilyMonthOrder} where  daystamp=#{daystamp}
 	</update>
 	
+	<select id="getUnFinishFamilyMonthAvgOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyMonthAvgOrder=0
+	</select>
+	<update id="finishFamilyMonthAvgOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyMonthAvgOrder=${taskFamilyMonthAvgOrder} where  daystamp=#{daystamp}
+	</update>
    <!--end 初始化Order任务关系 -->
    
 </mapper>

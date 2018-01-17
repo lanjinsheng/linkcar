@@ -39,10 +39,10 @@
    <insert id="insertFamilyScore"  useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.entity.FamilyScore" >
        INSERT IGNORE  INTO 
             familyScore
-            (month,familyId,orderNo,score) 
+            (month,familyId,orderNo,score,dayTimes) 
         VALUES
-            (#{month},#{familyId},#{orderNo},#{score})  
-            ON DUPLICATE KEY UPDATE score=score+${score}
+            (#{month},#{familyId},#{orderNo},#{score},#{dayTimes})  
+            ON DUPLICATE KEY UPDATE score=score+${score},averScore=convert((score+${score})/(dayTimes+${dayTimes}),decimal(10,2));
     </insert>	
 	 
  <!-- 定时处理行程逻辑 -->
