@@ -13,7 +13,7 @@
             (#{userId},#{plateNo},#{carType},#{useType},#{modelType},#{vin},#{issueDate},#{regDate},
             #{engineNo},#{key},#{remark},now(),#{ownerName})
              ON DUPLICATE KEY UPDATE 
-             frontImgUrl=#{key},remark=#{remark},ownerName=#{ownerName}
+             frontImgUrl=#{key},remark=#{remark},ownerName=#{ownerName},
              updateTime=now()
     </insert>
 
