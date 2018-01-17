@@ -58,7 +58,7 @@
      <!-- 清除锁定的记录 -->
     <update id="clearLockTask" parameterType="java.lang.Long" >
        UPDATE 
-           taskFamilyDayOrder 
+           taskFamilyMonthOrder 
        SET 
            taskStatus=0,taskFlag='0',failTimes=failTimes+1
        WHERE 

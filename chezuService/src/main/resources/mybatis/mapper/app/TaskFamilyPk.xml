@@ -27,7 +27,8 @@
 	   <insert id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
          update
             familyScore
-                set score=score+${familyLevelFactor} where familyId=#{familyId} and month=#{month}
+                set score=score+${familyLevelFactor},averScore=convert((score+${familyLevelFactor})/(dayTimes),decimal(10,2))
+                 where familyId=#{familyId} and month=#{month}
        </insert>	
 
  <!-- 定时处理 -->
