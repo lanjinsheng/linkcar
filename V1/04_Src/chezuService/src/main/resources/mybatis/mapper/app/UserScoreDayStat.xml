@@ -47,7 +47,7 @@
             speedTimes,speedTimesUpdateTime,overspeedTimes,overspeedTimesUpdateTime,
             tiredDrive,tiredDriveTimes,tiredDriveTimesUpdateTime,nightDriveTimes,nightDriveTimesUpdateTime,maxspeed,
             useShachepian,useHongniu,useYeshijing,useFadongji,
-            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum) 
+            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage) 
         VALUES
             (#{userId},#{daystamp}, #{userFamilyScoreId}, #{brakeTimes}, #{brakeTimesUpdateTime},#{turnTimes},
             #{turnTimesUpdateTime},
@@ -55,7 +55,7 @@
              #{tiredDrive}, #{tiredDriveTimes}, #{tiredDriveTimesUpdateTime}
             , #{nightDriveTimes}, #{nightDriveTimesUpdateTime},#{maxspeed},
             #{useShachepian},#{useHongniu},#{useYeshijing},#{useFadongji},
-             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum})
+             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage})
         ON DUPLICATE KEY UPDATE 
         brakeTimes=brakeTimes+${brakeTimes},
         brakeTimesUpdateTime=#{brakeTimesUpdateTime},
@@ -78,7 +78,8 @@
       useZengyaqi=useZengyaqi+${useZengyaqi},
       illegalStopTimes=illegalStopTimes+${illegalStopTimes},
       illegalStopUpdateTime=#{illegalStopUpdateTime},
-      travelNum=travelNum+${travelNum}
+      travelNum=travelNum+${travelNum},
+      mileage=mileage+${mileage}
          
     </insert>
     
