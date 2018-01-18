@@ -21,7 +21,7 @@ public class FamilyRelationTask
 	public void run()
 	{
 		LOG.info("FamilyRelationTask===========begin init tomorrow log");
-		taskService.initTodayFamilyRelation();
+		taskService.initTomorrowFamilyRelation();
 		LOG.info("FamilyRelationTask===========end init tomorrow log");
 	}
 }

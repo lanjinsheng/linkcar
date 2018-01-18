@@ -156,7 +156,7 @@ public class TaskService extends BaseService<TaskService>
 	 * 初始化第二天的家族PK关系
 	 */
 	@Transactional
-	public void initTodayFamilyRelation()
+	public void initTomorrowFamilyRelation()
 	{
 		FamilyChallengeLogParamBean bean = new FamilyChallengeLogParamBean();
 		bean.setChallengeDay(getCurrentDayStr());

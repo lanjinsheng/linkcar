@@ -45,7 +45,7 @@
 	</select>
 	 	
  	<select id="queryFamilyByType" resultType="com.idata365.app.entity.FamilyInfoBean" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select id, familyType from familyInfo where familyType=#{familyType} order by id asc
+ 		select id, familyType from familyInfo where familyType=#{familyType} and id!=999999 order by id asc
  	</select>
  	
  	<insert id="saveFamilyRelation" parameterType="com.idata365.app.entity.FamilyRelationParamBean" useGeneratedKeys="true" keyProperty="id" >
