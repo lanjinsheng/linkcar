@@ -103,4 +103,11 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select sum(time) as totalTime from userScoreDayStat where userId=#{userId}
 	</select>
 	
+	<update id="updateUseHoldNum" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		update userScoreDayStat set useHoldNum=useHoldNum+1 where userId=#{userId} and daystamp=#{daystamp}
+	</update>
+	
+	<update id="updateUseZhitiao" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		update userScoreDayStat set useZhitiao=useZhitiao+1 where userId=#{userId} and daystamp=#{daystamp}
+	</update>
 </mapper>

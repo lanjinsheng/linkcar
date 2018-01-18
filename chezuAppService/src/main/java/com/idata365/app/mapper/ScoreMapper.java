@@ -63,4 +63,8 @@ public interface ScoreMapper
 	public double statMileage(ScoreFamilyInfoParamBean bean);
 	
 	public double statTime(ScoreFamilyInfoParamBean bean);
+	
+	public int updateUseHoldNum(ScoreFamilyInfoParamBean bean);
+	
+	public int updateUseZhitiao(ScoreFamilyInfoParamBean bean);
 }

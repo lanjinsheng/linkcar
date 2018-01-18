@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.idata365.app.service.GameService;
+import com.idata365.app.service.TaskService;
 
 /**
  * 初始化明天的用户角色
@@ -16,12 +16,12 @@ public class UserFamilyRoleTask
 	private static final Logger LOG = LoggerFactory.getLogger(UserFamilyRoleTask.class);
 
 	@Autowired
-	private GameService gameService;
+	private TaskService taskService;
 
 	public void run()
 	{
 		LOG.info("begin init tomorrow log");
-		gameService.syncTomorrowRole();
+		taskService.syncTomorrowRole();
 		LOG.info("end init tomorrow log");
 	}
 }

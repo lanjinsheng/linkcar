@@ -804,7 +804,7 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		ScoreDetailUnitBean mazhaTimesBean = new ScoreDetailUnitBean();
 		mazhaTimesBean.setFactor("使用马扎");
-		mazhaTimesBean.setValue(String.valueOf(tempBean.getUseMazha()) + "次");
+		mazhaTimesBean.setValue(String.valueOf(tempBean.getUseHoldNum()) + "次");
 		mazhaTimesBean.setWeight(formattedDecimalToPercentage(tempBean.getMazhaProportion()));
 		mazhaTimesBean.setScore(String.valueOf(tempBean.getMazhaScore()));
 		resultList.add(mazhaTimesBean);
@@ -886,6 +886,11 @@ public class ScoreService extends BaseService<ScoreService>
 	public List<GameHistoryResultBean> gameHistory(ScoreFamilyInfoParamBean bean)
 	{
 		List<GameHistoryBean> tempList = this.scoreMapper.queryFamilyOrderByMonth(bean);
+		
+		if (CollectionUtils.isEmpty(tempList))
+		{
+			
+		}
 		
 		List<GameHistoryResultBean> resultList = new ArrayList<>();
 		

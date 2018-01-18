@@ -38,6 +38,7 @@ import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
 import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.RoleCountResultBean;
+import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
@@ -54,6 +55,7 @@ import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.LotteryMapper;
+import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.NumUtils;
 import com.idata365.app.util.RandUtils;
@@ -71,6 +73,9 @@ public class GameService extends BaseService<GameService>
 	
 	@Autowired
 	private LotteryMapper lotteryMapper;
+	
+	@Autowired
+	private ScoreMapper scoreMapper;
 	
 	@Autowired
 	private MessageService messageService;
@@ -324,11 +329,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -356,6 +361,11 @@ public class GameService extends BaseService<GameService>
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
 		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
+		
 		return resultBean;
 	}
 	
@@ -366,11 +376,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -398,6 +408,11 @@ public class GameService extends BaseService<GameService>
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
 		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
+		
 		return resultBean;
 	}
 	
@@ -408,11 +423,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -440,6 +455,11 @@ public class GameService extends BaseService<GameService>
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
 		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
+		
 		return resultBean;
 	}
 	
@@ -450,11 +470,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -482,6 +502,11 @@ public class GameService extends BaseService<GameService>
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
 		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
+		
 		return resultBean;
 	}
 	
@@ -492,11 +517,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -524,6 +549,11 @@ public class GameService extends BaseService<GameService>
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
 		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
+		
 		return resultBean;
 	}
 	
@@ -534,11 +564,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -566,6 +596,11 @@ public class GameService extends BaseService<GameService>
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
 		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
+		
 		return resultBean;
 	}
 	
@@ -576,11 +611,11 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
 		
-		int countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (countLottery == 0)
+		if (null == countLottery || countLottery == 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -607,6 +642,11 @@ public class GameService extends BaseService<GameService>
 		
 		//道具减1
 		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		ScoreFamilyInfoParamBean zhitiaoParamBean = new ScoreFamilyInfoParamBean();
+		zhitiaoParamBean.setUserId(userIds.get(idx));
+		zhitiaoParamBean.setDaystamp(currentDayStr);
+		this.scoreMapper.updateUseZhitiao(zhitiaoParamBean);
 		
 		return resultBean;
 	}
@@ -684,10 +724,36 @@ public class GameService extends BaseService<GameService>
 	 * @param bean
 	 * @return
 	 */
+	@Transactional
 	public int holdAtStation(GameFamilyParamBean bean)
 	{
+		LotteryBean lotteryBean = new LotteryBean();
+		lotteryBean.setUserId(bean.getUserId());
+		lotteryBean.setAwardId(LotteryConstant.MAZHA_LOTTERY);
+		
+		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
+		
+		//马扎用光
+		if (null == countLottery || countLottery == 0)
+		{
+			return -1;
+		}
+				
 		int result = this.gameMapper.updateToHoldParkStation(bean);
-		return result;
+		
+		if (0 == result)
+			return 0;
+		
+		//道具减1
+		this.lotteryMapper.updateLotteryCount(lotteryBean);
+		
+		//记录使用小马扎数
+		ScoreFamilyInfoParamBean paramHoldBean = new ScoreFamilyInfoParamBean();
+		paramHoldBean.setUserId(bean.getUserId());
+		paramHoldBean.setDaystamp(getCurrentDayStr());
+		this.scoreMapper.updateUseHoldNum(paramHoldBean);
+		
+		return 1;
 	}
 	
 	/**
@@ -868,7 +934,11 @@ public class GameService extends BaseService<GameService>
 			LotteryBean lotteryParamBean = new LotteryBean();
 			lotteryParamBean.setAwardId(tempAwardId);
 			lotteryParamBean.setUserId(bean.getUserId());
-			int tempTotalCount = this.lotteryMapper.countLottery(lotteryParamBean);
+			Integer tempTotalCount = this.lotteryMapper.countLottery(lotteryParamBean);
+			if (null == tempTotalCount)
+			{
+				tempTotalCount = 0;
+			}
 			
 			resultBean.setAwardTotalCount(String.valueOf(tempTotalCount));
 			

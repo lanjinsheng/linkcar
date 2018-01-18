@@ -19,7 +19,7 @@
     	</if>
     </insert>
     
-    <select id="countLottery" resultType="int" parameterType="com.idata365.app.entity.LotteryBean">
+    <select id="countLottery" resultType="Integer" parameterType="com.idata365.app.entity.LotteryBean">
     	select awardCount from lottery where userId=#{userId} and awardId=#{awardId}
     </select>
     

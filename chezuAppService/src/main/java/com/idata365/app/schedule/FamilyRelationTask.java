@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.idata365.app.service.GameService;
+import com.idata365.app.service.TaskService;
 
 /**
  * 初始化第二天的家族PK关系
@@ -16,12 +16,12 @@ public class FamilyRelationTask
 	private static final Logger LOG = LoggerFactory.getLogger(FamilyRelationTask.class);
 
 	@Autowired
-	private GameService gameService;
+	private TaskService taskService;
 
 	public void run()
 	{
 		LOG.info("FamilyRelationTask===========begin init tomorrow log");
-		gameService.initTodayFamilyRelation();
+		taskService.initTodayFamilyRelation();
 		LOG.info("FamilyRelationTask===========end init tomorrow log");
 	}
 }

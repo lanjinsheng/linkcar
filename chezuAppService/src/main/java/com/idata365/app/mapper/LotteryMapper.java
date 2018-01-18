@@ -12,7 +12,7 @@ public interface LotteryMapper
 	
 	public void saveOrUpdate(LotteryBean bean);
 	
-	public int countLottery(LotteryBean bean);
+	public Integer countLottery(LotteryBean bean);
 	
 	public void updateLotteryCount(LotteryBean bean);
 	
