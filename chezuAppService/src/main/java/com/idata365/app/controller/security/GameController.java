@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
+import com.idata365.app.entity.FamilyInfoResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.JudgeChallengeResultBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
@@ -108,11 +110,19 @@ public class GameController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
-		String judgeFlag = this.gameService.judgeChallengeFlag(bean);
-		Map<String, String> resultMap = new HashMap<>();
-		resultMap.put("judgeFlag", judgeFlag);
+		JudgeChallengeResultBean resultBean = this.gameService.judgeChallengeFlag(bean);
+		FamilyInfoResultBean familyObj = resultBean.getFamilyObj();
+		if (null != familyObj)
+		{
+			String imgUrl = familyObj.getImgUrl();
+			if (StringUtils.isNoneBlank(imgUrl))
+			{
+				String imgBasePath = super.getImgBasePath();
+				familyObj.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
 		
-		return ResultUtils.rtSuccess(resultMap);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 	
 	/**

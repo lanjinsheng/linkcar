@@ -27,10 +27,12 @@ import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
+import com.idata365.app.entity.FamilyInfoResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.JudgeChallengeResultBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
@@ -59,6 +61,8 @@ import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.NumUtils;
 import com.idata365.app.util.RandUtils;
+
+import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 
 @Service
 public class GameService extends BaseService<GameService>
@@ -205,20 +209,85 @@ public class GameService extends BaseService<GameService>
 		}
 	}
 	
-	public String judgeChallengeFlag(GameFamilyParamBean bean)
+	public JudgeChallengeResultBean judgeChallengeFlag(GameFamilyParamBean bean)
 	{
+		long prevFamilyId = bean.getFamilyId();
+		
 		FamilyChallengeLogParamBean familyChallengeLogParamBean = new FamilyChallengeLogParamBean();
-		familyChallengeLogParamBean.setFamilyId(bean.getFamilyId());
+		familyChallengeLogParamBean.setFamilyId(prevFamilyId);
 		familyChallengeLogParamBean.setChallengeDay(getTomorrowDateStr());
 		
+		JudgeChallengeResultBean resultBean = new JudgeChallengeResultBean();
 		if (judgeChallenged(familyChallengeLogParamBean))
 		{
-			return "1";
+			FamilyRelationBean relationBean = new FamilyRelationBean();
+			relationBean.setFamilyId(prevFamilyId);
+			relationBean.setDaystamp(getTomorrowDateStr());
+			
+			FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean).get(0);
+			
+			if (null != relationResultBean)
+			{
+				long familyId1 = relationResultBean.getFamilyId1();
+				long familyId2 = relationResultBean.getFamilyId2();
+				
+				long dstFamilyId;
+				if (prevFamilyId != familyId1)
+				{
+					dstFamilyId = familyId1;
+				}
+				else
+				{
+					dstFamilyId = familyId2;
+				}
+				
+				FamilyParamBean familyParamBean = new FamilyParamBean();
+				familyParamBean.setFamilyId(dstFamilyId);
+				FamilyInfoBean tempFamilyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+				
+				FamilyInfoResultBean familyObj = new FamilyInfoResultBean();
+				familyObj.setFamilyId(String.valueOf(tempFamilyInfoBean.getId()));
+				familyObj.setFamilyName(tempFamilyInfoBean.getFamilyName());
+				familyObj.setFamilyType(String.valueOf(tempFamilyInfoBean.getFamilyType()));
+				familyObj.setImgUrl(tempFamilyInfoBean.getImgUrl());
+				
+				resultBean.setFamilyObj(familyObj);
+			}
+			else
+			{
+				resultBean.setChallengeFlag("CHALLENGE");
+				
+				FamilyChallengeLogParamBean tempParamTypeBean = new FamilyChallengeLogParamBean();
+				tempParamTypeBean.setFamilyId(prevFamilyId);
+				tempParamTypeBean.setChallengeDay(getTomorrowDateStr());
+				FamilyChallengeLogBean tempTypeResultBean = this.gameMapper.queryChallengeType(tempParamTypeBean);
+				int challengeType = tempTypeResultBean.getChallengeType();
+				
+				String msgTemplate = "您已成功挑战FAMILY_HOLD家族\\n中午12：00将公布您的竞争对手，敬请期待！";
+				String tempMsg;
+				if (FamilyConstant.BRONZE_TYPE == challengeType)
+				{
+					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "青铜");
+				}
+				else if (FamilyConstant.SILVER_TYPE == challengeType)
+				{
+					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "白银");
+				}
+				else
+				{
+					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "黄金");
+				}
+				
+				resultBean.setChallengeMsg(tempMsg);
+			}
 		}
 		else
 		{
-			return "0";
+			resultBean.setChallengeFlag("UN_CHALLENGE");
+			resultBean.setChallengeMsg("未发起挑战");
 		}
+		
+		return resultBean;
 	}
 	
 	//查询正在对战的家族系信息
