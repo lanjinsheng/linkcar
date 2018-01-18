@@ -200,7 +200,7 @@
  	</select>
  	 	
  	<select id="countByType" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select count(id) from familyInfo where familyType=#{familyType}
+ 		select count(id) from familyInfo where familyType=#{familyType} and id!=999999
  	</select>
  	 	
  	<select id="queryFamilyByType" resultType="com.idata365.app.entity.FamilyInfoBean" parameterType="com.idata365.app.entity.FamilyParamBean">
