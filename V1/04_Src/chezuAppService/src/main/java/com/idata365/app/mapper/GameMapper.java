@@ -54,4 +54,6 @@ public interface GameMapper
 	public List<FamilyChallengeLogBean> queryChallengeLog(FamilyChallengeLogParamBean bean);
 	
 	public List<RoleCountBean> countRoleByRole(UserFamilyRoleLogParamBean bean);
+	
+	public FamilyChallengeLogBean queryChallengeType(FamilyChallengeLogParamBean bean);
 }
