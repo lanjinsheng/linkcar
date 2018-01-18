@@ -288,14 +288,11 @@ public class GameController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
 		int result = this.gameService.holdAtStation(bean);
-		if (result > 0)
-		{
-			return ResultUtils.rtSuccess(null);
-		}
-		else
-		{
-			return ResultUtils.rtFail(null);
-		}
+		
+		Map<String, String> resultMap = new HashMap<>();
+		resultMap.put("status", String.valueOf(result));
+		
+		return ResultUtils.rtSuccess(resultMap);
 	}
 	
 	/**

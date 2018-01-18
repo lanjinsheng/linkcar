@@ -24,4 +24,32 @@
 		</foreach>
 	</insert>
 	
+	<select id="queryUserFamilyRelation" resultType="com.idata365.app.entity.UserFamilyRelationBean">
+		select userId, familyId, role, joinTime from userFamilyRelation where role is not NULL order by id asc
+	</select>
+	
+	<select id="countTomorrowRole" resultType="int" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select count(id) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
+	
+	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime})
+	</insert>
+	
+	<insert id="saveUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into userScoreDayStat(userId, userFamilyScoreId, daystamp) values(#{userId}, #{userFamilyScoreId}, #{daystamp})
+	</insert>
+		
+	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
+		select familyId, prevType, challengeType from familyChallengeLog where challengeDay=#{challengeDay} order by id asc
+	</select>
+	 	
+ 	<select id="queryFamilyByType" resultType="com.idata365.app.entity.FamilyInfoBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select id, familyType from familyInfo where familyType=#{familyType} order by id asc
+ 	</select>
+ 	
+ 	<insert id="saveFamilyRelation" parameterType="com.idata365.app.entity.FamilyRelationParamBean" useGeneratedKeys="true" keyProperty="id" >
+		insert into familyRelation(selfFamilyId, competitorFamilyId, daystamp) values(#{selfFamilyId}, #{competitorFamilyId}, #{daystamp});
+	</insert>
+	 	 	
 </mapper>

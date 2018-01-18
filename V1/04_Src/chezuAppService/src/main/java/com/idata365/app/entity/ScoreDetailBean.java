@@ -142,7 +142,7 @@ public class ScoreDetailBean
 	
 	private long useZengyaqi;
 	
-	private long useMazha;
+	private long useHoldNum;
 	
 	private long useZhitiao;
 
@@ -542,15 +542,6 @@ public class ScoreDetailBean
 		this.useZengyaqi = useZengyaqi;
 	}
 
-	public long getUseMazha()
-	{
-		return useMazha;
-	}
-
-	public void setUseMazha(long useMazha)
-	{
-		this.useMazha = useMazha;
-	}
 
 	public long getUseZhitiao()
 	{
@@ -670,6 +661,16 @@ public class ScoreDetailBean
 	public void setExtraPlusScore(int extraPlusScore)
 	{
 		this.extraPlusScore = extraPlusScore;
+	}
+
+	public long getUseHoldNum()
+	{
+		return useHoldNum;
+	}
+
+	public void setUseHoldNum(long useHoldNum)
+	{
+		this.useHoldNum = useHoldNum;
 	}
 	
 }
