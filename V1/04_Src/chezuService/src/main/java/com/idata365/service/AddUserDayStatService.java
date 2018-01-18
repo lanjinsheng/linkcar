@@ -110,6 +110,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			userScoreDayStat.setUseShachepian(uth.getUseShachepian());
 			userScoreDayStat.setUseYeshijing(uth.getUseYeshijing());
 			userScoreDayStat.setUseZengyaqi(uth.getUseZengyaqi());
+			userScoreDayStat.setMileage(uth.getMileage());
 			userScoreDayStat.setTravelNum(1);
 			//更新车位
 			 ParkStation park=new ParkStation();

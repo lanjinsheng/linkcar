@@ -99,6 +99,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setNightDriveScore(nightDriveScore);
 			userScoreDayStat.setTimeScore(timeScore);
 			userScoreDayStat.setIllegalStopTimesScore(Double.valueOf(-userScoreDayStat.getIllegalStopTimes()));
+			userScoreDayStat.setPhoneTimesScore(phoneTimesScore);
 		}else {
 			userScoreDayStat.setScore(score+roleScore);
 			userScoreDayStat.setMileageScore(0d);
@@ -110,6 +111,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setTiredDriveScore(0d);
 			userScoreDayStat.setNightDriveScore(0d);
 			userScoreDayStat.setTimeScore(0d);
+			userScoreDayStat.setPhoneTimesScore(0d);
 		}
 		//增加其他加分项目:贴条等，待定
 		penalTimes+=userScoreDayStat.getBrakePenalTimes();
