@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserAchieveMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.UserAchieveBean" >
+    </resultMap>
+    
+    <!-- 初始化用户成就 -->
+    <insert id="insertUserAchieveInfo" useGeneratedKeys="true" keyProperty="id"  parameterType="java.lang.Long" >
+       INSERT INTO 
+            userAchieveInfo
+            (userId,achieveId,awardId,awardNum,lev,flag,createTime) 
+        VALUES
+          select #{userId},achieveId,awardId,awardNum,lev,flag,now() from userAchieveInfo where userId=0
+    </insert>
+    
+    <!-- 查询用户成就列表 -->
+     <select id="getUserAchieveList" resultType="java.util.HashMap" parameterType="java.lang.Long">
+		SELECT a.achieveId,d.achieveName,a.lev,a.flag,MAX(a.lev) as levSum,d.imgUrl
+		FROM userAchieveInfo a 
+		INNER JOIN dicUserAchieve d ON d.id=a.achieveId
+		WHERE a.userId= #{userId} 
+		GROUP BY d.id
+     </select>
+     
+      <!-- 查询用户某项成就详情 -->
+     <select id="getUserAchieveListById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select a.achieveId,d.achieveName,a.awardId,dy.awardValue,a.awardNum,a.nowNum,a.num
+		from userAchieveInfo a
+		inner join dicUserAchieve d ON d.id=a.achieveId 
+		inner join dicLottery dy on dy.awardId=a.awardId
+		where a.userId=#{userId}  and a.achieveId=#{achieveId}
+     </select>
+    
+     
+</mapper>
