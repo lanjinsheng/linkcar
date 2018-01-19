@@ -231,13 +231,17 @@ public class FamilyService extends BaseService<FamilyService>
 		FamilyParamBean familyParamBean = new FamilyParamBean();
 		familyParamBean.setUserId(userId);
 		int countStranger = this.familyMapper.countStranger(familyParamBean);
+		List<FamilyRandResultBean> resultList = new ArrayList<>();
+		if (0 == countStranger)
+		{
+			return resultList;
+		}
 		int startPos = RandUtils.generateRand(0, countStranger-1);
 		
 		FamilyParamBean bean = new FamilyParamBean();
 		bean.setStartPos(startPos);
 		bean.setUserId(userId);
 		List<FamilyRandBean> familys = this.familyMapper.queryFamilys(bean);
-		List<FamilyRandResultBean> resultList = new ArrayList<>();
 		for (FamilyRandBean tempBean : familys)
 		{
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
@@ -553,7 +557,7 @@ public class FamilyService extends BaseService<FamilyService>
 		}
 		
 		int countUsers = this.familyMapper.countUsers();
-		resultBean.setGamerNumnicai(countUsers);
+		resultBean.setGamerNum(countUsers);
 		
 		return resultBean;
 	}
