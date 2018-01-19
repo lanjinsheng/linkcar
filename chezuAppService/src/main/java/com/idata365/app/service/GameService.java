@@ -224,10 +224,11 @@ public class GameService extends BaseService<GameService>
 			relationBean.setFamilyId(prevFamilyId);
 			relationBean.setDaystamp(getTomorrowDateStr());
 			
-			FamilyRelationBean relationResultBean = this.familyMapper.queryFamilyIdByCompetitorId(relationBean).get(0);
+			List<FamilyRelationBean> relationList = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
 			
-			if (null != relationResultBean)
+			if (CollectionUtils.isNotEmpty(relationList))
 			{
+				FamilyRelationBean relationResultBean = relationList.get(0);
 				long familyId1 = relationResultBean.getFamilyId1();
 				long familyId2 = relationResultBean.getFamilyId2();
 				
@@ -252,6 +253,8 @@ public class GameService extends BaseService<GameService>
 				familyObj.setImgUrl(tempFamilyInfoBean.getImgUrl());
 				
 				resultBean.setFamilyObj(familyObj);
+				resultBean.setChallengeFlag("CHALLENGE_PARTNER");
+				resultBean.setChallengeMsg("已发起挑战已公布结果");
 			}
 			else
 			{
