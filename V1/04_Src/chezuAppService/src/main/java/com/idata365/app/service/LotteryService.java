@@ -189,6 +189,7 @@ public class LotteryService extends BaseService<LotteryService>
 		SignatureDayLogBean signatureDayLogBean = new SignatureDayLogBean();
 		signatureDayLogBean.setUserId(bean.getUserId());
 		signatureDayLogBean.setSigTimestamp(todayStr);
+		//记录抽奖状态
 		this.signatureDayLogMapper.updateSigStatus(signatureDayLogBean);
 		
 		LotteryResultBean resultBean = new LotteryResultBean();

@@ -5,18 +5,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.aliyun.oss.common.utils.DateUtil;
+import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.SigAwardStatBean;
+import com.idata365.app.entity.SigResultBean;
 import com.idata365.app.entity.SignatureDayLogBean;
+import com.idata365.app.entity.SignatureStatBean;
 import com.idata365.app.mapper.SignatureDayLogMapper;
+import com.idata365.app.util.AdBeanUtils;
 
 @Service
 public class SignInService extends BaseService<SignInService>
@@ -52,6 +55,7 @@ public class SignInService extends BaseService<SignInService>
 	 * 签到
 	 * @param bean
 	 */
+	@Transactional
 	public void sign(SignatureDayLogBean bean)
 	{
 		Calendar curDay = Calendar.getInstance();
@@ -61,10 +65,86 @@ public class SignInService extends BaseService<SignInService>
 		bean.setMonth(month);
 		
 		int count = this.signatureDayLogMapper.countByUserId(bean);
+		//如果今天尚未签到
 		if (0 == count)
 		{
-			this.signatureDayLogMapper.save(bean);;
+			SignatureDayLogBean sigParamBean = new SignatureDayLogBean();
+			sigParamBean.setUserId(bean.getUserId());
+			//查询最后一次签到日期
+			SigResultBean lastSigObj = this.signatureDayLogMapper.queryLastSigDay(bean);
+//			LOGGER.info("lastSigObjList====={}", JSON.toJSONString(lastSigObjList));
+			
+			//如果没有最后一次签到日期，则用户是第一次签到
+			if (null == lastSigObj)
+			{
+				//查询签到统计天数
+				SigResultBean numResultBean = this.signatureDayLogMapper.countSigStatNum(bean);
+				//如果没有签到统计天数，则初始化签到统计天数记录
+				if (null == numResultBean)
+				{
+					this.signatureDayLogMapper.saveSigStat(bean);
+				}
+				//如果有签到统计天数，则更统计天数记录为1
+				else
+				{
+					bean.setNum(1);
+					this.signatureDayLogMapper.updateSigNumStat(bean);
+				}
+			}
+			//如果有最后一次签到日期
+			else
+			{
+				String lastSigTs = lastSigObj.getSigTs();
+				//如果签到日期不等于今天，表尚未签到
+				if (!StringUtils.equals(lastSigTs, curDayStr))
+				{
+					String yesterdayStr = getYesterdayDateUndelimiterStr();
+					if (StringUtils.equals(lastSigTs, yesterdayStr))
+					{
+						SigResultBean numResultBean = this.signatureDayLogMapper.countSigStatNum(bean);
+						int sigNum = numResultBean.getSigNum();
+						if (7 == sigNum)
+						{
+							bean.setNum(1);
+						}
+						else
+						{
+							bean.setNum(sigNum + 1);
+						}
+						this.signatureDayLogMapper.updateSigNumStat(bean);
+					}
+					else
+					{
+						bean.setNum(1);
+						this.signatureDayLogMapper.updateSigNumStat(bean);
+					}
+				}
+			}
+			
+			SignatureDayLogBean saveParamBean = new SignatureDayLogBean();
+			saveParamBean.setUserId(bean.getUserId());
+			saveParamBean.setSigTimestamp(curDayStr);
+			saveParamBean.setMonth(month);
+			//记录签到
+			this.signatureDayLogMapper.save(saveParamBean);
 		}
+		
+	}
+	
+	public String getYesterdayDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(curDate, -1);
+		
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyyMMdd");
+		return yesterdayDateStr;
+	}
+	
+	private String getCurrentDayStrUnDelimiter()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN);
+		return dayStr;
 	}
 	
 	/**
@@ -75,76 +155,28 @@ public class SignInService extends BaseService<SignInService>
 	{
 		SigAwardStatBean resultBean = new SigAwardStatBean();
 		
-		Date todayDate = Calendar.getInstance().getTime();
-		Date beginDate = DateUtils.addDays(todayDate, -6);
-		String beginDateStr = DateFormatUtils.format(beginDate, DateConstant.DAY_PATTERN);
-		bean.setSigTimestamp(beginDateStr);
-		
-		List<SignatureDayLogBean> sigStatusList = this.signatureDayLogMapper.querySigStatus(bean);
-		
-		if (CollectionUtils.isEmpty(sigStatusList))
+		bean.setSigTimestamp(getCurrentDayStrUnDelimiter());
+		String sigStatus = this.signatureDayLogMapper.querySigStatus(bean);
+		if (StringUtils.equals("OK", sigStatus))
 		{
-			resultBean.setContinueSevenFlag("SEVEN_NO");
+			resultBean.setContinueSevenFlag("SEVEN_AWARD");
 		}
 		else
 		{
-			SignatureDayLogBean firstLogBean = sigStatusList.get(0);
-			String awardStatus = firstLogBean.getAwardStatus();
-			String firstLogDateStr = firstLogBean.getSigTimestamp();
-			String todayDateStr = DateFormatUtils.format(todayDate, DateConstant.DAY_PATTERN);
-			if (StringUtils.equals("OK", awardStatus)
-					&& StringUtils.equals(firstLogDateStr, todayDateStr))
+			SignatureStatBean statBean = this.signatureDayLogMapper.querySigStatInfo(bean);
+			String sigTimestamp = statBean.getSigTimestamp();
+			int num = statBean.getNum();
+			if (StringUtils.equals(sigTimestamp, getCurrentDayStrUnDelimiter())
+					&& 7 == num)
 			{
-				resultBean.setContinueSevenFlag("SEVEN_AWARD");
+				resultBean.setContinueSevenFlag("SEVEN_OK");
 			}
 			else
 			{
-				int continueCount = 0;
-				Date prevDate = null;
-				for (int i = 0; i < sigStatusList.size(); i++)
-				{
-					SignatureDayLogBean tempBean = sigStatusList.get(i);
-					String tempAwardStatus = tempBean.getAwardStatus();
-					if (StringUtils.equals("OK", tempAwardStatus))
-					{
-						break;
-					}
-					else
-					{
-						String sigTimestamp = tempBean.getSigTimestamp();
-						Date tempDate = parseStrToDate(sigTimestamp);
-						
-						if (null == prevDate)
-						{
-							continueCount = 1;
-							prevDate = tempDate;
-						}
-						else
-						{
-							Date addedDays = DateUtils.addDays(tempDate, 1);
-							if (addedDays.equals(prevDate))
-							{
-								continueCount++;
-								prevDate = tempDate;
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-				}
-				
-				if (7 == continueCount)
-				{
-					resultBean.setContinueSevenFlag("SEVEN_OK");
-				}
-				else
-				{
-					resultBean.setContinueSevenFlag("SEVEN_NO");
-				}
+				resultBean.setContinueSevenFlag("SEVEN_NO");
 			}
 		}
+		
 		return resultBean;
 	}
 	
@@ -155,70 +187,16 @@ public class SignInService extends BaseService<SignInService>
 	 */
 	public int queryContinueSigDay(SignatureDayLogBean bean)
 	{
-		int continueCount = 0;
-		
-		Date todayDate = Calendar.getInstance().getTime();
-		Date beginDate = DateUtils.addDays(todayDate, -6);
-		String beginDateStr = DateFormatUtils.format(beginDate, DateConstant.DAY_PATTERN);
-		bean.setSigTimestamp(beginDateStr);
-		
-		List<SignatureDayLogBean> sigStatusList = this.signatureDayLogMapper.querySigStatus(bean);
-		
-		if (CollectionUtils.isEmpty(sigStatusList))
+		SignatureStatBean statBean = this.signatureDayLogMapper.querySigStatInfo(bean);
+		String sigTimestamp = statBean.getSigTimestamp();
+		if (StringUtils.equals(sigTimestamp, getCurrentDayStrUnDelimiter())
+				|| StringUtils.equals(sigTimestamp, getYesterdayDateUndelimiterStr()))
 		{
-			return continueCount;
-			
+			return statBean.getNum();
 		}
 		else
 		{
-			SignatureDayLogBean firstLogBean = sigStatusList.get(0);
-			String awardStatus = firstLogBean.getAwardStatus();
-			String firstLogDateStr = firstLogBean.getSigTimestamp();
-			String todayDateStr = DateFormatUtils.format(todayDate, DateConstant.DAY_PATTERN);
-			if (StringUtils.equals("OK", awardStatus)
-					&& StringUtils.equals(firstLogDateStr, todayDateStr))
-			{
-				continueCount = 7;
-				return continueCount;
-			}
-			else
-			{
-				Date prevDate = null;
-				for (int i = 0; i < sigStatusList.size(); i++)
-				{
-					SignatureDayLogBean tempBean = sigStatusList.get(i);
-					String tempAwardStatus = tempBean.getAwardStatus();
-					if (StringUtils.equals("OK", tempAwardStatus))
-					{
-						break;
-					}
-					else
-					{
-						String sigTimestamp = tempBean.getSigTimestamp();
-						Date tempDate = parseStrToDate(sigTimestamp);
-						
-						if (null == prevDate)
-						{
-							continueCount = 1;
-							prevDate = tempDate;
-						}
-						else
-						{
-							Date addedDays = DateUtils.addDays(tempDate, 1);
-							if (addedDays.equals(prevDate))
-							{
-								continueCount++;
-								prevDate = tempDate;
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-				}
-			}
+			return 0;
 		}
-		return continueCount;
 	}
 }

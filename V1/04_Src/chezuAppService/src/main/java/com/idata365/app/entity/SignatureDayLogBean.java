@@ -2,6 +2,8 @@ package com.idata365.app.entity;
 
 public class SignatureDayLogBean
 {
+	private long id;
+	
 	//用户id
 	private long userId;
 		
@@ -13,8 +15,20 @@ public class SignatureDayLogBean
 	
 	private int count;
 	
+	private Integer num;
+	
 	//抽奖状态
 	private String awardStatus;
+
+	public long getId()
+	{
+		return id;
+	}
+
+	public void setId(long id)
+	{
+		this.id = id;
+	}
 
 	public long getUserId()
 	{
@@ -54,6 +68,16 @@ public class SignatureDayLogBean
 	public void setCount(int count)
 	{
 		this.count = count;
+	}
+
+	public Integer getNum()
+	{
+		return num;
+	}
+
+	public void setNum(Integer num)
+	{
+		this.num = num;
 	}
 
 	public String getAwardStatus()

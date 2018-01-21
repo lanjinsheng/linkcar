@@ -12,17 +12,37 @@
     	select count(*) from signatureDayLog where userId=#{userId} and sigTimestamp=#{sigTimestamp}
     </select>
     
+    <select id="queryLastSigDay" resultType="com.idata365.app.entity.SigResultBean"
+    	parameterType="com.idata365.app.entity.SignatureDayLogBean">
+    	select sigTimestamp as sigTs from signatureDayLog where userId=#{userId} order by sigTimestamp desc limit 0, 1
+    </select>
+    
+    <select id="countSigStatNum" resultType="com.idata365.app.entity.SigResultBean"
+    	parameterType="com.idata365.app.entity.SignatureDayLogBean">
+    	select num as sigNum from signatureStat where userId=#{userId}
+    </select>
+    
+    <insert id="saveSigStat" parameterType="com.idata365.app.entity.SignatureDayLogBean"  useGeneratedKeys="true" keyProperty="id">
+    	insert into signatureStat(userId, num, sigTimestamp) values(#{userId}, 1, #{sigTimestamp});
+    </insert>
+    
+    <update id="updateSigNumStat" parameterType="com.idata365.app.entity.SignatureDayLogBean" >
+       update signatureStat set num=#{num}, sigTimestamp=#{sigTimestamp} where userId=#{userId}
+    </update>
     
     <insert id="save" parameterType="com.idata365.app.entity.SignatureDayLogBean">
     	insert into signatureDayLog(userId, sigTimestamp, month) values(#{userId}, #{sigTimestamp}, #{month})
     </insert>
+
+	<select id="querySigStatus" resultType="java.lang.String" parameterType="com.idata365.app.entity.SignatureDayLogBean">
+		select awardStatus from signatureDayLog where userId=#{userId} and sigTimestamp=#{sigTimestamp}
+	</select>
+
+	<select id="querySigStatInfo" resultType="com.idata365.app.entity.SignatureStatBean" parameterType="com.idata365.app.entity.SignatureDayLogBean">
+		select num, sigTimestamp from signatureStat where userId=#{userId};
+	</select>
     
-    <select id="querySigStatus" resultType="com.idata365.app.entity.SignatureDayLogBean"
-    	parameterType="com.idata365.app.entity.SignatureDayLogBean">
-    	select sigTimestamp, awardStatus from signatureDayLog where userId=#{userId} and sigTimestamp>=#{sigTimestamp} order by sigTimestamp desc
-    </select>
-    
-    <update id="updateSigStatus" parameterType="com.idata365.app.entity.SignatureDayLogBean" >
+    <update id="updateSigStatus" parameterType="com.idata365.app.entity.SignatureDayLogBean">
        update signatureDayLog set awardStatus='OK' where userId=#{userId} and sigTimestamp=#{sigTimestamp}
     </update>
 </mapper>
