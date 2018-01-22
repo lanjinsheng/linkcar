@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyInvite;
@@ -80,9 +84,11 @@ public class ShareCommController extends BaseController
 	// return "invite1";
 	// }
 	@RequestMapping("/share/goInvite")
-	@ResponseBody
 	public Map<String, Object> goInvite(@RequestParam(required = false) Map<String, String> allRequestParams)
 	{
+		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+	   	  LOG.info( request.getParameter("key"));
 		String content = allRequestParams.get("key");
 		if (content == null)
 		{
@@ -118,7 +124,6 @@ public class ShareCommController extends BaseController
 	}
 
 	@RequestMapping("/share/getCode")
-	@ResponseBody
 	public Map<String, Object> getCode(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<String, String> requestBodyParams)
 	{
@@ -155,7 +160,6 @@ public class ShareCommController extends BaseController
 	}
 
 	@RequestMapping("/share/submitInvite")
-	@ResponseBody
 	public Map<String, Object> submitInvite(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<String, String> requestBodyParams)
 	{
@@ -276,7 +280,6 @@ public class ShareCommController extends BaseController
 	// }
 
 	@RequestMapping("/share/createInviteTest")
-	@ResponseBody
 	public Map<String, Object> createInviteTest(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams)
 	{
