@@ -84,12 +84,9 @@ public class ShareCommController extends BaseController
 	// return "invite1";
 	// }
 	@RequestMapping("/share/goInvite")
-	public Map<String, Object> goInvite(@RequestParam(required = false) Map<String, String> allRequestParams)
+	public Map<String, Object> goInvite(@RequestParam(required = false) Map<String, String> allRequestParams,@RequestBody(required = false) Map<String, Object> requestBodyParams)
 	{
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-	   	  LOG.info( request.getParameter("key"));
-		String content = allRequestParams.get("key");
+		String content = String.valueOf(requestBodyParams.get("key"));
 		if (content == null)
 		{
 			return ResultUtils.rtFailParam(null, "无效参数");
