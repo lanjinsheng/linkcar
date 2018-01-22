@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataMain;
@@ -116,17 +117,21 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 		}
    	     return true;
 	}
+	@Transactional(value="colTransactionManager")
 	public void clearLockTask(){
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		driveDataMainMapper.clearLockTask(compareTimes);
 	}
+	@Transactional(value="colTransactionManager")
 	public List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive){
 		return driveDataEventMapper.listDriveEventByMainId(drive);
 	}
+	@Transactional(value="colTransactionManager")
 	public void updateSuccSendDriveTask(DriveDataMain drive) {
 		drive.setIsPost(1);
 		driveDataMainMapper.updateSuccSendDriveTask(drive);
 	}
+	@Transactional(value="colTransactionManager")
 	public void updateFailSendDriveTask(DriveDataMain drive) {
 		drive.setIsPost(0);
 		driveDataMainMapper.updateFailSendDriveTask(drive);
