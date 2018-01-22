@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyInvite;
@@ -27,7 +28,7 @@ import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
-@Controller
+@RestController
 public class ShareCommController extends BaseController
 {
 	private final static Logger LOG = LoggerFactory.getLogger(ShareCommController.class);
