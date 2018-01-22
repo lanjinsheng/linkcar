@@ -4,27 +4,27 @@
    <resultMap id="BaseTaskFamilyMonthAvgOrderMap" type="com.idata365.entity.TaskFamilyMonthAvgOrder" >
     </resultMap>
     
-     <delete id="delTaskFamilyMonthAvgOrder" parameterType="java.lang.String">
+     <delete id="delTaskFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder">
         delete from  taskFamilyMonthAvgOrder
-		   where month=#{month}
+		   where startDay=#{startDay} and endDay=#{endDay} 
 	</delete>
     
    <insert id="initTaskFamilyMonthAvgOrder" parameterType="java.lang.String">
           INSERT IGNORE INTO  taskFamilyMonthAvgOrder
-		 (avgScore,orderNo,month,familyId,taskFlag,taskStatus,failTimes)
-         select averScore,0,month,familyId,0,0,0 from familyScore  where month=#{month} order by averScore desc
+		 (avgScore,orderNo,month,familyId,taskFlag,taskStatus,failTimes,startDay,endDay)
+         select averScore,0,month,familyId,0,0,0,startDay,endDay from familyScore  where month=#{month} order by averScore desc
 	</insert>
     <update id="updateFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
         update familyScore set
        beforeYesterdayOrderNo=yesterdayOrderNo,yesterdayOrderNo=#{orderNo} 
-        where  familyId=#{familyId} and month=#{month}
+        where  familyId=#{familyId} and startDay=#{startDay} and endDay=#{endDay} 
      </update>
 	
  <!-- 定时处理逻辑 -->
       <select id="getPreTaskRecord" resultMap="BaseTaskFamilyMonthAvgOrderMap" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
       select * from taskFamilyMonthAvgOrder
        WHERE 
-           id<![CDATA[<]]>${id} and id<![CDATA[>]]>(${id}-10) and   month=#{month} order by id desc  limit 1
+           id<![CDATA[<]]>${id} and id<![CDATA[>]]>(${id}-10) and startDay=#{startDay} and endDay=#{endDay}  order by id desc  limit 1
     </select>	
     <update id="lockFamilyMonthAvgOrderTask" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
        UPDATE 
@@ -32,7 +32,7 @@
        SET 
         taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
        WHERE 
-            taskStatus = 0  and taskFlag='0' and month=#{month} LIMIT 500  
+            taskStatus = 0  and taskFlag='0' and startDay=#{startDay} and endDay=#{endDay} LIMIT 500  
     </update>	
 	<!-- 获取任务 -->
 	 <select id="getFamilyMonthAvgOrderTask"  resultMap="BaseTaskFamilyMonthAvgOrderMap" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder">
