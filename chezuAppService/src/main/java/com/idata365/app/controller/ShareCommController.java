@@ -244,7 +244,7 @@ public class ShareCommController extends BaseController {
 	 @RequestMapping("/share/createInviteTest")
 	 @ResponseBody
 	    public Map<String,Object> createInviteTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-	      Long userId=	Long.valueOf(requestBodyParams.get("userId").toString());
+	      Long userId=	Long.valueOf(allRequestParams.get("userId"));
 		 Map<String,Object> rtMap=new HashMap<String,Object>();
 	    	Map<String,Object>  family=familyService.findFamilyIdByUserId(userId);
 	    	if(family==null) {
