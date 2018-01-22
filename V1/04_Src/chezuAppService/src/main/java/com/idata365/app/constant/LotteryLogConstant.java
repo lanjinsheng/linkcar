@@ -13,4 +13,5 @@ public class LotteryLogConstant
 	
 	public static final int GET_LOG = 5;
 	
+	public static final int USER_ACHIEVE_LOG = 6;
 }
