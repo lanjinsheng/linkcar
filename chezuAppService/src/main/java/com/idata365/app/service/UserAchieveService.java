@@ -40,4 +40,16 @@ public class UserAchieveService
 		// 查询列表
 		return userAchieveMapper.getUserAchieveListById(map);
 	}
+
+	/**
+	 * 初始化用户成就
+	 * 
+	 * @Description:
+	 * @author:CaiFengYao
+	 * @date:2018年1月22日 下午1:50:57
+	 */
+	public void initCreateUserAchieve(long userId)
+	{
+		userAchieveMapper.insertUserAchieveInfo(userId);
+	}
 }
