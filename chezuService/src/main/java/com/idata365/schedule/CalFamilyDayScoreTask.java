@@ -75,7 +75,7 @@ public class CalFamilyDayScoreTask extends TimerTask {
 			log.info("CalFamilyDayScoreTask do--list.size="+list.size());
 				for(TaskFamilyDayScore taskFamilyDayScore:list) {
 					try {
-						boolean result=calScoreFamilyDayService.calScoreFamilyDay(taskFamilyDayScore);
+						boolean result=calScoreFamilyDayService.calScoreFamilyDay(taskFamilyDayScore,tf.getStartDay(),tf.getEndDay());
 					if(result) {
 						calScoreFamilyDayService.updateSuccFamilyScoreDayTask(taskFamilyDayScore);
 						 

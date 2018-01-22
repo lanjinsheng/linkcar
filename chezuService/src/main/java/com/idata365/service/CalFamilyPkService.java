@@ -29,7 +29,7 @@ public class CalFamilyPkService {
 		return dayStr;
 	}
 	@Transactional
-	public boolean calFamilyPk(TaskFamilyPk taskFamilyPk) {
+	public boolean calFamilyPk(TaskFamilyPk taskFamilyPk,String startDay,String endDay) {
 		//获取pk关系
 		Long selfFamilyId=taskFamilyPk.getSelfFamilyId();
 		Long competitorFamilyId= taskFamilyPk.getCompetitorFamilyId();
@@ -91,7 +91,11 @@ public class CalFamilyPkService {
         taskFamilyPkMapper.updateFamilyDayScoreById(fdds2);
         String month=taskFamilyPk.getDaystamp().replaceAll("-", "").substring(0,6);
         fdds1.setMonth(month);
+        fdds1.setStartDay(startDay);
+        fdds1.setEndDay(endDay);
         fdds2.setMonth(month);
+        fdds2.setStartDay(startDay);
+        fdds2.setEndDay(endDay);
         taskFamilyPkMapper.updateFamilyScore(fdds1);
         taskFamilyPkMapper.updateFamilyScore(fdds2);
 		return true;

@@ -46,6 +46,5 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getUnFinishFamilyMonthAvgOrderList();
 	 int finishFamilyMonthAvgOrderTask(TaskSystemScoreFlag systemScoreFlag);
 	 
-	
 	 
 }

@@ -76,6 +76,8 @@ public class CalFamilyMonthAvgOrderTask extends TimerTask {
 			TaskFamilyMonthAvgOrder task=new TaskFamilyMonthAvgOrder();
 			task.setMonth(tf.getDaystamp().replaceAll("-", "").substring(0,6));
 			task.setTaskFlag(String.valueOf(taskFlag));
+			task.setStartDay(tf.getStartDay());
+			task.setEndDay(tf.getEndDay());
 			List<TaskFamilyMonthAvgOrder> list=calFamilyMonthAvgOrderService.getFamilyMonthAvgOrderTask(task);
 			TaskFamilyMonthAvgOrder preOrder=null;
 			if(list.size()==0) {//无任务

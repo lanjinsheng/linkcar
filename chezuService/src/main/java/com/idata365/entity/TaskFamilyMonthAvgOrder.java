@@ -18,9 +18,22 @@ public class TaskFamilyMonthAvgOrder implements Serializable {
 	private Integer failTimes;
 	private Double avgScore;
 	private int orderNo;
+	private String startDay;
+	private String endDay;
 	
 	
-	
+	public String getStartDay() {
+		return startDay;
+	}
+	public void setStartDay(String startDay) {
+		this.startDay = startDay;
+	}
+	public String getEndDay() {
+		return endDay;
+	}
+	public void setEndDay(String endDay) {
+		this.endDay = endDay;
+	}
 	public Double getAvgScore() {
 		return avgScore;
 	}

@@ -43,7 +43,7 @@ public class CalScoreFamilyDayService {
 		return dayStr;
 	}
 	@Transactional
-	public boolean calScoreFamilyDay(TaskFamilyDayScore taskFamilyDayScore) {
+	public boolean calScoreFamilyDay(TaskFamilyDayScore taskFamilyDayScore,String startDay,String endDay) {
 		FamilyDriveDayStat fscore=new FamilyDriveDayStat();
 		Long familyId=taskFamilyDayScore.getFamilyId();
 		String daystamp=taskFamilyDayScore.getDaystamp();
@@ -298,6 +298,8 @@ public class CalScoreFamilyDayService {
 		fs.setScore(score);
 		//插入家族赛季得分
 		fs.setDayTimes(1);
+		fs.setStartDay(startDay);
+		fs.setEndDay(endDay);
 		taskFamilyDayScoreMapper.insertFamilyScore(fs);
 		return true;
 	}
