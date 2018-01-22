@@ -16,7 +16,7 @@ import com.idata365.entity.TaskFamilyMonthOrder;
  */
 public interface TaskFamilyMonthAvgOrderMapper {
  
-	    int  delTaskFamilyMonthAvgOrder(@Param("month") String month);
+	    int  delTaskFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    int   updateFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    
 	    int  initTaskFamilyMonthAvgOrder(@Param("month") String month);

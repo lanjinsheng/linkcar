@@ -77,7 +77,7 @@ public class CalFamilyDayPkTask extends TimerTask {
 			log.info("CalFamilyDayPkTask do--list.size="+list.size());
 				for(TaskFamilyPk taskFamilyPk:list) {
 					try {
-						boolean result=calFamilyPkService.calFamilyPk(taskFamilyPk);
+						boolean result=calFamilyPkService.calFamilyPk(taskFamilyPk,tf.getStartDay(),tf.getEndDay());
 					if(result) {
 						calFamilyPkService.updateSuccFamilyPkTask(taskFamilyPk);
 						 

@@ -32,7 +32,7 @@ public class UserDeviceService extends BaseService<UserDeviceService>{
 		LOG.info("UserDeviceService init");
 	}
 	
-	@Transactional
+	@Transactional(value="colTransactionManager")
 	public boolean addDeviceUserInfo(String deviceToken,long userId){
 		 UserDevice dl=new UserDevice();
 		 String date=DateTools.getCurDate();

@@ -14,10 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.config.SystemProperties;
+import com.idata365.entity.DicGameDay;
+import com.idata365.entity.TaskFamilyMonthAvgOrder;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
 import com.idata365.mapper.app.TaskFamilyMonthAvgOrderMapper;
 import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
+import com.idata365.mapper.app.DicGameDayMapper;
 import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
 import com.idata365.mapper.app.TaskSystemScoreFlagMapper;
@@ -37,6 +41,10 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	TaskFamilyMonthOrderMapper taskFamilyMonthOrderMapper;
 	@Autowired
 	TaskFamilyMonthAvgOrderMapper taskFamilyMonthAvgOrderMapper;
+	@Autowired
+	DicGameDayMapper   dicGameDayMapper;
+	@Autowired
+	SystemProperties systemProperties;
 	public String getDateStr(int diff)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -48,9 +56,22 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	}
 	@Transactional
 	public void configSystemTask(){
+	
+		//查询竞赛时间
 		String dayStamp=getDateStr(-1);
+		DicGameDay gameDay=dicGameDayMapper.queryDicGameDay(dayStamp);
+		if(gameDay==null) {
+			gameDay=new DicGameDay();
+			gameDay.setStartDay(dayStamp);
+			gameDay.setEndDay(getDateStr(systemProperties.getGameDay()));
+			dicGameDayMapper.insertDicGameDay(gameDay);
+		}
+		
+		
 		TaskSystemScoreFlag taskSystemScoreFlag=new TaskSystemScoreFlag();
 		taskSystemScoreFlag.setDaystamp(dayStamp);
+		taskSystemScoreFlag.setStartDay(gameDay.getStartDay());
+		taskSystemScoreFlag.setEndDay(gameDay.getEndDay());
 		int insert=taskSystemScoreFlagMapper.insertSystemScoreFlag(taskSystemScoreFlag);
 		
 		List<TaskSystemScoreFlag> tasks=taskSystemScoreFlagMapper.getUnInitSystemScoreFlagList();
@@ -82,11 +103,12 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			taskFamilyMonthOrderMapper.delTaskFamilyMonthOrder(month);
 			taskFamilyMonthOrderMapper.initTaskFamilyMonthOrder(month);
 			
-			taskFamilyMonthAvgOrderMapper.delTaskFamilyMonthAvgOrder(month);
+			TaskFamilyMonthAvgOrder avgOrder=new TaskFamilyMonthAvgOrder();
+			avgOrder.setStartDay(gameDay.getStartDay());
+			avgOrder.setEndDay(gameDay.getEndDay());
+			taskFamilyMonthAvgOrderMapper.delTaskFamilyMonthAvgOrder(avgOrder);
 			taskFamilyMonthAvgOrderMapper.initTaskFamilyMonthAvgOrder(month);
-			
 			task.setTaskFamilyOrderInit(1);
-			
 			
 			taskSystemScoreFlagMapper.updateOrderInit(task);
 		}

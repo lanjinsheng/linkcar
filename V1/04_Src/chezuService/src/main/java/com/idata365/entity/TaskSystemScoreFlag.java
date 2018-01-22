@@ -22,8 +22,22 @@ public class TaskSystemScoreFlag implements Serializable {
 	private Integer familyDayScoreFlag;
 	private String daystamp;
 	
-	
-	
+	private String startDay;
+	private String endDay;
+
+
+	public String getStartDay() {
+		return startDay;
+	}
+	public void setStartDay(String startDay) {
+		this.startDay = startDay;
+	}
+	public String getEndDay() {
+		return endDay;
+	}
+	public void setEndDay(String endDay) {
+		this.endDay = endDay;
+	}
 	public Integer getTaskFamilyMonthAvgOrder() {
 		return taskFamilyMonthAvgOrder;
 	}

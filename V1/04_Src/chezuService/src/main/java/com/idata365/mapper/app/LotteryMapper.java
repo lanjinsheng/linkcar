@@ -3,7 +3,6 @@ package com.idata365.mapper.app;
 import java.util.List;
 
 import com.idata365.entity.ReadyLotteryBean;
-
 public interface LotteryMapper
 {
 
