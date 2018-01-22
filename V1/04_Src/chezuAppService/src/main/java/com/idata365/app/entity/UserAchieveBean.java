@@ -34,6 +34,42 @@ public class UserAchieveBean
 	private String awardValue;
 	// 类型
 	private int type;
+	// 时间
+	private String daystamp;
+	// 个人成就之增加当日个人评分
+	private double achieveScore;
+	// 个人成就之增加当日行程
+	private double ahieveMileage;
+
+	public double getAchieveScore()
+	{
+		return achieveScore;
+	}
+
+	public void setAchieveScore(double achieveScore)
+	{
+		this.achieveScore = achieveScore;
+	}
+
+	public double getAhieveMileage()
+	{
+		return ahieveMileage;
+	}
+
+	public void setAhieveMileage(double ahieveMileage)
+	{
+		this.ahieveMileage = ahieveMileage;
+	}
+
+	public String getDaystamp()
+	{
+		return daystamp;
+	}
+
+	public void setDaystamp(String daystamp)
+	{
+		this.daystamp = daystamp;
+	}
 
 	public int getType()
 	{
