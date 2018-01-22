@@ -1,6 +1,5 @@
 package com.idata365.app.mapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +40,11 @@ public interface UserAchieveMapper
 	public void updateAchieveTimesById(int id);
 
 	/**
+	 * 更新用户上传驾照时成就 及解锁标记
+	 */
+	public void updateAchieveWhenUploadLicence(int id);
+
+	/**
 	 * 查询用户可以解锁的成就记录
 	 */
 	public UserAchieveBean queryUserCanDeblockAchieve(Map<String, Object> m);
@@ -49,4 +53,14 @@ public interface UserAchieveMapper
 	 * 查询可以解锁的成就记录(定时器)
 	 */
 	public List<UserAchieveBean> queryCanDeblockAchieveTask(int achieveId);
+
+	/**
+	 * 更新用户当日个人评分
+	 */
+	public void updateUserPointsToday(UserAchieveBean bean);
+
+	/**
+	 * 更新用户当日个人评分
+	 */
+	public void updateUserMileageToday(UserAchieveBean bean);
 }
