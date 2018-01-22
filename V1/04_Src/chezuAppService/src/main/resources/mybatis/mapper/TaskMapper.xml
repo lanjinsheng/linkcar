@@ -32,7 +32,7 @@
 		select count(id) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
-	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id">
 		insert into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime})
 	</insert>
 	

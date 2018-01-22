@@ -42,6 +42,10 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t2.familyId=#{familyId} order by t2.daystamp desc limit #{start}, 10
 	</select>
 
+	<select id="queryHistoryRole" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
+		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{day}
+	</select>
+
 	<select id="queryCurrentRole" resultType="int" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
 		select role from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
 	</select>
@@ -74,7 +78,13 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
 	
 	<select id="queryTravels" resultType="com.idata365.app.entity.UserTravelHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select time, mileage, startTime, endTime, id as travelId, habitId, userId, createTime from userTravelHistory where userId=#{userId} and DATE_FORMAT(str_to_date(createTime, '%Y-%m-%d %H:%i:%s'), '%Y-%m-%d')=#{day} order by id asc
+		<![CDATA[
+		select time, mileage, startTime, endTime, id as travelId, habitId, userId, createTime from userTravelHistory where userId=71 and endTime>=#{startTime} and endTime<=#{endTime} order by startTime desc
+		]]>
+	</select>
+	
+	<select id="queryTravelBetweenTime" resultType="com.idata365.app.entity.UserFamilyRoleLogBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select startTime, endTime from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
 	<select id="queryTravelDetail" resultType="com.idata365.app.entity.UserTravelHistoryDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">

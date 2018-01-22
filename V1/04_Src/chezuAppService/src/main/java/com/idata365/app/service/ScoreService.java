@@ -55,6 +55,7 @@ import com.idata365.app.entity.ScoreUserResultBean;
 import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
 import com.idata365.app.entity.UserDetailResultBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
@@ -619,6 +620,16 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	public List<UserTravelHistoryResultBean> showTravels(ScoreFamilyInfoParamBean bean)
 	{
+		String day = bean.getDay();
+		String daystamp = StringUtils.remove(day, "-");
+		bean.setDaystamp(daystamp);
+		UserFamilyRoleLogBean betweenTimeBean = this.scoreMapper.queryTravelBetweenTime(bean);
+		String roleStartTime = betweenTimeBean.getStartTime();
+		String roleEndTime = betweenTimeBean.getEndTime();
+		
+		bean.setStartTime(roleStartTime);
+		bean.setEndTime(roleEndTime);
+		
 		List<UserTravelHistoryBean> travelList = this.scoreMapper.queryTravels(bean);
 		List<UserTravelHistoryResultBean> resultList = new ArrayList<>();
 		

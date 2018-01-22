@@ -18,6 +18,8 @@ public class FamilyParamBean
 	
 	private String familyName;
 	
+	private String name;
+	
 	private String inviteCode;
 	
 	private String imgUrl;
@@ -37,6 +39,8 @@ public class FamilyParamBean
 	private long msgId;
 	
 	private int status;
+	
+	private String endTime;
 	
 	public long getId()
 	{
@@ -116,6 +120,16 @@ public class FamilyParamBean
 	public void setFamilyName(String familyName)
 	{
 		this.familyName = familyName;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	public String getInviteCode()
@@ -216,6 +230,16 @@ public class FamilyParamBean
 	public void setStatus(int status)
 	{
 		this.status = status;
+	}
+
+	public String getEndTime()
+	{
+		return endTime;
+	}
+
+	public void setEndTime(String endTime)
+	{
+		this.endTime = endTime;
 	}
 	
 }

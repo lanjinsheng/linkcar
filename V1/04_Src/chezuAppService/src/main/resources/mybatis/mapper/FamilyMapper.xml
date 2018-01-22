@@ -26,6 +26,10 @@
        delete from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
     </delete>
 
+	<update id="updateFamilyRoleLog" parameterType="com.idata365.app.entity.FamilyParamBean">
+		update userFamilyRoleLog set endTime=#{endTime} where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
+	</update>
+	
 	<select id="countByCreateUser" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
 		select count(*) from familyInfo where createUserId=#{userId}
 	</select>
@@ -78,7 +82,7 @@
  	</update>
  
     <select id="countByName" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
-    	select count(1) from familyInfo where familyName=#{familyName}
+    	select count(1) from familyInfo where familyName=#{name}
     </select>
  	
  	<update id="updateInviteCode" parameterType="com.idata365.app.entity.FamilyParamBean">
