@@ -32,6 +32,18 @@ public class UserAchieveBean
 	private int nowNum;
 	// 道具名称
 	private String awardValue;
+	// 类型
+	private int type;
+
+	public int getType()
+	{
+		return type;
+	}
+
+	public void setType(int type)
+	{
+		this.type = type;
+	}
 
 	public int getNum()
 	{
