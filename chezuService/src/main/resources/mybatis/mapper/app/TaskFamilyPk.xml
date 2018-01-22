@@ -28,7 +28,7 @@
          update
             familyScore
                 set score=score+${familyLevelFactor},averScore=convert((score+${familyLevelFactor})/(dayTimes),decimal(10,2))
-                 where familyId=#{familyId} and month=#{month}
+                 where familyId=#{familyId}  and startDay=#{month} and endDay=#{endDay}
        </insert>	
 
  <!-- 定时处理 -->
