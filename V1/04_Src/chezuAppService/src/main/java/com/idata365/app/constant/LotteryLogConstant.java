@@ -1,6 +1,6 @@
 package com.idata365.app.constant;
 
-//1：比赛PK消耗；2：行程中奖励获得；3：签到获得；4：赠予他人道具；5：获得别人赠送道具
+//1：比赛PK消耗；2：行程中奖励获得；3：签到获得；4：赠予他人道具；5：获得别人赠送道具;6:个人成就奖励
 public class LotteryLogConstant
 {
 	public static final int GAME_PK_LOG = 1;
