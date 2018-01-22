@@ -15,8 +15,6 @@ abstract  class BaseController {
 	
 	 
 	protected String getFamilyInviteBasePath(String host) {
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
 	   	     return host+"share/invite.html?key=";
 
 	  }

@@ -44,6 +44,10 @@ abstract  class BaseController {
 	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/share/goInvite?key=";
 
 	  }
+	protected String getFamilyInviteBasePath(String host) {
+	   	     return host+"share/invite.html?key=";
+
+	  }
 	protected void dealListObect2String(List<Map<String,Object>> list) {
 		for(Map<String,Object> m: list) {
 			Set<String> keySet=m.keySet();

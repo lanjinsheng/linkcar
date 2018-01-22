@@ -217,33 +217,33 @@ public class ShareCommController extends BaseController {
     
     
     
+//	 @RequestMapping("/share/createInviteTest")
+//	 @ResponseBody
+//	    public Map<String,Object> createInviteTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+//	      Long userId=	Long.valueOf(allRequestParams.get("userId"));
+//		 Map<String,Object> rtMap=new HashMap<String,Object>();
+//	    	Map<String,Object>  family=familyService.findFamilyIdByUserId(userId);
+//	    	if(family==null) {
+//	    		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建");
+//	    	}
+//	    	try {
+//	    		Long familyId=Long.valueOf(rtMap.get("id").toString());
+//	    		String inviteCode=rtMap.get("inviteCode").toString();
+//	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+//				String key=SignUtils.encryptDataAes(String.valueOf(datas));
+//				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
+//				rtMap.put("shareUrl", shareUrl);
+//				return ResultUtils.rtSuccess(rtMap);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				return ResultUtils.rtFail(null);
+//			}
+//	    }
+	 
+	 
 	 @RequestMapping("/share/createInviteTest")
 	 @ResponseBody
 	    public Map<String,Object> createInviteTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-	      Long userId=	Long.valueOf(allRequestParams.get("userId"));
-		 Map<String,Object> rtMap=new HashMap<String,Object>();
-	    	Map<String,Object>  family=familyService.findFamilyIdByUserId(userId);
-	    	if(family==null) {
-	    		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建");
-	    	}
-	    	try {
-	    		Long familyId=Long.valueOf(rtMap.get("id").toString());
-	    		String inviteCode=rtMap.get("inviteCode").toString();
-	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
-				String key=SignUtils.encryptDataAes(String.valueOf(datas));
-				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
-				rtMap.put("shareUrl", shareUrl);
-				return ResultUtils.rtSuccess(rtMap);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				return ResultUtils.rtFail(null);
-			}
-	    }
-	 
-	 
-	 @RequestMapping("/share/createInvite")
-	 @ResponseBody
-	    public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 	      Long userId=	Long.valueOf(requestBodyParams.get("userId").toString());
 		 Map<String,Object> rtMap=new HashMap<String,Object>();
 	    	Map<String,Object>  family=familyService.findFamilyIdByUserId(userId);
@@ -251,8 +251,8 @@ public class ShareCommController extends BaseController {
 	    		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建");
 	    	}
 	    	try {
-	    		Long familyId=Long.valueOf(rtMap.get("id").toString());
-	    		String inviteCode=rtMap.get("inviteCode").toString();
+	    		Long familyId=Long.valueOf(family.get("id").toString());
+	    		String inviteCode=family.get("inviteCode").toString();
 	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 				String key=SignUtils.encryptDataAes(String.valueOf(datas));
 				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
