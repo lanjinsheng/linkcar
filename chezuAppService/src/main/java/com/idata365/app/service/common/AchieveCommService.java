@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.idata365.app.mapper.UserAchieveMapper;
 
@@ -15,6 +16,7 @@ import com.idata365.app.mapper.UserAchieveMapper;
  * @date:2018年1月22日 下午3:16:55
  * @author:CaiFengYao
  */
+@Service
 public class AchieveCommService
 {
 	@Autowired
