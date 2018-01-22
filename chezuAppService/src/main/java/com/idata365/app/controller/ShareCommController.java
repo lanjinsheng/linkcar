@@ -23,7 +23,7 @@ import com.idata365.app.service.FamilyInviteService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.MessageService;
-import com.idata365.app.service.common.AcchieveCommService;
+import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -42,7 +42,7 @@ public class ShareCommController extends BaseController
 	@Autowired
 	private SystemProperties systemProperties;
 	@Autowired
-	private AcchieveCommService acchieveCommService;
+	private AchieveCommService acchieveCommService;
 
 	public ShareCommController()
 	{
