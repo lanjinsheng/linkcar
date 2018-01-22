@@ -36,15 +36,22 @@
 		SELECT id
 		FROM userAchieveInfo
 		WHERE userId=#{userId} AND flag=0 AND achieveId=#{achieveId}
-		and<![CDATA[  (nowNum<=numand and lev<3) or (nowNum<num and lev=3) ]]>
+		and<![CDATA[  (nowNum<=num and lev<3) or (nowNum<num and lev=3) ]]>
 		ORDER BY lev
 		LIMIT 1
 	</select>
 
-	<!-- 更新用户次数 -->
+	<!-- 更新用户成就次数 -->
 	<update id="updateAchieveTimesById" parameterType="java.lang.Integer">
 		update userAchieveInfo
 		set nowNum=nowNum+1,editTime=now()
+		where id=#{id} AND flag=0
+	</update>
+	
+	<!-- 更新用户上传驾照时成就 及解锁标记-->
+	<update id="updateAchieveWhenUploadLicence" parameterType="java.lang.Integer">
+		update userAchieveInfo
+		set nowNum=num,editTime=now(),flag=1
 		where id=#{id} AND flag=0
 	</update>
 
@@ -61,4 +68,14 @@
 		FROM userAchieveInfo 
 		WHERE flag=0  AND achieveId=#{achieveId} AND nowNum>=num
 	</select>
+	
+	<!-- 更新用户当日评分 -->
+	<update id="updateUserPointsToday" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userScoreDayStat set achieveScore=achieveScore+#{achieveScore} where userId=#{userId} and daystamp=#{daystamp}
+	</update>
+	
+	<!-- 更新用户当日里程 -->
+	<update id="updateUserMileageToday" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userScoreDayStat set ahieveMileage=ahieveMileage+#{ahieveMileage} where userId=#{userId} and daystamp=#{daystamp}
+	</update>
 </mapper>
