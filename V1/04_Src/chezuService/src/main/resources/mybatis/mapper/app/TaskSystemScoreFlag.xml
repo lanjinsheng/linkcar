@@ -5,9 +5,9 @@
     </resultMap>
    <insert id="insertSystemScoreFlag" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 INSERT IGNORE INTO  taskSystemScoreFlag
-		 (daystamp)
+		 (daystamp,startDay,endDay)
 		  VALUES
-    	(#{daystamp})
+    	(#{daystamp},#{startDay},#{endDay})
 	</insert>
 	<select id="getSystemScoreFlag" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
 	   select * from taskSystemScoreFlag where daystamp=#{daystamp}

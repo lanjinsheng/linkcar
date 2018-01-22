@@ -19,7 +19,7 @@
        UPDATE 
             familyDriveDayStat 
        SET 
-        score=score+(${familyLevelFactor}),familyLevelFactor=${familyLevelFactor}
+        score=GREATEST(score+(${familyLevelFactor}),0),familyLevelFactor=${familyLevelFactor}
        WHERE 
             id=#{id}
     </update>	
@@ -27,8 +27,8 @@
 	   <insert id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
          update
             familyScore
-                set score=score+${familyLevelFactor},averScore=convert((score+${familyLevelFactor})/(dayTimes),decimal(10,2))
-                 where familyId=#{familyId}  and startDay=#{month} and endDay=#{endDay}
+                set score=GREATEST(score+${familyLevelFactor},0),averScore=GREATEST(convert((score+${familyLevelFactor})/(dayTimes),decimal(10,2)),0)
+                 where familyId=#{familyId}  and startDay=#{startDay} and endDay=#{endDay}
        </insert>	
 
  <!-- 定时处理 -->
