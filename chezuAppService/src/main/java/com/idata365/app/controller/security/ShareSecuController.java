@@ -1,6 +1,8 @@
 package com.idata365.app.controller.security;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.app.entity.FamilyInvite;
-import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.service.FamilyService;
-import com.idata365.app.service.LoginRegService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -22,6 +22,8 @@ public class ShareSecuController  extends BaseController {
 
 	@Autowired
 	private FamilyService familyService;
+	@Autowired
+	private SystemProperties systemProperties;
 	public ShareSecuController() {
 	}
 
@@ -34,13 +36,19 @@ public class ShareSecuController  extends BaseController {
     		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建\"");
     	}
     	try {
-    		Long familyId=Long.valueOf(rtMap.get("id").toString());
-    		String inviteCode=rtMap.get("inviteCode").toString();
+    		Long familyId=Long.valueOf(family.get("id").toString());
+    		String inviteCode=family.get("inviteCode").toString();
     		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 			String key=SignUtils.encryptDataAes(String.valueOf(datas));
-			String shareUrl=this.getFamilyInviteBasePath()+key;
+			String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
 			rtMap.put("shareUrl", shareUrl);
+			rtMap.put("title", "邀请您参与【好车族】游戏");
+			rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
+			List<String> imgs=new  ArrayList<String>();
+			imgs.add("http://apph5.idata365.com/appImgs/aa.jgp");
+			rtMap.put("imgs", imgs);
 			return ResultUtils.rtSuccess(rtMap);
+    		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			return ResultUtils.rtFail(null);
