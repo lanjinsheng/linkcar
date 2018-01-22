@@ -206,6 +206,11 @@ public class LoginRegService extends BaseService<LoginRegService>{
 		LOG.info("id:"+account.getId());
 		return null;
 	}
+	//小菜补充
+	public void achieveAddNewUser(long familyId) {
+		
+	}
+	
 	public String regUser(String phone,String pwd,Map<String,Object> rtMap) {
 		UsersAccount account=new UsersAccount();
 		account.setPhone(phone);
@@ -234,9 +239,15 @@ public class LoginRegService extends BaseService<LoginRegService>{
 	          		//更新invite
 	          		invite.setMemberUserId(account.getId());
 	          		familyInviteMapper.updateFamilyInviteWhenReg(invite);
-	          		
 				}
 				//发送注册消息由app端绑定回调message接口
+				
+				//发送拉新信息
+				if(list!=null && list.size()>0) {
+					FamilyInvite invite=list.get(0);
+					achieveAddNewUser(invite.getFamilyId());
+				}
+				
 				
 			}catch(Exception e) {
 				e.printStackTrace();
