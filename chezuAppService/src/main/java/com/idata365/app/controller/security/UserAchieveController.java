@@ -31,7 +31,8 @@ public class UserAchieveController extends BaseController
 	private UserAchieveService userAchieveService;
 
 	/**
-	 * @Description:
+	 * 查看用户成就列表
+	 * 
 	 * @author:CaiFengYao
 	 * @date:2018年1月19日 下午2:37:16
 	 */
