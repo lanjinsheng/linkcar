@@ -25,6 +25,12 @@
     
      <select id="getFamilyInviteByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
        SELECT *
-       FROM  familyInvite where memberPhone=#{phone} and memberUserId=0
+       FROM  familyInvite where memberPhone=#{phone} and memberUserId=0 order by createTime desc
      </select>
+     
+     <select id="getLatestInvite" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.FamilyInvite">
+       SELECT *
+       FROM  familyInvite where memberUserId=#{memberUserId} order by createTime desc limit 1
+     </select>
+     
 </mapper>
