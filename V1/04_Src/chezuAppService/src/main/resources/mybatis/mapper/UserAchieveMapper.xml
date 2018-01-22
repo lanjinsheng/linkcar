@@ -1,33 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.UserAchieveMapper">
-    <resultMap id="BaseResultMap" type="com.idata365.app.entity.UserAchieveBean" >
-    </resultMap>
-    
-    <!-- 初始化用户成就 -->
-    <insert id="insertUserAchieveInfo" useGeneratedKeys="true" keyProperty="id"  parameterType="java.lang.Long" >
-		INSERT INTO userAchieveInfo
-            (userId,achieveId,awardId,awardNum,lev,flag,num,nowNum,TYPE,createTime) 
-	    SELECT #{userId},achieveId,awardId,awardNum,lev,flag,num,nowNum,TYPE,NOW()
-          FROM userAchieveInfo WHERE userId=0
-    </insert>
-    
-    <!-- 查询用户成就列表 -->
-     <select id="getUserAchieveList" resultType="java.util.HashMap" parameterType="java.lang.Long">
+	<resultMap id="BaseResultMap" type="com.idata365.app.entity.UserAchieveBean">
+	</resultMap>
+
+	<!-- 初始化用户成就 -->
+	<insert id="insertUserAchieveInfo" useGeneratedKeys="true" keyProperty="id" parameterType="java.lang.Long">
+		INSERT INTO
+		userAchieveInfo
+		(userId,achieveId,awardId,awardNum,lev,flag,num,nowNum,TYPE,createTime)
+		SELECT
+		#{userId},achieveId,awardId,awardNum,lev,flag,num,nowNum,TYPE,NOW()
+		FROM userAchieveInfo WHERE userId=0
+	</insert>
+
+	<!-- 查询用户成就列表 -->
+	<select id="getUserAchieveList" resultType="java.util.HashMap" parameterType="java.lang.Long">
 		SELECT d.id AS achieveId,d.achieveName,d.maxLev,d.imgUrl,IFNULL(a.flag,0) flag,IFNULL(a.lev,1) lev
-		FROM dicUserAchieve d 
-		LEFT JOIN userAchieveInfo a ON a.id=(SELECT  MAX(id) id FROM  userAchieveInfo WHERE flag=1 AND userId=#{userId} AND d.id=achieveId )
+		FROM dicUserAchieve d
+		LEFT JOIN userAchieveInfo a ON a.id=(SELECT MAX(id) id FROM userAchieveInfo WHERE flag=1 AND userId=#{userId} AND d.id=achieveId )
 		GROUP BY d.id
-     </select>
-     
-      <!-- 查询用户某项成就详情 -->
-     <select id="getUserAchieveListById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	</select>
+
+	<!-- 查询用户某项成就详情 -->
+	<select id="getUserAchieveListById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 		select a.achieveId,d.achieveName,a.awardId,dy.awardValue,a.awardNum,a.nowNum,a.num,a.type,a.flag
 		from userAchieveInfo a
-		inner join dicUserAchieve d ON d.id=a.achieveId 
+		inner join dicUserAchieve d ON d.id=a.achieveId
 		left join dicLottery dy on dy.awardId=a.awardId
-		where a.userId=#{userId}  and a.achieveId=#{achieveId}
-     </select>
-    
-     
+		where a.userId=#{userId} and a.achieveId=#{achieveId}
+	</select>
+
+	<!-- 查看用户某项成就最新记录id -->
+	<select id="queryLatelyAchieveId" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT id
+		FROM userAchieveInfo
+		WHERE userId=#{userId} AND flag=0 AND achieveId=#{achieveId}
+		and<![CDATA[  (nowNum<=numand and lev<3) or (nowNum<num and lev=3) ]]>
+		ORDER BY lev
+		LIMIT 1
+	</select>
+
+	<!-- 更新用户次数 -->
+	<update id="updateAchieveTimesById" parameterType="java.lang.Integer">
+		update userAchieveInfo
+		set nowNum=nowNum+1,editTime=now()
+		where id=#{id} AND flag=0
+	</update>
+
+	<!-- 查询用户可以解锁的成就记录 -->
+	<select id="queryUserCanDeblockAchieve" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
+		SELECT id,awardId,awardNum
+		FROM userAchieveInfo 
+		WHERE userId=#{userId} AND flag=0  AND achieveId=#{achieveId} AND nowNum>=num
+	</select>
+
+	<!-- 查询可以解锁的成就记录(定时器) -->
+	<select id="queryCanDeblockAchieveTask" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="int">
+		SELECT id,awardId,awardNum,userId
+		FROM userAchieveInfo 
+		WHERE flag=0  AND achieveId=#{achieveId} AND nowNum>=num
+	</select>
 </mapper>
