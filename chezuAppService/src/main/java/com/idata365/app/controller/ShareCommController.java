@@ -44,35 +44,35 @@ public class ShareCommController extends BaseController {
 	}
 
  
-    @RequestMapping("/share/goInvite")
-    public String goInvite(@RequestParam (required = false) Map<String, String> allRequestParams,Map<String, Object> model){
-    	String content=allRequestParams.get("key");
-    	if(content==null) {
-    		return "error";
-    	}
-    	try {
-    	String key=SignUtils.decryptDataAes(content);
-    	String []arrayString = key.split(":");
-    	Long familyId=Long.valueOf(arrayString[0]);
-    	Long createTimeLong=Long.valueOf(arrayString[2]);
-    	String inviteCode=arrayString[1];
-    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
-    	if(now>createTimeLong) {
-    		LOG.info("过期的数据 key："+key);
-    		return "error";
-    	}
-    	//跳转到加盟页面
-//    	
-    	    String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
-			String sign=SignUtils.encryptDataAes(datas);
-			model.put("sign", sign);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "error";
-		}
-    	return "invite1";
-    }
+//    @RequestMapping("/share/goInvite")
+//    public String goInvite(@RequestParam (required = false) Map<String, String> allRequestParams,Map<String, Object> model){
+//    	String content=allRequestParams.get("key");
+//    	if(content==null) {
+//    		return "error";
+//    	}
+//    	try {
+//    	String key=SignUtils.decryptDataAes(content);
+//    	String []arrayString = key.split(":");
+//    	Long familyId=Long.valueOf(arrayString[0]);
+//    	Long createTimeLong=Long.valueOf(arrayString[2]);
+//    	String inviteCode=arrayString[1];
+//    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
+//    	if(now>createTimeLong) {
+//    		LOG.info("过期的数据 key："+key);
+//    		return "error";
+//    	}
+//    	//跳转到加盟页面
+////    	
+//    	    String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+//			String sign=SignUtils.encryptDataAes(datas);
+//			model.put("sign", sign);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return "error";
+//		}
+//    	return "invite1";
+//    }
     @RequestMapping("/share/goInvite")
     @ResponseBody
     public Map<String,Object> goInvite(@RequestParam (required = false) Map<String, String> allRequestParams){
