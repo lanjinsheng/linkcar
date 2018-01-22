@@ -221,7 +221,7 @@ public class ShareCommController extends BaseController
 					messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
 					// 推送消息
 					messageService.pushMessage(message, MessageEnum.INVITE_FAMILY);
-
+					rtMap.put("userNum", "1253");
 					return ResultUtils.rtSuccess(rtMap);
 				}
 				else
@@ -230,6 +230,7 @@ public class ShareCommController extends BaseController
 					familyInvite.setSendInviteMsg(0);
 					rtMap.put("userExist", "0");
 					rtMap.put("familyCode", inviteCode);
+					rtMap.put("userNum", "1253");
 					familyInviteService.insertInviteFamily(familyInvite);
 					return ResultUtils.rtSuccess(rtMap);
 				}
