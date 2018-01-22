@@ -1,6 +1,8 @@
 package com.idata365.app.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UsersAccount;
@@ -35,6 +38,8 @@ public class ShareCommController extends BaseController {
 	private LoginRegService loginRegService;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private SystemProperties systemProperties;
 	public ShareCommController() {
 	}
 
@@ -68,7 +73,37 @@ public class ShareCommController extends BaseController {
 		}
     	return "invite1";
     }
-
+    @RequestMapping("/share/goInvite")
+    @ResponseBody
+    public Map<String,Object> goInvite(@RequestParam (required = false) Map<String, String> allRequestParams){
+    	String content=allRequestParams.get("key");
+    	if(content==null) {
+    		return ResultUtils.rtFailParam(null, "无效参数");
+    		
+    	}
+    	Map<String,Object> rt=new HashMap<String,Object>();
+    	try {
+    	String key=SignUtils.decryptDataAes(content);
+    	String []arrayString = key.split(":");
+    	Long familyId=Long.valueOf(arrayString[0]);
+    	Long createTimeLong=Long.valueOf(arrayString[2]);
+    	String inviteCode=arrayString[1];
+    	Long now=System.currentTimeMillis()-(3600*1000);//一天过期
+    	if(now>createTimeLong) {
+    		LOG.info("过期的数据 key："+key);
+    		return ResultUtils.rtFailParam(null, "过期数据");
+    	}
+    	    String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+			String sign=SignUtils.encryptDataAes(datas);
+			
+			rt.put("sign", sign);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResultUtils.rtFail(null);
+		}
+    	return ResultUtils.rtSuccess(rt);
+    }
     
     @RequestMapping("/share/getCode")
     @ResponseBody
@@ -196,7 +231,7 @@ public class ShareCommController extends BaseController {
 	    		String inviteCode=rtMap.get("inviteCode").toString();
 	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 				String key=SignUtils.encryptDataAes(String.valueOf(datas));
-				String shareUrl=this.getFamilyInviteBasePath()+key;
+				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
 				rtMap.put("shareUrl", shareUrl);
 				return ResultUtils.rtSuccess(rtMap);
 			} catch (Exception e) {
@@ -204,6 +239,49 @@ public class ShareCommController extends BaseController {
 				return ResultUtils.rtFail(null);
 			}
 	    }
+	 
+	 
+	 @RequestMapping("/share/createInvite")
+	 @ResponseBody
+	    public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	      Long userId=	Long.valueOf(requestBodyParams.get("userId").toString());
+		 Map<String,Object> rtMap=new HashMap<String,Object>();
+	    	Map<String,Object>  family=familyService.findFamilyIdByUserId(userId);
+	    	if(family==null) {
+	    		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建");
+	    	}
+	    	try {
+	    		Long familyId=Long.valueOf(rtMap.get("id").toString());
+	    		String inviteCode=rtMap.get("inviteCode").toString();
+	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+				String key=SignUtils.encryptDataAes(String.valueOf(datas));
+				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
+				rtMap.put("shareUrl", shareUrl);
+				rtMap.put("title", "邀请您参与【好车族】游戏");
+				rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
+				List<String> imgs=new  ArrayList<String>();
+				imgs.add("http://apph5.idata365.com/appImgs/");
+				rtMap.put("imgs", imgs);
+				return ResultUtils.rtSuccess(rtMap);
+			} catch (Exception e) {
+				return ResultUtils.rtFail(null);
+			}
+	}
+	 
+	 
+	 @RequestMapping("/share/successShare")
+	 @ResponseBody
+	    public Map<String,Object> successShare(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+	      Long userId=	Long.valueOf(requestBodyParams.get("userId").toString());
+	      Long shareType=	Long.valueOf(requestBodyParams.get("shareType").toString());
+	      if(shareType==1) {
+	    	  //分享邀请码
+	      }
+	      Map<String,Object> rtMap=new HashMap<String,Object>();
+		  return ResultUtils.rtSuccess(rtMap);
+			 
+	}
+	 
 	 public static void main(String []args) {
 		 System.out.println("112:345353".split(":")[0]);
 	 }

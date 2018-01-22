@@ -19,7 +19,16 @@ public class SystemProperties {
     private  String ssoAccessKeyId;
     private  String ssoAccessKeySecret;
 	private String ssoQQ;
+	private String h5Host;
 	
+	public String getH5Host() {
+		return h5Host;
+	}
+
+	public void setH5Host(String h5Host) {
+		this.h5Host = h5Host;
+	}
+
 	public String getSsoQQ() {
 		return ssoQQ;
 	}

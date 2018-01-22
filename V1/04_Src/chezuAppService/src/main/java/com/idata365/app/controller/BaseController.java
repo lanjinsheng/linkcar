@@ -14,10 +14,10 @@ abstract  class BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 	
 	 
-	protected String getFamilyInviteBasePath() {
+	protected String getFamilyInviteBasePath(String host) {
 		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/share/goInvite?key=";
+	   	     return host+"share/invite.html?key=";
 
 	  }
 	protected String getRegSendMsgUrl() {
