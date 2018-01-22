@@ -27,6 +27,8 @@ public interface FamilyMapper
 	
 	public void deleteUserFamilyRelation(FamilyParamBean bean);
 	
+	public void updateFamilyRoleLog(FamilyParamBean bean);
+	
 	public int countByCreateUser(FamilyParamBean bean);
 	
 	public void save(FamilyParamBean bean);

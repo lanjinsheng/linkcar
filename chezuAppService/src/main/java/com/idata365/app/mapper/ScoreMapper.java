@@ -15,6 +15,7 @@ import com.idata365.app.entity.ScoreMemberInfoBean;
 import com.idata365.app.entity.ScoreUserBean;
 import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UsersAccountBean;
@@ -38,6 +39,8 @@ public interface ScoreMapper
 	
 	public List<ScoreUserHistoryBean> queryHistoryOrder(ScoreUserHistoryParamBean bean);
 	
+	public Integer queryHistoryRole(ScoreUserHistoryParamBean bean);
+	
 	public int queryCurrentRole(ScoreUserHistoryParamBean bean);
 	
 	public List<ScoreByDayBean> queryScoreByDay(ScoreUserHistoryParamBean bean);
@@ -51,6 +54,8 @@ public interface ScoreMapper
 	public FamilyDriveDayStatBean queryFamilyDriveStat(ScoreFamilyInfoParamBean bean);
 	
 	public List<UserTravelHistoryBean> queryTravels(ScoreFamilyInfoParamBean bean);
+	
+	public UserFamilyRoleLogBean queryTravelBetweenTime(ScoreFamilyInfoParamBean bean);
 	
 	public UserTravelHistoryDetailBean queryTravelDetail(ScoreFamilyInfoParamBean bean);
 	

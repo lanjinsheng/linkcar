@@ -102,7 +102,7 @@ public class TaskService extends BaseService<TaskService>
 	@Transactional
 	public void syncTomorrowRole()
 	{
-
+		//查询用户家族实时关系
 		List<UserFamilyRelationBean> tempList = this.taskMapper.queryUserFamilyRelation();
 		//格式：yyyyMMdd
 		String tomorrowDayStrUndelimiter = getTomorrowDateUndelimiterStr();
@@ -116,6 +116,8 @@ public class TaskService extends BaseService<TaskService>
 			tempParamBean.setDaystamp(tomorrowDayStrUndelimiter);
 			tempParamBean.setStartTime(startTime);
 			tempParamBean.setEndTime(endTime);
+			
+			//count用户明天的角色
 			int roleCount = this.taskMapper.countTomorrowRole(tempParamBean);
 			if (0 == roleCount)
 			{

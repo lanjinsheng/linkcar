@@ -34,10 +34,13 @@ import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
+import com.idata365.app.entity.UserFamilyRoleLogParamBean;
+import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.TaskMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.PhoneUtils;
@@ -56,6 +59,9 @@ public class FamilyService extends BaseService<FamilyService>
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private TaskMapper taskMapper;
 	
 	public FamilyResultBean findFamily(long userId)
 	{
@@ -119,9 +125,17 @@ public class FamilyService extends BaseService<FamilyService>
 	 * 移出家族
 	 * @param bean
 	 */
+	@Transactional
 	public void removeMember(FamilyParamBean bean)
 	{
 		this.familyMapper.deleteUserFamilyRelation(bean);
+		
+		//更新userFamilyRoleLog中的endTime
+		String ts = generateTimeStamp();
+		String daystamp = getCurrentDayStrWithUnDelimiter();
+		bean.setEndTime(ts);
+		bean.setDaystamp(daystamp);
+		this.familyMapper.updateFamilyRoleLog(bean);
 	}
 	
 	/**
@@ -180,10 +194,30 @@ public class FamilyService extends BaseService<FamilyService>
 			return 2;
 		}
 		
+		//记录用户、家族关系
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
 		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
+		
+		//初始化用户角色、成绩记录表start------------------
+		//记录用户在新家族的角色
+		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
+		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
+		userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
+		userFamilyRoleLogParamBean.setDaystamp(getCurrentDayStrWithUnDelimiter());
+		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+		userFamilyRoleLogParamBean.setStartTime(timeStamp);
+		userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
+		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
+		
+		//初始化加入新家族后的userScoreDayStat记录
+		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
+		tempScoreDayParamBean.setUserId(bean.getUserId());
+		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
+		tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
+		this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
+		//初始化用户角色、成绩记录表end------------------
 		
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
 		familyParamStatusBean.setMsgId(bean.getMsgId());
@@ -217,9 +251,24 @@ public class FamilyService extends BaseService<FamilyService>
 	 * 退出家族
 	 * @param bean
 	 */
+	@Transactional
 	public void quitFromFamily(FamilyParamBean bean)
 	{
 		this.familyMapper.deleteUserFamilyRelation(bean);
+		
+		//更新userFamilyRoleLog中的endTime
+		String ts = generateTimeStamp();
+		String daystamp = getCurrentDayStrWithUnDelimiter();
+		bean.setEndTime(ts);
+		bean.setDaystamp(daystamp);
+		this.familyMapper.updateFamilyRoleLog(bean);
+	}
+	
+	private String getCurrentDayStrWithUnDelimiter()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN);
+		return dayStr;
 	}
 	
 	/**
@@ -382,6 +431,25 @@ public class FamilyService extends BaseService<FamilyService>
 		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
+		//初始化用户角色、成绩记录表start------------------
+		//记录用户在新家族的角色
+		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
+		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
+		userFamilyRoleLogParamBean.setFamilyId(familyId);
+		userFamilyRoleLogParamBean.setDaystamp(getCurrentDayStrWithUnDelimiter());
+		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+		userFamilyRoleLogParamBean.setStartTime(timeStamp);
+		userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
+		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
+		
+		//初始化加入新家族后的userScoreDayStat记录
+		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
+		tempScoreDayParamBean.setUserId(bean.getUserId());
+		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
+		tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
+		this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
+		//初始化用户角色、成绩记录表end------------------
+				
 		//更新是否通过邀请码加入状态
 		boolean inviteCodeFlag = bean.isInviteCodeFlag();
 		UsersAccountParamBean usersAccountParamBean = new UsersAccountParamBean();
