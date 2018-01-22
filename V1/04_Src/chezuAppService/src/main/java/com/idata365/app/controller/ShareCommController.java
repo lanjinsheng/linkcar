@@ -39,6 +39,7 @@ public class ShareCommController extends BaseController
 
 	@Autowired
 	private FamilyService familyService;
+	@Autowired
 	private FamilyInviteService familyInviteService;
 	@Autowired
 	private LoginRegService loginRegService;
