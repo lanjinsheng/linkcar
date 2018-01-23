@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
@@ -39,9 +38,13 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
-	
+	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
+	
+	public static final String  TietiaoMessageUrl="com.shujin.shuzan://pasteNote.push?familyId=%s";
+	
+	
 	public static final Map<String,String> MessageImgs=new HashMap<String,String>();
 	static {
 		MessageImgs.put("1", "http://apph5.idata365.com/appImgs/xitong.png");
@@ -142,6 +145,47 @@ public class MessageService extends BaseService<MessageService>{
 			break;
 		}
 		return message;
+	}
+	
+	/**
+	 * 
+	    * @Title: buildTieTiaoMessage
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param opponentFamily 对手家族
+	    * @param @param opponentFamilyName 对手家族名称
+	    * @param @param fromUserId 用户id
+	    * @param @param myFamilyId 自家家族id
+	    * @param @return    参数
+	    * @return List<Message>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public List<Message> buildTieTiaoMessage(Long fromUserId,Long myFamilyId,Long opponentFamily,String opponentFamilyName) {
+		List<Message> messages=new ArrayList<Message>();
+		List<Map<String,Object>> userMap=familyService.familyRelationByFamilyId(myFamilyId);
+		for(Map<String,Object> m:userMap) {
+			if(m.get("userId").toString().equals(String.valueOf(fromUserId))) {
+				
+			}else {
+				Message message=new Message();
+				message.setFromUserId(fromUserId==null?0:fromUserId);
+				message.setBottomText("");
+				message.setChildType(0);
+				message.setContent(getTieTiao(opponentFamilyName));
+				message.setCreateTime(new Date());
+				message.setIcon("");
+				message.setIsPush(1);
+				message.setParentType(3);
+				message.setPicture("");
+				message.setTitle("贴条通知");
+				message.setToUserId(Long.valueOf(m.get("userId").toString()));
+				message.setUrlType(0);
+				message.setToUrl(getTietiaoMessageUrl(opponentFamily));
+				messages.add(message);
+			}
+		}
+		
+		return messages;
 	}
 	/**
 	 * 
@@ -393,8 +437,10 @@ public class MessageService extends BaseService<MessageService>{
 	
 	private String getFailMessageDesc(String familyName) {
 		return String.format(FailFamilyMessage, familyName);
-}
-	
+    }
+	private String getTieTiao(String familyName) {
+		return String.format(TietiaoMessage, familyName);
+	}
 	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
 	}
@@ -409,7 +455,9 @@ public class MessageService extends BaseService<MessageService>{
 	private String getPassMessageUrl(int familyId) {
 		return String.format(InvitePassMessageUrl, String.valueOf(familyId));
     }
-	
+	private String getTietiaoMessageUrl(Long familyId) {
+		return String.format(TietiaoMessageUrl, String.valueOf(familyId));
+    }
 	public static void main(String []args) {
 		MessageService service=new MessageService();
 		System.out.println(service.getInviteMessageUrl(80L));

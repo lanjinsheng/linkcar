@@ -643,4 +643,8 @@ public class FamilyService extends BaseService<FamilyService>
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
 	}
+	
+	public List<Map<String,Object>> familyRelationByFamilyId(Long familyId){
+		return familyMapper.getFamilyUsers(familyId);
+	}
 }
