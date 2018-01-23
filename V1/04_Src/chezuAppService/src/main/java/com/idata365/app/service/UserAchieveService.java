@@ -15,7 +15,6 @@ import com.idata365.app.service.common.AchieveCommService;
 @Service
 public class UserAchieveService
 {
-	private static final Logger LOG = LoggerFactory.getLogger(UserAchieveService.class);
 
 	@Autowired
 	private UserAchieveMapper userAchieveMapper;
