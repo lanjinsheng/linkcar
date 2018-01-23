@@ -182,6 +182,10 @@ public class ScoreService extends BaseService<ScoreService>
 		long familyId = bean.getFamilyId();
 		String tomorrowDateUndelimiterStr = getTomorrowDateUndelimiterStr();
 		
+		String yesterdayDateUndelimiterStr = getYesterdayDateUndelimiterStr();
+		
+		String yesterdayDateStr = getYesterdayDateStr();
+		
 		for (ScoreMemberInfoBean tempBean : tempList)
 		{
 			ScoreMemberInfoResultBean tempResultBean = new ScoreMemberInfoResultBean();
@@ -193,10 +197,33 @@ public class ScoreService extends BaseService<ScoreService>
 			roleLogParamBean.setUserId(userId);
 			roleLogParamBean.setFamilyId(familyId);
 			roleLogParamBean.setDaystamp(tomorrowDateUndelimiterStr);
-			List<Integer> roleList = this.gameMapper.queryRoleByDay(roleLogParamBean);
-			if (CollectionUtils.isNotEmpty(roleList))
+			List<Integer> tomorrowRoleList = this.gameMapper.queryRoleByDay(roleLogParamBean);
+			if (CollectionUtils.isNotEmpty(tomorrowRoleList))
 			{
-				tempResultBean.setTomorrowRole(String.valueOf(roleList.get(0)));
+				tempResultBean.setTomorrowRole(String.valueOf(tomorrowRoleList.get(0)));
+			}
+			
+			UserFamilyRoleLogParamBean  yesterdayRoleLogParamBean = new UserFamilyRoleLogParamBean();
+			yesterdayRoleLogParamBean.setUserId(userId);
+			yesterdayRoleLogParamBean.setFamilyId(familyId);
+			yesterdayRoleLogParamBean.setDaystamp(yesterdayDateUndelimiterStr);
+			List<UserFamilyRoleLogBean> yesterdayRoleLogList = this.gameMapper.queryFamilyRoleLog(yesterdayRoleLogParamBean);
+			if (CollectionUtils.isNotEmpty(yesterdayRoleLogList))
+			{
+				UserFamilyRoleLogBean yesterdayRoleLogBean = yesterdayRoleLogList.get(0);
+				int yesterdayRole = yesterdayRoleLogBean.getRole();
+				tempResultBean.setYesterdayRole(String.valueOf(yesterdayRole));
+				
+				long userFamilyRoleLogId = yesterdayRoleLogBean.getId();
+				UserFamilyRoleLogParamBean yesterdayScoreParamBean = new UserFamilyRoleLogParamBean();
+				yesterdayScoreParamBean.setUserId(userId);
+				yesterdayScoreParamBean.setUserFamilyRoleLogId(userFamilyRoleLogId);
+				yesterdayScoreParamBean.setDaystamp(yesterdayDateStr);
+				List<Double> scoreList = this.gameMapper.queryScore(yesterdayScoreParamBean);
+				if (CollectionUtils.isNotEmpty(scoreList))
+				{
+					tempResultBean.setYesterdayScore(String.valueOf(scoreList.get(0)));
+				}
 			}
 			
 			String name = tempBean.getName();
@@ -233,6 +260,26 @@ public class ScoreService extends BaseService<ScoreService>
 		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyyMMdd");
 		LOGGER.info(tomorrowDateStr);
 		return tomorrowDateStr;
+	}
+	
+	public String getYesterdayDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(curDate, -1);
+		
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyyMMdd");
+		LOGGER.info(yesterdayDateStr);
+		return yesterdayDateStr;
+	}
+	
+	public String getYesterdayDateStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(curDate, -1);
+		
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyy-MM-dd");
+		LOGGER.info(yesterdayDateStr);
+		return yesterdayDateStr;
 	}
 	
 	private String formatTime(String tempJoinTime)
