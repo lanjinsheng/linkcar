@@ -33,11 +33,12 @@
 
 	<!-- 查看用户某项成就最新记录id -->
 	<select id="queryLatelyAchieveInfo" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
-		SELECT id,num,nowNum,maxLev,lev
-		FROM userAchieveInfo
-		WHERE userId=#{userId} AND flag=0 AND achieveId=#{achieveId}
-		and<![CDATA[  nowNum<num and lev <= maxLev ]]>
-		ORDER BY lev
+		SELECT  a.id, a.num, a.nowNum,d.maxLev,a.lev
+		FROM userAchieveInfo a
+		inner join dicUserAchieve d ON d.id=a.achieveId
+		WHERE a.userId=#{userId} AND a.flag=0 AND a.achieveId=#{achieveId}
+		and<![CDATA[  a.nowNum<a.num and a.lev <= d.maxLev ]]> 
+		ORDER BY a.lev
 		LIMIT 1
 	</select>
 
