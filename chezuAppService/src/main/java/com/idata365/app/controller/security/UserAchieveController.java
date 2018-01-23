@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.service.UserAchieveService;
+import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
 
@@ -29,6 +30,9 @@ public class UserAchieveController extends BaseController
 
 	@Autowired
 	private UserAchieveService userAchieveService;
+
+	@Autowired
+	private AchieveCommService achieveCommService;
 
 	/**
 	 * 查看用户成就列表
@@ -78,5 +82,47 @@ public class UserAchieveController extends BaseController
 		this.dealListObect2String(list);
 		rtMap.put("getAchieveListById", list);
 		return ResultUtils.rtSuccess(rtMap);
+	}
+
+	@RequestMapping("/achieve/test")
+	public Map<String, Object> test(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<String, Object> requestBodyParams)
+	{
+		int type = Integer.valueOf(requestBodyParams.get("type").toString());
+		long userId = this.getUserId();
+		if (type == 1)
+		{
+			achieveCommService.addShareTimes(userId);
+		}
+		else if (type == 2)
+		{
+			achieveCommService.addGayTimes(userId);
+		}
+		else if (type == 3)
+		{
+			achieveCommService.addGodTimes(userId, 12);
+		}
+		else if (type == 4)
+		{
+			achieveCommService.addCarEndTimes(userId);
+		}
+		else if (type == 5)
+		{
+			achieveCommService.addBestDriverTimes(userId);
+		}
+		else if (type == 6)
+		{
+			achieveCommService.addCollectTimes(userId);
+		}
+		else if (type == 8)
+		{
+			achieveCommService.addGrabTimes(userId);
+		}
+		else if (type == 9)
+		{
+			achieveCommService.addStupidTimes(userId);
+		}
+
+		return ResultUtils.rtSuccess("成功！！！");
 	}
 }
