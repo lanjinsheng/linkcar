@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.util.ResultUtils;
@@ -26,6 +27,8 @@ public class UserController extends BaseController{
 
 	@Autowired
 	private LoginRegService loginRegService;
+	@Autowired
+	private SystemProperties systemProperties;
 	public UserController() {
 		System.out.println("UserController");
 	}
@@ -52,7 +55,7 @@ public class UserController extends BaseController{
     	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
     	String password=String.valueOf(requestBodyParams.get("password"));
     	String  status=LoginRegService.VC_ERR;
-    	if(verifyCode.equals("010101")) {
+    	if(verifyCode.equals(systemProperties.getNbcode())) {
     		status=LoginRegService.OK;
     	}else {
     		status=loginRegService.validVerifyCode(phone,2,verifyCode);
@@ -95,7 +98,7 @@ public class UserController extends BaseController{
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
     	String  status=LoginRegService.VC_ERR;
-    	if(verifyCode.equals("010101")) {//测试使用万能验证码
+    	if(verifyCode.equals(systemProperties.getNbcode())) {//测试使用万能验证码
     		status=LoginRegService.OK;
     	}else {
     		status=loginRegService.validVerifyCode(phone,1,verifyCode);
@@ -160,7 +163,7 @@ public class UserController extends BaseController{
       	String phone=String.valueOf(requestBodyParams.get("phone"));
       	String verifyCode=String.valueOf(requestBodyParams.get("verifyCode"));
       	String  status=LoginRegService.VC_ERR;
-    	if(verifyCode.equals("010101")) {//测试万能验证码
+    	if(verifyCode.equals(systemProperties.getNbcode())) {//测试万能验证码
     		status=LoginRegService.OK;
     	}else {
     		status=loginRegService.validVerifyCode(phone,3,verifyCode);

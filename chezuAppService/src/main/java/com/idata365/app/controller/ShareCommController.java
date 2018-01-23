@@ -185,7 +185,7 @@ public class ShareCommController extends BaseController
 			}
 			// 判断验证码是否正常
 			String status = LoginRegService.VC_ERR;
-			if (code.equals("010101"))
+			if (code.equals(systemProperties.getNbcode()))
 			{// 测试万能验证码
 				status = LoginRegService.OK;
 			}
