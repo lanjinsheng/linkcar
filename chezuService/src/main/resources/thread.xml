@@ -174,7 +174,7 @@
   </bean> 
   
   
-      <bean id="calFamilyMonthAvgOrderTask" class="com.idata365.schedule.CalFamilyMonthAvgOrderTask">  
+  <bean id="calFamilyMonthAvgOrderTask" class="com.idata365.schedule.CalFamilyMonthAvgOrderTask">  
     <property name="threadPool" ref="threadPool"></property>
   </bean>  
    
@@ -186,10 +186,6 @@
     <property name="period" value="20000" />   
   </bean> 
   <!--End#######################计算家族Order数据#######################################################-->
- 
- 
- 
- 
  
   
   <!--Begin#######################清理异常锁定记录#######################################################-->
@@ -211,6 +207,21 @@
    <!-- 延迟10s加载，异常锁定任务数据处理，并且每隔10秒进行处理扫描 -->
   <!--End#######################测试#######################################################-->
   
+    <!--Begin#######################比赛赛季结束家族得分天数加权任务#######################################################-->
+   <!-- 延迟10s加载，异常锁定任务数据处理，并且每隔10秒进行处理扫描 -->
+  <bean id="calGameEndTask" class="com.idata365.schedule.CalGameEndTask">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="calGameEndTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="calGameEndTask" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" /> 
+        <!-- 每次任务间隔20*1000毫秒-->  
+    <property name="period" value="20000" />   
+  </bean> 
+  <!--End#######################比赛结束家族得分天数加权任务#######################################################-->
+  
   
   
     <bean id="springScheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">  
@@ -225,8 +236,8 @@
 	   <ref bean="calFamilyDayScoreTaskExe"/> 
 	   <ref bean="calFamilyDayPkTaskExe"/> 
 	   <ref bean="calFamilyDayOrderTaskExe"/> 
-       <ref bean="calFamilyMonthOrderTaskExe"/>
        <ref bean="calFamilyMonthAvgOrderTaskExe"/>  
+       <ref bean="calGameEndTaskExe"/>    
       </list>  
     </property>  
   </bean>  
