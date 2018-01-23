@@ -24,8 +24,21 @@ public class TaskSystemScoreFlag implements Serializable {
 	
 	private String startDay;
 	private String endDay;
-
-
+    private Integer taskGameEnd;
+    private Integer taskGameEndInit;
+    
+	public Integer getTaskGameEnd() {
+		return taskGameEnd;
+	}
+	public void setTaskGameEnd(Integer taskGameEnd) {
+		this.taskGameEnd = taskGameEnd;
+	}
+	public Integer getTaskGameEndInit() {
+		return taskGameEndInit;
+	}
+	public void setTaskGameEndInit(Integer taskGameEndInit) {
+		this.taskGameEndInit = taskGameEndInit;
+	}
 	public String getStartDay() {
 		return startDay;
 	}
