@@ -35,7 +35,8 @@
          maxspeedScore= #{maxspeedScore}, 
          tiredDriveScore= #{tiredDriveScore}, 
          phoneTimesScore= #{phoneTimesScore},
-         nightDriveScore= #{nightDriveScore}
+         nightDriveScore= #{nightDriveScore},
+         mazhaScore=#{mazhaScore}
      where id=#{id}
     </update>
     
