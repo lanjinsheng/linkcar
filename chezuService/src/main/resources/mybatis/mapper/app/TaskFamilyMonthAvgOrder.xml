@@ -9,10 +9,10 @@
 		   where startDay=#{startDay} and endDay=#{endDay} 
 	</delete>
     
-   <insert id="initTaskFamilyMonthAvgOrder" parameterType="java.lang.String">
+   <insert id="initTaskFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder">
           INSERT IGNORE INTO  taskFamilyMonthAvgOrder
 		 (avgScore,orderNo,month,familyId,taskFlag,taskStatus,failTimes,startDay,endDay)
-         select averScore,0,month,familyId,0,0,0,startDay,endDay from familyScore  where month=#{month} order by averScore desc
+         select averScore,0,month,familyId,0,0,0,startDay,endDay from familyScore  where startDay=#{startDay} and endDay=#{endDay}  order by averScore desc
 	</insert>
     <update id="updateFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
         update familyScore set
