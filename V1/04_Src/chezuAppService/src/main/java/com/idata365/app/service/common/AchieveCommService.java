@@ -301,7 +301,7 @@ public class AchieveCommService
 	{
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
-		if (achieve.getId() != null)
+		if (achieve != null && achieve.getId() != null)
 		{
 			// 更新成就解锁标识
 			userAchieveMapper.updateFlagToLock(achieve.getId());
