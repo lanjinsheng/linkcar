@@ -2,7 +2,6 @@ package com.idata365.app.service.common;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -43,6 +42,8 @@ public class AchieveCommService
 
 	/**
 	 * 1.分享达人
+	 * 
+	 * @Description:分享游戏链接次数
 	 */
 	public void addShareTimes(long userId)
 	{
@@ -53,6 +54,8 @@ public class AchieveCommService
 
 	/**
 	 * 2.基友遍天下
+	 * 
+	 * @Description:拉新
 	 */
 	public void addGayTimes(long userId)
 	{
@@ -64,8 +67,10 @@ public class AchieveCommService
 
 	/**
 	 * 3.神行太保
+	 * 
+	 * @Description:累计里程
 	 */
-	public void addGodTimes(long userId)
+	public void addGodTimes(long userId, double mileage)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 3);
@@ -74,6 +79,8 @@ public class AchieveCommService
 
 	/**
 	 * 4.车位终结者
+	 * 
+	 * @Description:抢车位次数
 	 */
 	public void addCarEndTimes(long userId)
 	{
@@ -84,6 +91,8 @@ public class AchieveCommService
 
 	/**
 	 * 5.终结好司机
+	 * 
+	 * @Description:X天未发生违规行为
 	 */
 	public void addBestDriverTimes(long userId)
 	{
@@ -94,6 +103,8 @@ public class AchieveCommService
 
 	/**
 	 * 6.道具收集者
+	 * 
+	 * @Description:各种途径获得道具
 	 */
 	public void addCollectTimes(long userId)
 	{
@@ -102,18 +113,25 @@ public class AchieveCommService
 		updateAchieveTimes(map);
 	}
 
+	/****************************************** 坑爹模块start **************************************************/
 	/**
 	 * 7.黄金家族
+	 * 
+	 * @Description:TODO 所在家族连续X天位于黄金档内，当该成就完成时，该家族下的所有成员都加分
 	 */
-	public void addGoldFamilyTimes(long userId)
+	public void addGoldFamilyTimes(long userId, long familyId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 7);
-		updateAchieveTimes(map);
+		// updateAchieveTimes(map);
+		updateAchieveDaysByFamily();
 	}
 
+	/****************************************** 坑爹模块end **************************************************/
 	/**
 	 * 8.夺宝名人
+	 * 
+	 * @Description:上传驾驶证和行驶证
 	 */
 	public void addGrabTimes(long userId)
 	{
@@ -124,118 +142,14 @@ public class AchieveCommService
 
 	/**
 	 * 9.贴条小能手
+	 * 
+	 * @Description:累计贴条次数
 	 */
 	public void addStupidTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 9);
 		updateAchieveTimes(map);
-	}
-
-	/************************************************* 针对全体用户的成就方法 *************************************************************/
-
-	/**
-	 * 1.分享达人
-	 */
-	public void share()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(1);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户道具
-			saveLotteInfo(bean.getUserId(), bean.getAwardId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 2.基友遍天下 TODO 还未添加到评分日志表
-	 */
-	public void gay()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(2);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户当日个人评分
-			updateUserPointTodayByAchieve(bean.getUserId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 3.神行太保
-	 */
-	public void god()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(3);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户当日行程
-			updateUserMileageTodayByAchieve(bean.getUserId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 4.车位终结者
-	 */
-	public void carEnd()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(4);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户道具
-			saveLotteInfo(bean.getUserId(), bean.getAwardId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 5.终结好司机
-	 */
-	public void bestDriver()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(5);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户当日个人评分
-			updateUserPointTodayByAchieve(bean.getUserId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 6.道具收集者
-	 */
-	public void collect()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(6);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户道具
-			saveLotteInfo(bean.getUserId(), bean.getAwardId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 7.黄金家族
-	 */
-	public void goldFamily()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(7);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户当日个人评分
-			updateUserPointTodayByAchieve(bean.getUserId(), bean.getAwardNum());
-		}
-	}
-
-	/**
-	 * 9.贴条小能手
-	 */
-	public void stupid()
-	{
-		List<UserAchieveBean> userAs = userAchieveMapper.queryCanDeblockAchieveTask(9);
-		for (UserAchieveBean bean : userAs)
-		{
-			// 更新用户道具
-			saveLotteInfo(bean.getUserId(), bean.getAwardId(), bean.getAwardNum());
-		}
 	}
 
 	/**
@@ -252,14 +166,14 @@ public class AchieveCommService
 		 */
 		UserAchieveBean bean = userAchieveMapper.queryUserCanDeblockAchieve(map);
 		LOG.info("查询可以解锁的UserAchieveBean：>>>>>>>>>>>>>>>>>>>>>", bean);
-		if (bean == null || bean.getType() == 4)// 当夺宝名人时，返回
+		if (bean == null || bean.getType() == 3)// 当夺宝名人时，返回
 		{
 			LOG.info("无可更新成就，返回**********************");
 			return;
 		}
 		else
 		{
-			// 奖励类型(1.道具奖励;2.个人评分奖励;3.个人里程奖励;4.综合大礼包奖励)
+			// 奖励类型(1.道具奖励;2.个人评分奖励;3.综合大礼包奖励)
 			if (bean.getType() == 1)
 			{
 				// 更新用户道具
@@ -269,11 +183,6 @@ public class AchieveCommService
 			{
 				// 更新用户当日个人评分
 				updateUserPointTodayByAchieve(userId, bean.getAwardNum());
-			}
-			else if (bean.getType() == 3)
-			{
-				// 更新用户当日行程
-				updateUserMileageTodayByAchieve(userId, bean.getAwardNum());
 			}
 			// 更新成就解锁标识
 			userAchieveMapper.updateFlagToLock(bean.getId());
@@ -319,30 +228,67 @@ public class AchieveCommService
 		UserAchieveBean ubean = new UserAchieveBean();
 		ubean.setDaystamp(getCurrentDayStr());
 		ubean.setUserId(userId);
-		ubean.setAchieveScore(Double.valueOf(String.valueOf(awardCount)));
+		ubean.setExtraPlusScore(Double.valueOf(String.valueOf(awardCount)));
 		userAchieveMapper.updateUserPointsToday(ubean);
 	}
 
-	/**
-	 * 更新用户当日个人里程
-	 */
-	void updateUserMileageTodayByAchieve(long userId, int awardCount)
-	{
-		UserAchieveBean ubean = new UserAchieveBean();
-		ubean.setDaystamp(getCurrentDayStr());
-		ubean.setUserId(userId);
-		ubean.setAhieveMileage(Double.valueOf(String.valueOf(awardCount)));
-		userAchieveMapper.updateUserMileageToday(ubean);
-	}
-
-	// 更新成就操作
-	public void updateAchieveTimes(Map<String, Object> map)
+	// 更新成就次数操作(1次)
+	void updateAchieveTimes(Map<String, Object> map)
 	{
 		// 查看用户某项成就最新记录id
-		Integer achieveRecordId = userAchieveMapper.queryLatelyAchieveId(map);
-		if (achieveRecordId != null)
+		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
+		LOG.info("updateAchieveTimes==================================================", achieve);
+		if (achieve.getId() != null)
 		{
-			userAchieveMapper.updateAchieveTimesById(achieveRecordId);
+			userAchieveMapper.updateAchieveTimesById(achieve.getId());
+			if (achieve.getNowNum() + 1 >= achieve.getNum())
+			{
+				// 更新成就解锁标识
+				userAchieveMapper.updateFlagToLock(achieve.getId());
+				// 更新下一个成就等级的数量
+				if (achieve.getLev() < achieve.getMaxLev())
+				{
+					// 剩余成就值
+					map.put("lev", achieve.getLev() + 1);
+					map.put("nowNum", achieve.getNowNum() - achieve.getNum());
+					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
+					userAchieveMapper.updateNextLevAchieveValue(map);
+				}
+			}
+		}
+	}
+
+	// 更新该家族下所有成员当前天数
+	void updateAchieveDaysByFamily()
+	{
+
+	}
+
+	// 更新成就数量
+	void updateAchieveNum(Map<String, Object> map, double num)
+	{
+		// 查看用户某项成就最新记录id
+		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
+		LOG.info("updateAchieveNum==================================================", achieve);
+		if (achieve.getId() != null)
+		{
+			int sumNum = achieve.getNowNum() + Integer.valueOf(String.valueOf(num));//
+			achieve.setNowNum(Integer.valueOf(String.valueOf(num)));
+			userAchieveMapper.updateAchieveNumById(achieve);
+			if (sumNum >= achieve.getNum())
+			{
+				// 更新成就解锁标识
+				userAchieveMapper.updateFlagToLock(achieve.getId());
+				// 更新下一个成就等级的数量
+				if (achieve.getLev() < achieve.getMaxLev())
+				{
+					// 剩余成就值
+					map.put("lev", achieve.getLev() + 1);
+					map.put("nowNum", sumNum - achieve.getNum());
+					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
+					userAchieveMapper.updateNextLevAchieveValue(map);
+				}
+			}
 		}
 	}
 
@@ -354,11 +300,11 @@ public class AchieveCommService
 	public void updateAchieveWhenUploadLicence(Map<String, Object> map, long userId)
 	{
 		// 查看用户某项成就最新记录id
-		Integer achieveRecordId = userAchieveMapper.queryLatelyAchieveId(map);
-		if (achieveRecordId != null)
+		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
+		if (achieve.getId() != null)
 		{
 			// 更新成就解锁标识
-			userAchieveMapper.updateFlagToLock(achieveRecordId);
+			userAchieveMapper.updateFlagToLock(achieve.getId());
 			// 发放奖励
 			saveLotteInfo(userId, 1, 1);
 			// 发放奖励
