@@ -32,19 +32,26 @@
 	</select>
 
 	<!-- 查看用户某项成就最新记录id -->
-	<select id="queryLatelyAchieveId" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-		SELECT id
+	<select id="queryLatelyAchieveInfo" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
+		SELECT id,num,nowNum,maxLev,lev
 		FROM userAchieveInfo
 		WHERE userId=#{userId} AND flag=0 AND achieveId=#{achieveId}
-		and<![CDATA[  (nowNum<=num and lev<3) or (nowNum<num and lev=3) ]]>
+		and<![CDATA[  nowNum<num and lev <= maxLev ]]>
 		ORDER BY lev
 		LIMIT 1
 	</select>
 
 	<!-- 更新用户成就次数 -->
-	<update id="updateAchieveTimesById" parameterType="java.lang.Integer">
+	<update id="updateAchieveTimesById" parameterType="java.lang.Long">
 		update userAchieveInfo
 		set nowNum=nowNum+1,editTime=now()
+		where id=#{id} AND flag=0
+	</update>
+	
+	<!-- 更新用户成就值 -->
+	<update id="updateAchieveNumById" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userAchieveInfo
+		set nowNum=nowNum+#{nowNum},editTime=now()
 		where id=#{id} AND flag=0
 	</update>
 	
@@ -57,9 +64,10 @@
 
 	<!-- 查询用户可以解锁的成就记录 -->
 	<select id="queryUserCanDeblockAchieve" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
-		SELECT id,awardId,awardNum,type,lev,maxLev
-		FROM userAchieveInfo 
-		WHERE userId=#{userId} AND flag=0  AND achieveId=#{achieveId} AND nowNum>=num
+		SELECT a.id,a.awardId,a.awardNum,a.type,a.lev,d.maxLev
+		FROM userAchieveInfo a
+		inner join dicUserAchieve d on d.id=a.achieveId
+		WHERE a.userId=#{userId} AND a.flag=0  AND a.achieveId=#{achieveId} AND a.nowNum>=a.num
 	</select>
 
 	<!-- 通过成就等级查询成就信息 -->
@@ -71,14 +79,15 @@
 
 	<!-- 查询可以解锁的成就记录(定时器) -->
 	<select id="queryCanDeblockAchieveTask" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="int">
-		SELECT id,awardId,awardNum,userId,lev,maxLev
-		FROM userAchieveInfo 
-		WHERE flag=0  AND achieveId=#{achieveId} AND nowNum>=num
+		SELECT a.id,a.awardId,a.awardNum,a.userId,a.lev,d.maxLev
+		FROM userAchieveInfo a
+		inner join dicUserAchieve d on d.id=a.achieveId
+		WHERE a.flag=0  AND a.achieveId=#{achieveId} AND a.nowNum>=a.num
 	</select>
 	
 	<!-- 更新用户当日评分 -->
 	<update id="updateUserPointsToday" parameterType="com.idata365.app.entity.UserAchieveBean">
-		update userScoreDayStat set achieveScore=achieveScore+#{achieveScore} where userId=#{userId} and daystamp=#{daystamp}
+		update userScoreDayStat set extraPlusScore=extraPlusScore+#{extraPlusScore} where userId=#{userId} and daystamp=#{daystamp}
 	</update>
 	
 	<!-- 更新用户当日里程 -->
