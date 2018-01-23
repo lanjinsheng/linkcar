@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ import com.idata365.app.mapper.UserAchieveMapper;
 @Service
 public class AchieveCommService
 {
+	private static final Logger LOG = LoggerFactory.getLogger(AchieveCommService.class);
+
 	@Autowired
 	private UserAchieveMapper userAchieveMapper;
 
@@ -35,7 +39,7 @@ public class AchieveCommService
 	private LotteryMapper lotteryMapper;
 	Map<String, Object> map = new HashMap<String, Object>();
 
-	/************************************************* 增对具体用户的成就方法 *************************************************************/
+	/************************************************* 针对具体用户的成就方法 *************************************************************/
 
 	/**
 	 * 1.分享达人
@@ -242,12 +246,15 @@ public class AchieveCommService
 	 */
 	public void updateAchieveInfoBeforeQuery(int achieveId, long userId, Map<String, Object> map)
 	{
+		LOG.info("用户点击了个人成就，开始更新该项成就相关值==================================================");
 		/**
 		 * 查询用户可以解锁的成就记录
 		 */
 		UserAchieveBean bean = userAchieveMapper.queryUserCanDeblockAchieve(map);
+		LOG.info("查询可以解锁的UserAchieveBean：>>>>>>>>>>>>>>>>>>>>>", bean);
 		if (bean == null || bean.getType() == 4)// 当夺宝名人时，返回
 		{
+			LOG.info("无可更新成就，返回**********************");
 			return;
 		}
 		else
@@ -269,8 +276,20 @@ public class AchieveCommService
 				updateUserMileageTodayByAchieve(userId, bean.getAwardNum());
 			}
 			// 更新成就解锁标识
-			userAchieveMapper.updateAchieveWhenUploadLicence(bean.getId());
+			userAchieveMapper.updateFlagToLock(bean.getId());
+			// 更新下一个成就等级的数量
+			if (bean.getLev() < bean.getMaxLev())
+			{
+				// 剩余成就值
+				int remianNum = bean.getNowNum() - bean.getNum();
+				LOG.info("将更新下一等级成就信息，更新的剩余值为：>>>>>>>>>>>>>>>>>>>>>", remianNum);
+				map.put("lev", bean.getLev() + 1);
+				map.put("nowNum", remianNum);
+				LOG.info("updateNextLevAchieveValue的入参Map：>>>>>>>>>>>>>>>>>>>>>", map);
+				userAchieveMapper.updateNextLevAchieveValue(map);
+			}
 		}
+		LOG.info("更新成就结束==================================================");
 	}
 
 	// 保存道具的发放
@@ -339,7 +358,7 @@ public class AchieveCommService
 		if (achieveRecordId != null)
 		{
 			// 更新成就解锁标识
-			userAchieveMapper.updateAchieveWhenUploadLicence(achieveRecordId);
+			userAchieveMapper.updateFlagToLock(achieveRecordId);
 			// 发放奖励
 			saveLotteInfo(userId, 1, 1);
 			// 发放奖励
