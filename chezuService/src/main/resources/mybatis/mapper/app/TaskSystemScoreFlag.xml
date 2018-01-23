@@ -56,7 +56,7 @@
 	</update>
 	
 	<select id="getUnFinishFamilyPkList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where taskFamilyPkInit=1 and familyDayScoreFlag=1 and taskFamilyPk=0
+	   select * from taskSystemScoreFlag where taskFamilyPkInit=1 and familyDayScoreFlag=1  and taskFamilyPk=0
 	</select>
 	<update id="finishFamilyPkTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
@@ -65,7 +65,23 @@
 	
    <!--end 初始化Pk任务关系 -->
    
-   	
+   <!-- begin gameOver 逻辑处理 -->
+     <select id="getUnInitGameEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where  taskGameEndInit=0
+	</select>
+   	<update id="updateGameEndInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskGameEndInit=${taskGameEndInit} where  daystamp=#{daystamp}
+	</update>
+ 	<select id="getUnFinishGameEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where  taskGameEndInit=1 and taskFamilyPk=1 and taskGameEnd=0
+	</select>
+	<update id="finishGameEndTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskGameEnd=${taskGameEnd} where  daystamp=#{daystamp}
+	</update>  	
+   <!-- end gameOver 逻辑处理 -->
+   
 	<!--begin 初始化Order任务关系 -->
 	 <select id="getUnInitOrderFlagList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
 	   select * from taskSystemScoreFlag where taskFamilyOrderInit=0 and familyDayScoreFlag=1 and taskFamilyPk=1
@@ -83,8 +99,8 @@
 		  set taskFamilyDayOrder=${taskFamilyDayOrder} where  daystamp=#{daystamp}
 	</update>
 	
-		<select id="getUnFinishFamilyMonthOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyMonthOrder=0
+	<select id="getUnFinishFamilyMonthOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and taskGameEnd=1 and taskFamilyMonthOrder=0
 	</select>
 	<update id="finishFamilyMonthOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
