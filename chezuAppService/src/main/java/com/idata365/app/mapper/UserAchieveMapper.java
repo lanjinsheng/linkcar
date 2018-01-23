@@ -40,14 +40,19 @@ public interface UserAchieveMapper
 	public void updateAchieveTimesById(int id);
 
 	/**
-	 * 更新用户上传驾照时成就 及解锁标记
+	 * 更新用户该成就解锁标记
 	 */
-	public void updateAchieveWhenUploadLicence(long id);
+	public void updateFlagToLock(long id);
 
 	/**
 	 * 查询用户可以解锁的成就记录
 	 */
 	public UserAchieveBean queryUserCanDeblockAchieve(Map<String, Object> m);
+
+	/**
+	 * 通过成就等级查询成就信息
+	 */
+	public UserAchieveBean queryUserAchieveByLev(Map<String, Object> m);
 
 	/**
 	 * 查询可以解锁的成就记录(定时器)
@@ -63,4 +68,9 @@ public interface UserAchieveMapper
 	 * 更新用户当日个人评分
 	 */
 	public void updateUserMileageToday(UserAchieveBean bean);
+
+	/**
+	 * 更新下一等级的成就值 -
+	 */
+	public void updateNextLevAchieveValue(Map<String, Object> m);
 }
