@@ -19,7 +19,7 @@ public interface TaskFamilyMonthAvgOrderMapper {
 	    int  delTaskFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    int   updateFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    
-	    int  initTaskFamilyMonthAvgOrder(@Param("month") String month);
+	    int  initTaskFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    TaskFamilyMonthAvgOrder  getPreTaskRecord(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	 
 		void lockFamilyMonthAvgOrderTask(TaskFamilyMonthAvgOrder taskFamilyOrder);
