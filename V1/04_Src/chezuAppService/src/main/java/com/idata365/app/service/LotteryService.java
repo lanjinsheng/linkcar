@@ -26,12 +26,14 @@ import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.LotteryUser;
 import com.idata365.app.entity.SignatureDayLogBean;
+import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserTravelLottery;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.mapper.SignatureDayLogMapper;
 import com.idata365.app.mapper.UserTravelLotteryMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
 
 @Service
@@ -278,15 +280,44 @@ public class LotteryService extends BaseService<LotteryService>
 	 */
 	public List<LotteryResultUser> findUserList(long userId)
 	{
+		LotteryMigrateInfoMsgParamBean userFamilyParamBean = new LotteryMigrateInfoMsgParamBean();
+		userFamilyParamBean.setUserId(userId);
+		
 		List<LotteryResultUser> resultList = new ArrayList<>();
-		List<LotteryUser> userList = this.lotteryMigrateInfoMsgMapper.findUserList(userId);
-		for (int i = 0; i < userList.size(); i++)
+		
+		List<UserFamilyRelationBean> userFamilyList = this.lotteryMigrateInfoMsgMapper.findUserFamily(userFamilyParamBean);
+		for (UserFamilyRelationBean tempBean : userFamilyList)
 		{
-			LotteryResultUser tempUser = new LotteryResultUser();
-			LotteryUser lotteryUser = userList.get(i);
-			AdBeanUtils.copyOtherPropToStr(tempUser, lotteryUser);
-			tempUser.setTodayRole("1");
-			resultList.add(tempUser);
+			long tempUserId = tempBean.getUserId();
+			long tempFamilyId = tempBean.getFamilyId();
+			
+			LotteryMigrateInfoMsgParamBean tempRoleParam = new LotteryMigrateInfoMsgParamBean();
+			tempRoleParam.setUserId(tempUserId);
+			tempRoleParam.setFamilyId(tempFamilyId);
+			Integer tempRole = this.lotteryMigrateInfoMsgMapper.queryRoleByUserFamily(tempRoleParam);
+			
+			LotteryMigrateInfoMsgParamBean lotteryMigrateParam = new LotteryMigrateInfoMsgParamBean();
+			lotteryMigrateParam.setUserId(tempUserId);
+			LotteryUser tempLotteryUser = this.lotteryMigrateInfoMsgMapper.findLotteryUser(lotteryMigrateParam);
+			
+			LotteryResultUser tempResultBean = new LotteryResultUser();
+			tempResultBean.setUserId(String.valueOf(tempLotteryUser.getUserId()));
+			String name = tempLotteryUser.getName();
+			if (StringUtils.isBlank(name))
+			{
+				String phone = tempLotteryUser.getPhone();
+				String hidePhone = PhoneUtils.hidePhone(phone);
+				tempResultBean.setName(hidePhone);
+			}
+			else
+			{
+				tempResultBean.setName(name);
+			}
+			
+			tempResultBean.setImgUrl(String.valueOf(tempLotteryUser.getImgUrl()));
+			tempResultBean.setTodayRole(String.valueOf(tempRole));
+			
+			resultList.add(tempResultBean);
 		}
 		
 		return resultList;

@@ -8,6 +8,8 @@ public class LotteryMigrateInfoMsgParamBean
 
 	private int givenId;
 	
+	private long familyId;
+	
 	public long getUserId()
 	{
 		return userId;
@@ -36,6 +38,16 @@ public class LotteryMigrateInfoMsgParamBean
 	public void setGivenId(int givenId)
 	{
 		this.givenId = givenId;
+	}
+
+	public long getFamilyId()
+	{
+		return familyId;
+	}
+
+	public void setFamilyId(long familyId)
+	{
+		this.familyId = familyId;
 	}
 	
 }

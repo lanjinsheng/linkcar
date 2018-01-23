@@ -3,6 +3,7 @@ package com.idata365.app.controller.security;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,16 +69,27 @@ public class LotteryController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		long tempUserId = 0;
-		Long userId = super.getUserId();
+		Long userId = bean.getUserId();
 		if (userId != 0)
 		{
 			tempUserId = userId;
 		}
 		else
 		{
-			tempUserId = bean.getUserId();
+			tempUserId = super.getUserId();
 		}
+		
 		List<LotteryResultUser> userList = this.lotteryService.findUserList(tempUserId);
+		String imgBasePath = super.getImgBasePath();
+		for (LotteryResultUser tempBean : userList)
+		{
+			String imgUrl = tempBean.getImgUrl();
+			if (StringUtils.isNotBlank(imgUrl))
+			{
+				tempBean.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
+		
 		return ResultUtils.rtSuccess(userList);
 	}
 	
