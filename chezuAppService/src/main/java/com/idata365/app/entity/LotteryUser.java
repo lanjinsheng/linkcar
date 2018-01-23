@@ -8,6 +8,8 @@ public class LotteryUser
 	
 	private String imgUrl;
 	
+	private String phone;
+	
 	private int todayRole;
 	
 	private int start;
@@ -40,6 +42,16 @@ public class LotteryUser
 	public void setImgUrl(String imgUrl)
 	{
 		this.imgUrl = imgUrl;
+	}
+
+	public String getPhone()
+	{
+		return phone;
+	}
+
+	public void setPhone(String phone)
+	{
+		this.phone = phone;
 	}
 
 	public int getTodayRole()

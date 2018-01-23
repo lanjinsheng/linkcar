@@ -22,7 +22,15 @@
     	select toUserId, awardId, awardCount from lotteryMigrateInfoMsg where id=#{givenId}
     </select>
     
-    <select id="findUserList" resultType="com.idata365.app.entity.LotteryUser" parameterType="int">
-    	select id as userId, nickName as name, imgUrl from usersAccount where nickName is not NUll order by id desc limit 0, 12;
+    <select id="findLotteryUser" resultType="com.idata365.app.entity.LotteryUser" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
+    	select id as userId, nickName as name, phone, imgUrl from usersAccount where id=#{userId}
+    </select>
+    
+    <select id="findUserFamily" resultType="com.idata365.app.entity.UserFamilyRelationBean" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
+    	select userId, familyId from userFamilyRelation where familyId in (select familyId from userFamilyRelation where userId=#{userId} group by familyId) and userId!=#{userId} order by userId asc
+    </select>
+    
+    <select id="queryRoleByUserFamily" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
+    	select role from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
     </select>
 </mapper>
