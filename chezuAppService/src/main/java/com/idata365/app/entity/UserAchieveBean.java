@@ -25,7 +25,7 @@ public class UserAchieveBean
 	// 图片
 	private String imgUrl;
 	// 最高等级
-	private int levSum;
+	private int maxLev;
 	// 目标数量
 	private int num;
 	// 当前数量
@@ -121,14 +121,14 @@ public class UserAchieveBean
 		this.imgUrl = imgUrl;
 	}
 
-	public int getLevSum()
+	public int getMaxLev()
 	{
-		return levSum;
+		return maxLev;
 	}
 
-	public void setLevSum(int levSum)
+	public void setMaxLev(int maxLev)
 	{
-		this.levSum = levSum;
+		this.maxLev = maxLev;
 	}
 
 	public static long getSerialversionuid()
