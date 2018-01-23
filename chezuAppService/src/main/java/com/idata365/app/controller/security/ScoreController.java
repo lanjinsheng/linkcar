@@ -24,6 +24,7 @@ import com.idata365.app.entity.ScoreByDayResultBean;
 import com.idata365.app.entity.ScoreDetailUnitBean;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
+import com.idata365.app.entity.ScoreFamilyInfoBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.ScoreFamilyOrderResultBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
@@ -66,6 +67,29 @@ public class ScoreController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
 		ScoreFamilyInfoAllBean resultBean = this.scoreService.queryFamily(bean);
+		
+		String imgBasePath = super.getImgBasePath();
+		
+		ScoreFamilyInfoBean joinFamily = resultBean.getJoinFamily();
+		if (null != joinFamily)
+		{
+			String imgUrl = joinFamily.getImgUrl();
+			if (StringUtils.isNotBlank(imgUrl))
+			{
+				joinFamily.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
+		
+		ScoreFamilyInfoBean oriFamily = resultBean.getOriFamily();
+		if (null != oriFamily)
+		{
+			String imgUrl = oriFamily.getImgUrl();
+			if (StringUtils.isNotBlank(imgUrl))
+			{
+				oriFamily.setImgUrl(imgBasePath + imgUrl);
+			}
+		}
+		
 		List<ScoreFamilyInfoAllBean> resultList = new ArrayList<ScoreFamilyInfoAllBean>();
 		resultList.add(resultBean);
 		
