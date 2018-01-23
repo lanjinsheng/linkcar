@@ -4,14 +4,14 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.FamilyInvite" >
     </resultMap>
     <insert id="insertFamilyInviteHadReg" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyInvite" >
-       INSERT INTO 
+       INSERT ignore INTO 
             familyInvite
             (familyId,memberPhone,memberUserId,sendInviteMsg,createTime,sendTime,leaveWord) 
         VALUES
             (#{familyId}, #{memberPhone},#{memberUserId},1,now(),now(),#{leaveWord})
     </insert>
      <insert id="insertFamilyInviteNoReg" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyInvite" >
-       INSERT INTO 
+       INSERT ignore INTO 
             familyInvite
             (familyId,memberPhone,memberUserId,sendInviteMsg,createTime) 
         VALUES
