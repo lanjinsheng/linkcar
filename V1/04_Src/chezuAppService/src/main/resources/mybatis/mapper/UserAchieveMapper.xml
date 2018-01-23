@@ -48,8 +48,8 @@
 		where id=#{id} AND flag=0
 	</update>
 	
-	<!-- 更新用户上传驾照时成就 及解锁标记-->
-	<update id="updateAchieveWhenUploadLicence" parameterType="java.lang.Integer">
+	<!-- 更新用户该成就解锁标记-->
+	<update id="updateFlagToLock" parameterType="java.lang.Long">
 		update userAchieveInfo
 		set nowNum=num,editTime=now(),flag=1
 		where id=#{id} AND flag=0
@@ -57,14 +57,21 @@
 
 	<!-- 查询用户可以解锁的成就记录 -->
 	<select id="queryUserCanDeblockAchieve" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
-		SELECT id,awardId,awardNum
+		SELECT id,awardId,awardNum,type,lev,maxLev
 		FROM userAchieveInfo 
 		WHERE userId=#{userId} AND flag=0  AND achieveId=#{achieveId} AND nowNum>=num
 	</select>
 
+	<!-- 通过成就等级查询成就信息 -->
+	<select id="queryUserAchieveByLev" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
+		SELECT id,awardId,awardNum,type,lev
+		FROM userAchieveInfo 
+		WHERE userId=#{userId} AND flag=0  AND achieveId=#{achieveId} AND lev=#{lev}
+	</select>
+
 	<!-- 查询可以解锁的成就记录(定时器) -->
 	<select id="queryCanDeblockAchieveTask" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="int">
-		SELECT id,awardId,awardNum,userId
+		SELECT id,awardId,awardNum,userId,lev,maxLev
 		FROM userAchieveInfo 
 		WHERE flag=0  AND achieveId=#{achieveId} AND nowNum>=num
 	</select>
@@ -77,5 +84,10 @@
 	<!-- 更新用户当日里程 -->
 	<update id="updateUserMileageToday" parameterType="com.idata365.app.entity.UserAchieveBean">
 		update userScoreDayStat set ahieveMileage=ahieveMileage+#{ahieveMileage} where userId=#{userId} and daystamp=#{daystamp}
+	</update>
+	
+	<!-- 更新下一等级的成就值 -->
+	<update id="updateNextLevAchieveValue" parameterType="java.util.HashMap">
+		update userAchieveInfo set nowNum=nowNum+#{nowNum},editTime=now() where userId=#{userId} AND achieveId=#{achieveId} and lev=#{lev}
 	</update>
 </mapper>
