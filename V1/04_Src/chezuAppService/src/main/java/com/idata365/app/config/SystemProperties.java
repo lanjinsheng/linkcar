@@ -20,7 +20,17 @@ public class SystemProperties {
     private  String ssoAccessKeySecret;
 	private String ssoQQ;
 	private String h5Host;
+	private String nbcode;
 	
+	
+	public String getNbcode() {
+		return nbcode;
+	}
+
+	public void setNbcode(String nbcode) {
+		this.nbcode = nbcode;
+	}
+
 	public String getH5Host() {
 		return h5Host;
 	}
