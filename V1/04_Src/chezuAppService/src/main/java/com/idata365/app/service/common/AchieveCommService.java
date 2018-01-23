@@ -74,7 +74,7 @@ public class AchieveCommService
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 3);
-		updateAchieveTimes(map);
+		updateAchieveNum(map, mileage);
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class AchieveCommService
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
 		LOG.info("updateAchieveTimes==================================================", achieve);
-		if (achieve.getId() != null)
+		if (achieve != null && achieve.getId() != null)
 		{
 			userAchieveMapper.updateAchieveTimesById(achieve.getId());
 			if (achieve.getNowNum() + 1 >= achieve.getNum())
@@ -250,7 +250,7 @@ public class AchieveCommService
 				{
 					// 剩余成就值
 					map.put("lev", achieve.getLev() + 1);
-					map.put("nowNum", achieve.getNowNum() - achieve.getNum());
+					map.put("nowNum", achieve.getNowNum() + 1 - achieve.getNum());
 					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
 					userAchieveMapper.updateNextLevAchieveValue(map);
 				}
@@ -270,10 +270,10 @@ public class AchieveCommService
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
 		LOG.info("updateAchieveNum==================================================", achieve);
-		if (achieve.getId() != null)
+		if (achieve != null && achieve.getId() != null)
 		{
-			int sumNum = achieve.getNowNum() + Integer.valueOf(String.valueOf(num));//
-			achieve.setNowNum(Integer.valueOf(String.valueOf(num)));
+			int sumNum = achieve.getNowNum() + new Double(num).intValue();
+			achieve.setNowNum(new Double(num).intValue());
 			userAchieveMapper.updateAchieveNumById(achieve);
 			if (sumNum >= achieve.getNum())
 			{
