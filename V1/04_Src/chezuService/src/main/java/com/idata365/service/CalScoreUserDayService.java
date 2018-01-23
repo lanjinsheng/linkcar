@@ -44,6 +44,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		double tiredDriveScore=0d;
 		double phoneTimesScore=0d;
 		double nightDriveScore=0d;
+		double mazaScore=0d;
 		int penalTimes=0;
 		
 		if(role>=1 && role<=6) {
@@ -65,6 +66,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			nightDriveScore+=ds.getNightDrivingScore().doubleValue();
 			phoneTimesScore+=ds.getPhonePlayScore().doubleValue();
 		}
+		//驾驶得分
 		if(driveScores!=null && driveScores.size()>0) {
 			int size=driveScores.size();
 			score+=mileageScore;
@@ -87,6 +89,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			nightDriveScore=BigDecimal.valueOf(nightDriveScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 			phoneTimesScore=BigDecimal.valueOf(phoneTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 		}
+		//角色得分
 		if(role>=1 && role<=6) {
 			userScoreDayStat.setScore(score+roleScore);
 			userScoreDayStat.setMileageScore(mileageScore);
@@ -101,7 +104,23 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setIllegalStopTimesScore(Double.valueOf(-userScoreDayStat.getIllegalStopTimes()));
 			userScoreDayStat.setPhoneTimesScore(phoneTimesScore);
 		}else {
-			userScoreDayStat.setScore(score+roleScore);
+			//煎饼侠角色
+			//摊位得分
+			int useMaza=userScoreDayStat.getUseMazha();
+			
+			if(useMaza<=0) {
+				
+			}else if(useMaza>=1 && useMaza<=3) {
+				mazaScore+=30;
+			}else if(useMaza>=4 && useMaza<=6) {
+				mazaScore+=35;
+			}else if(useMaza>=7 && useMaza<=9) {
+				mazaScore+=40;
+			}else if(useMaza>=10) {
+				mazaScore+=50;
+			}
+		
+			userScoreDayStat.setScore(score+roleScore+mazaScore);
 			userScoreDayStat.setMileageScore(0d);
 			userScoreDayStat.setBrakeTimesScore(0d);
 			userScoreDayStat.setTurnTimesScore(0d);
@@ -113,6 +132,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setTimeScore(0d);
 			userScoreDayStat.setPhoneTimesScore(0d);
 		}
+		userScoreDayStat.setMazhaScore(mazaScore);
 		//增加其他加分项目:贴条等，待定
 		penalTimes+=userScoreDayStat.getBrakePenalTimes();
 		penalTimes+=userScoreDayStat.getTurnPenalTimes();

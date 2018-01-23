@@ -87,12 +87,19 @@ public class UserScoreDayStat implements Serializable {
 	private int useZengyaqi;
 	
 	private int useMazha;
+	private Double mazhaScore;
 	private int useZhitiao;
 	private Double tietiaoTakeOffScore;
 	private Double extraPlusScore;
 	private int travelNum;
 	
 	
+	public Double getMazhaScore() {
+		return mazhaScore;
+	}
+	public void setMazhaScore(Double mazhaScore) {
+		this.mazhaScore = mazhaScore;
+	}
 	public Double getExtraPlusScore() {
 		return extraPlusScore;
 	}
