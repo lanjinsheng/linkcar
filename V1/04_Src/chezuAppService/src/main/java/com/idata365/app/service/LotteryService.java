@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.LotteryLogConstant;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
@@ -67,6 +68,36 @@ public class LotteryService extends BaseService<LotteryService>
 			}
 			LotteryResultBean tempResultBean = new LotteryResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			
+			int awardId = tempBean.getAwardId();
+			switch(awardId)
+			{
+			case LotteryConstant.SHACHE_LOTTERY:
+				tempResultBean.setAwardDesc("可抵消1次急刹车");
+				break;
+			case LotteryConstant.CHELUNTAI_LOTTERY:
+				tempResultBean.setAwardDesc("可抵消1次急转弯");
+				break;
+			case LotteryConstant.FADONGJI_LOTTERY:
+				tempResultBean.setAwardDesc("可抵消1次最高时速驾驶");
+				break;
+			case LotteryConstant.HONGNIU_LOTTERY:
+				tempResultBean.setAwardDesc("可抵消1小时疲劳驾驶");
+				break;
+			case LotteryConstant.YESHI_LOTTERY:
+				tempResultBean.setAwardDesc("可抵消1小时夜间驾驶");
+				break;
+			case LotteryConstant.ZENGYA_LOTTERY:
+				tempResultBean.setAwardDesc("可抵消1次超速驾驶");
+				break;
+			case LotteryConstant.MAZHA_LOTTERY:
+				tempResultBean.setAwardDesc("可占领1次车位");
+				break;
+			case LotteryConstant.ZHITIAO_LOTTERY:
+				tempResultBean.setAwardDesc("可贴1次违规行为");
+				break;
+			}
+			
 			list.add(tempResultBean);
 		}
 		
