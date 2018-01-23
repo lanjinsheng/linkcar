@@ -111,7 +111,7 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			avgOrder.setStartDay(gameDay.getStartDay());
 			avgOrder.setEndDay(gameDay.getEndDay());
 			taskFamilyMonthAvgOrderMapper.delTaskFamilyMonthAvgOrder(avgOrder);
-			taskFamilyMonthAvgOrderMapper.initTaskFamilyMonthAvgOrder(month);
+			taskFamilyMonthAvgOrderMapper.initTaskFamilyMonthAvgOrder(avgOrder);
 			task.setTaskFamilyOrderInit(1);
 			taskSystemScoreFlagMapper.updateOrderInit(task);
 		}
