@@ -37,28 +37,16 @@ public class UserAchieveBean
 	// 时间
 	private String daystamp;
 	// 个人成就之增加当日个人评分
-	private double achieveScore;
-	// 个人成就之增加当日行程
-	private double ahieveMileage;
+	private double extraPlusScore;
 
-	public double getAchieveScore()
+	public double getExtraPlusScore()
 	{
-		return achieveScore;
+		return extraPlusScore;
 	}
 
-	public void setAchieveScore(double achieveScore)
+	public void setExtraPlusScore(double extraPlusScore)
 	{
-		this.achieveScore = achieveScore;
-	}
-
-	public double getAhieveMileage()
-	{
-		return ahieveMileage;
-	}
-
-	public void setAhieveMileage(double ahieveMileage)
-	{
-		this.ahieveMileage = ahieveMileage;
+		this.extraPlusScore = extraPlusScore;
 	}
 
 	public String getDaystamp()
