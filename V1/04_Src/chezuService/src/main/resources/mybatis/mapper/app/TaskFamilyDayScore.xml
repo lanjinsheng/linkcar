@@ -41,7 +41,7 @@
             familyScore
             (month,familyId,orderNo,score,dayTimes,startDay,endDay) 
         VALUES
-            (#{month},#{familyId},#{orderNo},#{score},#{dayTimes}#{startDay},#{endDay})  
+            (#{month},#{familyId},#{orderNo},#{score},#{dayTimes},#{startDay},#{endDay})  
             ON DUPLICATE KEY UPDATE score=score+${score},averScore=convert((score+${score})/(dayTimes+${dayTimes}),decimal(10,2)),
             dayTimes=dayTimes+${dayTimes};
     </insert>	
