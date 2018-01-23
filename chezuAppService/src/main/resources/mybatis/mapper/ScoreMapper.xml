@@ -79,7 +79,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	
 	<select id="queryTravels" resultType="com.idata365.app.entity.UserTravelHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		<![CDATA[
-		select time, mileage, startTime, endTime, id as travelId, habitId, userId, createTime from userTravelHistory where userId=71 and endTime>=#{startTime} and endTime<=#{endTime} order by startTime desc
+		select time, mileage, startTime, endTime, id as travelId, habitId, userId, createTime from userTravelHistory where userId=#{userId} and endTime>=#{startTime} and endTime<=#{endTime} order by startTime desc
 		]]>
 	</select>
 	
