@@ -835,26 +835,55 @@ public class GameService extends BaseService<GameService>
 	 */
 	public void informOtherToPenalty(GameFamilyParamBean bean, UserInfo userInfo)
 	{
-		List<Long> userIdList = this.gameMapper.queryFamilyOtherUserId(bean);
-		for (Long tempUserId : userIdList)
-		{
-			dealtMsg(userInfo, null, tempUserId, MessageEnum.INFORM_PENALTY);
+		FamilyInfoBean opponentFamily=getOpponentFamilyInfo(bean.getFamilyId());
+		List<Message> messageList=messageService.buildTieTiaoMessage(userInfo.getId(), bean.getFamilyId(), opponentFamily.getId(), opponentFamily.getFamilyName());
+		for(Message message:messageList) {
+			messageService.insertMessage(message, MessageEnum.INFORM_PENALTY);
+//  		//推送消息
+  		    messageService.pushMessage(message, MessageEnum.INFORM_PENALTY);
 		}
 	}
-	
-	private void dealtMsg(UserInfo userInfo, Long inviteId, Long toUserId, MessageEnum messageEnum)
-	{
-		LOGGER.info("userInfo={}", JSON.toJSONString(userInfo));
-		LOGGER.info("inviteId={}\ttoUserId={}", inviteId, toUserId);
-		LOGGER.info("messageEnum={}", messageEnum);
+	public FamilyInfoBean getOpponentFamilyInfo(long myFamilyId) {
+		FamilyRelationBean relationBean = new FamilyRelationBean();
+		relationBean.setFamilyId(myFamilyId);
+		relationBean.setDaystamp(getCurrentDayStr());
+		List<FamilyRelationBean> competitorList = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
+		if (CollectionUtils.isEmpty(competitorList))
+		{
+			return null;
+		}
 		
-		//构建成员加入消息
-  		Message message=messageService.buildMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(), toUserId, inviteId, messageEnum);
-  		//插入消息
-  		messageService.insertMessage(message, messageEnum);
-  		//推送消息
-  		messageService.pushMessage(message, messageEnum);
+		FamilyRelationBean relationResultBean = competitorList.get(0);
+		long familyId1 = relationResultBean.getFamilyId1();
+		long familyId2 = relationResultBean.getFamilyId2();
+		
+		FamilyParamBean familyParamBean = new FamilyParamBean();
+		if (myFamilyId != familyId1)
+		{
+			familyParamBean.setFamilyId(familyId1);
+		}
+		else
+		{
+			familyParamBean.setFamilyId(familyId2);
+		}
+		
+		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+		return familyInfoBean;
+
 	}
+//	private void dealtMsg(UserInfo userInfo, Long inviteId, Long toUserId, MessageEnum messageEnum)
+//	{
+//		LOGGER.info("userInfo={}", JSON.toJSONString(userInfo));
+//		LOGGER.info("inviteId={}\ttoUserId={}", inviteId, toUserId);
+//		LOGGER.info("messageEnum={}", messageEnum);
+//		
+//		//构建成员加入消息
+//  		Message message=messageService.buildMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(), toUserId, inviteId, messageEnum);
+//  		//插入消息
+//  		messageService.insertMessage(message, messageEnum);
+//  		//推送消息
+//  		messageService.pushMessage(message, messageEnum);
+//	}
 	
 	/**
 	 * 隐藏该段行程

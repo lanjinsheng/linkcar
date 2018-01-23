@@ -1,6 +1,9 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -108,4 +111,6 @@ public interface FamilyMapper
 	public void saveFamilyHistory(FamilyHistoryParamBean bean);
 	
 	public int countUsers();
+	
+	public List<Map<String,Object>> getFamilyUsers(@Param("familyId") Long familyId);
 }
