@@ -121,6 +121,11 @@ public class FamilyService extends BaseService<FamilyService>
 		return rtMap;
 	}
 	
+	public int getUsersCount() {
+		return this.familyMapper.countUsers();
+	}
+	
+	
 	/**
 	 * 移出家族
 	 * @param bean
