@@ -218,4 +218,9 @@
  	<select id="countUsers" resultType="int">
  		select count(1) from usersAccount
  	</select>
+ 	
+ 	<select id="getFamilyUsers" resultType="java.util.HashMap" parameterType="java.lang.Long">
+ 		select * from userFamilyRelation where familyId=#{familyId}
+ 	</select>
+ 	
 </mapper>
