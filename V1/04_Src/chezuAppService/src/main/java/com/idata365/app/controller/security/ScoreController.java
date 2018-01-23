@@ -323,17 +323,17 @@ public class ScoreController extends BaseController
 	public Map<String, Object> showTravelDetail(@RequestBody ScoreFamilyInfoParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		Map<String, Object> gpsMap = getGps(bean.getUserId(), bean.getHabitId());
+//		Map<String, Object> gpsMap = getGps(bean.getUserId(), bean.getHabitId());
 		List<TravelDetailResultBean> resultList = this.scoreService.showTravelDetail(bean);
 		
-		if (CollectionUtils.isNotEmpty(resultList))
-		{
-			//设置GPS
-			resultList.get(0).setGpsMap(gpsMap);
-			//获取行程道具
-			List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
-			resultList.get(0).setUserTravelLotterys(userTravelLotterys);
-		}
+//		if (CollectionUtils.isNotEmpty(resultList))
+//		{
+//			//设置GPS
+//			resultList.get(0).setGpsMap(gpsMap);
+//			//获取行程道具
+//			List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
+//			resultList.get(0).setUserTravelLotterys(userTravelLotterys);
+//		}
 		
 		return ResultUtils.rtSuccess(resultList);
 	}
@@ -352,6 +352,22 @@ public class ScoreController extends BaseController
 		Map<String, Object> gpsMap = getGps(bean.getUserId(),bean.getHabitId());
 			//设置GPS
 			rtGps.put("gpsMap", gpsMap);
+			//获取行程道具
+			List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
+			rtGps.put("userTravelLotterys", userTravelLotterys);
+		return ResultUtils.rtSuccess(rtGps);
+	}
+	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/score/showTravelLotterys")
+	public Map<String, Object> showTravelLotterys(@RequestBody ScoreFamilyInfoParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		Map<String,Object>  rtGps=new HashMap<String,Object>();
 			//获取行程道具
 			List<Map<String,String>> userTravelLotterys=lotteryService.getUserTravelLotterys(bean.getUserId(),  bean.getHabitId());
 			rtGps.put("userTravelLotterys", userTravelLotterys);
