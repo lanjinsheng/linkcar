@@ -221,8 +221,6 @@ public class ShareCommController extends BaseController
 					messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
 					// 推送消息
 					messageService.pushMessage(message, MessageEnum.INVITE_FAMILY);
-					rtMap.put("userNum", "1253");
-					return ResultUtils.rtSuccess(rtMap);
 				}
 				else
 				{
@@ -230,10 +228,11 @@ public class ShareCommController extends BaseController
 					familyInvite.setSendInviteMsg(0);
 					rtMap.put("userExist", "0");
 					rtMap.put("familyCode", inviteCode);
-					rtMap.put("userNum", "1253");
 					familyInviteService.insertInviteFamily(familyInvite);
-					return ResultUtils.rtSuccess(rtMap);
+					
 				}
+				rtMap.put("userNum", String.valueOf(familyService.getUsersCount()));
+				return ResultUtils.rtSuccess(rtMap);
 			}
 			else
 			{
@@ -297,10 +296,10 @@ public class ShareCommController extends BaseController
 			String key = SignUtils.encryptDataAes(String.valueOf(datas));
 			String shareUrl = this.getFamilyInviteBasePath(systemProperties.getH5Host()) + key;
 			rtMap.put("shareUrl", shareUrl);
-			rtMap.put("title", "邀请您参与【好车族】游戏");
+			rtMap.put("title", String.format("邀请您参与【%s】游戏", family.get("familyName").toString()));
 			rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
 			List<String> imgs = new ArrayList<String>();
-			imgs.add("http://apph5.idata365.com/appImgs/");
+			imgs.add("http://apph5.idata365.com/appImgs/logo.png");
 			rtMap.put("imgs", imgs);
 			return ResultUtils.rtSuccess(rtMap);
 		}

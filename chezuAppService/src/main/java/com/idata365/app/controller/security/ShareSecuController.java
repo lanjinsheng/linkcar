@@ -42,10 +42,10 @@ public class ShareSecuController  extends BaseController {
 			String key=SignUtils.encryptDataAes(String.valueOf(datas));
 			String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
 			rtMap.put("shareUrl", shareUrl);
-			rtMap.put("title", "邀请您参与【好车族】游戏");
+			rtMap.put("title", String.format("邀请您参与【%s】游戏", family.get("familyName").toString()));
 			rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
-			List<String> imgs=new  ArrayList<String>();
-			imgs.add("http://apph5.idata365.com/appImgs/aa.jgp");
+			List<String> imgs = new ArrayList<String>();
+			imgs.add("http://apph5.idata365.com/appImgs/logo.png");
 			rtMap.put("imgs", imgs);
 			return ResultUtils.rtSuccess(rtMap);
     		
