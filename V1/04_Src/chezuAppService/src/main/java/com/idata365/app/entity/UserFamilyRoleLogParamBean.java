@@ -4,6 +4,8 @@ public class UserFamilyRoleLogParamBean
 {
 	private long id;
 	
+	private long userFamilyRoleLogId;
+	
 	private long userId;
 	
 	private long familyId;
@@ -24,6 +26,16 @@ public class UserFamilyRoleLogParamBean
 	public void setId(long id)
 	{
 		this.id = id;
+	}
+
+	public long getUserFamilyRoleLogId()
+	{
+		return userFamilyRoleLogId;
+	}
+
+	public void setUserFamilyRoleLogId(long userFamilyRoleLogId)
+	{
+		this.userFamilyRoleLogId = userFamilyRoleLogId;
 	}
 
 	public long getUserId()

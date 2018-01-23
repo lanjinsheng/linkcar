@@ -10,6 +10,7 @@ import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.ViolationStatBean;
@@ -38,6 +39,10 @@ public interface GameMapper
 	public void saveUserFamilyRole(UserFamilyRoleLogParamBean bean);
 	
 	public List<Integer> queryRoleByDay(UserFamilyRoleLogParamBean bean);
+	
+	public List<UserFamilyRoleLogBean> queryFamilyRoleLog(UserFamilyRoleLogParamBean bean);
+	
+	public List<Double> queryScore(UserFamilyRoleLogParamBean bean);
 	
 	public List<UserFamilyRelationBean> queryUserFamilyRelation();
 	

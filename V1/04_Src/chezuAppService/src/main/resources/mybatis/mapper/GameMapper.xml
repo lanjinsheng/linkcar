@@ -46,6 +46,14 @@
 		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp} order by id desc
 	</select>
 	
+	<select id="queryFamilyRoleLog" resultType="com.idata365.app.entity.UserFamilyRoleLogBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select id, role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp} order by id desc
+	</select>
+	
+	<select id="queryScore" resultType="java.lang.Double" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select score from userScoreDayStat where userId=#{userId} and userFamilyScoreId=#{userFamilyRoleLogId} and daystamp=#{daystamp}
+	</select>
+	
 	<select id="queryUserFamilyRelation" resultType="com.idata365.app.entity.UserFamilyRelationBean">
 		select userId, familyId, role, joinTime from userFamilyRelation where role is not NULL order by id asc
 	</select>
