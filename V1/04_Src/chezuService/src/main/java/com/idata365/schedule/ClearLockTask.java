@@ -9,6 +9,7 @@ import com.idata365.service.AddUserDayStatService;
 import com.idata365.service.CalFamilyDayOrderService;
 import com.idata365.service.CalFamilyMonthOrderService;
 import com.idata365.service.CalFamilyPkService;
+import com.idata365.service.CalGameEndService;
 import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.CalScoreService;
 import com.idata365.service.SynDriveDataService;
@@ -38,6 +39,9 @@ public class ClearLockTask extends TimerTask {
     CalFamilyDayOrderService calFamilyDayOrderService;
     @Autowired
     CalFamilyMonthOrderService calFamilyMonthOrderService;
+    @Autowired
+    CalGameEndService calGameEndService;
+    
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -63,6 +67,7 @@ public class ClearLockTask extends TimerTask {
 				calFamilyDayOrderService.clearLockTask();
 				calFamilyMonthOrderService.clearLockTask();
 				calScoreFamilyDayService.clearLockTask();
+				calGameEndService.clearLockTask();
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.error(e);
