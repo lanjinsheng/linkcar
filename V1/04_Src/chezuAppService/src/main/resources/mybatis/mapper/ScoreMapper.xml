@@ -19,7 +19,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	<select id="queryFamilyOrderInfo" resultType="com.idata365.app.entity.ScoreFamilyOrderBean">
 		select imgUrl, t3.familyId as familyId, t3.yesterdayOrderNo as orderNo, t3.beforeYesterdayOrderNo as beforeYesterdayOrderNo, t2.familyName as name, t3.averScore as score from familyInfo t2 
 				join familyScore t3 on (t2.id=t3.familyId) 
-				order by t3.averScore desc limit 0, 100
+				order by t3.yesterdayOrderNo asc limit 0, 100
 	</select>
 
 	<select id="queryFamilyDetail" resultType="com.idata365.app.entity.ScoreFamilyDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
