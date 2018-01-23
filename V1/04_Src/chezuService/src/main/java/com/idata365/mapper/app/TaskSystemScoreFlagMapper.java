@@ -46,5 +46,11 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getUnFinishFamilyMonthAvgOrderList();
 	 int finishFamilyMonthAvgOrderTask(TaskSystemScoreFlag systemScoreFlag);
 	 
+	 //gameEnd===begin
+	 List<TaskSystemScoreFlag> getUnInitGameEndList(); 
+	 int  updateGameEndInit(TaskSystemScoreFlag systemScoreFlag);
 	 
+	 List<TaskSystemScoreFlag> getUnFinishGameEndList();
+	 int finishGameEndTask(TaskSystemScoreFlag systemScoreFlag);
+	 //gameEnd===end
 }

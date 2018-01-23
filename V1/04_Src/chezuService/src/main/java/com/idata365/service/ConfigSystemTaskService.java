@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.config.SystemProperties;
 import com.idata365.entity.DicGameDay;
 import com.idata365.entity.TaskFamilyMonthAvgOrder;
+import com.idata365.entity.TaskGameEnd;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
 import com.idata365.mapper.app.TaskFamilyMonthAvgOrderMapper;
@@ -24,6 +25,7 @@ import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
 import com.idata365.mapper.app.DicGameDayMapper;
 import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
+import com.idata365.mapper.app.TaskGameEndMapper;
 import com.idata365.mapper.app.TaskSystemScoreFlagMapper;
 @Service
 public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskService>{
@@ -43,6 +45,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	TaskFamilyMonthAvgOrderMapper taskFamilyMonthAvgOrderMapper;
 	@Autowired
 	DicGameDayMapper   dicGameDayMapper;
+	@Autowired
+	TaskGameEndMapper taskGameEndMapper;
 	@Autowired
 	SystemProperties systemProperties;
 	public String getDateStr(int diff)
@@ -109,11 +113,23 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			taskFamilyMonthAvgOrderMapper.delTaskFamilyMonthAvgOrder(avgOrder);
 			taskFamilyMonthAvgOrderMapper.initTaskFamilyMonthAvgOrder(month);
 			task.setTaskFamilyOrderInit(1);
-			
 			taskSystemScoreFlagMapper.updateOrderInit(task);
 		}
-		 
+		//game End
+		List<TaskSystemScoreFlag> tasks4=taskSystemScoreFlagMapper.getUnInitGameEndList();
+		for (TaskSystemScoreFlag task:tasks4) {
+			if(dayStamp.equals(task.getEndDay())) {
+				//比赛结算时间到了,初始化任务
+			}else {
+				taskGameEndMapper.initGameEnd(task);
+			}
+			task.setTaskGameEndInit(1);
+			taskSystemScoreFlagMapper.updateGameEndInit(task);
+		}
+	   //game End	 
 	}
+	
+	
 	public void finishConfigSystemUserScoreTask(TaskSystemScoreFlag task) {
 		task.setUserDayScoreFlag(1);
 		taskSystemScoreFlagMapper.finishUserDayScoreTask(task);
@@ -166,6 +182,16 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	public void finishConfigSystemFamilyMonthAvgOrderTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyMonthAvgOrder(1);
 		taskSystemScoreFlagMapper.finishFamilyMonthAvgOrderTask(task);
+	}
+	
+	
+	public List<TaskSystemScoreFlag> getUnFinishGameEnd(){
+		return taskSystemScoreFlagMapper.getUnFinishGameEndList();
+	}
+	public void finishConfigSystemGameEndTask(TaskSystemScoreFlag task) {
+		task.setTaskGameEnd(1);
+		taskSystemScoreFlagMapper.finishGameEndTask(task);
+		
 	}
 	
 }
