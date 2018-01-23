@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.ImageUtils;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.StaticDatas;
@@ -176,8 +178,20 @@ public class UserInfoController extends BaseController{
 		  String imgBase=getImgBasePath();
 		  Map<String,String> rtMap=new HashMap<String,String>();
 		  UserInfo userInfo=this.getUserInfo();
-		  rtMap.put("phone", userInfo.getPhone());
-		  rtMap.put("nickName", userInfo.getNickName());
+		  
+		  String phone = userInfo.getPhone();
+		  rtMap.put("phone", phone);
+		  
+		  String nickName = userInfo.getNickName();
+		  if (StringUtils.isBlank(nickName))
+		  {
+			  rtMap.put("nickName", PhoneUtils.hidePhone(phone));
+		  }
+		  else
+		  {
+			  rtMap.put("nickName", nickName);
+		  }
+		  
 		  rtMap.put("headImg", imgBase+userInfo.getImgUrl());
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
