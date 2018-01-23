@@ -42,7 +42,7 @@ public interface UserAchieveMapper
 	/**
 	 * 更新用户上传驾照时成就 及解锁标记
 	 */
-	public void updateAchieveWhenUploadLicence(int id);
+	public void updateAchieveWhenUploadLicence(long id);
 
 	/**
 	 * 查询用户可以解锁的成就记录
