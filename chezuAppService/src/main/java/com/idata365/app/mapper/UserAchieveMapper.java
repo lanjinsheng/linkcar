@@ -32,12 +32,17 @@ public interface UserAchieveMapper
 	/**
 	 * 查看用户某项成就最新记录id
 	 */
-	public Integer queryLatelyAchieveId(Map<String, Object> m);
+	public UserAchieveBean queryLatelyAchieveInfo(Map<String, Object> m);
 
 	/**
 	 * 更新用户分享次数
 	 */
-	public void updateAchieveTimesById(int id);
+	public void updateAchieveTimesById(long id);
+
+	/**
+	 * 更新用户成就值数量
+	 */
+	public void updateAchieveNumById(UserAchieveBean bean);
 
 	/**
 	 * 更新用户该成就解锁标记
