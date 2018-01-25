@@ -93,6 +93,7 @@ public class ScoreService extends BaseService<ScoreService>
 	public ScoreFamilyInfoAllBean queryFamily(ScoreFamilyInfoParamBean bean)
 	{
 		ScoreFamilyInfoAllBean resultBean = new ScoreFamilyInfoAllBean();
+		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
 		resultBean.setOriFamily(oriFamilyBean);
 		
@@ -112,6 +113,7 @@ public class ScoreService extends BaseService<ScoreService>
 				{
 					ScoreFamilyInfoParamBean tempParamBean = new ScoreFamilyInfoParamBean();
 					tempParamBean.setFamilyId(tempFamilyId);
+					tempParamBean.setTimeStr(getYesterdayDateStr());
 					ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
 					resultBean.setJoinFamily(joinFamilyBean);
 					break;
@@ -130,7 +132,10 @@ public class ScoreService extends BaseService<ScoreService>
 	{
 		List<ScoreFamilyOrderResultBean> resultList = new ArrayList<>();
 		
-		List<ScoreFamilyOrderBean> tempList = this.scoreMapper.queryFamilyOrderInfo();
+		ScoreFamilyInfoParamBean scoreFParamBean = new ScoreFamilyInfoParamBean();
+		scoreFParamBean.setTimeStr(getYesterdayDateStr());
+		
+		List<ScoreFamilyOrderBean> tempList = this.scoreMapper.queryFamilyOrderInfo(scoreFParamBean);
 		for (ScoreFamilyOrderBean tempBean : tempList)
 		{
 			ScoreFamilyOrderResultBean tempResultBean = new ScoreFamilyOrderResultBean();
@@ -154,6 +159,7 @@ public class ScoreService extends BaseService<ScoreService>
 	 */
 	public ScoreFamilyDetailResultBean queryFamilyDetail(ScoreFamilyInfoParamBean bean)
 	{
+		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyDetailBean tempBean = this.scoreMapper.queryFamilyDetail(bean);
 		List<String> recordsList = this.scoreMapper.queryFamilyRecords(bean);
 		ScoreFamilyDetailResultBean resultBean = new ScoreFamilyDetailResultBean();

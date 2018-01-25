@@ -2,28 +2,66 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.ScoreMapper">
 
+	<!-- 
 	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select imgUrl, t2.id as familyId, t1.yesterdayOrderNo as orderNo, t2.familyName as name from familyScore t1 
 right join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId}
+	</select>
+	 -->
+
+	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+	<![CDATA[
+		select imgUrl, t2.id as familyId, t1.yesterdayOrderNo as orderNo, t2.familyName as name from familyScore t1 
+right join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId} and t1.startDay<=#{timeStr} and t1.endDay>=#{timeStr}
+		]]>
 	</select>
 
 	<select id="queryFamilyIds" resultType="java.lang.Long" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select familyId from userFamilyRelation where userId=#{userId} order by id asc
 	</select>
 	
+	<!-- 
 	<select id="queryFamilyByFamilyId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select imgUrl, t2.id as familyId, t1.yesterdayOrderNo as orderNo, t2.familyName as name from familyScore t1 
 right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
+	 -->
+	
+	<select id="queryFamilyByFamilyId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+	<![CDATA[
+		select imgUrl, t2.id as familyId, t1.yesterdayOrderNo as orderNo, t2.familyName as name from familyScore t1 
+right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId} and t1.startDay<=#{timeStr} and t1.endDay>=#{timeStr}
+		]]>
+	</select>
 
+<!-- 
 	<select id="queryFamilyOrderInfo" resultType="com.idata365.app.entity.ScoreFamilyOrderBean">
 		select imgUrl, t3.familyId as familyId, t3.yesterdayOrderNo as orderNo, t3.beforeYesterdayOrderNo as beforeYesterdayOrderNo, t2.familyName as name, t3.averScore as score from familyInfo t2 
 				join familyScore t3 on (t2.id=t3.familyId) 
 				order by t3.yesterdayOrderNo asc limit 0, 100
 	</select>
+ -->
 
+	<select id="queryFamilyOrderInfo" resultType="com.idata365.app.entity.ScoreFamilyOrderBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+	<![CDATA[
+		select imgUrl, t3.familyId as familyId, t3.yesterdayOrderNo as orderNo, t3.beforeYesterdayOrderNo as beforeYesterdayOrderNo, t2.familyName as name, t3.averScore as score from familyInfo t2 
+				join familyScore t3 on (t2.id=t3.familyId) where t3.startDay<=#{timeStr} and t3.endDay>=#{timeStr} 
+				order by t3.yesterdayOrderNo asc limit 0, 100
+	]]>
+	</select>
+
+	<!-- 
 	<select id="queryFamilyDetail" resultType="com.idata365.app.entity.ScoreFamilyDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select imgUrl, familyName, t2.yesterdayOrderNo as orderNo from familyInfo t1 left join familyScore t2 on (t1.id=t2.familyId) where t1.id=#{familyId}
+	</select>
+	 -->
+
+	<select id="queryFamilyDetail" resultType="com.idata365.app.entity.ScoreFamilyDetailBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		<![CDATA[
+		select imgUrl, familyName, t2.yesterdayOrderNo as orderNo from familyInfo t1 
+			left join familyScore t2 on (t1.id=t2.familyId) 
+			where t1.id=#{familyId} and t2.startDay<=#{timeStr} and t2.endDay>=#{timeStr}
+		]]>
 	</select>
 
 	<select id="queryFamilyRecords" resultType="java.lang.String" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
