@@ -29,7 +29,7 @@ public interface ScoreMapper
 	
 	public ScoreFamilyInfoBean queryFamilyByFamilyId(ScoreFamilyInfoParamBean bean);
 	
-	public List<ScoreFamilyOrderBean> queryFamilyOrderInfo();
+	public List<ScoreFamilyOrderBean> queryFamilyOrderInfo(ScoreFamilyInfoParamBean bean);
 	
 	public ScoreFamilyDetailBean queryFamilyDetail(ScoreFamilyInfoParamBean bean);
 	

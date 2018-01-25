@@ -15,6 +15,8 @@ public class ScoreFamilyOrderBean
 	private String name;
 	
 	private double score;
+	
+	private String timeStr;
 
 	public String getImgUrl()
 	{
@@ -84,6 +86,16 @@ public class ScoreFamilyOrderBean
 	public void setScore(double score)
 	{
 		this.score = score;
+	}
+
+	public String getTimeStr()
+	{
+		return timeStr;
+	}
+
+	public void setTimeStr(String timeStr)
+	{
+		this.timeStr = timeStr;
 	}
 	
 }
