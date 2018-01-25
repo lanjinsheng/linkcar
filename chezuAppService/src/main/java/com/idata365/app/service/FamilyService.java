@@ -2,6 +2,7 @@ package com.idata365.app.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -563,8 +565,9 @@ public class FamilyService extends BaseService<FamilyService>
 			AdBeanUtils.copyOtherPropToStr(ownResultBean, ownFamilyBean);
 			
 			FamilyParamBean ownOrderParamBean = new FamilyParamBean();
-			ownOrderParamBean.setFamilyId(ownOrderParamBean.getFamilyId());
-			ownOrderParamBean.setMonth(getCurrentMonthStr());
+			ownOrderParamBean.setFamilyId(ownFamilyBean.getFamilyId());
+//			ownOrderParamBean.setMonth(getCurrentMonthStr());
+			ownOrderParamBean.setTimeStr(getYesterdayStr());
 			Integer ownOrderNo = this.familyMapper.queryOwnFamilyOrderNo(ownOrderParamBean);
 			if (null != ownOrderNo)
 			{
@@ -611,8 +614,10 @@ public class FamilyService extends BaseService<FamilyService>
 			
 			FamilyParamBean joinFamilyParamBean = new FamilyParamBean();
 			joinFamilyParamBean.setFamilyId(joinFamilyBean.getFamilyId());
-			joinFamilyParamBean.setMonth(getCurrentMonthStr());
-			Integer joinOrderNo = this.familyMapper.queryJoinFamilyOrderNo(joinFamilyParamBean);
+//			joinFamilyParamBean.setMonth(getCurrentMonthStr());
+			joinFamilyParamBean.setTimeStr(getYesterdayStr());
+			Integer joinOrderNo = this.familyMapper.queryOwnFamilyOrderNo(joinFamilyParamBean);
+//			Integer joinOrderNo = this.familyMapper.queryJoinFamilyOrderNo(joinFamilyParamBean);
 			if (null != joinOrderNo)
 			{
 				joinResultBean.setOrderNo(String.valueOf(joinOrderNo));
@@ -646,6 +651,14 @@ public class FamilyService extends BaseService<FamilyService>
 	{
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
+		return dayStr;
+	}
+	
+	private String getYesterdayStr()
+	{
+		Calendar cal = Calendar.getInstance();
+		Date yesterdayDate = DateUtils.addDays(cal.getTime(), -1);
+		String dayStr = DateFormatUtils.format(yesterdayDate, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
 	}
 	

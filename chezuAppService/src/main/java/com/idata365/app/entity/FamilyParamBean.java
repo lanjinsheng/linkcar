@@ -42,6 +42,8 @@ public class FamilyParamBean
 	
 	private String endTime;
 	
+	private String timeStr;
+	
 	public long getId()
 	{
 		return id;
@@ -240,6 +242,16 @@ public class FamilyParamBean
 	public void setEndTime(String endTime)
 	{
 		this.endTime = endTime;
+	}
+
+	public String getTimeStr()
+	{
+		return timeStr;
+	}
+
+	public void setTimeStr(String timeStr)
+	{
+		this.timeStr = timeStr;
 	}
 	
 }
