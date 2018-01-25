@@ -115,8 +115,16 @@
 			where t1.createUserId=#{userId} and t2.userId=#{userId}
  	</select>
  	
+ 	<!-- 
  	<select id="queryOwnFamilyOrderNo" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select yesterdayOrderNo as orderNo from familyScore where familyId=#{familyId} and month=#{month}
+ 	</select>
+ 	 -->
+ 	
+ 	<select id="queryOwnFamilyOrderNo" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		<![CDATA[
+ 		select yesterdayOrderNo from familyScore where familyId=#{familyId} and startDay<=#{timeStr} and endDay>=#{timeStr}
+		]]>
  	</select>
  	
  	<select id="queryJoinFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
