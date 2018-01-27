@@ -456,4 +456,15 @@ public class AchieveCommService
 		return dayStr;
 	}
 
+	/**
+	 * 初始化创建用户成就
+	 * @Description:
+	 * @param userId
+	 * @author:CaiFengYao
+	 * @date:2018年1月27日 下午1:57:21
+	 */
+	public void initCreateUserAchieve(long userId)
+	{
+		userAchieveMapper.insertUserAchieveInfo(userId);
+	}
 }
