@@ -38,6 +38,28 @@ public class UserAchieveBean
 	private String daystamp;
 	// 个人成就之增加当日个人评分
 	private double extraPlusScore;
+	// 连续登榜天数
+	private int goldCountDays;
+	private long familyId;
+	public long getFamilyId()
+	{
+		return familyId;
+	}
+
+	public void setFamilyId(long familyId)
+	{
+		this.familyId = familyId;
+	}
+
+	public int getGoldCountDays()
+	{
+		return goldCountDays;
+	}
+
+	public void setGoldCountDays(int goldCountDays)
+	{
+		this.goldCountDays = goldCountDays;
+	}
 
 	public double getExtraPlusScore()
 	{
