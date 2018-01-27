@@ -465,6 +465,12 @@ public class AchieveCommService
 	 */
 	public void initCreateUserAchieve(long userId)
 	{
-		userAchieveMapper.insertUserAchieveInfo(userId);
+		// 校验是否已经初始化过
+		long count = userAchieveMapper.checkUserAchieveCount(userId);
+		if (count == 0)
+		{
+			userAchieveMapper.insertUserAchieveInfo(userId);
+		}
+
 	}
 }
