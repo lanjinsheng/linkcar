@@ -145,4 +145,8 @@
 		inner join familyStayGoldLog g on g.familyId=r.familyId
 		where r.userId=#{userId}  and r.familyId!=#{familyId} 
  	</select>
+ 	
+ 	<select id="checkUserAchieveCount"  resultType="int" parameterType="java.lang.Long">
+ 		SELECT COUNT(1) FROM userAchieveInfo a WHERE a.userId=#{userId}
+ 	</select>
 </mapper>
