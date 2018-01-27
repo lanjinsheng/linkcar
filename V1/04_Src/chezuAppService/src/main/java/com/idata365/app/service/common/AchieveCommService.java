@@ -2,6 +2,7 @@ package com.idata365.app.service.common;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.LotteryLogConstant;
+import com.idata365.app.entity.FamilyStayGoldLogBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
 import com.idata365.app.entity.UserAchieveBean;
+import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.UserAchieveMapper;
 
@@ -33,7 +36,8 @@ public class AchieveCommService
 
 	@Autowired
 	private UserAchieveMapper userAchieveMapper;
-
+	@Autowired
+	private FamilyMapper familyMapper;
 	@Autowired
 	private LotteryMapper lotteryMapper;
 	Map<String, Object> map = new HashMap<String, Object>();
@@ -119,12 +123,9 @@ public class AchieveCommService
 	 * 
 	 * @Description:TODO 所在家族连续X天位于黄金档内，当该成就完成时，该家族下的所有成员都加分
 	 */
-	public void addGoldFamilyTimes(long userId, long familyId)
+	public void addGoldFamilyTimes(long familyId)
 	{
-		map.put("userId", userId);
-		map.put("achieveId", 7);
-		// updateAchieveTimes(map);
-		updateAchieveDaysByFamily();
+		updateAchieveDaysByFamily(familyId);
 	}
 
 	/****************************************** 坑爹模块end **************************************************/
@@ -166,7 +167,7 @@ public class AchieveCommService
 		 */
 		UserAchieveBean bean = userAchieveMapper.queryUserCanDeblockAchieve(map);
 		LOG.info("查询可以解锁的UserAchieveBean：>>>>>>>>>>>>>>>>>>>>>", bean);
-		if (bean == null || bean.getType() == 3)// 当夺宝名人时，返回
+		if (bean == null)// 当夺宝名人时，返回
 		{
 			LOG.info("无可更新成就，返回**********************");
 			return;
@@ -258,10 +259,132 @@ public class AchieveCommService
 		}
 	}
 
-	// 更新该家族下所有成员当前天数
-	void updateAchieveDaysByFamily()
-	{
+	/**
+	 * 更新该家族下所有成员当前天数
+	 * 	逻辑： 1.先看该家族有没有占领黄金榜记录，如果没有，则生成记录；有，则更新天数（断签则置为0)
+	 *      2.校验连续天数是否达到解锁标准：【30天】个人评分+5；【60天】个人评分8分；【100天】个人评分+10
+	 *               	 		达到：将家族下所有成员(不包括 已经解锁该成就的成员)的该成就解锁。并将天数置为0
+	 *               			没达到：更新该家族加所有成员的该项成就天数
+	 */
 
+	void updateAchieveDaysByFamily(long familyId)
+	{
+		FamilyStayGoldLogBean bean = userAchieveMapper.queryFamilyStayGoldInfo(familyId);
+		if (bean == null)
+		{
+			// 添加信息
+			userAchieveMapper.insertFamilyStayGoldLog(familyId);
+		}
+		else
+		{
+			if (bean.getContinueFlag() != 1)// 不等于1说明不是连续的，置为0
+			{
+				bean.setGoldCountDays(0);
+			}
+			else
+			{
+				bean.setGoldCountDays(bean.getGoldCountDays() + 1);
+			}
+		}
+		// 该家族下所有成员
+		List<Long> user = userAchieveMapper.getFamilyUsers(familyId);
+		int lockLev = 0;// 解锁等级
+		int lockNum = 0;// 解锁门槛天数(以后要加入到常量类中利于维护)
+		if (bean.getLev() == 0)
+		{
+			lockNum = 30;
+			if (bean.getGoldCountDays() >= lockNum)
+			{
+				lockLev = bean.getLev() + 1;
+				// 解锁
+				unclockUserGoldAchieve(user, lockLev);
+			}
+			else
+			{
+				lockLev = bean.getLev();
+				// 更新成就值
+				addUserGoldAchieveNum(user, lockLev, familyId, bean.getGoldCountDays());
+			}
+		}
+		else if (bean.getLev() == 1)
+		{
+			lockNum = 60;
+			if (bean.getGoldCountDays() >= lockNum)
+			{
+				lockLev = bean.getLev() + 1;
+				// 解锁
+				unclockUserGoldAchieve(user, lockLev);
+			}
+			else
+			{
+				lockLev = bean.getLev();
+				// 更新成就值
+				addUserGoldAchieveNum(user, lockLev, familyId, bean.getGoldCountDays());
+			}
+		}
+		else if (lockLev == 3)// 最高等级不再更新
+		{
+			lockNum = 100;
+			if (bean.getGoldCountDays() == lockNum)
+			{
+				lockLev = bean.getLev();
+				// 解锁
+				unclockUserGoldAchieve(user, lockLev);
+			}
+			else if (bean.getGoldCountDays() > lockNum)// 大于最高级不再更新值
+			{
+
+			}
+			else
+			{
+				lockLev = bean.getLev();
+				// 更新成就值
+				addUserGoldAchieveNum(user, lockLev, familyId, bean.getGoldCountDays());
+			}
+		}
+		// 更新天数、等级
+		userAchieveMapper.updateFamilyStayGoldLog(bean);
+
+	}
+
+	// 解锁用户黄金家族
+	void unclockUserGoldAchieve(List<Long> user, int lev)
+	{
+		for (Long userId : user)
+		{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("userId", userId);
+			map.put("lev", lev);
+			// 解锁该家族下所有成员此项成就
+			userAchieveMapper.unlockGoldFamilyAchieve(map);
+		}
+	}
+
+	// 增加用户黄金家族登榜成就数量
+	void addUserGoldAchieveNum(List<Long> user, int lev, long familyId, int continueCount)
+	{
+		for (Long userId : user)
+		{
+			int nowNum = 0;
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("userId", userId);
+			map.put("achieve", 7);
+			map.put("familyId", familyId);
+			map.put("lev", lev);
+			// 查询用户参加的另一个家族的黄金期
+			FamilyStayGoldLogBean fb = userAchieveMapper.queryUserOtherStayGoldDays(map);
+			if (fb != null && fb.getGoldCountDays() > continueCount)// 当用户参加的另一个家族成就更高时，将更新最高值
+			{
+				nowNum = fb.getGoldCountDays();
+			}
+			else
+			{
+				nowNum = continueCount;
+			}
+			map.put("nowNum", nowNum);
+			// 更新数量
+			userAchieveMapper.updateGoldFamilyAchieveValue(map);
+		}
 	}
 
 	// 更新成就数量
@@ -295,7 +418,7 @@ public class AchieveCommService
 	/**
 	 * 更新成就操作（当上传驾照时）
 	 * 
-	 * @Description:TODO 奖励没有在库里有体现，是写死在程序里的
+	 * @Description:TODO 奖励因为是一对多的关系所以没有在数据库里有体现，是写死在程序里的
 	 */
 	public void updateAchieveWhenUploadLicence(Map<String, Object> map, long userId)
 	{
