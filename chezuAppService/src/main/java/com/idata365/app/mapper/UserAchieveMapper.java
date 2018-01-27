@@ -118,5 +118,5 @@ public interface UserAchieveMapper
 	/**
 	 * 校验成就数量
 	 */
-	public long checkUserAchieveCount(long userId);
+	public int checkUserAchieveCount(long userId);
 }
