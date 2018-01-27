@@ -114,4 +114,9 @@ public interface UserAchieveMapper
 	 * 更新用户黄金家族成就值
 	 */
 	public void updateGoldFamilyAchieveValue(Map<String, Object> m);
+
+	/**
+	 * 校验成就数量
+	 */
+	public long checkUserAchieveCount(long userId);
 }
