@@ -100,4 +100,49 @@
 	<update id="updateNextLevAchieveValue" parameterType="java.util.HashMap">
 		update userAchieveInfo set nowNum=nowNum+#{nowNum},editTime=now() where userId=#{userId} AND achieveId=#{achieveId} and lev=#{lev}
 	</update>
+	
+	<!-- 查询家族登榜信息 -->
+	<select id="queryFamilyStayGoldInfo" parameterType="java.lang.Long" resultType="com.idata365.app.entity.FamilyStayGoldLogBean">
+		SELECT id,familyId,goldCountDays,TO_DAYS(NOW())-TO_DAYS(editTime) AS continueFlag
+		FROM familyStayGoldLog 
+		WHERE familyId=1
+	</select>
+	
+	<!-- 插入家族登榜信息 -->
+	<insert id="insertFamilyStayGoldLog" parameterType="java.lang.Long">
+	insert into familyStayGoldLog
+	(familyId,goldCountDays,addTime,editTime)
+	values
+	(#{familyId},1,now(),now())
+	</insert>
+	
+	<!-- 更新家族登榜信息 -->
+	<update id="updateFamilyStayGoldLog" parameterType="com.idata365.app.entity.FamilyStayGoldLogBean">
+	update familyStayGoldLog 
+	set goldCountDays=#{familyId},editTime=now(),lev=#{lev}
+	where familyId=#{familyId}
+	</update>
+	
+	<select id="getFamilyUsers" resultType="java.lang.Long" parameterType="java.lang.Long">
+ 		select userId from userFamilyRelation where familyId=#{familyId}
+ 	</select>
+ 	
+ 	<!-- 解锁黄金家族 -->
+ 	<update id="unlockGoldFamilyAchieve" parameterType="java.util.HashMap">
+ 		UPDATE userAchieveInfo SET flag=1 WHERE userId=#{userId} AND achieveId=7 AND flag=0 AND nowNum=num-1 and lev=#{lev}
+ 	</update>
+ 	
+ 	 	
+ 	<!-- 更新用户黄金家族成就值 -->
+ 	<update id="updateGoldFamilyAchieveValue" parameterType="java.util.HashMap">
+ 		UPDATE userAchieveInfo SET nowNum=#{familyId} WHERE userId=#{userId} AND achieveId=7 AND flag=0 and lev=#{lev}
+ 	</update>
+ 	
+ 	<!-- 查询用户参加的另一个家族的今日连续天数 -->
+ 	<select id="queryUserOtherStayGoldDays" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.FamilyStayGoldLogBean">
+		select r.familyId,g.goldCountDays 
+		from userFamilyRelation r
+		inner join familyStayGoldLog g on g.familyId=r.familyId
+		where r.userId=#{userId}  and r.familyId!=#{familyId} 
+ 	</select>
 </mapper>
