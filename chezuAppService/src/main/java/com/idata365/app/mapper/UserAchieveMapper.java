@@ -3,6 +3,9 @@ package com.idata365.app.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.idata365.app.entity.FamilyStayGoldLogBean;
 import com.idata365.app.entity.UserAchieveBean;
 
 /**
@@ -78,4 +81,39 @@ public interface UserAchieveMapper
 	 * 更新下一等级的成就值 -
 	 */
 	public void updateNextLevAchieveValue(Map<String, Object> m);
+
+	/**
+	 * 查询家族占领黄金榜信息
+	 */
+	public FamilyStayGoldLogBean queryFamilyStayGoldInfo(long familyId);
+
+	/**
+	 * 添加家族占领黄金榜信息
+	 */
+	public void insertFamilyStayGoldLog(long familyId);
+
+	/**
+	 * 更新家族占领黄金榜信息
+	 */
+	public void updateFamilyStayGoldLog(FamilyStayGoldLogBean bean);
+
+	/**
+	 * 所有指定家族成员
+	 */
+	public List<Long> getFamilyUsers(Long familyId);
+
+	/**
+	 * 解锁黄金家族
+	 */
+	public void unlockGoldFamilyAchieve(Map<String, Object> m);
+
+	/**
+	 * 查询用户参加的另一个家族连续黄金天数
+	 */
+	public FamilyStayGoldLogBean queryUserOtherStayGoldDays(Map<String, Object> m);
+
+	/**
+	 * 更新用户黄金家族成就值
+	 */
+	public void updateGoldFamilyAchieveValue(Map<String, Object> m);
 }
