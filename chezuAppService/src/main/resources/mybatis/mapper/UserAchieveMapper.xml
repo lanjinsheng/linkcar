@@ -8,9 +8,9 @@
 	<insert id="insertUserAchieveInfo" useGeneratedKeys="true" keyProperty="id" parameterType="java.lang.Long">
 		INSERT INTO
 		userAchieveInfo
-		(userId,achieveId,awardId,awardNum,lev,flag,num,nowNum,TYPE,createTime)
+		(userId,achieveId,awardId,awardNum,lev,flag,num,nowNum,type,createTime,status)
 		SELECT
-		#{userId},achieveId,awardId,awardNum,lev,flag,num,nowNum,TYPE,NOW()
+		#{userId},achieveId,awardId,awardNum,lev,flag,num,nowNum,type,NOW(),status
 		FROM userAchieveInfo WHERE userId=0
 	</insert>
 
