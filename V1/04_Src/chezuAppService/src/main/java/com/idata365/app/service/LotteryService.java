@@ -28,10 +28,12 @@ import com.idata365.app.entity.LotteryUser;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserTravelLottery;
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.mapper.SignatureDayLogMapper;
 import com.idata365.app.mapper.UserTravelLotteryMapper;
+import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
@@ -50,6 +52,10 @@ public class LotteryService extends BaseService<LotteryService>
 	
 	@Autowired
 	UserTravelLotteryMapper  userTravelLotteryMapper;
+	
+	@Autowired
+	private AchieveCommService achieveCommService;
+	
 	/**
 	 * 道具列表
 	 * @param bean
@@ -211,6 +217,8 @@ public class LotteryService extends BaseService<LotteryService>
 	@Transactional
 	public LotteryResultBean doLottery(LotteryBean bean)
 	{
+		achieveCommService.addAchieve(bean.getUserId(), 0d, AchieveEnum.AddCollectTimes);
+		
 		//随机生成出抽奖奖品
 		int awardId = RandUtils.generateRand();
 		bean.setAwardId(awardId);
@@ -334,6 +342,8 @@ public class LotteryService extends BaseService<LotteryService>
 		int toUserId = migrateInfoMsgBean.getToUserId();
 		int awardId = migrateInfoMsgBean.getAwardId();
 		int awardCount = migrateInfoMsgBean.getAwardCount();
+		
+		achieveCommService.addAchieve(toUserId, 0d, AchieveEnum.AddCollectTimes);
 		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(toUserId);

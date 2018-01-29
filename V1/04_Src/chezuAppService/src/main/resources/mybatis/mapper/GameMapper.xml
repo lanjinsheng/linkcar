@@ -34,6 +34,10 @@
 		select count(id) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
+	<select id="countExceptTomorrowRole" resultType="int" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select count(id) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp!=#{daystamp}
+	</select>
+	
 	<update id="updateUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		update userFamilyRoleLog set role=#{role} where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</update>
@@ -90,4 +94,11 @@
 		select familyId, prevType, challengeType from familyChallengeLog where familyId=#{familyId} and challengeDay=#{challengeDay} 
 	</select>
 	
+	<select id="queryDriveEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select isDrivingEdit from licenseDriver where userId=#{userId}
+	</select>
+	
+	<select id="queryTravelEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select isTravelEdit from isTravelEdit where userId=#{userId}
+	</select>
 </mapper>
