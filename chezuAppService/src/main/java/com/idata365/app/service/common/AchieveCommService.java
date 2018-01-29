@@ -16,10 +16,12 @@ import com.idata365.app.constant.LotteryLogConstant;
 import com.idata365.app.entity.FamilyStayGoldLogBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
+import com.idata365.app.entity.TaskAchieveAddValue;
 import com.idata365.app.entity.UserAchieveBean;
 import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.LotteryMapper;
+import com.idata365.app.mapper.TaskAchieveAddValueMapper;
 import com.idata365.app.mapper.UserAchieveMapper;
 
 /**
@@ -40,6 +42,9 @@ public class AchieveCommService
 	@Autowired
 	private FamilyMapper familyMapper;
 	@Autowired
+	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
+	
+	@Autowired
 	private LotteryMapper lotteryMapper;
 	Map<String, Object> map = new HashMap<String, Object>();
 	
@@ -55,6 +60,18 @@ public class AchieveCommService
 	    * @author LanYeYe
 	 */
 	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
+		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
+		taskAchieveAddValue.setAchieveType(type);
+		taskAchieveAddValue.setKeyId(keyId);
+		taskAchieveAddValue.setAddValue(value);
+		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
+		return true;
+	}
+	
+	public boolean dealTaskAchieveAddValue(TaskAchieveAddValue taskAchieveAddValue) {
+		AchieveEnum type=taskAchieveAddValue.getAchieveType();
+		Long keyId=taskAchieveAddValue.getKeyId();
+		Double value=taskAchieveAddValue.getAddValue();
 		switch(type) {
 		case AddGayTimes:
 			addGayTimes(keyId);
@@ -86,8 +103,6 @@ public class AchieveCommService
 		}
 		return true;
 	}
-	
-	
 
 	/************************************************* 针对具体用户的成就方法 *************************************************************/
 
