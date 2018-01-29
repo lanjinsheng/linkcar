@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.TaskAchieveAddValueMapper">
-	<resultMap id="BaseResultMap" type="com.idata365.app.entity.TaskAchieveAddValue">
+	<resultMap id="BaseAchieveAddValueMap" type="com.idata365.app.entity.TaskAchieveAddValue">
 	</resultMap>
 
 	<!-- 插入成就值 -->
@@ -12,4 +12,45 @@
 		values 
 		(#{keyId},#{addValue},#{achieveType},NOW())
 	</insert>
+	<!-- 定时处理逻辑 -->
+    <update id="lockAchieveAddValueTask" parameterType="com.idata365.app.entity.TaskAchieveAddValue" >
+       UPDATE 
+            taskAchieveAddValue 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
+       WHERE 
+            taskStatus = 0  and taskFlag='0' and taskType=#{taskType} LIMIT 500  
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getAchieveAddValueTask"  resultMap="BaseAchieveAddValueMap" parameterType="com.idata365.app.entity.TaskAchieveAddValue">
+		SELECT *  from taskAchieveAddValue where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateAchieveAddValueSuccTask" parameterType="com.idata365.app.entity.TaskAchieveAddValue" >
+        update taskAchieveAddValue set
+        taskStatus=1,taskDealTime=now(),orderNo=#{orderNo}
+        where  id=#{id}
+     </update>
+     <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,taskStatus=2为失败-->
+    <update id="updateAchieveAddValueFailTask" parameterType="com.idata365.app.entity.TaskAchieveAddValue" >
+       UPDATE 
+           taskAchieveAddValue 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskDealTime=now(),failTimes=failTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           taskAchieveAddValue 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理 结束-->		
 </mapper>
