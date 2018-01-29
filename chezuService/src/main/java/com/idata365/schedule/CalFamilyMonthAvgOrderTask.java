@@ -93,7 +93,7 @@ public class CalFamilyMonthAvgOrderTask extends TimerTask {
 			
 				for(TaskFamilyMonthAvgOrder taskFamilyMonthAvgOrder:list) {
 					try {
-						boolean result=calFamilyMonthAvgOrderService.calFamilyMonthAvgOrder(preOrder,taskFamilyMonthAvgOrder);
+						boolean result=calFamilyMonthAvgOrderService.calFamilyMonthAvgOrder(preOrder,taskFamilyMonthAvgOrder,timestamp);
 						preOrder=taskFamilyMonthAvgOrder;
 					if(result) {
 						calFamilyMonthAvgOrderService.updateSuccFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);

@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.entity.DriveScore;
+import com.idata365.entity.TaskAchieveAddValue;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
+import com.idata365.enums.AchieveEnum;
+import com.idata365.mapper.app.TaskAchieveAddValueMapper;
 import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.mapper.col.DriveScoreMapper;
@@ -22,6 +25,8 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 	UserFamilyScoreMapper userFamilyScoreMapper;
 	@Autowired
 	DriveScoreMapper driveScoreMapper;
+	@Autowired
+	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
 	public boolean calScoreUserDay(UserScoreDayStat userScoreDayStat) {
 		DriveScore driveScore=new DriveScore();
 		int role=0;
@@ -82,7 +87,8 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			mileageScore=BigDecimal.valueOf(mileageScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 			brakeTimesScore=BigDecimal.valueOf(brakeTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 			turnTimesScore=BigDecimal.valueOf(turnTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
-			speedTimesScore=BigDecimal.valueOf(speedTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
+//			speedTimesScore=BigDecimal.valueOf(speedTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
+			speedTimesScore=0d;//超速用0计算
 			overspeedTimesScore=BigDecimal.valueOf(overspeedTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 			maxspeedScore=BigDecimal.valueOf(maxspeedScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 			tiredDriveScore=BigDecimal.valueOf(tiredDriveScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
@@ -95,7 +101,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setMileageScore(mileageScore);
 			userScoreDayStat.setBrakeTimesScore(brakeTimesScore);
 			userScoreDayStat.setTurnTimesScore(turnTimesScore);
-			userScoreDayStat.setSpeedTimesScore(overspeedTimesScore);
+			userScoreDayStat.setSpeedTimesScore(speedTimesScore);
 			userScoreDayStat.setOverspeedTimesScore(overspeedTimesScore);
 			userScoreDayStat.setMaxspeedScore(maxspeedScore);
 			userScoreDayStat.setTiredDriveScore(tiredDriveScore);
@@ -168,7 +174,14 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		}
 		return true;
 	}
-	
+	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
+		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
+		taskAchieveAddValue.setAchieveType(type);
+		taskAchieveAddValue.setKeyId(keyId);
+		taskAchieveAddValue.setAddValue(value);
+		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
+		return true;
+	}
 	public void updateUserDayScore(UserScoreDayStat userScoreDayStat) {
 		userScoreDayStatMapper.updateUserScoreDayById(userScoreDayStat);
 	}

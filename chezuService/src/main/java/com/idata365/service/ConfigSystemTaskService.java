@@ -120,8 +120,9 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		for (TaskSystemScoreFlag task:tasks4) {
 			if(dayStamp.equals(task.getEndDay())) {
 				//比赛结算时间到了,初始化任务
-			}else {
 				taskGameEndMapper.initGameEnd(task);
+			}else {
+				
 			}
 			task.setTaskGameEndInit(1);
 			taskSystemScoreFlagMapper.updateGameEndInit(task);
@@ -194,4 +195,22 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		
 	}
 	
+	
+	
+	
+	public List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEnd(){
+		return taskSystemScoreFlagMapper.getUnFinishFamilyLevelDayEndList();
+	}
+	public void finishFamilyLevelDayEndTask(TaskSystemScoreFlag task) {
+		task.setTaskFamilyLevelDayEnd(1);
+		taskSystemScoreFlagMapper.finishFamilyLevelDayEndTask(task);
+	}
+	
+	public List<TaskSystemScoreFlag> getUnFinishUserBestDriveDayEnd(){
+		return taskSystemScoreFlagMapper.getUnFinishUserBestDriveDayEndList();
+	}
+	public void finishUserBestDriveDayEndTask(TaskSystemScoreFlag task) {
+		task.setTaskUserBestDriveDayEnd(1);
+		taskSystemScoreFlagMapper.finishUserBestDriveDayEndTask(task);
+	}
 }
