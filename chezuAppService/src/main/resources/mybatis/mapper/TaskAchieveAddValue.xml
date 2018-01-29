@@ -19,7 +19,7 @@
        SET 
         taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
        WHERE 
-            taskStatus = 0  and taskFlag='0' and taskType=#{taskType} LIMIT 500  
+            taskStatus = 0  and taskFlag='0'  LIMIT 500  
     </update>	
 	<!-- 获取任务 -->
 	 <select id="getAchieveAddValueTask"  resultMap="BaseAchieveAddValueMap" parameterType="com.idata365.app.entity.TaskAchieveAddValue">
