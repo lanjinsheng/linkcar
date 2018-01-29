@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.TaskGiveUserAchieveMapper">
+	<resultMap id="BaseTaskGiveUserAchieveMapper" type="com.idata365.app.entity.TaskGiveUserAchieveBean">
+	</resultMap>
+
+	<!-- 初始化用户成就定时表-->
+	<insert id="iniTaskGiveUserAchieve" >
+		INSERT IGNORE INTO taskGiveUserAchieve 
+		(achieveRecordId,createTime)
+		SELECT id,now() FROM userAchieveInfo WHERE flag=1 AND STATUS=0
+	</insert>
+	
+	<!-- 查询待处理的任务列表 -->
+	<select id="queryAhieveWaitDealList" resultType="com.idata365.app.entity.TaskGiveUserAchieveBean">
+		select id,achieveRecordId
+		from taskGiveUserAchieve
+		where taskStatus=0
+	</select>
+	
+	  <!-- 失败的calStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会 -->
+    <update id="updateFailUserAchieveTask" parameterType="com.idata365.app.entity.TaskGiveUserAchieveBean" >
+       UPDATE 
+           taskGiveUserAchieve 
+       SET 
+           taskStatus=#{taskStatus},taskFlag=0,taskDealTime=now(),failTimes=failTimes+1
+       WHERE 
+              id=#{id} 
+     </update>
+     
+     <!-- 更新task状态为成功 -->
+         <update id="updateSuccUserAchieveTask" parameterType="com.idata365.app.entity.TaskGiveUserAchieveBean" >
+       UPDATE 
+           taskGiveUserAchieve 
+       SET 
+           taskStatus=1,taskFlag=0,taskDealTime=now()
+       WHERE 
+              id=#{id} 
+     </update>
+     
+    <!-- 更新记录当前状态 -->
+    <update id="updateUserAchieveTaskStatus" parameterType="com.idata365.app.entity.TaskGiveUserAchieveBean" >
+       UPDATE 
+           taskGiveUserAchieve 
+       SET 
+           taskStatus=#{taskStatus}
+       WHERE 
+              id=#{id} 
+     </update>
+     
+     	<!-- 查询用户某项成就详情 -->
+	<select id="getUserAchieveInfoById" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.lang.Long">
+		SELECT a.id,a.achieveId,a.awardId,d.awardValue,a.awardNum,a.type,a.flag,a.userId
+		FROM userAchieveInfo a
+		LEFT JOIN dicLottery d ON d.id=a.awardId
+		WHERE a.id=#{id}
+	</select>
+	
+	 <update id="increLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount+${addedCount} where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+     <insert id="saveLotteryLog" parameterType="com.idata365.app.entity.LotteryLogInfoParamBean">
+    	insert into lotteryLogInfo(userId, awardId, awardCount, type, timestamp) values(#{userId}, #{awardId}, #{awardCount}, #{type}, #{timestamp})
+    </insert>
+    
+     	<!-- 更新用户当日评分 -->
+	<update id="updateUserPointsToday" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userScoreDayStat set extraPlusScore=extraPlusScore+#{extraPlusScore} where userId=#{userId} and daystamp=#{daystamp}
+	</update>
+	
+	<!-- 更新奖励发放状态为完成 -->
+	<update id="updateAchieveGiveStatusIsOver"  parameterType="java.lang.Long">
+		UPDATE userAchieveInfo set status=1 ,editTime=now() where id=#{id} and status=0
+	</update>
+</mapper>
