@@ -103,7 +103,7 @@ public class ShareCommController extends BaseController
 			Long familyId = Long.valueOf(arrayString[0]);
 			Long createTimeLong = Long.valueOf(arrayString[2]);
 			String inviteCode = arrayString[1];
-			Long now = System.currentTimeMillis() - (3600 * 1000);// 一天过期
+			Long now = System.currentTimeMillis() - (100*24*3600*1000);// 100天过期
 			if (now > createTimeLong)
 			{
 				LOG.info("过期的数据 key：" + key);
@@ -140,7 +140,7 @@ public class ShareCommController extends BaseController
 			Long familyId = Long.valueOf(arrayString[0]);
 			Long createTimeLong = Long.valueOf(arrayString[2]);
 			String inviteCode = arrayString[1];
-			Long now = System.currentTimeMillis() - (3600 * 1000);// 一天过期
+			Long now = System.currentTimeMillis() - (3600 * 1000);// 1小时过期
 			if (now > createTimeLong)
 			{
 				LOG.info("过期的数据 key：" + key);
