@@ -53,4 +53,14 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getUnFinishGameEndList();
 	 int finishGameEndTask(TaskSystemScoreFlag systemScoreFlag);
 	 //gameEnd===end
+	 
+	 //家族类型
+	 List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEndList();
+	 int  finishFamilyLevelDayEndTask(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 
+	 
+	 //用户按日违规统计
+	 List<TaskSystemScoreFlag> getUnFinishUserBestDriveDayEndList();
+	 int  finishUserBestDriveDayEndTask(TaskSystemScoreFlag systemScoreFlag);
 }

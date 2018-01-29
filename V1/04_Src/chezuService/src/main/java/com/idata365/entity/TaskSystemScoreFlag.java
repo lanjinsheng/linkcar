@@ -21,7 +21,22 @@ public class TaskSystemScoreFlag implements Serializable {
 	private Integer userDayScoreFlag;
 	private Integer familyDayScoreFlag;
 	private String daystamp;
+	private Integer taskFamilyLevelDayEnd;
+	private Integer taskUserBestDriveDayEnd;
 	
+ 
+	public Integer getTaskUserBestDriveDayEnd() {
+		return taskUserBestDriveDayEnd;
+	}
+	public void setTaskUserBestDriveDayEnd(Integer taskUserBestDriveDayEnd) {
+		this.taskUserBestDriveDayEnd = taskUserBestDriveDayEnd;
+	}
+	public Integer getTaskFamilyLevelDayEnd() {
+		return taskFamilyLevelDayEnd;
+	}
+	public void setTaskFamilyLevelDayEnd(Integer taskFamilyLevelDayEnd) {
+		this.taskFamilyLevelDayEnd = taskFamilyLevelDayEnd;
+	}
 	private String startDay;
 	private String endDay;
     private Integer taskGameEnd;

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableFeignClients("com.idata365.remote")
 @EnableAutoConfiguration(exclude={MultipartAutoConfiguration.class})
 public class ChezuServiceApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ChezuServiceApplication.class, args);
 	}

@@ -9,10 +9,12 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.idata365.entity.TaskFamilyDayEnd;
 import com.idata365.entity.TaskFamilyDayOrder;
 import com.idata365.entity.TaskFamilyMonthAvgOrder;
 import com.idata365.entity.TaskFamilyMonthOrder;
 import com.idata365.entity.TaskFamilyPk;
+import com.idata365.mapper.app.TaskFamilyDayEndMapper;
 import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyMonthAvgOrderMapper;
 import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
@@ -22,7 +24,8 @@ public class CalFamilyMonthAvgOrderService {
 
 	@Autowired
    TaskFamilyMonthAvgOrderMapper taskFamilyMonthAvgOrderMapper;
- 
+	@Autowired
+	TaskFamilyDayEndService taskFamilyDayEndService;
 	
 	
 	public String getDateStr(int diff)
@@ -33,7 +36,7 @@ public class CalFamilyMonthAvgOrderService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
-	public boolean calFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder preOrder,TaskFamilyMonthAvgOrder taskFamilyAvgOrder) {
+	public boolean calFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder preOrder,TaskFamilyMonthAvgOrder taskFamilyAvgOrder,String daystamp) {
 		//family的月分排行
 		if(preOrder==null)
 		{
@@ -47,6 +50,7 @@ public class CalFamilyMonthAvgOrderService {
 		}
 		//更新排名
 		taskFamilyMonthAvgOrderMapper.updateFamilyMonthAvgOrder(taskFamilyAvgOrder);
+		taskFamilyDayEndService.insertFamilyLevelTask(daystamp, taskFamilyAvgOrder.getOrderNo(), taskFamilyAvgOrder.getFamilyId());
 		return true;
 	}
 	

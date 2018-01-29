@@ -10,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.entity.TaskAchieveAddValue;
+import com.idata365.enums.AchieveEnum;
 import com.idata365.entity.ParkStation;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.mapper.app.ParkStationMapper;
+import com.idata365.mapper.app.TaskAchieveAddValueMapper;
 import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
@@ -31,6 +34,10 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	UserScoreDayStatMapper userScoreDayStatMapper;
 	@Autowired
 	ParkStationMapper parkStationMapper;
+	@Autowired
+	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
+	@Autowired
+	TaskUserDayEndService  taskUserDayEndService;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	
@@ -61,6 +68,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 		Map<String,Object> m=new HashMap<String,Object>();
 		m.put("userId", uth.getUserId());
 		m.put("driveEndTime", driveEndTime);
+		boolean isBestDrive=true;
 		List<UserFamilyRoleLog> roles= userFamilyScoreMapper.getUserRoles(m);
 		if(roles==null || roles.size()==0){//角色没创建，不处理。建议此处进行预警
 			return false;
@@ -76,10 +84,12 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			userScoreDayStat.setBrakeTimes(uth.getBrakeTimes()-uth.getBrakeTimesOffset());
 			if(userScoreDayStat.getBrakeTimes()>0) {
 				userScoreDayStat.setBrakeTimesUpdateTime(driveEndTime);
+				isBestDrive=false;
 			}
 			userScoreDayStat.setTurnTimes(uth.getTurnTimes()-uth.getTurnTimesOffset());
 			if(userScoreDayStat.getTurnTimes()>0) {
 				userScoreDayStat.setTurnTimesUpdateTime(driveEndTime);
+				isBestDrive=false;
 			}
 			userScoreDayStat.setSpeedTimes(uth.getSpeedTimes()-uth.getSpeedTimesOffset());
 			if(userScoreDayStat.getSpeedTimes()>0) {
@@ -90,6 +100,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			userScoreDayStat.setOverspeedTimes(overSpeed);
 			if(overSpeed>0) {
 				userScoreDayStat.setOverspeedTimesUpdateTime(driveEndTime);
+				isBestDrive=false;
 			}
 			int tiredDriveTimes=(uth.getTiredDrive()-uth.getTiredDriveOffset())>=120?1:0;
 			long tireTime =Double.valueOf(uth.getTiredDrive()-uth.getTiredDriveOffset()).longValue();
@@ -97,11 +108,13 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			userScoreDayStat.setTiredDriveTimes(tiredDriveTimes);
 			if(tiredDriveTimes>0) {
 				userScoreDayStat.setTiredDriveTimesUpdateTime(driveEndTime);
+				isBestDrive=false;
 			}
 			int nightDrive=(uth.getNightDrive()-uth.getNightDriveOffset())>=180?1:0;
 			userScoreDayStat.setNightDriveTimes(nightDrive);
 			if(nightDrive>0) {
 				userScoreDayStat.setNightDriveTimesUpdateTime(driveEndTime);
+				isBestDrive=false;
 			 }
 			userScoreDayStat.setMaxspeed(uth.getMaxspeed());
 			userScoreDayStat.setUseCheluntai(uth.getUseCheluntai());
@@ -122,10 +135,27 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			 if(updatePark==0) {//违停
 				 userScoreDayStat.setIllegalStopTimes(1);
 				 userScoreDayStat.setIllegalStopUpdateTime(driveEndTime);
+				 isBestDrive=false;
 			 }
 			 userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
+		}
+		//插入行程数据
+		addAchieve(uth.getUserId(),uth.getMileage(),AchieveEnum.AddGodTimes);
+		String daystamp=driveEndTime.substring(0,10);
+		if(!isBestDrive) {
+			taskUserDayEndService.addUserEndDayIsBestDrive(uth.getUserId(), 1.0d, daystamp);
+		}else {
+			taskUserDayEndService.addUserEndDayIsBestDrive(uth.getUserId(), 0d, daystamp);
 		}
 		LOG.info("UPDATE SUCCESS");
 	   return true;
    }
+	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
+		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
+		taskAchieveAddValue.setAchieveType(type);
+		taskAchieveAddValue.setKeyId(keyId);
+		taskAchieveAddValue.setAddValue(value);
+		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
+		return true;
+	}
 }
