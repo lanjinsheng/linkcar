@@ -28,6 +28,7 @@ import com.idata365.app.entity.UserDeviceLogs;
 import com.idata365.app.entity.UserLoginSession;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.VerifyCode;
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyInviteMapper;
 import com.idata365.app.mapper.FamilyMapper;
@@ -62,6 +63,8 @@ public class LoginRegService extends BaseService<LoginRegService>
 	AchieveCommService achieveCommService;
 	@Autowired
 	FamilyMapper familyMapper;
+	
+	
 
 	public LoginRegService()
 	{
@@ -254,7 +257,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 		// 查询出用户Id
 		Long userId = familyMapper.queryCreateUserId(bean);
 		// 调用公共接口
-		achieveCommService.addGayTimes(userId);
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGayTimes);
 	}
 
 	public String regUser(String phone, String pwd, Map<String, Object> rtMap)
@@ -291,7 +294,8 @@ public class LoginRegService extends BaseService<LoginRegService>
 					invite.setMemberUserId(account.getId());
 					familyInviteMapper.updateFamilyInviteWhenReg(invite);
 				}
-				// 发送注册消息由app端绑定回调message接口
+				// 发送成就初始化
+				achieveCommService.initCreateUserAchieve(account.getId());
 
 				// 发送拉新信息
 				if (list != null && list.size() > 0)

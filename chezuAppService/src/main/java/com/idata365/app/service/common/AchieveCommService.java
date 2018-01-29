@@ -17,6 +17,7 @@ import com.idata365.app.entity.FamilyStayGoldLogBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
 import com.idata365.app.entity.UserAchieveBean;
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.UserAchieveMapper;
@@ -41,6 +42,52 @@ public class AchieveCommService
 	@Autowired
 	private LotteryMapper lotteryMapper;
 	Map<String, Object> map = new HashMap<String, Object>();
+	
+	/**
+	 * 
+	    * @Title: addAchieve
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param keyId
+	    * @param @param value 数量，默认输入0
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
+		switch(type) {
+		case AddGayTimes:
+			addGayTimes(keyId);
+			break;
+		case AddGodTimes:
+			addGodTimes(keyId, value);
+			break;
+		case AddCarEndTimes:
+			addCarEndTimes(keyId);
+			break;
+		case AddBestDriverTimes:
+			addBestDriverTimes(keyId);
+			break;	
+		case AddCollectTimes:
+			addCollectTimes(keyId);
+			break;	
+		case AddGoldFamilyTimes:
+			addGoldFamilyTimes(keyId);
+			break;	
+		case AddGrabTimes:
+			addGrabTimes(keyId);
+			break;	
+		case AddStupidTimes:
+			addStupidTimes(keyId);
+			break;		
+		case AddShareTimes:
+			addShareTimes(keyId);
+			break;
+		}
+		return true;
+	}
+	
+	
 
 	/************************************************* 针对具体用户的成就方法 *************************************************************/
 
@@ -49,7 +96,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:分享游戏链接次数
 	 */
-	public void addShareTimes(long userId)
+	protected  void addShareTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 1);
@@ -61,7 +108,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:拉新
 	 */
-	public void addGayTimes(long userId)
+	protected void addGayTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 2);
@@ -74,7 +121,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:累计里程
 	 */
-	public void addGodTimes(long userId, double mileage)
+	protected void addGodTimes(long userId, double mileage)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 3);
@@ -86,7 +133,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:抢车位次数
 	 */
-	public void addCarEndTimes(long userId)
+	protected void addCarEndTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 4);
@@ -98,7 +145,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:X天未发生违规行为
 	 */
-	public void addBestDriverTimes(long userId)
+	protected void addBestDriverTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 5);
@@ -110,7 +157,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:各种途径获得道具
 	 */
-	public void addCollectTimes(long userId)
+	protected void addCollectTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 6);
@@ -123,7 +170,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:TODO 所在家族连续X天位于黄金档内，当该成就完成时，该家族下的所有成员都加分
 	 */
-	public void addGoldFamilyTimes(long familyId)
+	protected void addGoldFamilyTimes(long familyId)
 	{
 		updateAchieveDaysByFamily(familyId);
 	}
@@ -134,7 +181,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:上传驾驶证和行驶证
 	 */
-	public void addGrabTimes(long userId)
+	protected void addGrabTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 8);
@@ -146,7 +193,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:累计贴条次数
 	 */
-	public void addStupidTimes(long userId)
+	protected void addStupidTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 9);
