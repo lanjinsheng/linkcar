@@ -6,7 +6,7 @@
 
 	<!-- 初始化用户成就 -->
 	<insert id="insertUserAchieveInfo" useGeneratedKeys="true" keyProperty="id" parameterType="java.lang.Long">
-		INSERT INTO
+		INSERT ignore INTO
 		userAchieveInfo
 		(userId,achieveId,awardId,awardNum,lev,flag,num,nowNum,type,createTime,status)
 		SELECT
