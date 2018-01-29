@@ -100,7 +100,9 @@
 	</update>
 	
 	<select id="getUnFinishFamilyMonthOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and taskGameEnd=1 and taskFamilyMonthOrder=0
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 
+	   
+	   and taskGameEnd=1 and taskFamilyMonthOrder=0
 	</select>
 	<update id="finishFamilyMonthOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
@@ -108,7 +110,9 @@
 	</update>
 	
 	<select id="getUnFinishFamilyMonthAvgOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 and  taskFamilyMonthAvgOrder=0
+	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 
+	   and taskGameEnd=1
+	   and  taskFamilyMonthAvgOrder=0
 	</select>
 	<update id="finishFamilyMonthAvgOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
@@ -116,4 +120,27 @@
 	</update>
    <!--end 初始化Order任务关系 -->
    
+    <!--begin  家族类型 -->
+   	<select id="getUnFinishFamilyLevelDayEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskFamilyMonthAvgOrder=1
+	   and  taskFamilyLevelDayEnd=0
+	</select>
+	<update id="finishFamilyLevelDayEndTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskFamilyLevelDayEnd=${taskFamilyLevelDayEnd} where daystamp=#{daystamp}
+	</update>
+    <!--end  家族类型 -->
+    
+    <!--begin  用户违规 -->
+   	<select id="getUnFinishUserBestDriveDayEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where userDayScoreFlag=1
+	   and  taskUserBestDriveDayEnd=0
+	</select>
+	<update id="finishUserBestDriveDayEndTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskUserBestDriveDayEnd=${taskUserBestDriveDayEnd} where daystamp=#{daystamp}
+	</update>
+    <!--end   用户违规 -->
+    
+    
 </mapper>

@@ -39,9 +39,9 @@
    <insert id="insertFamilyScore"  useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.entity.FamilyScore" >
        INSERT IGNORE  INTO 
             familyScore
-            (month,familyId,orderNo,score,dayTimes,startDay,endDay) 
+            (month,familyId,orderNo,score,averScore,dayTimes,startDay,endDay) 
         VALUES
-            (#{month},#{familyId},#{orderNo},#{score},#{dayTimes},#{startDay},#{endDay})  
+            (#{month},#{familyId},#{orderNo},#{score},#{score},#{dayTimes},#{startDay},#{endDay})  
             ON DUPLICATE KEY UPDATE score=score+${score},averScore=convert((score+${score})/(dayTimes+${dayTimes}),decimal(10,2)),
             dayTimes=dayTimes+${dayTimes};
     </insert>	
