@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -18,12 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.ResultConstant;
+import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
+import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -44,6 +46,7 @@ import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
+import com.idata365.app.entity.SwitchRoleResultBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
@@ -53,16 +56,16 @@ import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.entity.ViolationStatResultBean;
 import com.idata365.app.entity.bean.UserInfo;
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.ScoreMapper;
+import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.NumUtils;
 import com.idata365.app.util.RandUtils;
-
-import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 
 @Service
 public class GameService extends BaseService<GameService>
@@ -83,6 +86,9 @@ public class GameService extends BaseService<GameService>
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+	private AchieveCommService achieveCommService;
 	
 	/**
 	 * 违规情况
@@ -397,6 +403,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalSpeed(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -444,6 +452,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalBrake(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -491,6 +501,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalTurn(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -538,6 +550,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalOverspeed(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -585,6 +599,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalNightDrive(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -632,6 +648,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalTiredDrive(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -679,6 +697,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public PenalResultBean penalIllegalStop(GameFamilyParamBean bean, long userId)
 	{
+		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(userId);
 		lotteryBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
@@ -799,6 +819,8 @@ public class GameService extends BaseService<GameService>
 	@Transactional
 	public int holdAtStation(GameFamilyParamBean bean)
 	{
+		achieveCommService.addAchieve(bean.getUserId(), 0d, AchieveEnum.AddCarEndTimes);
+		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(bean.getUserId());
 		lotteryBean.setAwardId(LotteryConstant.MAZHA_LOTTERY);
@@ -909,14 +931,50 @@ public class GameService extends BaseService<GameService>
 		return dayStr;
 	}
 	
+	private static final String ROLE_SEL_MSG = "您尚未上传驾驶证/行驶证，仅可试用一次“ROLE_HOLD”角色。\n如想挑战更多角色，上传证件来解锁吧！";
+	
+	private static final String ROLE_UN_SEL_MSG = "由于您尚未上传驾驶证/行驶证，“ROLE_HOLD”角色的试用权已使用完毕。\n如想挑战更多角色，上传证件来解锁吧！";
+	
 	/**
 	 * 切换明日角色
 	 * @param bean
 	 */
 	@Transactional
-	public void switchRole(UserFamilyRoleLogParamBean bean)
+	public SwitchRoleResultBean switchRole(UserFamilyRoleLogParamBean bean)
 	{
+		SwitchRoleResultBean resultBean = new SwitchRoleResultBean();
+		
+		int role = bean.getRole();
+		
+		DriverVehicleResultBean driveEditResultBean = this.gameMapper.queryDriveEditStatus(bean);
+		DriverVehicleResultBean travelEditResultBean = this.gameMapper.queryTravelEditStatus(bean);
+		
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		if (RoleConstant.JIANBING_ROLE != role)
+		{
+			//
+			if (0 != driveEditResultBean.getIsDrivingEdit()
+					|| 0 != travelEditResultBean.getIsTravelEdit())
+			{
+				//角色试用次数
+				int exceptTomorrowCount = this.gameMapper.countExceptTomorrowRole(bean);
+				if (exceptTomorrowCount > 0)
+				{
+					//试用完毕
+					resultBean.setTryFlag("0");
+					resultBean.setMsg(ROLE_UN_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
+					return resultBean;
+				}
+				else
+				{
+					resultBean.setTryFlag("1");
+					resultBean.setMsg(ROLE_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
+					return resultBean;
+				}
+			}
+		}
+		
+		
 		int roleCount = this.gameMapper.countTomorrowRole(bean);
 		if (roleCount > 0)
 		{
@@ -932,6 +990,39 @@ public class GameService extends BaseService<GameService>
 			
 			this.gameMapper.saveUserFamilyRole(bean);
 		}
+		
+		resultBean.setTryFlag("-1");
+		return resultBean;
+	}
+	
+	public String getRoleDesc(int role)
+	{
+		String roleDesc;
+		switch(role)
+		{
+		case RoleConstant.LAOSIJI_ROLE:
+			roleDesc = "老司机";
+			break;
+		case RoleConstant.PIAOYISHOU_ROLE:
+			roleDesc = "漂移手";
+			break;
+		case RoleConstant.ZHATUCHE_ROLE:
+			roleDesc = "渣土车司机";
+			break;
+		case RoleConstant.DIANTOUSIJI_ROLE:
+			roleDesc = "点头司机";
+			break;
+		case RoleConstant.HONGYANSIJI_ROLE:
+			roleDesc = "红眼司机";
+			break;
+		case RoleConstant.BIAOCHEDANG_ROLE:
+			roleDesc = "飙车党";
+			break;
+		default :
+			roleDesc = "煎饼侠";
+		}
+		
+		return roleDesc;
 	}
 	
 	/**

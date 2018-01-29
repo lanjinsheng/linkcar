@@ -95,6 +95,27 @@ public class ScoreService extends BaseService<ScoreService>
 		ScoreFamilyInfoAllBean resultBean = new ScoreFamilyInfoAllBean();
 		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
+		
+		ScoreFamilyInfoParamBean oriYesterdayParamBean = new ScoreFamilyInfoParamBean();
+		oriYesterdayParamBean.setFamilyId(oriFamilyBean.getFamilyId());
+		oriYesterdayParamBean.setDaystamp(getYesterdayDateStr());
+		FamilyDriveDayStatBean oriYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(oriYesterdayParamBean);
+		
+		oriFamilyBean.setYesterdayScore(oriYeterdayFamilyResultBean.getScore());
+		
+		int orderNo = oriFamilyBean.getOrderNo();
+		int beforeYesterdayOrderNo = oriFamilyBean.getBeforeYesterdayOrderNo();
+		int oriFamilyOrderChange;
+		if (0 == beforeYesterdayOrderNo)
+		{
+			oriFamilyOrderChange = 0;
+		}
+		else
+		{
+			oriFamilyOrderChange = orderNo - beforeYesterdayOrderNo;
+		}
+		oriFamilyBean.setOrderChange(oriFamilyOrderChange);
+		
 		resultBean.setOriFamily(oriFamilyBean);
 		
 		long origFamilyId = 0;
@@ -115,6 +136,28 @@ public class ScoreService extends BaseService<ScoreService>
 					tempParamBean.setFamilyId(tempFamilyId);
 					tempParamBean.setTimeStr(getYesterdayDateStr());
 					ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
+					
+					ScoreFamilyInfoParamBean joinYesterdayParamBean = new ScoreFamilyInfoParamBean();
+					joinYesterdayParamBean.setFamilyId(joinFamilyBean.getFamilyId());
+					joinYesterdayParamBean.setDaystamp(getYesterdayDateStr());
+					FamilyDriveDayStatBean joinYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(joinYesterdayParamBean);
+
+					joinFamilyBean.setYesterdayScore(joinYeterdayFamilyResultBean.getScore());
+					
+					int joinOrderNo = joinFamilyBean.getOrderNo();
+					int joinBeforeYesterdayOrderNo = joinFamilyBean.getBeforeYesterdayOrderNo();
+					
+					int joinFamilyOrderChange;
+					if (0 == joinBeforeYesterdayOrderNo)
+					{
+						joinFamilyOrderChange = 0;
+					}
+					else
+					{
+						joinFamilyOrderChange = joinOrderNo - joinBeforeYesterdayOrderNo;
+					}
+					joinFamilyBean.setOrderChange(joinFamilyOrderChange);
+					
 					resultBean.setJoinFamily(joinFamilyBean);
 					break;
 				}
@@ -143,7 +186,16 @@ public class ScoreService extends BaseService<ScoreService>
 			
 			int orderNo = tempBean.getOrderNo();
 			int beforeYesterdayOrderNo = tempBean.getBeforeYesterdayOrderNo();
-			int orderChange = orderNo - beforeYesterdayOrderNo;
+			
+			int orderChange;
+			if (0 == beforeYesterdayOrderNo)
+			{
+				orderChange = 0;
+			}
+			else
+			{
+				orderChange = orderNo - beforeYesterdayOrderNo;
+			}
 			tempResultBean.setOrderChange(String.valueOf(orderChange));
 			
 			resultList.add(tempResultBean);
@@ -575,7 +627,16 @@ public class ScoreService extends BaseService<ScoreService>
 		{
 			gameObjBeforeYesterdayOrderNo = beforeYesterdayGameObjFamilyStatBean.getOrderNo();
 		}
-		int gameObjOrderChange = gameObjYesterdayOrderNo - gameObjBeforeYesterdayOrderNo;
+		
+		int gameObjOrderChange;
+		if (0 == gameObjBeforeYesterdayOrderNo)
+		{
+			gameObjOrderChange = 0;
+		}
+		else
+		{
+			gameObjOrderChange = gameObjYesterdayOrderNo - gameObjBeforeYesterdayOrderNo;
+		}
 		
 		AdBeanUtils.copyOtherPropToStr(gameObj, gameObjFamilyStatBean);
 		
@@ -622,7 +683,15 @@ public class ScoreService extends BaseService<ScoreService>
 		int competitorYesterdayOrderNo = competitorObjFamilyStatBean.getOrderNo();
 		int competitorBeforeYesterdayOrderNo = beforeYesterdayCompetitorObjFamilyStatBean.getOrderNo();
 		
-		int competitorObjOrderChange = competitorYesterdayOrderNo - competitorBeforeYesterdayOrderNo;
+		int competitorObjOrderChange;
+		if (0 == competitorBeforeYesterdayOrderNo)
+		{
+			competitorObjOrderChange = 0;
+		}
+		else
+		{
+			competitorObjOrderChange = competitorYesterdayOrderNo - competitorBeforeYesterdayOrderNo;
+		}
 		
 		AdBeanUtils.copyOtherPropToStr(competitorObj, competitorObjFamilyStatBean);
 		

@@ -11,8 +11,8 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId}
 
 	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 	<![CDATA[
-		select imgUrl, t2.id as familyId, t1.yesterdayOrderNo as orderNo, t2.familyName as name from familyScore t1 
-right join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId} and t1.startDay<=#{timeStr} and t1.endDay>=#{timeStr}
+			select t1.yesterdayOrderNo as orderNo, t1.beforeYesterdayOrderNo as beforeYesterdayOrderNo, t1.averScore as score, imgUrl, t2.id as familyId, t2.familyName as name from familyScore t1 
+		right join familyInfo t2 on (t1.familyId=t2.id) where t2.createUserId=#{userId} and t1.startDay<=#{timeStr} and t1.endDay>=#{timeStr}
 		]]>
 	</select>
 
@@ -29,8 +29,8 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	
 	<select id="queryFamilyByFamilyId" resultType="com.idata365.app.entity.ScoreFamilyInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 	<![CDATA[
-		select imgUrl, t2.id as familyId, t1.yesterdayOrderNo as orderNo, t2.familyName as name from familyScore t1 
-right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId} and t1.startDay<=#{timeStr} and t1.endDay>=#{timeStr}
+		select t1.yesterdayOrderNo as orderNo, t1.beforeYesterdayOrderNo as beforeYesterdayOrderNo, t1.averScore as score, imgUrl, t2.id as familyId, t2.familyName as name from familyScore t1 
+			right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId} and t1.startDay<=#{timeStr} and t1.endDay>=#{timeStr}
 		]]>
 	</select>
 
@@ -45,7 +45,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId} and t1.s
 	<select id="queryFamilyOrderInfo" resultType="com.idata365.app.entity.ScoreFamilyOrderBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 	<![CDATA[
 		select imgUrl, t3.familyId as familyId, t3.yesterdayOrderNo as orderNo, t3.beforeYesterdayOrderNo as beforeYesterdayOrderNo, t2.familyName as name, t3.averScore as score from familyInfo t2 
-				join familyScore t3 on (t2.id=t3.familyId) where t3.startDay<=#{timeStr} and t3.endDay>=#{timeStr} 
+				join familyScore t3 on (t2.id=t3.familyId) where t3.startDay<=#{timeStr} and t3.endDay>=#{timeStr} and t3.yesterdayOrderNo !=0
 				order by t3.yesterdayOrderNo asc limit 0, 100
 	]]>
 	</select>

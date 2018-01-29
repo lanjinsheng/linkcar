@@ -2,6 +2,7 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
@@ -34,6 +35,8 @@ public interface GameMapper
 	
 	public int countTomorrowRole(UserFamilyRoleLogParamBean bean);
 	
+	public int countExceptTomorrowRole(UserFamilyRoleLogParamBean bean);
+	
 	public int updateUserFamilyRole(UserFamilyRoleLogParamBean bean);
 	
 	public void saveUserFamilyRole(UserFamilyRoleLogParamBean bean);
@@ -61,4 +64,8 @@ public interface GameMapper
 	public List<RoleCountBean> countRoleByRole(UserFamilyRoleLogParamBean bean);
 	
 	public FamilyChallengeLogBean queryChallengeType(FamilyChallengeLogParamBean bean);
+	
+	public DriverVehicleResultBean queryDriveEditStatus(UserFamilyRoleLogParamBean bean);
+	
+	public DriverVehicleResultBean queryTravelEditStatus(UserFamilyRoleLogParamBean bean);
 }

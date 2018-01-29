@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.SignConstant;
 import com.idata365.app.entity.SigAwardStatBean;
 import com.idata365.app.entity.SigResultBean;
 import com.idata365.app.entity.SignatureDayLogBean;
@@ -103,7 +104,7 @@ public class SignInService extends BaseService<SignInService>
 					{
 						SigResultBean numResultBean = this.signatureDayLogMapper.countSigStatNum(bean);
 						int sigNum = numResultBean.getSigNum();
-						if (7 == sigNum)
+						if (SignConstant.SIGN_CONTINUE_DAYS == sigNum)
 						{
 							bean.setNum(1);
 						}
@@ -167,7 +168,7 @@ public class SignInService extends BaseService<SignInService>
 			String sigTimestamp = statBean.getSigTimestamp();
 			int num = statBean.getNum();
 			if (StringUtils.equals(sigTimestamp, getCurrentDayStrUnDelimiter())
-					&& 7 == num)
+					&& SignConstant.SIGN_CONTINUE_DAYS == num)
 			{
 				resultBean.setContinueSevenFlag("SEVEN_OK");
 			}
