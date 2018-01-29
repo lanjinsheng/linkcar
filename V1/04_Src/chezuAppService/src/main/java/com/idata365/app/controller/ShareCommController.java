@@ -23,6 +23,7 @@ import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.service.FamilyInviteService;
 import com.idata365.app.service.FamilyService;
@@ -52,6 +53,7 @@ public class ShareCommController extends BaseController
 
 	public ShareCommController()
 	{
+		
 	}
 
 	// @RequestMapping("/share/goInvite")
@@ -319,7 +321,7 @@ public class ShareCommController extends BaseController
 		if (shareType == 1)
 		{
 			// 分享邀请码
-			acchieveCommService.addShareTimes(userId);
+			acchieveCommService.addAchieve(userId, 0d, AchieveEnum.AddShareTimes);
 		}
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		return ResultUtils.rtSuccess(rtMap);

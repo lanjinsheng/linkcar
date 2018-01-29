@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.service.UserAchieveService;
 import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.ResultUtils;
@@ -92,35 +93,35 @@ public class UserAchieveController extends BaseController
 		long userId = this.getUserId();
 		if (type == 1)
 		{
-			achieveCommService.addShareTimes(userId);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddShareTimes);
 		}
 		else if (type == 2)
 		{
-			achieveCommService.addGayTimes(userId);
+			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddGayTimes);
 		}
 		else if (type == 3)
 		{
-			achieveCommService.addGodTimes(userId, 12);
+			achieveCommService.addAchieve(userId,12d,AchieveEnum.AddGodTimes);
 		}
 		else if (type == 4)
 		{
-			achieveCommService.addCarEndTimes(userId);
+			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddCarEndTimes);
 		}
 		else if (type == 5)
 		{
-			achieveCommService.addBestDriverTimes(userId);
+			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddBestDriverTimes);
 		}
 		else if (type == 6)
 		{
-			achieveCommService.addCollectTimes(userId);
+			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddCollectTimes);
 		}
 		else if (type == 8)
 		{
-			achieveCommService.addGrabTimes(userId);
+			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddGrabTimes);
 		}
 		else if (type == 9)
 		{
-			achieveCommService.addStupidTimes(userId);
+			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddStupidTimes);
 		}
 
 		return ResultUtils.rtSuccess("成功！！！");
