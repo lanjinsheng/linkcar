@@ -20,9 +20,11 @@ import org.springframework.stereotype.Service;
 import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.LicenseDriverMapper;
 import com.idata365.app.mapper.LicenseVehicleTravelMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.service.common.AchieveCommService;
 
  
 
@@ -35,6 +37,9 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	LicenseVehicleTravelMapper licenseVehicleTravelMapper;
 	@Autowired
 	LicenseDriverMapper licenseDriverMapper;
+	@Autowired
+	AchieveCommService achieveCommService;
+	
 	public UserInfoService() {
 	}
 	 
@@ -107,8 +112,47 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	public void modifydrivingLicense(Map<String,Object> licenseDriver) {
 		
 		licenseDriverMapper.modifyImgDriverFront(licenseDriver);
- 
+		//判断licenseVehicleTravel 是否 isTravelEdit=0,是则进行证件成就增加
+		if(isVehicleTravelOK(Long.valueOf(licenseDriver.get("userId").toString()))) {
+			achieveCommService.addAchieve(Long.valueOf(licenseDriver.get("userId").toString()), 0d, AchieveEnum.AddGrabTimes);
+		}
 	} 
+	/**
+	 * 
+	    * @Title: isVehicleTravelOK
+	    * @Description: TODO(是否完成行驶证上传)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public boolean isVehicleTravelOK(Long userId) {
+		LicenseVehicleTravel travel=licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
+		if(travel!=null && travel.getIsTravelEdit()==0)
+		{
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * 
+	    * @Title: isDrivingOK
+	    * @Description: TODO(是否完成驾驶证上传)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public boolean isDrivingOK(Long userId) {
+		LicenseDriver dirver=licenseDriverMapper.findLicenseDriverByUserId(userId);
+		if(dirver!=null && dirver.getIsDrivingEdit()==0)
+		{
+			return true;
+		}
+		return false;
+	}
 	
 /**
  * 
@@ -150,7 +194,10 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	public void modifyVehicleLicense(Map<String,Object> vehicleDriver) {
 		
 		licenseVehicleTravelMapper.modifyImgVehicleFront(vehicleDriver);
- 
+		//判断licenseDriver是否 isDrivingEdit=0,是则进行证件成就增加
+		if(isDrivingOK(Long.valueOf(vehicleDriver.get("userId").toString()))) {
+			achieveCommService.addAchieve(Long.valueOf(vehicleDriver.get("userId").toString()), 0d, AchieveEnum.AddGrabTimes);
+		}
 	} 
 	
 	
