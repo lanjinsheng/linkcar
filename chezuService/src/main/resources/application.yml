@@ -31,5 +31,6 @@ spring:
       password: sjTest2962143!
     
 mybatis:
-  config-locations: classpath:mybatis/mybatis-config.xml
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/**.xml
   type-aliases-package: com.idata365.entity
