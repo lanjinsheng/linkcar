@@ -303,6 +303,11 @@ public class FamilyService extends BaseService<FamilyService>
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
 			
+			FamilyParamBean countParamBean = new FamilyParamBean();
+			countParamBean.setFamilyId(tempBean.getFamilyId());
+			int tempMemNum = this.familyMapper.countUsersByFamilyId(countParamBean);
+			tempResultBean.setNum(String.valueOf(tempMemNum));
+			
 			FamilyParamBean fParamBean = new FamilyParamBean();
 			fParamBean.setUserId(userId);
 			fParamBean.setFamilyId(tempBean.getFamilyId());
@@ -636,6 +641,10 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		int countUsers = this.familyMapper.countUsers();
 		resultBean.setGamerNum(countUsers);
+		
+		//统计未读消息
+		int countUnRead = this.familyMapper.countUnRead(bean);
+		resultBean.setNewsNum(countUnRead);
 		
 		return resultBean;
 	}

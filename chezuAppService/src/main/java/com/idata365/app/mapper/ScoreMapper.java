@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyMemberBean;
+import com.idata365.app.entity.FamilyScoreBean;
 import com.idata365.app.entity.GameHistoryBean;
 import com.idata365.app.entity.ScoreByDayBean;
 import com.idata365.app.entity.ScoreDetailBean;
@@ -35,6 +36,8 @@ public interface ScoreMapper
 	
 	public List<String> queryFamilyRecords(ScoreFamilyInfoParamBean bean);
 	
+	public List<FamilyScoreBean> queryOrderRecords(ScoreFamilyInfoParamBean bean);
+	
 	public List<ScoreMemberInfoBean> queryMemberByFamilyId(ScoreFamilyInfoParamBean bean);
 	
 	public List<ScoreUserHistoryBean> queryHistoryOrder(ScoreUserHistoryParamBean bean);
@@ -62,6 +65,8 @@ public interface ScoreMapper
 	public List<ScoreDetailBean> queryScoreDetail(ScoreFamilyInfoParamBean bean);
 	
 	public List<GameHistoryBean> queryFamilyOrderByMonth(ScoreFamilyInfoParamBean bean);
+	
+	public List<FamilyScoreBean> queryStartEndDay(ScoreFamilyInfoParamBean bean);
 	
 	public UsersAccountBean queryUserInfo(UsersAccountBean bean);
 	

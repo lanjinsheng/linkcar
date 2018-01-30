@@ -22,6 +22,10 @@ public class ScoreFamilyInfoParamBean
 	
 	private String timeStr;
 	
+	private String startDay;
+	
+	private String endDay;
+	
 	public long getHabitId() {
 		return habitId;
 	}
@@ -118,6 +122,26 @@ public class ScoreFamilyInfoParamBean
 	public void setTimeStr(String timeStr)
 	{
 		this.timeStr = timeStr;
+	}
+
+	public String getStartDay()
+	{
+		return startDay;
+	}
+
+	public void setStartDay(String startDay)
+	{
+		this.startDay = startDay;
+	}
+
+	public String getEndDay()
+	{
+		return endDay;
+	}
+
+	public void setEndDay(String endDay)
+	{
+		this.endDay = endDay;
 	}
 	
 }
