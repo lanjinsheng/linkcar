@@ -68,6 +68,10 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select record from familyHistory where familyId=#{familyId} order by id desc limit 0, 3
 	</select>
 
+	<select id="queryOrderRecords" resultType="com.idata365.app.entity.FamilyScoreBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select yesterdayOrderNo, endDay from familyScore where familyId=#{familyId} order by endDay asc
+	</select>
+
 	<select id="queryMemberByFamilyId" resultType="com.idata365.app.entity.ScoreMemberInfoBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select imgUrl, t1.nickName as name, t1.phone as phone, t1.id as userId, t2.role as role, joinTime from usersAccount t1 
 	join userFamilyRelation t2 on (t1.id=t2.userId) 
@@ -133,9 +137,22 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t1.daystamp=#{day} and t2.familyId=#{familyId}
 	</select>
 	
+	<!-- 
 	<select id="queryFamilyOrderByMonth" resultType="com.idata365.app.entity.GameHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as daystamp 
 			from familyDriveDayStat where date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y-%m')=#{month} and familyId=#{familyId} order by daystamp asc
+	</select>
+	 -->
+	
+	<select id="queryFamilyOrderByMonth" resultType="com.idata365.app.entity.GameHistoryBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		<![CDATA[
+select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as daystamp 
+		from familyDriveDayStat where daystamp>=#{startDay} and daystamp<=#{endDay} and familyId=#{familyId} order by daystamp asc
+		]]>
+	</select>
+	
+	<select id="queryStartEndDay" resultType="com.idata365.app.entity.FamilyScoreBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select startDay, endDay from familyScore where familyId=#{familyId} order by endDay desc
 	</select>
 	
 	<select id="queryUserInfo" resultType="com.idata365.app.entity.UsersAccountBean" parameterType="com.idata365.app.entity.UsersAccountBean">

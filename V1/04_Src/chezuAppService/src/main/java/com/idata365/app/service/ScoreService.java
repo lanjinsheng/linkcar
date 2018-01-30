@@ -30,6 +30,7 @@ import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.FamilyScoreBean;
 import com.idata365.app.entity.GameHistoryBean;
 import com.idata365.app.entity.GameHistoryResultBean;
 import com.idata365.app.entity.GameResultWithFamilyResultBean;
@@ -214,6 +215,17 @@ public class ScoreService extends BaseService<ScoreService>
 		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyDetailBean tempBean = this.scoreMapper.queryFamilyDetail(bean);
 		List<String> recordsList = this.scoreMapper.queryFamilyRecords(bean);
+		
+		List<FamilyScoreBean> orderList = this.scoreMapper.queryOrderRecords(bean);
+		//格式：2017-06-30 排名：100
+		for (FamilyScoreBean familyScoreTempBean : orderList)
+		{
+			String endDay = familyScoreTempBean.getEndDay();
+			int yesterdayOrderNo = familyScoreTempBean.getYesterdayOrderNo();
+			String recordDesc = endDay + " 排名：" + yesterdayOrderNo;
+			recordsList.add(recordDesc);
+		}
+		
 		ScoreFamilyDetailResultBean resultBean = new ScoreFamilyDetailResultBean();
 		
 		AdBeanUtils.copyOtherPropToStr(resultBean, tempBean);
@@ -493,6 +505,13 @@ public class ScoreService extends BaseService<ScoreService>
 		{
 			YesterdayScoreResultBean tempResultBean = new YesterdayScoreResultBean();
 			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
+			
+			String name = tempBean.getName();
+			if (StringUtils.isBlank(name))
+			{
+				tempResultBean.setName(PhoneUtils.hidePhone(tempBean.getPhone()));
+			}
+			
 			resultList.add(tempResultBean);
 			
 			tempTotalScore += tempBean.getScore();
@@ -538,6 +557,12 @@ public class ScoreService extends BaseService<ScoreService>
 		{
 			YesterdayContributionResultBean tempResultBean = new YesterdayContributionResultBean();
 			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
+			
+			if (StringUtils.isBlank(tempBean.getName()))
+			{
+				tempResultBean.setName(PhoneUtils.hidePhone(tempBean.getPhone()));
+			}
+			
 			//temp settings contribution start
 			tempResultBean.setContribution(String.valueOf(tempBean.getScore()));
 			//temp settings end
@@ -1018,6 +1043,28 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	public List<GameHistoryResultBean> gameHistory(ScoreFamilyInfoParamBean bean)
 	{
+		List<FamilyScoreBean> familyScoreList = this.scoreMapper.queryStartEndDay(bean);
+		if (CollectionUtils.isEmpty(familyScoreList))
+			return null;
+		
+		FamilyScoreBean lastScoreBean = familyScoreList.get(0);
+		String startDay = lastScoreBean.getStartDay();
+		String currentDayStr = getCurrentDayStr();
+		String endDay;
+		if (StringUtils.equals(startDay, currentDayStr))
+		{
+			lastScoreBean = familyScoreList.get(1);
+			startDay = lastScoreBean.getStartDay();
+			endDay = lastScoreBean.getEndDay();
+		}
+		else
+		{
+			endDay = lastScoreBean.getEndDay();
+		}
+		
+		bean.setStartDay(startDay);
+		bean.setEndDay(endDay);
+		
 		List<GameHistoryBean> tempList = this.scoreMapper.queryFamilyOrderByMonth(bean);
 		
 		if (CollectionUtils.isEmpty(tempList))
