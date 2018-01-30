@@ -36,8 +36,7 @@ public class ImController extends BaseController {
 	@RequestMapping("/im/getNotify")
     public Map<String,Object> getNotify(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Object family =requestBodyParams.get("familyId");
-		Object msgId=requestBodyParams.get("msgId");
-	  	 if(ValidTools.isBlank(family) || ValidTools.isBlank(msgId)) {
+	  	 if(ValidTools.isBlank(family)) {
     		 return ResultUtils.rtFailParam(null);
 	  	 }
 		long userId=this.getUserId();
