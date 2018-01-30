@@ -18,6 +18,14 @@ public class ImMsg implements Serializable {
 	private Date createTime;
 	private String msg;
 	private Integer isRead;
+	private String nickName;
+	
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 	public Long getId() {
 		return id;
 	}
