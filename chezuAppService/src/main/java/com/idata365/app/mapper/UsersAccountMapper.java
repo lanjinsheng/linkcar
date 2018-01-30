@@ -1,5 +1,6 @@
 package com.idata365.app.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
@@ -23,4 +24,6 @@ public interface UsersAccountMapper {
 	 
 	 Map<String,Object> getFamilyByUserId(@Param("userId") Long userId);
 	 Map<String,Object> getFamilyByFamilyId(@Param("familyId") Long familyId);
+	 
+	 List<Map<String,Object>> findFamilyRelation(@Param("familyId") Long familyId);
 }
