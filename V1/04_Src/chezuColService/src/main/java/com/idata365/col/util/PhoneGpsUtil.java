@@ -78,7 +78,7 @@ public class PhoneGpsUtil {
 		double lng1=Double.valueOf(first.get("y"));
 		double maxSpeed=Double.valueOf(first.get("s"));
 		setSpeedBean(speedBean,maxSpeed);
-		Gps Gps1=PositionUtil.gcj02ToGps84(Double.valueOf(lat1), Double.valueOf(lng1));
+		Gps Gps1=PositionUtil.Gps84(Double.valueOf(lat1), Double.valueOf(lng1));
 		i++;
 		for(;i<size;i++){
 			Map<String,String> gps=list.get(i);
@@ -93,7 +93,7 @@ public class PhoneGpsUtil {
 			double lng2=Double.valueOf(gps.get("y"));
 			double s=Double.valueOf(gps.get("s"));
 			setSpeedBean(speedBean,s);
-			Gps Gps2=PositionUtil.gcj02ToGps84(lat2, lng2);
+			Gps Gps2=PositionUtil.Gps84(lat2, lng2);
 		    Double d=PositionUtil.distance(Gps1.getLng(),Gps1.getLat(),Gps2.getLng(),Gps2.getLat());
 			   distance+=d;
 			   Gps1=Gps2;

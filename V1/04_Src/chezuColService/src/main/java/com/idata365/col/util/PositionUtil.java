@@ -53,7 +53,9 @@ public class PositionUtil {
 	return new Gps(lontitude, latitude);
 	}
 
-
+	public static Gps Gps84(double lng, double lat) {
+		return new Gps(lng, lat);
+	}
 	
 	
 	/**
