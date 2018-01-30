@@ -67,6 +67,7 @@ public class ImController extends BaseController {
 		notify.setFamilyName(String.valueOf(familyInfo.get("familyName")));
 		notify.setLeaderName(user.getNickName());
 		notify.setLeaderId(user.getId());
+		notify.setInUse(1);
 		int rt= imService.insertNotify(notify);
 		return ResultUtils.rtSuccess(null);
 	}	
