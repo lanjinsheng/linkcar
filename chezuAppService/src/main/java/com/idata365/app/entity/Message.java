@@ -1,8 +1,13 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Message {
+public class Message  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8806886258804999698L;
 	private Long id;
 	private Integer parentType;
 	private Integer childType;

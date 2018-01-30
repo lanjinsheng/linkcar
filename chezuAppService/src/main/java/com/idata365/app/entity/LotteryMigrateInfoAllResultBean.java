@@ -1,9 +1,15 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LotteryMigrateInfoAllResultBean
+public class LotteryMigrateInfoAllResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5208350661269655804L;
+
 	private String start;
 	
 	private List<LotteryMigrateInfoMsgResultBean> givenLottery;

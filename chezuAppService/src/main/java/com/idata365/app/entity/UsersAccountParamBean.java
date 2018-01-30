@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class UsersAccountParamBean
+import java.io.Serializable;
+
+public class UsersAccountParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8301341090629853750L;
+
 	private long userId;
 	
 	private int enableStranger;

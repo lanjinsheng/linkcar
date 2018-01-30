@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class FamilyChallengeLogParamBean
+import java.io.Serializable;
+
+public class FamilyChallengeLogParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8994275986767147834L;
+
 	private long id;
 	
 	private long familyId;

@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class InviteInfoResultBean
+import java.io.Serializable;
+
+public class InviteInfoResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4998763266012814764L;
+
 	private String orderNo;
 	
 	private String inviteCode;

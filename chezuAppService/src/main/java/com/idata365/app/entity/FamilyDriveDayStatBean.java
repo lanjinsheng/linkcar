@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class FamilyDriveDayStatBean
+import java.io.Serializable;
+
+public class FamilyDriveDayStatBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5571084896783871295L;
+
 	//
 	private int orderNo;
 	

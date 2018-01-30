@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class LotteryMigrateInfoMsgParamBean
+import java.io.Serializable;
+
+public class LotteryMigrateInfoMsgParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5201599952745123204L;
+
 	private long userId;
 	
 	private int start;

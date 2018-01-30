@@ -1,7 +1,13 @@
 package com.idata365.app.entity;
 
-public class PenalResultBean
+import java.io.Serializable;
+
+public class PenalResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -111309710189325176L;
 	private String penalStatus;
 
 	public String getPenalStatus()

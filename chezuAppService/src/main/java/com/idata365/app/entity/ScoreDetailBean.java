@@ -1,12 +1,19 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
+
 /**
  * 得分详情
  * @author Administrator
  *
  */
-public class ScoreDetailBean
+public class ScoreDetailBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6567467306299002817L;
+
 	//里程
 	private double mileage;
 	

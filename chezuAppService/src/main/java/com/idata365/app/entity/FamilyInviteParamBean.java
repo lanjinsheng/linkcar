@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class FamilyInviteParamBean
+import java.io.Serializable;
+
+public class FamilyInviteParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5179567453242296910L;
+
 	private long msgId;
 	
 	private long id;

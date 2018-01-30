@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ScoreByDayResultBean
+import java.io.Serializable;
+
+public class ScoreByDayResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7101816593420538090L;
+
 	private String score;
 	
 	private String speedingState;

@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class RoleCountResultBean
+import java.io.Serializable;
+
+public class RoleCountResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6016835492767203740L;
+
 	private String role;
 	
 	private String percent;

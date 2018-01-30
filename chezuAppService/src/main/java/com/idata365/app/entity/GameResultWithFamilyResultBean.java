@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class GameResultWithFamilyResultBean
+import java.io.Serializable;
+
+public class GameResultWithFamilyResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1307533253997071201L;
+
 	private String todayRole;
 	
 	private String nameUrl;

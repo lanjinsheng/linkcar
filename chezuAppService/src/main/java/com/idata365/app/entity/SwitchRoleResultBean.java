@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class SwitchRoleResultBean
+import java.io.Serializable;
+
+public class SwitchRoleResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -493835719947334840L;
+
 	private String tryFlag;
 	
 	private String msg;

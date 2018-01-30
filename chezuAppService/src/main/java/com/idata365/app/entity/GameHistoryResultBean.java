@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class GameHistoryResultBean
+import java.io.Serializable;
+
+public class GameHistoryResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7394718852275244972L;
+
 	private String orderNo;
 	
 	private String daystamp;

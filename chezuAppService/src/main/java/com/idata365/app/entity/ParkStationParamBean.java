@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ParkStationParamBean
+import java.io.Serializable;
+
+public class ParkStationParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 817232091885023084L;
+
 	private long familyRelationId;
 	
 	private String status;

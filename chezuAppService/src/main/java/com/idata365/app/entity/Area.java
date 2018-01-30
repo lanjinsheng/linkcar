@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class Area
+import java.io.Serializable;
+
+public class Area implements Serializable 
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7752776535028299165L;
+
 	//区域编码
 	private String upareaid;
 	

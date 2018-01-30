@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class SignatureStatBean
+import java.io.Serializable;
+
+public class SignatureStatBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1532706728557453350L;
+
 	private int num;
 	
 	private String sigTimestamp;

@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class UserScoreDayParamBean
+import java.io.Serializable;
+
+public class UserScoreDayParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5368554272886005441L;
+
 	private long id;
 	
 	private long userId;

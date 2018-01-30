@@ -1,9 +1,15 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class City
+public class City implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2849682680263767257L;
+
 	//区域编码
 	private String upareaid;
 	

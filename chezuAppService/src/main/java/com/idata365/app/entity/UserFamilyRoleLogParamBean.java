@@ -1,6 +1,8 @@
 package com.idata365.app.entity;
 
-public class UserFamilyRoleLogParamBean
+import java.io.Serializable;
+
+public class UserFamilyRoleLogParamBean implements Serializable
 {
 	private long id;
 	

@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class LotteryUser
+import java.io.Serializable;
+
+public class LotteryUser implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7953993453326268852L;
+
 	private int userId;
 	
 	private String name;

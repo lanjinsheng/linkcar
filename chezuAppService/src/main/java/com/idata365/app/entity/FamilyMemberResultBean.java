@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class FamilyMemberResultBean
+import java.io.Serializable;
+
+public class FamilyMemberResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -674501718439785023L;
+
 	private String name;
 	
 	private String imgUrl;

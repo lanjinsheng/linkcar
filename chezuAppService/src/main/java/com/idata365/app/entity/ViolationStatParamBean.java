@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ViolationStatParamBean
+import java.io.Serializable;
+
+public class ViolationStatParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6011292759337805103L;
+
 	private long familyId;
 	
 	private String daystamp;

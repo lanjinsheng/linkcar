@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class SigResultBean
+import java.io.Serializable;
+
+public class SigResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -55734202670968768L;
+
 	private String sigTs;
 	
 	private int sigNum;

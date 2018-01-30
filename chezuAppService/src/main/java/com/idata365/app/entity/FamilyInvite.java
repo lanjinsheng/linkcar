@@ -1,8 +1,13 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class FamilyInvite {
+public class FamilyInvite implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4642595705931335129L;
 	private Long id;
 	private Long familyId;
 	private String memberPhone;
