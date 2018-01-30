@@ -111,6 +111,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setPhoneTimesScore(phoneTimesScore);
 		}else {
 			//煎饼侠角色
+			score=0d;
 			//摊位得分
 			int useMaza=userScoreDayStat.getUseMazha();
 			
