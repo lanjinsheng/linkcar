@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class RoleCountBean
+import java.io.Serializable;
+
+public class RoleCountBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3592937181483815536L;
+
 	private int role;
 	
 	private int roleNum;

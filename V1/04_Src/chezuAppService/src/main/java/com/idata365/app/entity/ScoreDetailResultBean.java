@@ -1,9 +1,15 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ScoreDetailResultBean
+public class ScoreDetailResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5418850383967226051L;
+
 	//[0] Times;[1] Proportion; [2] score
 	private List<String> mileageArr;
 	

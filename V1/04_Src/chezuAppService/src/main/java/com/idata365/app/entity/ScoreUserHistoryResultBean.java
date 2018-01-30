@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ScoreUserHistoryResultBean
+import java.io.Serializable;
+
+public class ScoreUserHistoryResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1330623291163514184L;
+
 	private String score;
 	
 	private String role;

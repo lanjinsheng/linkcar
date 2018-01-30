@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class FamilyRandBean
+import java.io.Serializable;
+
+public class FamilyRandBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2853300121503258115L;
+
 	private String imgUrl;
 	
 	private int num;

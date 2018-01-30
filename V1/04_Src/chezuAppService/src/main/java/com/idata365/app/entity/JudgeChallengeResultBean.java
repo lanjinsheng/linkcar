@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class JudgeChallengeResultBean
+import java.io.Serializable;
+
+public class JudgeChallengeResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3651360198152071081L;
+
 	private String challengeFlag;
 	
 	private String challengeMsg;

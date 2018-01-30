@@ -1,9 +1,15 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UsersAccountBean
+public class UsersAccountBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3696335894382191956L;
+
 	private long id;
 	
 	private String nickName;

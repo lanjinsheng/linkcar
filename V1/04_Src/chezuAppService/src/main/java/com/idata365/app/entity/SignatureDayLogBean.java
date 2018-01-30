@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class SignatureDayLogBean
+import java.io.Serializable;
+
+public class SignatureDayLogBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7219749844582127594L;
+
 	private long id;
 	
 	//用户id

@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class DriverVehicleResultBean
+import java.io.Serializable;
+
+public class DriverVehicleResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4795839139681133238L;
+
 	private int isDrivingEdit;
 	
 	private int isTravelEdit;

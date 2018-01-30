@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class CompetitorFamilyInfoResultBean
+import java.io.Serializable;
+
+public class CompetitorFamilyInfoResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3906895791687398344L;
+
 	private String imgUrl;
 	
 	private String competitorFamilyId;

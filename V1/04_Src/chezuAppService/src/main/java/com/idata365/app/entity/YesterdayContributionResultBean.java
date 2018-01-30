@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class YesterdayContributionResultBean
+import java.io.Serializable;
+
+public class YesterdayContributionResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9155611839127384043L;
+
 	private String userId;
 	
 	private String name;

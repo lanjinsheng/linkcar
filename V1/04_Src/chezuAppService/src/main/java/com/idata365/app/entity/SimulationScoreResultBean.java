@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class SimulationScoreResultBean
+import java.io.Serializable;
+
+public class SimulationScoreResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -21977463776097182L;
+
 	private String roleId;
 	
 	private String score;

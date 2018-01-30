@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ViolationStatBean
+import java.io.Serializable;
+
+public class ViolationStatBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -325500213316035214L;
+
 	private int brakePenalTimes;
 	
 	private int brakeTimes;

@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ScoreUserBean
+import java.io.Serializable;
+
+public class ScoreUserBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2092090049863507085L;
+
 	private String imgUrl;
 	
 	private String name;

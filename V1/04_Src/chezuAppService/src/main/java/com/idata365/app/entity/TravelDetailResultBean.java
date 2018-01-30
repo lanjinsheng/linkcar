@@ -1,12 +1,18 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TravelDetailResultBean
+public class TravelDetailResultBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 934303938345963675L;
+
 	private String time;
 	
 	private String mileage;

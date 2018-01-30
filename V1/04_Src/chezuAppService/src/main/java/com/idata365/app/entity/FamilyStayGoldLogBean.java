@@ -1,5 +1,7 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
+
 /**
  * 
  * @className:com.idata365.app.entity.FamilyStayGoldLogBean
@@ -7,8 +9,12 @@ package com.idata365.app.entity;
  * @date:2018年1月25日 下午10:08:18
  * @author:CaiFengYao
  */
-public class FamilyStayGoldLogBean
+public class FamilyStayGoldLogBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7274317676977651882L;
 	private long familyId;
 	// 连续登榜天数
 	private int goldCountDays;

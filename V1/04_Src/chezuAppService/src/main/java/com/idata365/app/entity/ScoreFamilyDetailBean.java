@@ -1,9 +1,15 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ScoreFamilyDetailBean
+public class ScoreFamilyDetailBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8909559249987719702L;
+
 	private String imgUrl;
 	
 	private String familyName;

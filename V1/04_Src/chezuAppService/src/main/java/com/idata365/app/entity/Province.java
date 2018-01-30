@@ -1,9 +1,15 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Province
+public class Province implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8350879249385404020L;
+
 	//区域编码
 	private String upareaid;
 	

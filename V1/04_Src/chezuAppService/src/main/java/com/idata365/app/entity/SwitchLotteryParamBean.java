@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class SwitchLotteryParamBean
+import java.io.Serializable;
+
+public class SwitchLotteryParamBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4794729882641363396L;
+
 	private long userId;
 	
 	private int onAwardId;

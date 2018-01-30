@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class ReadyLotteryBean
+import java.io.Serializable;
+
+public class ReadyLotteryBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6797632685374950495L;
+
 	private long id;
 	
 	private long userId;

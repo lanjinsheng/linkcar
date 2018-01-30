@@ -1,7 +1,14 @@
 package com.idata365.app.entity;
 
-public class FamilyRelationBean
+import java.io.Serializable;
+
+public class FamilyRelationBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2074625027616449071L;
+
 	private long familyRelationId;
 	
 	private long familyId;
