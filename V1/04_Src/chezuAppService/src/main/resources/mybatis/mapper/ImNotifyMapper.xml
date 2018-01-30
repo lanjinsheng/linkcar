@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.ImNotifyMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.ImNotify" >
+    </resultMap>
+    <insert id="insertNotify"   parameterType="com.idata365.app.entity.Message" >
+       INSERT INTO 
+            imNotify
+            (leaderName,leaderId,notifyMsg,createTime,inUse) 
+        VALUES
+            (#{leaderName}, #{leaderId},#{notifyMsg},now(),#{inUse})
+    </insert>
+ 
+    <select id="getNotify" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	  select * from imNotify where inUse=1 and leaderId=#{familyId} order by id desc limit 1
+    </select>
+     
+    <update id="updateNotify"    parameterType="java.lang.Long" >
+      update
+            imNotify
+             set inUse=0 where familyId=#{familyId}
+    </update>
+ 
+     
+   
+    
+    
+    
+</mapper>

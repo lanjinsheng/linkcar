@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.ImMsgMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.ImMsg" >
+    </resultMap>
+    <insert id="insertMsg"   parameterType="java.util.List">
+       INSERT INTO 
+            imMsg
+            (familyId,fromUserPic,fromUserId,toUserPic,toUserId,createTime,msg,isRead)  VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+    		(#{item.familyId},#{item.fromUserPic},#{item.fromUserId},#{item.toUserPic},#{item.toUserId},now(),#{item.msg},#{item.isRead}) 
+    	</foreach>
+    </insert>
+ 
+    <select id="getMsg" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.ImMsg">
+  	  select a.familyId,b.imgUrl as toUserPic,a.fromUserPic,a.fromUserId,a.toUserId,a.createTime,a.msg,a.isRead
+  	    from imMsg  a left join usersAccount b on a.toUserId=b.id where 
+        a.familyId=#{familyId}  and a.toUserId=#{toUserId}
+         <if test='id != null and id>0 '>
+         <![CDATA[ and a.id>=#{id}]]>
+         </if>
+           order by a.id desc  limit 10
+    </select>
+     
+    <update id="updateMsg"    parameterType="java.util.HashMap" >
+      update
+            imMsg 
+             set isRead=1 where 
+             <![CDATA[id>=#{beginId} and id<=#{endId}]]> and familyId=#{familyId}  and toUserId=#{toUserId}
+    </update>
+ 
+     
+   
+    
+    
+    
+</mapper>
