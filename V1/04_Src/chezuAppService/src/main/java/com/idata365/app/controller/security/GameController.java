@@ -24,6 +24,7 @@ import com.idata365.app.entity.ReadyLotteryResultBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
+import com.idata365.app.entity.SwitchRoleResultBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.ViolationStatParamBean;
@@ -350,8 +351,8 @@ public class GameController extends BaseController
 	public Map<String, Object> switchRole(@RequestBody UserFamilyRoleLogParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		this.gameService.switchRole(bean);
-		return ResultUtils.rtSuccess(null);
+		SwitchRoleResultBean resultBean = this.gameService.switchRole(bean);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 	
 	/**
