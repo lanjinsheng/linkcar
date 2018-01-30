@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
-@MapperScan("com.idata365.mapper")
 @ComponentScan("com.idata365.*")
 @EnableFeignClients("com.idata365.remote")
 @EnableAutoConfiguration(exclude={MultipartAutoConfiguration.class})
