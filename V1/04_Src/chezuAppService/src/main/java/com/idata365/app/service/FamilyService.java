@@ -569,7 +569,7 @@ public class FamilyService extends BaseService<FamilyService>
 //			ownOrderParamBean.setMonth(getCurrentMonthStr());
 			ownOrderParamBean.setTimeStr(getYesterdayStr());
 			Integer ownOrderNo = this.familyMapper.queryOwnFamilyOrderNo(ownOrderParamBean);
-			if (null != ownOrderNo && 0 == ownOrderNo)
+			if (null != ownOrderNo && 0 != ownOrderNo)
 			{
 				ownResultBean.setOrderNo(String.valueOf(ownOrderNo));
 			}
