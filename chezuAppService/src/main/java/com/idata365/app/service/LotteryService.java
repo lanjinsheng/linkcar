@@ -56,6 +56,8 @@ public class LotteryService extends BaseService<LotteryService>
 	@Autowired
 	private AchieveCommService achieveCommService;
 	
+	
+	
 	/**
 	 * 道具列表
 	 * @param bean
@@ -201,6 +203,8 @@ public class LotteryService extends BaseService<LotteryService>
 			lotteryLogParamBean.setType(LotteryLogConstant.DRIVE_LOG);
 			lotteryLogParamBean.setTimestamp(getCurrentTs());
 			this.lotteryMapper.saveLotteryLog(lotteryLogParamBean);
+			achieveCommService.addAchieve(userId, Double.valueOf(receiveCount), AchieveEnum.AddCollectTimes);
+			
 		}
 	}
 	
@@ -217,7 +221,7 @@ public class LotteryService extends BaseService<LotteryService>
 	@Transactional
 	public LotteryResultBean doLottery(LotteryBean bean)
 	{
-		achieveCommService.addAchieve(bean.getUserId(), 0d, AchieveEnum.AddCollectTimes);
+		achieveCommService.addAchieve(bean.getUserId(), 1d, AchieveEnum.AddCollectTimes);
 		
 		//随机生成出抽奖奖品
 		int awardId = RandUtils.generateRand();
@@ -343,7 +347,7 @@ public class LotteryService extends BaseService<LotteryService>
 		int awardId = migrateInfoMsgBean.getAwardId();
 		int awardCount = migrateInfoMsgBean.getAwardCount();
 		
-		achieveCommService.addAchieve(toUserId, 0d, AchieveEnum.AddCollectTimes);
+		achieveCommService.addAchieve(toUserId, Double.valueOf(awardCount), AchieveEnum.AddCollectTimes);
 		
 		LotteryBean lotteryBean = new LotteryBean();
 		lotteryBean.setUserId(toUserId);
