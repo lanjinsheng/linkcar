@@ -83,7 +83,9 @@ public class AchieveCommService
 			addCarEndTimes(keyId);
 			break;
 		case AddBestDriverTimes:
+			if(taskAchieveAddValue.getAddValue().doubleValue()>0) {
 			addBestDriverTimes(keyId);
+			}
 			break;	
 		case AddCollectTimes:
 			addCollectTimes(keyId);
