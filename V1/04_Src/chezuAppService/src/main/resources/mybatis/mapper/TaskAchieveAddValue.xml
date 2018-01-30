@@ -29,7 +29,7 @@
 	 <!-- 更新任务 -->
      <update id="updateAchieveAddValueSuccTask" parameterType="com.idata365.app.entity.TaskAchieveAddValue" >
         update taskAchieveAddValue set
-        taskStatus=1,taskDealTime=now(),orderNo=#{orderNo}
+        taskStatus=1,taskDealTime=now()
         where  id=#{id}
      </update>
      <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,taskStatus=2为失败-->
