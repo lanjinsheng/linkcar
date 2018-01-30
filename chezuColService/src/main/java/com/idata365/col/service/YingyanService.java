@@ -7,11 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mortbay.log.Log;
 import org.springframework.stereotype.Service;
 
 import com.idata365.col.util.DateTools;
+import com.idata365.col.util.Gps;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.HttpUtils;
+import com.idata365.col.util.PositionUtil;
 
 @Service
 public class YingyanService {
@@ -126,14 +129,17 @@ public List<Map<String,Object>>  dealListGaode(List<Map<String,String>> list) {
 	List<Map<String,Object>> speedAlarmList=new ArrayList<Map<String,Object>>();
 	for(Map<String,String> map:list) {
 		if(map.get("t").equals("")) continue;
-	    long time=DateTools.changeDateTimeToSecond( map.get("t"));
-	    if(time==timeLong || Double.valueOf(map.get("s"))==0) {
+		//沦为utc时间
+	    long time=DateTools.changeDateTimeToSecond( map.get("t"))-(8*3600);
+	    if(time<0 || time==timeLong || Double.valueOf(map.get("s"))==0) {
 	    	continue;
 	    }
 	   
 	    timeLong=time;
-	    local.append(map.get("y")+",");
-	    local.append(map.get("x"));
+	    Gps gps= PositionUtil.gps84ToGcj02(Double.valueOf(map.get("y").toString()),Double.valueOf(map.get("x").toString()));
+	    
+	    local.append(gps.getLng()+",");
+	    local.append(gps.getLat());
 	    local.append("|");
 	    times.append(String.valueOf(time)+",");
 	    speed.append(map.get("s")+",");
@@ -176,8 +182,9 @@ private void dealSpeedAlarm(String locations,String time,String direction,String
 		    	List<Map<String,Object>> roads=(List<Map<String,Object>>)gdMap.get("roads");
 		    	int j=0;
 		    	for(Map<String,Object> road:roads) {
-		    		
 		    		int maxspeed=Integer.valueOf(road.get("maxspeed").toString());
+//		    		String crosspoint=road.get("crosspoint").toString();
+//		    		Log.info(crosspoint);
 		    		if(maxspeed>0) {
 		    			int s= BigDecimal.valueOf(Double.valueOf(tempList.get(j).get("s"))).multiply(BigDecimal.valueOf(3600)).divide(BigDecimal.valueOf(1000), 0,RoundingMode.HALF_UP).intValue();
 		    			if(s>maxspeed) {
