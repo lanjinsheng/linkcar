@@ -127,6 +127,14 @@ public class FamilyService extends BaseService<FamilyService>
 		return this.familyMapper.countUsers();
 	}
 	
+	public List<Map<String,Object>> findFamilyRelation(long family){
+		List<Map<String,Object>> rtList=usersAccountMapper.findFamilyRelation(family);
+		if(rtList==null || rtList.size()==0) {
+			return null;
+		}
+		return rtList;
+	}
+	
 	
 	/**
 	 * 移出家族
