@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.col.api.QQSSOTools;
@@ -27,6 +31,7 @@ import com.idata365.col.enums.UserSexEnum;
 import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.remote.DemoService;
 import com.idata365.col.service.DataService;
+import com.idata365.col.util.ResultUtils;
 
 
 @RestController
@@ -68,6 +73,21 @@ public class DemoController {
     	System.out.println(requestBodyParams==null?"null":requestBodyParams.size());
         return demoService.getUsers();
     }
+    
+    @RequestMapping(value = "/headerTest",method = RequestMethod.POST)
+    public Map<String,Object>  headerTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+//    	return name;
+   	   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+         String identificationJson=request.getHeader("identification");
+         String sign=request.getHeader("sign");
+         String equipmentInfo=request.getHeader("equipmentInfo");
+         LOG.info("identification="+identificationJson);
+         LOG.info("equipmentInfo="+equipmentInfo);
+         LOG.info("sign="+sign);
+         return ResultUtils.rtFailParam(null);
+    }
+    
     @RequestMapping(value = "/insertUserRemote")
     public String insertUserRemote(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 //    	return name;

@@ -134,10 +134,12 @@ public List<Map<String,Object>>  dealListGaode(List<Map<String,String>> list) {
 	    if(time<0 || time==timeLong || Double.valueOf(map.get("s"))==0) {
 	    	continue;
 	    }
-	   
-	    timeLong=time;
 	    Gps gps= PositionUtil.gps84ToGcj02(Double.valueOf(map.get("y").toString()),Double.valueOf(map.get("x").toString()));
-	    
+	    if(gps==null) {
+	    	continue;
+	    }
+	    timeLong=time;
+	   
 	    local.append(gps.getLng()+",");
 	    local.append(gps.getLat());
 	    local.append("|");
