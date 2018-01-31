@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,13 +58,15 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         * @author LanYeYe
      */
     @RequestMapping(value = "/v1/uploadDriveData",method = RequestMethod.POST)
-    public Map<String,Object>  uploadDriveData(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
+    public Map<String,Object>  uploadDriveData(@RequestParam CommonsMultipartFile file,@RequestHeader HttpHeaders headers) throws IOException {
     	 long  startTime=System.currentTimeMillis();
   	   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
         String sign=request.getHeader("sign");
+        String equipmentInfo=request.getHeader("equipmentInfo");
         LOG.info("identification="+identificationJson);
+        LOG.info("equipmentInfo="+equipmentInfo);
         LOG.info("sign="+sign);
         if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
       	  return ResultUtils.rtFailParam(null);
@@ -76,7 +80,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         int isEnd=Integer.valueOf(identificationM.get("isEnd").toString());
         int seq=Integer.valueOf(identificationM.get("seq").toString());
         int hadSensorData=Integer.valueOf(identificationM.get("hadSensorData").toString());
-        String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
+//        String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
         String deviceToken=String.valueOf(identificationM.get("deviceToken"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
         String filePath=userId+"/"+YYYYMMDD+"/A"+seq+"_"+System.currentTimeMillis();
@@ -141,13 +145,15 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         * @author LanYeYe
      */
     @RequestMapping(value = "/v1/uploadSensorData",method = RequestMethod.POST)
-    public Map<String,Object>  uploadSensorData(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
+    public Map<String,Object>  uploadSensorData(@RequestParam CommonsMultipartFile file,@RequestHeader HttpHeaders headers) throws IOException {
     	 long  startTime=System.currentTimeMillis();
   	   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
         String sign=request.getHeader("sign");
+        String equipmentInfo=request.getHeader("equipmentInfo");
         LOG.info("identification="+identificationJson);
+        LOG.info("equipmentInfo="+equipmentInfo);
         LOG.info("sign="+sign);
         if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
       	  return ResultUtils.rtFailParam(null);
@@ -160,7 +166,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         long habitId=Long.valueOf(identificationM.get("habitId").toString());
         int isEnd=Integer.valueOf(identificationM.get("isEnd").toString());
         int seq=Integer.valueOf(identificationM.get("seq").toString());
-        String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
+//        String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
         String YYYYMMDD=DateTools.getYYYYMMDD();
         String filePath=userId+"/"+YYYYMMDD+"/B"+seq+"_"+System.currentTimeMillis();
 //        LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
@@ -241,6 +247,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
     	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
           String identificationJson=request.getHeader("identification");
           String sign=request.getHeader("sign");
+          String equipmentInfo=request.getHeader("equipmentInfo");
           LOG.info("identification="+identificationJson);
           LOG.info("sign="+sign);
           if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
@@ -253,10 +260,10 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
           long userId=Long.valueOf(identificationM.get("userId").toString());
           long habitId=Long.valueOf(identificationM.get("habitId").toString());
           String startTime=(identificationM.get("startTime").toString());
-          int isEnd=Integer.valueOf(identificationM.get("isEnd").toString());
-          int seq=Integer.valueOf(identificationM.get("seq").toString());
-          int hadSensorData=Integer.valueOf(identificationM.get("hadSensorData").toString());
-          String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
+//          int isEnd=Integer.valueOf(identificationM.get("isEnd").toString());
+//          int seq=Integer.valueOf(identificationM.get("seq").toString());
+//          int hadSensorData=Integer.valueOf(identificationM.get("hadSensorData").toString());
+//          String equipmentInfo=String.valueOf(identificationM.get("equipmentInfo"));
           String deviceToken=String.valueOf(identificationM.get("deviceToken"));
           
           DriveDataStartLog startLog=new DriveDataStartLog();
