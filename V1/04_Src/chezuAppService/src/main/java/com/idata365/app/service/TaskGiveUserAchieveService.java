@@ -16,8 +16,6 @@ import com.idata365.app.entity.TaskGiveUserAchieveBean;
 import com.idata365.app.entity.UserAchieveBean;
 import com.idata365.app.mapper.TaskGiveUserAchieveMapper;
 
- 
-
 @Service
 public class TaskGiveUserAchieveService
 {
@@ -32,6 +30,7 @@ public class TaskGiveUserAchieveService
 	 * @author:CaiFengYao
 	 * @date:2018年1月23日 下午4:20:44
 	 */
+	@Transactional
 	public void initAchieveTask()
 	{
 		taskGiveUserAchieveMapper.iniTaskGiveUserAchieve();
@@ -42,10 +41,10 @@ public class TaskGiveUserAchieveService
 	 */
 	public List<TaskGiveUserAchieveBean> queryAchieveWaitList(TaskGiveUserAchieveBean taskGiveUserAchieveBean)
 	{
-		//锁定批次任务
-//		taskGiveUserAchieveMapper.lock(taskGiveUserAchieveBean);
-		
-		return taskGiveUserAchieveMapper.queryAhieveWaitDealList();
+		// 锁定批次任务
+		taskGiveUserAchieveMapper.lockGiveUserAchieveTask(taskGiveUserAchieveBean);
+		// 返回锁定列表
+		return taskGiveUserAchieveMapper.queryAhieveWaitDealList(taskGiveUserAchieveBean);
 	}
 
 	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean achieveTask)
