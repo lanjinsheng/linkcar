@@ -38,6 +38,9 @@ public class ImgsInfoController {
 	    LOG.info("start");
 		  String  key=allRequestParams.get("key");
 		  LOG.info("key="+key);
+		  if(key==null || key.equals("null")) {//无值情况下显示logo图片
+			  key="0/logo_Q";
+		  }
 //		  key=key.split(".")[0];
 	        HttpHeaders headers = new HttpHeaders();  
 	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");  
