@@ -78,19 +78,17 @@ public class UserAchieveController extends BaseController
 		int achieveId = Integer.valueOf(requestBodyParams.get("achieveId").toString());
 		// 业务处理
 		List<Map<String, Object>> list = userAchieveService.getAchieveListById(this.getUserId(), achieveId);
-		if (achieveId == 3)// 为神行太保时，将m转为km展示
+		for (Map<String, Object> m : list)
 		{
-			for (Map<String, Object> m : list)
+			if (achieveId == 3 && !m.get("nowNum").toString().equals("0"))// 为神行太保时，将m转为km展示
 			{
 				double nowNum = Double.valueOf(m.get("nowNum").toString());
-				if (nowNum > 0)
-				{
-					double nowNumKm = BigDecimal.valueOf(nowNum)
-							.divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-					m.put("nowNum", nowNumKm);
-				}
-
+				double nowNumKm = BigDecimal.valueOf(nowNum)
+						.divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+				m.put("nowNum", nowNumKm);
 			}
+			// 替换描述字段
+			m.put("achieveName", m.get("describe").toString().replaceAll("s", m.get("num").toString()));
 		}
 		this.dealListObect2String(list);
 		rtMap.put("getAchieveListById", list);
