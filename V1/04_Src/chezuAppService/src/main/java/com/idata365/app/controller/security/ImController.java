@@ -31,7 +31,7 @@ public class ImController extends BaseController {
     		 return ResultUtils.rtFailParam(null);
 	  	 }
 		long userId=this.getUserId();
-		return imService.getImMain(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString()));
+		return  ResultUtils.rtSuccess(imService.getImMain(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString())));
 	}
 	@RequestMapping("/im/getNotify")
     public Map<String,Object> getNotify(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
@@ -40,7 +40,7 @@ public class ImController extends BaseController {
     		 return ResultUtils.rtFailParam(null);
 	  	 }
 		long userId=this.getUserId();
-		return imService.getImNotify(Long.valueOf(family.toString()), userId);
+		return ResultUtils.rtSuccess(imService.getImNotify(Long.valueOf(family.toString()), userId,this.getImgBasePath()));
 	}
     
 	@RequestMapping("/im/getMsgs")
@@ -51,7 +51,7 @@ public class ImController extends BaseController {
     		 return ResultUtils.rtFailParam(null);
 	  	 }
 		long userId=this.getUserId();
-		return imService.getImMsgs(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString()));
+		return ResultUtils.rtSuccess(imService.getImMsgs(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString()),this.getImgBasePath()));
 	}
 	@RequestMapping("/im/submitNotify")
     public Map<String,Object> submitNotify(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
@@ -67,6 +67,7 @@ public class ImController extends BaseController {
 		notify.setFamilyName(String.valueOf(familyInfo.get("familyName")));
 		notify.setLeaderName(user.getNickName());
 		notify.setLeaderId(user.getId());
+		notify.setLeaderPic(user.getImgUrl());
 		notify.setInUse(1);
 		int rt= imService.insertNotify(notify);
 		return ResultUtils.rtSuccess(null);

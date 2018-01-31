@@ -122,7 +122,14 @@ public class FamilyService extends BaseService<FamilyService>
 		}
 		return rtMap;
 	}
-	
+	public Map<String,Object> findLeaderByFamilyId(long family)
+	{
+		Map<String,Object> rtMap=usersAccountMapper.getFamilyByFamilyId(family);
+		if(rtMap==null || rtMap.size()==0) {
+			return null;
+		}
+		return rtMap;
+	}
 	public int getUsersCount() {
 		return this.familyMapper.countUsers();
 	}
