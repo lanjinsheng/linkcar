@@ -16,7 +16,7 @@
      </select>
      
      <select id="getLeaderByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
-       SELECT a.familyName,b.imgUrl,b.nickName,b.id 
+       SELECT a.familyName,b.imgUrl,b.nickName,b.phone,b.id 
        FROM  familyInfo a left join usersAccount b on a.createUserId=b.id where a.id=#{familyId}
      </select>
      
