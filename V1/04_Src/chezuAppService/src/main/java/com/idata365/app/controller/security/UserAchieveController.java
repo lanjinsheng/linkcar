@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.ImgUrlConstant;
 import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.service.UserAchieveService;
 import com.idata365.app.service.common.AchieveCommService;
@@ -48,11 +49,10 @@ public class UserAchieveController extends BaseController
 		// 业务处理
 		List<Map<String, Object>> list = userAchieveService.getUserAchieveList(this.getUserId());
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
-		String imgBasePath = super.getImgBasePath();
 		for (Map<String, Object> m : list)
 		{
 			String imgUrl = m.get("imgUrl").toString();
-			m.put("imgUrl", imgBasePath + imgUrl);
+			m.put("imgUrl", ImgUrlConstant.achieveImg + imgUrl);
 			resultList.add(m);
 		}
 		this.dealListObect2String(resultList);
@@ -97,31 +97,35 @@ public class UserAchieveController extends BaseController
 		}
 		else if (type == 2)
 		{
-			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddGayTimes);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGayTimes);
 		}
 		else if (type == 3)
 		{
-			achieveCommService.addAchieve(userId,12d,AchieveEnum.AddGodTimes);
+			achieveCommService.addAchieve(userId, 12d, AchieveEnum.AddGodTimes);
 		}
 		else if (type == 4)
 		{
-			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddCarEndTimes);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddCarEndTimes);
 		}
 		else if (type == 5)
 		{
-			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddBestDriverTimes);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddBestDriverTimes);
 		}
 		else if (type == 6)
 		{
-			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddCollectTimes);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddCollectTimes);
 		}
 		else if (type == 8)
 		{
-			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddGrabTimes);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGrabTimes);
 		}
 		else if (type == 9)
 		{
-			achieveCommService.addAchieve(userId,0d,AchieveEnum.AddStupidTimes);
+			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddStupidTimes);
+		}
+		else if (type == 10)
+		{
+			achieveCommService.initCreateUserAchieve(userId);
 		}
 
 		return ResultUtils.rtSuccess("成功！！！");
