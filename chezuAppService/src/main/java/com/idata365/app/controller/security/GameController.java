@@ -356,6 +356,19 @@ public class GameController extends BaseController
 	}
 	
 	/**
+	 * 试用角色
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/tryRole")
+	public Map<String, Object> tryRole(@RequestBody UserFamilyRoleLogParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.gameService.tryRole(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
 	 * 查询明日角色
 	 * @param bean
 	 * @return

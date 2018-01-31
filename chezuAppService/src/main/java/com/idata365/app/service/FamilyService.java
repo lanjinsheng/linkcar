@@ -33,15 +33,18 @@ import com.idata365.app.entity.FamilyRandBean;
 import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.FamilyScoreBean;
 import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
+import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
@@ -55,6 +58,9 @@ public class FamilyService extends BaseService<FamilyService>
 	
 	@Autowired
 	private FamilyMapper familyMapper;
+	
+	@Autowired
+	private ScoreMapper scoreMapper;
 	
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
@@ -534,8 +540,20 @@ public class FamilyService extends BaseService<FamilyService>
 		FamilyRandBean familyResultBean = this.familyMapper.queryFamilyByCode(bean);
 		InviteInfoResultBean resultBean = new InviteInfoResultBean();
 		resultBean.setInviteCode(inviteCode);
-		resultBean.setOrderNo("100");
 		resultBean.setFamilyName(familyResultBean.getName());
+		
+		ScoreFamilyInfoParamBean orderParamBean = new ScoreFamilyInfoParamBean();
+		orderParamBean.setFamilyId(familyResultBean.getFamilyId());
+		List<FamilyScoreBean> orderList = this.scoreMapper.queryOrderRecords(orderParamBean);
+		if (CollectionUtils.isNotEmpty(orderList))
+		{
+			int yesterdayOrderNo = orderList.get(orderList.size()-1).getYesterdayOrderNo();
+			resultBean.setOrderNo(String.valueOf(yesterdayOrderNo));
+		}
+		else
+		{
+			resultBean.setOrderNo("-1");
+		}
 		return resultBean;
 	}
 	

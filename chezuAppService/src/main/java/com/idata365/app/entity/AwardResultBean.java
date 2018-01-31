@@ -28,6 +28,12 @@ public class AwardResultBean
 	//奖品
 	private String award;
 	
+	//
+	private String awardImg;
+	
+	//
+	private String nextAwardTime;
+	
 	//问答
 	private List<QuestionBean> questionList;
 
@@ -119,5 +125,25 @@ public class AwardResultBean
 	public void setQuestionList(List<QuestionBean> questionList)
 	{
 		this.questionList = questionList;
+	}
+
+	public String getAwardImg()
+	{
+		return awardImg;
+	}
+
+	public void setAwardImg(String awardImg)
+	{
+		this.awardImg = awardImg;
+	}
+
+	public String getNextAwardTime()
+	{
+		return nextAwardTime;
+	}
+
+	public void setNextAwardTime(String nextAwardTime)
+	{
+		this.nextAwardTime = nextAwardTime;
 	}
 }

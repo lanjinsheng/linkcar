@@ -969,24 +969,7 @@ public class GameService extends BaseService<GameService>
 				}
 				else
 				{
-					//试用一次
-					
-					int roleCount = this.gameMapper.countTomorrowRole(bean);
-					if (roleCount > 0)
-					{
-						this.gameMapper.updateUserFamilyRole(bean);
-					}
-					else
-					{
-						String tomorrowDateStr = getTomorrowDateStr();
-						String startTime = tomorrowDateStr + " 00:00:00";
-						String endTime = tomorrowDateStr + " 23:59:59";
-						bean.setStartTime(startTime);
-						bean.setEndTime(endTime);
-						
-						this.gameMapper.saveUserFamilyRole(bean);
-					}
-					
+					//提示：可试用一次，返回
 					resultBean.setTryFlag("1");
 					resultBean.setMsg(ROLE_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
 					return resultBean;
@@ -994,6 +977,7 @@ public class GameService extends BaseService<GameService>
 			}
 		}
 		
+		//正常切换角色
 		int roleCount = this.gameMapper.countTomorrowRole(bean);
 		if (roleCount > 0)
 		{
@@ -1012,6 +996,32 @@ public class GameService extends BaseService<GameService>
 		
 		resultBean.setTryFlag("-1");
 		return resultBean;
+	}
+	
+	/**
+	 * 试用角色
+	 * @param bean
+	 */
+	@Transactional
+	public void tryRole(UserFamilyRoleLogParamBean bean)
+	{
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		
+		int roleCount = this.gameMapper.countTomorrowRole(bean);
+		if (roleCount > 0)
+		{
+			this.gameMapper.updateUserFamilyRole(bean);
+		}
+		else
+		{
+			String tomorrowDateStr = getTomorrowDateStr();
+			String startTime = tomorrowDateStr + " 00:00:00";
+			String endTime = tomorrowDateStr + " 23:59:59";
+			bean.setStartTime(startTime);
+			bean.setEndTime(endTime);
+			
+			this.gameMapper.saveUserFamilyRole(bean);
+		}
 	}
 	
 	public String getRoleDesc(int role)
