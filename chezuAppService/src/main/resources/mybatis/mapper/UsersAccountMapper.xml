@@ -15,6 +15,11 @@
        FROM  familyInfo where id=#{familyId}
      </select>
      
+     <select id="getLeaderByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT a.familyName,b.imgUrl,b.nickName,b.id 
+       FROM  familyInfo a left join usersAccount b on a.createUserId=b.id where a.id=#{familyId}
+     </select>
+     
      <select id="findFamilyRelation" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
        FROM  familyRelation where familyId=#{familyId}
