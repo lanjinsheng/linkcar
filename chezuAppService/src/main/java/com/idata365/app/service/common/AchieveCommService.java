@@ -43,11 +43,11 @@ public class AchieveCommService
 	private FamilyMapper familyMapper;
 	@Autowired
 	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
-	
+
 	@Autowired
 	private LotteryMapper lotteryMapper;
 	Map<String, Object> map = new HashMap<String, Object>();
-	
+
 	/**
 	 * 
 	    * @Title: addAchieve
@@ -59,20 +59,23 @@ public class AchieveCommService
 	    * @throws
 	    * @author LanYeYe
 	 */
-	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
-		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
+	public boolean addAchieve(long keyId, Double value, AchieveEnum type)
+	{
+		TaskAchieveAddValue taskAchieveAddValue = new TaskAchieveAddValue();
 		taskAchieveAddValue.setAchieveType(type);
 		taskAchieveAddValue.setKeyId(keyId);
 		taskAchieveAddValue.setAddValue(value);
 		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
 		return true;
 	}
-	
-	public boolean dealTaskAchieveAddValue(TaskAchieveAddValue taskAchieveAddValue) {
-		AchieveEnum type=taskAchieveAddValue.getAchieveType();
-		Long keyId=taskAchieveAddValue.getKeyId();
-		Double value=taskAchieveAddValue.getAddValue();
-		switch(type) {
+
+	public boolean dealTaskAchieveAddValue(TaskAchieveAddValue taskAchieveAddValue)
+	{
+		AchieveEnum type = taskAchieveAddValue.getAchieveType();
+		Long keyId = taskAchieveAddValue.getKeyId();
+		Double value = taskAchieveAddValue.getAddValue();
+		switch (type)
+		{
 		case AddGayTimes:
 			addGayTimes(keyId);
 			break;
@@ -83,22 +86,23 @@ public class AchieveCommService
 			addCarEndTimes(keyId);
 			break;
 		case AddBestDriverTimes:
-			if(taskAchieveAddValue.getAddValue().doubleValue()>0) {
-			addBestDriverTimes(keyId);
+			if (taskAchieveAddValue.getAddValue().doubleValue() > 0)
+			{
+				addBestDriverTimes(keyId);
 			}
-			break;	
+			break;
 		case AddCollectTimes:
-			addCollectTimes(keyId);
-			break;	
+			addCollectTimes(keyId, value);
+			break;
 		case AddGoldFamilyTimes:
 			addGoldFamilyTimes(keyId);
-			break;	
+			break;
 		case AddGrabTimes:
 			addGrabTimes(keyId);
-			break;	
+			break;
 		case AddStupidTimes:
 			addStupidTimes(keyId);
-			break;		
+			break;
 		case AddShareTimes:
 			addShareTimes(keyId);
 			break;
@@ -113,7 +117,7 @@ public class AchieveCommService
 	 * 
 	 * @Description:分享游戏链接次数
 	 */
-	protected  void addShareTimes(long userId)
+	protected void addShareTimes(long userId)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 1);
@@ -174,11 +178,11 @@ public class AchieveCommService
 	 * 
 	 * @Description:各种途径获得道具
 	 */
-	protected void addCollectTimes(long userId)
+	protected void addCollectTimes(long userId, double value)
 	{
 		map.put("userId", userId);
 		map.put("achieveId", 6);
-		updateAchieveTimes(map);
+		updateAchieveNum(map, value);
 	}
 
 	/****************************************** 坑爹模块start **************************************************/
