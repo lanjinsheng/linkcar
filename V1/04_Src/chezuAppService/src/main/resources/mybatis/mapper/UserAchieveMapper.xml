@@ -16,7 +16,7 @@
 
 	<!-- 查询用户成就列表 -->
 	<select id="getUserAchieveList" resultType="java.util.HashMap" parameterType="java.lang.Long">
-		SELECT d.id AS achieveId,d.achieveName,d.maxLev,d.imgUrl,IFNULL(a.flag,0) flag,IFNULL(a.lev,1) lev
+		SELECT d.id AS achieveId,d.achieveName,d.maxLev,d.imgUrl,IFNULL(a.flag,0) flag,IFNULL(a.lev,0) lev
 		FROM dicUserAchieve d
 		LEFT JOIN userAchieveInfo a ON a.id=(SELECT MAX(id) id FROM userAchieveInfo WHERE flag=1 AND userId=#{userId} AND d.id=achieveId )
 		GROUP BY d.id
