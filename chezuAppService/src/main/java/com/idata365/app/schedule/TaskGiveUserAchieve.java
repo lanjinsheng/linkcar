@@ -44,66 +44,72 @@ public class TaskGiveUserAchieve extends TimerTask
 	public void run()
 	{
 		log.info("TaskGiveUserAchieve start--");
-
-		if (!pd)
+		try
 		{
-			return;
-		}
-		synchronized (lock)
-		{
-			if (pd)
+			if (!pd)
 			{
-				pd = false;
+				return;
+			}
+			synchronized (lock)
+			{
+				if (pd)
+				{
+					pd = false;
 
-				long taskFlag = System.currentTimeMillis();
-				TaskKeyLog key = new TaskKeyLog();
-				key.setTaskFlag(String.valueOf(taskFlag));
-				key.setTaskName("TaskGiveUserAchieve");
-				int hadKey = taskKeyLogService.insertAppKey(key);
-				if (hadKey == 0)
-				{
-					pd = true;
-					return;
-				}
-				
-				// 初始化
-				taskGiveUserAchieveService.initAchieveTask();
-				// 列表
-				
-				TaskGiveUserAchieveBean taskGiveUserAchieveBean=new TaskGiveUserAchieveBean();
-				taskGiveUserAchieveBean.setTaskFlag(String.valueOf(taskFlag));
-				
-				List<TaskGiveUserAchieveBean> list = taskGiveUserAchieveService.queryAchieveWaitList(taskGiveUserAchieveBean);
-				log.info("TaskGiveUserAchieve do--list.size=" + list.size());
-				for (TaskGiveUserAchieveBean achieveTask : list)
-				{
-					log.info("achieveTask>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + achieveTask.getId());
-					try
+					long taskFlag = System.currentTimeMillis();
+					TaskKeyLog key = new TaskKeyLog();
+					key.setTaskFlag(String.valueOf(taskFlag));
+					key.setTaskName("TaskGiveUserAchieve");
+					int hadKey = taskKeyLogService.insertAppKey(key);
+					if (hadKey == 0)
 					{
-						achieveTask.setTaskStatus(-1);
-						// 锁定记录
-						taskGiveUserAchieveService.updateUserAchieveTaskStatus(achieveTask);
-						// 业务部分
-						boolean result = taskGiveUserAchieveService
-								.giveAwardByAchieve(achieveTask.getAchieveRecordId());
-						if (result)
+						pd = true;
+						return;
+					}
+
+					// 初始化用户成就
+					threadPool.execute(new InitAchieveTask(taskGiveUserAchieveService));
+
+					TaskGiveUserAchieveBean taskGiveUserAchieveBean = new TaskGiveUserAchieveBean();
+					taskGiveUserAchieveBean.setTaskFlag(String.valueOf(taskFlag));
+					// 列表
+					List<TaskGiveUserAchieveBean> list = taskGiveUserAchieveService
+							.queryAchieveWaitList(taskGiveUserAchieveBean);
+					log.info("TaskGiveUserAchieve do--list.size=" + list.size());
+					for (TaskGiveUserAchieveBean achieveTask : list)
+					{
+						log.info("achieveTask>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + achieveTask.getId());
+						try
 						{
-							taskGiveUserAchieveService.updateSuccUserAchieveTask(achieveTask);
-						}else {
+							// 业务部分
+							boolean result = taskGiveUserAchieveService.giveAwardByAchieve(achieveTask
+									.getAchieveRecordId());
+							if (result)
+							{
+								taskGiveUserAchieveService.updateSuccUserAchieveTask(achieveTask);
+							}
+							else
+							{
+								taskGiveUserAchieveService.updateFailUserAchieveTask(achieveTask);
+							}
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+							log.error(e);
 							taskGiveUserAchieveService.updateFailUserAchieveTask(achieveTask);
 						}
 					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-						log.error(e);
-						taskGiveUserAchieveService.updateFailUserAchieveTask(achieveTask);
-					}
+					pd = true;
 				}
-				pd = true;
-			}
 
+			}
 		}
+		catch (Exception e)
+		{
+			pd = true;
+		}
+
 		log.info("TaskGiveUserAchieve end--");
 	}
 }
