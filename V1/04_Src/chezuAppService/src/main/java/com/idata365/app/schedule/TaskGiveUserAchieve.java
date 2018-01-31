@@ -68,7 +68,7 @@ public class TaskGiveUserAchieve extends TimerTask
 					}
 
 					// 初始化用户成就
-					threadPool.execute(new InitAchieveTask(taskGiveUserAchieveService));
+					threadPool.execute(new InitAchieveTask());
 
 					TaskGiveUserAchieveBean taskGiveUserAchieveBean = new TaskGiveUserAchieveBean();
 					taskGiveUserAchieveBean.setTaskFlag(String.valueOf(taskFlag));

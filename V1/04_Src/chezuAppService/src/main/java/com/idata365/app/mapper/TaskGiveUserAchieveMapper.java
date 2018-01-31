@@ -2,6 +2,8 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
 import com.idata365.app.entity.TaskGiveUserAchieveBean;
@@ -31,6 +33,10 @@ public interface TaskGiveUserAchieveMapper
 	 * 更新失败信息
 	 */
 	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean bean);
+	
+	
+	void clearLockTask(@Param("compareTimes") Long compareTimes);
+	
 
 	/**
 	 * 更新记录状态
