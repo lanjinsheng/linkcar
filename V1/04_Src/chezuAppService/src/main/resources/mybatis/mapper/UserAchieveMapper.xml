@@ -29,6 +29,7 @@
 		inner join dicUserAchieve d ON d.id=a.achieveId
 		left join dicLottery dy on dy.awardId=a.awardId
 		where a.userId=#{userId} and a.achieveId=#{achieveId}
+		order by d.maxLev
 	</select>
 
 	<!-- 查看用户某项成就最新记录id -->
