@@ -65,10 +65,15 @@ public class TaskGiveUserAchieve extends TimerTask
 					pd = true;
 					return;
 				}
+				
 				// 初始化
 				taskGiveUserAchieveService.initAchieveTask();
 				// 列表
-				List<TaskGiveUserAchieveBean> list = taskGiveUserAchieveService.queryAchieveWaitList();
+				
+				TaskGiveUserAchieveBean taskGiveUserAchieveBean=new TaskGiveUserAchieveBean();
+				taskGiveUserAchieveBean.setTaskFlag(String.valueOf(taskFlag));
+				
+				List<TaskGiveUserAchieveBean> list = taskGiveUserAchieveService.queryAchieveWaitList(taskGiveUserAchieveBean);
 				log.info("TaskGiveUserAchieve do--list.size=" + list.size());
 				for (TaskGiveUserAchieveBean achieveTask : list)
 				{
@@ -84,21 +89,14 @@ public class TaskGiveUserAchieve extends TimerTask
 						if (result)
 						{
 							taskGiveUserAchieveService.updateSuccUserAchieveTask(achieveTask);
+						}else {
+							taskGiveUserAchieveService.updateFailUserAchieveTask(achieveTask);
 						}
 					}
 					catch (Exception e)
 					{
 						e.printStackTrace();
 						log.error(e);
-						if (achieveTask.getFailTimes() > 100)
-						{
-							// 状态置为2，代表计算次数已经极限
-							achieveTask.setFailTimes(2);
-						}
-						else
-						{
-							achieveTask.setFailTimes(0);
-						}
 						taskGiveUserAchieveService.updateFailUserAchieveTask(achieveTask);
 					}
 				}
