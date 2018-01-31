@@ -14,11 +14,17 @@ feign:
     
 server:
   port: 9081
- 
+  tomcat:
+    uri-encoding: UTF-8
 spring:
   application:
     name: service-col-chezu
-    
+  http:
+    encoding:
+      charset: UTF-8  
+      force: true
+      enabled: true
+      
     # 驱动配置信息
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
