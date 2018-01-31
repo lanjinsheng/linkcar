@@ -13,8 +13,8 @@
     </insert>
  
     <select id="getMsg" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.ImMsg">
-  	  select a.familyId,CONCAT(#{fromUserPic},b.imgUrl) as toUserPic,b.nickName,b.phone,a.fromUserPic,a.fromUserId,a.toUserId,a.createTime,a.msg,a.isRead
-  	    from imMsg  a left join usersAccount b on a.toUserId=b.id where 
+  	  select a.id,a.familyId,b.imgUrl as fromUserPic,b.nickName,b.phone,a.fromUserPic,a.fromUserId,a.toUserId,a.createTime,a.msg,a.isRead
+  	    from imMsg  a left join usersAccount b on a.fromUserId=b.id where 
         a.familyId=#{familyId}  and a.toUserId=#{toUserId}
          <if test='id != null and id>0 '>
          <![CDATA[ and a.id>=#{id}]]>

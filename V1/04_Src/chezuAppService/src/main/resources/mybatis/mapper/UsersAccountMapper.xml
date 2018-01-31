@@ -22,7 +22,7 @@
      
      <select id="findFamilyRelation" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
-       FROM  familyRelation where familyId=#{familyId}
+       FROM  userFamilyRelation where familyId=#{familyId}
      </select>
      
      
