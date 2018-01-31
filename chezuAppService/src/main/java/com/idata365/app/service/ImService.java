@@ -80,7 +80,7 @@ public class ImService extends BaseService<ImService>
     		imNotify.setLeaderId(Long.valueOf(leaderInfo.get("id").toString()));
     		imNotify.setLeaderPic(basePath+String.valueOf(leaderInfo.get("imgUrl")));
     		imNotify.setFamilyId(familyId);
-    		rtMap.put("imNotify", new ImNotify());
+    		rtMap.put("imNotify", imNotify);
     	}else {
     		imNotify.setLeaderPic(basePath+imNotify.getLeaderPic());
     		rtMap.put("imNotify", imNotify);
