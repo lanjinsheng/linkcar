@@ -17,8 +17,16 @@ public class ImNotify implements Serializable {
 	private Integer inUse;
 	private Long familyId;
 	private String familyName;
+	private String leaderPic;
 	
 	
+	
+	public String getLeaderPic() {
+		return leaderPic;
+	}
+	public void setLeaderPic(String leaderPic) {
+		this.leaderPic = leaderPic;
+	}
 	public String getFamilyName() {
 		return familyName;
 	}

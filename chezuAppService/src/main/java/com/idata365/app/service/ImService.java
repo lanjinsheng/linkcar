@@ -45,12 +45,13 @@ public class ImService extends BaseService<ImService>
     	return rtMap;
     }
     
-    public Map<String,Object> getImMsgs(Long familyId,Long userId,Long msgId){
+    public Map<String,Object> getImMsgs(Long familyId,Long userId,Long msgId,String basePath){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	Map<String,Object> upMap=new HashMap<String,Object>();
     	ImMsg msg=new ImMsg();
     	msg.setId(msgId);
     	msg.setFamilyId(familyId);
+    	msg.setFromUserPic(basePath);
     	List<ImMsg> imMsgs=imMsgMapper.getMsg(msg);
     	
     	if(imMsgs==null || imMsgs.size()==0) {
@@ -67,12 +68,21 @@ public class ImService extends BaseService<ImService>
     	return rtMap;
     }
     
-    public Map<String,Object> getImNotify(Long familyId,Long userId){
+    public Map<String,Object> getImNotify(Long familyId,Long userId,String basePath){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	ImNotify imNotify=imNotifyMapper.getNotify(familyId);
     	if(imNotify==null) {
+    		//获取家族信息
+    		Map<String,Object> leaderInfo=familyService.findLeaderByFamilyId(familyId);
+    		imNotify=new ImNotify();
+    		imNotify.setFamilyName(String.valueOf(leaderInfo.get("familyName")));
+    		imNotify.setLeaderName(String.valueOf(leaderInfo.get("nickName")));
+    		imNotify.setLeaderId(Long.valueOf(leaderInfo.get("id").toString()));
+    		imNotify.setLeaderPic(basePath+String.valueOf(leaderInfo.get("imgUrl")));
+    		imNotify.setFamilyId(familyId);
     		rtMap.put("imNotify", new ImNotify());
     	}else {
+    		imNotify.setLeaderPic(basePath+imNotify.getLeaderPic());
     		rtMap.put("imNotify", imNotify);
     	}
     	return rtMap;
