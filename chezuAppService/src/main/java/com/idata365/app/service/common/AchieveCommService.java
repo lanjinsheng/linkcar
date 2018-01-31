@@ -140,13 +140,17 @@ public class AchieveCommService
 	/**
 	 * 3.神行太保
 	 * 
-	 * @Description:累计里程
+	 * @Description:累计里程(km)TODO 入参是米
 	 */
 	protected void addGodTimes(long userId, double mileage)
 	{
+		if (mileage == 0)
+		{
+			return;
+		}
 		map.put("userId", userId);
 		map.put("achieveId", 3);
-		updateAchieveNum(map, mileage);
+		updateAchieveMile(map, mileage);
 	}
 
 	/**
@@ -452,6 +456,35 @@ public class AchieveCommService
 			map.put("nowNum", nowNum);
 			// 更新数量
 			userAchieveMapper.updateGoldFamilyAchieveValue(map);
+		}
+	}
+
+	// 更新成就里程
+	void updateAchieveMile(Map<String, Object> map, double num)
+	{
+		// 查看用户某项成就最新记录id
+		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
+		LOG.info("updateAchieveNum==================================================", achieve);
+		if (achieve != null && achieve.getId() != null)
+		{
+			int sumNum = achieve.getNowNum() + new Double(num).intValue();
+			achieve.setNowNum(new Double(num).intValue());
+			userAchieveMapper.updateAchieveNumById(achieve);
+			int goalNum = achieve.getNum() * 1000;// 目标里程，字典表里是km，此处转为m来计算
+			if (sumNum >= goalNum)
+			{
+				// 更新成就解锁标识
+				userAchieveMapper.updateFlagToLock(achieve.getId());
+				// 更新下一个成就等级的数量
+				if (achieve.getLev() < achieve.getMaxLev())
+				{
+					// 剩余成就值
+					map.put("lev", achieve.getLev() + 1);
+					map.put("nowNum", sumNum - achieve.getNum());
+					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
+					userAchieveMapper.updateNextLevAchieveValue(map);
+				}
+			}
 		}
 	}
 
