@@ -7,8 +7,8 @@
     <insert id="insertStartData" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.col.entity.DriveDataStartLog" >
        INSERT INTO 
             driveDataStartLog
-            (userId,habitId,startTimeLong,createTime,equipmentInfo,deviceToken) 
+            (userId,habitId,startTime,createTime,equipmentInfo,deviceToken) 
         VALUES
-            (#{userId}, #{habitId}, #{startTimeLong},now(), #{equipmentInfo}, #{deviceToken})
+            (#{userId}, #{habitId}, #{startTime},now(), #{equipmentInfo}, #{deviceToken})
     </insert>
 </mapper>
