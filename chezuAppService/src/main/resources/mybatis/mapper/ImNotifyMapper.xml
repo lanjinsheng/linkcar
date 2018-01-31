@@ -12,7 +12,7 @@
     </insert>
  
     <select id="getNotify" resultMap="BaseResultMap" parameterType="java.lang.Long">
-  	  select * from imNotify where inUse=1 and leaderId=#{familyId} order by id desc limit 1
+  	  select * from imNotify where inUse=1 and familyId=#{familyId} order by id desc limit 1
     </select>
      
     <update id="updateNotify"    parameterType="java.lang.Long" >
