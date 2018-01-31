@@ -24,7 +24,7 @@
 
 	<!-- 查询用户某项成就详情 -->
 	<select id="getUserAchieveListById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-		select a.achieveId,d.achieveName,a.awardId,dy.awardValue,a.awardNum,a.nowNum,a.num,a.type,a.flag
+		select a.achieveId,d.achieveName,a.awardId,dy.awardValue,a.awardNum,a.nowNum,a.num,a.type,a.flag,d.describe
 		from userAchieveInfo a
 		inner join dicUserAchieve d ON d.id=a.achieveId
 		left join dicLottery dy on dy.awardId=a.awardId
