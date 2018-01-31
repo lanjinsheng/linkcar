@@ -969,13 +969,30 @@ public class GameService extends BaseService<GameService>
 				}
 				else
 				{
+					//试用一次
+					
+					int roleCount = this.gameMapper.countTomorrowRole(bean);
+					if (roleCount > 0)
+					{
+						this.gameMapper.updateUserFamilyRole(bean);
+					}
+					else
+					{
+						String tomorrowDateStr = getTomorrowDateStr();
+						String startTime = tomorrowDateStr + " 00:00:00";
+						String endTime = tomorrowDateStr + " 23:59:59";
+						bean.setStartTime(startTime);
+						bean.setEndTime(endTime);
+						
+						this.gameMapper.saveUserFamilyRole(bean);
+					}
+					
 					resultBean.setTryFlag("1");
 					resultBean.setMsg(ROLE_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
 					return resultBean;
 				}
 			}
 		}
-		
 		
 		int roleCount = this.gameMapper.countTomorrowRole(bean);
 		if (roleCount > 0)
