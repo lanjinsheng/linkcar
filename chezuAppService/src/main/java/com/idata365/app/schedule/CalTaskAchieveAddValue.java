@@ -52,7 +52,7 @@ public class CalTaskAchieveAddValue extends TimerTask {
 		if(pd){
 			pd=false;
 			try {
-		 
+				
 			long taskFlag=System.currentTimeMillis();
 			TaskKeyLog key=new TaskKeyLog();
 			key.setTaskFlag(String.valueOf(taskFlag));

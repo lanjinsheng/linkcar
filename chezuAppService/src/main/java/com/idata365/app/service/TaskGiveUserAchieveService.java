@@ -40,14 +40,26 @@ public class TaskGiveUserAchieveService
 	/**
 	 * 查询待处理成就任务
 	 */
-	public List<TaskGiveUserAchieveBean> queryAchieveWaitList()
+	public List<TaskGiveUserAchieveBean> queryAchieveWaitList(TaskGiveUserAchieveBean taskGiveUserAchieveBean)
 	{
-		return taskGiveUserAchieveMapper.queryAhieveWaitDealList();
+		//锁定批次任务
+		taskGiveUserAchieveMapper.lock(taskGiveUserAchieveBean);
+		
+		return taskGiveUserAchieveMapper.queryAhieveWaitDealList(taskGiveUserAchieveBean);
 	}
 
-	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean bean)
+	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean achieveTask)
 	{
-		taskGiveUserAchieveMapper.updateFailUserAchieveTask(bean);
+		if (achieveTask.getFailTimes() > 100)
+		{
+			// 状态置为2，代表计算次数已经极限
+			achieveTask.setFailTimes(2);
+		}
+		else
+		{
+			achieveTask.setFailTimes(0);
+		}
+		taskGiveUserAchieveMapper.updateFailUserAchieveTask(achieveTask);
 	}
 
 	/**
