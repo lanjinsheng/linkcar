@@ -3,6 +3,8 @@ package com.idata365.col.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -65,7 +67,13 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
         String sign=request.getHeader("sign");
-        String equipmentInfo=UnicodeUtil.unicodeDecode(request.getHeader("equipmentInfo"));
+        String equipmentInfo=request.getHeader("equipmentInfo");
+        try {
+        	equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         LOG.info("identification="+identificationJson);
         LOG.info("equipmentInfo="+equipmentInfo);
         LOG.info("sign="+sign);
@@ -152,7 +160,13 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
         String sign=request.getHeader("sign");
-        String equipmentInfo=UnicodeUtil.unicodeDecode(request.getHeader("equipmentInfo"));
+        String equipmentInfo=request.getHeader("equipmentInfo");
+        try {
+        	equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         LOG.info("identification="+identificationJson);
         LOG.info("equipmentInfo="+equipmentInfo);
         LOG.info("sign="+sign);
@@ -248,7 +262,13 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
     	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
           String identificationJson=request.getHeader("identification");
           String sign=request.getHeader("sign");
-          String equipmentInfo=UnicodeUtil.unicodeDecode(request.getHeader("equipmentInfo"));
+          String equipmentInfo=request.getHeader("equipmentInfo");
+          try {
+          	equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+  		} catch (UnsupportedEncodingException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}
           LOG.info("identification="+identificationJson);
           LOG.info("sign="+sign);
           if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
