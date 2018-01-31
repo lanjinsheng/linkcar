@@ -7,8 +7,6 @@ import com.idata365.app.entity.LotteryLogInfoParamBean;
 import com.idata365.app.entity.TaskGiveUserAchieveBean;
 import com.idata365.app.entity.UserAchieveBean;
 
-
-
 /**
  * 
  * @className:com.idata365.mapper.app.TaskGiveUserAchieveMapper
@@ -27,7 +25,7 @@ public interface TaskGiveUserAchieveMapper
 	/**
 	 * 查询待处理成就列表
 	 */
-	public List<TaskGiveUserAchieveBean> queryAhieveWaitDealList();
+	public List<TaskGiveUserAchieveBean> queryAhieveWaitDealList(TaskGiveUserAchieveBean taskGiveUserAchieveBean);
 
 	/**
 	 * 更新失败信息
@@ -62,4 +60,9 @@ public interface TaskGiveUserAchieveMapper
 	 * 更新状态为成功
 	 */
 	public void updateSuccUserAchieveTask(TaskGiveUserAchieveBean bean);
+
+	/**
+	 * 锁定任务表
+	 */
+	public void lockGiveUserAchieveTask(TaskGiveUserAchieveBean bean);
 }
