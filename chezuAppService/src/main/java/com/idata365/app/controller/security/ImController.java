@@ -75,6 +75,7 @@ public class ImController extends BaseController {
 		notify.setLeaderId(user.getId());
 		notify.setLeaderPic(user.getImgUrl());
 		notify.setInUse(1);
+		notify.setFamilyId(Long.valueOf(family.toString()));
 		notify.setNotifyMsg(msg.toString());
 		int rt= imService.insertNotify(notify);
 		return ResultUtils.rtSuccess(null);
