@@ -124,7 +124,7 @@ public class FamilyService extends BaseService<FamilyService>
 	}
 	public Map<String,Object> findLeaderByFamilyId(long family)
 	{
-		Map<String,Object> rtMap=usersAccountMapper.getFamilyByFamilyId(family);
+		Map<String,Object> rtMap=usersAccountMapper.getLeaderByFamilyId(family);
 		if(rtMap==null || rtMap.size()==0) {
 			return null;
 		}
