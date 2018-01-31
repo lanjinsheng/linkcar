@@ -11,10 +11,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.directory.api.util.Unicode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +34,7 @@ import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.remote.DemoService;
 import com.idata365.col.service.DataService;
 import com.idata365.col.util.ResultUtils;
+import com.idata365.col.util.UnicodeUtil;
 
 
 @RestController
@@ -75,16 +78,11 @@ public class DemoController {
     }
     
     @RequestMapping(value = "/headerTest",method = RequestMethod.POST)
-    public Map<String,Object>  headerTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    public Map<String,Object>  headerTest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestHeader(value="equipmentInfo") String equipmentInfo){
 //    	return name;
    	   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
    	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-         String identificationJson=request.getHeader("identification");
-         String sign=request.getHeader("sign");
-         String equipmentInfo=request.getHeader("equipmentInfo");
-         LOG.info("identification="+identificationJson);
-         LOG.info("equipmentInfo="+equipmentInfo);
-         LOG.info("sign="+sign);
+         LOG.info("equipmentInfo="+UnicodeUtil.unicodeDecode(equipmentInfo));
          return ResultUtils.rtFailParam(null);
     }
     

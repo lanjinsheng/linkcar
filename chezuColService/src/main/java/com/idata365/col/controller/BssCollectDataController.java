@@ -35,6 +35,7 @@ import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.ResultUtils;
 import com.idata365.col.util.SignUtils;
 import com.idata365.col.util.StaticDatas;
+import com.idata365.col.util.UnicodeUtil;
 import com.idata365.col.util.ValidTools;
 
 
@@ -64,7 +65,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
         String sign=request.getHeader("sign");
-        String equipmentInfo=request.getHeader("equipmentInfo");
+        String equipmentInfo=UnicodeUtil.unicodeDecode(request.getHeader("equipmentInfo"));
         LOG.info("identification="+identificationJson);
         LOG.info("equipmentInfo="+equipmentInfo);
         LOG.info("sign="+sign);
@@ -151,7 +152,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
         String sign=request.getHeader("sign");
-        String equipmentInfo=request.getHeader("equipmentInfo");
+        String equipmentInfo=UnicodeUtil.unicodeDecode(request.getHeader("equipmentInfo"));
         LOG.info("identification="+identificationJson);
         LOG.info("equipmentInfo="+equipmentInfo);
         LOG.info("sign="+sign);
@@ -247,7 +248,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
     	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
           String identificationJson=request.getHeader("identification");
           String sign=request.getHeader("sign");
-          String equipmentInfo=request.getHeader("equipmentInfo");
+          String equipmentInfo=UnicodeUtil.unicodeDecode(request.getHeader("equipmentInfo"));
           LOG.info("identification="+identificationJson);
           LOG.info("sign="+sign);
           if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
