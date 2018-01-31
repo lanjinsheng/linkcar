@@ -1,5 +1,7 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
+
 /**
  * 
  * @className:com.idata365.app.entity.UserAchieveBean
@@ -7,7 +9,7 @@ package com.idata365.app.entity;
  * @date:2018年1月19日 下午3:05:27
  * @author:CaiFengYao
  */
-public class UserAchieveBean
+public class UserAchieveBean implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private Long id;
@@ -41,6 +43,7 @@ public class UserAchieveBean
 	// 连续登榜天数
 	private int goldCountDays;
 	private long familyId;
+
 	public long getFamilyId()
 	{
 		return familyId;
