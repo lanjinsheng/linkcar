@@ -43,9 +43,9 @@ public class TaskGiveUserAchieveService
 	public List<TaskGiveUserAchieveBean> queryAchieveWaitList(TaskGiveUserAchieveBean taskGiveUserAchieveBean)
 	{
 		//锁定批次任务
-		taskGiveUserAchieveMapper.lock(taskGiveUserAchieveBean);
+//		taskGiveUserAchieveMapper.lock(taskGiveUserAchieveBean);
 		
-		return taskGiveUserAchieveMapper.queryAhieveWaitDealList(taskGiveUserAchieveBean);
+		return taskGiveUserAchieveMapper.queryAhieveWaitDealList();
 	}
 
 	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean achieveTask)
