@@ -24,4 +24,11 @@ abstract  class BaseController {
 	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/msg/sendRegMsg?key=";
 
 	}
+	
+	protected String getImgBasePath() {
+		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+	   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+	   	  return "http://"+request.getServerName()+":"+request.getServerPort()+"/userFiles/getImgs?key=";
+     
+	  }
 }
