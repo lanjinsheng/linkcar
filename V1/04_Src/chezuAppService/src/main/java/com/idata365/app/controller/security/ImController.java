@@ -14,6 +14,7 @@ import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ImService;
 import com.idata365.app.util.ResultUtils;
+import com.idata365.app.util.StringTools;
 import com.idata365.app.util.ValidTools;
 
 @RestController
@@ -65,10 +66,16 @@ public class ImController extends BaseController {
 		notify.setFamilyId(Long.valueOf(family.toString()));
 		Map<String,Object> familyInfo=familyService.findFamilyByFamilyId(notify.getFamilyId());
 		notify.setFamilyName(String.valueOf(familyInfo.get("familyName")));
-		notify.setLeaderName(user.getNickName());
+		
+		if(user.getNickName()==null) {
+			notify.setLeaderName(StringTools.getPhoneHidden(user.getPhone()));
+		}else {
+			notify.setLeaderName(user.getNickName());
+		}
 		notify.setLeaderId(user.getId());
 		notify.setLeaderPic(user.getImgUrl());
 		notify.setInUse(1);
+		notify.setNotifyMsg(msg.toString());
 		int rt= imService.insertNotify(notify);
 		return ResultUtils.rtSuccess(null);
 	}	
