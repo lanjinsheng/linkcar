@@ -19,7 +19,15 @@ public class ImMsg implements Serializable {
 	private String msg;
 	private Integer isRead;
 	private String nickName;
+	private String phone;
 	
+	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	public String getNickName() {
 		return nickName;
 	}
