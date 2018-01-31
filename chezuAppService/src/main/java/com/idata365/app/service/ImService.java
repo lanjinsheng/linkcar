@@ -59,6 +59,11 @@ public class ImService extends BaseService<ImService>
     		rtMap.put("imMsgs", new ArrayList());
     		
     	}else {
+    		for(ImMsg imMsg:imMsgs) {
+    			if(imMsg.getNickName()==null) {
+    				imMsg.setNickName(StringTools.getPhoneHidden(imMsg.getPhone()));
+    			}
+    		}
     		upMap.put("familyId", familyId);
         	upMap.put("toUserId", userId);
         	upMap.put("beginId", msgId);
