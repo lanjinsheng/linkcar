@@ -34,6 +34,12 @@ public class AwardBean implements Serializable
 	
 	//奖品
 	private String award;
+	
+	//
+	private String awardImg;
+	
+	//
+	private String nextAwardTime;
 
 	public long getId()
 	{
@@ -123,6 +129,26 @@ public class AwardBean implements Serializable
 	public void setAward(String award)
 	{
 		this.award = award;
+	}
+
+	public String getAwardImg()
+	{
+		return awardImg;
+	}
+
+	public void setAwardImg(String awardImg)
+	{
+		this.awardImg = awardImg;
+	}
+
+	public String getNextAwardTime()
+	{
+		return nextAwardTime;
+	}
+
+	public void setNextAwardTime(String nextAwardTime)
+	{
+		this.nextAwardTime = nextAwardTime;
 	}
 	
 }
