@@ -15,7 +15,7 @@
 	<select id="queryAhieveWaitDealList" resultType="com.idata365.app.entity.TaskGiveUserAchieveBean">
 		select id,achieveRecordId
 		from taskGiveUserAchieve
-		where taskStatus=0
+		where taskStatus=-1 and taskFlag=#{taskFlag}
 	</select>
 	
 	  <!-- 失败的calStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会 -->
@@ -46,6 +46,16 @@
            taskStatus=#{taskStatus}
        WHERE 
               id=#{id} 
+     </update>
+     
+      <!-- 锁定任务表 -->
+    <update id="lockGiveUserAchieveTask" parameterType="com.idata365.app.entity.TaskGiveUserAchieveBean" >
+       UPDATE 
+           taskGiveUserAchieve 
+       SET 
+           taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
+       WHERE 
+           taskStatus = 0  and taskFlag='0'  LIMIT 500  
      </update>
      
      	<!-- 查询用户某项成就详情 -->
