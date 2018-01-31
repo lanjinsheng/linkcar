@@ -953,7 +953,9 @@ public class GameService extends BaseService<GameService>
 		if (RoleConstant.JIANBING_ROLE != role)
 		{
 			//
-			if (0 != driveEditResultBean.getIsDrivingEdit()
+			if (null == driveEditResultBean
+					|| null == travelEditResultBean
+					|| 0 != driveEditResultBean.getIsDrivingEdit()
 					|| 0 != travelEditResultBean.getIsTravelEdit())
 			{
 				//角色试用次数
