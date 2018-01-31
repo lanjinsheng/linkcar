@@ -12,6 +12,7 @@ import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.ImNotify;
 import com.idata365.app.mapper.ImMsgMapper;
 import com.idata365.app.mapper.ImNotifyMapper;
+import com.idata365.app.util.StringTools;
 
 @Service
 public class ImService extends BaseService<ImService>
@@ -76,7 +77,11 @@ public class ImService extends BaseService<ImService>
     		Map<String,Object> leaderInfo=familyService.findLeaderByFamilyId(familyId);
     		imNotify=new ImNotify();
     		imNotify.setFamilyName(String.valueOf(leaderInfo.get("familyName")));
-    		imNotify.setLeaderName(String.valueOf(leaderInfo.get("nickName")));
+    		if(leaderInfo.get("nickName")==null) {
+    			imNotify.setLeaderName(StringTools.getPhoneHidden(String.valueOf(leaderInfo.get("phone"))));
+    		}else {
+    			imNotify.setLeaderName(String.valueOf(leaderInfo.get("nickName")));
+    		}
     		imNotify.setLeaderId(Long.valueOf(leaderInfo.get("id").toString()));
     		imNotify.setLeaderPic(basePath+String.valueOf(leaderInfo.get("imgUrl")));
     		imNotify.setFamilyId(familyId);
@@ -115,5 +120,7 @@ public class ImService extends BaseService<ImService>
     	}
     	
     	return imMsgMapper.insertMsg(insertList);
+    }
+    public static void main(String []args) {
     }
 }
