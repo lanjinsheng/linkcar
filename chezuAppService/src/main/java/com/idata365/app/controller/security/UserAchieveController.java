@@ -1,5 +1,6 @@
 package com.idata365.app.controller.security;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,10 +64,7 @@ public class UserAchieveController extends BaseController
 	/**
 	 * 查看用户某项成就具体内容
 	 * 
-	 * @Description:
-	 * @param allRequestParams
-	 * @param requestBodyParams
-	 * @return
+	 * @Description:TODO achieveId==3(神行太保)。该id不能变
 	 * @author:CaiFengYao
 	 * @date:2018年1月19日 下午5:27:48
 	 */
@@ -80,6 +78,20 @@ public class UserAchieveController extends BaseController
 		int achieveId = Integer.valueOf(requestBodyParams.get("achieveId").toString());
 		// 业务处理
 		List<Map<String, Object>> list = userAchieveService.getAchieveListById(this.getUserId(), achieveId);
+		if (achieveId == 3)// 为神行太保时，将m转为km展示
+		{
+			for (Map<String, Object> m : list)
+			{
+				double nowNum = Double.valueOf(m.get("nowNum").toString());
+				if (nowNum > 0)
+				{
+					double nowNumKm = BigDecimal.valueOf(nowNum)
+							.divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+					m.put("nowNum", nowNumKm);
+				}
+
+			}
+		}
 		this.dealListObect2String(list);
 		rtMap.put("getAchieveListById", list);
 		return ResultUtils.rtSuccess(rtMap);
