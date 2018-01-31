@@ -33,7 +33,7 @@
        UPDATE 
            taskGiveUserAchieve 
        SET 
-           taskStatus=1,taskFlag=0,taskDealTime=now()
+           taskStatus=1,taskDealTime=now()
        WHERE 
               id=#{id} 
      </update>
@@ -57,7 +57,15 @@
        WHERE 
            taskStatus = 0  and taskFlag='0'  LIMIT 500  
      </update>
-     
+          <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           taskGiveUserAchieve 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
      	<!-- 查询用户某项成就详情 -->
 	<select id="getUserAchieveInfoById" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.lang.Long">
 		SELECT a.id,a.achieveId,a.awardId,d.awardValue,a.awardNum,a.type,a.flag,a.userId
