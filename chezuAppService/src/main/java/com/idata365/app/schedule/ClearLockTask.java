@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.idata365.app.service.TaskAchieveAddValueService;
+import com.idata365.app.service.TaskGiveUserAchieveService;
 
 
 public class ClearLockTask extends TimerTask { 
@@ -17,8 +18,8 @@ public class ClearLockTask extends TimerTask {
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
     TaskAchieveAddValueService taskAchieveAddValueService;
- 
-    
+    @Autowired
+    TaskGiveUserAchieveService taskGiveUserAchieveService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -38,7 +39,7 @@ public class ClearLockTask extends TimerTask {
 		
 			try {
 				taskAchieveAddValueService.clearLockTask();
-				 
+				taskGiveUserAchieveService.clearLockTask();
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.error(e);

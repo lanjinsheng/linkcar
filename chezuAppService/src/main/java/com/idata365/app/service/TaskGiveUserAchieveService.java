@@ -60,6 +60,11 @@ public class TaskGiveUserAchieveService
 		}
 		taskGiveUserAchieveMapper.updateFailUserAchieveTask(achieveTask);
 	}
+	
+	public	void clearLockTask() {
+		long compareTimes=System.currentTimeMillis()-(5*60*1000);
+		taskGiveUserAchieveMapper.clearLockTask(compareTimes);
+	}
 
 	/**
 	 * 更新状态
