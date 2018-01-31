@@ -1,5 +1,8 @@
 package com.idata365.col.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public class UnicodeUtil {
 	 /**
      * unicode解码（unicode编码转中文）
@@ -76,7 +79,12 @@ public class UnicodeUtil {
     }
     
     public static void main(String []args) {
-//    	String aaa="徐小波\U7684";
-//    	System.out.println(unicodeDecode(aaa));
+    	String aaa="iPhone%20SE%2010.3.3%20xiaobo%E7%9A%84%20iPhone%201.0";
+    	try {
+			System.out.println(URLDecoder.decode(aaa,"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
