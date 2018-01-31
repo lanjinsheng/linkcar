@@ -51,6 +51,7 @@ public class ImService extends BaseService<ImService>
     	Map<String,Object> upMap=new HashMap<String,Object>();
     	ImMsg msg=new ImMsg();
     	msg.setId(msgId);
+    	msg.setToUserId(userId);
     	msg.setFamilyId(familyId);
     	msg.setFromUserPic(basePath);
     	List<ImMsg> imMsgs=imMsgMapper.getMsg(msg);
@@ -63,6 +64,7 @@ public class ImService extends BaseService<ImService>
     			if(imMsg.getNickName()==null) {
     				imMsg.setNickName(StringTools.getPhoneHidden(imMsg.getPhone()));
     			}
+    			imMsg.setFromUserPic(basePath+imMsg.getFromUserPic());
     		}
     		upMap.put("familyId", familyId);
         	upMap.put("toUserId", userId);
