@@ -47,6 +47,9 @@ public class TaskGiveUserAchieveService
 		return taskGiveUserAchieveMapper.queryAhieveWaitDealList(taskGiveUserAchieveBean);
 	}
 
+	/**
+	 * 更新失败次数
+	 */
 	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean achieveTask)
 	{
 		if (achieveTask.getFailTimes() > 100)
@@ -60,18 +63,11 @@ public class TaskGiveUserAchieveService
 		}
 		taskGiveUserAchieveMapper.updateFailUserAchieveTask(achieveTask);
 	}
-	
-	public	void clearLockTask() {
-		long compareTimes=System.currentTimeMillis()-(5*60*1000);
-		taskGiveUserAchieveMapper.clearLockTask(compareTimes);
-	}
 
-	/**
-	 * 更新状态
-	 */
-	public void updateUserAchieveTaskStatus(TaskGiveUserAchieveBean bean)
+	public void clearLockTask()
 	{
-		taskGiveUserAchieveMapper.updateUserAchieveTaskStatus(bean);
+		long compareTimes = System.currentTimeMillis() - (5 * 60 * 1000);
+		taskGiveUserAchieveMapper.clearLockTask(compareTimes);
 	}
 
 	public void updateSuccUserAchieveTask(TaskGiveUserAchieveBean bean)
@@ -108,6 +104,7 @@ public class TaskGiveUserAchieveService
 	// 保存道具的发放
 	void saveLotteInfo(long userId, int awardId, int awardCount)
 	{
+		LOG.info("saveLotteInfo：发放道具============================userId:", userId);
 		LotteryBean tempParamBean = new LotteryBean();
 		tempParamBean.setUserId(userId);
 		tempParamBean.setAwardId(awardId);
@@ -122,6 +119,7 @@ public class TaskGiveUserAchieveService
 		lotteryLogParamBean.setType(6);// 1：比赛PK消耗；2：行程中奖励获得；3：签到获得；4：赠予他人道具；5：获得别人赠送道具;6:个人成就奖励
 		lotteryLogParamBean.setTimestamp(getCurrentTs());
 		this.taskGiveUserAchieveMapper.saveLotteryLog(lotteryLogParamBean);
+		LOG.info("saveLotteInfo：发放道具==================================end");
 	}
 
 	/**
@@ -129,6 +127,7 @@ public class TaskGiveUserAchieveService
 	 */
 	void updateUserPointTodayByAchieve(long userId, int awardCount)
 	{
+		LOG.info("updateUserPointTodayByAchieve：增加当日评分============================userId:", userId);
 		UserAchieveBean ubean = new UserAchieveBean();
 		ubean.setDaystamp(getCurrentDayStr());
 		ubean.setUserId(userId);
