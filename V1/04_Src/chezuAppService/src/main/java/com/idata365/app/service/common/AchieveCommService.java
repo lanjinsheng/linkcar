@@ -465,13 +465,16 @@ public class AchieveCommService
 	// 更新成就里程
 	void updateAchieveMile(Map<String, Object> map, double num)
 	{
+		int numToday = new Double(num).intValue();// 今天里程
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
 		LOG.info("updateAchieveNum==================================================", achieve);
 		if (achieve != null && achieve.getId() != null)
 		{
-			int sumNum = achieve.getNowNum() + new Double(num).intValue();
-			achieve.setNowNum(new Double(num).intValue());
+			int sumNum = achieve.getNowNum() + numToday;
+			LOG.info("getNowNum>>>>" + achieve.getNowNum() + ";numToday>>>>>" + numToday + ";sumNum>>>>" + sumNum);
+			achieve.setNowNum(numToday);
+			// 更新用户里程成就值
 			userAchieveMapper.updateAchieveNumById(achieve);
 			int goalNum = achieve.getNum() * 1000;// 目标里程，字典表里是km，此处转为m来计算
 			if (sumNum >= goalNum)
@@ -483,7 +486,8 @@ public class AchieveCommService
 				{
 					// 剩余成就值
 					map.put("lev", achieve.getLev() + 1);
-					map.put("nowNum", sumNum - achieve.getNum());
+					map.put("nowNum", sumNum - goalNum);
+					LOG.info("升级后，剩余值为sumNum - goalNum>>>>>>>>>", sumNum - goalNum);
 					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
 					userAchieveMapper.updateNextLevAchieveValue(map);
 				}
