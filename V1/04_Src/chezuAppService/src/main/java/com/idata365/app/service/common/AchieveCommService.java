@@ -282,7 +282,7 @@ public class AchieveCommService
 		tempParamBean.setAwardId(awardId);
 		tempParamBean.setAwardCount(awardCount);
 
-		this.lotteryMapper.increLotteryCount(tempParamBean);
+		this.lotteryMapper.saveOrUpdate(tempParamBean);
 
 		LotteryLogInfoParamBean lotteryLogParamBean = new LotteryLogInfoParamBean();
 		lotteryLogParamBean.setUserId(userId);
