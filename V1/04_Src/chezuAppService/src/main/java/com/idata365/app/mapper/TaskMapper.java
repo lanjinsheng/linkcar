@@ -8,8 +8,10 @@ import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
+import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.ParkStationParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
 
@@ -25,7 +27,9 @@ public interface TaskMapper
 	
 	public List<UserFamilyRelationBean> queryUserFamilyRelation();
 	
-	public int countTomorrowRole(UserFamilyRoleLogParamBean bean);
+	public UserFamilyRoleLogBean queryFamilyRoleLog(UserFamilyRoleLogParamBean bean);
+	
+	public void updateUserRole(UserFamilyRoleLogParamBean bean);
 	
 	public void saveUserFamilyRole(UserFamilyRoleLogParamBean bean);
 	
@@ -37,4 +41,7 @@ public interface TaskMapper
 	
 	public void saveFamilyRelation(FamilyRelationParamBean bean);
 
+	public List<Long> queryUserIds();
+	
+	public void saveOrUpdate(LotteryBean bean);
 }

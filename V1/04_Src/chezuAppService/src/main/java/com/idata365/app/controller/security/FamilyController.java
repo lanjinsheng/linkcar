@@ -23,6 +23,7 @@ import com.idata365.app.entity.FamilyInviteResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
+import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
@@ -291,5 +292,17 @@ public class FamilyController extends BaseController
 		resultList.add(resultBean);
 		
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 主页统计字段接口
+	 * @param reqBean
+	 * @return
+	 */
+	@RequestMapping("/family/queryMainNum")
+	public Map<String, Object> queryMainNum(@RequestBody FamilyParamBean reqBean)
+	{
+		MainResultBean resultBean = this.familyService.queryMainNum(reqBean);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 }
