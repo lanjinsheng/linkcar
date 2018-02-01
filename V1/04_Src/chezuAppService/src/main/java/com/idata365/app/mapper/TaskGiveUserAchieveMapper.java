@@ -48,7 +48,7 @@ public interface TaskGiveUserAchieveMapper
 	 */
 	public UserAchieveBean getUserAchieveInfoById(long id);
 
-	public void increLotteryCount(LotteryBean bean);
+	public void saveOrUpdate(LotteryBean bean);
 
 	public void saveLotteryLog(LotteryLogInfoParamBean bean);
 
