@@ -86,7 +86,7 @@ public class AchieveCommService
 			addCarEndTimes(keyId);
 			break;
 		case AddBestDriverTimes:
-			if (taskAchieveAddValue.getAddValue().doubleValue() > 0)
+			if (taskAchieveAddValue.getAddValue().doubleValue() == 0)
 			{
 				addBestDriverTimes(keyId);
 			}
@@ -338,85 +338,88 @@ public class AchieveCommService
 	 *               	 		达到：将家族下所有成员(不包括 已经解锁该成就的成员)的该成就解锁。并将天数置为0
 	 *               			没达到：更新该家族加所有成员的该项成就天数
 	 */
-
-	void updateAchieveDaysByFamily(long familyId)
+	public void updateAchieveDaysByFamily(long familyId)
 	{
+		LOG.info("updateAchieveDaysByFamily.start==================================familyId=", familyId);
+		// 查询家族占领黄金榜信息
 		FamilyStayGoldLogBean bean = userAchieveMapper.queryFamilyStayGoldInfo(familyId);
+		LOG.info("FamilyStayGoldLogBean>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", bean);
+		if (bean != null && bean.getLev() >= 3)// 当登榜等级为3级时，不再更新(ps:3级已是最高等级)
+		{
+			return;
+		}
 		if (bean == null)
 		{
 			// 添加信息
 			userAchieveMapper.insertFamilyStayGoldLog(familyId);
+			bean = userAchieveMapper.queryFamilyStayGoldInfo(familyId);
+		}
+		int goldCountDays = 0;
+		int lev = bean.getLev();
+		int lockNum = 0;// 解锁门槛天数(以后要加入到常量类中利于维护)
+		if (bean.getContinueFlag() == 1)// 不等于1说明不是连续的，置位掉
+		{
+			goldCountDays = bean.getGoldCountDays() + 1;
 		}
 		else
 		{
-			if (bean.getContinueFlag() != 1)// 不等于1说明不是连续的，置为0
-			{
-				bean.setGoldCountDays(0);
-			}
-			else
-			{
-				bean.setGoldCountDays(bean.getGoldCountDays() + 1);
-			}
+			goldCountDays = 1;// 重置，从第一天开始
 		}
-		// 该家族下所有成员
+		// 该家族下所有成员列表
 		List<Long> user = userAchieveMapper.getFamilyUsers(familyId);
-		int lockLev = 0;// 解锁等级
-		int lockNum = 0;// 解锁门槛天数(以后要加入到常量类中利于维护)
-		if (bean.getLev() == 0)
+		if (lev == 0)
 		{
 			lockNum = 30;
-			if (bean.getGoldCountDays() >= lockNum)
+			if (goldCountDays >= lockNum)
 			{
-				lockLev = bean.getLev() + 1;
+				lev = lev + 1;
 				// 解锁
-				unclockUserGoldAchieve(user, lockLev);
+				unclockUserGoldAchieve(user, lev);
 			}
 			else
 			{
-				lockLev = bean.getLev();
 				// 更新成就值
-				addUserGoldAchieveNum(user, lockLev, familyId, bean.getGoldCountDays());
+				addUserGoldAchieveNum(user, lev, familyId, goldCountDays);
+				goldCountDays = 0;// 升级后置为0
 			}
 		}
 		else if (bean.getLev() == 1)
 		{
 			lockNum = 60;
-			if (bean.getGoldCountDays() >= lockNum)
+			if (goldCountDays >= lockNum)
 			{
-				lockLev = bean.getLev() + 1;
+				lev = lev + 1;
 				// 解锁
-				unclockUserGoldAchieve(user, lockLev);
+				unclockUserGoldAchieve(user, lev);
 			}
 			else
 			{
-				lockLev = bean.getLev();
 				// 更新成就值
-				addUserGoldAchieveNum(user, lockLev, familyId, bean.getGoldCountDays());
+				addUserGoldAchieveNum(user, lev, familyId, goldCountDays);
+				goldCountDays = 0;// 升级后置为0
 			}
 		}
-		else if (lockLev == 3)// 最高等级不再更新
+		else if (bean.getLev() == 2)
 		{
 			lockNum = 100;
-			if (bean.getGoldCountDays() == lockNum)
+			if (goldCountDays >= lockNum)
 			{
-				lockLev = bean.getLev();
+				lev = lev + 1;
 				// 解锁
-				unclockUserGoldAchieve(user, lockLev);
-			}
-			else if (bean.getGoldCountDays() > lockNum)// 大于最高级不再更新值
-			{
-
+				unclockUserGoldAchieve(user, lev);
 			}
 			else
 			{
-				lockLev = bean.getLev();
 				// 更新成就值
-				addUserGoldAchieveNum(user, lockLev, familyId, bean.getGoldCountDays());
+				addUserGoldAchieveNum(user, lev, familyId, goldCountDays);
+				goldCountDays = 0;// 升级后置为0
 			}
 		}
+		bean.setLev(lev);
+		bean.setGoldCountDays(goldCountDays);
 		// 更新天数、等级
 		userAchieveMapper.updateFamilyStayGoldLog(bean);
-
+		LOG.info("updateAchieveDaysByFamily.end========================================");
 	}
 
 	// 解锁用户黄金家族
@@ -442,7 +445,6 @@ public class AchieveCommService
 			map.put("userId", userId);
 			map.put("achieve", 7);
 			map.put("familyId", familyId);
-			map.put("lev", lev);
 			// 查询用户参加的另一个家族的黄金期
 			FamilyStayGoldLogBean fb = userAchieveMapper.queryUserOtherStayGoldDays(map);
 			if (fb != null && fb.getGoldCountDays() > continueCount)// 当用户参加的另一个家族成就更高时，将更新最高值
@@ -453,6 +455,7 @@ public class AchieveCommService
 			{
 				nowNum = continueCount;
 			}
+			map.put("lev", lev + 1);
 			map.put("nowNum", nowNum);
 			// 更新数量
 			userAchieveMapper.updateGoldFamilyAchieveValue(map);
