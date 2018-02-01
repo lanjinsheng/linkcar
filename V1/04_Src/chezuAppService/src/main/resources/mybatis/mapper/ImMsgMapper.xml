@@ -12,13 +12,18 @@
     	</foreach>
     </insert>
  
-    <select id="getMsg" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.ImMsg">
+    <select id="getMsg" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	  select a.id,a.familyId,b.imgUrl as fromUserPic,b.nickName,b.phone,a.fromUserPic,a.fromUserId,a.toUserId,a.createTime,a.msg,a.isRead
   	    from imMsg  a left join usersAccount b on a.fromUserId=b.id where 
         a.familyId=#{familyId}  and a.toUserId=#{toUserId}
-         <if test='id != null and id>0 '>
-         <![CDATA[ and a.id>=#{id}]]>
-         </if>
+        <choose>
+        <when test="isHistory>0">
+             <![CDATA[ and a.id<=#{id}]]>
+        </when>
+        <otherwise>
+           <![CDATA[ and a.id>=#{id}]]>
+        </otherwise>
+        </choose>
            order by a.id desc  limit 10
     </select>
      
