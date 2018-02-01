@@ -26,35 +26,41 @@ public class ImService extends BaseService<ImService>
     FamilyService familyService;
     public Map<String,Object> getImMain(Long familyId,Long userId,Long msgId){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	ImNotify imNotify=imNotifyMapper.getNotify(familyId);
-    	if(imNotify==null) {
-    		rtMap.put("imNotify", new ImNotify());
-    	}else {
-    		rtMap.put("imNotify", imNotify);
-    	}
-    	ImMsg msg=new ImMsg();
-    	msg.setId(msgId);
-    	msg.setFamilyId(familyId);
-    	List<ImMsg> imMsgs=imMsgMapper.getMsg(msg);
-    	
-    	if(imMsgs==null || imMsgs.size()==0) {
-    		rtMap.put("imMsgs", new ArrayList());
-    	}else {
-    		rtMap.put("imMsgs", imMsgs);
-    	}
-    	
+//    	ImNotify imNotify=imNotifyMapper.getNotify(familyId);
+//    	if(imNotify==null) {
+//    		rtMap.put("imNotify", new ImNotify());
+//    	}else {
+//    		rtMap.put("imNotify", imNotify);
+//    	}
+//    	ImMsg msg=new ImMsg();
+//    	msg.setId(msgId);
+//    	msg.setFamilyId(familyId);
+//    	List<ImMsg> imMsgs=imMsgMapper.getMsg(msg);
+//    	
+//    	if(imMsgs==null || imMsgs.size()==0) {
+//    		rtMap.put("imMsgs", new ArrayList());
+//    	}else {
+//    		rtMap.put("imMsgs", imMsgs);
+//    	}
+//    	
     	return rtMap;
     }
     
-    public Map<String,Object> getImMsgs(Long familyId,Long userId,Long msgId,String basePath){
+    public Map<String,Object> getImMsgs(Long familyId,Long userId,Long msgId,int isHistory,String basePath){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	Map<String,Object> upMap=new HashMap<String,Object>();
-    	ImMsg msg=new ImMsg();
-    	msg.setId(msgId);
-    	msg.setToUserId(userId);
-    	msg.setFamilyId(familyId);
-    	msg.setFromUserPic(basePath);
-    	List<ImMsg> imMsgs=imMsgMapper.getMsg(msg);
+    	Map<String,Object> searchMap=new HashMap<String,Object>();
+    	
+    	searchMap.put("id", msgId);
+    	searchMap.put("toUserId", userId);
+    	searchMap.put("isHistory", isHistory);
+    	searchMap.put("familyId", familyId);
+//    	ImMsg msg=new ImMsg();
+//    	msg.setId(msgId);
+//    	msg.setToUserId(userId);
+//    	msg.setFamilyId(familyId);
+//    	msg.setFromUserPic(basePath);
+    	List<ImMsg> imMsgs=imMsgMapper.getMsg(searchMap);
     	
     	if(imMsgs==null || imMsgs.size()==0) {
     		rtMap.put("imMsgs", new ArrayList());
@@ -68,8 +74,13 @@ public class ImService extends BaseService<ImService>
     		}
     		upMap.put("familyId", familyId);
         	upMap.put("toUserId", userId);
-        	upMap.put("beginId", msgId);
-    		upMap.put("endId", imMsgs.get(0).getId());
+        	if(isHistory==1) {
+        	  	upMap.put("beginId", imMsgs.get(imMsgs.size()-1).getId());
+	    		upMap.put("endId", msgId);
+        	}else {
+	        	upMap.put("beginId", msgId);
+	    		upMap.put("endId", imMsgs.get(0).getId());
+        	}
     		imMsgMapper.updateMsg(upMap);
     		rtMap.put("imMsgs", imMsgs);
     	}
