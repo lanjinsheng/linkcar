@@ -69,7 +69,9 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         String sign=request.getHeader("sign");
         String equipmentInfo=request.getHeader("equipmentInfo");
         try {
-        	equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+        	if(equipmentInfo!=null) {
+        		equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+        	}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,7 +164,9 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         String sign=request.getHeader("sign");
         String equipmentInfo=request.getHeader("equipmentInfo");
         try {
-        	equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+        	if(equipmentInfo!=null) {
+        		equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+        	}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -264,7 +268,9 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
           String sign=request.getHeader("sign");
           String equipmentInfo=request.getHeader("equipmentInfo");
           try {
-          	equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+        	  if(equipmentInfo!=null) {
+          		equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+              }
   		} catch (UnsupportedEncodingException e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
