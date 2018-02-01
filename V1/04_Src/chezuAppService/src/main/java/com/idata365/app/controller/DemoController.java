@@ -60,12 +60,14 @@ public class DemoController extends BaseController {
     public Map<String,Object> getMsgs(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Object family =requestBodyParams.get("familyId");
 		Object msgId=requestBodyParams.get("msgId");
-	  	 if(ValidTools.isBlank(family) || ValidTools.isBlank(msgId)) {
+		Object isHistory=requestBodyParams.get("isHistory");
+	  	 if(ValidTools.isBlank(family) || ValidTools.isBlank(msgId) || ValidTools.isBlank(isHistory)) {
     		 return ResultUtils.rtFailParam(null);
 	  	 }
 		long userId=80L;
-		return ResultUtils.rtSuccess(imService.getImMsgs(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString()),this.getImgBasePath()));
-	}
+		Map<String,Object> rtMap= imService.getImMsgs(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString()),Integer.valueOf(isHistory.toString()),this.getImgBasePath());
+		return ResultUtils.rtSuccess(rtMap);
+		}
 	@RequestMapping("/im/submitMsgTest")
     public Map<String,Object> submitMsg(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Object family =requestBodyParams.get("familyId");
