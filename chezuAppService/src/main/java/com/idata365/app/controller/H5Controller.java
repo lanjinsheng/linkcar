@@ -35,7 +35,7 @@ public class H5Controller extends BaseController
 		String awardImg = resultBean.getAwardImg();
 		if (StringUtils.isNotBlank(awardImg))
 		{
-			resultBean.setImgUrl(imgBasePath + awardImg);
+			resultBean.setAwardImg(imgBasePath + awardImg);
 		}
 		
 		return ResultUtils.rtSuccess(resultBean);
