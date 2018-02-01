@@ -35,7 +35,7 @@
 	</select>
 	
 	<select id="countExceptTomorrowRole" resultType="int" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
-		select count(id) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp!=#{daystamp}
+		select count(id) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and role=#{role} and daystamp!=#{daystamp}
 	</select>
 	
 	<update id="updateUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
