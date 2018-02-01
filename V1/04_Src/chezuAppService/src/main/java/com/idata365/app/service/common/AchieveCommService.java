@@ -338,7 +338,7 @@ public class AchieveCommService
 	 *               	 		达到：将家族下所有成员(不包括 已经解锁该成就的成员)的该成就解锁。并将天数置为0
 	 *               			没达到：更新该家族加所有成员的该项成就天数
 	 */
-	public void updateAchieveDaysByFamily(long familyId)
+	void updateAchieveDaysByFamily(long familyId)
 	{
 		LOG.info("updateAchieveDaysByFamily.start==================================familyId=", familyId);
 		// 查询家族占领黄金榜信息
