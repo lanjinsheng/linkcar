@@ -73,10 +73,18 @@
 		LEFT JOIN dicLottery d ON d.id=a.awardId
 		WHERE a.id=#{id}
 	</select>
-	
-	 <update id="increLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
-    	update lottery set awardCount=awardCount+#{awardCount} where userId=#{userId} and awardId=#{awardId}
-    </update>
+    
+    <insert id="saveOrUpdate" parameterType="com.idata365.app.entity.LotteryBean">
+    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+    		select count(*) from lottery where userId=#{userId} and awardId=#{awardId}
+    	</selectKey>
+    	<if test="count > 0">
+    		update lottery set awardCount=awardCount+#{awardCount} where userId=#{userId} and awardId=#{awardId}
+    	</if>
+    	<if test="count == 0">
+    		insert into lottery(userId, awardId, awardCount) values(#{userId}, #{awardId}, #{awardCount})
+    	</if>
+    </insert>
     
      <insert id="saveLotteryLog" parameterType="com.idata365.app.entity.LotteryLogInfoParamBean">
     	insert into lotteryLogInfo(userId, awardId, awardCount, type, timestamp) values(#{userId}, #{awardId}, #{awardCount}, #{type}, #{timestamp})
