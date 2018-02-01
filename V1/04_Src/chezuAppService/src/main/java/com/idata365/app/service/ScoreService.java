@@ -553,21 +553,17 @@ public class ScoreService extends BaseService<ScoreService>
 	//
 	public List<YesterdayContributionResultBean> familyContribution(ScoreFamilyInfoParamBean bean)
 	{
-		
-		Date todayDate = Calendar.getInstance().getTime();
-		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
-		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
-		bean.setDaystamp(yesterdayDateStr);
-		
+		String yesterdayDateUndelimiterStr = getYesterdayDateUndelimiterStr();
 		List<YesterdayScoreBean> tempList = this.scoreMapper.queryMembersByFamily(bean);
 		
+		double tempTotalScore = 0;
 		List<YesterdayContributionResultBean> resultList = new ArrayList<>();
 		for (YesterdayScoreBean tempBean : tempList)
 		{
 			ScoreFamilyInfoParamBean userFamilyRoleParamBean = new ScoreFamilyInfoParamBean();
 			userFamilyRoleParamBean.setUserId(tempBean.getUserId());
 			userFamilyRoleParamBean.setFamilyId(bean.getFamilyId());
-			userFamilyRoleParamBean.setDaystamp(yesterdayDateStr);
+			userFamilyRoleParamBean.setDaystamp(yesterdayDateUndelimiterStr);
 			Integer tempUserFamilyRoleId = this.scoreMapper.queryFamilyRoleId(userFamilyRoleParamBean);
 			
 			ScoreFamilyInfoParamBean userScoreDayParamBean = new ScoreFamilyInfoParamBean();
@@ -584,10 +580,21 @@ public class ScoreService extends BaseService<ScoreService>
 				tempResultBean.setName(PhoneUtils.hidePhone(tempBean.getPhone()));
 			}
 			
-			//temp settings contribution start
-			tempResultBean.setContribution(String.valueOf(tempBean.getScore()));
-			//temp settings end
 			resultList.add(tempResultBean);
+			
+			tempTotalScore += tempBean.getScore();
+		}
+		
+		int totalSize = tempList.size();
+		if (totalSize > 0)
+		{
+			for (YesterdayContributionResultBean tempBean : resultList)
+			{
+				BigDecimal resultBd = BigDecimal.valueOf(NumberUtils.toDouble(tempBean.getScore())).divide(BigDecimal.valueOf(tempTotalScore), 2, BigDecimal.ROUND_HALF_UP);
+				double resultD = resultBd.doubleValue();
+				String contribution = formattedDecimalToPercentage(resultD);
+				tempBean.setContribution(contribution);
+			}
 		}
 		
 		return resultList;

@@ -18,6 +18,8 @@ public class YesterdayContributionResultBean implements Serializable
 	private String contribution;
 	
 	private String role;
+	
+	private String score;
 
 	public String getUserId()
 	{
@@ -67,6 +69,16 @@ public class YesterdayContributionResultBean implements Serializable
 	public void setRole(String role)
 	{
 		this.role = role;
+	}
+
+	public String getScore()
+	{
+		return score;
+	}
+
+	public void setScore(String score)
+	{
+		this.score = score;
 	}
 
 }
