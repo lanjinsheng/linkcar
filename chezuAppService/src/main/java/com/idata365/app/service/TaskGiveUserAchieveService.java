@@ -111,7 +111,7 @@ public class TaskGiveUserAchieveService
 		tempParamBean.setAwardId(awardId);
 		tempParamBean.setAwardCount(awardCount);
 
-		this.taskGiveUserAchieveMapper.increLotteryCount(tempParamBean);
+		this.taskGiveUserAchieveMapper.saveOrUpdate(tempParamBean);
 
 		LotteryLogInfoParamBean lotteryLogParamBean = new LotteryLogInfoParamBean();
 		lotteryLogParamBean.setUserId(userId);
