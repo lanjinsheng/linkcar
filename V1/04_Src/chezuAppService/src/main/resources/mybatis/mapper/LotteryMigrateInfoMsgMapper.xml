@@ -30,6 +30,10 @@
     	select userId, familyId from userFamilyRelation where familyId in (select familyId from userFamilyRelation where userId=#{userId} group by familyId) and userId!=#{userId} order by userId asc
     </select>
     
+    <select id="countFamilyByUserAndId" resultType="int" parameterType="com.idata365.app.entity.UserFamilyRelationBean">
+    	select count(1) from familyInfo where createUserId=#{userId} and id=#{familyId}
+    </select>
+    
     <select id="queryRoleByUserFamily" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
     	select role from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
     </select>

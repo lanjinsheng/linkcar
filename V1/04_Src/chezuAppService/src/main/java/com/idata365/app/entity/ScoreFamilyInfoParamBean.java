@@ -33,6 +33,8 @@ public class ScoreFamilyInfoParamBean implements Serializable
 	
 	private String endDay;
 	
+	private long userFamilyScoreId;
+	
 	public long getHabitId() {
 		return habitId;
 	}
@@ -149,6 +151,16 @@ public class ScoreFamilyInfoParamBean implements Serializable
 	public void setEndDay(String endDay)
 	{
 		this.endDay = endDay;
+	}
+
+	public long getUserFamilyScoreId()
+	{
+		return userFamilyScoreId;
+	}
+
+	public void setUserFamilyScoreId(long userFamilyScoreId)
+	{
+		this.userFamilyScoreId = userFamilyScoreId;
 	}
 	
 }

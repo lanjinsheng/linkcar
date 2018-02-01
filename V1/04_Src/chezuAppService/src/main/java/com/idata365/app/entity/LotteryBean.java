@@ -19,6 +19,8 @@ public class LotteryBean implements Serializable
 	
 	private int addedCount;
 	
+	private int reducedCount;
+	
 	private String daystamp;
 
 	public long getUserId()
@@ -79,6 +81,16 @@ public class LotteryBean implements Serializable
 	public void setDaystamp(String daystamp)
 	{
 		this.daystamp = daystamp;
+	}
+
+	public int getReducedCount()
+	{
+		return reducedCount;
+	}
+
+	public void setReducedCount(int reducedCount)
+	{
+		this.reducedCount = reducedCount;
 	}
 	
 }

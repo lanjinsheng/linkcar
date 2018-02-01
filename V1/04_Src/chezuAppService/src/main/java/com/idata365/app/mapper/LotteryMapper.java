@@ -40,4 +40,5 @@ public interface LotteryMapper
 	
 	public void saveLotteryLog(LotteryLogInfoParamBean bean);
 	
+	public void reduceLotteryCount(LotteryBean bean);
 }

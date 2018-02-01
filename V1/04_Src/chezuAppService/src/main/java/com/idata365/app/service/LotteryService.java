@@ -247,12 +247,20 @@ public class LotteryService extends BaseService<LotteryService>
 	 * 赠送道具
 	 * @param bean
 	 */
+	@Transactional
 	public void givenLottery(LotteryMigrateInfoMsgBean bean)
 	{
 		Calendar curCal = Calendar.getInstance();
 		String givenTime = DateFormatUtils.format(curCal, DateConstant.SECOND_PATTERN);
 		bean.setGivenTime(givenTime);
 		this.lotteryMigrateInfoMsgMapper.save(bean);
+		
+		LotteryBean reduceParamBean = new LotteryBean();
+		reduceParamBean.setReducedCount(bean.getAwardCount());
+		reduceParamBean.setUserId(bean.getUserId());
+		reduceParamBean.setAwardId(bean.getAwardId());
+		
+		this.lotteryMapper.reduceLotteryCount(reduceParamBean);
 	}
 	
 	/**
@@ -298,6 +306,36 @@ public class LotteryService extends BaseService<LotteryService>
 		List<LotteryResultUser> resultList = new ArrayList<>();
 		
 		List<UserFamilyRelationBean> userFamilyList = this.lotteryMigrateInfoMsgMapper.findUserFamily(userFamilyParamBean);
+		
+		UserFamilyRelationBean userFamilyRelation1 = null;
+		UserFamilyRelationBean userFamilyRelation0 = null;
+		for (int i = 0; i < userFamilyList.size(); i++)
+		{
+			if (0 != i)
+			{
+				userFamilyRelation1 = userFamilyList.get(i);
+				userFamilyRelation0 = userFamilyList.get(i - 1);
+				if (userFamilyRelation1.getUserId() == userFamilyRelation0.getUserId())
+				{
+					break;
+				}
+			}
+		}
+		
+		//如果有一个用户在自己创建的家族和加入的家族重复出险，去掉后面一个
+		if (null != userFamilyRelation1 && null != userFamilyRelation0)
+		{
+			int count1 = this.lotteryMigrateInfoMsgMapper.countFamilyByUserAndId(userFamilyRelation1);
+			if (0 == count1)
+			{
+				userFamilyList.remove(userFamilyRelation1);
+			}
+			else
+			{
+				userFamilyList.remove(userFamilyRelation0);
+			}
+		}
+		
 		for (UserFamilyRelationBean tempBean : userFamilyList)
 		{
 			long tempUserId = tempBean.getUserId();

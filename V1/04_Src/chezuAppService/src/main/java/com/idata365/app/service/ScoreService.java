@@ -492,17 +492,26 @@ public class ScoreService extends BaseService<ScoreService>
 	 */
 	public List<YesterdayScoreResultBean> findYesterdayFamilyScore(ScoreFamilyInfoParamBean bean)
 	{
-		Date todayDate = Calendar.getInstance().getTime();
-		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
-		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
-		bean.setDaystamp(yesterdayDateStr);
+		String yesterdayDateUndelimiterStr = getYesterdayDateUndelimiterStr();
 		
-		List<YesterdayScoreBean> tempList = this.scoreMapper.queryYesterdayFamilyScore(bean);
+		List<YesterdayScoreBean> tempList = this.scoreMapper.queryMembersByFamily(bean);
 		
 		double tempTotalScore = 0;
 		List<YesterdayScoreResultBean> resultList = new ArrayList<>();
 		for (YesterdayScoreBean tempBean : tempList)
 		{
+			ScoreFamilyInfoParamBean userFamilyRoleParamBean = new ScoreFamilyInfoParamBean();
+			userFamilyRoleParamBean.setUserId(tempBean.getUserId());
+			userFamilyRoleParamBean.setFamilyId(bean.getFamilyId());
+			userFamilyRoleParamBean.setDaystamp(yesterdayDateUndelimiterStr);
+			Integer tempUserFamilyRoleId = this.scoreMapper.queryFamilyRoleId(userFamilyRoleParamBean);
+			
+			ScoreFamilyInfoParamBean userScoreDayParamBean = new ScoreFamilyInfoParamBean();
+			userScoreDayParamBean.setUserId(tempBean.getUserId());
+			userScoreDayParamBean.setUserFamilyScoreId(tempUserFamilyRoleId);
+			Double tempUserScore = this.scoreMapper.queryUserScore(userScoreDayParamBean);
+			tempBean.setScore(tempUserScore);
+			
 			YesterdayScoreResultBean tempResultBean = new YesterdayScoreResultBean();
 			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
 			
@@ -550,11 +559,23 @@ public class ScoreService extends BaseService<ScoreService>
 		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
 		bean.setDaystamp(yesterdayDateStr);
 		
-		List<YesterdayScoreBean> tempList = this.scoreMapper.queryYesterdayFamilyScore(bean);
+		List<YesterdayScoreBean> tempList = this.scoreMapper.queryMembersByFamily(bean);
 		
 		List<YesterdayContributionResultBean> resultList = new ArrayList<>();
 		for (YesterdayScoreBean tempBean : tempList)
 		{
+			ScoreFamilyInfoParamBean userFamilyRoleParamBean = new ScoreFamilyInfoParamBean();
+			userFamilyRoleParamBean.setUserId(tempBean.getUserId());
+			userFamilyRoleParamBean.setFamilyId(bean.getFamilyId());
+			userFamilyRoleParamBean.setDaystamp(yesterdayDateStr);
+			Integer tempUserFamilyRoleId = this.scoreMapper.queryFamilyRoleId(userFamilyRoleParamBean);
+			
+			ScoreFamilyInfoParamBean userScoreDayParamBean = new ScoreFamilyInfoParamBean();
+			userScoreDayParamBean.setUserId(tempBean.getUserId());
+			userScoreDayParamBean.setUserFamilyScoreId(tempUserFamilyRoleId);
+			Double tempUserScore = this.scoreMapper.queryUserScore(userScoreDayParamBean);
+			tempBean.setScore(tempUserScore);
+			
 			YesterdayContributionResultBean tempResultBean = new YesterdayContributionResultBean();
 			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
 			

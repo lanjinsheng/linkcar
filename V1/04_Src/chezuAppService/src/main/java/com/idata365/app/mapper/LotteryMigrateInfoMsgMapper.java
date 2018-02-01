@@ -21,5 +21,7 @@ public interface LotteryMigrateInfoMsgMapper
 	
 	public List<UserFamilyRelationBean> findUserFamily(LotteryMigrateInfoMsgParamBean bean);
 	
+	public int countFamilyByUserAndId(UserFamilyRelationBean bean);
+	
 	public Integer queryRoleByUserFamily(LotteryMigrateInfoMsgParamBean bean);
 }
