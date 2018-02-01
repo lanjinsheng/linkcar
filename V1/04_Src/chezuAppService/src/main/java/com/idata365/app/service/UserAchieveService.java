@@ -11,7 +11,7 @@ import com.idata365.app.mapper.UserAchieveMapper;
 import com.idata365.app.service.common.AchieveCommService;
 
 @Service
-public class UserAchieveService
+public class UserAchieveService extends BaseService<UserAchieveService>
 {
 
 	@Autowired
