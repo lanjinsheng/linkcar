@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 public class UserFamilyRoleLogBean implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -747611848445848781L;
+
 	private long id;
 	
 	private int role;

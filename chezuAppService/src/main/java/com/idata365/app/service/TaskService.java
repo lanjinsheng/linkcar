@@ -17,14 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
+import com.idata365.app.constant.LotteryConstant;
+import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
+import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.ParkStationParamBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.mapper.TaskMapper;
@@ -118,19 +122,56 @@ public class TaskService extends BaseService<TaskService>
 			tempParamBean.setEndTime(endTime);
 			
 			//count用户明天的角色
-			int roleCount = this.taskMapper.countTomorrowRole(tempParamBean);
-			if (0 == roleCount)
+			UserFamilyRoleLogBean tomorrowRoleLog = this.taskMapper.queryFamilyRoleLog(tempParamBean);
+			if (null == tomorrowRoleLog)
 			{
+				//初始化明天的userFamilyRoleLog
+				tempParamBean.setRole(RoleConstant.JIANBING_ROLE);
 				this.taskMapper.saveUserFamilyRole(tempParamBean);
 				long userFamilyRoleLogId = tempParamBean.getId();
 				
+				//初始化userFamilyRelation中的role
+				UserFamilyRoleLogParamBean userRoleParamBean = new UserFamilyRoleLogParamBean();
+				userRoleParamBean.setRole(RoleConstant.JIANBING_ROLE);
+				userRoleParamBean.setUserId(tempBean.getUserId());
+				userRoleParamBean.setFamilyId(tempBean.getFamilyId());
+				this.taskMapper.updateUserRole(userRoleParamBean);
+				
+				//初始化明天的userScoreDayStat
 				UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 				tempScoreDayParamBean.setUserId(tempBean.getUserId());
 				tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogId);
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
-				
 				this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
 			}
+			else
+			{
+				//更新userFamilyRelation中的role
+				UserFamilyRoleLogParamBean userRoleParamBean = new UserFamilyRoleLogParamBean();
+				userRoleParamBean.setRole(tomorrowRoleLog.getRole());
+				userRoleParamBean.setUserId(tempBean.getUserId());
+				userRoleParamBean.setFamilyId(tempBean.getFamilyId());
+				this.taskMapper.updateUserRole(userRoleParamBean);
+				
+				//初始化明天的userScoreDayStat
+				UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
+				tempScoreDayParamBean.setUserId(tempBean.getUserId());
+				tempScoreDayParamBean.setUserFamilyScoreId(tomorrowRoleLog.getId());
+				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
+				this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
+			}
+		}
+		
+		//给每个用户赠送一张小纸条
+		List<Long> userIds = this.taskMapper.queryUserIds();
+		for (Long tempUserId : userIds)
+		{
+			LotteryBean tempLotteryParamBean = new LotteryBean();
+			tempLotteryParamBean.setUserId(tempUserId);
+			tempLotteryParamBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+			tempLotteryParamBean.setAwardCount(1);
+			
+			this.taskMapper.saveOrUpdate(tempLotteryParamBean);
 		}
 	}
 	

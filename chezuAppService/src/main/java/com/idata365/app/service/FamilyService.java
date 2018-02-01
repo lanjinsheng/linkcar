@@ -35,6 +35,7 @@ import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.FamilyScoreBean;
 import com.idata365.app.entity.InviteInfoResultBean;
+import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
@@ -225,27 +226,42 @@ public class FamilyService extends BaseService<FamilyService>
 		//记录用户、家族关系
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
-		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
-		//初始化用户角色、成绩记录表start------------------
-		//记录用户在新家族的角色
-		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
-		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
-		userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
-		userFamilyRoleLogParamBean.setDaystamp(getCurrentDayStrWithUnDelimiter());
-		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
-		userFamilyRoleLogParamBean.setStartTime(timeStamp);
-		userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
-		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
+		FamilyRelationBean familyRelationParam = new FamilyRelationBean();
+		familyRelationParam.setFamilyId(bean.getFamilyId());
+		familyRelationParam.setDaystamp(getCurrentDayStr());
+		List<Long> relationIds = this.familyMapper.queryFamilyRelationIds(familyRelationParam);
 		
-		//初始化加入新家族后的userScoreDayStat记录
-		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
-		tempScoreDayParamBean.setUserId(bean.getUserId());
-		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
-		tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
-		this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
-		//初始化用户角色、成绩记录表end------------------
+		if (CollectionUtils.isNotEmpty(relationIds))
+		{
+			//初始化用户在新家族的角色到userFamilyRelation
+			UserFamilyRoleLogParamBean roleLogParamBean = new UserFamilyRoleLogParamBean();
+			roleLogParamBean.setUserId(bean.getUserId());
+			roleLogParamBean.setFamilyId(bean.getFamilyId());
+			roleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+			this.taskMapper.updateUserRole(roleLogParamBean);
+			
+			//初始化用户角色、成绩记录表start------------------
+			//记录用户在新家族的角色到userFamilyRoleLog
+			UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
+			userFamilyRoleLogParamBean.setUserId(bean.getUserId());
+			userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
+			userFamilyRoleLogParamBean.setDaystamp(getCurrentDayStrWithUnDelimiter());
+			userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+			userFamilyRoleLogParamBean.setStartTime(timeStamp);
+			userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
+			this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
+			
+			//初始化加入新家族后的userScoreDayStat记录
+			UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
+			tempScoreDayParamBean.setUserId(bean.getUserId());
+			tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
+			tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
+			this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
+			//初始化用户角色、成绩记录表end------------------
+		}
+		
 		
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
 		familyParamStatusBean.setMsgId(bean.getMsgId());
@@ -461,7 +477,6 @@ public class FamilyService extends BaseService<FamilyService>
 		bean.setFamilyId(familyId);
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
-		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
 		//初始化用户角色、成绩记录表start------------------
@@ -706,5 +721,24 @@ public class FamilyService extends BaseService<FamilyService>
 	
 	public List<Map<String,Object>> familyRelationByFamilyId(Long familyId){
 		return familyMapper.getFamilyUsers(familyId);
+	}
+	
+	/**
+	 * 主页统计字段接口
+	 * @param bean
+	 * @return
+	 */
+	public MainResultBean queryMainNum(FamilyParamBean bean)
+	{
+		MainResultBean resultBean = new MainResultBean();
+		
+		int countUsers = this.familyMapper.countUsers();
+		resultBean.setGamerNum(countUsers);
+		
+		//统计未读消息
+		int countUnRead = this.familyMapper.countUnRead(bean);
+		resultBean.setNewsNum(countUnRead);
+		
+		return resultBean;
 	}
 }
