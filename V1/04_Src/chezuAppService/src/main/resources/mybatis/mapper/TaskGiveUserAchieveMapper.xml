@@ -75,7 +75,7 @@
 	</select>
 	
 	 <update id="increLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
-    	update lottery set awardCount=awardCount+${addedCount} where userId=#{userId} and awardId=#{awardId}
+    	update lottery set awardCount=awardCount+#{awardCount} where userId=#{userId} and awardId=#{awardId}
     </update>
     
      <insert id="saveLotteryLog" parameterType="com.idata365.app.entity.LotteryLogInfoParamBean">
