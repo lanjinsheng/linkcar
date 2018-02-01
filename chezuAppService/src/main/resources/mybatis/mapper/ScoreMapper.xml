@@ -102,10 +102,17 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 			where t1.familyId=#{familyId} and t3.daystamp=#{daystamp};
 	</select>
 	
-	<select id="queryYesterdayFamilyScore" resultType="com.idata365.app.entity.YesterdayScoreBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select t1.id as userId, t1.nickName as name, t1.phone as phone, t1.imgUrl as imgUrl, t3.score as score, t2.role as role from usersAccount t1 
-			join userFamilyRelation t2 on (t1.id=t2.userId) 
-			left join userScoreDayStat t3 on (t1.id=t3.userId) where familyId=#{familyId} and t3.daystamp=#{daystamp}
+	<select id="queryMembersByFamily" resultType="com.idata365.app.entity.YesterdayScoreBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select t1.id as userId, t1.nickName as name, t1.phone as phone, t1.imgUrl as imgUrl, t2.role as role from usersAccount t1 
+	join userFamilyRelation t2 on (t1.id=t2.userId)  where familyId=#{familyId} order by t2.id asc
+	</select>
+	
+	<select id="queryFamilyRoleId" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select id as userFamilyScoreId from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
+	
+	<select id="queryUserScore" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select score from userScoreDayStat where userId=#{userId} and userFamilyScoreId=#{userFamilyScoreId}
 	</select>
 	
 	<select id="queryYesterdayMemberScore" resultType="com.idata365.app.entity.FamilyMemberBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">

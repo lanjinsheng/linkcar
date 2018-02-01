@@ -50,7 +50,11 @@ public interface ScoreMapper
 	
 	public List<ScoreUserBean> queryUserDayScoreByFamily(ScoreFamilyInfoParamBean bean);
 	
-	public List<YesterdayScoreBean> queryYesterdayFamilyScore(ScoreFamilyInfoParamBean bean);
+	public List<YesterdayScoreBean> queryMembersByFamily(ScoreFamilyInfoParamBean bean);
+	
+	public Integer queryFamilyRoleId(ScoreFamilyInfoParamBean bean);
+	
+	public Double queryUserScore(ScoreFamilyInfoParamBean bean);
 	
 	public List<FamilyMemberBean> queryYesterdayMemberScore(ScoreFamilyInfoParamBean bean);
 	
