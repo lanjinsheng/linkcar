@@ -104,7 +104,8 @@ public class TaskGiveUserAchieveService
 	// 保存道具的发放
 	void saveLotteInfo(long userId, int awardId, int awardCount)
 	{
-		LOG.info("saveLotteInfo：发放道具============================userId:", userId);
+		LOG.info("saveLotteInfo：发放道具开始============================userId:", userId);
+		LOG.info("awardId>>>>>>>>>>>>>>>>:" + awardId + ";awardCount>>>>>>>>>>>>>>" + awardCount);
 		LotteryBean tempParamBean = new LotteryBean();
 		tempParamBean.setUserId(userId);
 		tempParamBean.setAwardId(awardId);
@@ -119,7 +120,7 @@ public class TaskGiveUserAchieveService
 		lotteryLogParamBean.setType(6);// 1：比赛PK消耗；2：行程中奖励获得；3：签到获得；4：赠予他人道具；5：获得别人赠送道具;6:个人成就奖励
 		lotteryLogParamBean.setTimestamp(getCurrentTs());
 		this.taskGiveUserAchieveMapper.saveLotteryLog(lotteryLogParamBean);
-		LOG.info("saveLotteInfo：发放道具==================================end");
+		LOG.info("saveLotteInfo：发放道具结束==================================end");
 	}
 
 	/**
@@ -127,12 +128,13 @@ public class TaskGiveUserAchieveService
 	 */
 	void updateUserPointTodayByAchieve(long userId, int awardCount)
 	{
-		LOG.info("updateUserPointTodayByAchieve：增加当日评分============================userId:", userId);
+		LOG.info("updateUserPointTodayByAchieve：增加当日评分开始============================userId:", userId);
 		UserAchieveBean ubean = new UserAchieveBean();
 		ubean.setDaystamp(getCurrentDayStr());
 		ubean.setUserId(userId);
 		ubean.setExtraPlusScore(Double.valueOf(String.valueOf(awardCount)));
 		taskGiveUserAchieveMapper.updateUserPointsToday(ubean);
+		LOG.info("updateUserPointTodayByAchieve：增加当日评分结束===========================================");
 	}
 
 	private String getCurrentTs()
