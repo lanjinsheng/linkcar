@@ -125,6 +125,12 @@ public class UserAchieveController extends BaseController
 		{
 			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddCollectTimes);
 		}
+		else if (type == 7)
+		{
+			long familyId = 2;
+			// achieveCommService.addAchieve(familyId, 0d, AchieveEnum.AddGoldFamilyTimes);
+			// achieveCommService.updateAchieveDaysByFamily(familyId);
+		}
 		else if (type == 8)
 		{
 			achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGrabTimes);
