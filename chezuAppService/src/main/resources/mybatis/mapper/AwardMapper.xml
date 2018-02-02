@@ -5,6 +5,9 @@
 	<select id="queryAwardInfo" resultType="com.idata365.app.entity.AwardBean">
 		select * from awardInfo order by id desc limit 0, 1
 	</select>
+	<select id="queryAwardInfoById" resultType="com.idata365.app.entity.AwardBean" parameterType="java.lang.Long">
+		select * from awardInfo where id=#{id}
+	</select>
 
 	<select id="queryQuestions" parameterType="com.idata365.app.entity.QuestionParamBean" resultType="com.idata365.app.entity.QuestionBean">
 		select * from questionInfo where awardInfoId=#{awardInfoId} order by id asc
