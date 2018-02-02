@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.mapper.UserAchieveMapper;
 import com.idata365.app.service.common.AchieveCommService;
@@ -42,6 +43,7 @@ public class UserAchieveService extends BaseService<UserAchieveService>
 	 * @author:CaiFengYao
 	 * @date:2018年1月22日 下午6:06:01
 	 */
+	@Transactional
 	public List<Map<String, Object>> getAchieveListById(long userId, int achieveId)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -51,17 +53,5 @@ public class UserAchieveService extends BaseService<UserAchieveService>
 		achieveCommService.updateAchieveInfoBeforeQuery(achieveId, userId, map);
 		// 查询列表
 		return userAchieveMapper.getUserAchieveListById(map);
-	}
-
-	/**
-	 * 初始化用户成就
-	 * 
-	 * @Description:
-	 * @author:CaiFengYao
-	 * @date:2018年1月22日 下午1:50:57
-	 */
-	public void initCreateUserAchieve(long userId)
-	{
-		userAchieveMapper.insertUserAchieveInfo(userId);
 	}
 }
