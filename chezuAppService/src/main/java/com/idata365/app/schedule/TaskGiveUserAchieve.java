@@ -78,7 +78,7 @@ public class TaskGiveUserAchieve extends TimerTask
 					log.info("TaskGiveUserAchieve do--list.size=" + list.size());
 					for (TaskGiveUserAchieveBean achieveTask : list)
 					{
-						log.info("achieveTask>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + achieveTask.getId());
+						log.info("achieveTask>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}" + achieveTask.getId());
 						try
 						{
 							// 业务部分
