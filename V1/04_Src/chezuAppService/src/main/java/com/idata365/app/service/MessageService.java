@@ -38,28 +38,33 @@ import com.idata365.app.util.ValidTools;
 @Service
 public class MessageService extends BaseService<MessageService>{
 	private final static Logger LOG = LoggerFactory.getLogger(MessageService.class);
+	public static final String  H5Host="http://apph5.idata365.com/";
 	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
 	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
+	public static final String KaijiangMessage=H5Host+"share/lottery.html";
+	
 	
 	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	
 	public static final String  TietiaoMessageUrl="com.shujin.shuzan://pasteNote.push?familyId=%s";
 	public static final String AchieveMessageUrl="com.shujin.shuzan://achievementDetails.push?achieveId=%s&titleName=%s";
-	public static final String RegMessageUrl="http://apph5.idata365.com/share/home.html";
+	public static final String RegMessageUrl=H5Host+"share/home.html";
+	public static final String KaijiangMessageUrl=H5Host+"share/lottery.html";
+	
 	@Autowired
 	SystemProperties systemProperties;
 	public static final Map<String,String> MessageImgs=new HashMap<String,String>();
 	static {
-		MessageImgs.put("1", "http://apph5.idata365.com/appImgs/xitong.png");
-		MessageImgs.put("2", "http://apph5.idata365.com/appImgs/shenpi.png");
-		MessageImgs.put("3", "http://apph5.idata365.com/appImgs/tietiao.png");
-		MessageImgs.put("4", "http://apph5.idata365.com/appImgs/kaijiang.png");
-		MessageImgs.put("5", "http://apph5.idata365.com/appImgs/chengjiu.png");
+		MessageImgs.put("1", H5Host+"appImgs/xitong.png");
+		MessageImgs.put("2", H5Host+"appImgs/shenpi.png");
+		MessageImgs.put("3", H5Host+"appImgs/tietiao.png");
+		MessageImgs.put("4", H5Host+"appImgs/kaijiang.png");
+		MessageImgs.put("5", H5Host+"appImgs/chengjiu.png");
 	}
 	@Autowired
 	MessageMapper messageMapper;
@@ -340,12 +345,6 @@ public class MessageService extends BaseService<MessageService>{
 				rtMap3.put("icon",MessageImgs.get("3"));
 				rtMap3.put("title", "贴条消息");
 				hadTT=true;
-			}else if(parentType==4) {
-				rtMap4.put("msgType", "4");
-				rtMap4.put("unRead", String.valueOf(map.get("typeCount")));
-				rtMap4.put("icon",MessageImgs.get("4"));
-				rtMap4.put("title", "开奖消息");
-				hadKJ=true;
 			}
 			else if(parentType==5) {
 				rtMap5.put("msgType", "5");
@@ -401,6 +400,8 @@ public class MessageService extends BaseService<MessageService>{
 		}else {
 			rtMap3.put("lastMsgTime", "");
 		}
+		
+		//开奖为特殊情况,从 awardInfo获取数据
 		if(!hadKJ){
 			rtMap4.put("msgType", "4");
 			rtMap4.put("unRead","0");
@@ -408,15 +409,16 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap4.put("title", "开奖消息");	
 		}
 		paramMap.put("parentType", 4);
+		timeMsg=messageMapper.getMsgKaijiangTime(paramMap);
 		
-		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
+		
 		if(timeMsg!=null && timeMsg.size()>0) {
 			String time=String.valueOf(timeMsg.get("createTime"));
 			rtMap4.put("lastMsgTime", getMsgTyoeTimes(time));
 		}else {
 			rtMap4.put("lastMsgTime", "");
 		}
-		
+		//开奖为特殊情况===end
 		if(!hadCJ)  {
 			rtMap5.put("msgType", "5");
 			rtMap5.put("unRead","0");
@@ -497,13 +499,19 @@ public class MessageService extends BaseService<MessageService>{
 		if(msgId<0) {
 			map.put("startMsgId", 999999999999999L);
 		}
-		List<Map<String,Object>>  list=messageMapper.getMsgListByType(map);
-		for(Map<String,Object> m:list) {
-			int urtType=Integer.valueOf(m.get("urlType").toString());
-			int isRead=Integer.valueOf(m.get("isRead").toString());
-			Long id=Long.valueOf(m.get("msgId").toString());
-			if(urtType==2 && isRead==0) {
-				  messageMapper.updateRead(id);
+		List<Map<String,Object>>  list=null;
+		if(map.get("msgType").equals("4")) {//开奖消息
+			map.put("toUrl", KaijiangMessage+"?id=");
+			list=messageMapper.getMsgListKaijiang(map);
+		}else {
+			list=messageMapper.getMsgListByType(map);
+			for(Map<String,Object> m:list) {
+				int urtType=Integer.valueOf(m.get("urlType").toString());
+				int isRead=Integer.valueOf(m.get("isRead").toString());
+				Long id=Long.valueOf(m.get("msgId").toString());
+				if(urtType==2 && isRead==0) {
+					  messageMapper.updateRead(id);
+				}
 			}
 		}
 		return list;
