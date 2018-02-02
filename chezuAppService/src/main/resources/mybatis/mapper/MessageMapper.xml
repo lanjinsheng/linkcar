@@ -38,6 +38,21 @@
     </select>
     
     
+    <select id="getMsgKaijiangTime" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+      select DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime from awardInfo where  
+      order by id desc limit 1
+    </select>
+    
+    
+    <select id="getMsgListKaijiang" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+   	 select id msgId,'' as icon,4 as parentType,0 as childType,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,
+   	 '开奖消息' as title,'' as picture,taskTitle as content,'' as bottomText,1 as urlType,CONCAT(#{toUrl},id)as toUrl,1 as isRead
+   	 from awardInfo where  <![CDATA[ id<=${startMsgId}]]>  
+      order by id desc
+       limit 10
+    </select>
+    
+    
     <select id="getMsgListByType" resultType="java.util.HashMap" parameterType="java.util.HashMap">
    	 select id msgId,icon,parentType,childType,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime,title,picture,content,bottomText,urlType,toUrl,isRead
    	 from message where parentType=#{msgType} and <![CDATA[ id<=${startMsgId}]]> and toUserId=#{toUserId}
