@@ -54,6 +54,7 @@ public class TaskGiveUserAchieveService
 	/**
 	 * 更新失败次数
 	 */
+	@Transactional
 	public void updateFailUserAchieveTask(TaskGiveUserAchieveBean achieveTask)
 	{
 		if (achieveTask.getFailTimes() > 100)
@@ -74,6 +75,7 @@ public class TaskGiveUserAchieveService
 		taskGiveUserAchieveMapper.clearLockTask(compareTimes);
 	}
 
+	@Transactional
 	public void updateSuccUserAchieveTask(TaskGiveUserAchieveBean bean)
 	{
 		taskGiveUserAchieveMapper.updateSuccUserAchieveTask(bean);
