@@ -508,7 +508,7 @@ public class MessageService extends BaseService<MessageService>{
 		return String.format(TietiaoMessage, familyName);
 	}
 	private String getAchieveDesc(String achieveMsg) {
-		return String.format(AchieveMessage, achieveMsg);
+		return String.format(AchieveMessage);
     }
 	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
