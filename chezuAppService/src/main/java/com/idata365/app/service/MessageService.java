@@ -270,7 +270,7 @@ public class MessageService extends BaseService<MessageService>{
 	public List<Map<String,String>> getMsgMainTypes(Long userId){
 		Map<String,Object> paramMap=new HashMap<String,Object>();
 		paramMap.put("toUserId", userId);
-		boolean hadXT=false,hadSP=false,hadTT=false,hadKJ=false;
+		boolean hadXT=false,hadSP=false,hadTT=false,hadKJ=false,hadCJ=false;
 		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 		Map<String,String>  rtMap1=new HashMap<String,String>();
 		rtMap1.put("desc", "系统想对你说的话......");
@@ -280,6 +280,8 @@ public class MessageService extends BaseService<MessageService>{
 		rtMap3.put("desc", "不要错过给对方家族狠狠一贴的机会!");
 		Map<String,String>  rtMap4=new HashMap<String,String>();
 		rtMap4.put("desc", "大奖花落谁家？你也有机会!");
+		Map<String,String>  rtMap5=new HashMap<String,String>();
+		rtMap5.put("desc", "新成就达成！来看看奖励吧!");
 		List<Map<String,Object>> findList=messageMapper.getMsgMainTypes(userId);
 		for(Map<String,Object> map:findList) {
 			int parentType=Integer.valueOf(map.get("parentType").toString());
@@ -307,6 +309,13 @@ public class MessageService extends BaseService<MessageService>{
 				rtMap4.put("icon",MessageImgs.get("4"));
 				rtMap4.put("title", "开奖消息");
 				hadKJ=true;
+			}
+			else if(parentType==5) {
+				rtMap5.put("msgType", "5");
+				rtMap5.put("unRead", String.valueOf(map.get("typeCount")));
+				rtMap5.put("icon",MessageImgs.get("5"));
+				rtMap5.put("title", "成就消息");
+				hadCJ=true;
 			}
 		}
 		if(!hadXT) {
@@ -362,6 +371,7 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap4.put("title", "开奖消息");	
 		}
 		paramMap.put("parentType", 4);
+		
 		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
 		if(timeMsg!=null && timeMsg.size()>0) {
 			String time=String.valueOf(timeMsg.get("createTime"));
@@ -369,10 +379,28 @@ public class MessageService extends BaseService<MessageService>{
 		}else {
 			rtMap4.put("lastMsgTime", "");
 		}
-		list.add(rtMap1);
+		
+		if(!hadCJ)  {
+			rtMap5.put("msgType", "5");
+			rtMap5.put("unRead","0");
+			rtMap5.put("icon",MessageImgs.get("5"));
+			rtMap5.put("title", "成就消息");
+		}
+		paramMap.put("parentType", 5);
+		
+		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
+		if(timeMsg!=null && timeMsg.size()>0) {
+			String time=String.valueOf(timeMsg.get("createTime"));
+			rtMap5.put("lastMsgTime", getMsgTyoeTimes(time));
+		}else {
+			rtMap5.put("lastMsgTime", "");
+		}
+		//23541
 		list.add(rtMap2);
 		list.add(rtMap3);
+		list.add(rtMap5);
 	    list.add(rtMap4);
+	    list.add(rtMap1);
 		return list;
 	}
 	private String getMsgTyoeTimes(String time) {
