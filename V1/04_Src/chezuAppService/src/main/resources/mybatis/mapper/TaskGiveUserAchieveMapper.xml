@@ -68,8 +68,9 @@
      </update>
      	<!-- 查询用户某项成就详情 -->
 	<select id="getUserAchieveInfoById" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.lang.Long">
-		SELECT a.id,a.achieveId,a.awardId,d.awardValue,a.awardNum,a.type,a.flag,a.userId
+		SELECT a.id,a.achieveId,a.awardId,d.awardValue,a.awardNum,a.type,a.flag,a.userId,dic.achieveName
 		FROM userAchieveInfo a
+		inner join dicUserAchieve dic on dic.id=a.achieveId
 		LEFT JOIN dicLottery d ON d.id=a.awardId
 		WHERE a.id=#{id}
 	</select>
