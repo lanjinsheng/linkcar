@@ -39,7 +39,7 @@
     
     
     <select id="getMsgKaijiangTime" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-      select DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime from awardInfo where  
+      select DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTime from awardInfo   
       order by id desc limit 1
     </select>
     
