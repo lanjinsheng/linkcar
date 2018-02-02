@@ -18,4 +18,8 @@ public interface MessageMapper {
 	Map<String,Object> getMsgMainTypeTime(Map<String,Object> map);
 	
 	void updateRead(@Param("msgId") Long msgId);
+	
+	Message getMessageById(@Param("id") Long msgId);
+	
+	
 }
