@@ -238,7 +238,7 @@ public class AchieveCommService
 		 * 查询用户可以解锁的成就记录
 		 */
 		UserAchieveBean bean = userAchieveMapper.queryUserCanDeblockAchieve(map);
-		LOG.info("查询可以解锁的UserAchieveBean：>>>>>>>>>>>>>>>>>>>>>", bean);
+		LOG.info("查询可以解锁的UserAchieveBean：>>>>>>>>>>>>>>>>>>>>>{}", bean);
 		if (bean == null)// 当夺宝名人时，返回
 		{
 			LOG.info("无可更新成就，返回**********************");
@@ -310,7 +310,7 @@ public class AchieveCommService
 	{
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
-		LOG.info("updateAchieveTimes==================================================", achieve);
+		LOG.info("updateAchieveTimes=================================================={}", achieve);
 		if (achieve != null && achieve.getId() != null)
 		{
 			userAchieveMapper.updateAchieveTimesById(achieve.getId());
@@ -324,7 +324,7 @@ public class AchieveCommService
 					// 剩余成就值
 					map.put("lev", achieve.getLev() + 1);
 					map.put("nowNum", achieve.getNowNum() + 1 - achieve.getNum());
-					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
+					LOG.info("解锁该项成就，并更新下一等级成就，参数为=================================================={}", map);
 					userAchieveMapper.updateNextLevAchieveValue(map);
 				}
 			}
@@ -340,10 +340,10 @@ public class AchieveCommService
 	 */
 	void updateAchieveDaysByFamily(long familyId)
 	{
-		LOG.info("updateAchieveDaysByFamily.start==================================familyId=", familyId);
+		LOG.info("updateAchieveDaysByFamily.start==================================familyId={}", familyId);
 		// 查询家族占领黄金榜信息
 		FamilyStayGoldLogBean bean = userAchieveMapper.queryFamilyStayGoldInfo(familyId);
-		LOG.info("FamilyStayGoldLogBean>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", bean);
+		LOG.info("FamilyStayGoldLogBean>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}", bean);
 		if (bean != null && bean.getLev() >= 3)// 当登榜等级为3级时，不再更新(ps:3级已是最高等级)
 		{
 			return;
@@ -419,7 +419,7 @@ public class AchieveCommService
 		bean.setGoldCountDays(goldCountDays);
 		// 更新天数、等级
 		userAchieveMapper.updateFamilyStayGoldLog(bean);
-		LOG.info("updateAchieveDaysByFamily.end========================================");
+		LOG.info("updateAchieveDaysByFamily.end========================================{}");
 	}
 
 	// 解锁用户黄金家族
@@ -468,11 +468,11 @@ public class AchieveCommService
 		int numToday = new Double(num).intValue();// 今天里程
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
-		LOG.info("updateAchieveNum==================================================", achieve);
+		LOG.info("updateAchieveNum=================================================={}", achieve);
 		if (achieve != null && achieve.getId() != null)
 		{
 			int sumNum = achieve.getNowNum() + numToday;
-			LOG.info("getNowNum>>>>" + achieve.getNowNum() + ";numToday>>>>>" + numToday + ";sumNum>>>>" + sumNum);
+			LOG.info("getNowNum>>>>{}" + achieve.getNowNum() + ";numToday>>>>>{}" + numToday + ";sumNum>>>>" + sumNum);
 			achieve.setNowNum(numToday);
 			// 更新用户里程成就值
 			userAchieveMapper.updateAchieveNumById(achieve);
@@ -488,7 +488,7 @@ public class AchieveCommService
 					map.put("lev", achieve.getLev() + 1);
 					map.put("nowNum", sumNum - goalNum);
 					LOG.info("升级后，剩余值为sumNum - goalNum>>>>>>>>>", sumNum - goalNum);
-					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
+					LOG.info("解锁该项成就，并更新下一等级成就，参数为=================================================={}", map);
 					userAchieveMapper.updateNextLevAchieveValue(map);
 				}
 			}
@@ -500,7 +500,7 @@ public class AchieveCommService
 	{
 		// 查看用户某项成就最新记录id
 		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
-		LOG.info("updateAchieveNum==================================================", achieve);
+		LOG.info("updateAchieveNum=================================================={}", achieve);
 		if (achieve != null && achieve.getId() != null)
 		{
 			int sumNum = achieve.getNowNum() + new Double(num).intValue();
@@ -516,7 +516,7 @@ public class AchieveCommService
 					// 剩余成就值
 					map.put("lev", achieve.getLev() + 1);
 					map.put("nowNum", sumNum - achieve.getNum());
-					LOG.info("解锁该项成就，并更新下一等级成就，参数为==================================================", map);
+					LOG.info("解锁该项成就，并更新下一等级成就，参数为=================================================={}", map);
 					userAchieveMapper.updateNextLevAchieveValue(map);
 				}
 			}
