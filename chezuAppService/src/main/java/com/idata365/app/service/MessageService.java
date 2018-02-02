@@ -20,12 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.Message;
+import com.idata365.app.entity.TaskMessagePush;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.MessageMapper;
+import com.idata365.app.mapper.TaskMessagePushMapper;
 import com.idata365.app.partnerApi.ManagePushApi;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ValidTools;
@@ -64,6 +67,9 @@ public class MessageService extends BaseService<MessageService>{
 	ManagePushApi  managePushApi;
 	@Autowired
 	FamilyService familyService;
+	@Autowired
+	TaskMessagePushMapper taskMessagePushMapper;
+	
 	public MessageService() {
 	}
 	 /**
@@ -151,6 +157,19 @@ public class MessageService extends BaseService<MessageService>{
 			break;
 		}
 		return message;
+	}
+	/**
+	 * 
+	    * @Title: getMessageById
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param messageId
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	Message getMessageById(long messageId) {
+		return messageMapper.getMessageById(messageId);
 	}
 	
 	/**
@@ -260,7 +279,13 @@ public class MessageService extends BaseService<MessageService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional
 	public void pushMessage(Message msg,MessageEnum type) {
+		TaskMessagePush task=new TaskMessagePush();
+		task.setMessageId(msg.getId());
+		taskMessagePushMapper.insertTaskMessagePush(task);
+	}
+	public void pushMessageByTask(Message msg) {
 		String alias=msg.getToUserId()+"_0";
 		 Map<String,String> extraMap = new HashMap<String, String>();
 	        extraMap.put("parentType", String.valueOf(msg.getParentType()));
@@ -269,7 +294,6 @@ public class MessageService extends BaseService<MessageService>{
 	        extraMap.put("toUrl", msg.getToUrl());
 		 	managePushApi.SendMsgToOne(msg.getContent(), alias, ManagePushApi.PLATFORM_IOS, extraMap);
 	}
-	
 	/**
 	 * 
 	    * @Title: getMsgMainTypes
@@ -515,7 +539,7 @@ public class MessageService extends BaseService<MessageService>{
 	}
 	
 	private String getH5RegMessageUrl(){
-		return "http://www.idata365.com";
+		return RegMessageUrl;
 	}
 	private String getRegMessageDesc() {
 		 return RegMessage;

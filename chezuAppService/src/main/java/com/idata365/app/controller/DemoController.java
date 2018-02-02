@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.ImMsg;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.bean.UserInfo;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.remote.ChezuService;
 import com.idata365.app.service.FamilyInviteService;
 import com.idata365.app.service.ImService;
+import com.idata365.app.service.MessageService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.ValidTools;
@@ -30,6 +33,10 @@ public class DemoController extends BaseController {
 	ChezuService chezuService ;
 	@Autowired
 	ImService imService;
+	
+	@Autowired
+	MessageService messageService;
+	
 	 @RequestMapping("/test/getInviteListTest")
 	public Map<String,Object> getInviteListTest(){
 		 List<FamilyInvite> list= familyInviteService.getFamilyInviteByPhone("15851750576");
@@ -67,7 +74,18 @@ public class DemoController extends BaseController {
 		long userId=80L;
 		Map<String,Object> rtMap= imService.getImMsgs(Long.valueOf(family.toString()), userId,Long.valueOf(msgId.toString()),Integer.valueOf(isHistory.toString()),this.getImgBasePath());
 		return ResultUtils.rtSuccess(rtMap);
-		}
+	}
+	
+	
+	@RequestMapping("/test/messageAdd")
+    public Map<String,Object> messageAdd(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+		Message msg=new Message(); 
+		msg.setId(135L);
+		messageService.pushMessage(msg, MessageEnum.SYSTEM_REG);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	
 	@RequestMapping("/im/submitMsgTest")
     public Map<String,Object> submitMsg(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Object family =requestBodyParams.get("familyId");
