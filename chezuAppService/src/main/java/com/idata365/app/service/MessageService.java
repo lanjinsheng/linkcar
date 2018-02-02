@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
@@ -39,18 +40,23 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
+	public static final String AchieveMessage="新成就达成！奖励您【%s】！";
+	
 	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	
 	public static final String  TietiaoMessageUrl="com.shujin.shuzan://pasteNote.push?familyId=%s";
-	
-	
+	public static final String AchieveMessageUrl="com.shujin.shuzan://achievementDetails.push?achieveId=%s&titleName=%s";
+	public static final String RegMessageUrl="http://apph5.idata365.com/share/home.html";
+	@Autowired
+	SystemProperties systemProperties;
 	public static final Map<String,String> MessageImgs=new HashMap<String,String>();
 	static {
 		MessageImgs.put("1", "http://apph5.idata365.com/appImgs/xitong.png");
 		MessageImgs.put("2", "http://apph5.idata365.com/appImgs/shenpi.png");
 		MessageImgs.put("3", "http://apph5.idata365.com/appImgs/tietiao.png");
 		MessageImgs.put("4", "http://apph5.idata365.com/appImgs/kaijiang.png");
+		MessageImgs.put("5", "http://apph5.idata365.com/appImgs/chengjiu.png");
 	}
 	@Autowired
 	MessageMapper messageMapper;
@@ -187,6 +193,25 @@ public class MessageService extends BaseService<MessageService>{
 		
 		return messages;
 	}
+	
+	public Message buildAchieveMessage(Long fromUserId,String awardMsg,Long toUserId,int achieveId,String achieveName) {
+				Message message=new Message();
+				message.setFromUserId(fromUserId==null?0:fromUserId);
+				message.setBottomText("");
+				message.setChildType(0);
+				message.setContent(getAchieveDesc(awardMsg));
+				message.setCreateTime(new Date());
+				message.setIcon("");
+				message.setIsPush(1);
+				message.setParentType(5);
+				message.setPicture("");
+				message.setTitle("成就通知");
+				message.setToUserId(toUserId);
+				message.setUrlType(0);
+				message.setToUrl(getAchieveMessageUrl(achieveId,achieveName));
+		        return message;
+	}
+	
 	/**
 	 * 
 	    * @Title: insertMessage
@@ -441,6 +466,9 @@ public class MessageService extends BaseService<MessageService>{
 	private String getTieTiao(String familyName) {
 		return String.format(TietiaoMessage, familyName);
 	}
+	private String getAchieveDesc(String achieveMsg) {
+		return String.format(AchieveMessage, achieveMsg);
+    }
 	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
 	}
@@ -457,6 +485,10 @@ public class MessageService extends BaseService<MessageService>{
     }
 	private String getTietiaoMessageUrl(Long familyId) {
 		return String.format(TietiaoMessageUrl, String.valueOf(familyId));
+    }
+	
+	private String getAchieveMessageUrl(int achieveId,String achieveName) {
+		return String.format(AchieveMessageUrl, String.valueOf(achieveId),achieveName);
     }
 	public static void main(String []args) {
 		MessageService service=new MessageService();
