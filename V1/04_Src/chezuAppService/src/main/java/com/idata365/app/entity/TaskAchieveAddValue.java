@@ -1,5 +1,7 @@
 package com.idata365.app.entity;
 
+import java.io.Serializable;
+
 import com.idata365.app.enums.AchieveEnum;
 
 /**
@@ -9,7 +11,7 @@ import com.idata365.app.enums.AchieveEnum;
  * @date:2018年1月23日 下午3:39:03
  * @author:CaiFengYao
  */
-public class TaskAchieveAddValue
+public class TaskAchieveAddValue implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private Long id;
