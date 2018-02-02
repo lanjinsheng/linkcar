@@ -116,12 +116,11 @@ public class TaskGiveUserAchieveService
 	void saveLotteInfo(long userId, int awardId, int awardCount)
 	{
 		LOG.info("saveLotteInfo：发放道具开始============================userId:{}", userId);
-		LOG.info("awardId>>>>>>>>>>>>>>>>:" + awardId + ";awardCount>>>>>>>>>>>>>>" + awardCount);
 		LotteryBean tempParamBean = new LotteryBean();
 		tempParamBean.setUserId(userId);
 		tempParamBean.setAwardId(awardId);
 		tempParamBean.setAwardCount(awardCount);
-
+		LOG.info("tempParamBean>>>>>>>>>>>>>>>>>>>:{}", tempParamBean);
 		this.taskGiveUserAchieveMapper.saveOrUpdate(tempParamBean);
 
 		LotteryLogInfoParamBean lotteryLogParamBean = new LotteryLogInfoParamBean();
