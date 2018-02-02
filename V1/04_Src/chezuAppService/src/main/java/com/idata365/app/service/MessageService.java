@@ -193,7 +193,20 @@ public class MessageService extends BaseService<MessageService>{
 		
 		return messages;
 	}
-	
+	/**
+	 * 
+	    * @Title: buildAchieveMessage
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param fromUserId 
+	    * @param @param awardMsg 奖励5个马扎
+	    * @param @param toUserId
+	    * @param @param achieveId
+	    * @param @param achieveName 
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	public Message buildAchieveMessage(Long fromUserId,String awardMsg,Long toUserId,int achieveId,String achieveName) {
 				Message message=new Message();
 				message.setFromUserId(fromUserId==null?0:fromUserId);
