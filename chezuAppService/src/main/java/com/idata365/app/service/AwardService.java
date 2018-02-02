@@ -24,11 +24,15 @@ public class AwardService extends BaseService<AwardService>
 	private AwardMapper awardMapper;
 	
 	@Transactional
-	public AwardResultBean showAwardUser()
+	public AwardResultBean showAwardUser(Long id)
 	{
 		AwardResultBean resultBean = new AwardResultBean();
-		
-		AwardBean awardBean = this.awardMapper.queryAwardInfo();
+		 AwardBean awardBean=null;
+		if(id>0) {
+		      awardBean = this.awardMapper.queryAwardInfoById(id);
+		}else {
+			  awardBean = this.awardMapper.queryAwardInfo();
+		}
 		
 		QuestionParamBean questionParamBean = new QuestionParamBean();
 		questionParamBean.setAwardInfoId(awardBean.getId());
@@ -45,4 +49,5 @@ public class AwardService extends BaseService<AwardService>
 		
 		return resultBean;
 	}
+ 
 }
