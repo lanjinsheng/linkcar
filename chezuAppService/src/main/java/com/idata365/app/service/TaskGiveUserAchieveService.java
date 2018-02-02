@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.TaskGiveUserAchieveBean;
 import com.idata365.app.entity.UserAchieveBean;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.TaskGiveUserAchieveMapper;
 
 @Service
@@ -22,7 +24,8 @@ public class TaskGiveUserAchieveService
 	private final static Logger LOG = LoggerFactory.getLogger(TaskGiveUserAchieveService.class);
 	@Autowired
 	TaskGiveUserAchieveMapper taskGiveUserAchieveMapper;
-
+	@Autowired
+	MessageService messageService;
 	/**
 	 * 初始化成就任务
 	 * 
@@ -98,6 +101,11 @@ public class TaskGiveUserAchieveService
 		}
 		// 更新发放标识
 		taskGiveUserAchieveMapper.updateAchieveGiveStatusIsOver(achieveRecordId);
+		//增加成就消息==推送消息
+//		Message  message=messageService.buildAchieveMessage(fromUserId, awardMsg, toUserId, achieveId, achieveName);
+//		messageService.insertMessage(message, MessageEnum.ACHIEVE);
+//  	messageService.pushMessage(message, MessageEnum.ACHIEVE);
+  		
 		return true;
 	}
 
