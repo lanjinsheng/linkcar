@@ -140,7 +140,7 @@
  	<select id="queryUserIdsWithSpeedPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.speedTimes > t2.speedPenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.speedTimes > t2.speedPenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateSpeedPenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -150,7 +150,7 @@
  	<select id="queryUserIdsWithBrakePenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.brakeTimes > t2.brakePenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.brakeTimes > t2.brakePenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateBrakePenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -160,7 +160,7 @@
  	<select id="queryUserIdsWithTurnPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.turnTimes > t2.turnPenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.turnTimes > t2.turnPenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateTurnPenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -170,7 +170,7 @@
  	<select id="queryUserIdsWithOverspeedPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.overspeedTimes > t2.overspeedPenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.overspeedTimes > t2.overspeedPenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateOverspeedPenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -180,7 +180,7 @@
  	<select id="queryUserIdsWithNightDrivePenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.nightDriveTimes > t2.nightDrivePenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.nightDriveTimes > t2.nightDrivePenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateNightDrivePenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -190,7 +190,7 @@
  	<select id="queryUserIdsWithTiredDrivePenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.tiredDriveTimes > t2.tiredDrivePenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.tiredDriveTimes > t2.tiredDrivePenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateTiredDrivePenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -200,7 +200,7 @@
  	<select id="queryUserIdsWithIllegalStopPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
-			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.illegalStopTimes > t2.illegalStopPenalTimes order by userId asc
+			where t1.familyid=#{familyId} and t2.daystamp=#{daystamp} and t2.illegalStopTimes > t2.illegalStopPenalTimes group by userId order by userId asc
  	</select>
  	
  	<update id="updateIllegalStopPenalTimes" parameterType="com.idata365.app.entity.FamilyParamBean">

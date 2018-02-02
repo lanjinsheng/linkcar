@@ -18,6 +18,8 @@ public class ScoreUserHistoryParamBean implements Serializable
 	private int start;
 	
 	private String day;
+	
+	private long userFamilyScoreId;
 
 	public String getStartDay()
 	{
@@ -67,6 +69,16 @@ public class ScoreUserHistoryParamBean implements Serializable
 	public void setDay(String day)
 	{
 		this.day = day;
+	}
+
+	public long getUserFamilyScoreId()
+	{
+		return userFamilyScoreId;
+	}
+
+	public void setUserFamilyScoreId(long userFamilyScoreId)
+	{
+		this.userFamilyScoreId = userFamilyScoreId;
 	}
 	
 }

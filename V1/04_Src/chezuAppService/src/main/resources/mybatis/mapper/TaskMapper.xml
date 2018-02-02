@@ -25,11 +25,15 @@
 	</insert>
 	
 	<select id="queryUserFamilyRelation" resultType="com.idata365.app.entity.UserFamilyRelationBean">
-		select userId, familyId, joinTime from userFamilyRelation order by id asc
+		select userId, familyId, role, joinTime from userFamilyRelation order by id asc
 	</select>
 	
 	<select id="queryFamilyRoleLog" resultType="com.idata365.app.entity.UserFamilyRoleLogBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		select id, role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
+	
+	<select id="queryRoleExceptDay" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp!=#{daystamp}
 	</select>
 	
 	<update id="updateUserRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
@@ -37,10 +41,18 @@
 	</update>
 	
 	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id">
-		insert into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime})
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+    		select count(*) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
+    	</selectKey>
+    	<if test="count > 0">
+    		update userFamilyRoleLog set role=#{role}, startTime=#{startTime}, endTime=#{endTime} where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
+    	</if>
+    	<if test="count == 0">
+			insert into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime})
+    	</if>
 	</insert>
 	
-	<insert id="saveUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="saveOrUpdateUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
 		<selectKey keyProperty="count" resultType="int" order="BEFORE">
     		select count(*) from userScoreDayStat where userId=#{userId} and userFamilyScoreId=#{userFamilyScoreId} and daystamp=#{daystamp}
     	</selectKey>
@@ -79,6 +91,12 @@
     		insert into lottery(userId, awardId, awardCount) values(#{userId}, #{awardId}, #{awardCount})
     	</if>
     </insert>
-    
-    
+    	
+	<select id="queryDriveEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select isDrivingEdit from licenseDriver where userId=#{userId}
+	</select>
+	
+	<select id="queryTravelEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select isTravelEdit from licenseVehicleTravel where userId=#{userId}
+	</select>
 </mapper>

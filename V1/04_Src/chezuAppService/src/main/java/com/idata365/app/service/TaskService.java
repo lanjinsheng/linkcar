@@ -19,6 +19,7 @@ import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.RoleConstant;
+import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -116,33 +117,63 @@ public class TaskService extends BaseService<TaskService>
 		for (UserFamilyRelationBean tempBean : tempList)
 		{
 			UserFamilyRoleLogParamBean tempParamBean = new UserFamilyRoleLogParamBean();
-			AdBeanUtils.copyNotNullProperties(tempParamBean, tempBean);;
+			AdBeanUtils.copyNotNullProperties(tempParamBean, tempBean);
 			tempParamBean.setDaystamp(tomorrowDayStrUndelimiter);
 			tempParamBean.setStartTime(startTime);
 			tempParamBean.setEndTime(endTime);
+			
+			DriverVehicleResultBean driveEditStatus = this.taskMapper.queryDriveEditStatus(tempParamBean);
+			DriverVehicleResultBean travelEditStatus = this.taskMapper.queryTravelEditStatus(tempParamBean);
+			
+			List<Integer> historyRoleList = this.taskMapper.queryRoleExceptDay(tempParamBean);
+			
+			//试用标记位,true表已经试用
+			boolean flag = false;
+			if (null == driveEditStatus
+					|| null == travelEditStatus
+							|| 0 != driveEditStatus.getIsDrivingEdit()
+							|| 0 != travelEditStatus.getIsTravelEdit())
+			{
+				int role = tempBean.getRole();
+				if (0 != role
+						&& 7 != role
+						&& CollectionUtils.isNotEmpty(historyRoleList)
+						&& historyRoleList.contains(role))
+				{
+					flag = true;
+				}
+			}
 			
 			//count用户明天的角色
 			UserFamilyRoleLogBean tomorrowRoleLog = this.taskMapper.queryFamilyRoleLog(tempParamBean);
 			if (null == tomorrowRoleLog)
 			{
 				//初始化明天的userFamilyRoleLog
-				tempParamBean.setRole(RoleConstant.JIANBING_ROLE);
+				//如果角色已经被试用过一天，则明天角色恢复为默认角色
+				if (flag)
+				{
+					tempParamBean.setRole(RoleConstant.JIANBING_ROLE);
+				}
+				
 				this.taskMapper.saveUserFamilyRole(tempParamBean);
 				long userFamilyRoleLogId = tempParamBean.getId();
 				
 				//初始化userFamilyRelation中的role
-				UserFamilyRoleLogParamBean userRoleParamBean = new UserFamilyRoleLogParamBean();
-				userRoleParamBean.setRole(RoleConstant.JIANBING_ROLE);
-				userRoleParamBean.setUserId(tempBean.getUserId());
-				userRoleParamBean.setFamilyId(tempBean.getFamilyId());
-				this.taskMapper.updateUserRole(userRoleParamBean);
+				if (flag)
+				{
+					UserFamilyRoleLogParamBean userRoleParamBean = new UserFamilyRoleLogParamBean();
+					userRoleParamBean.setRole(RoleConstant.JIANBING_ROLE);
+					userRoleParamBean.setUserId(tempBean.getUserId());
+					userRoleParamBean.setFamilyId(tempBean.getFamilyId());
+					this.taskMapper.updateUserRole(userRoleParamBean);
+				}
 				
 				//初始化明天的userScoreDayStat
 				UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 				tempScoreDayParamBean.setUserId(tempBean.getUserId());
 				tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogId);
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
-				this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
+				this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			}
 			else
 			{
@@ -158,7 +189,7 @@ public class TaskService extends BaseService<TaskService>
 				tempScoreDayParamBean.setUserId(tempBean.getUserId());
 				tempScoreDayParamBean.setUserFamilyScoreId(tomorrowRoleLog.getId());
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
-				this.taskMapper.saveUserScoreDay(tempScoreDayParamBean);
+				this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			}
 		}
 		

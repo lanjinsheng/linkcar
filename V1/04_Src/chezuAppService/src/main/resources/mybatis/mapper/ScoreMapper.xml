@@ -92,14 +92,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	</select>
 	
 	<select id="queryScoreByDay" resultType="com.idata365.app.entity.ScoreByDayBean" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
-		select score, speedingState, driveState, creditState, steadyState, mileageState from userScoreDayStat where userId=#{userId} and daystamp=#{day}
-	</select>
-	
-	<select id="queryUserDayScoreByFamily" resultType="com.idata365.app.entity.ScoreUserBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select t1.userId as userId, imgUrl, nickName as name, phone, t3.score as score from userFamilyRelation t1 
-			join usersAccount t2 on (t1.userId=t2.id) 
-			left join userScoreDayStat t3 on (t1.userId=t3.userId) 
-			where t1.familyId=#{familyId} and t3.daystamp=#{daystamp};
+		select score, speedingState, driveState, creditState, steadyState, mileageState from userScoreDayStat where userId=#{userId} and daystamp=#{day} and userFamilyScoreId=#{userFamilyScoreId}
 	</select>
 	
 	<select id="queryMembersByFamily" resultType="com.idata365.app.entity.YesterdayScoreBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
@@ -111,14 +104,12 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select id as userFamilyScoreId from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
-	<select id="queryUserScore" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select score from userScoreDayStat where userId=#{userId} and userFamilyScoreId=#{userFamilyScoreId}
+	<select id="queryFamilyRoleIdList" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select id as userFamilyScoreId from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId}
 	</select>
 	
-	<select id="queryYesterdayMemberScore" resultType="com.idata365.app.entity.FamilyMemberBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select t1.id as userId, t1.nickName as name, t1.phone as phone, t1.imgUrl as imgUrl, t3.score as score, t2.role as realRole from usersAccount t1 
-			join userFamilyRelation t2 on (t1.id=t2.userId) 
-			left join userScoreDayStat t3 on (t1.id=t3.userId) where familyId=#{familyId} and t3.daystamp=#{daystamp}
+	<select id="queryUserScore" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select score from userScoreDayStat where userId=#{userId} and userFamilyScoreId=#{userFamilyScoreId}
 	</select>
 	
 	<select id="queryFamilyDriveStat" resultType="com.idata365.app.entity.FamilyDriveDayStatBean" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
@@ -167,11 +158,21 @@ select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as da
 	</select>
 	
 	<select id="statMileage" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select sum(mileage) as totalMileage from userScoreDayStat where userId=#{userId}
+		select sum(mileage) as totalMileage from userScoreDayStat where userId=#{userId} 
+		and userFamilyScoreId in 
+		<foreach item="item" index="index" collection="userFamilyRoleIdList" open="("  
+            separator="," close=")">  
+            #{item}  
+        </foreach>  
 	</select>
 	
 	<select id="statTime" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
-		select sum(time) as totalTime from userScoreDayStat where userId=#{userId}
+		select sum(time) as totalTime from userScoreDayStat where userId=#{userId} 
+		and userFamilyScoreId in 
+		<foreach item="item" index="index" collection="userFamilyRoleIdList" open="("  
+            separator="," close=")">  
+            #{item}  
+        </foreach> 
 	</select>
 	
 	<update id="updateUseHoldNum" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">

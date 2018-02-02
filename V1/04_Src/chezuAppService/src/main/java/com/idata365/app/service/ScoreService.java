@@ -398,8 +398,14 @@ public class ScoreService extends BaseService<ScoreService>
 			
 			String tempDayStr = formatDayStr(dayStr);
 			
-			if (StringUtils.equals(tempDayStr, todayStr))
+			//如果晚于今天
+			if (StringUtils.compare(tempDayStr, todayStr) > 0)
 			{
+				continue;
+			}
+			else if (StringUtils.equals(tempDayStr, todayStr))
+			{
+				//过滤掉今天，今天在for循环开始前已加入
 //				tempResultBean.setDayStr(tempDayStr + "(今日)");
 				continue;
 			}
@@ -447,6 +453,13 @@ public class ScoreService extends BaseService<ScoreService>
 	 */
 	public List<ScoreByDayResultBean> getScoreByDay(ScoreUserHistoryParamBean bean)
 	{
+		ScoreFamilyInfoParamBean userFamilyRoleParamBean = new ScoreFamilyInfoParamBean();
+		userFamilyRoleParamBean.setUserId(bean.getUserId());
+		userFamilyRoleParamBean.setFamilyId(bean.getFamilyId());
+		userFamilyRoleParamBean.setDaystamp(StringUtils.remove(bean.getDay(), "-"));
+		Integer tempFamilyRoleId = this.scoreMapper.queryFamilyRoleId(userFamilyRoleParamBean);
+		bean.setUserFamilyScoreId(tempFamilyRoleId);
+		
 		List<ScoreByDayBean> tempList = this.scoreMapper.queryScoreByDay(bean);
 		
 		List<ScoreByDayResultBean> resultList = new ArrayList<>();
@@ -455,31 +468,6 @@ public class ScoreService extends BaseService<ScoreService>
 			ScoreByDayResultBean resultBean = new ScoreByDayResultBean();
 			AdBeanUtils.copyOtherPropToStr(resultBean, tempBean);
 			resultList.add(resultBean);
-		}
-		
-		return resultList;
-	}
-	
-	/**
-	 * !!!!drop
-	 * 昨日得分
-	 * @param bean
-	 * @return
-	 */
-	public List<ScoreUserResultBean> findYesterdayScore(ScoreFamilyInfoParamBean bean)
-	{
-		Date todayDate = Calendar.getInstance().getTime();
-		Date yesterdayDate = DateUtils.addDays(todayDate, -1);
-		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
-		bean.setDaystamp(yesterdayDateStr);
-		
-		List<ScoreUserBean> tempList = this.scoreMapper.queryUserDayScoreByFamily(bean);
-		List<ScoreUserResultBean> resultList = new ArrayList<>();
-		for (ScoreUserBean tempBean : tempList)
-		{
-			ScoreUserResultBean tempResultBean = new ScoreUserResultBean();
-			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
-			resultList.add(tempResultBean);
 		}
 		
 		return resultList;
@@ -598,36 +586,6 @@ public class ScoreService extends BaseService<ScoreService>
 		}
 		
 		return resultList;
-	}
-	
-	/**
-	 * 获得家族及成员昨日理论得分
-	 * @param bean
-	 * @return
-	 */
-	public FamilyMemberAllResultBean generateYesterdayFamilyScore(ScoreFamilyInfoParamBean bean)
-	{
-		FamilyMemberAllResultBean resultBean = new FamilyMemberAllResultBean();
-		
-		List<FamilyMemberBean> tempList = this.scoreMapper.queryYesterdayMemberScore(bean);
-		
-		List<FamilyMemberResultBean> scoreList = new ArrayList<>();
-		for (FamilyMemberBean tempBean : tempList)
-		{
-			FamilyMemberResultBean tempResultBean = new FamilyMemberResultBean();
-			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
-			//temp settings  percent score supposeRole start
-			tempResultBean.setPercent("20%");
-			tempResultBean.setSupposeRole(String.valueOf(RandUtils.generateRand(1, 5)));
-			//temp settings  percent score supposeRole end
-			scoreList.add(tempResultBean);
-		}
-		
-		//temp settings start
-		resultBean.setSimulationScore("83");
-		resultBean.setScoreArr(scoreList);
-		//temp settings end
-		return resultBean;
 	}
 	
 	/**
@@ -750,10 +708,6 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		competitorObj.setOrderChange(String.valueOf(competitorObjOrderChange));
 		
-		//temp settsing competitingResult orderNo==========start
-//		competitorObj.setCompetitingResult("SUCCESS");
-//		competitorObj.setOrderNo("15");
-		
 		double myFamilyScore = gameObjFamilyStatBean.getScore();
 		double competitorScore = competitorObjFamilyStatBean.getScore();
 		if (myFamilyScore > competitorScore)
@@ -775,22 +729,6 @@ public class ScoreService extends BaseService<ScoreService>
 		resultBean.setCompetitorObj(competitorObj);
 		
 		return resultBean;
-	}
-	
-	public List<SimulationScoreResultBean> generateYesterdaySimulationScore(ScoreFamilyInfoParamBean bean)
-	{
-		List<SimulationScoreResultBean> resultList = new ArrayList<>();
-		
-		//temp settsing score roleId
-		for (int i = 1; i <= 7; i++)
-		{
-			SimulationScoreResultBean tempBean0 = new SimulationScoreResultBean();
-			tempBean0.setRoleId(String.valueOf(i));
-			tempBean0.setScore("50");
-			resultList.add(tempBean0);
-		}
-		
-		return resultList;
 	}
 	
 	public List<UserTravelHistoryResultBean> showTravels(ScoreFamilyInfoParamBean bean)
@@ -1154,6 +1092,9 @@ public class ScoreService extends BaseService<ScoreService>
 		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
 		resultBean.setFamilyName(familyInfoBean.getFamilyName());
 		resultBean.setFamilyImgUrl(familyInfoBean.getImgUrl());
+		
+		List<Integer> userFamilyRoleIdList = this.scoreMapper.queryFamilyRoleIdList(bean);
+		bean.setUserFamilyRoleIdList(userFamilyRoleIdList);
 		
 		double statMileage = this.scoreMapper.statMileage(bean);
 		String mileageStr = BigDecimal.valueOf(statMileage).divide(BigDecimal.valueOf(1000), 1, BigDecimal.ROUND_HALF_UP).toString() + "km";

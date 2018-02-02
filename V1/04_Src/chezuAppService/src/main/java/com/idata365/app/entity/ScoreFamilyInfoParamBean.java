@@ -1,6 +1,7 @@
 package com.idata365.app.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ScoreFamilyInfoParamBean implements Serializable
 {
@@ -34,6 +35,8 @@ public class ScoreFamilyInfoParamBean implements Serializable
 	private String endDay;
 	
 	private long userFamilyScoreId;
+	
+	private List<Integer> userFamilyRoleIdList;
 	
 	public long getHabitId() {
 		return habitId;
@@ -161,6 +164,16 @@ public class ScoreFamilyInfoParamBean implements Serializable
 	public void setUserFamilyScoreId(long userFamilyScoreId)
 	{
 		this.userFamilyScoreId = userFamilyScoreId;
+	}
+
+	public List<Integer> getUserFamilyRoleIdList()
+	{
+		return userFamilyRoleIdList;
+	}
+
+	public void setUserFamilyRoleIdList(List<Integer> userFamilyRoleIdList)
+	{
+		this.userFamilyRoleIdList = userFamilyRoleIdList;
 	}
 	
 }
