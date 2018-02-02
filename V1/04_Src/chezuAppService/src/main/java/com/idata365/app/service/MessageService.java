@@ -207,12 +207,12 @@ public class MessageService extends BaseService<MessageService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	public Message buildAchieveMessage(Long fromUserId,String awardMsg,Long toUserId,int achieveId,String achieveName) {
+	public Message buildAchieveMessage(Long fromUserId,Long toUserId,int achieveId,String achieveName) {
 				Message message=new Message();
 				message.setFromUserId(fromUserId==null?0:fromUserId);
 				message.setBottomText("");
 				message.setChildType(0);
-				message.setContent(getAchieveDesc(awardMsg));
+				message.setContent(getAchieveDesc(""));
 				message.setCreateTime(new Date());
 				message.setIcon("");
 				message.setIsPush(1);
