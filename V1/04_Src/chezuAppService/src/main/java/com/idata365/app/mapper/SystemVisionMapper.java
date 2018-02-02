@@ -4,12 +4,12 @@ import com.idata365.app.entity.SystemVisionBean;
 
 /**
  * 
- * @className:com.idata365.app.mapper.SystemVisonMapper
+ * @className:com.idata365.app.mapper.SystemVisionMapper
  * @description:TODO
- * @date:2018年2月1日 下午12:39:36
+ * @date:2018年2月2日 上午10:39:36
  * @author:CaiFengYao
  */
-public interface SystemVisonMapper
+public interface SystemVisionMapper
 {
 	/**
 	 * 查询版本信息
