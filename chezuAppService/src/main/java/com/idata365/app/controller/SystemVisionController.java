@@ -1,6 +1,5 @@
 package com.idata365.app.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -39,9 +38,8 @@ public class SystemVisionController extends BaseController
 		{
 			return ResultUtils.rtFailParam(null, "无效参数");
 		}
-		int status = systemVisionService.verifyVision(phoneType, vision);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("visionStatus", status);
+		// 业务处理
+		Map<String, Object> map = systemVisionService.verifyVision(phoneType, vision);
 		return ResultUtils.rtSuccess(map);
 	}
 }
