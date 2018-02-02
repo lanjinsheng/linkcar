@@ -40,7 +40,7 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
-	public static final String AchieveMessage="新成就达成！奖励您【%s】！";
+	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	
 	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
