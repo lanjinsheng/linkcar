@@ -19,6 +19,8 @@ public class UserFamilyRoleLogParamBean implements Serializable
 	private String startTime;
 	
 	private String endTime;
+	
+	private int count;
 
 	public long getId()
 	{
@@ -98,6 +100,16 @@ public class UserFamilyRoleLogParamBean implements Serializable
 	public void setEndTime(String endTime)
 	{
 		this.endTime = endTime;
+	}
+
+	public int getCount()
+	{
+		return count;
+	}
+
+	public void setCount(int count)
+	{
+		this.count = count;
 	}
 	
 }

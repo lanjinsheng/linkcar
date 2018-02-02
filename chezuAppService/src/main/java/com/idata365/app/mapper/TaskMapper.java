@@ -2,6 +2,7 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -29,11 +30,13 @@ public interface TaskMapper
 	
 	public UserFamilyRoleLogBean queryFamilyRoleLog(UserFamilyRoleLogParamBean bean);
 	
+	public List<Integer> queryRoleExceptDay(UserFamilyRoleLogParamBean bean);
+	
 	public void updateUserRole(UserFamilyRoleLogParamBean bean);
 	
 	public void saveUserFamilyRole(UserFamilyRoleLogParamBean bean);
 	
-	public void saveUserScoreDay(UserScoreDayParamBean bean);
+	public void saveOrUpdateUserScoreDay(UserScoreDayParamBean bean);
 	
 	public List<FamilyChallengeLogBean> queryChallengeLog(FamilyChallengeLogParamBean bean);
 
@@ -44,4 +47,8 @@ public interface TaskMapper
 	public List<Long> queryUserIds();
 	
 	public void saveOrUpdate(LotteryBean bean);
+	
+	public DriverVehicleResultBean queryDriveEditStatus(UserFamilyRoleLogParamBean bean);
+	
+	public DriverVehicleResultBean queryTravelEditStatus(UserFamilyRoleLogParamBean bean);
 }

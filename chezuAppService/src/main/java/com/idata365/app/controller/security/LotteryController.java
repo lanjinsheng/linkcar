@@ -3,6 +3,7 @@ package com.idata365.app.controller.security;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgParamBean;
+import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.UserTravelLottery;
@@ -61,6 +63,21 @@ public class LotteryController extends BaseController
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		LotteryMigrateInfoAllResultBean listFriendList = this.lotteryService.listFriendList(bean);
+		
+		String imgBasePath = super.getImgBasePath();
+		List<LotteryMigrateInfoMsgResultBean> lotteryUserList = listFriendList.getGivenLottery();
+		if (CollectionUtils.isNotEmpty(lotteryUserList))
+		{
+			for (LotteryMigrateInfoMsgResultBean tempBean : lotteryUserList)
+			{
+				String imgUrl = tempBean.getImgUrl();
+				if (StringUtils.isNotBlank(imgUrl))
+				{
+					tempBean.setImgUrl(imgBasePath + imgUrl);
+				}
+			}
+		}
+		
 		return ResultUtils.rtSuccess(listFriendList);
 	}
 	

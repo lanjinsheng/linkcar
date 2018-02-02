@@ -237,20 +237,6 @@ public class ScoreController extends BaseController
 	}
 	
 	/**
-	 * 获得家族及成员昨日理论得分
-	 * @param bean
-	 * @return
-	 */
-	@RequestMapping("/score/generateYesterdayFamilyScore")
-	public Map<String, Object> generateYesterdayFamilyScore(@RequestBody ScoreFamilyInfoParamBean bean)
-	{
-		LOG.info("param==={}", JSON.toJSONString(bean));
-		
-		FamilyMemberAllResultBean resultBean = this.scoreService.generateYesterdayFamilyScore(bean);
-		return ResultUtils.rtSuccess(resultBean);
-	}
-	
-	/**
 	 * 昨日赛果
 	 * @param bean
 	 * @return
@@ -282,20 +268,6 @@ public class ScoreController extends BaseController
 			
 			resultList.add(resultBean);
 		}
-		
-		return ResultUtils.rtSuccess(resultList);
-	}
-	
-	/**
-	 * 获得昨日理论得分(用户所有角色)
-	 * @param bean
-	 * @return
-	 */
-	@RequestMapping("/score/generateYesterdaySimulationScore")
-	public Map<String, Object> generateYesterdaySimulationScore(@RequestBody ScoreFamilyInfoParamBean bean)
-	{
-		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<SimulationScoreResultBean> resultList = this.scoreService.generateYesterdaySimulationScore(bean);
 		
 		return ResultUtils.rtSuccess(resultList);
 	}
