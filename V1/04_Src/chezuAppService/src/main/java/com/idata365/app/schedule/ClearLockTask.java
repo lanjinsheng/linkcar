@@ -5,7 +5,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.idata365.app.entity.TaskAwardInfoPush;
 import com.idata365.app.service.TaskAchieveAddValueService;
+import com.idata365.app.service.TaskAwardInfoPushService;
 import com.idata365.app.service.TaskGiveUserAchieveService;
 import com.idata365.app.service.TaskMessagePushService;
 
@@ -23,6 +25,9 @@ public class ClearLockTask extends TimerTask {
     TaskGiveUserAchieveService taskGiveUserAchieveService;
     @Autowired
     TaskMessagePushService taskMessagePushService;
+    @Autowired
+    TaskAwardInfoPushService taskAwardInfoPushService;
+    
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -44,6 +49,7 @@ public class ClearLockTask extends TimerTask {
 				taskAchieveAddValueService.clearLockTask();
 				taskGiveUserAchieveService.clearLockTask();
 				taskMessagePushService.clearLockTask();
+				taskAwardInfoPushService.clearLockTask();
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.error(e);

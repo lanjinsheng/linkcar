@@ -50,10 +50,10 @@ public class ManagePushApi {
      * @param msg   需要推送的消息
      * @param type  app点击通知，跳转的页面
      */
-    public   void SendMsgToAll(String msg,Integer type,String platform) throws Exception{
+    public   void SendMsgToAll(String msg,Map<String,String> extraMap,String platform) throws Exception{
         ClientConfig.getInstance().setMaxRetryTimes(3);
         JPushClient jpushClient = new JPushClient(systemProperties.getJgSecret(),systemProperties.getJgAppKey());
-        PushPayload payload = BuildMsgAll(msg, platform, type);
+        PushPayload payload = BuildMsgAll(msg, platform, extraMap);
         jpushClient.sendPush(payload);
     }
 
@@ -146,7 +146,7 @@ public class ManagePushApi {
      * @param type      app点击通知，跳转的页面
      * @return          组合好的消息体
      */
-    private   PushPayload BuildMsgAll(String message,String platform,Integer type){
+    private   PushPayload BuildMsgAll_noUse(String message,String platform,Integer type){
        if(platform.equals(PLATFORM_ALL_ANDROID)){
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android())
@@ -174,6 +174,9 @@ public class ManagePushApi {
                 .build();
       }
     }
+    
+    
+    
     /**
      * 极光推送参数组合
      * @param message   消息主题
