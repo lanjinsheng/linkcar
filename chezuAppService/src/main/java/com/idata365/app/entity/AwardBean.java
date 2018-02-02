@@ -1,6 +1,7 @@
 package com.idata365.app.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AwardBean implements Serializable
 {
@@ -40,6 +41,55 @@ public class AwardBean implements Serializable
 	
 	//
 	private String nextAwardTime;
+	
+	private Long userId;
+	private String taskTitle;
+	private String gameEndDay;
+	private int sendMessage;
+	private Date createTime;
+	
+	
+	
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getTaskTitle() {
+		return taskTitle;
+	}
+
+	public void setTaskTitle(String taskTitle) {
+		this.taskTitle = taskTitle;
+	}
+
+	public String getGameEndDay() {
+		return gameEndDay;
+	}
+
+	public void setGameEndDay(String gameEndDay) {
+		this.gameEndDay = gameEndDay;
+	}
+
+	public int getSendMessage() {
+		return sendMessage;
+	}
+
+	public void setSendMessage(int sendMessage) {
+		this.sendMessage = sendMessage;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	public long getId()
 	{
