@@ -99,6 +99,21 @@
   </bean> 
   <!--End#######################定时消息任务#######################################################-->
  
+  <!--Begin#######################定时消息任务#######################################################-->
+  <!-- 延迟11s加载，并且每隔10秒进行处理扫描,同步行程数据给业务层 -->
+  <bean id="awardInfoPushTask" class="com.idata365.app.schedule.CalTaskAwardInfoPush">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="awardInfoPushTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="awardInfoPushTask" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="12000" /> 
+        <!-- 每次任务间隔 60秒-->  
+    <property name="period" value="10000" />   
+  </bean> 
+  <!--End#######################定时消息任务#######################################################-->
+ 
  
 	<bean id="springScheduledExecutorFactoryBean"
 		class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">
@@ -108,6 +123,7 @@
 				<ref bean="calTaskAchieveAddValueExe" />
 				<ref bean="giveUserAchieveTaskExe" />
 				<ref bean="messagePushTaskExe" />
+				<ref bean="awardInfoPushTaskExe" />
 				<ref bean="clearLockTaskExe" />
 				
 			</list>
