@@ -16,6 +16,14 @@
     select count(parentType) typeCount,parentType from message where isRead=0 and toUserId=#{toUserId}  group by parentType order by parentType
     </select>
      
+     
+    <select id="getMessageById" resultType="com.idata365.app.entity.Message" parameterType="java.lang.Long">
+    	select * from message where id=#{id}
+    </select>
+     
+     
+     
+     
     <update id="updateRead"    parameterType="java.lang.Long" >
       update
             message
