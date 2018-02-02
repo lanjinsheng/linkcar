@@ -26,6 +26,7 @@ public class TaskGiveUserAchieveService
 	TaskGiveUserAchieveMapper taskGiveUserAchieveMapper;
 	@Autowired
 	MessageService messageService;
+
 	/**
 	 * 初始化成就任务
 	 * 
@@ -101,11 +102,11 @@ public class TaskGiveUserAchieveService
 		}
 		// 更新发放标识
 		taskGiveUserAchieveMapper.updateAchieveGiveStatusIsOver(achieveRecordId);
-		//增加成就消息==推送消息
-//		Message  message=messageService.buildAchieveMessage(fromUserId, awardMsg, toUserId, achieveId, achieveName);
-//		messageService.insertMessage(message, MessageEnum.ACHIEVE);
-//  	messageService.pushMessage(message, MessageEnum.ACHIEVE);
-  		
+		// 增加成就消息==推送消息
+		Message message = messageService
+				.buildAchieveMessage(userId, userId, bean.getAchieveId(), bean.getAchieveName());
+		messageService.insertMessage(message, MessageEnum.ACHIEVE);
+		messageService.pushMessage(message, MessageEnum.ACHIEVE);
 		return true;
 	}
 
