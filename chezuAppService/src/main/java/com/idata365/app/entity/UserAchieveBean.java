@@ -43,6 +43,17 @@ public class UserAchieveBean implements Serializable
 	// 连续登榜天数
 	private int goldCountDays;
 	private long familyId;
+	private String achieveName;
+
+	public String getAchieveName()
+	{
+		return achieveName;
+	}
+
+	public void setAchieveName(String achieveName)
+	{
+		this.achieveName = achieveName;
+	}
 
 	public long getFamilyId()
 	{
