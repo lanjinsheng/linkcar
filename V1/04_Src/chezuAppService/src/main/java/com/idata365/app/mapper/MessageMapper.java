@@ -14,8 +14,11 @@ public interface MessageMapper {
 	List<Map<String,Object>> getMsgMainTypes(@Param("toUserId") Long toUserId);
 	
 	List<Map<String,Object>> getMsgListByType(Map<String,Object> map);
+	List<Map<String,Object>> getMsgListKaijiang(Map<String,Object> map);
 	
 	Map<String,Object> getMsgMainTypeTime(Map<String,Object> map);
+	Map<String,Object> getMsgKaijiangTime(Map<String,Object> map);
+	
 	
 	void updateRead(@Param("msgId") Long msgId);
 	
