@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.config.SystemProperties;
+import com.idata365.app.entity.AwardBean;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.TaskMessagePush;
@@ -299,6 +300,22 @@ public class MessageService extends BaseService<MessageService>{
 	        extraMap.put("toUrl", msg.getToUrl());
 		 	managePushApi.SendMsgToOne(msg.getContent(), alias, ManagePushApi.PLATFORM_IOS, extraMap);
 	}
+	
+	public void pushAwardMessageByTask(Long awardId,String title) {
+		//String alias=toUserId+"_0";
+		 Map<String,String> extraMap = new HashMap<String, String>();
+	        extraMap.put("parentType", "4");
+	        extraMap.put("childType", "0");
+	        extraMap.put("msgId","0");
+	        extraMap.put("toUrl",KaijiangMessageUrl+awardId);
+		 	try{
+				managePushApi.SendMsgToAll(title, extraMap, ManagePushApi.PLATFORM_IOS);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
 	/**
 	 * 
 	    * @Title: getMsgMainTypes
