@@ -23,7 +23,7 @@ public class UserAchieveService extends BaseService<UserAchieveService>
 	/**
 	 * 查询个人成就列表
 	 * 
-	 * @Description:TODO 查询语句有待修正
+	 * @Description:
 	 * @author:CaiFengYao
 	 * @date:2018年1月19日 上午11:05:26
 	 */
