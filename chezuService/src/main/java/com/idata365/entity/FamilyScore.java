@@ -1,6 +1,7 @@
 package com.idata365.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class FamilyScore implements Serializable{
 
@@ -39,7 +40,7 @@ public Double getAverScore() {
 	return averScore;
 }
 public void setAverScore(Double averScore) {
-	this.averScore = averScore;
+	this.averScore = BigDecimal.valueOf(averScore).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 }
 public Integer getYesterdayOrderNo() {
 	return yesterdayOrderNo;
@@ -87,7 +88,7 @@ public Double getScore() {
 	return score;
 }
 public void setScore(Double score) {
-	this.score = score;
+	this.score = BigDecimal.valueOf(score).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 }
 
 
