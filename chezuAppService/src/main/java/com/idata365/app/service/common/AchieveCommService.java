@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.idata365.app.constant.AchieveConstant;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.LotteryLogConstant;
 import com.idata365.app.entity.FamilyStayGoldLogBean;
@@ -120,7 +121,7 @@ public class AchieveCommService
 	protected void addShareTimes(long userId)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 1);
+		map.put("achieveId", AchieveConstant.SHARE_ID);
 		updateAchieveTimes(map);
 	}
 
@@ -132,7 +133,7 @@ public class AchieveCommService
 	protected void addGayTimes(long userId)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 2);
+		map.put("achieveId", AchieveConstant.GAY_ID);
 		updateAchieveTimes(map);
 
 	}
@@ -149,8 +150,8 @@ public class AchieveCommService
 			return;
 		}
 		map.put("userId", userId);
-		map.put("achieveId", 3);
-		updateAchieveMile(map, mileage);
+		map.put("achieveId", AchieveConstant.GOD_ID);
+		updateAchieveNum(map, mileage);
 	}
 
 	/**
@@ -161,7 +162,7 @@ public class AchieveCommService
 	protected void addCarEndTimes(long userId)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 4);
+		map.put("achieveId", AchieveConstant.CAREND_ID);
 		updateAchieveTimes(map);
 	}
 
@@ -173,7 +174,7 @@ public class AchieveCommService
 	protected void addBestDriverTimes(long userId)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 5);
+		map.put("achieveId", AchieveConstant.BESTDRIVER_ID);
 		updateAchieveTimes(map);
 	}
 
@@ -185,7 +186,7 @@ public class AchieveCommService
 	protected void addCollectTimes(long userId, double value)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 6);
+		map.put("achieveId", AchieveConstant.COLLECT_ID);
 		updateAchieveNum(map, value);
 	}
 
@@ -209,7 +210,7 @@ public class AchieveCommService
 	protected void addGrabTimes(long userId)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 8);
+		map.put("achieveId", AchieveConstant.GRAB_ID);
 		updateAchieveWhenUploadLicence(map, userId);
 	}
 
@@ -221,57 +222,8 @@ public class AchieveCommService
 	protected void addStupidTimes(long userId)
 	{
 		map.put("userId", userId);
-		map.put("achieveId", 9);
+		map.put("achieveId", AchieveConstant.STUPID_ID);
 		updateAchieveTimes(map);
-	}
-
-	/**
-	 * 更新成就
-	 * 
-	 * @Description:当用户点击某项成就时，先更新后查询。更新rule：成就达到解锁要求时
-	 * 
-	 */
-	public void updateAchieveInfoBeforeQuery(int achieveId, long userId, Map<String, Object> map)
-	{
-		LOG.info("用户点击了个人成就，开始更新该项成就相关值==================================================");
-		/**
-		 * 查询用户可以解锁的成就记录
-		 */
-		UserAchieveBean bean = userAchieveMapper.queryUserCanDeblockAchieve(map);
-		LOG.info("查询可以解锁的UserAchieveBean：>>>>>>>>>>>>>>>>>>>>>{}", bean);
-		if (bean == null)// 当夺宝名人时，返回
-		{
-			LOG.info("无可更新成就，返回**********************");
-			return;
-		}
-		else
-		{
-			// 奖励类型(1.道具奖励;2.个人评分奖励;3.综合大礼包奖励)
-			if (bean.getType() == 1)
-			{
-				// 更新用户道具
-				saveLotteInfo(userId, bean.getAwardId(), bean.getAwardNum());
-			}
-			else if (bean.getType() == 2)
-			{
-				// 更新用户当日个人评分
-				updateUserPointTodayByAchieve(userId, bean.getAwardNum());
-			}
-			// 更新成就解锁标识
-			userAchieveMapper.updateFlagToLock(bean.getId());
-			// 更新下一个成就等级的数量
-			if (bean.getLev() < bean.getMaxLev())
-			{
-				// 剩余成就值
-				int remianNum = bean.getNowNum() - bean.getNum();
-				LOG.info("将更新下一等级成就信息，更新的剩余值为：>>>>>>>>>>>>>>>>>>>>>", remianNum);
-				map.put("lev", bean.getLev() + 1);
-				map.put("nowNum", remianNum);
-				LOG.info("updateNextLevAchieveValue的入参Map：>>>>>>>>>>>>>>>>>>>>>", map);
-				userAchieveMapper.updateNextLevAchieveValue(map);
-			}
-		}
-		LOG.info("更新成就结束==================================================");
 	}
 
 	// 保存道具的发放
@@ -459,39 +411,6 @@ public class AchieveCommService
 			map.put("nowNum", nowNum);
 			// 更新数量
 			userAchieveMapper.updateGoldFamilyAchieveValue(map);
-		}
-	}
-
-	// 更新成就里程
-	void updateAchieveMile(Map<String, Object> map, double num)
-	{
-		int numToday = new Double(num).intValue();// 今天里程
-		// 查看用户某项成就最新记录id
-		UserAchieveBean achieve = userAchieveMapper.queryLatelyAchieveInfo(map);
-		LOG.info("updateAchieveNum=================================================={}", achieve);
-		if (achieve != null && achieve.getId() != null)
-		{
-			int sumNum = achieve.getNowNum() + numToday;
-			LOG.info("getNowNum>>>>{}" + achieve.getNowNum() + ";numToday>>>>>{}" + numToday + ";sumNum>>>>" + sumNum);
-			achieve.setNowNum(numToday);
-			// 更新用户里程成就值
-			userAchieveMapper.updateAchieveNumById(achieve);
-			int goalNum = achieve.getNum() * 1000;// 目标里程，字典表里是km，此处转为m来计算
-			if (sumNum >= goalNum)
-			{
-				// 更新成就解锁标识
-				userAchieveMapper.updateFlagToLock(achieve.getId());
-				// 更新下一个成就等级的数量
-				if (achieve.getLev() < achieve.getMaxLev())
-				{
-					// 剩余成就值
-					map.put("lev", achieve.getLev() + 1);
-					map.put("nowNum", sumNum - goalNum);
-					LOG.info("升级后，剩余值为sumNum - goalNum>>>>>>>>>", sumNum - goalNum);
-					LOG.info("解锁该项成就，并更新下一等级成就，参数为=================================================={}", map);
-					userAchieveMapper.updateNextLevAchieveValue(map);
-				}
-			}
 		}
 	}
 
