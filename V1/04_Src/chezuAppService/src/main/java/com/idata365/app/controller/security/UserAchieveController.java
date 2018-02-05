@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.AchieveConstant;
 import com.idata365.app.constant.ImgUrlConstant;
 import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.service.UserAchieveService;
@@ -80,15 +81,22 @@ public class UserAchieveController extends BaseController
 		List<Map<String, Object>> list = userAchieveService.getAchieveListById(this.getUserId(), achieveId);
 		for (Map<String, Object> m : list)
 		{
-			if (achieveId == 3 && !m.get("nowNum").toString().equals("0"))// 为神行太保时，将m转为km展示
+			double num = Double.valueOf(m.get("num").toString());
+			if (achieveId == AchieveConstant.GOD_ID)// 为神行太保时，将m转为km展示
 			{
+				System.out.println("------------------------------------------num:" + num);
+				double numKm = BigDecimal.valueOf(num).divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_EVEN)
+						.doubleValue();
+				System.out.println("------------------------------------------numKm:" + numKm);
+				m.put("num", numKm);
 				double nowNum = Double.valueOf(m.get("nowNum").toString());
 				double nowNumKm = BigDecimal.valueOf(nowNum)
 						.divide(BigDecimal.valueOf(1000), 2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 				m.put("nowNum", nowNumKm);
+				num = numKm;
 			}
 			// 替换描述字段
-			m.put("achieveName", m.get("describe").toString().replaceAll("s", m.get("num").toString()));
+			m.put("achieveName", m.get("describe").toString().replaceAll("s", String.valueOf(num)));
 		}
 		this.dealListObect2String(list);
 		rtMap.put("getAchieveListById", list);
@@ -127,7 +135,7 @@ public class UserAchieveController extends BaseController
 		}
 		else if (type == 7)
 		{
-			long familyId = 2;
+			// long familyId = 2;
 			// achieveCommService.addAchieve(familyId, 0d, AchieveEnum.AddGoldFamilyTimes);
 			// achieveCommService.updateAchieveDaysByFamily(familyId);
 		}
