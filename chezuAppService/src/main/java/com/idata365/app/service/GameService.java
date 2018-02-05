@@ -1100,7 +1100,7 @@ public class GameService extends BaseService<GameService>
 	public List<ReadyLotteryResultBean> getReadyLottery(ReadyLotteryBean bean)
 	{
 		getReadyLotteryB(bean);
-		List<ReadyLotteryResultBean> resultList = this.findTomorrowReadyLottery(bean);
+		List<ReadyLotteryResultBean> resultList = this.findTomorrowSpecifyLottery(bean);
 		return resultList;
 	}
 
@@ -1137,6 +1137,23 @@ public class GameService extends BaseService<GameService>
 		lotteryBean.setAwardId(bean.getAwardId());
 		lotteryBean.setAddedCount(readyLotteryCount);
 		this.lotteryMapper.increLotteryCount(lotteryBean);
+	}
+	
+	public List<ReadyLotteryResultBean> findTomorrowSpecifyLottery(ReadyLotteryBean bean)
+	{
+		String paramAwardId = String.valueOf(bean.getAwardId());
+		List<ReadyLotteryResultBean> tempList = this.findTomorrowReadyLottery(bean);
+		Iterator<ReadyLotteryResultBean> iterator = tempList.iterator();
+		while (iterator.hasNext())
+		{
+			ReadyLotteryResultBean tempBean = iterator.next();
+			if (!StringUtils.equals(tempBean.getAwardId(), paramAwardId))
+			{
+				iterator.remove();
+			}
+		}
+		
+		return tempList;
 	}
 	
 	public List<ReadyLotteryResultBean> findTomorrowReadyLottery(ReadyLotteryBean bean)
@@ -1181,7 +1198,7 @@ public class GameService extends BaseService<GameService>
 		this.lotteryMapper.delLotteryCount(lotteryParamBean);
 		
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
-		List<ReadyLotteryResultBean> resultList = this.findTomorrowReadyLottery(bean);
+		List<ReadyLotteryResultBean> resultList = this.findTomorrowSpecifyLottery(bean);
 		return resultList;
 	}
 	
@@ -1197,7 +1214,7 @@ public class GameService extends BaseService<GameService>
 		this.lotteryMapper.addLotteryCount(lotteryParamBean);
 		
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
-		List<ReadyLotteryResultBean> resultList = this.findTomorrowReadyLottery(bean);
+		List<ReadyLotteryResultBean> resultList = this.findTomorrowSpecifyLottery(bean);
 		return resultList;
 	}
 	
@@ -1220,7 +1237,7 @@ public class GameService extends BaseService<GameService>
 		
 		ReadyLotteryBean tomorrowParamBean = new ReadyLotteryBean();
 		tomorrowParamBean.setUserId(bean.getUserId());
-		List<ReadyLotteryResultBean> resultList = findTomorrowReadyLottery(tomorrowParamBean);
+		List<ReadyLotteryResultBean> resultList = findTomorrowSpecifyLottery(tomorrowParamBean);
 		return resultList;
 	}
 	
