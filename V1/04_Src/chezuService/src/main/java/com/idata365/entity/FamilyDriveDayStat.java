@@ -1,6 +1,7 @@
 package com.idata365.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class FamilyDriveDayStat  implements Serializable {
 
@@ -104,19 +105,19 @@ public class FamilyDriveDayStat  implements Serializable {
 		return score;
 	}
 	public void setScore(Double score) {
-		this.score = score;
+		this.score = BigDecimal.valueOf(score).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 	public Double getScoreComm() {
 		return scoreComm;
 	}
 	public void setScoreComm(Double scoreComm) {
-		this.scoreComm = scoreComm;
+		this.scoreComm =BigDecimal.valueOf(scoreComm).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 	public Double getScoreAdd() {
 		return scoreAdd;
 	}
 	public void setScoreAdd(Double scoreAdd) {
-		this.scoreAdd = scoreAdd;
+		this.scoreAdd = BigDecimal.valueOf(scoreAdd).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 	public Integer getSpeedTimes() {
 		return speedTimes;
@@ -294,8 +295,4 @@ public class FamilyDriveDayStat  implements Serializable {
 		this.time = time;
 	}
 	
-	
-	
-	
-
 }
