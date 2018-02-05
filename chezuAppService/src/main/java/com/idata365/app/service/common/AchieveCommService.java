@@ -422,10 +422,10 @@ public class AchieveCommService
 		LOG.info("updateAchieveNum=================================================={}", achieve);
 		if (achieve != null && achieve.getId() != null)
 		{
-			int sumNum = achieve.getNowNum() + new Double(num).intValue();
+			int sumNum = achieve.getNowNum() + new Double(num).intValue();// 当前总量=库存数量+新增数量
 			achieve.setNowNum(new Double(num).intValue());
 			userAchieveMapper.updateAchieveNumById(achieve);
-			if (sumNum >= achieve.getNum())
+			if (sumNum >= achieve.getNum())// 如果当前总量大于升级数量则给予升级处理
 			{
 				// 更新成就解锁标识
 				userAchieveMapper.updateFlagToLock(achieve.getId());
