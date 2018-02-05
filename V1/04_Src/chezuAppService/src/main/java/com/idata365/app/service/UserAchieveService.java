@@ -49,8 +49,6 @@ public class UserAchieveService extends BaseService<UserAchieveService>
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", userId);
 		map.put("achieveId", achieveId);
-		// 先更新成就
-		achieveCommService.updateAchieveInfoBeforeQuery(achieveId, userId, map);
 		// 查询列表
 		return userAchieveMapper.getUserAchieveListById(map);
 	}
