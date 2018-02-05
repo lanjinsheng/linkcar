@@ -44,7 +44,7 @@ public interface ScoreMapper
 	
 	public Integer queryHistoryRole(ScoreUserHistoryParamBean bean);
 	
-	public int queryCurrentRole(ScoreUserHistoryParamBean bean);
+	public Integer queryCurrentRole(ScoreUserHistoryParamBean bean);
 	
 	public List<ScoreByDayBean> queryScoreByDay(ScoreUserHistoryParamBean bean);
 	

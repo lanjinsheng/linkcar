@@ -87,7 +87,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{day}
 	</select>
 
-	<select id="queryCurrentRole" resultType="int" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
+	<select id="queryCurrentRole" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
 		select role from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
 	</select>
 	

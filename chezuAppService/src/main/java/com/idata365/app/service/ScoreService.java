@@ -383,7 +383,7 @@ public class ScoreService extends BaseService<ScoreService>
 		String yesterdayStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
 		
 		ScoreUserHistoryResultBean todayResultBean = new ScoreUserHistoryResultBean();
-		int currentRole = this.scoreMapper.queryCurrentRole(bean);
+		Integer currentRole = this.scoreMapper.queryCurrentRole(bean);
 		todayResultBean.setRole(String.valueOf(currentRole));
 		todayResultBean.setDayStr(todayStr + "(今日)");
 		todayResultBean.setScore("暂无评分");
@@ -590,7 +590,7 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	/**
 	 * 昨日赛果
-	 * @param bean
+	 * @param bean 
 	 * @return
 	 */
 	public CompetitorResultBean showGameResult(ScoreFamilyInfoParamBean bean)
