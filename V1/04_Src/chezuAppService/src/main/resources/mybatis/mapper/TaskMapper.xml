@@ -75,7 +75,11 @@
  	<insert id="saveFamilyRelation" parameterType="com.idata365.app.entity.FamilyRelationParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into familyRelation(selfFamilyId, competitorFamilyId, daystamp) values(#{selfFamilyId}, #{competitorFamilyId}, #{daystamp});
 	</insert>
-	 	 	
+	
+	<delete id="delFamilyRelations" parameterType="com.idata365.app.entity.FamilyRelationParamBean">
+		delete from familyRelation where daystamp=#{daystamp}
+	</delete>
+	
 	<select id="queryUserIds" resultType="java.lang.Long">
 		select id from usersAccount order by id asc
 	</select>
@@ -91,6 +95,14 @@
     		insert into lottery(userId, awardId, awardCount) values(#{userId}, #{awardId}, #{awardCount})
     	</if>
     </insert>
+    
+	<update id="resetMaZhaCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=#{awardCount} where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <select id="queryUserIdsByRole" resultType="java.lang.Long" parameterType="com.idata365.app.entity.UserFamilyRoleLogBean">
+    	select distinct userId from userFamilyRelation where role=#{role}
+    </select>
     	
 	<select id="queryDriveEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		select isDrivingEdit from licenseDriver where userId=#{userId}
@@ -99,4 +111,5 @@
 	<select id="queryTravelEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		select isTravelEdit from licenseVehicleTravel where userId=#{userId}
 	</select>
+
 </mapper>

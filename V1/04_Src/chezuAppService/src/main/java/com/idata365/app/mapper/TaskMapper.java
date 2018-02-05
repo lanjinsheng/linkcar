@@ -43,10 +43,16 @@ public interface TaskMapper
 	public List<FamilyInfoBean> queryFamilyByType(FamilyParamBean bean);
 	
 	public void saveFamilyRelation(FamilyRelationParamBean bean);
+	
+	public void delFamilyRelations(FamilyRelationParamBean bean);
 
 	public List<Long> queryUserIds();
 	
 	public void saveOrUpdate(LotteryBean bean);
+	
+	public void resetMaZhaCount(LotteryBean bean);
+	
+	public List<Long> queryUserIdsByRole(UserFamilyRoleLogBean bean);
 	
 	public DriverVehicleResultBean queryDriveEditStatus(UserFamilyRoleLogParamBean bean);
 	

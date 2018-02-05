@@ -104,6 +104,13 @@ public class TaskService extends BaseService<TaskService>
 		return dayStr;
 	}
 	
+	/**
+	 * 初始化明天的userFamilyRoleLog
+	 * 初始化userFamilyRelation中的role
+	 * 初始化明天的userScoreDayStat
+	 * 给每个用户赠送一张小纸条
+	 * 
+	 */
 	@Transactional
 	public void syncTomorrowRole()
 	{
@@ -248,6 +255,12 @@ public class TaskService extends BaseService<TaskService>
 		goldParam.setFamilyType(FamilyConstant.GOLD_TYPE);
 		List<FamilyInfoBean> goldList = this.taskMapper.queryFamilyByType(goldParam);
 		
+		String tomorrowDateStr = getTomorrowDateStr();
+		
+		FamilyRelationParamBean delFamilyRelationParamBean = new FamilyRelationParamBean();
+		delFamilyRelationParamBean.setDaystamp(tomorrowDateStr);
+		this.taskMapper.delFamilyRelations(delFamilyRelationParamBean);
+		
 		//tempList中的家族全部都能匹配上挑战的家族
 		for (FamilyChallengeLogBean tempBean : tempList)
 		{
@@ -258,20 +271,20 @@ public class TaskService extends BaseService<TaskService>
 			if (challengeType == FamilyConstant.BRONZE_TYPE && CollectionUtils.isNotEmpty(bronzeList))
 			{
 				//绑定并从***List移除被配对的家族
-				bindFamily(bronzeList, familyId);
+				bindFamily(bronzeList, familyId, tomorrowDateStr);
 				
 				//移除familyId对应的家族
 				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
 			}
 			else if (challengeType == FamilyConstant.SILVER_TYPE && CollectionUtils.isNotEmpty(silverList))
 			{
-				bindFamily(silverList, familyId);
+				bindFamily(silverList, familyId, tomorrowDateStr);
 				
 				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
 			}
 			else if (challengeType == FamilyConstant.GOLD_TYPE && CollectionUtils.isNotEmpty(goldList))
 			{
-				bindFamily(goldList, familyId);
+				bindFamily(goldList, familyId, tomorrowDateStr);
 				
 				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
 			}
@@ -301,7 +314,7 @@ public class TaskService extends BaseService<TaskService>
 				FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
 				relationParamBean.setSelfFamilyId(lastFamilyInfo.getId());
 				relationParamBean.setCompetitorFamilyId(FamilyConstant.ROBOT_FAMILY_ID);
-				relationParamBean.setDaystamp(getTomorrowDateStr());
+				relationParamBean.setDaystamp(tomorrowDateStr);
 				this.taskMapper.saveFamilyRelation(relationParamBean);
 			}
 			else
@@ -317,7 +330,7 @@ public class TaskService extends BaseService<TaskService>
 						FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
 						relationParamBean.setSelfFamilyId(firstFamilyId);
 						relationParamBean.setCompetitorFamilyId(secondFamilyId);
-						relationParamBean.setDaystamp(getTomorrowDateStr());
+						relationParamBean.setDaystamp(tomorrowDateStr);
 						this.taskMapper.saveFamilyRelation(relationParamBean);
 					}
 				}
@@ -329,7 +342,7 @@ public class TaskService extends BaseService<TaskService>
 					FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
 					relationParamBean.setSelfFamilyId(lastFamilyInfo.getId());
 					relationParamBean.setCompetitorFamilyId(FamilyConstant.ROBOT_FAMILY_ID);
-					relationParamBean.setDaystamp(getTomorrowDateStr());
+					relationParamBean.setDaystamp(tomorrowDateStr);
 					this.taskMapper.saveFamilyRelation(relationParamBean);
 				}
 			}
@@ -341,7 +354,7 @@ public class TaskService extends BaseService<TaskService>
 	 * @param familyList
 	 * @param familyId
 	 */
-	private void bindFamily(List<FamilyInfoBean> familyList, long familyId)
+	private void bindFamily(List<FamilyInfoBean> familyList, long familyId, String tomorrowDateStr)
 	{
 		int size = familyList.size();
 		
@@ -359,7 +372,7 @@ public class TaskService extends BaseService<TaskService>
 			FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
 			relationParamBean.setSelfFamilyId(familyId);
 			relationParamBean.setCompetitorFamilyId(competitorFamilyId);
-			relationParamBean.setDaystamp(getTomorrowDateStr());
+			relationParamBean.setDaystamp(tomorrowDateStr);
 			this.taskMapper.saveFamilyRelation(relationParamBean);
 			
 			familyList.remove(idx);
