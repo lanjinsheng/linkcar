@@ -4,6 +4,8 @@ public class ReviewParamBean
 {
 	private int userId;
 	
+	private int level;
+	
 	private String content;
 	
 	private String createTime;
@@ -16,6 +18,16 @@ public class ReviewParamBean
 	public void setUserId(int userId)
 	{
 		this.userId = userId;
+	}
+
+	public int getLevel()
+	{
+		return level;
+	}
+
+	public void setLevel(int level)
+	{
+		this.level = level;
 	}
 
 	public String getContent()

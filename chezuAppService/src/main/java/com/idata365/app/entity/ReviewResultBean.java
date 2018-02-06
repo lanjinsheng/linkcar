@@ -1,24 +1,12 @@
 package com.idata365.app.entity;
 
-public class ReviewBean
+public class ReviewResultBean
 {
-	private int userId;
-	
 	private String content;
 	
-	private int level;
+	private String level;
 	
 	private String createTime;
-
-	public int getUserId()
-	{
-		return userId;
-	}
-
-	public void setUserId(int userId)
-	{
-		this.userId = userId;
-	}
 
 	public String getContent()
 	{
@@ -30,12 +18,12 @@ public class ReviewBean
 		this.content = content;
 	}
 
-	public int getLevel()
+	public String getLevel()
 	{
 		return level;
 	}
 
-	public void setLevel(int level)
+	public void setLevel(String level)
 	{
 		this.level = level;
 	}
