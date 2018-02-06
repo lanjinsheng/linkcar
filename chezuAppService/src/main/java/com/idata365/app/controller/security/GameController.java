@@ -21,6 +21,8 @@ import com.idata365.app.entity.JudgeChallengeResultBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
+import com.idata365.app.entity.ReviewBean;
+import com.idata365.app.entity.ReviewParamBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
@@ -495,5 +497,31 @@ public class GameController extends BaseController
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<RoleCountResultBean> resultList = this.gameService.queryRolePercent(bean);
 		return ResultUtils.rtSuccess(resultList);
+	}
+	
+	/**
+	 * 保存评论
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/saveReview")
+	public Map<String, Object> saveReview(@RequestBody ReviewParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		this.gameService.saveReview(bean);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 查询评论
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/queryReview")
+	public Map<String, Object> queryReview(@RequestBody ReviewParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		ReviewBean resultBean = this.gameService.queryReview(bean);
+		return ResultUtils.rtSuccess(resultBean);
 	}
 }
