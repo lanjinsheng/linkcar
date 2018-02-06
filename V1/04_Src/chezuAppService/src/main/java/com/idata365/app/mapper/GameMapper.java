@@ -7,6 +7,8 @@ import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.ReviewBean;
+import com.idata365.app.entity.ReviewParamBean;
 import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.StationBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
@@ -68,4 +70,8 @@ public interface GameMapper
 	public DriverVehicleResultBean queryDriveEditStatus(UserFamilyRoleLogParamBean bean);
 	
 	public DriverVehicleResultBean queryTravelEditStatus(UserFamilyRoleLogParamBean bean);
+	
+	public void saveReview(ReviewParamBean bean);
+	
+	public ReviewBean queryReview(ReviewParamBean bean);
 }

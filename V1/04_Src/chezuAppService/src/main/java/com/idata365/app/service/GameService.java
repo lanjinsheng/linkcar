@@ -40,6 +40,8 @@ import com.idata365.app.entity.Message;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
+import com.idata365.app.entity.ReviewBean;
+import com.idata365.app.entity.ReviewParamBean;
 import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
@@ -924,6 +926,13 @@ public class GameService extends BaseService<GameService>
 		return dayStr;
 	}
 	
+	private String getCurrentTs()
+	{
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.SECOND_FORMAT_PATTERN);
+		return dayStr;
+	}
+	
 	private String getCurrentDayStr()
 	{
 		Calendar cal = Calendar.getInstance();
@@ -1512,5 +1521,16 @@ public class GameService extends BaseService<GameService>
 		}
 		
 		return resultList;
+	}
+	
+	public void saveReview(ReviewParamBean bean)
+	{
+		bean.setCreateTime(getCurrentTs());
+		this.gameMapper.saveReview(bean);
+	}
+	
+	public ReviewBean queryReview(ReviewParamBean bean)
+	{
+		return this.gameMapper.queryReview(bean);
 	}
 }
