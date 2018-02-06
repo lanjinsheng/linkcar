@@ -103,10 +103,10 @@
 	</select>
 	
 	<insert id="saveReview" parameterType="com.idata365.app.entity.ReviewParamBean" useGeneratedKeys="true" keyProperty="id">
-		insert into review(userId, content, createTime) values(#{userId}, #{content}, #{createTime})
+		insert into review(userId, content, level, createTime) values(#{userId}, #{content}, #{level}, #{createTime})
 	</insert>
 	
 	<select id="queryReview" parameterType="com.idata365.app.entity.ReviewParamBean" resultType="com.idata365.app.entity.ReviewBean">
-		select content, createTime from review where userId=#{userId}
+		select content, level, createTime from review where userId=#{userId}
 	</select>
 </mapper>

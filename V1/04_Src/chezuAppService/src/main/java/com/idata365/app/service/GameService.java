@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -42,6 +41,7 @@ import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
 import com.idata365.app.entity.ReviewBean;
 import com.idata365.app.entity.ReviewParamBean;
+import com.idata365.app.entity.ReviewResultBean;
 import com.idata365.app.entity.RoleCountBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
@@ -1529,8 +1529,11 @@ public class GameService extends BaseService<GameService>
 		this.gameMapper.saveReview(bean);
 	}
 	
-	public ReviewBean queryReview(ReviewParamBean bean)
+	public ReviewResultBean queryReview(ReviewParamBean bean)
 	{
-		return this.gameMapper.queryReview(bean);
+		ReviewBean tempBean = this.gameMapper.queryReview(bean);
+		ReviewResultBean resultBean = new ReviewResultBean();
+		AdBeanUtils.copyNotNullProperties(resultBean, tempBean);
+		return resultBean;
 	}
 }

@@ -23,6 +23,7 @@ import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
 import com.idata365.app.entity.ReviewBean;
 import com.idata365.app.entity.ReviewParamBean;
+import com.idata365.app.entity.ReviewResultBean;
 import com.idata365.app.entity.RoleCountResultBean;
 import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
@@ -521,7 +522,7 @@ public class GameController extends BaseController
 	public Map<String, Object> queryReview(@RequestBody ReviewParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		ReviewBean resultBean = this.gameService.queryReview(bean);
+		ReviewResultBean resultBean = this.gameService.queryReview(bean);
 		return ResultUtils.rtSuccess(resultBean);
 	}
 }
