@@ -7,12 +7,12 @@
    <insert id="initGameEnd" parameterType="com.idata365.entity.TaskSystemScoreFlag">
         INSERT IGNORE INTO  taskGameEnd
 		 (familyScoreId,dayTimes)
-         select id,dayTimes from familyScore  where startDay=#{startDay}  and endDay=#{endDay}
+         select id,dayTimes from familyScore  where <![CDATA[startDay<=#{daystamp} and  endDay>=#{daystamp}]]>
 	</insert>
 	 <update id="updateFamilyScore"  parameterType="com.idata365.entity.TaskGameEnd" >
          update
             familyScore
-                set score=(score*${addRatio}),averScore=convert((averScore*${addRatio}),decimal(10,2))
+                set averScore=convert((averScore*${addRatio}),decimal(10,2))
                  where id=#{familyScoreId}
      </update>	
 	
