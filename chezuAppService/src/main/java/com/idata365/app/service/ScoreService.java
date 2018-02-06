@@ -212,8 +212,15 @@ public class ScoreService extends BaseService<ScoreService>
 	 */
 	public ScoreFamilyDetailResultBean queryFamilyDetail(ScoreFamilyInfoParamBean bean)
 	{
-		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyDetailBean tempBean = this.scoreMapper.queryFamilyDetail(bean);
+		bean.setTimeStr(getYesterdayDateStr());
+		
+		Integer tempFamilyOrderNo = this.scoreMapper.queryFamilyYesterdayOrder(bean);
+		if (null != tempFamilyOrderNo)
+		{
+			tempBean.setOrderNo(tempFamilyOrderNo);
+		}
+		
 		List<String> recordsList = this.scoreMapper.queryFamilyRecords(bean);
 		
 		List<FamilyScoreBean> orderList = this.scoreMapper.queryOrderRecords(bean);
