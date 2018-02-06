@@ -42,7 +42,7 @@
             (month,familyId,orderNo,score,averScore,dayTimes,startDay,endDay) 
         VALUES
             (#{month},#{familyId},#{orderNo},#{score},#{score},#{dayTimes},#{startDay},#{endDay})  
-            ON DUPLICATE KEY UPDATE score=select convert((score+${score}),decimal(10,3)),averScore=convert((score+${score})/(dayTimes+${dayTimes}),decimal(10,2)),
+            ON DUPLICATE KEY UPDATE score=convert((score+${score}),decimal(10,3)),averScore=convert((score+${score})/(dayTimes+${dayTimes}),decimal(10,2)),
             dayTimes=dayTimes+${dayTimes};
     </insert>	
 	 
