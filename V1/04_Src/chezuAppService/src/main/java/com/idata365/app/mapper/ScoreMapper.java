@@ -34,6 +34,8 @@ public interface ScoreMapper
 	
 	public ScoreFamilyDetailBean queryFamilyDetail(ScoreFamilyInfoParamBean bean);
 	
+	public Integer queryFamilyYesterdayOrder(ScoreFamilyInfoParamBean bean);
+	
 	public List<String> queryFamilyRecords(ScoreFamilyInfoParamBean bean);
 	
 	public List<FamilyScoreBean> queryOrderRecords(ScoreFamilyInfoParamBean bean);
