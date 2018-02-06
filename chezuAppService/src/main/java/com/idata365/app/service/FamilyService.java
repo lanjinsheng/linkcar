@@ -687,13 +687,6 @@ public class FamilyService extends BaseService<FamilyService>
 			resultBean.setJoinFamily(joinResultBean);
 		}
 		
-		int countUsers = this.familyMapper.countUsers();
-		resultBean.setGamerNum(countUsers);
-		
-		//统计未读消息
-		int countUnRead = this.familyMapper.countUnRead(bean);
-		resultBean.setNewsNum(countUnRead);
-		
 		return resultBean;
 	}
 	
@@ -738,6 +731,10 @@ public class FamilyService extends BaseService<FamilyService>
 		//统计未读消息
 		int countUnRead = this.familyMapper.countUnRead(bean);
 		resultBean.setNewsNum(countUnRead);
+		
+		//统计聊天未读消息
+		int countUnReadChats = this.familyMapper.countUnReadChats(bean);
+		resultBean.setChatsNum(countUnReadChats);
 		
 		return resultBean;
 	}

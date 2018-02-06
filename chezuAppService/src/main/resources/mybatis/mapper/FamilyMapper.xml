@@ -231,6 +231,10 @@
  		select count(id) from message where toUserId=#{userId} and isRead=0
  	</select>
  	
+ 	<select id="countUnReadChats" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select count(id) from imMsg where familyId=#{familyId} and toUserId=#{userId} and isRead=0
+ 	</select>
+ 	
  	<select id="getFamilyUsers" resultType="java.util.HashMap" parameterType="java.lang.Long">
  		select * from userFamilyRelation where familyId=#{familyId}
  	</select>
