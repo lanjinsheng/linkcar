@@ -67,7 +67,7 @@
    
    <!-- begin gameOver 逻辑处理 -->
      <select id="getUnInitGameEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where  taskGameEndInit=0
+	   select * from taskSystemScoreFlag where  taskGameEndInit=0 and taskFamilyPk=1
 	</select>
    	<update id="updateGameEndInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
