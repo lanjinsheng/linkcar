@@ -294,5 +294,4 @@ public class FamilyDriveDayStat  implements Serializable {
 	public void setTime(Double time) {
 		this.time = time;
 	}
-	
 }
