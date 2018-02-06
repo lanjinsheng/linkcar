@@ -114,5 +114,7 @@ public interface FamilyMapper
 	
 	public int countUnRead(FamilyParamBean bean);
 	
+	public int countUnReadChats(FamilyParamBean bean);
+	
 	public List<Map<String,Object>> getFamilyUsers(@Param("familyId") Long familyId);
 }
