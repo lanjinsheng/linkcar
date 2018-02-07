@@ -178,6 +178,11 @@ public class FamilyController extends BaseController
 		{
 			return ResultUtils.rtFailRequest(null);
 		}
+		else if (-2 == familyId)
+		{
+			return ResultUtils.rtFailVerification(null);
+		}
+		
 		Map<String, Long> resultMap = new HashMap<>();
 		resultMap.put("familyId", familyId);
 		List<Map<String, Long>> resultList = new ArrayList<>();
