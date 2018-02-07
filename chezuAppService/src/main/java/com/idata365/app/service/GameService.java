@@ -1279,38 +1279,6 @@ public class GameService extends BaseService<GameService>
 		return tomorrowDateStr;
 	}
 	
-	@Transactional
-	public void syncTomorrowRole()
-	{
-		List<UserFamilyRelationBean> tempList = this.gameMapper.queryUserFamilyRelation();
-		//格式：yyyyMMdd
-		String tomorrowDayStrUndelimiter = getTomorrowDateUndelimiterStr();
-		String tomorrowDateStr = getTomorrowDateStr();
-		String startTime = tomorrowDateStr + " 00:00:00";
-		String endTime = tomorrowDateStr + " 23:59:59";
-		for (UserFamilyRelationBean tempBean : tempList)
-		{
-			UserFamilyRoleLogParamBean tempParamBean = new UserFamilyRoleLogParamBean();
-			AdBeanUtils.copyNotNullProperties(tempParamBean, tempBean);;
-			tempParamBean.setDaystamp(tomorrowDayStrUndelimiter);
-			tempParamBean.setStartTime(startTime);
-			tempParamBean.setEndTime(endTime);
-			int roleCount = this.gameMapper.countTomorrowRole(tempParamBean);
-			if (0 == roleCount)
-			{
-				this.gameMapper.saveUserFamilyRole(tempParamBean);
-				long userFamilyRoleLogId = tempParamBean.getId();
-				
-				UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
-				tempScoreDayParamBean.setUserId(tempBean.getUserId());
-				tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogId);
-				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
-				
-				this.gameMapper.saveUserScoreDay(tempScoreDayParamBean);
-			}
-		}
-	}
-	
 	/**
 	 * 初始化第二天的家族PK关系
 	 */

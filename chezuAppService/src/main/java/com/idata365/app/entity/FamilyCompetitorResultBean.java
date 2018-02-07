@@ -25,6 +25,8 @@ public class FamilyCompetitorResultBean implements Serializable
 	
 	private String time;
 	
+	private String score;
+	
 	private String speedTimes;
 	
 	private String brakeTimes;
@@ -211,6 +213,16 @@ public class FamilyCompetitorResultBean implements Serializable
 	public void setUseHoldNum(String useHoldNum)
 	{
 		this.useHoldNum = useHoldNum;
+	}
+
+	public String getScore()
+	{
+		return score;
+	}
+
+	public void setScore(String score)
+	{
+		this.score = score;
 	}
 
 	public String getUsePhoneTimes()
