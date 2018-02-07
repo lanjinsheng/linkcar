@@ -462,6 +462,14 @@ public class FamilyService extends BaseService<FamilyService>
 			return -1;
 		}
 		
+		FamilyParamBean countNameParam = new FamilyParamBean();
+		countNameParam.setName(bean.getFamilyName());
+		int nameCounts = this.familyMapper.countByName(countNameParam);
+		if (nameCounts > 0)
+		{
+			return -2;
+		}
+		
 		bean.setCreateTimeStr(generateTimeStampUndelimiter());
 		bean.setFamilyType(FamilyConstant.BRONZE_TYPE);
 		this.familyMapper.save(bean);
