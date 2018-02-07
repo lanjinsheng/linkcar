@@ -40,6 +40,7 @@
 		update userFamilyRelation set role=#{role} where userId=#{userId} and familyId=#{familyId}
 	</update>
 	
+	<!-- 
 	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id">
 		<selectKey keyProperty="count" resultType="int" order="BEFORE">
     		select count(*) from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp}
@@ -50,6 +51,12 @@
     	<if test="count == 0">
 			insert into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime})
     	</if>
+	</insert>
+	 -->
+	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id">
+		insert IGNORE into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) 
+values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime}) 
+ON DUPLICATE KEY UPDATE role=#{role}, startTime=#{startTime}, endTime=#{endTime}
 	</insert>
 	
 	<insert id="saveOrUpdateUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
