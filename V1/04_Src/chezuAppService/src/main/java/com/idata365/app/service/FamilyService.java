@@ -772,4 +772,14 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		return resultBean;
 	}
+	
+	/**
+	 * 标记新手指导已阅读
+	 * @param bean
+	 */
+	public void updateTaskFlag(FamilyParamBean bean)
+	{
+		//标记新手指导标记位
+		this.familyMapper.updateTaskFlag(bean);
+	}
 }
