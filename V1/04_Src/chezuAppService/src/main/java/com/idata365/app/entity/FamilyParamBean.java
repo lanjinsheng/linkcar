@@ -47,10 +47,24 @@ public class FamilyParamBean implements Serializable
 	
 	private int status;
 	
+	private String startTime;
+	
 	private String endTime;
 	
 	private String timeStr;
 	
+	private int hadGet;
+	
+	public String getStartTime()
+	{
+		return startTime;
+	}
+
+	public void setStartTime(String startTime)
+	{
+		this.startTime = startTime;
+	}
+
 	public long getId()
 	{
 		return id;
@@ -259,6 +273,16 @@ public class FamilyParamBean implements Serializable
 	public void setTimeStr(String timeStr)
 	{
 		this.timeStr = timeStr;
+	}
+
+	public int getHadGet()
+	{
+		return hadGet;
+	}
+
+	public void setHadGet(int hadGet)
+	{
+		this.hadGet = hadGet;
 	}
 	
 }

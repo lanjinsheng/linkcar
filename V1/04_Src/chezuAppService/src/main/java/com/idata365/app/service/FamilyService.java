@@ -744,6 +744,32 @@ public class FamilyService extends BaseService<FamilyService>
 		int countUnReadChats = this.familyMapper.countUnReadChats(bean);
 		resultBean.setChatsNum(countUnReadChats);
 		
+		int taskFlag = this.familyMapper.queryTaskFlag(bean);
+		
+		String yesterdayStr = getYesterdayStr();
+		bean.setStartTime(yesterdayStr + " 00:00:00");
+		bean.setEndTime(yesterdayStr + " 23:59:59");
+		List<Long> habitList = this.familyMapper.queryHabits(bean);
+		
+		int countUnReceive;
+		if (CollectionUtils.isNotEmpty(habitList))
+		{
+			countUnReceive = this.familyMapper.countUnReceive(habitList);
+		}
+		else
+		{
+			countUnReceive = 0;
+		}
+		
+		if (0 == taskFlag && countUnReceive > 0)
+		{
+			resultBean.setReadFlag(1);
+		}
+		else
+		{
+			resultBean.setReadFlag(0);
+		}
+		
 		return resultBean;
 	}
 }

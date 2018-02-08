@@ -239,4 +239,22 @@
  		select * from userFamilyRelation where familyId=#{familyId}
  	</select>
  	
+ 	<select id="queryTaskFlag" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select taskFlag from usersAccount where id=#{userId}
+ 	</select>
+ 	
+ 	<select id="queryHabits" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select habitId from userTravelHistory where userId=#{userId} and endTime between #{startTime} and #{endTime}
+ 	</select>
+ 	
+ 	<select id="countUnReceive" resultType="int" parameterType="java.util.List">
+ 		select count(id) from userTravelLottery where hadGet=0 and habitId in 
+ 		<foreach collection="list" item="item" open="(" separator="," close=")">
+			${item}
+		</foreach>
+ 	</select>
+ 	
+ 	<update id="updateTaskFlag" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		update usersAccount set taskFlag=1 where id=#{userId}
+ 	</update>
 </mapper>

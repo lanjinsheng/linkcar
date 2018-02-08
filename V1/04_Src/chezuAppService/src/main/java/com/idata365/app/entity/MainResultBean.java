@@ -9,6 +9,9 @@ public class MainResultBean
 	
 	//聊天未读数目
 	private int chatsNum;
+	
+	//1表弹出新手引导；0表不需要弹出
+	private int readFlag;
 
 	public int getGamerNum()
 	{
@@ -38,5 +41,15 @@ public class MainResultBean
 	public void setChatsNum(int chatsNum)
 	{
 		this.chatsNum = chatsNum;
+	}
+
+	public int getReadFlag()
+	{
+		return readFlag;
+	}
+
+	public void setReadFlag(int readFlag)
+	{
+		this.readFlag = readFlag;
 	}
 }
