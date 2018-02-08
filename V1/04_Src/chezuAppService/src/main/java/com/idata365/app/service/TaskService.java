@@ -220,6 +220,8 @@ public class TaskService extends BaseService<TaskService>
 	@Transactional
 	public void givenLottery(Long tempUserId)
 	{
+		LOGGER.info("givenLottery======tempUserId======{}", tempUserId);
+		
 		//赠送小纸条
 		LotteryBean tempLotteryParamBean = new LotteryBean();
 		tempLotteryParamBean.setUserId(tempUserId);
