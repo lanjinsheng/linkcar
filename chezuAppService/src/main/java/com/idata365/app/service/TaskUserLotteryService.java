@@ -19,6 +19,9 @@ import com.idata365.app.service.common.AchieveCommService;
 public class TaskUserLotteryService {
 	@Autowired
      TaskUserLotteryMapper taskUserLotteryMapper;
+	
+	@Autowired
+	private TaskService taskService;
  
 	@Transactional
 	public void doSomeThing() {
@@ -26,7 +29,7 @@ public class TaskUserLotteryService {
 	}
 	 
 	public boolean calUserTotteryTask(TaskUserLottery task) {
-		//待小明哥补充
+		taskService.givenLottery(task.getUserId());
 		return true;
 	}
 	
