@@ -310,4 +310,16 @@ public class FamilyController extends BaseController
 		MainResultBean resultBean = this.familyService.queryMainNum(reqBean);
 		return ResultUtils.rtSuccess(resultBean);
 	}
+	
+	/**
+	 * 
+	 * @param reqBean
+	 * @return
+	 */
+	@RequestMapping("/family/updateTaskFlag")
+	public Map<String, Object> updateTaskFlag(@RequestBody FamilyParamBean reqBean)
+	{
+		this.familyService.updateTaskFlag(reqBean);
+		return ResultUtils.rtSuccess(null);
+	}
 }
