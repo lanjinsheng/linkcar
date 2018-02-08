@@ -11,6 +11,8 @@ public class UserFamilyRoleLogBean implements Serializable
 
 	private long id;
 	
+	private long userId;
+	
 	private int role;
 	
 	private String startTime;
@@ -25,6 +27,16 @@ public class UserFamilyRoleLogBean implements Serializable
 	public void setId(long id)
 	{
 		this.id = id;
+	}
+
+	public long getUserId()
+	{
+		return userId;
+	}
+
+	public void setUserId(long userId)
+	{
+		this.userId = userId;
 	}
 
 	public int getRole()

@@ -110,7 +110,15 @@ ON DUPLICATE KEY UPDATE role=#{role}, startTime=#{startTime}, endTime=#{endTime}
     <select id="queryUserIdsByRole" resultType="java.lang.Long" parameterType="com.idata365.app.entity.UserFamilyRoleLogBean">
     	select distinct userId from userFamilyRelation where role=#{role}
     </select>
-    	
+    
+    <select id="countsRole" resultType="int" parameterType="com.idata365.app.entity.UserFamilyRoleLogBean">
+    	select count(id) from userFamilyRelation where userId=#{userId} and role=#{role}
+    </select>
+    
+	<select id="countLottery" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.LotteryBean">
+    	select awardCount from lottery where userId=#{userId} and awardId=#{awardId}
+    </select>
+    
 	<select id="queryDriveEditStatus" resultType="com.idata365.app.entity.DriverVehicleResultBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		select isDrivingEdit from licenseDriver where userId=#{userId}
 	</select>
