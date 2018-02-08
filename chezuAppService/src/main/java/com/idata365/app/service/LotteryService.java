@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.LotteryLogConstant;
+import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
@@ -29,6 +30,7 @@ import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserTravelLottery;
 import com.idata365.app.enums.AchieveEnum;
+import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.mapper.SignatureDayLogMapper;
@@ -56,7 +58,8 @@ public class LotteryService extends BaseService<LotteryService>
 	@Autowired
 	private AchieveCommService achieveCommService;
 	
-	
+	@Autowired
+	private FamilyMapper familyMapper;
 	
 	/**
 	 * 道具列表
@@ -188,6 +191,11 @@ public class LotteryService extends BaseService<LotteryService>
 			Long userId = travelLotteryResultBean.getUserId();
 			Integer awardId = travelLotteryResultBean.getAwardId();
 			Integer awardCount = travelLotteryResultBean.getAwardCount();
+			
+			//标记新手指导标记位
+			FamilyParamBean taskParamBean = new FamilyParamBean();
+			taskParamBean.setUserId(userId);
+			this.familyMapper.updateTaskFlag(taskParamBean);
 			
 			LotteryBean tempParamBean = new LotteryBean();
 			tempParamBean.setUserId(userId);
