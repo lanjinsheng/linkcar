@@ -201,16 +201,69 @@ public class TaskService extends BaseService<TaskService>
 		}
 		
 		//给每个用户赠送一张小纸条
-		List<Long> userIds = this.taskMapper.queryUserIds();
-		for (Long tempUserId : userIds)
+//		List<Long> userIds = this.taskMapper.queryUserIds();
+//		for (Long tempUserId : userIds)
+//		{
+//			LotteryBean tempLotteryParamBean = new LotteryBean();
+//			tempLotteryParamBean.setUserId(tempUserId);
+//			tempLotteryParamBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+//			tempLotteryParamBean.setAwardCount(1);
+//			
+//			this.taskMapper.saveOrUpdate(tempLotteryParamBean);
+//		}
+	}
+	
+	/**
+	 * 赠送道具接口
+	 * @param tempUserId
+	 */
+	@Transactional
+	public void givenLottery(Long tempUserId)
+	{
+		//赠送小纸条
+		LotteryBean tempLotteryParamBean = new LotteryBean();
+		tempLotteryParamBean.setUserId(tempUserId);
+		tempLotteryParamBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
+		tempLotteryParamBean.setAwardCount(1);
+		
+		this.taskMapper.saveOrUpdate(tempLotteryParamBean);
+		
+		//煎饼侠赠送小马扎10张，前一天赠送的使期失效
+		UserFamilyRoleLogBean countsRoleParam = new UserFamilyRoleLogBean();
+		countsRoleParam.setUserId(tempUserId);
+		countsRoleParam.setRole(RoleConstant.JIANBING_ROLE);
+		int roleCounts = this.taskMapper.countsRole(countsRoleParam);
+		if (roleCounts > 0)
 		{
-			LotteryBean tempLotteryParamBean = new LotteryBean();
-			tempLotteryParamBean.setUserId(tempUserId);
-			tempLotteryParamBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
-			tempLotteryParamBean.setAwardCount(1);
+			LotteryBean countLotteryParam = new LotteryBean();
+			countLotteryParam.setUserId(tempUserId);
+			countLotteryParam.setAwardId(LotteryConstant.MAZHA_LOTTERY);
+			Integer mazhaCount = this.taskMapper.countLottery(countLotteryParam);
 			
-			this.taskMapper.saveOrUpdate(tempLotteryParamBean);
+			LotteryBean mazhaParam = new LotteryBean();
+			mazhaParam.setUserId(tempUserId);
+			mazhaParam.setAwardId(LotteryConstant.MAZHA_LOTTERY);
+			mazhaParam.setAwardCount(10);
+			if (null == mazhaCount)
+			{
+				this.taskMapper.saveOrUpdate(mazhaParam);
+			}
+			else
+			{
+				this.taskMapper.resetMaZhaCount(mazhaParam);
+			}
 		}
+		else
+		{
+			//如果不是煎饼侠角色，清空小马扎道具
+			LotteryBean mazhaParam = new LotteryBean();
+			mazhaParam.setUserId(tempUserId);
+			mazhaParam.setAwardId(LotteryConstant.MAZHA_LOTTERY);
+			mazhaParam.setAwardCount(0);
+			this.taskMapper.resetMaZhaCount(mazhaParam);
+		}
+		
+		this.taskMapper.countsRole(countsRoleParam);
 	}
 	
 	public String getTomorrowDateUndelimiterStr()

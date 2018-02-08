@@ -54,6 +54,10 @@ public interface TaskMapper
 	
 	public List<Long> queryUserIdsByRole(UserFamilyRoleLogBean bean);
 	
+	public int countsRole(UserFamilyRoleLogBean bean);
+	
+	public Integer countLottery(LotteryBean bean);
+	
 	public DriverVehicleResultBean queryDriveEditStatus(UserFamilyRoleLogParamBean bean);
 	
 	public DriverVehicleResultBean queryTravelEditStatus(UserFamilyRoleLogParamBean bean);
