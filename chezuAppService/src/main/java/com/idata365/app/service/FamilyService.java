@@ -761,7 +761,7 @@ public class FamilyService extends BaseService<FamilyService>
 			countUnReceive = 0;
 		}
 		
-		if (0 == taskFlag && countUnReceive > 0)
+		if (0 == taskFlag && countUnReceive > 0 && 0 != bean.getFamilyId())
 		{
 			resultBean.setReadFlag(1);
 		}
