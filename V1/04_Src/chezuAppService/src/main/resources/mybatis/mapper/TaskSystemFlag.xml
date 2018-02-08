@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.TaskSystemFlagMapper">
+   <resultMap id="BaseTaskSystemMap" type="com.idata365.app.entity.TaskSystemFlag" >
+    </resultMap>
+   <insert id="initTaskSystemFlag" parameterType="com.idata365.app.entity.TaskSystemFlag">
+		 INSERT IGNORE INTO  taskSystemFlag
+		 (daystamp)
+		  VALUES
+    	(#{daystamp})
+	</insert>
+	<update id="finishInitLottery" parameterType="com.idata365.app.entity.TaskSystemFlag">
+		 update taskSystemFlag
+		  set taskLotteryInit=${taskLotteryInit} where  id=#{id}
+	</update>
+	
+	<select id="getUnInitLotteryFlagList" resultMap="BaseTaskSystemMap"   parameterType="com.idata365.app.entity.TaskSystemFlag">
+	   select * from taskSystemFlag where taskLotteryInit=0
+	</select>
+	
+</mapper>
