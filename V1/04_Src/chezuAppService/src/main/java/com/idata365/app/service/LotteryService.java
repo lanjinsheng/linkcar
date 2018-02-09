@@ -256,8 +256,17 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param bean
 	 */
 	@Transactional
-	public void givenLottery(LotteryMigrateInfoMsgBean bean)
+	public int givenLottery(LotteryMigrateInfoMsgBean bean)
 	{
+		LotteryBean countParam = new LotteryBean();
+		countParam.setUserId(bean.getUserId());
+		countParam.setAwardId(bean.getAwardId());
+		Integer countLottery = this.lotteryMapper.countLottery(countParam);
+		if (null != countLottery && countLottery < bean.getAwardCount())
+		{
+			return -1;
+		}
+		
 		Calendar curCal = Calendar.getInstance();
 		String givenTime = DateFormatUtils.format(curCal, DateConstant.SECOND_PATTERN);
 		bean.setGivenTime(givenTime);
@@ -268,7 +277,8 @@ public class LotteryService extends BaseService<LotteryService>
 		reduceParamBean.setUserId(bean.getUserId());
 		reduceParamBean.setAwardId(bean.getAwardId());
 		
-		this.lotteryMapper.reduceLotteryCount(reduceParamBean);
+		int result = this.lotteryMapper.reduceLotteryCount(reduceParamBean);
+		return result;
 	}
 	
 	/**
@@ -283,11 +293,17 @@ public class LotteryService extends BaseService<LotteryService>
 		List<LotteryMigrateInfoMsgResultBean> givenLotteryList = new ArrayList<>();
 		for (int i = 0; i < tempList.size(); i++)
 		{
+			LotteryMigrateInfoMsgBean tempResultBean = tempList.get(i);
 			LotteryMigrateInfoMsgResultBean tempBean = new LotteryMigrateInfoMsgResultBean();
-			AdBeanUtils.copyOtherPropToStr(tempBean, tempList.get(i));
+			AdBeanUtils.copyOtherPropToStr(tempBean, tempResultBean);
 			String givenTime = tempBean.getGivenTime();
 			String newGivenTime = StringUtils.substring(givenTime, 0, 8);
 			tempBean.setGivenTime(newGivenTime);
+			
+			if (StringUtils.isBlank(tempBean.getName()))
+			{
+				tempBean.setName(PhoneUtils.hidePhone(tempResultBean.getPhone()));
+			}
 			
 			givenLotteryList.add(tempBean);
 		}

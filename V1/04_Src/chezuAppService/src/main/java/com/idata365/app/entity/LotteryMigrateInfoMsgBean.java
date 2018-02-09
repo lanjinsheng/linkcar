@@ -37,6 +37,8 @@ public class LotteryMigrateInfoMsgBean implements Serializable
 	private String name;
 	
 	private String day;
+	
+	private String phone;
 
 	public int getId()
 	{
@@ -136,6 +138,16 @@ public class LotteryMigrateInfoMsgBean implements Serializable
 	public void setDay(String day)
 	{
 		this.day = day;
+	}
+
+	public String getPhone()
+	{
+		return phone;
+	}
+
+	public void setPhone(String phone)
+	{
+		this.phone = phone;
 	}
 	
 }

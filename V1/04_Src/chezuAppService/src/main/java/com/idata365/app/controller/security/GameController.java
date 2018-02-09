@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.LotteryNotEnoughException;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.FamilyInfoResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
@@ -21,7 +22,6 @@ import com.idata365.app.entity.JudgeChallengeResultBean;
 import com.idata365.app.entity.PenalResultBean;
 import com.idata365.app.entity.ReadyLotteryBean;
 import com.idata365.app.entity.ReadyLotteryResultBean;
-import com.idata365.app.entity.ReviewBean;
 import com.idata365.app.entity.ReviewParamBean;
 import com.idata365.app.entity.ReviewResultBean;
 import com.idata365.app.entity.RoleCountResultBean;
@@ -418,7 +418,14 @@ public class GameController extends BaseController
 	public Map<String, Object> getReadyLottery(@RequestBody ReadyLotteryBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<ReadyLotteryResultBean> resultList = this.gameService.getReadyLottery(bean);
+		List<ReadyLotteryResultBean> resultList = null;
+		try
+		{
+			resultList = this.gameService.getReadyLottery(bean);
+		} catch (LotteryNotEnoughException e)
+		{
+			return ResultUtils.rtFail(null, "道具不够", "-3");
+		}
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -444,7 +451,14 @@ public class GameController extends BaseController
 	public Map<String, Object> switchLottery(@RequestBody SwitchLotteryParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<ReadyLotteryResultBean> resultList = this.gameService.switchLottery(bean);
+		List<ReadyLotteryResultBean> resultList = null;
+		try
+		{
+			resultList = this.gameService.switchLottery(bean);
+		} catch (LotteryNotEnoughException e)
+		{
+			return ResultUtils.rtFail(null, "道具不够", "-3");
+		}
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -470,7 +484,14 @@ public class GameController extends BaseController
 	public Map<String, Object> increReadyLottery(@RequestBody ReadyLotteryBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<ReadyLotteryResultBean> resultList = this.gameService.increReadyLottery(bean);
+		List<ReadyLotteryResultBean> resultList = null;
+		try
+		{
+			resultList = this.gameService.increReadyLottery(bean);
+		} catch (LotteryNotEnoughException e)
+		{
+			return ResultUtils.rtFail(null, "道具不够", "-3");
+		}
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
@@ -483,7 +504,14 @@ public class GameController extends BaseController
 	public Map<String, Object> decreReadyLottery(@RequestBody ReadyLotteryBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<ReadyLotteryResultBean> resultList = this.gameService.decreReadyLottery(bean);
+		List<ReadyLotteryResultBean> resultList = null;
+		try
+		{
+			resultList = this.gameService.decreReadyLottery(bean);
+		} catch (LotteryNotEnoughException e)
+		{
+			return ResultUtils.rtFailParam(null, "装备道具数量为0");
+		}
 		return ResultUtils.rtSuccess(resultList);
 	}
 	
