@@ -62,7 +62,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	
 	<select id="queryFamilyYesterdayOrder" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		<![CDATA[
-		select yesterdayOrderNo from familyScore where id=#{familyId} and startDay<=#{timeStr} and endDay>=#{timeStr}
+		select yesterdayOrderNo from familyScore where familyId=#{familyId} and startDay<=#{timeStr} and endDay>=#{timeStr}
 		]]>
 	</select>
 
