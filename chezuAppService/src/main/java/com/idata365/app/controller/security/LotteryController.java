@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryMigrateInfoAllResultBean;
 import com.idata365.app.entity.LotteryMigrateInfoMsgBean;
@@ -54,8 +55,23 @@ public class LotteryController extends BaseController
 	public Map<String, Object> givenLottery(@RequestBody LotteryMigrateInfoMsgBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		this.lotteryService.givenLottery(bean);
-		return ResultUtils.rtSuccess(null);
+		
+		int awardId = bean.getAwardId();
+		if (LotteryConstant.MAZHA_LOTTERY == awardId
+				|| LotteryConstant.ZHITIAO_LOTTERY == awardId)
+		{
+			return ResultUtils.rtFailParam(null, "马扎和纸条不能赠送");
+		}
+		
+		int result = this.lotteryService.givenLottery(bean);
+		if (-1 == result)
+		{
+			return ResultUtils.rtFail(null, "道具不够", "-3");
+		}
+		else
+		{
+			return ResultUtils.rtSuccess(null);
+		}
 	}
 	
 	@RequestMapping("/om/listFriendList")

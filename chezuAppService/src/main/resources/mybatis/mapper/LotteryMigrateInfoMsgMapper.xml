@@ -4,7 +4,7 @@
     
     <select id="query" resultType="com.idata365.app.entity.LotteryMigrateInfoMsgBean"
     	parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
-    	select t1.id as id, userId, awardId, t2.imgUrl as imgUrl, awardCount, date_format(str_to_date(givenTime, '%Y%m%d%H%I%S'), '%Y-%m-%d') as day, status, if (t2.nickName is null, t2.phone, t2.nickName) as name 
+    	select t1.id as id, userId, awardId, t2.imgUrl as imgUrl, awardCount, date_format(str_to_date(givenTime, '%Y%m%d%H%I%S'), '%Y-%m-%d') as day, status, t2.nickName as name, t2.phone as phone 
 	from lotteryMigrateInfoMsg t1 
 	join usersAccount t2 on (t1.userId=t2.id) where t1.toUserId=#{userId} order by t1.id desc limit #{start}, 5
     </select>

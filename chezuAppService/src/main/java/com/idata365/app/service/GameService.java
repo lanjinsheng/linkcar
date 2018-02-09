@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.LotteryNotEnoughException;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.LotteryConstant;
@@ -50,9 +51,7 @@ import com.idata365.app.entity.StationResultBean;
 import com.idata365.app.entity.SwitchLotteryParamBean;
 import com.idata365.app.entity.SwitchRoleResultBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
-import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
-import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.ViolationStatBean;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
@@ -415,7 +414,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -464,7 +463,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -513,7 +512,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -562,7 +561,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -611,7 +610,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -660,7 +659,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -709,7 +708,7 @@ public class GameService extends BaseService<GameService>
 		
 		PenalResultBean resultBean = new PenalResultBean();
 		//纸条用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			resultBean.setPenalStatus(ResultConstant.NONE_LEFT);
 			return resultBean;
@@ -830,7 +829,7 @@ public class GameService extends BaseService<GameService>
 		Integer countLottery = this.lotteryMapper.countLottery(lotteryBean);
 		
 		//马扎用光
-		if (null == countLottery || countLottery == 0)
+		if (null == countLottery || countLottery <= 0)
 		{
 			return -1;
 		}
@@ -1104,24 +1103,35 @@ public class GameService extends BaseService<GameService>
 	/**
 	 * 装备道具
 	 * @param bean
+	 * @throws LotteryNotEnoughException 
 	 */
 	@Transactional
-	public List<ReadyLotteryResultBean> getReadyLottery(ReadyLotteryBean bean)
+	public List<ReadyLotteryResultBean> getReadyLottery(ReadyLotteryBean bean) throws LotteryNotEnoughException
 	{
 		getReadyLotteryB(bean);
 		List<ReadyLotteryResultBean> resultList = this.findTomorrowSpecifyLottery(bean);
 		return resultList;
 	}
 
-	private void getReadyLotteryB(ReadyLotteryBean bean)
+	private void getReadyLotteryB(ReadyLotteryBean bean) throws LotteryNotEnoughException
 	{
-		bean.setDaystamp(getTomorrowDateUndelimiterStr());
-		this.lotteryMapper.saveOrUpdateReadyLottery(bean);
+		LotteryBean countParam = new LotteryBean();
+		countParam.setUserId(bean.getUserId());
+		countParam.setAwardId(bean.getAwardId());
+		Integer countLottery = this.lotteryMapper.countLottery(countParam);
+		
+		if (null == countLottery || countLottery <= 0)
+		{
+			throw new LotteryNotEnoughException();
+		}
 		
 		LotteryBean lotteryParamBean = new LotteryBean();
 		lotteryParamBean.setUserId(bean.getUserId());
 		lotteryParamBean.setAwardId(bean.getAwardId());
 		this.lotteryMapper.updateLotteryCount(lotteryParamBean);
+		
+		bean.setDaystamp(getTomorrowDateUndelimiterStr());
+		this.lotteryMapper.saveOrUpdateReadyLottery(bean);
 	}
 	
 	/**
@@ -1196,15 +1206,26 @@ public class GameService extends BaseService<GameService>
 	}
 	
 	@Transactional
-	public List<ReadyLotteryResultBean> increReadyLottery(ReadyLotteryBean bean)
+	public List<ReadyLotteryResultBean> increReadyLottery(ReadyLotteryBean bean) throws LotteryNotEnoughException
 	{
+		LotteryBean countParam = new LotteryBean();
+		countParam.setUserId(bean.getUserId());
+		countParam.setAwardId(bean.getAwardId());
+		Integer countLottery = this.lotteryMapper.countLottery(countParam);
+		
+		if (null == countLottery || countLottery <= 0)
+		{
+			throw new LotteryNotEnoughException();
+		}
+		
 		LotteryBean lotteryParamBean = new LotteryBean();
 		lotteryParamBean.setUserId(bean.getUserId());
 		lotteryParamBean.setAwardId(bean.getAwardId());
 		lotteryParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
-		this.lotteryMapper.increReadyLotteryCount(lotteryParamBean);
 		
 		this.lotteryMapper.delLotteryCount(lotteryParamBean);
+		
+		this.lotteryMapper.increReadyLotteryCount(lotteryParamBean);
 		
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
 		List<ReadyLotteryResultBean> resultList = this.findTomorrowSpecifyLottery(bean);
@@ -1212,17 +1233,24 @@ public class GameService extends BaseService<GameService>
 	}
 	
 	@Transactional
-	public List<ReadyLotteryResultBean> decreReadyLottery(ReadyLotteryBean bean)
+	public List<ReadyLotteryResultBean> decreReadyLottery(ReadyLotteryBean bean) throws LotteryNotEnoughException
 	{
+		String tomorrowStr = getTomorrowDateUndelimiterStr();
+		bean.setDaystamp(tomorrowStr);
+		int countReadyLottery = this.lotteryMapper.countReadyLottery(bean);
+		if (countReadyLottery <= 0)
+		{
+			throw new LotteryNotEnoughException();
+		}
+		
 		LotteryBean lotteryParamBean = new LotteryBean();
 		lotteryParamBean.setUserId(bean.getUserId());
 		lotteryParamBean.setAwardId(bean.getAwardId());
-		lotteryParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
+		lotteryParamBean.setDaystamp(tomorrowStr);
 		this.lotteryMapper.decreReadyLotteryCount(lotteryParamBean);
 		
 		this.lotteryMapper.addLotteryCount(lotteryParamBean);
 		
-		bean.setDaystamp(getTomorrowDateUndelimiterStr());
 		List<ReadyLotteryResultBean> resultList = this.findTomorrowSpecifyLottery(bean);
 		return resultList;
 	}
@@ -1230,9 +1258,10 @@ public class GameService extends BaseService<GameService>
 	/**
 	 * 替换道具
 	 * @param bean
+	 * @throws LotteryNotEnoughException 
 	 */
 	@Transactional
-	public List<ReadyLotteryResultBean> switchLottery(SwitchLotteryParamBean bean)
+	public List<ReadyLotteryResultBean> switchLottery(SwitchLotteryParamBean bean) throws LotteryNotEnoughException
 	{
 		ReadyLotteryBean onBean = new ReadyLotteryBean();
 		onBean.setUserId(bean.getUserId());
