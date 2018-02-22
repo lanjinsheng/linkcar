@@ -231,6 +231,9 @@ public class ScoreService extends BaseService<ScoreService>
 			int yesterdayOrderNo = familyScoreTempBean.getYesterdayOrderNo();
 			String recordDesc = endDay + " 排名：" + yesterdayOrderNo;
 			recordsList.add(recordDesc);
+			
+			if (recordsList.size() >= 3)
+				break;
 		}
 		
 		ScoreFamilyDetailResultBean resultBean = new ScoreFamilyDetailResultBean();
