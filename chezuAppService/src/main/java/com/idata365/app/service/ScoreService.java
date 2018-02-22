@@ -392,14 +392,18 @@ public class ScoreService extends BaseService<ScoreService>
 		String todayStr = DateFormatUtils.format(todayDate, DAY_PATTERN);
 		String yesterdayStr = DateFormatUtils.format(yesterdayDate, DAY_PATTERN);
 		
-		ScoreUserHistoryResultBean todayResultBean = new ScoreUserHistoryResultBean();
-		Integer currentRole = this.scoreMapper.queryCurrentRole(bean);
-		todayResultBean.setRole(String.valueOf(currentRole));
-		todayResultBean.setDayStr(todayStr + "(今日)");
-		todayResultBean.setScore("暂无评分");
-		
 		List<ScoreUserHistoryResultBean> resultList = new ArrayList<>();
-		resultList.add(todayResultBean);
+		
+		if (0 == bean.getStart())
+		{
+			ScoreUserHistoryResultBean todayResultBean = new ScoreUserHistoryResultBean();
+			Integer currentRole = this.scoreMapper.queryCurrentRole(bean);
+			todayResultBean.setRole(String.valueOf(currentRole));
+			todayResultBean.setDayStr(todayStr + "(今日)");
+			todayResultBean.setScore("暂无评分");
+			resultList.add(todayResultBean);
+		}
+		
 		for (ScoreUserHistoryBean tempBean : tempList)
 		{
 			ScoreUserHistoryResultBean tempResultBean = new ScoreUserHistoryResultBean();
