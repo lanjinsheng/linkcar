@@ -14,6 +14,8 @@ import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRandBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
+import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 
 public interface FamilyMapper
@@ -125,4 +127,6 @@ public interface FamilyMapper
 	public int countUnReceive(List<Long> paramList);
 	
 	public int updateTaskFlag(FamilyParamBean bean);
+	
+	public List<UserFamilyRoleLogBean> queryStartEnd(UserFamilyRoleLogParamBean bean);
 }

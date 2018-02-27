@@ -39,6 +39,7 @@ import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
+import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccountParamBean;
@@ -747,19 +748,43 @@ public class FamilyService extends BaseService<FamilyService>
 		int taskFlag = this.familyMapper.queryTaskFlag(bean);
 		
 		String yesterdayStr = getYesterdayStr();
-		bean.setStartTime(yesterdayStr + " 00:00:00");
-		bean.setEndTime(yesterdayStr + " 23:59:59");
-		List<Long> habitList = this.familyMapper.queryHabits(bean);
 		
-		int countUnReceive;
-		if (CollectionUtils.isNotEmpty(habitList))
+		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
+		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
+		userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
+		
+		List<UserFamilyRoleLogBean> startEndList = this.familyMapper.queryStartEnd(userFamilyRoleLogParamBean);
+		String startTime = null;
+		String endTime = null;
+		int countUnReceive = 0;
+		
+		if (CollectionUtils.isNotEmpty(startEndList))
 		{
-			countUnReceive = this.familyMapper.countUnReceive(habitList);
+			for (UserFamilyRoleLogBean tempBean : startEndList)
+			{
+				String tempEndTime = tempBean.getEndTime();
+				if (StringUtils.startsWith(tempEndTime, yesterdayStr))
+				{
+					startTime = tempBean.getStartTime();
+					endTime = tempEndTime;
+					
+					bean.setStartTime(startTime);
+					bean.setEndTime(endTime);
+					List<Long> habitList = this.familyMapper.queryHabits(bean);
+					
+					if (CollectionUtils.isNotEmpty(habitList))
+					{
+						countUnReceive = this.familyMapper.countUnReceive(habitList);
+						break;
+					}
+					else
+					{
+						countUnReceive = 0;
+					}
+				}
+			}
 		}
-		else
-		{
-			countUnReceive = 0;
-		}
+		
 		
 		if (0 == taskFlag && countUnReceive > 0 && 0 != bean.getFamilyId())
 		{

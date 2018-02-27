@@ -257,4 +257,8 @@
  	<update id="updateTaskFlag" parameterType="com.idata365.app.entity.FamilyParamBean">
  		update usersAccount set taskFlag=1 where id=#{userId}
  	</update>
+ 	
+ 	<select id="queryStartEnd" resultType="com.idata365.app.entity.UserFamilyRoleLogBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+ 		select startTime, endTime from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} order by id desc limit 0, 30
+ 	</select>
 </mapper>
