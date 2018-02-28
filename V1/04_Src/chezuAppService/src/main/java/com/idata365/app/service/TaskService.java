@@ -136,6 +136,7 @@ public class TaskService extends BaseService<TaskService>
 			
 			//试用标记位,true表已经试用
 			boolean flag = false;
+			//没有编辑过驾驶证、行驶证
 			if (null == driveEditStatus
 					|| null == travelEditStatus
 							|| 0 != driveEditStatus.getIsDrivingEdit()
