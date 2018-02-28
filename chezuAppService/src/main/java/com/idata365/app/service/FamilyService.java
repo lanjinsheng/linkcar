@@ -484,19 +484,23 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		//组长自己绑定新创建的家族
 		bean.setFamilyId(familyId);
-		String timeStamp = generateTimeStamp();
-		bean.setJoinTime(timeStamp);
+		Date todayDate = Calendar.getInstance().getTime();
+		bean.setJoinTime(generateTimeStamp());
 		this.familyMapper.saveUserFamily(bean);
 		
+		Date tomorrowDate = DateUtils.addDays(todayDate, 1);
+		String startTime = DateFormatUtils.format(tomorrowDate, DateConstant.DAY_PATTERN_DELIMIT) + " 00:00:00";
+		String endTime = DateFormatUtils.format(tomorrowDate, DateConstant.DAY_PATTERN_DELIMIT) + " 23:59:59";
+		
 		//初始化用户角色、成绩记录表start------------------
-		//记录用户在新家族的角色
+		//记录用户在新家族的明天的角色
 		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
 		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
 		userFamilyRoleLogParamBean.setFamilyId(familyId);
-		userFamilyRoleLogParamBean.setDaystamp(getCurrentDayStrWithUnDelimiter());
+		userFamilyRoleLogParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
 		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
-		userFamilyRoleLogParamBean.setStartTime(timeStamp);
-		userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
+		userFamilyRoleLogParamBean.setStartTime(startTime);
+		userFamilyRoleLogParamBean.setEndTime(endTime);
 		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
 		
 		//初始化加入新家族后的userScoreDayStat记录
@@ -526,6 +530,16 @@ public class FamilyService extends BaseService<FamilyService>
 		return familyId;
 	}
 	
+	public String getTomorrowDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date tomorrowDate = DateUtils.addDays(curDate, 1);
+		
+		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyyMMdd");
+		LOGGER.info(tomorrowDateStr);
+		return tomorrowDateStr;
+	}
+	
 	private String generateTimeStampUndelimiter()
 	{
 		Calendar todayCal = Calendar.getInstance();
@@ -537,6 +551,12 @@ public class FamilyService extends BaseService<FamilyService>
 	{
 		Calendar todayCal = Calendar.getInstance();
 		String timeStamp = DateFormatUtils.format(todayCal, DateConstant.SECOND_FORMAT_PATTERN);
+		return timeStamp;
+	}
+	
+	private String generateTimeStamp(Date date)
+	{
+		String timeStamp = DateFormatUtils.format(date, DateConstant.SECOND_FORMAT_PATTERN);
 		return timeStamp;
 	}
 	
