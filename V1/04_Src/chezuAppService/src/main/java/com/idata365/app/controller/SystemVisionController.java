@@ -55,6 +55,7 @@ public class SystemVisionController extends BaseController
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("inviteSwitchStatus", SystemConstant.INVITECODE_SWITCH);
+		map.put("loginValidStatus", SystemConstant.LOGINCODE_SWITCH);
 		return ResultUtils.rtSuccess(map);
 	}
 }
