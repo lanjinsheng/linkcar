@@ -13,4 +13,14 @@ public class SystemConstant
 	 * 邀请码开关(0关，1开)
 	 */
 	public static final int INVITECODE_SWITCH = 1;
+
+	/**
+	 * 固定邀请码
+	 */
+	public static final String INVITE_CODE = "5566";
+
+	/**
+	 * 登录验证码开关(0关，1开)
+	 */
+	public static final int LOGINCODE_SWITCH = 1;
 }
