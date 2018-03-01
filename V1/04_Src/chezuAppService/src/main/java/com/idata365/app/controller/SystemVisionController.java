@@ -1,5 +1,6 @@
 package com.idata365.app.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,16 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.SystemConstant;
 import com.idata365.app.service.SystemVisionService;
 import com.idata365.app.util.ResultUtils;
 
-/**
- * 版本控制
- * @className:com.idata365.app.controller.SystemVisionController
- * @description:TODO
- * @date:2018年2月1日 上午11:57:34
- * @author:CaiFengYao
- */
 @RestController
 public class SystemVisionController extends BaseController
 {
@@ -28,6 +23,12 @@ public class SystemVisionController extends BaseController
 	@Autowired
 	private SystemVisionService systemVisionService;
 
+	/**
+	 * 校验系统版本号
+	 * @Description:
+	 * @author:CaiFengYao
+	 * @date:2018年3月1日 上午10:13:51
+	 */
 	@RequestMapping("/system/verifyVision")
 	public Map<String, Object> verifyVision(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<String, String> requestBodyParams)
@@ -40,6 +41,20 @@ public class SystemVisionController extends BaseController
 		}
 		// 业务处理
 		Map<String, Object> map = systemVisionService.verifyVision(phoneType, vision);
+		return ResultUtils.rtSuccess(map);
+	}
+
+	/**
+	 * 查询邀请码开关
+	 * @Description:
+	 * @author:CaiFengYao
+	 * @date:2018年3月1日 上午10:13:51
+	 */
+	@RequestMapping("/system/queryInviteSwitch")
+	public Map<String, Object> queryInviteSwitch()
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("inviteSwitchStatus", SystemConstant.INVITECODE_SWITCH);
 		return ResultUtils.rtSuccess(map);
 	}
 }
