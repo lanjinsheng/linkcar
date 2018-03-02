@@ -132,7 +132,7 @@ public class UserController extends BaseController{
     		if(status.equals(LoginRegService.VC_EX)) 
     		return ResultUtils.rtFailParam(null, "校验码过期");
     	}
-    	return ResultUtils.rtSuccess(null);
+    	return ResultUtils.rtSuccess(null); 
     }
     /**
      * 
@@ -150,18 +150,18 @@ public class UserController extends BaseController{
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("password")))
           return ResultUtils.rtFailParam(null);
-    	// 校验是否需要邀请码
-    			if (SystemConstant.INVITECODE_SWITCH == 1)
-    			{
-    				if (ValidTools.isBlank(requestBodyParams.get("inviteCode")))
-    				{
-    					return ResultUtils.rtFailParam(null);
-    				}
-    				else if (!String.valueOf(requestBodyParams.get("inviteCode")).equals(SystemConstant.INVITE_CODE))
-    				{
-    			    		return ResultUtils.rtFailParam(null, "邀请码错误");
-    				}
-    			}
+		// 校验是否需要邀请码
+		if (SystemConstant.INVITECODE_SWITCH == 1)
+		{
+			if (ValidTools.isBlank(requestBodyParams.get("inviteCode")))
+			{
+				return ResultUtils.rtFailParam(null);
+			}
+			else if (!String.valueOf(requestBodyParams.get("inviteCode")).equals(SystemConstant.INVITE_CODE))
+			{
+				return ResultUtils.rtFailParam(null, "邀请码错误");
+			}
+		}
     	String phone=String.valueOf(requestBodyParams.get("phone"));
     	String password=String.valueOf(requestBodyParams.get("password"));
     	String token=loginRegService.regUser(phone, password,rtMap);
