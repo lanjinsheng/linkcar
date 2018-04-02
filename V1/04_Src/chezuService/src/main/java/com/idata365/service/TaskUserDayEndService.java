@@ -52,6 +52,7 @@ public static final String TaskType_JugeBestDrive="JugeBestDrive";
 			task.setTaskValue(value);
 			taskUserDayEndMapper.insertTaskUserDayEnd(task);
 	}
+	@Transactional
 	public List<TaskUserDayEnd> getUserBestDriveDayEndTask(TaskUserDayEnd task){
 		task.setTaskType(TaskType_JugeBestDrive);
 		//先锁定任务
@@ -59,11 +60,12 @@ public static final String TaskType_JugeBestDrive="JugeBestDrive";
 		//返回任务列表
 		return taskUserDayEndMapper.getUserDayEndTask(task);
 	}
-	
+	@Transactional
 	public	void updateSuccUserDayEndTask(TaskUserDayEnd task) {
 		taskUserDayEndMapper.updateUserDayEndSuccTask(task);
 	}
 //	
+	@Transactional
 	public void updateFailUserDayEndTask(TaskUserDayEnd task) {
 		if(task.getFailTimes()>100) {
 			//状态置为2，代表计算次数已经极限
@@ -74,6 +76,7 @@ public static final String TaskType_JugeBestDrive="JugeBestDrive";
 		taskUserDayEndMapper.updateUserDayEndFailTask(task);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskUserDayEndMapper.clearLockTask(compareTimes);

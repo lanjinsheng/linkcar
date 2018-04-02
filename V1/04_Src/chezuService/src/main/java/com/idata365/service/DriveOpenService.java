@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataLog;
@@ -44,10 +45,12 @@ public class DriveOpenService extends BaseService<DriveOpenService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional(value="colTransactionManager")
 	public List<DriveDataLog>  listDriveLogByUH(DriveDataLog log) {
 		  List<DriveDataLog> list= driveDataLogMapper.listDriveLogByUH(log);
 		  return list;
 	}
+	@Transactional(value="colTransactionManager")
 	public List<DriveDataEvent>  listDriveAlarmByUH(Long userId,Long habitId) {
 		DriveDataMain drive=new DriveDataMain();
 		List<DriveDataEvent> list=new ArrayList<DriveDataEvent>();

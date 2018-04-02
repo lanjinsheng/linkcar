@@ -40,22 +40,24 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	TaskUserDayEndService  taskUserDayEndService;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
-	
+	@Transactional
 	public List<UserTravelHistory> getTravelTask(UserTravelHistory userTravelHistory){
 		//先锁定任务
 		userTravelHistoryMapper.lockTravelTask(userTravelHistory);
 		//返回任务列表
 		return userTravelHistoryMapper.getTravelTask(userTravelHistory);
 	}
-	
+	@Transactional
 	public	void updateSuccAddUserDayStatTask(UserTravelHistory userTravelHistory) {
 		userTravelHistoryMapper.updateTravelSuccTask(userTravelHistory);
 	}
 //	
+	@Transactional
 	public void updateFailAddUserDayStatTask(UserTravelHistory userTravelHistory) {
 		userTravelHistoryMapper.updateTravelFailTask(userTravelHistory);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		userTravelHistoryMapper.clearLockTask(compareTimes);

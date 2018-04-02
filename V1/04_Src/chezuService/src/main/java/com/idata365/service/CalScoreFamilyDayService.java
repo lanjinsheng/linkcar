@@ -305,22 +305,24 @@ public class CalScoreFamilyDayService {
 	}
 	
 	
-	
+	@Transactional
 	public List<TaskFamilyDayScore> getFamilyScoreDayTask(TaskFamilyDayScore taskFamilyDayScore){
 		//先锁定任务
 		taskFamilyDayScoreMapper.lockFamilyDayScoreTask(taskFamilyDayScore);
 		//返回任务列表
 		return taskFamilyDayScoreMapper.getFamilyDayScoreTask(taskFamilyDayScore);
 	}
-	
+	@Transactional
 	public	void updateSuccFamilyScoreDayTask(TaskFamilyDayScore taskFamilyDayScore) {
 		taskFamilyDayScoreMapper.updateFamilyDayScoreSuccTask(taskFamilyDayScore);
 	}
 //	
+	@Transactional
 	public void updateFailFamilyScoreDayTask(TaskFamilyDayScore taskFamilyDayScore) {
 		taskFamilyDayScoreMapper.updateFamilyDayScoreFailTask(taskFamilyDayScore);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskFamilyDayScoreMapper.clearLockTask(compareTimes);

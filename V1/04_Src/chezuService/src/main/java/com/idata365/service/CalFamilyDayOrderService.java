@@ -8,6 +8,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.TaskFamilyDayOrder;
 import com.idata365.entity.TaskFamilyPk;
@@ -29,6 +30,7 @@ public class CalFamilyDayOrderService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
+	@Transactional
 	public boolean calFamilyDayOrder(TaskFamilyDayOrder preOrder,TaskFamilyDayOrder taskFamilyOrder) {
 		//family的日分排行
 		if(preOrder==null)
@@ -45,29 +47,31 @@ public class CalFamilyDayOrderService {
 		taskFamilyDayOrderMapper.updateFamilyDayOrder(taskFamilyOrder);
 		return true;
 	}
-	
+	@Transactional
 	public TaskFamilyDayOrder getPre(TaskFamilyDayOrder taskFamilyOrder) {
 		//family的日分排行
 		TaskFamilyDayOrder preOrder=taskFamilyDayOrderMapper.getPreTaskRecord(taskFamilyOrder);
 		return preOrder;
 	}
 	
-	
+	@Transactional
 	public List<TaskFamilyDayOrder> getFamilyDayOrderTask(TaskFamilyDayOrder taskFamilyOrder){
 		//先锁定任务
 		taskFamilyDayOrderMapper.lockFamilyDayOrderTask(taskFamilyOrder);
 		//返回任务列表
 		return taskFamilyDayOrderMapper.getFamilyDayOrderTask(taskFamilyOrder);
 	}
-	
+	@Transactional
 	public	void updateSuccFamilyDayOrderTask(TaskFamilyDayOrder taskFamilyOrder) {
 		taskFamilyDayOrderMapper.updateFamilyDayOrderSuccTask(taskFamilyOrder);
 	}
 //	
+	@Transactional
 	public void updateFailFamilyDayOrderTask(TaskFamilyDayOrder taskFamilyOrder) {
 		taskFamilyDayOrderMapper.updateFamilyDayOrderFailTask(taskFamilyOrder);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskFamilyDayOrderMapper.clearLockTask(compareTimes);
