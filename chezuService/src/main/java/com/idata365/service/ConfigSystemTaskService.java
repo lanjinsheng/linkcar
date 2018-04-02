@@ -130,65 +130,72 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	   //game End	 
 	}
 	
-	
+	@Transactional
 	public void finishConfigSystemUserScoreTask(TaskSystemScoreFlag task) {
 		task.setUserDayScoreFlag(1);
 		taskSystemScoreFlagMapper.finishUserDayScoreTask(task);
 		
 	}
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishUserDayScore(){
 		return taskSystemScoreFlagMapper.getUnFinishDayScoreList();
 	}
 	
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishFamilyDayScore(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyScoreList();
 	}
+	@Transactional
 	public void finishConfigSystemFamilyScoreTask(TaskSystemScoreFlag task) {
 		task.setFamilyDayScoreFlag(1);
 		taskSystemScoreFlagMapper.finishFamilyDayScoreTask(task);
 		
 	}
 	
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishFamilyPk(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyPkList();
 	}
+	@Transactional
 	public void finishConfigSystemFamilyPkTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyPk(1);
 		taskSystemScoreFlagMapper.finishFamilyPkTask(task);
 		
 	}
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishFamilyDayOrder(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyDayOrderList();
 	}
+	@Transactional
 	public void finishConfigSystemFamilyDayOrderTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyDayOrder(1);
 		taskSystemScoreFlagMapper.finishFamilyDayOrderTask(task);
 	}
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishFamilyMonthOrder(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyMonthOrderList();
 	}
+	@Transactional
 	public void finishConfigSystemFamilyMonthOrderTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyMonthOrder(1);
 		taskSystemScoreFlagMapper.finishFamilyMonthOrderTask(task);
 	}
 	
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishFamilyMonthAvgOrder(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyMonthAvgOrderList();
 	}
+	@Transactional
 	public void finishConfigSystemFamilyMonthAvgOrderTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyMonthAvgOrder(1);
 		taskSystemScoreFlagMapper.finishFamilyMonthAvgOrderTask(task);
 	}
 	
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishGameEnd(){
 		return taskSystemScoreFlagMapper.getUnFinishGameEndList();
 	}
+	@Transactional
 	public void finishConfigSystemGameEndTask(TaskSystemScoreFlag task) {
 		task.setTaskGameEnd(1);
 		taskSystemScoreFlagMapper.finishGameEndTask(task);

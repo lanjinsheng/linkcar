@@ -57,6 +57,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	 * @param userId
 	 * @return
 	 */
+	@Transactional
 	public List<ReadyLotteryBean> queryReadyLottery(long userId)
 	{
 		ReadyLotteryBean paramBean = new ReadyLotteryBean();
@@ -83,6 +84,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	 * @param consumeCount
 	 * @return	
 	 */
+	@Transactional
 	public boolean consumeLottery(List<ReadyLotteryBean> paramList,Long userId)
 	{
 		String currentDayStr = getCurrentDayStr();
@@ -97,7 +99,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		return true;
 	}
 	
-	
+	@Transactional(value="colTransactionManager")
 	public List<DriveScore> getDriveScoreByUH(Long userId,Long habitId) {
 		DriveScore driveScore=new DriveScore();
 		driveScore.setUserId(userId);
@@ -112,7 +114,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 //	}
 //	
 //	
-	
+	@Transactional
 	public List<UserFamilyRoleLog> getRolesByUserIdTime(Long userId,String driveEndTime){
 		Map<String,Object> m=new HashMap<String,Object>();
 		m.put("userId", userId);
@@ -696,6 +698,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional(value="colTransactionManager")
 	public List<DriveScore> calScoreByUHInsertDb(Long userId,Long habitId){
 		List<DriveScore> driveScoreList=new ArrayList<DriveScore>();
 		List<ReadyLotteryBean> loteryBeans=new ArrayList<ReadyLotteryBean>();
@@ -829,6 +832,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional(value="colTransactionManager")
 	public Map<String,Object> calScoreByUH(Long userId,Long habitId){
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		List<DriveScore> driveScoreList=new ArrayList<DriveScore>();
@@ -969,22 +973,24 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
-	
+	@Transactional(value="colTransactionManager")
 	public List<CalDriveTask> getCalScoreTask(CalDriveTask driveScore){
 		//先锁定任务
 		calDriveTaskMapper.lockCalScoreTask(driveScore);
 		//返回任务列表
 		return calDriveTaskMapper.getCalScoreTask(driveScore);
 	}
-	
+	@Transactional(value="colTransactionManager")
 	public	void updateSuccCalScoreTask(CalDriveTask driveScore) {
 		calDriveTaskMapper.updateSuccCalScoreTask(driveScore);
 	}
 //	
+	@Transactional(value="colTransactionManager")
 	public void updateFailCalScoreTask(CalDriveTask driveScore) {
 		calDriveTaskMapper.updateFailCalScoreTask(driveScore);
 	}
 //	
+	
 	@Transactional(value="colTransactionManager")
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);

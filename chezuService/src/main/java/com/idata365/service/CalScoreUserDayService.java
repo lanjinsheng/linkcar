@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.TaskAchieveAddValue;
@@ -27,6 +28,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 	DriveScoreMapper driveScoreMapper;
 	@Autowired
 	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
+	@Transactional
 	public boolean calScoreUserDay(UserScoreDayStat userScoreDayStat) {
 		DriveScore driveScore=new DriveScore();
 		int role=0;
@@ -175,33 +177,36 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		}
 		return true;
 	}
-	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
-		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
-		taskAchieveAddValue.setAchieveType(type);
-		taskAchieveAddValue.setKeyId(keyId);
-		taskAchieveAddValue.setAddValue(value);
-		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
-		return true;
-	}
+//	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {
+//		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
+//		taskAchieveAddValue.setAchieveType(type);
+//		taskAchieveAddValue.setKeyId(keyId);
+//		taskAchieveAddValue.setAddValue(value);
+//		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
+//		return true;
+//	}
+	@Transactional
 	public void updateUserDayScore(UserScoreDayStat userScoreDayStat) {
 		userScoreDayStatMapper.updateUserScoreDayById(userScoreDayStat);
 	}
-	
+	@Transactional
 	public List<UserScoreDayStat> getUserScoreDayTask(UserScoreDayStat userScoreDayStat){
 		//先锁定任务
 		userScoreDayStatMapper.lockUserDayScoreTask(userScoreDayStat);
 		//返回任务列表
 		return userScoreDayStatMapper.getUserDayScoreTask(userScoreDayStat);
 	}
-	
+	@Transactional
 	public	void updateSuccUserScoreDayTask(UserScoreDayStat userScoreDayStat) {
 		userScoreDayStatMapper.updateUserDayScoreSuccTask(userScoreDayStat);
 	}
 //	
+	@Transactional
 	public void updateFailUserScoreDayTask(UserScoreDayStat userScoreDayStat) {
 		userScoreDayStatMapper.updateUserDayScoreFailTask(userScoreDayStat);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		userScoreDayStatMapper.clearLockTask(compareTimes);

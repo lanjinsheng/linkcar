@@ -54,7 +54,7 @@ public static final String TaskType_FamilyLevel="FamilyLevel";
 	 taskFamilyDayEndMapper.updateFamilyLevel(map);
 	 return true;
 	}
-	
+	@Transactional
 	public boolean insertFamilyLevelTask(String daystamp,int order,Long familyId) {
 		//家族黄金，白银，青铜等级任务加入
 		TaskFamilyDayEnd task=new TaskFamilyDayEnd();
@@ -65,6 +65,7 @@ public static final String TaskType_FamilyLevel="FamilyLevel";
 		taskFamilyDayEndMapper.insertTaskFamilyDayEnd(task);
 		return true;
 	}
+	@Transactional
 	public List<TaskFamilyDayEnd> getFamilyLevelDayEndTask(TaskFamilyDayEnd task){
 		task.setTaskType(TaskType_FamilyLevel);
 		//先锁定任务
@@ -72,11 +73,12 @@ public static final String TaskType_FamilyLevel="FamilyLevel";
 		//返回任务列表
 		return taskFamilyDayEndMapper.getFamilyDayEndTask(task);
 	}
-	
+	@Transactional
 	public	void updateSuccFamilyDayEndTask(TaskFamilyDayEnd task) {
 		taskFamilyDayEndMapper.updateFamilyDayEndSuccTask(task);
 	}
 //	
+	@Transactional
 	public void updateFailFamilyDayEndTask(TaskFamilyDayEnd task) {
 		if(task.getFailTimes()>100) {
 			//状态置为2，代表计算次数已经极限
@@ -87,6 +89,7 @@ public static final String TaskType_FamilyLevel="FamilyLevel";
 		taskFamilyDayEndMapper.updateFamilyDayEndFailTask(task);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskFamilyDayEndMapper.clearLockTask(compareTimes);

@@ -57,18 +57,18 @@ public class CalGameEndService {
 		return true;
 	}
 	
-	
+	@Transactional
 	public List<TaskGameEnd> geGameEndTask(TaskGameEnd taskGameEnd){
 		//先锁定任务
 		taskGameEndMapper.lockGameEndTask(taskGameEnd);
 		//返回任务列表
 		return taskGameEndMapper.getGameEndTask(taskGameEnd);
 	}
-	
+	@Transactional
 	public	void updateSuccGameEndTask(TaskGameEnd taskGameEnd) {
 		taskGameEndMapper.updateGameEndSuccTask(taskGameEnd);
 	}
-	
+	@Transactional
 	public void updateGameEndFailTask(TaskGameEnd taskGameEnd) {
 		if(taskGameEnd.getFailTimes()>100) {
 			//状态置为2，代表计算次数已经极限
@@ -79,6 +79,7 @@ public class CalGameEndService {
 		taskGameEndMapper.updateGameEndFailTask(taskGameEnd);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskGameEndMapper.clearLockTask(compareTimes);

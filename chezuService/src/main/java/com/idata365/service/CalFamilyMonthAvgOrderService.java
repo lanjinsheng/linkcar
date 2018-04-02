@@ -8,6 +8,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.TaskFamilyDayEnd;
 import com.idata365.entity.TaskFamilyDayOrder;
@@ -36,6 +37,7 @@ public class CalFamilyMonthAvgOrderService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
+	@Transactional
 	public boolean calFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder preOrder,TaskFamilyMonthAvgOrder taskFamilyAvgOrder,String daystamp) {
 		//family的月分排行
 		if(preOrder==null)
@@ -53,29 +55,31 @@ public class CalFamilyMonthAvgOrderService {
 		taskFamilyDayEndService.insertFamilyLevelTask(daystamp, taskFamilyAvgOrder.getOrderNo(), taskFamilyAvgOrder.getFamilyId());
 		return true;
 	}
-	
+	@Transactional
 	public TaskFamilyMonthAvgOrder getAvgPre(TaskFamilyMonthAvgOrder taskFamilyAvgOrder) {
 		//family的日分排行
 		TaskFamilyMonthAvgOrder preOrder=taskFamilyMonthAvgOrderMapper.getPreTaskRecord(taskFamilyAvgOrder);
 		return preOrder;
 	}
 	
-	
+	@Transactional
 	public List<TaskFamilyMonthAvgOrder> getFamilyMonthAvgOrderTask(TaskFamilyMonthAvgOrder taskFamilyOrder){
 		//先锁定任务
 		taskFamilyMonthAvgOrderMapper.lockFamilyMonthAvgOrderTask(taskFamilyOrder);
 		//返回任务列表
 		return taskFamilyMonthAvgOrderMapper.getFamilyMonthAvgOrderTask(taskFamilyOrder);
 	}
-	
+	@Transactional
 	public	void updateSuccFamilyMonthAvgOrderTask(TaskFamilyMonthAvgOrder taskFamilyOrder) {
 		taskFamilyMonthAvgOrderMapper.updateFamilyMonthAvgOrderSuccTask(taskFamilyOrder);
 	}
 //	
+	@Transactional
 	public void updateFailFamilyMonthAvgOrderTask(TaskFamilyMonthAvgOrder taskFamilyOrder) {
 		taskFamilyMonthAvgOrderMapper.updateFamilyMonthAvgOrderFailTask(taskFamilyOrder);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskFamilyMonthAvgOrderMapper.clearLockTask(compareTimes);

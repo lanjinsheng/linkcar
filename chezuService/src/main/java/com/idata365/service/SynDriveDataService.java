@@ -54,6 +54,7 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional(value="colTransactionManager")
 	public List<DriveDataMain>  getSendDriveTask(DriveDataMain drive) {
 		    driveDataMainMapper.lockSendDriveTask(drive);
 		  List<DriveDataMain> list= driveDataMainMapper.getSendDriveTask(drive);
@@ -80,6 +81,7 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 		lottery.setHadGet(0);
 		return lottery;
 	}
+	@Transactional
 	public boolean recieveDrive(List<DriveDataMain> driveList){
 		//进行驾驶数据同步到业务层，逻辑待写入
 		List<UserTravelHistory>  list=new ArrayList<UserTravelHistory>();
@@ -110,6 +112,7 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 		}
 		return true;
 	}
+	@Transactional
 	public boolean addCalTask(List<DriveDataMain> driveList) {
 		 //插入计分项目
 		if(driveList.size()>0) {

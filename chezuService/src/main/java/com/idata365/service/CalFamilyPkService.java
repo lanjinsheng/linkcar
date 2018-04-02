@@ -102,22 +102,24 @@ public class CalFamilyPkService {
 	}
 	
 	
-	
+	@Transactional
 	public List<TaskFamilyPk> getFamilyPkTask(TaskFamilyPk taskFamilyPk){
 		//先锁定任务
 		taskFamilyPkMapper.lockFamilyPkTask(taskFamilyPk);
 		//返回任务列表
 		return taskFamilyPkMapper.getFamilyPkTask(taskFamilyPk);
 	}
-	
+	@Transactional
 	public	void updateSuccFamilyPkTask(TaskFamilyPk taskFamilyPk) {
 		taskFamilyPkMapper.updateFamilyPkSuccTask(taskFamilyPk);
 	}
 //	
+	@Transactional
 	public void updateFailFamilyPkTask(TaskFamilyPk taskFamilyPk) {
 		taskFamilyPkMapper.updateFamilyPkFailTask(taskFamilyPk);
 	}
 //	
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskFamilyPkMapper.clearLockTask(compareTimes);
