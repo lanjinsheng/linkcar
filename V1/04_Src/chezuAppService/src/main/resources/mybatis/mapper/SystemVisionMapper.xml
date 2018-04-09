@@ -6,7 +6,7 @@
 		resultType="com.idata365.app.entity.SystemVisionBean">
 		select * 
 		from systemVision 
-		where phoneType=#{phoneType} and vision=#{vision}
+		where phoneType=#{phoneType} order by id desc limit 1
 	</select>
 
 </mapper>
