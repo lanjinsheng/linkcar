@@ -36,6 +36,7 @@ public class SystemVisionController extends BaseController
 	{
 		String phoneType = requestBodyParams.get("phoneType");
 		String vision = requestBodyParams.get("vision");
+		LOG.info("phoneType="+phoneType+"===vision="+vision);
 		if (phoneType == null || vision == null)
 		{
 			return ResultUtils.rtFailParam(null, "无效参数");
