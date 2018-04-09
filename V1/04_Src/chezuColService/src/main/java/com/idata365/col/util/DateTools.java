@@ -101,6 +101,25 @@ public class DateTools
 		 * Timestamp(date.getTime());
 		 */
 	}
+	
+	public static long changeDateTimeToMSecond(String dateTimeStr)
+	{
+		
+		java.util.Date da = null;
+		try
+		{
+			da = yyMMddHHmmssSSS.parse(dateTimeStr);
+			return da.getTime();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0L;
+		/*
+		 * Date date = Date.valueOf(dateStr); return new
+		 * Timestamp(date.getTime());
+		 */
+	}
 	/**
 	 * 返回前天，昨天，明天，后天等
 	 * 

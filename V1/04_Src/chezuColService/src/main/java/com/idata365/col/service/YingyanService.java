@@ -183,13 +183,26 @@ private void dealSpeedAlarm(String locations,String time,String direction,String
 		    if(gdMap!=null && String.valueOf(gdMap.get("status")).equals("1")) {
 		    	List<Map<String,Object>> roads=(List<Map<String,Object>>)gdMap.get("roads");
 		    	int j=0;
+		    	int preMaxSpeed=0;
+		    	long preTimes=0;
 		    	for(Map<String,Object> road:roads) {
 		    		int maxspeed=Integer.valueOf(road.get("maxspeed").toString());
 //		    		String crosspoint=road.get("crosspoint").toString();
 //		    		Log.info(crosspoint);
-		    		if(maxspeed>0) {
+		    		if(maxspeed>10) {
+		    			//当前速度*
 		    			int s= BigDecimal.valueOf(Double.valueOf(tempList.get(j).get("s"))).multiply(BigDecimal.valueOf(3600)).divide(BigDecimal.valueOf(1000), 0,RoundingMode.HALF_UP).intValue();
-		    			if(s>maxspeed) {
+		    			int s1=s-10;//人为减小10公里
+		    			long now=DateTools.changeDateTimeToMSecond((tempList.get(j).get("t")));
+		    			if(s1>maxspeed) {
+		    					if((now-preTimes)<10000) {//2个点在10s以内
+		    						if(preMaxSpeed>=(maxspeed*2)) {//被误定位高架下的公路了。
+		    							//前一时刻的值是现有的2倍了,放弃当前值
+		    							preMaxSpeed=maxspeed;
+		    			    			preTimes=now;
+		    			    			continue;
+		    						}
+		    					}
 		    				tempList.get(j).put("ms", String.valueOf(maxspeed));
 							Map<String,Object> alarm=new HashMap<String,Object>();
 							alarm.put("startTime", tempList.get(j).get("t"));
@@ -201,6 +214,8 @@ private void dealSpeedAlarm(String locations,String time,String direction,String
 							alarm.put("lat", tempList.get(j).get("x"));
 		    				speedAlarmList.add(alarm);
 		    			}
+		    			preMaxSpeed=maxspeed;
+		    			preTimes=now;
 		    		}
 		    		j++;
 		    	}
