@@ -255,12 +255,21 @@ public class ScoreController extends BaseController
 			String imgBasePath = super.getImgBasePath();
 			
 			FamilyCompetitorResultBean gameObj = resultBean.getGameObj();
-			if (StringUtils.isNotBlank(gameObj.getImgUrl()))
+			FamilyCompetitorResultBean competitorObj = resultBean.getCompetitorObj();
+			//对于首日刚创建的用户,无昨日数据，进行特殊初始化处理
+			if(gameObj==null || competitorObj==null) {
+				//判断用户创建时间可能为今日，无昨日赛况信息，造成数据无效，需要进行初始化数据返回
+				scoreService.dealGameResultInit(resultBean,bean.getFamilyId());
+				gameObj = resultBean.getGameObj();
+				competitorObj = resultBean.getCompetitorObj();
+			}
+			
+			if (gameObj!=null && StringUtils.isNotBlank(gameObj.getImgUrl()))
 			{
 				gameObj.setImgUrl(imgBasePath + gameObj.getImgUrl());
 			}
 			
-			FamilyCompetitorResultBean competitorObj = resultBean.getCompetitorObj();
+			
 			if (null != competitorObj && StringUtils.isNotBlank(competitorObj.getImgUrl()))
 			{
 				competitorObj.setImgUrl(imgBasePath + competitorObj.getImgUrl());

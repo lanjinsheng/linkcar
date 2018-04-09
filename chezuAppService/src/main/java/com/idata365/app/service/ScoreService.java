@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +69,7 @@ import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.ScoreMapper;
+import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
@@ -86,6 +88,39 @@ public class ScoreService extends BaseService<ScoreService>
 	@Autowired
 	private FamilyMapper familyMapper;
 	
+	@Autowired
+	private UsersAccountMapper usersAccountMapper;
+	
+	private ScoreFamilyInfoBean intiScoreFamilyInfoBeanByUser(long userId) {
+		ScoreFamilyInfoBean scoreFamilyInfoBean=new ScoreFamilyInfoBean();
+		Map<String,Object> family=usersAccountMapper.getFamilyByUserId(userId);
+		scoreFamilyInfoBean.setAwardType(0);
+		scoreFamilyInfoBean.setBeforeYesterdayOrderNo(0);
+		scoreFamilyInfoBean.setCreateUserId(userId);
+		scoreFamilyInfoBean.setFamilyId(Long.valueOf(family.get("id").toString()));
+		scoreFamilyInfoBean.setImgUrl(String.valueOf(family.get("imgUrl")));
+		scoreFamilyInfoBean.setName(String.valueOf(family.get("familyName")));
+		scoreFamilyInfoBean.setOrderChange(0);
+		scoreFamilyInfoBean.setScore(0);
+		scoreFamilyInfoBean.setOrderNo(0);
+		scoreFamilyInfoBean.setYesterdayScore(0);
+		return scoreFamilyInfoBean;
+	}
+	private ScoreFamilyInfoBean intiScoreFamilyInfoBeanByFamily(long familyId) {
+		ScoreFamilyInfoBean scoreFamilyInfoBean=new ScoreFamilyInfoBean();
+		Map<String,Object> family=usersAccountMapper.getFamilyByUserId(familyId);
+		scoreFamilyInfoBean.setAwardType(0);
+		scoreFamilyInfoBean.setBeforeYesterdayOrderNo(0);
+		scoreFamilyInfoBean.setCreateUserId(Long.valueOf(family.get("createUserId").toString()));
+		scoreFamilyInfoBean.setFamilyId(familyId);
+		scoreFamilyInfoBean.setImgUrl(String.valueOf(family.get("imgUrl")));
+		scoreFamilyInfoBean.setName(String.valueOf(family.get("familyName")));
+		scoreFamilyInfoBean.setOrderChange(0);
+		scoreFamilyInfoBean.setScore(0);
+		scoreFamilyInfoBean.setOrderNo(0);
+		scoreFamilyInfoBean.setYesterdayScore(0);
+		return scoreFamilyInfoBean;
+	}
 	/**
 	 * 发起家族、参与家族查询
 	 * @param bean
@@ -96,27 +131,29 @@ public class ScoreService extends BaseService<ScoreService>
 		ScoreFamilyInfoAllBean resultBean = new ScoreFamilyInfoAllBean();
 		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
-		
-		ScoreFamilyInfoParamBean oriYesterdayParamBean = new ScoreFamilyInfoParamBean();
-		oriYesterdayParamBean.setFamilyId(oriFamilyBean.getFamilyId());
-		oriYesterdayParamBean.setDaystamp(getYesterdayDateStr());
-		FamilyDriveDayStatBean oriYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(oriYesterdayParamBean);
-		
-		oriFamilyBean.setYesterdayScore(oriYeterdayFamilyResultBean.getScore());
-		
-		int orderNo = oriFamilyBean.getOrderNo();
-		int beforeYesterdayOrderNo = oriFamilyBean.getBeforeYesterdayOrderNo();
-		int oriFamilyOrderChange;
-		if (0 == beforeYesterdayOrderNo)
-		{
-			oriFamilyOrderChange = 0;
+		if(oriFamilyBean==null) {//发起家族为今日创建
+			oriFamilyBean=intiScoreFamilyInfoBeanByUser(bean.getUserId());
+		}else {
+			ScoreFamilyInfoParamBean oriYesterdayParamBean = new ScoreFamilyInfoParamBean();
+			oriYesterdayParamBean.setFamilyId(oriFamilyBean.getFamilyId());
+			oriYesterdayParamBean.setDaystamp(getYesterdayDateStr());
+			FamilyDriveDayStatBean oriYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(oriYesterdayParamBean);
+			
+			oriFamilyBean.setYesterdayScore(oriYeterdayFamilyResultBean.getScore());
+			
+			int orderNo = oriFamilyBean.getOrderNo();
+			int beforeYesterdayOrderNo = oriFamilyBean.getBeforeYesterdayOrderNo();
+			int oriFamilyOrderChange;
+			if (0 == beforeYesterdayOrderNo)
+			{
+				oriFamilyOrderChange = 0;
+			}
+			else
+			{
+				oriFamilyOrderChange = orderNo - beforeYesterdayOrderNo;
+			}
+			oriFamilyBean.setOrderChange(oriFamilyOrderChange);
 		}
-		else
-		{
-			oriFamilyOrderChange = orderNo - beforeYesterdayOrderNo;
-		}
-		oriFamilyBean.setOrderChange(oriFamilyOrderChange);
-		
 		resultBean.setOriFamily(oriFamilyBean);
 		
 		long origFamilyId = 0;
@@ -137,28 +174,30 @@ public class ScoreService extends BaseService<ScoreService>
 					tempParamBean.setFamilyId(tempFamilyId);
 					tempParamBean.setTimeStr(getYesterdayDateStr());
 					ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
-					
-					ScoreFamilyInfoParamBean joinYesterdayParamBean = new ScoreFamilyInfoParamBean();
-					joinYesterdayParamBean.setFamilyId(joinFamilyBean.getFamilyId());
-					joinYesterdayParamBean.setDaystamp(getYesterdayDateStr());
-					FamilyDriveDayStatBean joinYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(joinYesterdayParamBean);
-
-					joinFamilyBean.setYesterdayScore(joinYeterdayFamilyResultBean.getScore());
-					
-					int joinOrderNo = joinFamilyBean.getOrderNo();
-					int joinBeforeYesterdayOrderNo = joinFamilyBean.getBeforeYesterdayOrderNo();
-					
-					int joinFamilyOrderChange;
-					if (0 == joinBeforeYesterdayOrderNo)
-					{
-						joinFamilyOrderChange = 0;
+					if(joinFamilyBean==null) {//参与家族为今日创建
+						joinFamilyBean=intiScoreFamilyInfoBeanByFamily(tempFamilyId);
+					}else {
+						ScoreFamilyInfoParamBean joinYesterdayParamBean = new ScoreFamilyInfoParamBean();
+						joinYesterdayParamBean.setFamilyId(joinFamilyBean.getFamilyId());
+						joinYesterdayParamBean.setDaystamp(getYesterdayDateStr());
+						FamilyDriveDayStatBean joinYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(joinYesterdayParamBean);
+						
+						joinFamilyBean.setYesterdayScore(joinYeterdayFamilyResultBean.getScore());
+						
+						int joinOrderNo = joinFamilyBean.getOrderNo();
+						int joinBeforeYesterdayOrderNo = joinFamilyBean.getBeforeYesterdayOrderNo();
+						
+						int joinFamilyOrderChange;
+						if (0 == joinBeforeYesterdayOrderNo)
+						{
+							joinFamilyOrderChange = 0;
+						}
+						else
+						{
+							joinFamilyOrderChange = joinOrderNo - joinBeforeYesterdayOrderNo;
+						}
+						joinFamilyBean.setOrderChange(joinFamilyOrderChange);
 					}
-					else
-					{
-						joinFamilyOrderChange = joinOrderNo - joinBeforeYesterdayOrderNo;
-					}
-					joinFamilyBean.setOrderChange(joinFamilyOrderChange);
-					
 					resultBean.setJoinFamily(joinFamilyBean);
 					break;
 				}
@@ -505,12 +544,16 @@ public class ScoreService extends BaseService<ScoreService>
 			userFamilyRoleParamBean.setDaystamp(yesterdayDateUndelimiterStr);
 			Integer tempUserFamilyRoleId = this.scoreMapper.queryFamilyRoleId(userFamilyRoleParamBean);
 			
+			if(tempUserFamilyRoleId==null) {//用户昨日无角色
+				tempBean.setScore(0);
+			}else {
+			
 			ScoreFamilyInfoParamBean userScoreDayParamBean = new ScoreFamilyInfoParamBean();
 			userScoreDayParamBean.setUserId(tempBean.getUserId());
 			userScoreDayParamBean.setUserFamilyScoreId(tempUserFamilyRoleId);
 			Double tempUserScore = this.scoreMapper.queryUserScore(userScoreDayParamBean);
 			tempBean.setScore(tempUserScore);
-			
+			}
 			YesterdayScoreResultBean tempResultBean = new YesterdayScoreResultBean();
 			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
 			
@@ -523,6 +566,7 @@ public class ScoreService extends BaseService<ScoreService>
 			resultList.add(tempResultBean);
 			
 			tempTotalScore += tempBean.getScore();
+			
 		}
 		
 		int totalSize = tempList.size();
@@ -530,10 +574,14 @@ public class ScoreService extends BaseService<ScoreService>
 		{
 			for (YesterdayScoreResultBean tempBean : resultList)
 			{
-				BigDecimal resultBd = BigDecimal.valueOf(NumberUtils.toDouble(tempBean.getScore())).divide(BigDecimal.valueOf(tempTotalScore), 2, BigDecimal.ROUND_HALF_UP);
-				double resultD = resultBd.doubleValue();
-				String percent = formattedDecimalToPercentage(resultD);
-				tempBean.setPercent(percent);
+				if(tempTotalScore==0) {
+					tempBean.setPercent("0");
+				}else {
+					BigDecimal resultBd = BigDecimal.valueOf(NumberUtils.toDouble(tempBean.getScore())).divide(BigDecimal.valueOf(tempTotalScore), 2, BigDecimal.ROUND_HALF_UP);
+					double resultD = resultBd.doubleValue();
+					String percent = formattedDecimalToPercentage(resultD);
+					tempBean.setPercent(percent);
+				}
 			}
 		}
 		
@@ -564,13 +612,15 @@ public class ScoreService extends BaseService<ScoreService>
 			userFamilyRoleParamBean.setFamilyId(bean.getFamilyId());
 			userFamilyRoleParamBean.setDaystamp(yesterdayDateUndelimiterStr);
 			Integer tempUserFamilyRoleId = this.scoreMapper.queryFamilyRoleId(userFamilyRoleParamBean);
-			
+			if(tempUserFamilyRoleId==null) {//昨日无角色
+				tempBean.setScore(0);
+			}else {
 			ScoreFamilyInfoParamBean userScoreDayParamBean = new ScoreFamilyInfoParamBean();
 			userScoreDayParamBean.setUserId(tempBean.getUserId());
 			userScoreDayParamBean.setUserFamilyScoreId(tempUserFamilyRoleId);
 			Double tempUserScore = this.scoreMapper.queryUserScore(userScoreDayParamBean);
 			tempBean.setScore(tempUserScore);
-			
+			}
 			YesterdayContributionResultBean tempResultBean = new YesterdayContributionResultBean();
 			AdBeanUtils.copyNotNullProperties(tempResultBean, tempBean);
 			
@@ -589,16 +639,58 @@ public class ScoreService extends BaseService<ScoreService>
 		{
 			for (YesterdayContributionResultBean tempBean : resultList)
 			{
-				BigDecimal resultBd = BigDecimal.valueOf(NumberUtils.toDouble(tempBean.getScore())).divide(BigDecimal.valueOf(tempTotalScore), 2, BigDecimal.ROUND_HALF_UP);
-				double resultD = resultBd.doubleValue();
-				String contribution = formattedDecimalToPercentage(resultD);
-				tempBean.setContribution(contribution);
+				if(tempTotalScore==0) {
+					tempBean.setContribution("0");
+				}else {
+					BigDecimal resultBd = BigDecimal.valueOf(NumberUtils.toDouble(tempBean.getScore())).divide(BigDecimal.valueOf(tempTotalScore), 2, BigDecimal.ROUND_HALF_UP);
+					double resultD = resultBd.doubleValue();
+					String contribution = formattedDecimalToPercentage(resultD);
+					tempBean.setContribution(contribution);
+				}
 			}
 		}
 		
 		return resultList;
 	}
+ 
 	
+	public void dealGameResultInit(CompetitorResultBean resultBean,Long familyId) {
+		FamilyCompetitorResultBean gameObj=initFamilyCompetitorResultBean();
+		Map<String,Object> family=usersAccountMapper.getFamilyByFamilyId(familyId);
+		FamilyCompetitorResultBean competitorObj=initFamilyCompetitorResultBean();
+		gameObj.setImgUrl(String.valueOf(family.get("imgUrl")));
+		gameObj.setFamilyId(String.valueOf(familyId));
+		gameObj.setName(String.valueOf(family.get("familyName")));
+		resultBean.setGameObj(gameObj);
+		resultBean.setCompetitorObj(competitorObj);
+	}
+	private FamilyCompetitorResultBean initFamilyCompetitorResultBean() {
+		FamilyCompetitorResultBean gameObj=new FamilyCompetitorResultBean();
+		gameObj.setBrakeTimes("0");
+		gameObj.setCompetitingResult("0");
+		gameObj.setFamilyId("0");
+		gameObj.setFamilyLevelFactor("0");
+		gameObj.setFamilyNumFactor("0");
+		gameObj.setIllegalStopTimes("0");
+		gameObj.setImgUrl(null);
+		gameObj.setMaxspeed("0");
+		gameObj.setMemberFactor("0");
+		gameObj.setMileage("0");
+		gameObj.setName("0");
+		gameObj.setNightDriveTimes("0");
+		gameObj.setOrderChange("0");
+		gameObj.setOrderNo("0");
+		gameObj.setOverspeedTimes("0");
+		gameObj.setRoleFactor("0");
+		gameObj.setScore("0");
+		gameObj.setSpeedTimes("0");
+		gameObj.setTime("0");
+		gameObj.setTiredDriveTimes("0");
+		gameObj.setTurnTimes("0");
+		gameObj.setUseHoldNum("0");
+		gameObj.setUsePhoneTimes("0");
+		return gameObj;
+	}
 	/**
 	 * 昨日赛果
 	 * @param bean 
