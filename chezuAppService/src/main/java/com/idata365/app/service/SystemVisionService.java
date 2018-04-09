@@ -22,15 +22,19 @@ public class SystemVisionService extends BaseService<SystemVisionService>
 		req.setPhoneType(Integer.valueOf(phoneType));
 		req.setVision(vision);
 		SystemVisionBean rsp = systemVisonMapper.querySystemVisionInfo(req);
-		int rspStatus = -1;
-		if (rsp != null)
-		{
-			rspStatus = rsp.getStatus();
-		}
 		Map<String, Object> map = new HashMap<String, Object>();
+		int rspStatus = -1;
+		map.put("skipUrl",0);
 		map.put("visionStatus", rspStatus);
-		map.put("skipUrl", rsp.getUrl());
-
+		if (rsp != null)
+		{//获取最后的版本信息比较版本号
+			if(rsp.getVision().equals(vision)) {
+				
+			}else {
+				map.put("visionStatus", rsp.getStatus());
+				map.put("skipUrl", rsp.getUrl());
+			}
+		}
 		return map;
 	}
 }
