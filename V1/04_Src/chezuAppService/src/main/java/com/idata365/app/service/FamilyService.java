@@ -234,8 +234,8 @@ public class FamilyService extends BaseService<FamilyService>
 		familyRelationParam.setDaystamp(getCurrentDayStr());
 		List<Long> relationIds = this.familyMapper.queryFamilyRelationIds(familyRelationParam);
 		
-		if (CollectionUtils.isNotEmpty(relationIds))
-		{
+//		if (CollectionUtils.isNotEmpty(relationIds))
+//		{
 			//初始化用户在新家族的角色到userFamilyRelation
 			UserFamilyRoleLogParamBean roleLogParamBean = new UserFamilyRoleLogParamBean();
 			roleLogParamBean.setUserId(bean.getUserId());
@@ -261,7 +261,7 @@ public class FamilyService extends BaseService<FamilyService>
 			tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
 			this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			//初始化用户角色、成绩记录表end------------------
-		}
+//		}
 		
 		
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
