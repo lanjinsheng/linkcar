@@ -55,7 +55,7 @@
     </select>
      
 	<insert id="saveUserFamily" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
-		insert into userFamilyRelation(userId, familyId, joinTime) values(#{userId}, #{familyId}, #{joinTime})
+		insert into userFamilyRelation(userId, familyId, joinTime,role) values(#{userId}, #{familyId}, #{joinTime},#{role})
 	</insert>
      
     <select id="queryFamilyByCode" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
