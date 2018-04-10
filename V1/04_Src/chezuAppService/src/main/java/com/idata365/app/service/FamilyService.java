@@ -232,7 +232,7 @@ public class FamilyService extends BaseService<FamilyService>
 		FamilyRelationBean familyRelationParam = new FamilyRelationBean();
 		familyRelationParam.setFamilyId(bean.getFamilyId());
 		familyRelationParam.setDaystamp(getCurrentDayStr());
-		List<Long> relationIds = this.familyMapper.queryFamilyRelationIds(familyRelationParam);
+//		List<Long> relationIds = this.familyMapper.queryFamilyRelationIds(familyRelationParam);
 		
 //		if (CollectionUtils.isNotEmpty(relationIds))
 //		{
@@ -491,8 +491,21 @@ public class FamilyService extends BaseService<FamilyService>
 		Date tomorrowDate = DateUtils.addDays(todayDate, 1);
 		String startTime = DateFormatUtils.format(tomorrowDate, DateConstant.DAY_PATTERN_DELIMIT) + " 00:00:00";
 		String endTime = DateFormatUtils.format(tomorrowDate, DateConstant.DAY_PATTERN_DELIMIT) + " 23:59:59";
-		
+		String curDayStr=getCurrentDayStr();
 		//初始化用户角色、成绩记录表start------------------
+		
+		//记录用户在新家族今天的角色
+		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean0 = new UserFamilyRoleLogParamBean();
+		userFamilyRoleLogParamBean0.setUserId(bean.getUserId());
+		userFamilyRoleLogParamBean0.setFamilyId(familyId);
+		userFamilyRoleLogParamBean0.setDaystamp(getCurrentDateUndelimiterStr());
+		userFamilyRoleLogParamBean0.setRole(RoleConstant.JIANBING_ROLE);
+		userFamilyRoleLogParamBean0.setStartTime(curDayStr+ " 00:00:00");
+		userFamilyRoleLogParamBean0.setEndTime(curDayStr+ " 23:59:59");
+		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean0);
+						
+		
+		
 		//记录用户在新家族的明天的角色
 		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
 		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
@@ -539,7 +552,13 @@ public class FamilyService extends BaseService<FamilyService>
 		LOGGER.info(tomorrowDateStr);
 		return tomorrowDateStr;
 	}
-	
+	public String getCurrentDateUndelimiterStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		String curDateStr = DateFormatUtils.format(curDate, "yyyyMMdd");
+		LOGGER.info(curDateStr);
+		return curDateStr;
+	}
 	private String generateTimeStampUndelimiter()
 	{
 		Calendar todayCal = Calendar.getInstance();

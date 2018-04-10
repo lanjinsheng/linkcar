@@ -90,31 +90,62 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
-	
+	/**
+	 * 
+	    * @Title: intiScoreFamilyInfoBeanByUser
+	    * @Description: TODO(初始化家族view数据)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return ScoreFamilyInfoBean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	private ScoreFamilyInfoBean intiScoreFamilyInfoBeanByUser(long userId) {
 		ScoreFamilyInfoBean scoreFamilyInfoBean=new ScoreFamilyInfoBean();
 		Map<String,Object> family=usersAccountMapper.getFamilyByUserId(userId);
 		scoreFamilyInfoBean.setAwardType(0);
 		scoreFamilyInfoBean.setBeforeYesterdayOrderNo(0);
 		scoreFamilyInfoBean.setCreateUserId(userId);
-		scoreFamilyInfoBean.setFamilyId(Long.valueOf(family.get("id").toString()));
-		scoreFamilyInfoBean.setImgUrl(String.valueOf(family.get("imgUrl")));
-		scoreFamilyInfoBean.setName(String.valueOf(family.get("familyName")));
+		if(family!=null) {
+			scoreFamilyInfoBean.setFamilyId(Long.valueOf(family.get("id").toString()));
+			scoreFamilyInfoBean.setImgUrl(String.valueOf(family.get("imgUrl")));
+			scoreFamilyInfoBean.setName(String.valueOf(family.get("familyName")));
+		}else {
+			scoreFamilyInfoBean.setFamilyId(0);
+			scoreFamilyInfoBean.setImgUrl(null);
+			scoreFamilyInfoBean.setName("");
+		}
 		scoreFamilyInfoBean.setOrderChange(0);
 		scoreFamilyInfoBean.setScore(0);
 		scoreFamilyInfoBean.setOrderNo(0);
 		scoreFamilyInfoBean.setYesterdayScore(0);
 		return scoreFamilyInfoBean;
 	}
+	/**
+	 * 
+	    * @Title: intiScoreFamilyInfoBeanByFamily
+	    * @Description: TODO(初始化家族view数据)
+	    * @param @param familyId
+	    * @param @return    参数
+	    * @return ScoreFamilyInfoBean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	private ScoreFamilyInfoBean intiScoreFamilyInfoBeanByFamily(long familyId) {
 		ScoreFamilyInfoBean scoreFamilyInfoBean=new ScoreFamilyInfoBean();
-		Map<String,Object> family=usersAccountMapper.getFamilyByUserId(familyId);
+		Map<String,Object> family=usersAccountMapper.getFamilyByFamilyId(familyId);
 		scoreFamilyInfoBean.setAwardType(0);
 		scoreFamilyInfoBean.setBeforeYesterdayOrderNo(0);
-		scoreFamilyInfoBean.setCreateUserId(Long.valueOf(family.get("createUserId").toString()));
 		scoreFamilyInfoBean.setFamilyId(familyId);
-		scoreFamilyInfoBean.setImgUrl(String.valueOf(family.get("imgUrl")));
-		scoreFamilyInfoBean.setName(String.valueOf(family.get("familyName")));
+		if(family!=null) {
+			scoreFamilyInfoBean.setCreateUserId(Long.valueOf(family.get("createUserId").toString()));
+			scoreFamilyInfoBean.setImgUrl(String.valueOf(family.get("imgUrl")));
+			scoreFamilyInfoBean.setName(String.valueOf(family.get("familyName")));
+		}else {
+			scoreFamilyInfoBean.setCreateUserId(0);
+			scoreFamilyInfoBean.setImgUrl(null);
+			scoreFamilyInfoBean.setName("");	
+		}
 		scoreFamilyInfoBean.setOrderChange(0);
 		scoreFamilyInfoBean.setScore(0);
 		scoreFamilyInfoBean.setOrderNo(0);
