@@ -227,6 +227,7 @@ public class FamilyService extends BaseService<FamilyService>
 		//记录用户、家族关系
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
+		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
 		FamilyRelationBean familyRelationParam = new FamilyRelationBean();
@@ -486,6 +487,7 @@ public class FamilyService extends BaseService<FamilyService>
 		bean.setFamilyId(familyId);
 		Date todayDate = Calendar.getInstance().getTime();
 		bean.setJoinTime(generateTimeStamp());
+		bean.setRole(RoleConstant.JIANBING_ROLE);
 		this.familyMapper.saveUserFamily(bean);
 		
 		Date tomorrowDate = DateUtils.addDays(todayDate, 1);
