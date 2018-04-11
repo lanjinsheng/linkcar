@@ -162,8 +162,8 @@
             <appender-ref ref="DEBUG" />  
             <appender-ref ref="TRACE" />  
         </root>  
-        
-        <logger name="com.idata365.app.mapper" level="DEBUG">
+        <!-- mapper的输出取消 -->
+       <!-- <logger name="com.idata365.app.mapper" level="DEBUG">
 	        <appender-ref ref="STDOUT" />
-	    </logger>
+	    </logger> -->
     </configuration>  
