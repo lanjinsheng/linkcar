@@ -33,6 +33,10 @@ public class SystemVisionController extends BaseController
 	public Map<String, Object> verifyVision(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<String, String> requestBodyParams)
 	{
+		if (requestBodyParams == null)
+		{
+			return ResultUtils.rtFailParam(null, "无效版本参数");
+		}
 		String phoneType = requestBodyParams.get("phoneType");
 		String vision = requestBodyParams.get("vision");
 		LOG.info("phoneType="+phoneType+"===vision="+vision);
