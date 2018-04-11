@@ -521,7 +521,7 @@ public class FamilyService extends BaseService<FamilyService>
 		//初始化加入新家族后的userScoreDayStat记录
 		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 		tempScoreDayParamBean.setUserId(bean.getUserId());
-		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
+		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean0.getId());
 		tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
 		this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 		//初始化用户角色、成绩记录表end------------------
