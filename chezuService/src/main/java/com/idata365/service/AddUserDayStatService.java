@@ -84,17 +84,17 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			userScoreDayStat.setUserFamilyScoreId(role.getId());
 			userScoreDayStat.setDaystamp(driveEndTime.substring(0,10));
 			userScoreDayStat.setBrakeTimes(uth.getBrakeTimes()-uth.getBrakeTimesOffset());
-			if(userScoreDayStat.getBrakeTimes()>0) {
+			if(uth.getBrakeTimes()>0) {
 				userScoreDayStat.setBrakeTimesUpdateTime(driveEndTime);
 				isBestDrive=false;
 			}
 			userScoreDayStat.setTurnTimes(uth.getTurnTimes()-uth.getTurnTimesOffset());
-			if(userScoreDayStat.getTurnTimes()>0) {
+			if(uth.getTurnTimes()>0) {
 				userScoreDayStat.setTurnTimesUpdateTime(driveEndTime);
 				isBestDrive=false;
 			}
 			userScoreDayStat.setSpeedTimes(uth.getSpeedTimes()-uth.getSpeedTimesOffset());
-			if(userScoreDayStat.getSpeedTimes()>0) {
+			if(uth.getSpeedTimes()>0) {
 				userScoreDayStat.setSpeedTimesUpdateTime(driveEndTime);
 			}
 			
