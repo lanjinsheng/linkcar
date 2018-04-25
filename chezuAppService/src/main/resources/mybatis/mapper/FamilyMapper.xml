@@ -261,4 +261,46 @@
  	<select id="queryStartEnd" resultType="com.idata365.app.entity.UserFamilyRoleLogBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
  		select startTime, endTime from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} order by id desc limit 0, 30
  	</select>
-</mapper>
+ 	
+ 	<!-- 进行活跃度处理 -->
+ 	<update id="addFamilyMemberNum"   parameterType="java.lang.Long">
+       update  
+            familyInfo
+            set memberNum=memberNum+1
+            where id=#{familyId}
+    </update>
+    <update id="removeFamilyMemberNum"   parameterType="java.lang.Long">
+       update  
+            familyInfo
+                set memberNum=memberNum-1
+            where id=#{familyId}
+    </update>
+    
+   	<update id="updateFamilyActiveLevel"   parameterType="java.lang.Long">
+       update  
+            familyInfo
+           set activeLevel=concat(memberNum,driveFlag)
+            where id=#{familyId}
+    </update>
+	
+	<!-- 锁定匹配用户 -->
+	<update id="updateFamilyPkKeyGet"   parameterType="java.util.HashMap">
+ 	    update  familyInfo set matchKey=#{matchKey} select 
+ 	    id from familyInfo where familyType=#{familyType} and id!=#{id}
+ 	     order by activeLevel desc limit 1
+    </update>
+    <select id="getCompetitorFamilyId" resultType="long" parameterType="java.lang.String">
+ 		 select competitorFamilyId from familyInfo where matchKey=#{matchKey}
+ 	</select>
+   	<update id="updateFamilyPkSelfKey"   parameterType="java.util.HashMap">
+ 	    update familyInfo set matchKey=#{matchKey} where  id=#{id}
+    </update>
+     <insert id="insertPkRelation" parameterType="java.util.HashMap">
+		 INSERT IGNORE INTO  familyRelation
+		 (selfFamilyId,competitorFamilyId,daystamp)
+		  VALUES
+    		(#{selfFamilyId},#{competitorFamilyId},#{daystamp}) 
+	</insert>
+    
+    
+  </mapper>
