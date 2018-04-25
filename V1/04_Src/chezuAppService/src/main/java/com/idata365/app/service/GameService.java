@@ -5,8 +5,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -201,7 +203,61 @@ public class GameService extends BaseService<GameService>
 			return 0;
 		}
 	}
-	
+	/**
+	 * 
+	    * @Title: challengeFamilyV1_1
+	    * @Description: TODO(挑战v1.1)
+	    * @param @param bean
+	    * @param @return    参数
+	    * @return int    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public Map<String,Object> challengeFamilyV1_1(GameFamilyParamBean bean)
+	{
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		String tomorrowDateStr = getTomorrowDateStr();
+		
+		FamilyChallengeLogParamBean saveChallgenParamBean = new FamilyChallengeLogParamBean();
+		saveChallgenParamBean.setFamilyId(bean.getFamilyId());
+		saveChallgenParamBean.setChallengeType(bean.getFamilyType());
+		saveChallgenParamBean.setChallengeDay(tomorrowDateStr);
+		//判断是否已经发起挑战
+		boolean challengeFlag = judgeChallenged(saveChallgenParamBean);
+		if (challengeFlag)
+		{
+			rtMap.put("error", "你已经匹配过家族了!");
+			return rtMap;
+		}
+		Map<String,Object> pkKey=new HashMap<String,Object>();
+		pkKey.put("id", bean.getFamilyId());
+		pkKey.put("familyType", bean.getFamilyId());
+		String matchKey=bean.getFamilyId()+""+System.currentTimeMillis();
+		pkKey.put("matchKey", matchKey);
+		int getPk=familyMapper.updateFamilyPkKeyGet(pkKey);
+		if(getPk==0) {
+			rtMap.put("error", "该等级无可匹配家族!");
+			return rtMap;
+		}else {
+			//插入匹配家族
+			long  competitorFamilyId=familyMapper.getCompetitorFamilyId(matchKey);
+			int updateSelf=familyMapper.updateFamilyPkSelfKey(pkKey);
+			Map<String,Object> pkRelation=new HashMap<String,Object>();
+			pkRelation.put("selfFamilyId", bean.getFamilyId());
+			pkRelation.put("competitorFamilyId", competitorFamilyId);
+			pkKey.put("daystamp", tomorrowDateStr);
+			familyMapper.insertPkRelation(pkRelation);
+			//查询家族
+			FamilyParamBean paramBean=new FamilyParamBean();
+			paramBean.setFamilyId(competitorFamilyId);
+			FamilyInfoBean familyBean=familyMapper.queryFamilyInfo(paramBean);
+			rtMap.put("competitorFamilyId", competitorFamilyId);
+			rtMap.put("familyName", familyBean.getFamilyName());
+			return rtMap;
+		}
+		
+	}
 	//判断是否已经成功发起过挑战
 	public boolean judgeChallenged(FamilyChallengeLogParamBean bean)
 	{

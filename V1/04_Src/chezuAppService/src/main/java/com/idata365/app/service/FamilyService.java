@@ -166,6 +166,9 @@ public class FamilyService extends BaseService<FamilyService>
 		bean.setEndTime(ts);
 		bean.setDaystamp(daystamp);
 		this.familyMapper.updateFamilyRoleLog(bean);
+		//更新家族热度
+		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
+		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 	}
 	
 	/**
@@ -271,6 +274,9 @@ public class FamilyService extends BaseService<FamilyService>
 		this.familyMapper.updateInviteStatus(familyParamStatusBean);
 		
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
+		//增加用户热度
+		familyMapper.addFamilyMemberNum(bean.getFamilyId());
+		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 		
 		return 3;
 	}

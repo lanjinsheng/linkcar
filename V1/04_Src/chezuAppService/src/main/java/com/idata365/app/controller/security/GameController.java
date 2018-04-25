@@ -70,12 +70,30 @@ public class GameController extends BaseController
 	public Map<String, Object> challengeFamily(@RequestBody GameFamilyParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		
 		int resultFlag = this.gameService.challengeFamily(bean);
 		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("challengeFlag", String.valueOf(resultFlag));
 		return ResultUtils.rtSuccess(resultMap);
 	}
+	
+	/**
+	 * 挑战家族
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/game/challengeFamilyV1_1")
+	public Map<String, Object> challengeFamilyV1_1(@RequestBody GameFamilyParamBean bean)
+	{
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		Map<String, Object> resultMap = this.gameService.challengeFamilyV1_1(bean);
+		if(resultMap.get("error")==null) {
+			return ResultUtils.rtSuccess(resultMap);
+		}else {
+			return ResultUtils.rtFailParam(null,resultMap.get("error").toString());
+		}
+	
+	}
+	
 	
 	/**
 	 * 查询正在对战的家族系信息
