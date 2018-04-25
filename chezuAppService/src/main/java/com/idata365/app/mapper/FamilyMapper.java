@@ -129,4 +129,16 @@ public interface FamilyMapper
 	public int updateTaskFlag(FamilyParamBean bean);
 	
 	public List<UserFamilyRoleLogBean> queryStartEnd(UserFamilyRoleLogParamBean bean);
+	
+	 //家族人数更新活跃度--begin
+	 void  addFamilyMemberNum(@Param("familyId") Long familyId);
+	 void  removeFamilyMemberNum(@Param("familyId") Long familyId);
+	 void  updateFamilyActiveLevel(@Param("familyId") Long familyId);
+	 //家族人数更新活跃度--end
+	 //挑选对战家族--begin
+	 int updateFamilyPkKeyGet(Map<String,Object> map);
+	 int updateFamilyPkSelfKey(Map<String,Object> map);
+	 int insertPkRelation(Map<String,Object> map);
+	 long getCompetitorFamilyId(@Param("familyId") String matchKey);
+	 //挑选对战家族--end
 }
