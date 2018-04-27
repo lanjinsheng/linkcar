@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.idata365.app</groupId>
-	<artifactId>chezuAppService8082</artifactId>
+	<artifactId>chezuAppServiceShop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>chezuAppService</name>
+	<name>chezuAppServiceShop</name>
 	<description>shujin app project for Spring Boot</description>
 
 	<parent>
