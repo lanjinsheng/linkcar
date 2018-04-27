@@ -22,6 +22,7 @@ import com.idata365.app.entity.UsersAccount;
 public interface ChezuAssetService {
    /**
     * 远程进行用户账户验证，待远程接口写入
+    * 通过map去获取diamondsNum=0, userId=150, powerNum=0
     * @param token
     * @return
     */
