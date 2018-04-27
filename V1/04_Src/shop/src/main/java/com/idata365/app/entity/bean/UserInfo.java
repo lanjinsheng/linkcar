@@ -4,7 +4,7 @@ import com.idata365.app.entity.UsersAccount;
 
 public class UserInfo extends UsersAccount{
 
-	
+	String token;
 	    /**
 	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 	    */
@@ -20,4 +20,11 @@ public class UserInfo extends UsersAccount{
 		this.setImgUrl(account.getImgUrl());
 	}
 
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }
