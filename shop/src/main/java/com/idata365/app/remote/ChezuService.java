@@ -25,5 +25,5 @@ public interface ChezuService {
     * @return
     */
    @RequestMapping(value = "/account/validToken",method = RequestMethod.POST)
-   UsersAccount  validToken(@RequestParam  String  token);
+   UsersAccount  validToken(@RequestParam(value="token")  String  token);
 }
