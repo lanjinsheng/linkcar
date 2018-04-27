@@ -4,8 +4,8 @@ server:
 eureka:
   client:
     serviceUrl:
-#      defaultZone: http://119.28.16.217:8761/eureka/
-      defaultZone: http://product-eureka.idata365.com/eureka/
+    defaultZone: http://119.28.16.217:8761/eureka/
+#        defaultZone: http://product-eureka.idata365.com/eureka/
     healthcheck:
       enabled: true
   instance:
@@ -33,14 +33,14 @@ spring:
 # 驱动配置信息
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-#    url: jdbc:mysql://115.159.216.58:6633/sjdev?useUnicode=true&useSSL=false
+    url: jdbc:mysql://115.159.216.58:6633/devShop?useUnicode=true&useSSL=false
 #    url: jdbc:mysql://115.159.216.58:6633/sjtest?useUnicode=true&useSSL=false
-#    username: sjTest
-#    password: sjTest2962143!
-    url: jdbc:mysql://127.0.0.1:6633/sjBss?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: shujin
-    password: shujin20180416!
-    driverClassName: com.mysql.jdbc.Driver
+    username: shopdb
+    password: shopDb20180427!
+#    url: jdbc:mysql://127.0.0.1:6633/sjBss?useUnicode=true&characterEncoding=utf-8&useSSL=false
+#    username: shujin
+#    password: shujin20180416!
+#   driverClassName: com.mysql.jdbc.Driver
 
 #连接池的配置信息
     initialSize: 5
