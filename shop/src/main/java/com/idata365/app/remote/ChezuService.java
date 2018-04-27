@@ -17,16 +17,13 @@ import com.idata365.app.entity.UsersAccount;
     * @date 2017年12月28日
     *
  */
-@FeignClient(value = "service-chezu",fallback = ChezuHystric.class)
+@FeignClient(value = "service-account-chezu",fallback = ChezuHystric.class)
 public interface ChezuService {
    /**
     * 远程进行用户账户验证，待远程接口写入
     * @param token
     * @return
     */
-   @RequestMapping(value = "/Account/validToken",method = RequestMethod.POST)
+   @RequestMapping(value = "/account/validToken",method = RequestMethod.POST)
    UsersAccount  validToken(@RequestParam  String  token);
-   
-
-   
 }
