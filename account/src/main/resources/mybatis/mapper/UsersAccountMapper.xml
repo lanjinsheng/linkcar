@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UsersAccountMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.UsersAccount" >
+    </resultMap>
+
+
+<!-- 临时使用的，转移到家族逻辑中 -->
+     <select id="getFamilyByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  familyInfo where createUserId=#{userId}
+     </select>
+     <select id="getFamilyByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  familyInfo where id=#{familyId}
+     </select>
+     
+     <select id="getLeaderByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT a.familyName,b.imgUrl,b.nickName,b.phone,b.id 
+       FROM  familyInfo a left join usersAccount b on a.createUserId=b.id where a.id=#{familyId}
+     </select>
+     
+     <select id="findFamilyRelation" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userFamilyRelation where familyId=#{familyId}
+     </select>
+     
+     
+     <select id="findAccountByPhone" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
+       SELECT *
+       FROM  usersAccount where phone=#{phone}
+     </select>
+     
+     <select id="findAccountById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  usersAccount where id=#{id}
+     </select>
+      <select id="findAccountByIdAndPwd" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
+       SELECT *
+       FROM  usersAccount where id=#{id} and pwd=#{pwd}
+     </select>
+     
+      <insert id="insertUser"   useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UsersAccount" >
+       INSERT ignore  INTO 
+            usersAccount
+            (phone,pwd,lastLoginTime,createTime) 
+        VALUES
+            (#{phone}, #{pwd},now(),now())
+    </insert>
+    
+    <update id="updateUserPwd"   parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set pwd=#{pwd},lastLoginTime=now()
+            where phone=#{phone}
+    </update>
+    <update id="updatePwdByUserIdAndOldPwd"   parameterType="java.util.HashMap" >
+       update  
+            usersAccount
+             set pwd=#{newPwd}
+            where id=#{userId} and pwd=#{orgPwd}
+    </update>
+   <update id="updateUserLogin"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set lastLoginTime=now()
+            where phone=#{phone}
+    </update>
+   <update id="updateNickName"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set nickName=#{nickName}
+            where id=#{id}
+    </update>   
+    
+       <update id="updateEnableStranger"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set enableStranger=#{enableStranger}
+            where id=#{id}
+     </update> 
+    
+     
+       <update id="updateImgUrl"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set imgUrl=#{imgUrl}
+            where id=#{id}
+    </update> 
+    
+    <update id="updatePhone"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set phone=#{phone}
+            where id=#{id}
+    </update>  
+    
+</mapper>
