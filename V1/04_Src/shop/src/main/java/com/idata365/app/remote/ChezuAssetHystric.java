@@ -19,6 +19,13 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		return null;
 	}
 
+	@Override
+	public boolean submitDiamondAsset(long userId, double diamondNum, String sign) {
+		// TODO Auto-generated method stub
+		LOG.info(" submitDiamondAsset 挂了   ChezuAssetService");
+		return false;
+	}
+
 	 
  
 	
