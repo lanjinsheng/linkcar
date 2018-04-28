@@ -39,8 +39,8 @@ public class AssetController extends BaseController{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		if(usersAsset!=null) {
 			rtMap.put("userId", userId);
-			rtMap.put("powerNum", usersAsset.getPowerNum());
-			rtMap.put("diamondsNum", usersAsset.getDiamondsNum());
+			rtMap.put("powerNum", usersAsset.getHadPowerNum());
+			rtMap.put("diamondsNum", usersAsset.getHadDiamondsNum());
 		}else {
 			rtMap.put("userId", userId);
 			rtMap.put("powerNum", "0");
