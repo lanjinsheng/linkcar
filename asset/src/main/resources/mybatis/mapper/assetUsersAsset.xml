@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.AssetUsersAssetMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.AssetUsersAsset" >
+    </resultMap>
+     <select id="getUserAssetByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  assetUsersAsset where userId=#{userId}
+     </select>
+      <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
+        update assetUsersAsset set hadDiamondsNum=(hadDiamondsNum-${diamondsNum}) where
+           <![CDATA[ hadDiamondsNum>=${diamondsNum} and userId=#{userId}]]>
+     </update>
+     
+</mapper>
