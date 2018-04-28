@@ -28,6 +28,19 @@ public interface ChezuAssetService {
     */
    @RequestMapping(value = "/asset/getUserAsset",method = RequestMethod.POST)
    Map<String,Object>  getUserAsset(@RequestParam(value="userId")  long  userId,@RequestParam(value="sign") String sign);
-   
-   
+   /**
+    * 
+       * @Title: submitDiamondAsset
+       * @Description: TODO(返回false消费失败，true消费成功)
+       * @param @param userId
+       * @param @param diamondNum
+       * @param @param sign
+       * @param @return    参数
+       * @return boolean    返回类型
+       * @throws
+       * @author LanYeYe
+    */
+   @RequestMapping(value = "/asset/submitDiamondAsset",method = RequestMethod.POST)
+	boolean  submitDiamondAsset(@RequestParam(value="userId")  long  userId,@RequestParam(value="diamondNum") double diamondNum,@RequestParam(value="sign") String sign);
+
 }
