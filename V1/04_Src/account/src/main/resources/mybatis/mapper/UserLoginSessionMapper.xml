@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserLoginSessionMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.UserLoginSession" >
+    </resultMap>
+
+      <insert id="insertToken" parameterType="com.idata365.app.entity.UserLoginSession" >
+       INSERT IGNORE   INTO 
+            userLoginSession
+            (userId,createTimeLong,token) 
+        VALUES
+            (#{userId},#{createTimeLong},#{token}) ON DUPLICATE KEY UPDATE createTimeLong=#{createTimeLong},token=#{token}
+    </insert>
+    
+         <select id="findToken" resultMap="BaseResultMap" parameterType="String">
+       SELECT *
+       FROM  userLoginSession where token=#{token} order by createTimeLong desc limit 1
+     </select>
+</mapper>
