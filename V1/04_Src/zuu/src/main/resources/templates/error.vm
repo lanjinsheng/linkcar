@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<p>zuul有错误： ${status} ${error}</p>
+</body>
+</html>
