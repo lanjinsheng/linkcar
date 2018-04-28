@@ -35,6 +35,7 @@ public class AssetService extends BaseService<AssetService>
 	public final static int RecordType_1=2;
 	@Autowired
 	AssetUsersAssetMapper assetUsersAssetMapper;
+	@Autowired
     AssetUsersDiamondsLogsMapper assetUsersDiamondsLogsMapper;
 	public AssetService()
 	{ 
