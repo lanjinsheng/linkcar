@@ -26,8 +26,5 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		return false;
 	}
 
-	 
- 
-	
  
 }
