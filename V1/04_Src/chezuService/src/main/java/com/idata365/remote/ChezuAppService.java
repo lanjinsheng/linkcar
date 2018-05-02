@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "service-app-dev-chezu",fallback = ChezuAppHystric.class)
+@FeignClient(value = "service-app-chezu",fallback = ChezuAppHystric.class)
 public interface ChezuAppService {
     @RequestMapping(value = "/v1/getUserLotter",method = RequestMethod.POST)
     boolean getUserLotter(@RequestParam  Map<String,Object>  map);

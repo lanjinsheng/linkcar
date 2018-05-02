@@ -14,6 +14,7 @@ public class ChezuAppHystric implements ChezuAppService {
 	@Override
 	public boolean getUserLotter(Map<String, Object> map) {
 		// TODO Auto-generated method stub
+		LOG.error("ChezuAppHystric  getUserLotter挂了");
 		return false;
 	}
 	 
