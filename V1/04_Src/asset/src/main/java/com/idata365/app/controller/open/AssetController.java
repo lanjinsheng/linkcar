@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,8 +87,8 @@ public class AssetController extends BaseController{
 	    * @throws
 	    * @author LanYeYe
 	 */
-    @RequestMapping(value = "/addPowerUsersTask",method = RequestMethod.POST)
-    boolean addPowerUsersTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign,AssetUsersPowerLogs assetUsersPowerLogs) {
+    @RequestMapping(value = "/asset/addPowerUsersTask",method = RequestMethod.POST)
+    boolean addPowerUsersTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign, @RequestBody AssetUsersPowerLogs assetUsersPowerLogs) {
     	LOG.info("PARAM:"+jsonValue+"===sign:"+sign);
 		LOG.info("校验逻辑待处理·~~~sign:"+SignUtils.encryptHMAC(jsonValue));
 		return assetService.addUserPowers(assetUsersPowerLogs);
@@ -104,8 +105,8 @@ public class AssetController extends BaseController{
 	    * @throws
 	    * @author LanYeYe
 	 */
-    @RequestMapping(value = "/addPowerFamilyTask",method = RequestMethod.POST)
-    boolean addPowerFamilyTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign,AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
+    @RequestMapping(value = "/asset/addPowerFamilyTask",method = RequestMethod.POST)
+    boolean addPowerFamilyTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign, @RequestBody AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
     	LOG.info("PARAM:"+jsonValue+"===sign:"+sign);
 		LOG.info("校验逻辑待处理·~~~sign:"+SignUtils.encryptHMAC(jsonValue));
 		return assetService.addFamiliesPowers(assetFamiliesPowerLogs);
