@@ -6,7 +6,7 @@
  
      <update id="updatePowerAdd"   parameterType="com.idata365.app.entity.AssetFamiliesPowerLogs">
         update assetFamiliesAsset set powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum}) where
-           userId=#{userId} 
+           familyId=#{familyId} 
      </update>
      
 </mapper>
