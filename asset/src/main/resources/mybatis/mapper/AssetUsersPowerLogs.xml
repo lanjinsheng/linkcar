@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.AssetUsersPowerLogsMapper">
+    <resultMap id="BaseAssetUsersPowerLogsMap" type="com.idata365.app.entity.AssetUsersPowerLogs" >
+    </resultMap>
+ 
+  <update id="insertUsersPowerLogs"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+        insert into  assetUsersPowerLogs
+        (userId,powerNum,recordType,eventType,effectId,remark,createTime)
+        values(#{userId},#{powerNum},#{recordType},#{eventType},
+        #{effectId},#{remark},now())
+   </update>
+     
+</mapper>
