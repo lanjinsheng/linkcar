@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.entity.AssetFamiliesDiamondsLogs;
+import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
+import com.idata365.app.entity.AssetUsersPowerLogs;
+import com.idata365.app.enums.PowerEnum;
 import com.idata365.app.service.AssetService;
+import com.idata365.app.util.SignUtils;
 
 
 @RestController
@@ -50,7 +55,7 @@ public class AssetController extends BaseController{
 	}
 	/**
 	 * 
-	    * @Title: getUserAsset
+	    * @Title: submitDiamondAsset
 	    * @Description: TODO(diamondNum减少)
 	    * @param @param userId
 	    * @param @param diamondNum
@@ -69,4 +74,45 @@ public class AssetController extends BaseController{
 	}
 	
 
+	/**
+	 * 
+	    * @Title: addPowerUsersTask
+	    * @Description: TODO(增加个人动力值)
+	    * @param @param jsonValue
+	    * @param @param sign
+	    * @param @param assetUsersPowerLogs
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+    @RequestMapping(value = "/addPowerUsersTask",method = RequestMethod.POST)
+    boolean addPowerUsersTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign,AssetUsersPowerLogs assetUsersPowerLogs) {
+    	LOG.info("PARAM:"+jsonValue+"===sign:"+sign);
+		LOG.info("校验逻辑待处理·~~~sign:"+SignUtils.encryptHMAC(jsonValue));
+		return assetService.addUserPowers(assetUsersPowerLogs);
+    }
+	/**
+	 * 
+	    * @Title: addPowerFamilyTask
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param jsonValue
+	    * @param @param sign
+	    * @param @param assetFamiliesDiamondsLogs
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+    @RequestMapping(value = "/addPowerFamilyTask",method = RequestMethod.POST)
+    boolean addPowerFamilyTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign,AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
+    	LOG.info("PARAM:"+jsonValue+"===sign:"+sign);
+		LOG.info("校验逻辑待处理·~~~sign:"+SignUtils.encryptHMAC(jsonValue));
+		return assetService.addFamiliesPowers(assetFamiliesPowerLogs);
+    }
+    
+    
+    public static void main(String []args) {
+    	System.out.println("Share".equals(PowerEnum.Share));
+    }
 }
