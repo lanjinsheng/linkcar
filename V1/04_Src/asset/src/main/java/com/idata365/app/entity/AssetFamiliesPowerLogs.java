@@ -1,27 +1,26 @@
 package com.idata365.app.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 
-    * @ClassName: AssetUsersAsset
+    * @ClassName: AssetFamiliesPowerLogs
     * @Description: TODO(这里用一句话描述这个类的作用)
     * @author LanYeYe
     * @date 2018年4月27日
     *
  */
-public class AssetUsersDiamondsLogs implements Serializable {
+public class AssetFamiliesPowerLogs implements Serializable {
 	
-	    
+	
 	    /**
 	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 	    */
-	private static final long serialVersionUID = 6760116933465753578L;
+	private static final long serialVersionUID = -8714316704136613787L;
 	private Long id;
-	private Long userId;
-	private BigDecimal diamondsNum;
+	private Long familyId;
+	private Long powerNum;
 	private Integer recordType;
 	private Integer eventType;
 	private Long effectId;
@@ -33,17 +32,18 @@ public class AssetUsersDiamondsLogs implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getUserId() {
-		return userId;
+	 
+	public Long getFamilyId() {
+		return familyId;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setFamilyId(Long familyId) {
+		this.familyId = familyId;
 	}
-	public BigDecimal getDiamondsNum() {
-		return diamondsNum;
+	public Long getPowerNum() {
+		return powerNum;
 	}
-	public void setDiamondsNum(BigDecimal diamondsNum) {
-		this.diamondsNum = diamondsNum;
+	public void setPowerNum(Long powerNum) {
+		this.powerNum = powerNum;
 	}
 	public Integer getRecordType() {
 		return recordType;
@@ -75,7 +75,6 @@ public class AssetUsersDiamondsLogs implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
-	
+	 
 	
 }
