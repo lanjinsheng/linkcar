@@ -8,8 +8,8 @@
        FROM  assetUsersAsset where userId=#{userId}
      </select>
       <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
-        update assetUsersAsset set hadDiamondsNum=(hadDiamondsNum-${diamondsNum}) where
-           <![CDATA[ hadDiamondsNum>=${diamondsNum} and userId=#{userId}]]>
+        update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}) where
+           <![CDATA[ diamondsNum>=${diamondsNum} and userId=#{userId}]]>
      </update>
      
 </mapper>
