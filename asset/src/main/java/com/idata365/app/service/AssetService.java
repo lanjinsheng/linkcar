@@ -38,6 +38,8 @@ public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
 	public final static int EventType_Buy = 3;//购买
 	public final static int EventType_Power_Index_Get = 2;//首页拾取
+	public final static int EventType_Power_Trip = 4;//行程
+	
 	public final static int RecordType_2 = 2;// 减少
 	public final static int RecordType_1 = 2;// 增加
 	@Autowired
@@ -182,5 +184,25 @@ public class AssetService extends BaseService<AssetService> {
 		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 		assetFamiliesAssetMapper.updatePowerAdd(assetFamiliesPowerLogs);
 		return true;
+	}
+	
+	/**
+	 * 
+	    * @Title: getUserPowerByEffectId
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param effectId
+	    * @param @return    参数
+	    * @return String    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public String getUserPowerByEffectId(long effectId) {
+		AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
+		assetUsersPowerLogs.setEffectId(effectId);
+		assetUsersPowerLogs.setEventType(EventType_Power_Trip);
+		AssetUsersPowerLogs apl=assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
+		if(apl==null) return "0";
+		return String.valueOf(apl.getPowerNum());
 	}
 }

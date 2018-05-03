@@ -132,7 +132,26 @@ public class AssetController extends BaseController {
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
 		return assetService.addFamiliesPowers(assetFamiliesPowerLogs);
 	}
+/**
+ * 
+    * @Title: getUserPowerByEffectId
+    * @Description: TODO(这里用一句话描述这个方法的作用)
+    * @param @param effectId
+    * @param @param sign
+    * @param @return    参数
+    * @return String    返回类型
+    * @throws
+    * @author LanYeYe
+ */
+	@RequestMapping(value = "/asset/getUserPowerByEffectId", method = RequestMethod.POST)
+	String getUserPowerByEffectId(@RequestParam(value = "effectId") long effectId,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("effectId:" + effectId + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(effectId)));
+		return assetService.getUserPowerByEffectId(effectId);
+	}
 
+	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
 	}
