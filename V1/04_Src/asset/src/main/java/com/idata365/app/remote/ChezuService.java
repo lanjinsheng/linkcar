@@ -54,7 +54,7 @@ public interface ChezuService {
 	    * @param @return    参数
 	    * @return Map<String,Object>    返回类型
 	    * Map.put("nickNames":"张三,lisi,无误")
-	    * Map.put("headUrl":"url1,url2,url3")
+	    * Map.put("userHeadUrls":"url1,url2,url3")
 	    * @throws
 	    * @author LanYeYe
 	 */
