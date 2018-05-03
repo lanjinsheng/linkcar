@@ -51,7 +51,6 @@ public class WebControllerSecurityAop {
 		HttpServletRequest request = (HttpServletRequest) requestAttributes
 				.resolveReference(RequestAttributes.REFERENCE_REQUEST);
 		String token = request.getHeader("token");
-		token = "415abae615f44acfb8af0c45715722f4";
 		LOG.info("拦截到了" + proceedingJoinPoint.getSignature().getName() + "方法...");
 
 		// try {//obj之前可以写目标方法执行前的逻辑
