@@ -20,10 +20,19 @@ public class ChezuHystric implements ChezuService {
 	}
 
 	@Override
-	public Map<String, Object> getFamilyInfo(String userId) {
-		// TODO Auto-generated method stub
-		LOG.info("getFamilyInfo 挂了  service-account-chezu");
+	public Map<String, Object> getFamiliesInfoByUserId(long userId, long sign) {
+		// err Auto-generated method stub
+		LOG.error(" getFamiliesInfoByUserId 挂了  service-account-chezu");
 		return null;
 	}
+
+	@Override
+	public Map<String, Object> getUsersInfoByIds(String userIds, long sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" getUsersInfoByIds 挂了  service-account-chezu");
+		return null;
+	}
+
+ 
 
 }
