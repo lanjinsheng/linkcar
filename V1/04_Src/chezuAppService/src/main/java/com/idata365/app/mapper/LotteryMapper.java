@@ -1,6 +1,9 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
@@ -41,4 +44,8 @@ public interface LotteryMapper
 	public void saveLotteryLog(LotteryLogInfoParamBean bean);
 	
 	public int reduceLotteryCount(LotteryBean bean);
+    //v1.1增加 行程道具的获取与接收
+	 Map<String,Object> getChest(Map<String,Object> map);
+	 public int recChest(@Param("id") Long id);
+	 
 }

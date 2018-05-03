@@ -372,6 +372,7 @@ public class GameController extends BaseController
 	public Map<String, Object> switchRole(@RequestBody UserFamilyRoleLogParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
+		bean.setUserId(this.getUserId());
 		SwitchRoleResultBean resultBean = this.gameService.switchRole(bean);
 		return ResultUtils.rtSuccess(resultBean);
 	}

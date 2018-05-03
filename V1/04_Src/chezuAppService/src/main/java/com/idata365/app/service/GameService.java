@@ -1008,56 +1008,58 @@ public class GameService extends BaseService<GameService>
 	{
 		SwitchRoleResultBean resultBean = new SwitchRoleResultBean();
 		
-		int role = bean.getRole();
+//		int role = bean.getRole();
 		
-		DriverVehicleResultBean driveEditResultBean = this.gameMapper.queryDriveEditStatus(bean);
-		DriverVehicleResultBean travelEditResultBean = this.gameMapper.queryTravelEditStatus(bean);
+//		DriverVehicleResultBean driveEditResultBean = this.gameMapper.queryDriveEditStatus(bean);
+//		DriverVehicleResultBean travelEditResultBean = this.gameMapper.queryTravelEditStatus(bean);
 		
 		bean.setDaystamp(getTomorrowDateUndelimiterStr());
-		if (RoleConstant.JIANBING_ROLE != role)
-		{
-			//
-			if (null == driveEditResultBean
-					|| null == travelEditResultBean
-					|| 0 != driveEditResultBean.getIsDrivingEdit()
-					|| 0 != travelEditResultBean.getIsTravelEdit())
+//		if (RoleConstant.JIANBING_ROLE != role)
+//		{
+//			//
+//			if (null == driveEditResultBean
+//					|| null == travelEditResultBean
+//					|| 0 != driveEditResultBean.getIsDrivingEdit()
+//					|| 0 != travelEditResultBean.getIsTravelEdit())
+//			{
+//				//角色试用次数
+//				int exceptTomorrowCount = this.gameMapper.countExceptTomorrowRole(bean);
+//				if (exceptTomorrowCount > 0)
+//				{
+//					//试用完毕
+//					resultBean.setTryFlag("0");
+//					resultBean.setMsg(ROLE_UN_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
+//					return resultBean;
+//				}
+//				else
+//				{
+//					//提示：可试用一次，返回
+//					resultBean.setTryFlag("1");
+//					resultBean.setMsg(ROLE_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
+//					return resultBean;
+//				}
+//			}
+//		}
+		List<Map<String,Object>> list=this.familyMapper.getFamilyByUserId(bean.getUserId());
+		for(Map<String,Object> m:list) {
+			bean.setFamilyId(Long.valueOf(m.get("familyId").toString()));
+		    //正常切换角色
+			int roleCount = this.gameMapper.countTomorrowRole(bean);
+			if (roleCount > 0)
 			{
-				//角色试用次数
-				int exceptTomorrowCount = this.gameMapper.countExceptTomorrowRole(bean);
-				if (exceptTomorrowCount > 0)
-				{
-					//试用完毕
-					resultBean.setTryFlag("0");
-					resultBean.setMsg(ROLE_UN_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
-					return resultBean;
-				}
-				else
-				{
-					//提示：可试用一次，返回
-					resultBean.setTryFlag("1");
-					resultBean.setMsg(ROLE_SEL_MSG.replace("ROLE_HOLD", getRoleDesc(role)));
-					return resultBean;
-				}
+				this.gameMapper.updateUserFamilyRole(bean);
+			}
+			else
+			{
+				String tomorrowDateStr = getTomorrowDateStr();
+				String startTime = tomorrowDateStr + " 00:00:00";
+				String endTime = tomorrowDateStr + " 23:59:59";
+				bean.setStartTime(startTime);
+				bean.setEndTime(endTime);
+				
+				this.gameMapper.saveUserFamilyRole(bean);
 			}
 		}
-		
-		//正常切换角色
-		int roleCount = this.gameMapper.countTomorrowRole(bean);
-		if (roleCount > 0)
-		{
-			this.gameMapper.updateUserFamilyRole(bean);
-		}
-		else
-		{
-			String tomorrowDateStr = getTomorrowDateStr();
-			String startTime = tomorrowDateStr + " 00:00:00";
-			String endTime = tomorrowDateStr + " 23:59:59";
-			bean.setStartTime(startTime);
-			bean.setEndTime(endTime);
-			
-			this.gameMapper.saveUserFamilyRole(bean);
-		}
-		
 		resultBean.setTryFlag("-1");
 		return resultBean;
 	}

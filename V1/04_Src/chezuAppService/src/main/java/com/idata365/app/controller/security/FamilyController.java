@@ -29,9 +29,11 @@ import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
+import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BusinessDatasService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.util.ResultUtils;
+import com.idata365.app.util.SignUtils;
 
 @RestController
 public class FamilyController extends BaseController
@@ -42,6 +44,9 @@ public class FamilyController extends BaseController
 	BusinessDatasService businessDatasService;
 	@Autowired
 	SystemProperties systemProperties;
+	@Autowired
+	ChezuAssetService chezuAssetService;
+	
 	@RequestMapping("/family/removeMember")
 	public Map<String, Object> removeMember(@RequestBody FamilyParamBean reqBean)
 	{
@@ -182,7 +187,8 @@ public class FamilyController extends BaseController
 		{
 			return ResultUtils.rtFailVerification(null);
 		}
-		
+		//家族资产初始化
+		chezuAssetService.initFamilyCreate(familyId, SignUtils.encryptHMAC(String.valueOf(familyId)));
 		Map<String, Long> resultMap = new HashMap<>();
 		resultMap.put("familyId", familyId);
 		List<Map<String, Long>> resultList = new ArrayList<>();

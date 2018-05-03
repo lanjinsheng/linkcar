@@ -24,6 +24,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
+import com.idata365.app.entity.UserConfig;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
@@ -178,7 +179,8 @@ public class UserInfoController extends BaseController{
 		  String imgBase=getImgBasePath();
 		  Map<String,String> rtMap=new HashMap<String,String>();
 		  UserInfo userInfo=this.getUserInfo();
-		  
+		  LicenseDriver licenseDrive=userInfoService.getLicenseDriver(userInfo.getId());
+		  LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(userInfo.getId());
 		  String phone = userInfo.getPhone();
 		  rtMap.put("phone", phone);
 		  
@@ -193,6 +195,13 @@ public class UserInfoController extends BaseController{
 		  }
 		  
 		  rtMap.put("headImg", imgBase+userInfo.getImgUrl());
+		  if(licenseDrive!=null && licenseVehicleTravel!=null && licenseDrive.getIsDrivingEdit()==0 && licenseVehicleTravel.getIsTravelEdit()==0) {
+			  //证件上传即认证
+			  rtMap.put("isAuthenticated", "1");
+		  }else {
+			  rtMap.put("isAuthenticated", "0"); 
+		  }
+		  
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
 	    @RequestMapping(value = "/user/uploadHeadImg",method = RequestMethod.POST)
@@ -598,5 +607,46 @@ public class UserInfoController extends BaseController{
 //              ImageUtils.dealImgJSZ(dealFile,rtMap);
               ImageUtils.dealImgJSZ(dealFile,rtMap);
               System.out.println(rtMap.size());
+	  }
+	  /**
+	   * 
+	      * @Title: gpsHidden
+	      * @Description: TODO(Gps设置隐藏)
+	      * @param @param allRequestParams
+	      * @param @param requestBodyParams
+	      * @param @return    参数
+	      * @return Map<String,Object>    返回类型
+	      * @throws
+	      * @author LanYeYe
+	   */
+	  @RequestMapping("/user/gpsHidden")
+	  public  Map<String,Object>  gpsHidden(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
+		  String gpsHidden=String.valueOf(requestBodyParams.get("gpsHidden"));
+		  userInfoService.updateUserConfig(gpsHidden, this.getUserId());
+		  return ResultUtils.rtSuccess(null);
+	  }
+	  /**
+	   * 
+	      * @Title: getUserConfig
+	      * @Description: TODO(用户配置获取)
+	      * @param @param allRequestParams
+	      * @param @param requestBodyParams
+	      * @param @return    参数
+	      * @return Map<String,Object>    返回类型
+	      * @throws
+	      * @author LanYeYe
+	   */
+	  @RequestMapping("/user/getUserConfig")
+	  public  Map<String,Object>  getUserConfig(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
+		  UserConfig userConfig=userInfoService.getUserConfig(this.getUserId());
+		  String gpsHidden="0";
+		  if(userConfig==null) {
+			  gpsHidden="1";
+		  }else {
+			  gpsHidden=String.valueOf(userConfig.getIsHidden());
+		  }
+		  Map<String,Object> rtMap=new HashMap<String,Object>();
+		  rtMap.put("gpsHidden", gpsHidden);
+		  return ResultUtils.rtSuccess(rtMap);
 	  }
 }

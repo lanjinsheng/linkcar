@@ -10,13 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.bean.UserInfo;
 
 abstract  class BaseController {
-	
+	@Autowired
+	private SystemProperties systemProperties;
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 	
 	protected UserInfo getUserInfo() {
@@ -32,16 +35,12 @@ abstract  class BaseController {
 		   return userInfo.getId();
 	}
 	protected String getImgBasePath() {
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-	   	  return "http://"+request.getServerName()+":"+request.getServerPort()+"/userFiles/getImgs?key=";
+	   	  return systemProperties.getAppHost()+"userFiles/getImgs?key=";
        
 	  }
 	
 	protected String getFamilyInviteBasePath() {
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/share/goInvite?key=";
+	   	     return systemProperties.getAppHost()+"share/goInvite?key=";
 
 	  }
 	protected String getFamilyInviteBasePath(String host) {
