@@ -14,4 +14,6 @@ public interface AssetUsersAssetMapper {
 
     int updateDiamondsConsume(Map<String,Object> datas);
     int updatePowerAdd(AssetUsersPowerLogs assetUsersPowerLogs);
+    
+    int initUser(AssetUsersAsset assetUsersAsset);
 }

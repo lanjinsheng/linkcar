@@ -152,6 +152,23 @@ public class AssetController extends BaseController {
 	}
 
 	
+	@RequestMapping(value = "/asset/initUserCreate", method = RequestMethod.POST)
+	boolean initUserCreate(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("effectId:" + userId + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(userId)));
+		assetService.initUser(userId);
+		 return true;
+	}
+	@RequestMapping(value = "/asset/initFamilyCreate", method = RequestMethod.POST)
+	boolean initFamilyCreate(@RequestParam(value = "familyId") long familyId,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("effectId:" + familyId + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(familyId)));
+		assetService.initFamily(familyId);
+		 return true;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
 	}
