@@ -23,7 +23,7 @@ import com.idata365.app.util.SignUtils;
 
 @RestController
 public class AssetController extends BaseController {
-	protected static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
+	protected static final Logger LOG = LoggerFactory.getLogger(AssetController.class);
 	@Autowired
 	AssetService assetService;
 

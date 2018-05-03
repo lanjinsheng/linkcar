@@ -36,7 +36,8 @@ import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
 @Service
 public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
-	public final static int EventType_Buy = 3;
+	public final static int EventType_Buy = 3;//购买
+	public final static int EventType_Power_Index_Get = 2;//首页拾取
 	public final static int RecordType_2 = 2;// 减少
 	public final static int RecordType_1 = 2;// 增加
 	@Autowired
