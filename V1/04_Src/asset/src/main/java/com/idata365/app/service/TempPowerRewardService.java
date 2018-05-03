@@ -59,7 +59,7 @@ public class TempPowerRewardService extends BaseService<TempPowerRewardService> 
 
 	 
 	private List<TempPowerReward> randReward(long userId){
-		List<TempPowerReward> list=new ArrayList();
+		List<TempPowerReward> list=new ArrayList<TempPowerReward>();
 		int n=1;
 		for(int i=0;i<9;i++) {
 			TempPowerReward p=new TempPowerReward();
