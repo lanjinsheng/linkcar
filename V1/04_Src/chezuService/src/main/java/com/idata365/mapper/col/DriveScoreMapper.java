@@ -8,6 +8,7 @@ public interface DriveScoreMapper {
 
 	void insertScore(DriveScore driveScore);
 	List<DriveScore> getDriveScoreByUH(DriveScore driveScore);
+	List<DriveScore> getDriveScoreByUHF(DriveScore driveScore);
 	void insertScoreList(List<DriveScore> list);
 	
 	List<DriveScore> getDriveScoreByUR(DriveScore driveScore);

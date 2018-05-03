@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DriveScore;
-import com.idata365.entity.TaskAchieveAddValue;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
-import com.idata365.enums.AchieveEnum;
+import com.idata365.mapper.app.FamilyInfoMapper;
 import com.idata365.mapper.app.TaskAchieveAddValueMapper;
 import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
@@ -28,6 +27,8 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 	DriveScoreMapper driveScoreMapper;
 	@Autowired
 	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
+	@Autowired
+	FamilyInfoMapper familyInfoMapper;
 	@Transactional
 	public boolean calScoreUserDay(UserScoreDayStat userScoreDayStat) {
 		DriveScore driveScore=new DriveScore();
@@ -175,6 +176,10 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		}else {
 			userScoreDayStat.setScore(endScore);
 		}
+		//计算完分数,进行家族行程热度增加
+//		long familyId=userRoleLog.getFamilyId();
+//		familyInfoMapper.updateFamilyDriveFlag(familyId);
+//		familyInfoMapper.updateFamilyActiveLevel(familyId);
 		return true;
 	}
 //	public boolean addAchieve(long keyId,Double value,AchieveEnum type) {

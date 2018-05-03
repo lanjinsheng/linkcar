@@ -57,10 +57,17 @@ public interface TaskSystemScoreFlagMapper {
 	 //家族类型
 	 List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEndList();
 	 int  finishFamilyLevelDayEndTask(TaskSystemScoreFlag systemScoreFlag);
-	 
-	 
+
 	 
 	 //用户按日违规统计
 	 List<TaskSystemScoreFlag> getUnFinishUserBestDriveDayEndList();
 	 int  finishUserBestDriveDayEndTask(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 
+	 //家族pk匹配处理
+	 List<TaskSystemScoreFlag> getUnInitPkRelationList(); 
+	 int  updatePkRelationInit(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 List<TaskSystemScoreFlag> getUnFinishPKRelationList();
+	 int  finishPKRelation(TaskSystemScoreFlag systemScoreFlag);
 }

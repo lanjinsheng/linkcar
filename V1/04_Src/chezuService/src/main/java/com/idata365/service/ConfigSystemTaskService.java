@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.config.SystemProperties;
 import com.idata365.entity.DicGameDay;
 import com.idata365.entity.TaskFamilyMonthAvgOrder;
-import com.idata365.entity.TaskGameEnd;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
 import com.idata365.mapper.app.TaskFamilyMonthAvgOrderMapper;
@@ -25,8 +24,10 @@ import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
 import com.idata365.mapper.app.DicGameDayMapper;
 import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
+import com.idata365.mapper.app.TaskFamilyPkRelationMapper;
 import com.idata365.mapper.app.TaskGameEndMapper;
 import com.idata365.mapper.app.TaskSystemScoreFlagMapper;
+import com.idata365.util.DateTools;
 @Service
 public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskService>{
 	private static final Logger LOG = LoggerFactory.getLogger(ConfigSystemTaskService.class);
@@ -47,6 +48,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	DicGameDayMapper   dicGameDayMapper;
 	@Autowired
 	TaskGameEndMapper taskGameEndMapper;
+	@Autowired
+	TaskFamilyPkRelationMapper taskFamilyPkRelationMapper;
 	@Autowired
 	SystemProperties systemProperties;
 	public String getDateStr(int diff)
@@ -76,7 +79,7 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		taskSystemScoreFlag.setDaystamp(dayStamp);
 		taskSystemScoreFlag.setStartDay(gameDay.getStartDay());
 		taskSystemScoreFlag.setEndDay(gameDay.getEndDay());
-		int insert=taskSystemScoreFlagMapper.insertSystemScoreFlag(taskSystemScoreFlag);
+		taskSystemScoreFlagMapper.insertSystemScoreFlag(taskSystemScoreFlag);
 		
 		List<TaskSystemScoreFlag> tasks=taskSystemScoreFlagMapper.getUnInitSystemScoreFlagList();
 		for (TaskSystemScoreFlag task:tasks) {
@@ -115,6 +118,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			task.setTaskFamilyOrderInit(1);
 			taskSystemScoreFlagMapper.updateOrderInit(task);
 		}
+
+		
 		//game End
 		List<TaskSystemScoreFlag> tasks4=taskSystemScoreFlagMapper.getUnInitGameEndList();
 		for (TaskSystemScoreFlag task:tasks4) {
@@ -127,7 +132,29 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			task.setTaskGameEndInit(1);
 			taskSystemScoreFlagMapper.updateGameEndInit(task);
 		}
-	   //game End	 
+		  //game End	
+		
+		//初始化pk任務
+		List<TaskSystemScoreFlag> task5=taskSystemScoreFlagMapper.getUnInitPkRelationList();
+		for(TaskSystemScoreFlag task:task5) {
+			Long t1=DateTools.getDateTimeOfLong(task.getDaystamp()+" 23:59:59");
+			Long t2=System.currentTimeMillis();
+			if(t2>t1 && (t2-t1)<82800000) {//時間到了,未超過一天，立馬促發
+//				String taskDay=task.getDaystamp();
+//				String nowDay=getDateStr(0);
+//				task.setDaystamp(nowDay);
+				taskFamilyPkRelationMapper.initTaskFamilyPkRelation(task);
+				taskFamilyPkRelationMapper.updateFamilyInfoMatchKey();
+				task.setInitPkRelation(1);
+//				task.setDaystamp(taskDay);
+				taskSystemScoreFlagMapper.updatePkRelationInit(task);
+			
+			}else {
+				
+			}
+			
+		}
+	  
 	}
 	
 	@Transactional
@@ -204,20 +231,34 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	
 	
 	
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEnd(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyLevelDayEndList();
 	}
+	@Transactional
 	public void finishFamilyLevelDayEndTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyLevelDayEnd(1);
 		taskSystemScoreFlagMapper.finishFamilyLevelDayEndTask(task);
 	}
-	
+	@Transactional
 	public List<TaskSystemScoreFlag> getUnFinishUserBestDriveDayEnd(){
 		return taskSystemScoreFlagMapper.getUnFinishUserBestDriveDayEndList();
 	}
+	@Transactional
 	public void finishUserBestDriveDayEndTask(TaskSystemScoreFlag task) {
 		task.setTaskUserBestDriveDayEnd(1);
 		taskSystemScoreFlagMapper.finishUserBestDriveDayEndTask(task);
 	}
+	
+	/** 处理PK关联数据**/
+	@Transactional
+	public List<TaskSystemScoreFlag> getUnFinishPKRelation(){
+		return taskSystemScoreFlagMapper.getUnFinishPKRelationList();
+	}
+	@Transactional
+	public void finishPKRelation(TaskSystemScoreFlag task) {
+		task.setPkRelation(1);
+		taskSystemScoreFlagMapper.finishPKRelation(task);
+	}
+	
 }
