@@ -15,14 +15,17 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
+import com.idata365.app.entity.UserConfig;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.LicenseDriverMapper;
 import com.idata365.app.mapper.LicenseVehicleTravelMapper;
+import com.idata365.app.mapper.UserConfigMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.common.AchieveCommService;
 
@@ -32,6 +35,8 @@ import com.idata365.app.service.common.AchieveCommService;
 public class UserInfoService extends BaseService<UserInfoService>{
 	private final static Logger LOG = LoggerFactory.getLogger(UserInfoService.class);
 	@Autowired
+	UserConfigMapper userConfigMapper;
+	@Autowired
 	 UsersAccountMapper usersAccountMapper;
 	@Autowired
 	LicenseVehicleTravelMapper licenseVehicleTravelMapper;
@@ -39,7 +44,7 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	LicenseDriverMapper licenseDriverMapper;
 	@Autowired
 	AchieveCommService achieveCommService;
-	
+
 	public UserInfoService() {
 	}
 	 
@@ -231,5 +236,35 @@ public class UserInfoService extends BaseService<UserInfoService>{
 		 account.put("newPwd", newPwd);
 		usersAccountMapper.updatePwdByUserIdAndOldPwd(account);
  
+	}
+	/**
+	 * 
+	    * @Title: updateUserConfig
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param gpsHidden
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public boolean updateUserConfig(String gpsHidden,long userId) {
+		UserConfig userConfig=new UserConfig();
+		userConfig.setIsHidden(Integer.valueOf(gpsHidden));
+		userConfig.setUserId(userId);
+		userConfigMapper.updateUserConfig(userConfig);
+		return true;
+	}
+	/**
+	 * 
+	    * @Title: getUserConfig
+	    * @Description: TODO(获取用户配置)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return UserConfig    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public UserConfig getUserConfig(long userId) {
+		 return userConfigMapper.getUserConfigById(userId);
 	}
 }

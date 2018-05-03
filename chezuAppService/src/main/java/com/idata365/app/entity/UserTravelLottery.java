@@ -14,6 +14,14 @@ public class UserTravelLottery implements Serializable {
 	private Integer awardId;
 	private Integer awardCount;
 	private Integer hadGet;
+	private Long createMilTimes;
+	
+	public Long getCreateMilTimes() {
+		return createMilTimes;
+	}
+	public void setCreateMilTimes(Long createMilTimes) {
+		this.createMilTimes = createMilTimes;
+	}
 	public Long getId() {
 		return id;
 	}

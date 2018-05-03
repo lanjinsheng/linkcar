@@ -16,8 +16,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.constant.SystemConstant;
+import com.idata365.app.entity.LicenseDriver;
+import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.service.LoginRegService;
+import com.idata365.app.service.UserInfoService;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.ValidTools;
@@ -30,6 +34,8 @@ public class UserController extends BaseController{
 	private LoginRegService loginRegService;
 	@Autowired
 	private SystemProperties systemProperties;
+	@Autowired
+	private UserInfoService userInfoService;
 	public UserController() {
 		System.out.println("UserController");
 	}
@@ -83,6 +89,17 @@ public class UserController extends BaseController{
     			token=UUID.randomUUID().toString().replaceAll("-", "");
     			loginRegService.insertToken(account.getId(),token);
     			rtMap.put("userId", account.getId());
+    			rtMap.put("nickName", account.getNickName()==null?PhoneUtils.hidePhone(phone): account.getNickName());
+    			rtMap.put("headImg", this.getImgBasePath()+account.getImgUrl());
+    			LicenseDriver licenseDrive=userInfoService.getLicenseDriver(account.getId());
+    			LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(account.getId());
+    			 if(licenseDrive!=null && licenseVehicleTravel!=null && licenseDrive.getIsDrivingEdit()==0 && licenseVehicleTravel.getIsTravelEdit()==0) {
+    				  //证件上传即认证
+    				  rtMap.put("isAuthenticated", "1");
+    			  }else {
+    				  rtMap.put("isAuthenticated", "0"); 
+    			  }
+    			
     		}else {
     			
     		}
@@ -169,6 +186,9 @@ public class UserController extends BaseController{
     		return ResultUtils.rtFailRequest(null);
     	}
     	rtMap.put("token", token);
+    	rtMap.put("nickName", PhoneUtils.hidePhone(phone));
+    	rtMap.put("headImg", "");
+    	rtMap.put("isAuthenticated", "0");
     	return ResultUtils.rtSuccess(rtMap);
     }
     

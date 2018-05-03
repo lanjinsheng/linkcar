@@ -215,7 +215,44 @@ public class LotteryService extends BaseService<LotteryService>
 			
 		}
 	}
-	
+	@Transactional
+	public boolean recChest(String id,long pUserId)
+	{
+		UserTravelLottery bean=new UserTravelLottery();
+		bean.setUserId(Long.valueOf(id));
+		bean.setUserId(pUserId);
+		int receiveCount = userTravelLotteryMapper.recievedUserTravelLottery(bean);
+		if (receiveCount > 0)
+		{
+			UserTravelLottery travelLotteryResultBean = this.userTravelLotteryMapper.queryTravelLottery(bean);
+			Long userId = travelLotteryResultBean.getUserId();
+			Integer awardId = travelLotteryResultBean.getAwardId();
+			Integer awardCount = travelLotteryResultBean.getAwardCount();
+			
+			//标记新手指导标记位
+			FamilyParamBean taskParamBean = new FamilyParamBean();
+			taskParamBean.setUserId(userId);
+			this.familyMapper.updateTaskFlag(taskParamBean);
+			
+			LotteryBean tempParamBean = new LotteryBean();
+			tempParamBean.setUserId(userId);
+			tempParamBean.setAwardId(awardId);
+			tempParamBean.setAwardCount(awardCount);
+			
+			this.lotteryMapper.saveOrUpdate(tempParamBean);
+			
+			LotteryLogInfoParamBean lotteryLogParamBean = new LotteryLogInfoParamBean();
+			lotteryLogParamBean.setUserId(userId);
+			lotteryLogParamBean.setAwardId(awardId);
+			lotteryLogParamBean.setAwardCount(awardCount);
+			lotteryLogParamBean.setType(LotteryLogConstant.DRIVE_LOG);
+			lotteryLogParamBean.setTimestamp(getCurrentTs());
+			this.lotteryMapper.saveLotteryLog(lotteryLogParamBean);
+			achieveCommService.addAchieve(userId, Double.valueOf(receiveCount), AchieveEnum.AddCollectTimes);
+			
+		}
+		return true;
+	}
 	private String getCurrentTs()
 	{
 		Calendar cal = Calendar.getInstance();
@@ -419,4 +456,26 @@ public class LotteryService extends BaseService<LotteryService>
 		
 		this.lotteryMigrateInfoMsgMapper.updateStatus(bean);
 	}
+	
+	/**
+	 * 
+	    * @Title: getChest
+	    * @Description: TODO(獲取道具)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public Map<String,Object> getChest(long userId)
+	{
+		Map<String,Object> parmMap=new HashMap<String,Object>();
+		parmMap.put("userId", userId);
+		parmMap.put("createMilTimes", System.currentTimeMillis()-(7*24*3600*1000));
+		return this.lotteryMapper.getChest(parmMap);
+		
+	}
+	
+	 
 }

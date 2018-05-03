@@ -37,9 +37,11 @@ import com.idata365.app.mapper.UserLoginSessionMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.mapper.VerifyCodeMapper;
 import com.idata365.app.partnerApi.PhoneMsgTools;
+import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.remote.ChezuService;
 import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.SignUtils;
 
 @Service
 public class LoginRegService extends BaseService<LoginRegService>
@@ -55,6 +57,8 @@ public class LoginRegService extends BaseService<LoginRegService>
 	UserDeviceLogsMapper userDeviceLogsMapper;
 	@Autowired
 	ChezuService chezuService;
+	@Autowired
+	ChezuAssetService chezuAssetService;
 	@Autowired
 	FamilyInviteMapper familyInviteMapper;
 	@Autowired
@@ -190,6 +194,8 @@ public class LoginRegService extends BaseService<LoginRegService>
 			}
 		}
 		pAccount.setId(dbAccount.getId());
+		pAccount.setImgUrl(dbAccount.getImgUrl());
+		pAccount.setNickName(dbAccount.getNickName());
 		return OK;
 	}
 
@@ -278,6 +284,9 @@ public class LoginRegService extends BaseService<LoginRegService>
 			rtMap.put("userId", account.getId());
 			try
 			{
+				//初始化账号
+				chezuAssetService.initUserCreate(account.getId(), SignUtils.encryptHMAC(String.valueOf(account.getId())));
+				
 				// 进行家族绑定的检索，如果存在家族邀请，则发送申请消息
 				List<FamilyInvite> list = familyInviteMapper.getFamilyInviteByPhone(phone);
 				for (FamilyInvite invite : list)

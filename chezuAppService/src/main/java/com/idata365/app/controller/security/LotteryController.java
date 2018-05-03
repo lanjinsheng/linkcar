@@ -1,5 +1,7 @@
 package com.idata365.app.controller.security;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -142,5 +145,30 @@ public class LotteryController extends BaseController
 		return ResultUtils.rtSuccess(null);
 	}
 	
+	/**
+	 * 
+	    * @Title: getChest
+	    * @Description: TODO(v1.1获取宝箱道具)
+	    * @param @param bean
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	
+	@RequestMapping("/om/getChest")
+	public Map<String, Object> getChestgetUserConfig(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) 
+	{
+		Map<String,Object> rtMap=lotteryService.getChest(this.getUserId());
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	@RequestMapping("/om/recChest")
+	public Map<String, Object> recChest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) 
+	{
+		String id=String.valueOf(requestBodyParams.get("id"));
+		 boolean bl=lotteryService.recChest(id,this.getUserId());
+		return ResultUtils.rtSuccess(null);
+	}
 	
 }

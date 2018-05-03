@@ -20,9 +20,18 @@ public class SystemProperties {
     private  String ssoAccessKeySecret;
 	private String ssoQQ;
 	private String h5Host;
+	private String appHost;
 	private String nbcode;
 	
 	
+	public String getAppHost() {
+		return appHost;
+	}
+
+	public void setAppHost(String appHost) {
+		this.appHost = appHost;
+	}
+
 	public String getNbcode() {
 		return nbcode;
 	}

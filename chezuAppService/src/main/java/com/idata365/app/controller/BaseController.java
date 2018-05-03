@@ -1,16 +1,17 @@
 package com.idata365.app.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.idata365.app.config.SystemProperties;
 
 
 abstract  class BaseController {
-	
+	@Autowired
+	private SystemProperties systemProperties;
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
 	
 	 
@@ -19,16 +20,12 @@ abstract  class BaseController {
 
 	  }
 	protected String getRegSendMsgUrl() {
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-	   	     return "http://"+request.getServerName()+":"+request.getServerPort()+"/msg/sendRegMsg?key=";
+	   	     return systemProperties.getAppHost()+"msg/sendRegMsg?key=";
 
 	}
 	
 	protected String getImgBasePath() {
-		  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-	   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-	   	  return "http://"+request.getServerName()+":"+request.getServerPort()+"/userFiles/getImgs?key=";
+	   	 return systemProperties.getAppHost()+"userFiles/getImgs?key=";
      
 	  }
 }

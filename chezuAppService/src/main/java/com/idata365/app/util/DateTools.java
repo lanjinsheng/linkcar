@@ -14,11 +14,17 @@ public class DateTools
 	private static FastDateFormat yyMMddHHmmss = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 	private static FastDateFormat yyMMddHHmmssSSS = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
 	private static FastDateFormat yyyyMMdd = FastDateFormat.getInstance("yyyyMMdd");
+	private static FastDateFormat yyyy_MM_dd= FastDateFormat.getInstance("yyyy-MM-dd");
 	
 	public static String getYYYYMMDD() {
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
 	}
+	
+	public static String getYYYY_MM_DD() {
+		  String 	customDate = yyyy_MM_dd.format(new Date());
+		  return customDate;
+		}
 	public static String getCurDate()
 	{
 		String customDate = "";

@@ -1,23 +1,15 @@
 package com.idata365.app.partnerApi;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-
-import org.springframework.core.io.InputStreamResource;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.CannedAccessControlList;
-import com.aliyun.oss.model.CreateBucketRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.idata365.app.enums.UserImgsEnum;
-import com.idata365.app.util.ZipUtils;
 
 /**
  * This sample demonstrates how to get started with basic requests to Aliyun OSS 
@@ -26,12 +18,21 @@ import com.idata365.app.util.ZipUtils;
 public class SSOTools {
 	
       //内网
-//  private static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";
+//  public static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";
+	 public static String endpoint = "oss-cn-shanghai-internal.aliyuncs.com";
     //外网
-    public static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static String accessKeyId = "LTAIwwEJMzKOaDtT";
-    public static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
-    public static String bucketName_userInfo="app-users-imgs-info";
+//    public static String endpoint = "oss-cn-shanghai.aliyuncs.com";
+//    public static String accessKeyId = "LTAIwwEJMzKOaDtT";
+//    public static String accessKeyId = "LTAI7twiGyhAjuUt";
+//	 public static String accessKeyId = "LTAIZSZOEeCxVXsd";
+	 public static String accessKeyId = "LTAI7twiGyhAjuUt";
+	 
+	 
+//    public static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
+//    public static String accessKeySecret = "9PwsBRBT5YIFAoYh4QcjMYAGRjxbs1";
+    public static String accessKeySecret = "9PwsBRBT5YIFAoYh4QcjMYAGRjxbs1";
+    //    public static String bucketName_userInfo="app-users-imgs-info";
+    public static String bucketName_userInfo="users-imgs-info";
     
    // private static String bucketName = "driveDatas";
     public static String createSSOUsersImgInfoKey(long userId,UserImgsEnum type) {
@@ -49,25 +50,22 @@ public class SSOTools {
          */
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
         try {
-            /*
-             * Determine whether the bucket exists
-             */
-            if (!ossClient.doesBucketExist(bucketName_userInfo)) {
+        if (!ossClient.doesBucketExist(bucketName_userInfo)) {
                 /*
                  * Create a new OSS bucket
                  */
                 System.out.println("Creating bucket " + bucketName_userInfo + "\n");
                 ossClient.createBucket(bucketName_userInfo);
-                CreateBucketRequest createBucketRequest= new CreateBucketRequest(bucketName_userInfo);
-                createBucketRequest.setCannedACL(CannedAccessControlList.PublicRead);
-                ossClient.createBucket(createBucketRequest);
+                 System.out.println("ok,Creating bucket " + bucketName_userInfo + "\n");
             }
             /*
              * Upload an object to your bucket
              */
             ossClient.putObject(new PutObjectRequest(bucketName_userInfo,dir, is));
             
-        } finally {
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }finally {
             /*
              * Do not forget to shut down the client finally to release all allocated resources.
              */
