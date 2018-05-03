@@ -20,4 +20,10 @@
 		#{effectId},#{remark},now())
 	</update>
 
+	<select id="getDiamondsByEffectId" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersDiamondsLogs where effectId=#{effectId}
+	</select>
+
 </mapper>

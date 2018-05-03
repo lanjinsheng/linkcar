@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.FamilyGameAssetMapper">
+    <resultMap id="BaseFamilyGameAssetMap" type="com.idata365.app.entity.FamilyGameAsset" >
+    </resultMap>
+     <select id="getFamilyGameAssets" resultMap="BaseFamilyGameAssetMap" parameterType="com.idata365.app.entity.FamilyGameAsset">
+       SELECT *
+       FROM  familyGameAsset where familyId=#{familyId} and diamondsNum<![CDATA[>]]>0 order by id desc limit 10
+     </select>
+     <select id="getFamilyGameAssetsPre" resultMap="BaseFamilyGameAssetMap" parameterType="com.idata365.app.entity.FamilyGameAsset">
+       SELECT *
+       FROM  familyGameAsset where familyId=#{familyId} and id<![CDATA[<]]>#{id} and diamondsNum<![CDATA[>]]>0 order by id desc limit 10
+     </select> 
+</mapper>
