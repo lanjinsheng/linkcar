@@ -87,6 +87,6 @@ public class AccountController extends BaseController{
 	{
 		
 		LOG.info("userIds="+userIds+"===sign="+sign);
-		return accountService.getFamiliesInfoByUserId(userIds);
+		return accountService.getUsersInfoByIds(userIds,this.getImgBasePath());
 	}
 }
