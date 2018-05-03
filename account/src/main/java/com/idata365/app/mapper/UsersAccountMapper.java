@@ -23,8 +23,11 @@ public interface UsersAccountMapper {
 	 void  updatePwdByUserIdAndOldPwd(Map<String,Object> account);
 	 
 	 Map<String,Object> getFamilyByUserId(@Param("userId") Long userId);
+	 Map<String,Object> getOpponentFamilyId(Map<String,Object> map);
+	 
 	 Map<String,Object> getFamilyByFamilyId(@Param("familyId") Long familyId);
 	 Map<String,Object> getLeaderByFamilyId(@Param("familyId") Long familyId);
 	 
 	 List<Map<String,Object>> findFamilyRelation(@Param("familyId") Long familyId);
+	 
 }
