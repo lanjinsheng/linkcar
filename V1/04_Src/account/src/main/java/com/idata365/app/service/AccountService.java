@@ -47,7 +47,7 @@ public class AccountService extends BaseService<AccountService>
 	     * @author LanYeYe
 	  */
 	@Transactional
-	public Map<String,Object> getFamiliesInfoByUserId(String userIds)
+	public Map<String,Object> getUsersInfoByIds(String userIds,String getImgBasePath)
 	{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		StringBuffer userNickNames=new StringBuffer();
@@ -59,7 +59,7 @@ public class AccountService extends BaseService<AccountService>
 			if(account!=null) {
 				userNickNames.append(account.getNickName()==null?account.getPhone():account.getNickName());
 				userNickNames.append(",");
-				userHeadUrls.append(account.getImgUrl()==null?"":account.getImgUrl());
+				userHeadUrls.append(account.getImgUrl()==null?"":getImgBasePath+account.getImgUrl());
 				userHeadUrls.append(",");
 			}
 		}
