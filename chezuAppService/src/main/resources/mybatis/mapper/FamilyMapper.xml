@@ -94,7 +94,7 @@
     </select>
  	
  	<select id="queryFamilyIdByUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select familyId from userFamilyRelation where userId=#{userId}
+ 		select familyId from userFamilyRelation where userId=#{userId} limit 1
  	</select>
  	
  	<select id="countUsersByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -238,6 +238,11 @@
  	<select id="getFamilyUsers" resultType="java.util.HashMap" parameterType="java.lang.Long">
  		select * from userFamilyRelation where familyId=#{familyId}
  	</select>
+ 	
+ 	<select id="getFamilyByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+ 		select * from userFamilyRelation where userId=#{userId}
+ 	</select>
+ 	
  	
  	<select id="queryTaskFlag" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select taskFlag from usersAccount where id=#{userId}
