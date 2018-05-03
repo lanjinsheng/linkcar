@@ -78,4 +78,15 @@
 	<update id="reduceLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
 		update lottery set awardCount=awardCount-${reducedCount} where userId=#{userId} and awardId=#{awardId}
 	</update>
+	
+	
+	
+	
+	<select id="getChest" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	select id,awardId,awardCount from userTravelLottery where userId=#{userId} and createMilTimes<![CDATA[>]]>${createMilTimes} and hadGet=0 limit 1
+    </select>
+    <update id="recChest"  parameterType="java.lang.Long">
+    	update userTravelLottery set hadGet=1 where id=#{id}
+    </update>
+    
 </mapper>
