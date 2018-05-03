@@ -28,24 +28,37 @@ public interface ChezuService {
 	@RequestMapping(value = "/account/validToken", method = RequestMethod.POST)
 	UsersAccount validToken(@RequestParam(value = "token") String token);
 
+    /**
+     * 
+        * @Title: getFamiliesInfoByUserId
+        * @Description: TODO(获取家族信息)
+        * @param @param userId
+        * @param @param sign
+        * @param @return    参数
+        * @return Map<String,Object>    返回类型
+        * Map.put("familyId":"id")
+        * Map.put("familyUserCount":"number")
+	    * Map.put("fightFamilyId":"id")
+        * Map.put("fightFamilyUserCount":"number")
+        * @throws
+        * @author LanYeYe
+     */
+	@RequestMapping(value = "/account/getFamiliesInfoByUserId",method = RequestMethod.POST)
+	public Map<String,Object>  getFamiliesInfoByUserId(@RequestParam(value="userId") long userId,@RequestParam(value="sign") long sign);
 	/**
 	 * 
-	 * @Title: getFamilyInfo
-	 * @Description: TODO(根据用户ID获取家族信息，待远程接口写入)
-	 * @param @param
-	 *            userId
-	 * @param @return
-	 *            参数
-	 * @return Map<String,Object> 返回类型 
-	 * 		nikeName --- 昵称
-	 * 		familyId --- 家族ID  long
-	 * 		fightFamilyId --- 对战家族ID  long
-	 * 		familyUserCount --- 家族总人数   long
-	 * 		fightFamilyUserCount --- 对战家族总人数  long
-	 * @throws @author
-	 *             LiXing
+	    * @Title: getUsersInfoByIds
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param userIds
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * Map.put("nickNames":"张三,lisi,无误")
+	    * Map.put("headUrl":"url1,url2,url3")
+	    * @throws
+	    * @author LanYeYe
 	 */
-	@RequestMapping(value = "/account/getFamilyInfo", method = RequestMethod.POST)
-	Map<String, Object> getFamilyInfo(@RequestParam(value = "userId") String userId);
-
+	@RequestMapping(value = "/account/getUsersInfoByIds",method = RequestMethod.POST)
+	public Map<String,Object>  getUsersInfoByIds(@RequestParam(value="userIds") String userIds,@RequestParam(value="sign") long sign);
+	 
 }
