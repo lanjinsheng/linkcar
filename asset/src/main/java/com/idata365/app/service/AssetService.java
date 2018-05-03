@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
@@ -204,5 +205,41 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersPowerLogs apl=assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
 		if(apl==null) return "0";
 		return String.valueOf(apl.getPowerNum());
+	}
+	
+	/**
+	 * 
+	    * @Title: initFamily
+	    * @Description: TODO(创建家族时候调用)
+	    * @param @param familyId
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	
+	@Transactional
+	public boolean initFamily(long familyId) {
+		AssetFamiliesAsset assetFamiliesAsset=new AssetFamiliesAsset();
+		assetFamiliesAsset.setFamilyId(familyId);
+		assetFamiliesAssetMapper.initFamily(assetFamiliesAsset);
+		return true;
+	}
+	/**
+	 * 
+	    * @Title: initUser
+	    * @Description: TODO(创建用户初始化)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public boolean initUser(long userId) {
+		AssetUsersAsset assetUsersAsset=new AssetUsersAsset();
+		assetUsersAsset.setUserId(userId);
+		assetUsersAssetMapper.initUser(assetUsersAsset);
+		return true;
 	}
 }
