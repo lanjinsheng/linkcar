@@ -30,6 +30,8 @@ public class UserTravelHistory implements Serializable {
 	int tiredDriveOffset;
 	int highSpeedTimesOffset;
 	
+	String score;
+	
 	private int addDayStatFlag;
 	private String taskFlag;
 	private Date taskDealTime;
@@ -80,6 +82,12 @@ public class UserTravelHistory implements Serializable {
 	
 	
 	
+	public String getScore() {
+		return score;
+	}
+	public void setScore(String score) {
+		this.score = score;
+	}
 	public int getAddDayStatFlag() {
 		return addDayStatFlag;
 	}

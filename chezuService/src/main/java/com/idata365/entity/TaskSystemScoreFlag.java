@@ -24,7 +24,23 @@ public class TaskSystemScoreFlag implements Serializable {
 	private Integer taskFamilyLevelDayEnd;
 	private Integer taskUserBestDriveDayEnd;
 	
- 
+	private Integer pkRelation;
+	private Integer initPkRelation;
+	
+	
+	
+	public Integer getInitPkRelation() {
+		return initPkRelation;
+	}
+	public void setInitPkRelation(Integer initPkRelation) {
+		this.initPkRelation = initPkRelation;
+	}
+	public Integer getPkRelation() {
+		return pkRelation;
+	}
+	public void setPkRelation(Integer pkRelation) {
+		this.pkRelation = pkRelation;
+	}
 	public Integer getTaskUserBestDriveDayEnd() {
 		return taskUserBestDriveDayEnd;
 	}

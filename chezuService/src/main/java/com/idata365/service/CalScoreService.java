@@ -99,6 +99,22 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		return true;
 	}
 	
+	/**
+	 * 
+	    * @Title: updateTravelHistory
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param userTravelHistory
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public boolean updateTravelHistory(UserTravelHistory userTravelHistory)
+	{
+		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
+		return true;
+	}
 	@Transactional(value="colTransactionManager")
 	public List<DriveScore> getDriveScoreByUH(Long userId,Long habitId) {
 		DriveScore driveScore=new DriveScore();
@@ -108,7 +124,6 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		return dsList;
 	}
 	
-//	
 //	public void insertScore(DriveScore driveScore) {
 //		driveScoreMapper.insertScore(driveScore);
 //	}
@@ -769,6 +784,12 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		ds.setSpeedUpScore(BigDecimal.valueOf(jiaScore));
 		ds.setTiredDrivingScore(BigDecimal.valueOf(triedScore));
 		ds.setTurnScore(BigDecimal.valueOf(zhuanScore));
+		
+		BigDecimal tripScore=ds.getBrakeScore().add(ds.getDistanceScore()).add(ds.getMaxSpeedScore())
+		.add(ds.getNightDrivingScore()).add(ds.getOverSpeedScore()).add(ds.getPhonePlayScore())
+		.add(ds.getSpeedUpScore()).add(ds.getTiredDrivingScore()).add(ds.getTurnScore());
+		userTravelHistory.setScore(String.valueOf(tripScore.doubleValue()));
+		//叠加角色
 		for(UserFamilyRoleLog role:roles) {
 			DriveScore nDs=(DriveScore) ds.clone();
 			int roleId=role.getRole();
@@ -804,6 +825,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			nDs.setUserFamilyRoleLogId(role.getId());
 			driveScoreMapper.insertScore(nDs);
 			driveScoreList.add(nDs);
+			role.getFamilyId();
+			
 		}
 		if(roles==null || roles.size()==0) {
 			ds.setFamilyId(0L);
@@ -813,7 +836,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		}
 		
 		//更新travel
-		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
+		updateTravelHistory(userTravelHistory);
 		//更新道具
 		consumeLottery(loteryBeans, userId);
 		

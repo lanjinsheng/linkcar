@@ -6,12 +6,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.idata365.entity.TaskFamilyDayScore;
 import com.idata365.entity.TaskFamilyPk;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.service.CalFamilyPkService;
-import com.idata365.service.CalScoreFamilyDayService;
 import com.idata365.service.ConfigSystemTaskService;
 import com.idata365.service.TaskKeyLogService;
 
