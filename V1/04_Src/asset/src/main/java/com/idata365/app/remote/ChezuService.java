@@ -59,6 +59,6 @@ public interface ChezuService {
 	    * @author LanYeYe
 	 */
 	@RequestMapping(value = "/account/getUsersInfoByIds",method = RequestMethod.POST)
-	public Map<String,Object>  getUsersInfoByIds(@RequestParam(value="userIds") String userIds,@RequestParam(value="sign") long sign);
+	public Map<String,Object>  getUsersInfoByIds(@RequestParam(value="userIds") String userIds,@RequestParam(value="sign") String sign);
 	 
 }
