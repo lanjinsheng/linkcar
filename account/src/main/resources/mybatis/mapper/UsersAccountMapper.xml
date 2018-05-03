@@ -10,6 +10,12 @@
        SELECT *
        FROM  familyInfo where createUserId=#{userId}
      </select>
+      <select id="getOpponentFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT *
+       FROM  familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId})
+       and daystamp=#{daystamp}
+     </select> 
+     
      <select id="getFamilyByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
        FROM  familyInfo where id=#{familyId}
