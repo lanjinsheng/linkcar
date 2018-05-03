@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.idata365.app.mapper.AssetUsersDiamondsLogsMapper">
-    <resultMap id="BaseAssetUsersDiamondsLogsMap" type="com.idata365.app.entity.AssetUsersDiamondsLogs" >
+<mapper
+	namespace="com.idata365.app.mapper.AssetUsersDiamondsLogsMapper">
+	<resultMap id="BaseAssetUsersDiamondsLogsMap"
+		type="com.idata365.app.entity.AssetUsersDiamondsLogs">
+	</resultMap>
+	<resultMap id="BaseResultMap" type="com.idata365.app.entity.AssetUsersDiamondsLogs" >
     </resultMap>
- 
-  <update id="insertDiamondsConsume"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
-        insert into  assetUsersDiamondsLogs
-        (userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
-        values(#{userId},#{diamondsNum},#{recordType},#{eventType},
-        #{effectId},#{remark},now())
-   </update>
-     
+	<select id="getIndexDiamonds" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersDiamondsLogs where userId=#{userId} order by 'createTime'
+	</select>
+	<update id="insertDiamondsConsume"
+		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+		insert into assetUsersDiamondsLogs
+		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
+		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
+		#{effectId},#{remark},now())
+	</update>
+
 </mapper>
