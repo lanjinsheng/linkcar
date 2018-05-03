@@ -1,7 +1,9 @@
 package com.idata365.app.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,77 +24,112 @@ import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
- 
+
 /**
  * 
-    * @ClassName: AssetService
-    * @Description: TODO(资产处理)
-    * @author LanYeYe
-    * @date 2018年4月27日
-    *
+ * @ClassName: AssetService
+ * @Description: TODO(资产处理)
+ * @author LanYeYe
+ * @date 2018年4月27日
+ *
  */
 @Service
-public class AssetService extends BaseService<AssetService>
-{
+public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
-	public final static int EventType_Buy=3;
-	public final static int RecordType_2=2;//减少
-	public final static int RecordType_1=2;//增加
+	public final static int EventType_Buy = 3;
+	public final static int RecordType_2 = 2;// 减少
+	public final static int RecordType_1 = 2;// 增加
 	@Autowired
 	AssetUsersAssetMapper assetUsersAssetMapper;
 	@Autowired
-    AssetUsersDiamondsLogsMapper assetUsersDiamondsLogsMapper;
-	
+	AssetUsersDiamondsLogsMapper assetUsersDiamondsLogsMapper;
 	@Autowired
-    AssetUsersPowerLogsMapper assetUsersPowerLogsMapper;
-	
+	AssetUsersPowerLogsMapper assetUsersPowerLogsMapper;
 	@Autowired
-    AssetFamiliesPowerLogsMapper assetFamiliesPowerLogsMapper;
+	AssetFamiliesPowerLogsMapper assetFamiliesPowerLogsMapper;
 	@Autowired
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
-	
-	public AssetService()
-	{ 
-		
+
+	public AssetService() {
+
 	}
 
 	/**
 	 * 
-	    * @Title: getUserAssetByUserId
-	    * @Description: TODO(通过userId获取资产)
-	    * @param @param userId
-	    * @param @return    参数
-	    * @return AssetUsersAsset    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: getUserAssetByUserId
+	 * @Description: TODO(通过userId获取资产)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return AssetUsersAsset 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	@Transactional
-	public AssetUsersAsset getUserAssetByUserId(long userId)
-	{
+	public AssetUsersAsset getUserAssetByUserId(long userId) {
 
 		return assetUsersAssetMapper.getUserAssetByUserId(userId);
 	}
+
 	/**
 	 * 
-	    * @Title: updateDiamondsConsume
-	    * @Description: TODO(这里用一句话描述这个方法的作用)
-	    * @param @param userId
-	    * @param @param diamondsNum
-	    * @param @return    参数
-	    * @return boolean    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: getIndexDiamonds
+	 * @Description: TODO(返回首页钻石数量)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return Map<String,String> 返回类型
+	 * @throws @author
+	 *             LiXing
 	 */
 	@Transactional
-	public boolean updateDiamondsConsume(long userId,double diamondsNum)
-	{
-		Map<String,Object> datas=new HashMap<String,Object>();
+	public List<Map<String, String>> getIndexDiamonds(long userId) {
+		List<AssetUsersDiamondsLogs> list = assetUsersDiamondsLogsMapper.getIndexDiamonds(userId);
+
+		List<Map<String, String>> data = new ArrayList<>();
+		if (list.size() == 0) {
+			Map<String, String> rtMap = new HashMap<String, String>();
+			rtMap.put("receiveType", "");
+			rtMap.put("num", "");
+			rtMap.put("time", "");
+			data.add(rtMap);
+		} else {
+			for (int i = 0; i < list.size(); i++) {
+				Map<String, String> rtMap = new HashMap<String, String>();
+				rtMap.put("receiveType", String.valueOf(list.get(i).getEventType()));
+				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
+				rtMap.put("time", String.valueOf(list.get(i).getCreateTime()));
+				data.add(rtMap);
+			}
+		}
+		return data;
+	}
+
+	/**
+	 * 
+	 * @Title: updateDiamondsConsume
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param @param
+	 *            userId
+	 * @param @param
+	 *            diamondsNum
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
+	@Transactional
+	public boolean updateDiamondsConsume(long userId, double diamondsNum) {
+		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("userId", userId);
 		datas.put("diamondsNum", diamondsNum);
-		int hadUpdate=assetUsersAssetMapper.updateDiamondsConsume(datas);
-		if(hadUpdate>0) {
-			//钻石数量够买，则进行日志增加
-			AssetUsersDiamondsLogs assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
+		int hadUpdate = assetUsersAssetMapper.updateDiamondsConsume(datas);
+		if (hadUpdate > 0) {
+			// 钻石数量够买，则进行日志增加
+			AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 			assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 			assetUsersDiamondsLogs.setEffectId(0L);
 			assetUsersDiamondsLogs.setEventType(EventType_Buy);
@@ -101,43 +138,46 @@ public class AssetService extends BaseService<AssetService>
 			assetUsersDiamondsLogs.setUserId(userId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
 			return true;
-		}else {
-			LOG.info("userId="+userId+"钻石数量不够支付:"+diamondsNum);
+		} else {
+			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 
-	    * @Title: addUserPowers
-	    * @Description: TODO(用户动力值增加)
-	    * @param @param assetUsersPowerLogs
-	    * @param @return    参数
-	    * @return boolean    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: addUserPowers
+	 * @Description: TODO(用户动力值增加)
+	 * @param @param
+	 *            assetUsersPowerLogs
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
-	
+
 	@Transactional
-	public boolean addUserPowers(AssetUsersPowerLogs assetUsersPowerLogs)
-	{
+	public boolean addUserPowers(AssetUsersPowerLogs assetUsersPowerLogs) {
 		assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
 		assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
 		return true;
 	}
+
 	/**
 	 * 
-	    * @Title: addFamiliesPowers
-	    * @Description: TODO(家族动力值增加)
-	    * @param @param assetFamiliesPowerLogs
-	    * @param @return    参数
-	    * @return boolean    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: addFamiliesPowers
+	 * @Description: TODO(家族动力值增加)
+	 * @param @param
+	 *            assetFamiliesPowerLogs
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	@Transactional
-	public boolean addFamiliesPowers(AssetFamiliesPowerLogs assetFamiliesPowerLogs)
-	{
+	public boolean addFamiliesPowers(AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
 		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 		assetFamiliesAssetMapper.updatePowerAdd(assetFamiliesPowerLogs);
 		return true;
