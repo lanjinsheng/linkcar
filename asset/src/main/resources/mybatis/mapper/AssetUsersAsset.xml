@@ -16,5 +16,11 @@
         update assetUsersAsset set powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum}) where
            userId=#{userId} 
      </update>
-     
+     <insert id="initUser"   parameterType="com.idata365.app.entity.AssetUsersAsset">
+            INSERT IGNORE  INTO 
+            assetUsersAsset
+            (userId,updateTime) 
+        VALUES
+            (#{userId},now())
+     </insert>
 </mapper>
