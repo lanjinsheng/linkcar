@@ -83,6 +83,7 @@ public class AccountService extends BaseService<AccountService>
 	{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		 Map<String,Object> my=usersAccountMapper.getFamilyByUserId(userId);
+		 if(my==null) return null;
 //	 
 //		    * Map.put("fightFamilyId":"id")
 //	        * Map.put("fightFamilyUserCount":"number")
