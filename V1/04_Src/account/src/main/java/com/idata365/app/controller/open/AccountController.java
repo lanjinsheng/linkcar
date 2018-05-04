@@ -1,5 +1,6 @@
 package com.idata365.app.controller.open;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,11 @@ public class AccountController extends BaseController{
 	public Map<String,Object>  getFamiliesInfoByUserId(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
 	{
 		LOG.info("userId="+userId+"===sign="+sign);
+		Map<String,Object> rt=new HashMap<String,Object>();
+		rt.put("familyId", 0);
+		rt.put("familyUserCount", 0);
+		rt.put("fightFamilyId", 0);
+		rt.put("fightFamilyUserCount", 0);
     	return accountService.getFamiliesInfoByUserId(userId);
 	}
 	
