@@ -72,7 +72,12 @@ public class AccountController extends BaseController{
 		rt.put("familyUserCount", 0);
 		rt.put("fightFamilyId", 0);
 		rt.put("fightFamilyUserCount", 0);
-    	return accountService.getFamiliesInfoByUserId(userId);
+		Map<String,Object> db= accountService.getFamiliesInfoByUserId(userId);
+		if(db==null) {
+			return rt;
+		}else {
+			return db;
+		}
 	}
 	
 	/**
