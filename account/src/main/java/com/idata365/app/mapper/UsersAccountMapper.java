@@ -29,5 +29,7 @@ public interface UsersAccountMapper {
 	 Map<String,Object> getLeaderByFamilyId(@Param("familyId") Long familyId);
 	 
 	 List<Map<String,Object>> findFamilyRelation(@Param("familyId") Long familyId);
+	 //
+	 List<Map<String,Object>> getUsersByFamilyId(Map<String,Object> map);
 	 
 }

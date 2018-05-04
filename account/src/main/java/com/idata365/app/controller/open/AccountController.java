@@ -1,6 +1,7 @@
 package com.idata365.app.controller.open;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +100,33 @@ public class AccountController extends BaseController{
 		
 		LOG.info("userIds="+userIds+"===sign="+sign);
 		return accountService.getUsersInfoByIds(userIds,this.getImgBasePath());
+	}
+	
+	
+	/**
+	 * 
+	    * @Title: getUsersByFamilyId
+	    * @Description: TODO(通过familyId获取成员ids)
+	    * @param @param userId
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@RequestMapping(value = "/account/getUsersByFamilyId",method = RequestMethod.POST)
+	public String  getUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign)
+	{
+		LOG.info("familyId="+familyId+"===sign="+sign);
+		StringBuffer sb=new StringBuffer();
+		List<Map<String,Object>> list= accountService.getUsersByFamilyId(familyId, daystamp);
+		for(Map<String,Object> m:list) {
+			sb.append(String.valueOf(m.get("userId")));
+			sb.append(",");
+		}
+		if(sb.length()>0) {
+			return sb.toString().substring(0, sb.length()-1);
+		}
+		return null;
 	}
 }

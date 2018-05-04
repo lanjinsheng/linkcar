@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -109,5 +110,14 @@ public class AccountService extends BaseService<AccountService>
 	        
 		return rtMap;
 	}
+	
+	@Transactional
+	public List<Map<String,Object>> getUsersByFamilyId(long familyId,String daystamp){
+		Map<String,Object> param=new HashMap<String,Object>();
+		param.put("familyId", familyId);
+		param.put("daystamp", daystamp);
+		return usersAccountMapper.getUsersByFamilyId(param);
+	}
+	
 	
 }
