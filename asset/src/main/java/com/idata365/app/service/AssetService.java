@@ -276,16 +276,16 @@ public class AssetService extends BaseService<AssetService> {
 
 	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familyInfo,
 			Map<Object, Object> requestBodyParams) {
-		long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
-		long fightFamilyId = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
+//		long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
+//		long fightFamilyId = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
+//
+//		long familyUserCount = Long.valueOf(String.valueOf(familyInfo.get("familyUserCount")));
+//		long fightFamilyUserCount = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyUserCount")));
 
-		long familyUserCount = Long.valueOf(String.valueOf(familyInfo.get("familyUserCount")));
-		long fightFamilyUserCount = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyUserCount")));
-
-		// long familyId = 1000003;
-		// long fightFamilyId = 1000011;
-		// long familyUserCount = 5;
-		// long fightFamilyUserCount = 5;
+		 long familyId = 1000003;
+		 long fightFamilyId = 1000011;
+		 long familyUserCount = 5;
+		 long fightFamilyUserCount = 5;
 
 		long todayContribution = 0;
 		long todayReceive = 0;
@@ -361,11 +361,11 @@ public class AssetService extends BaseService<AssetService> {
 	@Transactional
 	public void stoleFamilyFightPowers(long userId, Map<String, Object> familyInfo, long ballId, long powerNum)
 			throws Exception {
-		long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
-		long fightFamilyId = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
+//		long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
+//		long fightFamilyId = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
 
-		// long familyId = 1000003;
-		// long fightFamilyId = 1000011;
+		 long familyId = 1000003;
+		 long fightFamilyId = 1000011;
 
 		// 修改个人相关数据
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
@@ -400,7 +400,7 @@ public class AssetService extends BaseService<AssetService> {
 		}
 
 	}
-
+	
 	private void youSetter(long powerNum, long familyId, AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
 		assetFamiliesPowerLogs.setFamilyId(familyId);
 		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum() - 2 * powerNum);

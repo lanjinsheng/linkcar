@@ -15,10 +15,11 @@ public interface AssetUsersAssetMapper {
 	int updateDiamondsConsume(Map<String, Object> datas);
 
 	int updatePowerAdd(AssetUsersPowerLogs assetUsersPowerLogs);
-    int updateDiamondsAdd(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
-	    
+
+	int updateDiamondsAdd(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
+
 	int initUser(AssetUsersAsset assetUsersAsset);
-	    
+
 	void userPowersSnapShot(@Param("tableName") String tableName);
 
 }
