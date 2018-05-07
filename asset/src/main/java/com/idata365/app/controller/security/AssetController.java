@@ -185,4 +185,29 @@ public class AssetController extends BaseController {
 		}
 		return ResultUtils.rtSuccess(result);
 	}
+	
+	/**
+	 * 
+	    * @Title: signInPower
+	    * @Description: TODO(签到获取power)
+	    * @param @param allRequestParams
+	    * @param @param requestBodyParams
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	
+	@RequestMapping("/signInPower")
+	public Map<String, Object> signInPower(
+			@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		
+		long userId=this.getUserId();
+		//
+		assetService.getDaySignInLog(userId);
+		return ResultUtils.rtSuccess(null);
+	}
+	
+	
 }
