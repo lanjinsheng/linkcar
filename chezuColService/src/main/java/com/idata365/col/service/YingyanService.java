@@ -128,7 +128,7 @@ public List<Map<String,Object>>  dealListGaode(List<Map<String,String>> list) {
 	List<Map<String,String>> tempList=new ArrayList<Map<String,String>>();
 	List<Map<String,Object>> speedAlarmList=new ArrayList<Map<String,Object>>();
 	for(Map<String,String> map:list) {
-		if(map.get("t").equals("")) continue;
+		if(map.get("t").equals("") || map.get("invalid")!=null) continue;
 		//沦为utc时间
 	    long time=DateTools.changeDateTimeToSecond( map.get("t"))-(8*3600);
 	    if(time<0 || time==timeLong || Double.valueOf(map.get("s"))==0) {

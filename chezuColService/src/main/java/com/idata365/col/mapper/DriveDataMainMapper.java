@@ -1,8 +1,7 @@
 package com.idata365.col.mapper;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
+import java.util.Map;
 
 import com.idata365.col.entity.DriveDataMain;
 /**
@@ -23,4 +22,5 @@ public interface DriveDataMainMapper {
 //	 void  updateFailSendDriveTask(DriveDataMain drive);
 //	 void  clearLockTask(@Param("compareTimes") long compareTimes);
 	 DriveDataMain getDriveDataMainByUH(DriveDataMain drive);
+	 List<DriveDataMain> listPageDriveMainTest(Map<String,Object> map);
 }

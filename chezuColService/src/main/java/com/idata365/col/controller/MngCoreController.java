@@ -72,7 +72,36 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	    	  return ResultUtils.rtSuccess(null);
 
 	    }
+	  @RequestMapping(value = "/v1/getGpsValuesTest",method = {RequestMethod.POST,RequestMethod.GET})
+	    public Map<String,Object>  getGpsValuesTest(@RequestParam Map<String,Object> map) {
+	    	  DriveDataLog d=new DriveDataLog();	
+	    	  d.setUserId(Long.valueOf(map.get("userId").toString()));
+	    	  d.setHabitId(Long.valueOf(map.get("habitId").toString()));
+	    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
+	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+	    	  for(DriveDataLog drive:drives) {
+	    		     StringBuffer json=new StringBuffer();
+	    		     if(drive.getFilePath().endsWith("_Q")) {
+	    		    	 QQSSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }else {
+	    		    	 SSOTools.getSSOFile(json,drive.getFilePath());
+	    		     }
+			         Map<String,Object> jMap=GsonUtils.fromJson(json.toString());
+			         if(jMap.get("gpsInfos")!=null) {
+			        	 list.addAll((List)jMap.get("gpsInfos"));
+			         }
+			 }
+	    	  if(list.size()>0) {
+	    		  List<Map<String, String>> datas= PhoneGpsUtil.dealOrderGps(list);
+	    		  for(Map<String, String> m:datas) {
+	    			  System.out.println(m.get("t")+"====="+m.get("s"));
+	    		  }
+	    	  }
+	    	  return ResultUtils.rtSuccess(null);
 
+	    }
+	  
+	  
 	   /**
 	    * 
 	       * @Title: getGpsByUH

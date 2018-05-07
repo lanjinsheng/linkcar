@@ -88,6 +88,9 @@ public class DatasDealTask implements Runnable
 	    		 if(Integer.valueOf(day2).intValue()!=Integer.valueOf(day1)) {
 	    			 data.setValidStatus(-1);
 	    			 data.setLabelFlag("隔天数据");
+	    		 }else if(list.size()<60){
+	    			 data.setValidStatus(-1);
+	    			 data.setLabelFlag("点数小于60");
 	    		 }else {
 		    		 //识别驾驶标签
 		    		 if(driveTimes<180) {//180s内的驾驶行为忽略
