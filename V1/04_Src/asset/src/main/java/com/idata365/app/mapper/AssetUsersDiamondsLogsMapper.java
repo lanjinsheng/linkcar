@@ -13,7 +13,8 @@ public interface AssetUsersDiamondsLogsMapper {
 
 
     int insertDiamondsConsume(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
-
+    int insertUsersDiamondsDay(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
+    
     List<AssetUsersDiamondsLogs> getIndexDiamonds(@Param("userId")long userId);
     
     List<AssetUsersDiamondsLogs> getDiamondsByEffectId(@Param("effectId")long effectId);

@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersPowerLogs;
+import com.idata365.app.entity.FamilyGameAsset;
 import com.idata365.app.enums.PowerEnum;
 import com.idata365.app.service.AssetService;
+import com.idata365.app.service.FamilyGameAssetService;
+import com.idata365.app.service.TaskAutoAddService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -26,7 +29,10 @@ public class AssetController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(AssetController.class);
 	@Autowired
 	AssetService assetService;
-
+	@Autowired
+    TaskAutoAddService taskAutoAddService;
+	@Autowired
+	FamilyGameAssetService familyGameAssetService;
 	/**
 	 * 
 	 * @Title: getUserAsset
@@ -168,6 +174,44 @@ public class AssetController extends BaseController {
 		assetService.initFamily(familyId);
 		 return true;
 	}
+	
+    /**
+     * 
+        * @Title: addFamilyGameOrder
+        * @Description: TODO(对order进行sign)
+        * @param @param sign
+        * @param @param assetFamiliesPowerLogs
+        * @param @return    参数
+        * @return boolean    返回类型
+        * @throws
+        * @author LanYeYe
+     */
+    @RequestMapping(value = "/asset/addFamilyGameOrder",method = RequestMethod.POST)
+    boolean addFamilyGameOrder(@RequestParam(value="sign")   String sign, @RequestBody   FamilyGameAsset familyGameAsset) {
+    	LOG.info("familyGameAsset:" + familyGameAsset.getOrderNo() + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(familyGameAsset.getOrderNo())));
+		familyGameAssetService.insertgameAsset(familyGameAsset);
+		return true;
+    }
+    /**
+     * 
+        * @Title: addFamilyGameOrderEnd
+        * @Description: TODO(对season进行sign)
+        * @param @param sign
+        * @param @param season
+        * @param @return    参数
+        * @return boolean    返回类型
+        * @throws
+        * @author LanYeYe
+     */
+    @RequestMapping(value = "/asset/addFamilyGameOrderEnd",method = RequestMethod.POST)
+    boolean addFamilyGameOrderEnd(@RequestParam(value="season")   String season,@RequestParam(value="sign")   String sign) {
+    	LOG.info("addFamilyGameOrderEnd:" + season + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + sign);
+		taskAutoAddService.syncFamilyGameEndAdd(season);
+    	return true;
+    }
+
 	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));

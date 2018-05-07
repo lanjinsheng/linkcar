@@ -60,5 +60,19 @@ public interface ChezuService {
 	 */
 	@RequestMapping(value = "/account/getUsersInfoByIds",method = RequestMethod.POST)
 	public Map<String,Object>  getUsersInfoByIds(@RequestParam(value="userIds") String userIds,@RequestParam(value="sign") String sign);
-	 
+	
+	/**
+	 * 
+	    * @Title: getUsersByFamilyId
+	    * @Description: TODO(通过familyId获取成员ids)
+	    * @param @param userId
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@RequestMapping(value = "/account/getUsersByFamilyId",method = RequestMethod.POST)
+	public String  getUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign);
+
 }

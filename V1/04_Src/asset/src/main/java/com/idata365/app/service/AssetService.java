@@ -40,9 +40,14 @@ public class AssetService extends BaseService<AssetService> {
 	public final static int EventType_Buy = 3;//购买
 	public final static int EventType_Power_Index_Get = 2;//首页拾取
 	public final static int EventType_Power_Trip = 4;//行程
+	public final static int EventType_Daimond_DayPower_User = 1;//每日分配
+	public final static int EventType_Daimond_GameEnd_User = 2;//比赛结束家族分配
+	
+	public final static int EventType_Daimond_GameEnd = 1;//比赛获取
+	public final static int EventType_Daimond_Distr = 2;//比赛分配消耗
 	
 	public final static int RecordType_2 = 2;// 减少
-	public final static int RecordType_1 = 2;// 增加
+	public final static int RecordType_1 = 1;// 增加
 	@Autowired
 	AssetUsersAssetMapper assetUsersAssetMapper;
 	@Autowired
@@ -241,5 +246,9 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersAsset.setUserId(userId);
 		assetUsersAssetMapper.initUser(assetUsersAsset);
 		return true;
+	}
+	@Transactional
+	public void userPowersSnapShot(String tableName){
+		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
 }
