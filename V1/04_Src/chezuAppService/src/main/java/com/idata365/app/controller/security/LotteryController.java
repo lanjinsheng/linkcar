@@ -1,7 +1,4 @@
 package com.idata365.app.controller.security;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import java.util.List;
 import java.util.Map;
 
