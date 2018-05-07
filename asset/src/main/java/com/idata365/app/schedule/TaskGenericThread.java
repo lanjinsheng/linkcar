@@ -46,10 +46,9 @@ public class TaskGenericThread implements Runnable{
 						break;
 					}
 					case DoUserSeasonReward:{
-						
+						taskGenericService.doUserSeasonReward(task);
 						break;
 					}
-					
 					default:
 						break;
 				}
