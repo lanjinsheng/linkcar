@@ -12,13 +12,20 @@
 		SELECT *
 		FROM assetUsersDiamondsLogs where userId=#{userId} order by 'createTime'
 	</select>
-	<update id="insertDiamondsConsume"
+	<insert id="insertDiamondsConsume"
 		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
 		insert into assetUsersDiamondsLogs
 		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
 		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
 		#{effectId},#{remark},now())
-	</update>
+	</insert>
+	<insert id="insertUsersDiamondsDay"
+		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+		insert into assetUsersDiamondsLogs
+		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
+		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
+		#{effectId},#{remark},now())
+	 </insert>
 
 	<select id="getDiamondsByEffectId" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">

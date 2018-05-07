@@ -11,4 +11,13 @@
        SELECT *
        FROM  familyGameAsset where familyId=#{familyId} and id<![CDATA[<]]>#{id} and diamondsNum<![CDATA[>]]>0 order by id desc limit 10
      </select> 
+     <insert id="insertFamilyGameAsset"   parameterType="com.idata365.app.entity.FamilyGameAsset">
+            INSERT IGNORE  INTO 
+            familyGameAsset
+            (familyId,startDay,endDay,orderNo,seasonName) 
+        VALUES
+            (#{familyId},#{startDay},#{endDay},#{orderNo},#{seasonName})
+     </insert>
+     
+     
 </mapper>

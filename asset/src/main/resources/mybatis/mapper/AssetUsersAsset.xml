@@ -11,8 +11,12 @@
         update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}) where
            <![CDATA[ diamondsNum>=${diamondsNum} and userId=#{userId}]]>
      </update>
-     
-     <update id="updatePowerAdd"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+      <update id="updateDiamondsAdd"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}) 
+        where
+           userId=#{userId} 
+     </update>
+     <update id="updatePowerAdd"   parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
         update assetUsersAsset set powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum}) where
            userId=#{userId} 
      </update>
@@ -23,4 +27,9 @@
         VALUES
             (#{userId},now())
      </insert>
+     <insert id="userPowersSnapShot"   parameterType="java.lang.String">
+             create table ${tableName} select * from assetUsersAsset
+     </insert>
+     
+     
 </mapper>
