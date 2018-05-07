@@ -83,7 +83,28 @@ public class AssetService extends BaseService<AssetService> {
 
 		return assetUsersAssetMapper.getUserAssetByUserId(userId);
 	}
-
+	
+	/**
+	 * 
+	 * @Title: getTotalNums
+	 * @Description: TODO(返回首页钻石、动力总数量)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return Map<String,String> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
+	public Map<String, String> getTotalNums(long userId) {
+		Map<String, String> map = new HashMap<>();
+		long totalDiamondsNum = assetUsersDiamondsLogsMapper.getTotalDiamondsNum(userId);
+		map.put("totalDiamondsNum", String.valueOf(totalDiamondsNum));
+		long totalPowersNum = assetUsersPowerLogsMapper.getTotalPowersNum(userId);
+		map.put("totalPowersNum", String.valueOf(totalPowersNum));
+		return map;
+	}
+	
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -96,12 +117,8 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LiXing
 	 */
-	public Map<String, Object> getIndexDiamonds(long userId, Map<Object, Object> requestBodyParams) {
-		Map<String, Object> map = new HashMap<>();
+	public List<Map<String, String>> getIndexDiamonds(long userId, Map<Object, Object> requestBodyParams) {
 		List<AssetUsersDiamondsLogs> list = new ArrayList<>();
-		// 首页钻石总数：totalDiamondsNum
-		long totalDiamondsNum = assetUsersDiamondsLogsMapper.getTotalDiamondsNum(userId);
-		map.put("totalDiamondsNum", String.valueOf(totalDiamondsNum));
 
 		if (requestBodyParams != null && StringUtils.isNotEmpty(String.valueOf(requestBodyParams.get("id")))) {
 			long id = Long.valueOf(String.valueOf(requestBodyParams.get("id")));
@@ -128,8 +145,7 @@ public class AssetService extends BaseService<AssetService> {
 				data.add(rtMap);
 			}
 		}
-		map.put("data", data);
-		return map;
+		return data;
 	}
 
 	/**
@@ -144,12 +160,8 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LiXing
 	 */
-	public Map<String, Object> getIndexPowers(long userId, Map<Object, Object> requestBodyParams) {
-		Map<String, Object> map = new HashMap<>();
+	public List<Map<String, String>> getIndexPowers(long userId, Map<Object, Object> requestBodyParams) {
 		List<AssetUsersPowerLogs> list = new ArrayList<>();
-		// 首页动力总数：totalPowersNum
-		long totalPowersNum = assetUsersPowerLogsMapper.getTotalPowersNum(userId);
-		map.put("totalPowersNum", String.valueOf(totalPowersNum));
 
 		if (requestBodyParams != null && StringUtils.isNotEmpty(String.valueOf(requestBodyParams.get("id")))) {
 			long id = Long.valueOf(String.valueOf(requestBodyParams.get("id")));
@@ -177,8 +189,7 @@ public class AssetService extends BaseService<AssetService> {
 				data.add(rtMap);
 			}
 		}
-		map.put("data", data);
-		return map;
+		return data;
 	}
 
 	/**
@@ -497,4 +508,5 @@ public class AssetService extends BaseService<AssetService> {
 	public void userPowersSnapShot(String tableName){
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
+
 }

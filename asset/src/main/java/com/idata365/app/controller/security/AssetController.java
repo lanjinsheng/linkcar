@@ -27,7 +27,25 @@ public class AssetController extends BaseController {
 	AssetService assetService;
 	@Autowired
 	ChezuService chezuService;
-
+	/**
+	 * 
+	 * @Title: getIndexDiamonds
+	 * @Description: TODO(获取首页钻石、动力总数量)
+	 * @param @return
+	 *            参数
+	 * @return <Map<String,String>> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
+	@RequestMapping("/getTotalNums")
+	public Map<String, Object> getTotalNums(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		Map<String,String> data = assetService.getTotalNums(userId);
+		return ResultUtils.rtSuccess(data);
+	}
+	
+	
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -42,7 +60,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexDiamonds(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		Map<String,Object> data = assetService.getIndexDiamonds(userId,requestBodyParams);
+		List<Map<String, String>> data = assetService.getIndexDiamonds(userId,requestBodyParams);
 		return ResultUtils.rtSuccess(data);
 	}
 
@@ -60,7 +78,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		Map<String,Object> data = assetService.getIndexPowers(userId,requestBodyParams);
+		List<Map<String, String>> data = assetService.getIndexPowers(userId,requestBodyParams);
 		return ResultUtils.rtSuccess(data);
 	}
 
