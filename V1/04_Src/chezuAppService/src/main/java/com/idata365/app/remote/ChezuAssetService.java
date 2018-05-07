@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
     * @date 2017年12月28日
     *
  */
-@FeignClient(value = "service-asset-chezu",fallback = ChezuHystric.class)
+@FeignClient(value = "service-asset-chezu",fallback = ChezuAssetHystric.class)
 public interface ChezuAssetService {
 	/**
 	 * 
