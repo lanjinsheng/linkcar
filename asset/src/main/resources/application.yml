@@ -27,7 +27,7 @@ hystrix:
   
 spring:
   application:
-    name: service-asset-chezu
+    name: service-asset-chezu-lcc
  
     
 

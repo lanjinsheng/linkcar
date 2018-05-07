@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 /**
  * 
  */
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
@@ -122,11 +122,11 @@ public class AssetService extends BaseService<AssetService> {
 	public List<Map<String, String>> getIndexDiamonds(long userId, Map<Object, Object> requestBodyParams) {
 		List<AssetUsersDiamondsLogs> list = new ArrayList<>();
 
-		if (requestBodyParams != null && StringUtils.isNotEmpty(String.valueOf(requestBodyParams.get("id")))) {
+		if ("0".equals(requestBodyParams.get("id").toString())) {
+			list = assetUsersDiamondsLogsMapper.getIndexDiamondsFirst(userId);
+		} else {
 			long id = Long.valueOf(String.valueOf(requestBodyParams.get("id")));
 			list = assetUsersDiamondsLogsMapper.getIndexDiamonds(userId, id);
-		} else {
-			list = assetUsersDiamondsLogsMapper.getIndexDiamondsFirst(userId);
 		}
 
 		List<Map<String, String>> data = new ArrayList<>();
@@ -165,11 +165,11 @@ public class AssetService extends BaseService<AssetService> {
 	public List<Map<String, String>> getIndexPowers(long userId, Map<Object, Object> requestBodyParams) {
 		List<AssetUsersPowerLogs> list = new ArrayList<>();
 
-		if (requestBodyParams != null && StringUtils.isNotEmpty(String.valueOf(requestBodyParams.get("id")))) {
+		if ("0".equals(requestBodyParams.get("id").toString())) {
+			list = assetUsersPowerLogsMapper.getIndexPowersFirst(userId);
+		} else {
 			long id = Long.valueOf(String.valueOf(requestBodyParams.get("id")));
 			list = assetUsersPowerLogsMapper.getIndexPowers(userId, id);
-		} else {
-			list = assetUsersPowerLogsMapper.getIndexPowersFirst(userId);
 		}
 
 		List<Map<String, String>> data = new ArrayList<>();
@@ -302,7 +302,7 @@ public class AssetService extends BaseService<AssetService> {
 
 		long todayContribution = 0;
 		long todayReceive = 0;
-		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getIndexPowersFirst(userId);
+		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowers(userId);
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getRecordType() == 1 && assetUsersPowerLogs.getEventType() == 3) {
 				todayReceive += assetUsersPowerLogs.getPowerNum();
@@ -329,8 +329,8 @@ public class AssetService extends BaseService<AssetService> {
 				thisScore = realNum;
 			}
 			powerBall.put("thisScore", String.valueOf(thisScore));
-
-			// 已经领取过该球能量的userid列表,clickFamilyId为用户点击的能量球familyID
+			String[] userIdsArray = {};
+			// 已经领取过该球能量的userId列表,clickFamilyId为用户点击的能量球familyID
 			if (requestBodyParams != null && requestBodyParams.get("familyId") != null && realCount != 0) {
 				long clickFamilyId = Long.valueOf((String.valueOf(requestBodyParams.get("familyId"))));
 				String userIds = "";
@@ -340,14 +340,14 @@ public class AssetService extends BaseService<AssetService> {
 					}
 				}
 				userIds = userIds.substring(0, userIds.length());
-				String[] userIdsArray = userIds.split(",");
+				userIdsArray = userIds.split(",");
 				powerBall.put("receivelist", userIdsArray);
 			} else {
-				powerBall.put("receivelist", "");
+				powerBall.put("receivelist", userIdsArray);
 			}
 			powerBall.put("createFamilyId", String.valueOf(assetFamiliesPowerLogs.getFamilyId()));
 			powerBall.put("createTime",
-					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
+					String.valueOf(DateTools.formatDateD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
 		Map<String, Object> data = new HashMap<>();
