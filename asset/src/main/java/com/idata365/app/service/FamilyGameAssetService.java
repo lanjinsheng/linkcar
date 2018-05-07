@@ -132,5 +132,9 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		}
 		return rtList;
 	}
+	@Transactional
+	public void insertgameAsset(FamilyGameAsset familyGameAsset) {
+		familyGameAssetMapper.insertFamilyGameAsset(familyGameAsset);
+	}
  
 }

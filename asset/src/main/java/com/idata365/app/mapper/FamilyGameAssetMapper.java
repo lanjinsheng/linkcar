@@ -10,7 +10,7 @@ import com.idata365.app.entity.TempPowerReward;
 
 public interface FamilyGameAssetMapper {
 
-//	 int batchInsertTempPowerReward(List<TempPowerReward> tempPowerReward);
+	 int insertFamilyGameAsset(FamilyGameAsset familyGameAsset);
 	List<FamilyGameAsset>  getFamilyGameAssets(FamilyGameAsset familyGameAsset);
 	List<FamilyGameAsset>  getFamilyGameAssetsPre(FamilyGameAsset familyGameAsset);
 	 
