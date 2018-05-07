@@ -5,11 +5,11 @@
     </resultMap>
    <insert id="batchInsert" parameterType="java.util.HashMap">
 		 INSERT IGNORE INTO  userTravelHistory
-		 (createTime,userId,startTime,endTime,mileage,time,brakeTimes,speedTimes,turnTimes,overspeedTimes,maxspeed,habitId)
+		 (createTime,userId,startTime,endTime,mileage,time,brakeTimes,speedTimes,turnTimes,overspeedTimes,maxspeed,habitId,hiddenFlag)
 		  VALUES
     	<foreach collection="list" item="item" index="index" separator=",">
     		(#{item.createTime},#{item.userId},#{item.startTime},#{item.endTime},#{item.mileage},#{item.time},#{item.brakeTimes},
-    		#{item.speedTimes},#{item.turnTimes},#{item.overspeedTimes},#{item.maxspeed},#{item.habitId}
+    		#{item.speedTimes},#{item.turnTimes},#{item.overspeedTimes},#{item.maxspeed},#{item.habitId},#{item.hiddenFlag}
     		) 
     	</foreach>
 	</insert>
@@ -21,7 +21,7 @@
 		tiredDriveOffset=#{tiredDriveOffset},highSpeedTimesOffset=#{highSpeedTimesOffset},
 		useShachepian=#{useShachepian},useHongniu=#{useHongniu},useYeshijing=#{useYeshijing},
 		useFadongji=#{useFadongji},useCheluntai=#{useCheluntai},useZengyaqi=#{useZengyaqi},
-		taskFlag='0',addDayStatFlag=0
+		taskFlag='0',addDayStatFlag=0,score=#{score}
 		where userId=#{userId} and habitId=#{habitId}
 	 </update>
 	

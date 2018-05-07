@@ -31,6 +31,9 @@
     <select id="getDriveScoreByUH"  resultMap="driveScoreMap" parameterType="com.idata365.entity.DriveScore">
 		SELECT *  from driveScore where userId=#{userId} and habitId=#{habitId};
 	</select>
+	<select id="getDriveScoreByUHF"  resultMap="driveScoreMap" parameterType="com.idata365.entity.DriveScore">
+		SELECT *  from driveScore where userId=#{userId} and habitId=#{habitId} and familyId=#{familyId};
+	</select>
 
 
     <select id="getDriveScoreByUR"  resultMap="driveScoreMap" parameterType="com.idata365.entity.DriveScore">

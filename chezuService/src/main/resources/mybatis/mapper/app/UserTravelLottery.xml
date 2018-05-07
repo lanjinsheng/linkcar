@@ -5,10 +5,10 @@
     </resultMap>
    <insert id="batchInsert" parameterType="java.util.HashMap">
 		 INSERT IGNORE INTO  userTravelLottery
-		 (userId,habitId,awardId,awardCount,hadGet)
+		 (userId,habitId,awardId,awardCount,hadGet,createMilTimes)
 		  VALUES
     	<foreach collection="list" item="item" index="index" separator=",">
-    		(#{item.userId},#{item.habitId},#{item.awardId},#{item.awardCount},#{item.hadGet}) 
+    		(#{item.userId},#{item.habitId},#{item.awardId},#{item.awardCount},#{item.hadGet},#{createMilTimes}) 
     	</foreach>
 	</insert>
 	 
