@@ -141,6 +141,20 @@
 		  set taskUserBestDriveDayEnd=${taskUserBestDriveDayEnd} where daystamp=#{daystamp}
 	</update>
     <!--end   用户违规 -->
-    
-    
+    <!--begin  pk分配邏輯 -->  
+    <select id="getUnInitPkRelationList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where   initPkRelation=0
+	</select>
+	<update id="updatePkRelationInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set initPkRelation=${initPkRelation} where daystamp=#{daystamp}
+	</update>
+	<select id="getUnFinishPKRelationList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where initPkRelation=1 and pkRelation=0
+	</select>
+	<update id="finishPKRelation" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set pkRelation=${pkRelation} where daystamp=#{daystamp}
+	</update>
+	<!--end  pk分配邏輯 --> 
 </mapper>
