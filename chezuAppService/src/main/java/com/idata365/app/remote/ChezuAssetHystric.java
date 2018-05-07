@@ -16,6 +16,20 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("getUserPowerByEffectId 挂了");
 		return null;
 	}
+
+	@Override
+	public boolean initUserCreate(long userId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("initUserCreate 挂了");
+		return false;
+	}
+
+	@Override
+	public boolean initFamilyCreate(long familyId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("initFamilyCreate 挂了");
+		return false;
+	}
 	 
 	
  
