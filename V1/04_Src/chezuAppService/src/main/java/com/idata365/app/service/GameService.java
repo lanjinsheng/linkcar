@@ -214,7 +214,7 @@ public class GameService extends BaseService<GameService>
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public Map<String,Object> challengeFamilyV1_1(GameFamilyParamBean bean)
+	public Map<String,Object> challengeFamilyV1_1(GameFamilyParamBean bean,String basePath)
 	{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		String tomorrowDateStr = getTomorrowDateStr();
@@ -254,6 +254,8 @@ public class GameService extends BaseService<GameService>
 			FamilyInfoBean familyBean=familyMapper.queryFamilyInfo(paramBean);
 			rtMap.put("competitorFamilyId", competitorFamilyId);
 			rtMap.put("familyName", familyBean.getFamilyName());
+			rtMap.put("familyType", familyBean.getFamilyType());
+			rtMap.put("imgUrl", basePath+familyBean.getImgUrl());
 			return rtMap;
 		}
 		
