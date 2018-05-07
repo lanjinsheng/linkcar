@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.AwardBean;
 import com.idata365.app.entity.FamilyResultBean;
+import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.TaskMessagePush;
 import com.idata365.app.enums.MessageEnum;
@@ -49,11 +50,16 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";
 	
 	
-	public static final String  InviteMessageUrl="com.shujin.shuzan://check.push?msgId=%s";
-	public static final String  InvitePassMessageUrl="com.shujin.shuzan://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
+	public static final String  InviteMessageUrl="com.shujin.haochezu://check.push?msgId=%s";
+	public static final String  InvitePassMessageUrl="com.shujin.haochezu://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	
-	public static final String  TietiaoMessageUrl="com.shujin.shuzan://pasteNote.push?familyId=%s";
-	public static final String AchieveMessageUrl="com.shujin.shuzan://achievementDetails.push?achieveId=%s&titleName=%s";
+	public static final String  TietiaoMessageUrl="com.shujin.haochezu://pasteNote.push?familyId=%s";
+	public static final String AchieveMessageUrl="com.shujin.haochezu://achievementDetails.push?achieveId=%s&titleName=%s";
+	//聊天室
+	public static final String ImMessageUrl="com.shujin.haochezu://chatMain.push?familyId=%s";
+	
+	
+	
 	public static final String RegMessageUrl=H5Host+"share/home.html";
 	public static final String KaijiangMessageUrl=H5Host+"share/lottery.html";
 	
@@ -300,7 +306,15 @@ public class MessageService extends BaseService<MessageService>{
 	        extraMap.put("toUrl", msg.getToUrl());
 		 	managePushApi.SendMsgToOne(msg.getContent(), alias, ManagePushApi.PLATFORM_IOS, extraMap);
 	}
-	
+	public void pushImMessageByTask(ImMsg msg,String toUser) {
+		String alias=toUser+"_0";
+		 Map<String,String> extraMap = new HashMap<String, String>();
+	        extraMap.put("parentType", "0");
+	        extraMap.put("childType", "0");
+	        extraMap.put("msgId",String.valueOf(msg.getId()));
+	        extraMap.put("toUrl", getImMessageUrl(msg.getFamilyId()));
+		 	managePushApi.SendMsgToOne(msg.getMsg(), alias, ManagePushApi.PLATFORM_IOS, extraMap);
+	}
 	public void pushAwardMessageByTask(Long awardId,String title) {
 		//String alias=toUserId+"_0";
 		 Map<String,String> extraMap = new HashMap<String, String>();
@@ -559,6 +573,7 @@ public class MessageService extends BaseService<MessageService>{
 	private String getAchieveDesc(String achieveMsg) {
 		return String.format(AchieveMessage);
     }
+	
 	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
 	}
@@ -579,6 +594,9 @@ public class MessageService extends BaseService<MessageService>{
 	
 	private String getAchieveMessageUrl(int achieveId,String achieveName) {
 		return String.format(AchieveMessageUrl, String.valueOf(achieveId),achieveName);
+    }
+	private String getImMessageUrl(long familyId) {
+		return String.format(ImMessageUrl, String.valueOf(familyId));
     }
 	public static void main(String []args) {
 		MessageService service=new MessageService();

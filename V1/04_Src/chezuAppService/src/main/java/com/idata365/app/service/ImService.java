@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,7 +87,9 @@ public class ImService extends BaseService<ImService>
     	}
     	return rtMap;
     }
-    
+    public  ImMsg  getMsgById( Long id) {
+    	return imMsgMapper.getMsgById(id);
+    }
     public Map<String,Object> getImNotify(Long familyId,Long userId,String basePath){
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	ImNotify imNotify=imNotifyMapper.getNotify(familyId);
@@ -131,6 +134,7 @@ public class ImService extends BaseService<ImService>
         		msg.setFromUserPic(imMsg.getFromUserPic());
         		msg.setToUserId(toUserId);
         		msg.setMsg(imMsg.getMsg());
+        		msg.setAtUsers(imMsg.getAtUsers());
         		msg.setIsRead(0);
         		insertList.add(msg);
     		}

@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.ImNotify;
+import com.idata365.app.entity.TaskImMessagePush;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ImService;
+import com.idata365.app.service.MessageService;
+import com.idata365.app.service.TaskImMessagePushService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.StringTools;
 import com.idata365.app.util.ValidTools;
@@ -24,6 +27,10 @@ public class ImController extends BaseController {
 	ImService imService;
 	@Autowired
 	FamilyService familyService;
+	@Autowired
+	TaskImMessagePushService taskImMessagePushService;
+	@Autowired
+	MessageService messageService;
 	@RequestMapping("/im/getMain")
     public Map<String,Object> getMain(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Object family =requestBodyParams.get("familyId");
@@ -98,7 +105,18 @@ public class ImController extends BaseController {
 		imMsg.setMsg(msg.toString());
 		imMsg.setIsRead(0);
 		imMsg.setFamilyId(Long.valueOf(family.toString()));
+		Object users=requestBodyParams.get("users");
+		imMsg.setAtUsers(users!=null?String.valueOf(users):null);
 		int rt= imService.insertMsg(imMsg);
+		if(users!=null && !users.equals("")) {
+				TaskImMessagePush task=new TaskImMessagePush();
+				task.setImMessageId(imMsg.getId());
+				taskImMessagePushService.insertTaskImMessagePush(task);
+				String []arrayUsers=String.valueOf(users).split(",");
+				for(String userId:arrayUsers) {
+					messageService.pushImMessageByTask(imMsg,userId);
+				}
+		}
 		return ResultUtils.rtSuccess(null);
 	}	
 	
