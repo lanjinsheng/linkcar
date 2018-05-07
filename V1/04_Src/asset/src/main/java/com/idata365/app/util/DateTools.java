@@ -255,6 +255,23 @@ public class DateTools
 		return dd;
 	}
 	/**
+	 * 将日期转-时-分-秒
+	 */
+	public static String formatDateD(Date date)
+	{
+		String dd = null;
+		try
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			dd = sdf.format(date);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return dd;
+	}
+	/**
 	 * 将日期转为年-月-日 -时-分-秒
 	 */
 	public static String formatDateYMD(Date date)
