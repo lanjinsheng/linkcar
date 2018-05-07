@@ -20,8 +20,15 @@ public class ImMsg implements Serializable {
 	private Integer isRead;
 	private String nickName;
 	private String phone;
+	private String atUsers;
 	
 	
+	public String getAtUsers() {
+		return atUsers;
+	}
+	public void setAtUsers(String atUsers) {
+		this.atUsers = atUsers;
+	}
 	public String getPhone() {
 		return phone;
 	}
