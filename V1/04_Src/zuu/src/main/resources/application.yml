@@ -20,4 +20,4 @@ zuul:
       serviceId: service-account-chezu
     other:
       path: /app/**
-      serviceId: service-app-dev-chezu
+      serviceId: service-app-chezu
