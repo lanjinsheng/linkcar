@@ -94,7 +94,7 @@ public class PowerService extends BaseService<PowerService>
 		 		break;
 		 	case TripToFamily:
 		 		AssetFamiliesPowerLogs familyPower=new AssetFamiliesPowerLogs();
-		 		familyPower.setEffectId(taskPowerLog.getId());
+		 		familyPower.setEffectId(Long.valueOf(String.valueOf(map.get("effectId"))));
 		 		familyPower.setEventType(EventType_MemberTrip);//签到
 		 		familyPower.setPowerNum(Long.valueOf(String.valueOf(map.get("toFamilyValue"))));
 		 		familyPower.setRecordType(RecordType_1);//增加1，减少2
@@ -106,7 +106,7 @@ public class PowerService extends BaseService<PowerService>
 		 		break;
 		 	case TripToUser:
 		 		AssetUsersPowerLogs tripPower=new AssetUsersPowerLogs();
-		 		tripPower.setEffectId(taskPowerLog.getId());
+		 		tripPower.setEffectId(Long.valueOf(String.valueOf(map.get("effectId"))));
 		 		tripPower.setEventType(EventType_UserTrip);//行程
 		 		tripPower.setPowerNum(Long.valueOf(String.valueOf(map.get("toUserValue"))));
 		 		tripPower.setRecordType(RecordType_1);//增加1，减少2

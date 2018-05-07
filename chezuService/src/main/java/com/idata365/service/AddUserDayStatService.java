@@ -89,14 +89,14 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	private boolean addFamilyTripPowerLogs(long userId,long habitId,long familyId,int power) {
+	private boolean addFamilyTripPowerLogs(long userId,long habitId,long familyId,int power,long effectId) {
 		 
-		    String jsonValue="{\"userId\":%d,\"habitId\":%d,\"familyId\":%d,\"toFamilyValue\":%s}";
+		    String jsonValue="{\"userId\":%d,\"habitId\":%d,\"familyId\":%d,\"toFamilyValue\":%s,\"effectId\":%d}";
 	    	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
 	    	taskPowerLogs.setUserId(userId);
 	    	taskPowerLogs.setTaskType(PowerEnum.TripToFamily);
 	    	int familyPower=BigDecimal.valueOf(power).divide(BigDecimal.valueOf(2),0,RoundingMode.HALF_EVEN).intValue();
-	    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,familyId,familyPower));
+	    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,familyId,familyPower,effectId));
 	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 	    	if(hadAdd>0) {
 	    		return true;
@@ -116,16 +116,16 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	private int addUserTripPowerLogs(long userId,long habitId,double distance,Double score) {
+	private int addUserTripPowerLogs(long effectId,long userId,long habitId,double distance,Double score) {
 		 
-		String jsonValue="{\"userId\":%d,\"habitId\":%d,\"toUserValue\":%s}";
+		String jsonValue="{\"userId\":%d,\"habitId\":%d,\"toUserValue\":%s,\"effectId\":%d}";
 		//(10+分数-45/10)*公里
 		BigDecimal score1=(BigDecimal.valueOf(score).subtract(BigDecimal.valueOf(45))).divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_EVEN);
     	int power=(score1.add(BigDecimal.valueOf(10))).multiply(BigDecimal.valueOf(distance)).divide(BigDecimal.valueOf(1000),0,RoundingMode.HALF_EVEN).intValue();
       	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
     	taskPowerLogs.setUserId(userId);
     	taskPowerLogs.setTaskType(PowerEnum.TripToUser);
-    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,String.valueOf(power)));
+    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,String.valueOf(power),effectId));
     	taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
     	return power;
 	}
@@ -152,7 +152,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 		}
 		//行程power
 //		String score="0";
-		int power=addUserTripPowerLogs(uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
+		int power=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
 		for(UserFamilyRoleLog role:roles) {
 			
 			//进行家族行程热度增加
@@ -161,7 +161,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			familyInfoMapper.updateFamilyActiveLevel(familyId);
 			
 			//插入行程得分任务
-			addFamilyTripPowerLogs(role.getUserId(), uth.getHabitId(),familyId, power);
+			addFamilyTripPowerLogs(role.getUserId(), uth.getHabitId(),familyId, power,uth.getId());
 			
 			if(role.getRole()==7) {//煎饼侠，行程不纳入
 				continue;

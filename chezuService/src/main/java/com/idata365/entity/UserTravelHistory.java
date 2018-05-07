@@ -29,7 +29,7 @@ public class UserTravelHistory implements Serializable {
 	int nightDriveOffset;
 	int tiredDriveOffset;
 	int highSpeedTimesOffset;
-	
+	String hiddenFlag; 
 	String score;
 	
 	private int addDayStatFlag;
@@ -37,6 +37,12 @@ public class UserTravelHistory implements Serializable {
 	private Date taskDealTime;
 	private int failTimes;
 	
+	public String getHiddenFlag() {
+		return hiddenFlag;
+	}
+	public void setHiddenFlag(String hiddenFlag) {
+		this.hiddenFlag = hiddenFlag;
+	}
 	public int getUseShachepian() {
 		return useShachepian;
 	}

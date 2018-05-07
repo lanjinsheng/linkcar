@@ -16,6 +16,15 @@ import com.idata365.entity.TaskFamilyPk;
 import com.idata365.mapper.app.TaskFamilyDayOrderMapper;
 import com.idata365.mapper.app.TaskFamilyMonthOrderMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
+
+/**
+ * 
+    * @ClassName: CalFamilyMonthOrderService
+    * @Description: TODO(这做废，该计算可以不需要)
+    * @author LanYeYe
+    * @date 2018年5月3日
+    *
+ */
 @Service
 public class CalFamilyMonthOrderService {
 

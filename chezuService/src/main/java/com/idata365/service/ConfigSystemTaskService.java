@@ -52,6 +52,9 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	TaskFamilyPkRelationMapper taskFamilyPkRelationMapper;
 	@Autowired
 	SystemProperties systemProperties;
+	@Autowired
+	UserConfigService userConfigService;
+	
 	public String getDateStr(int diff)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -63,7 +66,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	}
 	@Transactional
 	public void configSystemTask(){
-	
+		//用户配置更新
+		userConfigService.getUserConfig();
 		//查询竞赛时间
 		String dayStamp=getDateStr(-1);
 		DicGameDay gameDay=dicGameDayMapper.queryDicGameDay(dayStamp);
