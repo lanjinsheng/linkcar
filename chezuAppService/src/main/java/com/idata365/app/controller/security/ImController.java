@@ -109,13 +109,16 @@ public class ImController extends BaseController {
 		imMsg.setAtUsers(users!=null?String.valueOf(users):null);
 		int rt= imService.insertMsg(imMsg);
 		if(users!=null && !users.equals("")) {
-				TaskImMessagePush task=new TaskImMessagePush();
-				task.setImMessageId(imMsg.getId());
-				taskImMessagePushService.insertTaskImMessagePush(task);
 				String []arrayUsers=String.valueOf(users).split(",");
+				//直接发送
 				for(String userId:arrayUsers) {
 					messageService.pushImMessageByTask(imMsg,userId);
 				}
+			    //暂时不从任务走,下面只插入任务，但不执行任务
+				TaskImMessagePush task=new TaskImMessagePush();
+				task.setImMessageId(imMsg.getId());
+				taskImMessagePushService.insertTaskImMessagePush(task);
+			
 		}
 		return ResultUtils.rtSuccess(null);
 	}	
