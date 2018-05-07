@@ -19,5 +19,6 @@ public interface AssetUsersPowerLogsMapper {
 	List<AssetUsersPowerLogs> getAllRecord();
 
 	AssetUsersPowerLogs getUsersPowerLogsByEffectId(AssetUsersPowerLogs assetUsersPowerLogs);
-
+	
+	int getSignInLogByUserId(@Param("userId") long userId);
 }
