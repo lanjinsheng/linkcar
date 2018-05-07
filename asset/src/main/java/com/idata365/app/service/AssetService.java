@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
@@ -41,8 +41,16 @@ import com.idata365.app.util.DateTools;
 public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
 	public final static int EventType_Buy = 3;
+	public final static int EventType_Power_Index_Get = 2;//首页拾取
+	public final static int EventType_Power_Trip = 4;//行程
+	public final static int EventType_Daimond_DayPower_User = 1;//每日分配
+	public final static int EventType_Daimond_GameEnd_User = 2;//比赛结束家族分配
+	
+	public final static int EventType_Daimond_GameEnd = 1;//比赛获取
+	public final static int EventType_Daimond_Distr = 2;//比赛分配消耗
+	
 	public final static int RecordType_2 = 2;// 减少
-	public final static int RecordType_1 = 2;// 增加
+	public final static int RecordType_1 = 1;// 增加
 	@Autowired
 	AssetUsersAssetMapper assetUsersAssetMapper;
 	@Autowired
@@ -429,5 +437,64 @@ public class AssetService extends BaseService<AssetService> {
 	public List<AssetUsersPowerLogs> getStoleFamilyFightPowers() {
 		List<AssetUsersPowerLogs> list = assetUsersPowerLogsMapper.getAllRecord();
 		return list;
+	}
+	/**
+	 * 
+	    * @Title: getUserPowerByEffectId
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param effectId
+	    * @param @return    参数
+	    * @return String    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public String getUserPowerByEffectId(long effectId) {
+		AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
+		assetUsersPowerLogs.setEffectId(effectId);
+		assetUsersPowerLogs.setEventType(EventType_Power_Trip);
+		AssetUsersPowerLogs apl=assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
+		if(apl==null) return "0";
+		return String.valueOf(apl.getPowerNum());
+	}
+	
+	/**
+	 * 
+	    * @Title: initFamily
+	    * @Description: TODO(创建家族时候调用)
+	    * @param @param familyId
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	
+	@Transactional
+	public boolean initFamily(long familyId) {
+		AssetFamiliesAsset assetFamiliesAsset=new AssetFamiliesAsset();
+		assetFamiliesAsset.setFamilyId(familyId);
+		assetFamiliesAssetMapper.initFamily(assetFamiliesAsset);
+		return true;
+	}
+	/**
+	 * 
+	    * @Title: initUser
+	    * @Description: TODO(创建用户初始化)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public boolean initUser(long userId) {
+		AssetUsersAsset assetUsersAsset=new AssetUsersAsset();
+		assetUsersAsset.setUserId(userId);
+		assetUsersAssetMapper.initUser(assetUsersAsset);
+		return true;
+	}
+	@Transactional
+	public void userPowersSnapShot(String tableName){
+		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
 }
