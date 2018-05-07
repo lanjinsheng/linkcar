@@ -9,9 +9,6 @@
 						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 						http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
-
-	 
- 
  <!-- 异步线程池 -->  
   <bean id="threadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">  
     <!-- 核心线程数  -->  
@@ -252,13 +249,46 @@
   <!--End#######################按天成员驾驶是否违规#######################################################-->
 
 
+ <!--Begin#######################按天匹配昨日未曾设置pk的家族#######################################################-->
+  <!-- 延迟10s加载，并且每隔25秒进行处理扫描 -->
+  <bean id="calFamilyPkRelationTask" class="com.idata365.schedule.CalFamilyDayPkRelationTask">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="calFamilyPkRelationTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="calFamilyPkRelationTask" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" /> 
+        <!-- 每次任务间隔25*1000毫秒-->  
+    <property name="period" value="25000" />   
+  </bean> 
+  <!--End#######################按天匹配昨日未曾设置pk的家族#######################################################-->
+ <!--Begin#######################计算power的日志#######################################################-->
+  <!-- 延迟10s加载，并且每隔25秒进行处理扫描 -->
+  <bean id="calPowerTask" class="com.idata365.schedule.CalPowerTask">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="calPowerTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="calPowerTask" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" /> 
+        <!-- 每次任务间隔5*1000毫秒-->  
+    <property name="period" value="5000" />   
+  </bean> 
+  <!--End#######################计算power的日志#######################################################-->
+
+
+
     <bean id="springScheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">  
     <property name="scheduledExecutorTasks">  
       <list>  
+       <ref bean="addUserDayStatTaskExe"/>
+       <ref bean="calPowerTaskExe"/>  
+      
 	   <ref bean="driveSendMainTaskExe" />
 	   <ref bean="calScoreMainTaskExe"/>
-	   <ref bean="addUserDayStatTaskExe"/> 
-	   <ref bean="configInitTaskExe"/> 
+	  
 	   <ref bean="calUserDayScoreTaskExe"/> 
 	   <ref bean="calFamilyDayScoreTaskExe"/> 
 	   <ref bean="calFamilyDayPkTaskExe"/> 
@@ -267,6 +297,9 @@
        <ref bean="calGameEndTaskExe"/>
        <ref bean="calUserDayEndBestDriveTaskExe"/> 
        <ref bean="calFamilyDayEndLevelTaskExe"/> 
+       
+       <ref bean="configInitTaskExe"/> 
+       <ref bean="calFamilyPkRelationTaskExe"/> 
        <ref bean="clearLockTaskExe"/>
       </list>  
     </property>  
