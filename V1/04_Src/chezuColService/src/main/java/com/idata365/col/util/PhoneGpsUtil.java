@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.idata365.col.schedule.DatasDealTask;
 public class PhoneGpsUtil {
 	private static Logger log = Logger.getLogger(PhoneGpsUtil.class);
 	public static void main(String []args){
+	
 	}
 	final static double speed120=33.33;
 	final static double speed130=36.11;
@@ -36,7 +38,68 @@ public class PhoneGpsUtil {
 			speedBean.setSpeed160UpTimes(speedBean.getSpeed160UpTimes()+1);
 		}
 	}
+	/**
+	 * 
+	    * @Title: dealValidGps
+	    * @Description: TODO(去除无效gps)
+	    * @param @param list    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public static List<Map<String,String>> dealOrderGps(List<Map<String,String>> list){
+		List<OrderGpsBean> scbList=new ArrayList<OrderGpsBean>();
+		List<Map<String,String>> rtList=new ArrayList<Map<String,String>>();
+		int len=0;
+		for(Map<String,String> gps:list) {
+			if(gps.get("t")==null || gps.get("s").equals("")) {
+				len++;
+				continue;
+			}
+			scbList.add(new OrderGpsBean(String.valueOf(gps.get("t")),len));
+			len++;
+		}
+		scbList.sort(Comparator.naturalOrder());
+		int i=scbList.size();
+		 
+		for(int j=0;j<i;j++) {
+			int validNum=scbList.get(j).getLsNumber();
+			rtList.add(list.get(validNum));
+		}
+		return rtList;
+	}
+	
+	/**
+	 * 
+	    * @Title: dealValidGps
+	    * @Description: TODO(去除无效gps)
+	    * @param @param list    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public static void dealValidGps(List<Map<String,String>> list){
+		List<SpeedClearBean> scbList=new ArrayList<SpeedClearBean>();
+		int len=0;
+		for(Map<String,String> gps:list) {
+			if(gps.get("s")==null || gps.get("s").equals("")) {
+				len++;
+				continue;
+			}
+			scbList.add(new SpeedClearBean(Double.valueOf(gps.get("s")),len));
+			len++;
+		}
+		scbList.sort(Comparator.naturalOrder());
+		int i=((list.size()/3600+1)*5);
+		if(i>list.size()) return;
+		for(int j=0;j<i;j++) {
+			int validNum=scbList.get(j).getLsNumber();
+			list.get(validNum).put("invalid", "1");
+		}
+	}
 	public static Map<String,Object> getGpsValues(List<Map<String,String>> list,String uhIDs){
+		//清理gps點
+		dealValidGps(list);
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		Double distance=0d;//距离值测算
 		double avgSpeed=0;
@@ -65,7 +128,7 @@ public class PhoneGpsUtil {
 		int i=0;
 		String st=first.get("t");
 		StringBuffer et=new StringBuffer(first.get("t"));
-		while(st.equals("")) {
+		while(st.equals("") && first.get("invalid")==null) {
 			  i++;
 			  first=list.get(i);
 			  st=first.get("t");
@@ -82,6 +145,9 @@ public class PhoneGpsUtil {
 		i++;
 		for(;i<size;i++){
 			Map<String,String> gps=list.get(i);
+			if(gps.get("invalid")!=null) {
+				continue;
+			}
 			 if(!gps.get("t").equals("")) {
 				   et.setLength(0);
 				   et.append(gps.get("t"));
@@ -548,9 +614,22 @@ public class PhoneGpsUtil {
 			max=d13;
 		}else if(d13<min){
 			min=d13;
-		
 		}
 		return (max-min);
 	}
 	
+	/*==========================================================*/
+	/**
+	 * 下面做個測試函數
+	 */
+	public static Map<String,Object> getGpsValuesTest(List<Map<String,String>> list,String uhIDs){
+		dealValidGps(list);
+		for(Map<String,String> gps:list) {
+			if(gps.get("invalid")!=null) {
+				System.out.println("搗亂數據:"+gps.get("s")+"==="+gps.get("invalid"));
+			}
+		}
+		return null;
+	}
+		
 }

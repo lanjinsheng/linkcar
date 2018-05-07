@@ -209,6 +209,16 @@ public class DataService extends BaseService<DataService>{
 			ResultUtils.putSuccess(map);
 			return sb.toString();
 	}
+	
+	
+	
+	public String listPageDriveMainTest(Map<String,Object> map) {
+		  List<DriveDataMain> list= driveDataMainMapper.listPageDriveMainTest(map);
+			StringBuffer sb = new StringBuffer("");
+			sb.append(ResultUtils.toJson(list));
+			ResultUtils.putSuccess(map);
+			return sb.toString();
+	}
 	/**
 	 * 
 	    * @Title: lockUploadStatusTask
