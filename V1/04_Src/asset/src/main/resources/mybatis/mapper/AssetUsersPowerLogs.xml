@@ -36,4 +36,10 @@
 		FROM assetUsersPowerLogs where
 		 <![CDATA[ eventType=3 and createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
+	
+	 <select id="getUsersPowerLogsByEffectId" resultMap="BaseAssetUsersPowerLogsMap" parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
+       SELECT *
+       FROM  assetUsersPowerLogs where effectId=#{effectId} and eventType=#{eventType}
+     </select>
+     
 </mapper>
