@@ -43,6 +43,8 @@ public class AssetService extends BaseService<AssetService> {
 	public final static int EventType_Buy = 3;
 	public final static int EventType_Power_Index_Get = 2;//首页拾取
 	public final static int EventType_Power_Trip = 4;//行程
+	public final static int EventType_Power_SignIn = 1;//签到
+	
 	public final static int EventType_Daimond_DayPower_User = 1;//每日分配
 	public final static int EventType_Daimond_GameEnd_User = 2;//比赛结束家族分配
 	
@@ -509,4 +511,30 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
 
+	/**
+	 * 
+	    * @Title: getDaySignInLog
+	    * @Description: TODO(签到获取动力)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return int    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public int getDaySignInLog(Long userId) {
+		int c=assetUsersPowerLogsMapper.getSignInLogByUserId(userId);
+		if(c>0) {
+			return 0;
+		}else {
+			AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
+			assetUsersPowerLogs.setEffectId(0l);
+			assetUsersPowerLogs.setEventType(EventType_Power_SignIn);
+			assetUsersPowerLogs.setPowerNum(5l);
+			assetUsersPowerLogs.setRecordType(RecordType_1);
+			assetUsersPowerLogs.setRemark(userId+"签到获取");
+			assetUsersPowerLogs.setUserId(userId);
+			 assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
+			return assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
+		}
+	}
 }
