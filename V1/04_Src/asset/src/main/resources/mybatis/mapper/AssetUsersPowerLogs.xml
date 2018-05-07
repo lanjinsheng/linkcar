@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.idata365.app.mapper.AssetUsersPowerLogsMapper">
-    <resultMap id="BaseAssetUsersPowerLogsMap" type="com.idata365.app.entity.AssetUsersPowerLogs" >
-    </resultMap>
- 
-  <update id="insertUsersPowerLogs"   parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
-        insert into  assetUsersPowerLogs
-        (userId,powerNum,recordType,eventType,effectId,remark,createTime)
-        values(#{userId},#{powerNum},#{recordType},#{eventType},
-        #{effectId},#{remark},now())
-   </update>
-   
-    <select id="getUsersPowerLogsByEffectId" resultMap="BaseAssetUsersPowerLogsMap" parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
-       SELECT *
-       FROM  assetUsersAsset where userId=#{userId}
-     </select>
-     
+<mapper
+	namespace="com.idata365.app.mapper.AssetUsersPowerLogsMapper">
+	<resultMap id="BaseAssetUsersPowerLogsMap"
+		type="com.idata365.app.entity.AssetUsersPowerLogs">
+	</resultMap>
+	<resultMap id="BaseResultMap"
+		type="com.idata365.app.entity.AssetUsersPowerLogs">
+	</resultMap>
+	<update id="insertUsersPowerLogs"
+		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+		insert into assetUsersPowerLogs
+		(userId,powerNum,recordType,eventType,effectId,remark,createTime)
+		values(#{userId},#{powerNum},#{recordType},#{eventType},
+		#{effectId},#{remark},now())
+	</update>
+	<select id="getIndexPowers" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersPowerLogs where
+		userId=#{userId} and <![CDATA[id< #{id} and createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
+	</select>
+	<select id="getIndexPowersFirst" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersPowerLogs where
+		userId=#{userId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]> limit 10
+	</select>
+	<select id="getTotalPowersNum" resultType="java.lang.Long">
+		SELECT sum(powerNum) FROM assetUsersPowerLogs where userId=#{userId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY)]]>
+	</select>
+	<select id="getAllRecord" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersPowerLogs where
+		 <![CDATA[ eventType=3 and createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
+	</select>
 </mapper>
