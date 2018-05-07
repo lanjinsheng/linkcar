@@ -76,6 +76,12 @@ public class CalFamilyMonthAvgOrderService {
 //	
 	@Transactional
 	public void updateFailFamilyMonthAvgOrderTask(TaskFamilyMonthAvgOrder taskFamilyOrder) {
+		if(taskFamilyOrder.getFailTimes()>100) {
+			//状态置为2，代表计算次数已经极限
+			taskFamilyOrder.setTaskStatus(2);
+		}else {
+			taskFamilyOrder.setTaskStatus(0);
+		}
 		taskFamilyMonthAvgOrderMapper.updateFamilyMonthAvgOrderFailTask(taskFamilyOrder);
 	}
 //	

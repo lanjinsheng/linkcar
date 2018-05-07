@@ -3,6 +3,7 @@ package com.idata365.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class StaticDatas {
 	public static Map<String,Object> UserConfigDefault=new HashMap<String,Object> ();
@@ -21,5 +22,16 @@ public class StaticDatas {
 		UserConfigDefault.put("stepEndCount", 20);
 		UserConfigDefault.put("limitSpeedEndTimes", 300);
 		UserConfigDefault.put("coordinateSet", new ArrayList<Object>());
+	}
+	/**
+	 * 生成随机数，范围[min, max]
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static int generateRand(int min, int max)
+	{
+		int randNum = ThreadLocalRandom.current().nextInt(max - min + 1) + min;
+		return randNum;
 	}
 }

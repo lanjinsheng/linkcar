@@ -9,7 +9,9 @@ package com.idata365.service;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
@@ -79,6 +81,7 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 		lottery.setHabitId(habitId);
 		lottery.setUserId(userId);
 		lottery.setHadGet(0);
+		lottery.setCreateMilTimes(System.currentTimeMillis());
 		return lottery;
 	}
 	@Transactional
@@ -101,6 +104,12 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 			uth.setTurnTimes(drive.getTurnTimes());
 			uth.setOverspeedTimes(drive.getOverspeedTimes());
 			uth.setMaxspeed(drive.getMaxSpeed().doubleValue());
+			uth.setHiddenFlag("1");
+			if(UserConfigService.map.get(uth.getUserId())!=null) {
+				//查找配置
+				String hidden=String.valueOf(UserConfigService.map.get(uth.getUserId()));
+				uth.setHiddenFlag(hidden);
+			}
 			list.add(uth);
 			lotterys.add(getTravelLottery(uth.getUserId(),uth.getHabitId()));
 		}

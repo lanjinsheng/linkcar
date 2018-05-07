@@ -27,7 +27,7 @@ import com.idata365.service.TaskKeyLogService;
 
 /**
  * 
-    * @ClassName: CalFamilyMonthAvgOrderTask
+    * @ClassName: CalFamilyDayEndLevelTask
     * @Description: TODO(平均数)
     * @author LanYeYe
     * @date 2017年12月31日
