@@ -10,7 +10,8 @@ public interface AssetFamiliesPowerLogsMapper {
 
 	int insertFamiliesPowerLogs(AssetFamiliesPowerLogs assetFamiliesPowerLogs);
 
-	List<AssetFamiliesPowerLogs> getFamilyPowers(@Param("familyId") long familyId,@Param("fightFamilyId") long fightFamilyId);
+	List<AssetFamiliesPowerLogs> getFamilyPowers(@Param("familyId") long familyId,
+			@Param("fightFamilyId") long fightFamilyId);
 
-	AssetFamiliesPowerLogs getFamiliesPowerLogs(@Param("ballId")long ballId);
+	AssetFamiliesPowerLogs getFamiliesPowerLogs(@Param("ballId") long ballId);
 }

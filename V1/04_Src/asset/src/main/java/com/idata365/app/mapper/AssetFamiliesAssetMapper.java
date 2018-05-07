@@ -15,9 +15,11 @@ public interface AssetFamiliesAssetMapper {
 	int updateFamilyPowerMinus(@Param("familyId") long familyId, @Param("powerNum") long powerNum);
 
 	AssetFamiliesAsset getFamiliesAssetByFamilyId(@Param("familyId") Long familyId);
+
 	int updateDiamondsAdd(AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs);
+
 	int updateDiamondsReduce(AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs);
-	    
+
 	int initFamily(AssetFamiliesAsset assetFamiliesAsset);
 
 }

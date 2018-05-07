@@ -42,10 +42,8 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexDiamonds(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		
 		Map<String,Object> data = assetService.getIndexDiamonds(userId,requestBodyParams);
 		return ResultUtils.rtSuccess(data);
-
 	}
 
 	/**
@@ -64,12 +62,11 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		Map<String,Object> data = assetService.getIndexPowers(userId,requestBodyParams);
 		return ResultUtils.rtSuccess(data);
-
 	}
 
 	/**
 	 * 
-	 * @Title: getFamilyPowers
+	 * @Title: getFamilyFightPowers
 	 * @Description: TODO(获取家族对战动力情况)
 	 * @param @param
 	 *            allRequestParams
@@ -82,7 +79,7 @@ public class AssetController extends BaseController {
 	 *             LiXing
 	 */
 	@RequestMapping("/getFamilyFightPowers")
-	public Map<String, Object> getFamilyPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> getFamilyFightPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
@@ -142,7 +139,7 @@ public class AssetController extends BaseController {
 	 *             LiXing
 	 */
 	@RequestMapping("/getFamilyFightPowersRecord")
-	public Map<String, Object> getStoleFamilyFightPowers(
+	public Map<String, Object> getStolePowersRecord(
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
