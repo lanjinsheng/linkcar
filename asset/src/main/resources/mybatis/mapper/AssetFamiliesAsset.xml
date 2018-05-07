@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.idata365.app.mapper.AssetFamiliesAssetMapper">
-    <resultMap id="BaseFamiliestMap" type="com.idata365.app.entity.AssetFamiliesAsset" >
-    </resultMap>
- 
-     <update id="updatePowerAdd"   parameterType="com.idata365.app.entity.AssetFamiliesPowerLogs">
-        update assetFamiliesAsset set powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum}) where
-           familyId=#{familyId} 
-     </update>
-     <update id="updateDiamondsAdd"   parameterType="com.idata365.app.entity.AssetFamiliesDiamondsLogs">
-        update assetFamiliesAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}) where
-           familyId=#{familyId} 
-     </update>
-     <update id="updateDiamondsReduce"   parameterType="com.idata365.app.entity.AssetFamiliesDiamondsLogs">
-        update assetFamiliesAsset set diamondsNum=(diamondsNum-${diamondsNum}),hadDiamondsNum=(hadDiamondsNum-${diamondsNum}) where
-           familyId=#{familyId} 
-     </update>
-     
-     <insert id="initFamily"   parameterType="com.idata365.app.entity.AssetFamiliesAsset">
-            INSERT IGNORE  INTO 
-            assetFamiliesAsset
-            (familyId,updateTime) 
-        VALUES
-            (#{familyId},now())
-     </insert>
+<mapper
+	namespace="com.idata365.app.mapper.AssetFamiliesAssetMapper">
+	<resultMap id="BaseFamiliestMap"
+		type="com.idata365.app.entity.AssetFamiliesAsset">
+	</resultMap>
+
+	<update id="updatePowerAdd"
+		parameterType="com.idata365.app.entity.AssetFamiliesAsset">
+		update assetFamiliesAsset set
+		powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum})
+		where
+		familyId=#{familyId}
+	</update>
+	<update id="updateFamilyPowerAdd">
+		update assetFamiliesAsset set
+		powerNum=(powerNum+#{powerNum,jdbcType=BIGINT}),hadPowerNum=(hadPowerNum+#{powerNum,jdbcType=BIGINT})
+		where
+		familyId=#{familyId,jdbcType=BIGINT}
+	</update>
+	<update id="updateFamilyPowerMinus">
+		update assetFamiliesAsset set
+		powerNum=(powerNum-#{powerNum,jdbcType=BIGINT})
+		where
+		familyId=#{familyId,jdbcType=BIGINT} and powerNum>#{powerNum}
+	</update>
+	<select id="getFamiliesAssetByFamilyId" resultMap="BaseFamiliestMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetFamiliesAsset where familyId=#{familyId}
+	</select>
 </mapper>

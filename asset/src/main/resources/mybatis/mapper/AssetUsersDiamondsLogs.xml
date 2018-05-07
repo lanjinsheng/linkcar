@@ -5,32 +5,30 @@
 	<resultMap id="BaseAssetUsersDiamondsLogsMap"
 		type="com.idata365.app.entity.AssetUsersDiamondsLogs">
 	</resultMap>
-	<resultMap id="BaseResultMap" type="com.idata365.app.entity.AssetUsersDiamondsLogs" >
-    </resultMap>
+	<resultMap id="BaseResultMap"
+		type="com.idata365.app.entity.AssetUsersDiamondsLogs">
+	</resultMap>
 	<select id="getIndexDiamonds" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
-		FROM assetUsersDiamondsLogs where userId=#{userId} order by 'createTime'
+		FROM assetUsersDiamondsLogs where
+		userId=#{userId} and <![CDATA[id< #{id} order by createTime desc limit 10]]>
 	</select>
-	<insert id="insertDiamondsConsume"
-		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
-		insert into assetUsersDiamondsLogs
-		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
-		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
-		#{effectId},#{remark},now())
-	</insert>
-	<insert id="insertUsersDiamondsDay"
-		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
-		insert into assetUsersDiamondsLogs
-		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
-		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
-		#{effectId},#{remark},now())
-	 </insert>
-
-	<select id="getDiamondsByEffectId" resultMap="BaseResultMap"
+	<select id="getIndexDiamondsFirst" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
-		FROM assetUsersDiamondsLogs where effectId=#{effectId}
+		FROM assetUsersDiamondsLogs where
+		userId=#{userId} order by createTime desc limit 10
 	</select>
+	<select id="getTotalDiamondsNum" resultType="java.lang.Long">
+		SELECT sum(diamondsNum) FROM assetUsersDiamondsLogs where userId=#{userId}
+	</select>
+	<update id="insertDiamondsConsume"
+		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
+		insert into assetUsersDiamondsLogs
+		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
+		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
+		#{effectId},#{remark},now())
+	</update>
 
 </mapper>
