@@ -6,14 +6,14 @@
     <insert id="insertMsg"   parameterType="java.util.List">
        INSERT INTO 
             imMsg
-            (familyId,fromUserPic,fromUserId,toUserPic,toUserId,createTime,msg,isRead)  VALUES
+            (familyId,fromUserPic,fromUserId,toUserPic,toUserId,createTime,msg,isRead,atUsers)  VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
-    		(#{item.familyId},#{item.fromUserPic},#{item.fromUserId},#{item.toUserPic},#{item.toUserId},now(),#{item.msg},#{item.isRead}) 
+    		(#{item.familyId},#{item.fromUserPic},#{item.fromUserId},#{item.toUserPic},#{item.toUserId},now(),#{item.msg},#{item.isRead},#{item.atUsers}) 
     	</foreach>
     </insert>
  
     <select id="getMsg" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-  	  select a.id,a.familyId,b.imgUrl as fromUserPic,b.nickName,b.phone,a.fromUserPic,a.fromUserId,a.toUserId,a.createTime,a.msg,a.isRead
+  	  select a.id,a.familyId,b.imgUrl as fromUserPic,b.nickName,b.phone,a.fromUserPic,a.fromUserId,a.toUserId,a.createTime,a.msg,a.atUsers,a.isRead
   	    from imMsg  a left join usersAccount b on a.fromUserId=b.id where 
         a.familyId=#{familyId}  and a.toUserId=#{toUserId}
         <choose>
@@ -25,6 +25,11 @@
         </otherwise>
         </choose>
            order by a.id desc  limit 10
+    </select>
+     
+     <select id="getMsgById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	  select *
+  	    from imMsg   where id=#{id}
     </select>
      
     <update id="updateMsg"    parameterType="java.util.HashMap" >
