@@ -26,8 +26,8 @@ public class TaskImMessagePushService {
 	
 	@Transactional
 	public boolean pushMessage(TaskImMessagePush task) {
-		ImMsg msg=imService.getMsgById(task.getImMessageId());
-		messageService.pushImMessageByTask(msg);
+//		ImMsg msg=imService.getMsgById(task.getImMessageId());
+//		messageService.pushImMessageByTask(msg);
 		return true;
 	}
 	
