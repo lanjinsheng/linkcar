@@ -34,6 +34,15 @@ public class ChezuHystric implements ChezuService {
 		return null;
 	}
 
- 
+
+	@Override
+	public String getUsersByFamilyId(long familyId, String daystamp, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" getUsersByFamilyId 挂了  service-account-chezu");
+		return null;
+	}
+
+	 
+
 
 }
