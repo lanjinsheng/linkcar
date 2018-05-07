@@ -129,28 +129,28 @@ public class TaskService extends BaseService<TaskService>
 			tempParamBean.setStartTime(startTime);
 			tempParamBean.setEndTime(endTime);
 			
-			DriverVehicleResultBean driveEditStatus = this.taskMapper.queryDriveEditStatus(tempParamBean);
-			DriverVehicleResultBean travelEditStatus = this.taskMapper.queryTravelEditStatus(tempParamBean);
-			
-			List<Integer> historyRoleList = this.taskMapper.queryRoleExceptDay(tempParamBean);
+//			DriverVehicleResultBean driveEditStatus = this.taskMapper.queryDriveEditStatus(tempParamBean);
+//			DriverVehicleResultBean travelEditStatus = this.taskMapper.queryTravelEditStatus(tempParamBean);
+
+//			List<Integer> historyRoleList = this.taskMapper.queryRoleExceptDay(tempParamBean);
 			
 			//试用标记位,true表已经试用
-			boolean flag = false;
+//			boolean flag = false;
 			//没有编辑过驾驶证、行驶证
-			if (null == driveEditStatus
-					|| null == travelEditStatus
-							|| 0 != driveEditStatus.getIsDrivingEdit()
-							|| 0 != travelEditStatus.getIsTravelEdit())
-			{
-				int role = tempBean.getRole();
-				if (0 != role
-						&& 7 != role
-						&& CollectionUtils.isNotEmpty(historyRoleList)
-						&& historyRoleList.contains(role))
-				{
-					flag = true;
-				}
-			}
+//			if (null == driveEditStatus
+//					|| null == travelEditStatus
+//							|| 0 != driveEditStatus.getIsDrivingEdit()
+//							|| 0 != travelEditStatus.getIsTravelEdit())
+//			{
+//				int role = tempBean.getRole();
+//				if (0 != role
+//						&& 7 != role
+//						&& CollectionUtils.isNotEmpty(historyRoleList)
+//						&& historyRoleList.contains(role))
+//				{
+//					flag = true;
+//				}
+//			}
 			
 			//count用户明天的角色
 			UserFamilyRoleLogBean tomorrowRoleLog = this.taskMapper.queryFamilyRoleLog(tempParamBean);
@@ -158,23 +158,23 @@ public class TaskService extends BaseService<TaskService>
 			{
 				//初始化明天的userFamilyRoleLog
 				//如果角色已经被试用过一天，则明天角色恢复为默认角色
-				if (flag)
-				{
-					tempParamBean.setRole(RoleConstant.JIANBING_ROLE);
-				}
+//				if (flag)
+//				{
+//					tempParamBean.setRole(RoleConstant.JIANBING_ROLE);
+//				}
 				
 				this.taskMapper.saveUserFamilyRole(tempParamBean);
 				long userFamilyRoleLogId = tempParamBean.getId();
 				
 				//初始化userFamilyRelation中的role
-				if (flag)
-				{
-					UserFamilyRoleLogParamBean userRoleParamBean = new UserFamilyRoleLogParamBean();
-					userRoleParamBean.setRole(RoleConstant.JIANBING_ROLE);
-					userRoleParamBean.setUserId(tempBean.getUserId());
-					userRoleParamBean.setFamilyId(tempBean.getFamilyId());
-					this.taskMapper.updateUserRole(userRoleParamBean);
-				}
+//				if (flag)
+//				{
+//					UserFamilyRoleLogParamBean userRoleParamBean = new UserFamilyRoleLogParamBean();
+//					userRoleParamBean.setRole(RoleConstant.JIANBING_ROLE);
+//					userRoleParamBean.setUserId(tempBean.getUserId());
+//					userRoleParamBean.setFamilyId(tempBean.getFamilyId());
+//					this.taskMapper.updateUserRole(userRoleParamBean);
+//				}
 				
 				//初始化明天的userScoreDayStat
 				UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
