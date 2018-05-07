@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.TaskGenericMapper">
+   <resultMap id="BaseTaskGenericMap" type="com.idata365.app.entity.TaskGeneric" >
+    </resultMap>
+    
+   <insert id="insertTask" parameterType="com.idata365.app.entity.TaskGeneric">
+        INSERT IGNORE INTO  taskGeneric
+		 (genericKey,jsonValue,taskType,priority,createTime)
+		 values
+		 (#{genericKey},#{jsonValue},#{taskType},#{priority},now())
+    </insert>
+    
+    <insert id="initUserDayRewardTask"  parameterType="java.util.HashMap">
+        INSERT IGNORE INTO  taskGeneric
+		 (genericKey,jsonValue,taskType,priority,createTime)
+		 select CONCAT(#{genericKey},'_do',id),CONCAT('{"id":',id,',"tableName":"',#{tableName},'","powerTotal":',${powerTotal},'}'),#{taskType},#{priority},now() from ${tableName}
+    </insert>
+    <insert id="initFamilySeasonReward"  parameterType="java.util.HashMap">
+        INSERT IGNORE INTO  taskGeneric
+		 (genericKey,jsonValue,taskType,priority,createTime)
+		 select CONCAT(#{genericKey},'_do',id),
+		 CONCAT('{"id":',id,'"orderNo":',orderNo,'"familyId":',familyId,'"familyTotal":',${familyTotal},'}'),
+		 #{taskType},
+		 #{priority},now() from familyGameAsset where
+		 seasonName=#{season} order by id limit ${limit}
+    </insert>
+    <select id="getByFamilyTotal"  resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT count(1)  from familyGameAsset where seasonName=#{season}
+	 </select>
+    
+ 	<select id="getByGenericKey"  resultMap="BaseTaskGenericMap" parameterType="java.lang.String">
+		SELECT *  from taskGeneric where genericKey=#{genericKey} and taskStatus=1
+	 </select>
+	 
+	 <select id="getPowerDayTotal"  resultType="java.lang.Long" parameterType="java.util.HashMap">
+		SELECT sum(hadPowerNum)  from ${tableName} 
+	 </select>
+	
+	 <select id="getPersonPower"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT *  from ${tableName} where id=#{id}
+	 </select>
+	 <select id="getUserPowerByUserId"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT *  from ${tableName} where userId=#{userId}
+	 </select>
+	
+ <!-- 定时处理逻辑 -->
+    <update id="lockTask" parameterType="com.idata365.app.entity.TaskGeneric" >
+       UPDATE 
+            taskGeneric 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=${taskDealTime}
+       WHERE 
+            taskStatus = 0  and taskFlag='0' LIMIT 5  
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getTask"  resultMap="BaseTaskGenericMap" parameterType="com.idata365.app.entity.TaskGeneric">
+		SELECT *  from taskGeneric where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateSuccTask" parameterType="com.idata365.app.entity.TaskGeneric" >
+        update taskGeneric set
+        taskStatus=1,taskDealTime=${taskDealTime}
+        where  id=#{id}
+     </update>
+     <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,taskStatus=2为失败-->
+    <update id="updateFailTask" parameterType="com.idata365.app.entity.TaskGeneric" >
+       UPDATE 
+           taskGeneric 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskDealTime=${taskDealTime},failTimes=failTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           taskGeneric 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskDealTime<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理 结束-->		
+	
+</mapper>
