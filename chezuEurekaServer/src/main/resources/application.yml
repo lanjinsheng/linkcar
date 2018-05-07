@@ -2,7 +2,8 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: product-eureka.idata365.com
+#    hostname: product-eureka.idata365.com
+    hostname: 119.28.16.217
     prefer-ip-address: true
     ip-address: true
   client:
