@@ -85,7 +85,7 @@ public class GameController extends BaseController
 	public Map<String, Object> challengeFamilyV1_1(@RequestBody GameFamilyParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		Map<String, Object> resultMap = this.gameService.challengeFamilyV1_1(bean);
+		Map<String, Object> resultMap = this.gameService.challengeFamilyV1_1(bean,this.getImgBasePath());
 		if(resultMap.get("error")==null) {
 			return ResultUtils.rtSuccess(resultMap);
 		}else {
