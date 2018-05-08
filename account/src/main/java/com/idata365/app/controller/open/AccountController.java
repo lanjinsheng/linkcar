@@ -80,7 +80,22 @@ public class AccountController extends BaseController{
 			return db;
 		}
 	}
-	
+	@RequestMapping(value = "/account/getFamiliesInfoByfamilyId",method = RequestMethod.POST)
+	public Map<String,Object>  getFamiliesInfoByfamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="sign") String sign)
+	{
+		LOG.info("userId="+familyId+"===sign="+sign);
+		Map<String,Object> rt=new HashMap<String,Object>();
+		rt.put("familyId", 0);
+		rt.put("familyUserCount", 0);
+		rt.put("fightFamilyId", 0);
+		rt.put("fightFamilyUserCount", 0);
+		Map<String,Object> db= accountService.getFamiliesInfoByFamilyId(familyId);
+		if(db==null) {
+			return rt;
+		}else {
+			return db;
+		}
+	}
 	/**
 	 * 
 	    * @Title: getUsersInfoByIds
@@ -102,7 +117,7 @@ public class AccountController extends BaseController{
 		return accountService.getUsersInfoByIds(userIds,this.getImgBasePath());
 	}
 	
-	
+
 	/**
 	 * 
 	    * @Title: getUsersByFamilyId
@@ -129,4 +144,6 @@ public class AccountController extends BaseController{
 		}
 		return null;
 	}
+	
+	
 }

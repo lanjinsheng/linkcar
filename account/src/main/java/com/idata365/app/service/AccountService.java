@@ -110,7 +110,47 @@ public class AccountService extends BaseService<AccountService>
 	        
 		return rtMap;
 	}
-	
+	/**
+	 * 
+	    * @Title: getFamiliesInfoByUserId
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public Map<String,Object> getFamiliesInfoByFamilyId(long familyId)
+	{
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		 Map<String,Object> family1=usersAccountMapper.getFamilyByFamilyId(familyId);
+		 if(family1==null) return null;
+//	 
+//		    * Map.put("fightFamilyId":"id")
+//	        * Map.put("fightFamilyUserCount":"number")
+		   rtMap.put("familyId", familyId);
+	       rtMap.put("familyUserCount", family1.get("memberNum"));
+	       rtMap.put("daystamp", DateTools.getCurDateYYYY_MM_dd());
+	       Map<String,Object> opp=usersAccountMapper.getOpponentFamilyId(rtMap);
+	       
+	        if(opp!=null && opp.size()>0) {
+	        	Long familyId2=0l;
+	        	if(String.valueOf(opp.get("selfFamilyId")).equals(String.valueOf(familyId))){
+	        		familyId2=Long.valueOf(opp.get("competitorFamilyId").toString());
+	        	}else {
+	        		familyId2=Long.valueOf(opp.get("selfFamilyId").toString());
+	        	}
+	        	 Map<String,Object> family2=usersAccountMapper.getFamilyByFamilyId(familyId2);
+	        	 rtMap.put("fightFamilyId",family2.get("id"));
+	  	         rtMap.put("fightFamilyUserCount", family2.get("memberNum"));
+	        }else {
+	        	 rtMap.put("fightFamilyId",0);
+	  	         rtMap.put("fightFamilyUserCount", 0);
+	        }
+	        
+		return rtMap;
+	}
 	@Transactional
 	public List<Map<String,Object>> getUsersByFamilyId(long familyId,String daystamp){
 		Map<String,Object> param=new HashMap<String,Object>();
