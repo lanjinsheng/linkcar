@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>chezuAppServiceShop</name>
+	<name>chezuAppService</name>
 	<description>shujin app project for Spring Boot</description>
 
 	<parent>
