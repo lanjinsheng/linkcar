@@ -347,7 +347,7 @@ public class AssetService extends BaseService<AssetService> {
 			}
 			powerBall.put("createFamilyId", String.valueOf(assetFamiliesPowerLogs.getFamilyId()));
 			powerBall.put("createTime",
-					String.valueOf(DateTools.formatDateD(assetFamiliesPowerLogs.getCreateTime())));
+					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
 		Map<String, Object> data = new HashMap<>();
@@ -397,17 +397,16 @@ public class AssetService extends BaseService<AssetService> {
 			// 自己家族动力日志表：一条添加记录，一条减少记录
 			// 添加
 			mySetter(powerNum, familyId, assetFamiliesPowerLogs);
-			assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 			// 减少
 			youSetter(powerNum, familyId, assetFamiliesPowerLogs);
-			assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
+			
+			assetFamiliesPowerLogsMapper.updateFamiliesPowerLogs(familyId,powerNum);
 		} else {
 			mySetter(powerNum, familyId, assetFamiliesPowerLogs);
-			assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 			// 修改资产
 			assetFamiliesAssetMapper.updateFamilyPowerAdd(familyId, powerNum);
 			youSetter(powerNum, fightFamilyId, assetFamiliesPowerLogs);
-			assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
+			assetFamiliesPowerLogsMapper.updateFamiliesPowerLogs(fightFamilyId,powerNum);
 			// 修改资产
 			assetFamiliesAssetMapper.updateFamilyPowerMinus(fightFamilyId, powerNum);
 		}
