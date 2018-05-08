@@ -10,11 +10,11 @@ import com.idata365.app.entity.UsersAccount;
 
 /**
  * 
- * @ClassName: ChezuService
- * @Description: TODO(资产的增加与减少)
- * @author LanYeYe
- * @date 2017年12月28日
- *
+    * @ClassName: ChezuAppService
+    * @Description: TODO(这里用一句话描述这个类的作用)
+    * @author LanYeYe
+    * @date 2018年5月8日
+    *
  */
 @FeignClient(value = "service-app-chezu", fallback = ChezuAppHystric.class)
 public interface ChezuAppService {
