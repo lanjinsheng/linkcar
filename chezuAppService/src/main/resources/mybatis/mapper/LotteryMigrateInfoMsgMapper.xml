@@ -19,7 +19,7 @@
     
     <select id="queryById" resultType="com.idata365.app.entity.LotteryMigrateInfoMsgBean"
     	parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
-    	select toUserId, awardId, awardCount from lotteryMigrateInfoMsg where id=#{givenId}
+    	select * from lotteryMigrateInfoMsg where id=#{givenId}
     </select>
     
     <select id="findLotteryUser" resultType="com.idata365.app.entity.LotteryUser" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgParamBean">
