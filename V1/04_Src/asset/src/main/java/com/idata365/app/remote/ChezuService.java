@@ -43,8 +43,8 @@ public interface ChezuService {
         * @throws
         * @author LanYeYe
      */
-	@RequestMapping(value = "/account/getFamiliesInfoByUserId",method = RequestMethod.POST)
-	public Map<String,Object>  getFamiliesInfoByUserId(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign);
+	@RequestMapping(value = "/account/getFamiliesInfoByfamilyId",method = RequestMethod.POST)
+	public Map<String,Object>  getFamiliesInfoByfamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="sign") String sign);
 	/**
 	 * 
 	    * @Title: getUsersInfoByIds

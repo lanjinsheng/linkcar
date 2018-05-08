@@ -12,6 +12,14 @@
 		values(#{familyId},#{powerNum},#{recordType},#{eventType},
 		#{effectId},#{remark},now(),#{realNum},#{count})
 	</update>
+	
+	<update id="updateFamiliesPowerLogs">
+		update assetFamiliesPowerLogs set
+		powerNum=(powerNum-#{powerNum,jdbcType=BIGINT})
+		where
+		familyId=#{familyId,jdbcType=BIGINT} and powerNum>#{powerNum}
+	</update>
+	
 	<select id="getFamilyPowers" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *

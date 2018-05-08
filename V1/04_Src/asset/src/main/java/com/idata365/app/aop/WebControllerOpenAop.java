@@ -19,7 +19,7 @@ public class WebControllerOpenAop {
 public WebControllerOpenAop() {
 	LOG.info("WebControllerAop init");
 }
-    //匹配com.idata365.col.controller包及其子包下的所有类的所有方法
+    //匹配com.idata365.app.controller.open包及其子包下的所有类的所有方法
    @Pointcut("execution(* com.idata365.app.controller.open..*.*(..))")
     public Object executeService(){
 		return "ok";

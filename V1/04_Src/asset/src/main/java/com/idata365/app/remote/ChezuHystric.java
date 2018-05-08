@@ -27,18 +27,18 @@ public class ChezuHystric implements ChezuService {
 		return null;
 	}
 
-	@Override
-	public Map<String, Object> getFamiliesInfoByUserId(long userId, String sign) {
-		// TODO Auto-generated method stub
-		LOG.error(" getFamiliesInfoByUserId 挂了  service-account-chezu");
-		return null;
-	}
-
 
 	@Override
 	public String getUsersByFamilyId(long familyId, String daystamp, String sign) {
 		// TODO Auto-generated method stub
 		LOG.error(" getUsersByFamilyId 挂了  service-account-chezu");
+		return null;
+	}
+
+
+	@Override
+	public Map<String, Object> getFamiliesInfoByfamilyId(long familyId, String sign) {
+		LOG.error(" getFamiliesInfoByfamilyId 挂了  service-account-chezu");
 		return null;
 	}
 

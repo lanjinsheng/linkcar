@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.idata365.app.service.AssetService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
+import com.idata365.app.util.ValidTools;
 
 @RestController("securityAssetController")
 public class AssetController extends BaseController {
@@ -100,9 +102,10 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getFamilyFightPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-		Map<String, Object> familiesInfoByUserId = chezuService.getFamiliesInfoByUserId(userId, sign);
-		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfoByUserId,requestBodyParams));
+		Map<String, Object> familiesInfoByFamilyId = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
+		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfoByFamilyId,requestBodyParams));
 	}
 
 	/**
@@ -124,14 +127,16 @@ public class AssetController extends BaseController {
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId(); 
+//		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-		Map<String, Object> familiesInfoByUserId = chezuService.getFamiliesInfoByUserId(userId, sign);
+//		Map<String, Object> familiesInfoByFamilyId = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
 
 		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
 		long powerNum =Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		Map<String, String> datas = new HashMap<>();
 		try {
-			assetService.stoleFamilyFightPowers(userId, familiesInfoByUserId, ballId, powerNum);
+//			assetService.stoleFamilyFightPowers(userId, familiesInfoByFamilyId, ballId, powerNum);
+			assetService.stoleFamilyFightPowers(userId, null, ballId, powerNum);
 			datas.put("isReceive", "1");
 			return ResultUtils.rtSuccess(datas);
 		} catch (Exception e) {
@@ -170,7 +175,7 @@ public class AssetController extends BaseController {
 		for (AssetUsersPowerLogs assetUsersPowerLogs : list) {
 			Map<String, String> data = new HashMap<>();
 			data.put("powerNum", String.valueOf(assetUsersPowerLogs.getPowerNum()));
-			data.put("time", String.valueOf(DateTools.formatDateYMD(assetUsersPowerLogs.getCreateTime())));
+			data.put("time", String.valueOf(DateTools.formatDateD(assetUsersPowerLogs.getCreateTime())));
 			result.add(data);
 			Ids += assetUsersPowerLogs.getUserId() + ",";
 		}
