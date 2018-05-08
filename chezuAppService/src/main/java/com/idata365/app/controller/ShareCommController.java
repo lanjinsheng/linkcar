@@ -222,7 +222,7 @@ public class ShareCommController extends BaseController
 					// 插入消息
 					messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
 					// 推送消息
-					messageService.pushMessage(message, MessageEnum.INVITE_FAMILY);
+					messageService.pushMessageTrans(message, MessageEnum.INVITE_FAMILY);
 				}
 				else
 				{

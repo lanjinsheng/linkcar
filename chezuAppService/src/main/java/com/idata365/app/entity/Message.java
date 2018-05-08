@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Message  implements Serializable{
-	/**
-	 * 
-	 */
+	
+	    /**
+	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	    */
 	private static final long serialVersionUID = -8806886258804999698L;
 	private Long id;
 	private Integer parentType;

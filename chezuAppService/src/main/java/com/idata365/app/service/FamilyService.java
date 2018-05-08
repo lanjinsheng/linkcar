@@ -156,7 +156,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @param bean
 	 */
 	@Transactional
-	public void removeMember(FamilyParamBean bean)
+	public void removeMember(FamilyParamBean bean,UserInfo user)
 	{
 		this.familyMapper.deleteUserFamilyRelation(bean);
 		
@@ -169,6 +169,17 @@ public class FamilyService extends BaseService<FamilyService>
 		//更新家族热度
 		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
 		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
+		
+		//发送消息
+		String nickName=user.getNickName();
+		if(nickName==null) {
+			nickName=user.getPhone();
+		}
+		FamilyParamBean familyParamBean=new FamilyParamBean();
+		familyParamBean.setFamilyId(bean.getFamilyId());
+		FamilyResultBean familyResultBean =familyMapper.queryFamilyById(familyParamBean);
+		Message msg=messageService.buildKickMemberMessage(user.getId(),bean.getUserId(),nickName,familyResultBean.getMyFamilyName());
+		messageService.pushMessageNotrans(msg, MessageEnum.Kick_Member);
 	}
 	
 	/**
@@ -436,7 +447,7 @@ public class FamilyService extends BaseService<FamilyService>
   		//插入消息
   		messageService.insertMessage(message, messageEnum);
   		//推送消息
-  		messageService.pushMessage(message, messageEnum);
+  		messageService.pushMessageNotrans(message, messageEnum);
 	}
 	
 	/**

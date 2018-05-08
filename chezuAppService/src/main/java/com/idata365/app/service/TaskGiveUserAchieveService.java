@@ -108,7 +108,7 @@ public class TaskGiveUserAchieveService
 		Message message = messageService
 				.buildAchieveMessage(userId, userId, bean.getAchieveId(), bean.getAchieveName());
 		messageService.insertMessage(message, MessageEnum.ACHIEVE);
-		messageService.pushMessage(message, MessageEnum.ACHIEVE);
+		messageService.pushMessageNotrans(message, MessageEnum.ACHIEVE);
 		return true;
 	}
 

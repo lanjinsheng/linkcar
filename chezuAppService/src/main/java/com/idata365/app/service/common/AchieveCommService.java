@@ -40,8 +40,8 @@ public class AchieveCommService
 
 	@Autowired
 	private UserAchieveMapper userAchieveMapper;
-	@Autowired
-	private FamilyMapper familyMapper;
+//	@Autowired
+//	private FamilyMapper familyMapper;
 	@Autowired
 	TaskAchieveAddValueMapper taskAchieveAddValueMapper;
 

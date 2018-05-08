@@ -20,6 +20,7 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.UserTravelLottery;
+import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.LotteryService;
 import com.idata365.app.util.ResultUtils;
 
@@ -62,8 +63,8 @@ public class LotteryController extends BaseController
 		{
 			return ResultUtils.rtFailParam(null, "马扎和纸条不能赠送");
 		}
-		
-		int result = this.lotteryService.givenLottery(bean);
+		UserInfo user=this.getUserInfo();
+		int result = this.lotteryService.givenLottery(bean,user);
 		if (-1 == result)
 		{
 			return ResultUtils.rtFail(null, "道具不够", "-3");
@@ -130,9 +131,28 @@ public class LotteryController extends BaseController
 	public Map<String, Object> receiveLottery(@RequestBody LotteryMigrateInfoMsgParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		this.lotteryService.receiveLottery(bean);;
+		this.lotteryService.receiveLottery(bean,this.getUserInfo());;
 		return ResultUtils.rtSuccess(null);
 	}
+	/**
+	 * 
+	    * @Title: receiveLottery
+	    * @Description: TODO(通过lotteryMigrateInfoId获取)
+	    * @param @param bean
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@RequestMapping("/om/getLotteryById")
+	public Map<String, Object> getLotteryById(@RequestBody Map<String,Object> map)
+	{
+//		lotteryMigrateInfo
+		 String msgId=String.valueOf(map.get("msgId"));
+		 return lotteryService.getLotteryById(msgId);
+		 
+	}
+	
 	
 	@RequestMapping("/om/receiveTravelLottery")
 	public Map<String, Object> receiveTravelLottery(@RequestBody UserTravelLottery bean)
@@ -141,6 +161,9 @@ public class LotteryController extends BaseController
 		this.lotteryService.receiveTravelLottery(bean);
 		return ResultUtils.rtSuccess(null);
 	}
+	
+	
+ 
 	
 	/**
 	 * 

@@ -35,6 +35,7 @@ import com.idata365.app.entity.FamilyInfoResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyRelationParamBean;
+import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.JudgeChallengeResultBean;
 import com.idata365.app.entity.LotteryBean;
@@ -214,7 +215,7 @@ public class GameService extends BaseService<GameService>
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public Map<String,Object> challengeFamilyV1_1(GameFamilyParamBean bean,String basePath)
+	public Map<String,Object> challengeFamilyV1_1(GameFamilyParamBean bean,String basePath,UserInfo user)
 	{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		String tomorrowDateStr = getTomorrowDateStr();
@@ -256,6 +257,16 @@ public class GameService extends BaseService<GameService>
 			rtMap.put("familyName", familyBean.getFamilyName());
 			rtMap.put("familyType", familyBean.getFamilyType());
 			rtMap.put("imgUrl", basePath+familyBean.getImgUrl());
+			
+			//循环查找出对方家族组员
+			FamilyParamBean familyParamBean=new FamilyParamBean();
+			familyParamBean.setFamilyId(bean.getFamilyId());
+			FamilyResultBean familyResultBean=familyMapper.queryFamilyById(familyParamBean);
+			List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(bean.getFamilyId());
+			for(Map<String,Object> m:userList) {
+				Message msg=messageService.buildChallegeMessage(user.getId(), Long.valueOf(m.get("userId").toString()), familyResultBean.getMyFamilyName());
+				messageService.pushMessageNotrans(msg, MessageEnum.Challege);
+			}
 			return rtMap;
 		}
 		
@@ -914,6 +925,7 @@ public class GameService extends BaseService<GameService>
 	 * @param bean
 	 * @param userInfo
 	 */
+	@Transactional
 	public void informOtherToPenalty(GameFamilyParamBean bean, UserInfo userInfo)
 	{
 		FamilyInfoBean opponentFamily=getOpponentFamilyInfo(bean.getFamilyId());
@@ -921,7 +933,7 @@ public class GameService extends BaseService<GameService>
 		for(Message message:messageList) {
 			messageService.insertMessage(message, MessageEnum.INFORM_PENALTY);
 //  		//推送消息
-  		    messageService.pushMessage(message, MessageEnum.INFORM_PENALTY);
+  		    messageService.pushMessageNotrans(message, MessageEnum.INFORM_PENALTY);
 		}
 	}
 	public FamilyInfoBean getOpponentFamilyInfo(long myFamilyId) {

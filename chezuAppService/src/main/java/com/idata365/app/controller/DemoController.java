@@ -81,7 +81,7 @@ public class DemoController extends BaseController {
     public Map<String,Object> messageAdd(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Message msg=new Message(); 
 		msg.setId(135L);
-		messageService.pushMessage(msg, MessageEnum.SYSTEM_REG);
+		messageService.pushMessageTrans(msg, MessageEnum.SYSTEM_REG);
 		return ResultUtils.rtSuccess(null);
 	}
 	
