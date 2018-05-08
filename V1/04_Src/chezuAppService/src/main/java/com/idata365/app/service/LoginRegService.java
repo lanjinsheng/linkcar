@@ -265,7 +265,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 		// 调用公共接口
 		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGayTimes);
 	}
-
+    @Transactional
 	public String regUser(String phone, String pwd, Map<String, Object> rtMap)
 	{
 		UsersAccount account = new UsersAccount();
@@ -298,7 +298,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 					// 插入消息
 					messageService.insertMessage(message, MessageEnum.INVITE_FAMILY);
 					// 推送消息
-					messageService.pushMessage(message, MessageEnum.INVITE_FAMILY);
+					messageService.pushMessageNotrans(message, MessageEnum.INVITE_FAMILY);
 					// 更新invite
 					invite.setMemberUserId(account.getId());
 					familyInviteMapper.updateFamilyInviteWhenReg(invite);

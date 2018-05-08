@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.config.SystemProperties;
-import com.idata365.app.entity.AwardBean;
+import com.idata365.app.constant.MessageTypeConstant;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.Message;
@@ -44,21 +44,39 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
 	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
+	//踢人
+	public static final String KickMemberMessage="族长【%s】将您移出了【%s】家族，此处不留爷自有留爷处，咱们江湖再见！";
+	public static final String ChallengeMessage="下战书！您的家族被【%】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
+	
+	public static final String RewardMessage="恭喜！您的家族在【%s】赛季中获得了第【%s】名的好成绩，奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
+	
+	
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";
+	//兑换
+	public static final String ShopMessage="恭喜您兑换【%s】成功，工作人员会在1~3个工作日内处理您的兑换请求，请耐心等待通知";
+	public static final String GoodsSendMessage="您兑换的【%s】工作人员已经寄出，正在飞向您的路上，惊喜马上就到~";
+	//道具赠送
+	public static final String LotterySendMessage="一个惊喜!【%s】赠送给你一个【%s】,快去领取吧!";
+	public static final String LotteryRecMessage="【%s】已经收到你送的道具了,谢谢你的慷慨!";
 	
 	
-	public static final String  InviteMessageUrl="com.shujin.haochezu://check.push?msgId=%s";
-	public static final String  InvitePassMessageUrl="com.shujin.haochezu://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	
-	public static final String  TietiaoMessageUrl="com.shujin.haochezu://pasteNote.push?familyId=%s";
-	public static final String AchieveMessageUrl="com.shujin.haochezu://achievementDetails.push?achieveId=%s&titleName=%s";
+	public static final String  InviteMessageUrl="com.idata365.haochezu://check.push?msgId=%s";
+	public static final String  InvitePassMessageUrl="com.idata365.haochezu://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
+	
+	public static final String  TietiaoMessageUrl="com.idata365.haochezu://pasteNote.push?familyId=%s";
+	public static final String AchieveMessageUrl="com.idata365.haochezu://achievementDetails.push?achieveId=%s&titleName=%s";
 	//聊天室
-	public static final String ImMessageUrl="com.shujin.haochezu://chatMain.push?familyId=%s";
+	public static final String ImMessageUrl="com.idata365.haochezu://chatsMain.push?familyId=%s";
 	
+	//我的奖励(购买记录)
+	public static final String RewardNotes="com.idata365.haochezu://rewardNotes.push";
 	
+	//道具赠送通知
+	public static final String PropsSend="com.idata365.haochezu://propsReceive.push?msgId=%s";
 	
 	public static final String RegMessageUrl=H5Host+"share/home.html";
 	public static final String KaijiangMessageUrl=H5Host+"share/lottery.html";
@@ -106,12 +124,12 @@ public class MessageService extends BaseService<MessageService>{
 		case SYSTEM_REG:
 			message.setFromUserId(fromUserId==null?0:fromUserId);
 			message.setBottomText("");
-			message.setChildType(1);
+			message.setChildType(MessageTypeConstant.SystemType_Reg);
 			message.setContent(getRegMessageDesc());
 			message.setCreateTime(new Date());
 			message.setIcon("");
 			message.setIsPush(1);
-			message.setParentType(1);
+			message.setParentType(MessageTypeConstant.SystemType);
 			message.setPicture("");
 			message.setTitle("欢迎您!");
 			message.setToUserId(toUserId);
@@ -121,12 +139,12 @@ public class MessageService extends BaseService<MessageService>{
 		case INVITE_FAMILY:
 			message.setFromUserId(fromUserId==null?0:fromUserId);
 			message.setBottomText("点击审核");
-			message.setChildType(1);
+			message.setChildType(MessageTypeConstant.FamilyType_Apply);
 			message.setContent(getInviteMessageDesc(fromUserPhone,fromUserNick));
 			message.setCreateTime(new Date());
 			message.setIcon("");
 			message.setIsPush(1);
-			message.setParentType(2);
+			message.setParentType(MessageTypeConstant.FamilyType);
 			message.setPicture("");
 			message.setTitle("玩家申请");
 			message.setToUserId(toUserId);
@@ -137,12 +155,12 @@ public class MessageService extends BaseService<MessageService>{
 			FamilyResultBean f=familyService.findFamily(fromUserId); 
 			message.setFromUserId(fromUserId==null?0:fromUserId);
 			message.setBottomText("");
-			message.setChildType(2);
+			message.setChildType(MessageTypeConstant.FamilyType_Pass);
 			message.setContent(getPassMessageDesc(fromUserPhone,fromUserNick,f.getMyFamilyName()));
 			message.setCreateTime(new Date());
 			message.setIcon("");
 			message.setIsPush(1);
-			message.setParentType(2);
+			message.setParentType(MessageTypeConstant.FamilyType);
 			message.setPicture("");
 			message.setTitle("族长审核");
 			message.setToUserId(toUserId);
@@ -153,12 +171,12 @@ public class MessageService extends BaseService<MessageService>{
 			FamilyResultBean ff=familyService.findFamily(fromUserId); 
 			message.setFromUserId(fromUserId==null?0:fromUserId);
 			message.setBottomText("");
-			message.setChildType(3);
+			message.setChildType(MessageTypeConstant.FamilyType_Fail);
 			message.setContent(getFailMessageDesc(ff.getMyFamilyName()));
 			message.setCreateTime(new Date());
 			message.setIcon("");
 			message.setIsPush(1);
-			message.setParentType(2);
+			message.setParentType(MessageTypeConstant.FamilyType);
 			message.setPicture("");
 			message.setTitle("族长审核");
 			message.setToUserId(toUserId);
@@ -170,6 +188,184 @@ public class MessageService extends BaseService<MessageService>{
 		}
 		return message;
 	}
+	/**
+	 * 
+	    * @Title: buildShopMessage
+	    * @Description: TODO(购买消息)
+	    * @param @param fromUserId
+	    * @param @param toUserId
+	    * @param @param goodsName
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Message buildShopMessage(Long fromUserId,Long toUserId,String goodsName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_Exchange);
+		message.setContent(getShopMessageDesc(goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	/**
+	 * 
+	    * @Title: buildGoodsSendMessage
+	    * @Description: TODO(商品发放消息)
+	    * @param @param fromUserId
+	    * @param @param toUserId
+	    * @param @param goodsName
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Message buildGoodsSendMessage(Long fromUserId,Long toUserId,String goodsName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_Exchange_Ok);
+		message.setContent(getGoodsSendMessageDesc(goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("奖励发放通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(RewardNotes);
+		return message;
+	}
+	/**
+	 * 
+	    * @Title: buildLotterySendMessage
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param fromUserId
+	    * @param @param toUserId
+	    * @param @param goodsName
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Message buildLotterySendMessage(String lotteryMigrateInfoId,Long fromUserId,Long toUserId,String fromUserName,String lotteryName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.PersonType_Prop_Give);
+		message.setContent(getLotterySendMessageDesc(fromUserName,lotteryName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.PersonType);
+		message.setPicture("");
+		message.setTitle("道具赠送通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(PropsSend, lotteryMigrateInfoId));
+		return message;
+	}
+	/**
+	 * 
+	    * @Title: buildLotteryRecMessage
+	    * @Description: TODO(领取道具消息)
+	    * @param @param fromUserId
+	    * @param @param toUserId
+	    * @param @param fromUserName
+	    * @param @param lotteryName
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Message buildLotteryRecMessage(Long fromUserId,Long toUserId,String fromUserName,String lotteryName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.PersonType_Prop_Give);
+		message.setContent(getLotterySendMessageDesc(fromUserName,lotteryName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.PersonType);
+		message.setPicture("");
+		message.setTitle("道具领取通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl("");
+		return message;
+	}
+	
+	/**
+	 * 
+	    * @Title: buildKickMemberMessage
+	    * @Description: TODO(踢人)
+	    * @param @param fromUserId
+	    * @param @param toUserId
+	    * @param @param leaderName
+	    * @param @param familyName
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Message buildKickMemberMessage(Long fromUserId,Long toUserId, String  leaderName,String familyName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_Kickout);
+		message.setContent(String.format(KickMemberMessage,leaderName,familyName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("家族踢出通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	/**
+	 * 
+	    * @Title: buildChallegeMessage
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param fromUserId
+	    * @param @param toUserId
+	    * @param @param familyName
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Message buildChallegeMessage(Long fromUserId,Long toUserId, String familyName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_Challenge);
+		message.setContent(String.format(ChallengeMessage,familyName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("挑战通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	
 	/**
 	 * 
 	    * @Title: getMessageById
@@ -242,12 +438,12 @@ public class MessageService extends BaseService<MessageService>{
 				Message message=new Message();
 				message.setFromUserId(fromUserId==null?0:fromUserId);
 				message.setBottomText("");
-				message.setChildType(0);
+				message.setChildType(MessageTypeConstant.PersonType_Achievement);
 				message.setContent(getAchieveDesc(""));
 				message.setCreateTime(new Date());
 				message.setIcon("");
 				message.setIsPush(1);
-				message.setParentType(5);
+				message.setParentType(MessageTypeConstant.PersonType);
 				message.setPicture("");
 				message.setTitle("成就通知");
 				message.setToUserId(toUserId);
@@ -292,11 +488,18 @@ public class MessageService extends BaseService<MessageService>{
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public void pushMessage(Message msg,MessageEnum type) {
+	public void pushMessageTrans(Message msg,MessageEnum type) {
 		TaskMessagePush task=new TaskMessagePush();
 		task.setMessageId(msg.getId());
 		taskMessagePushMapper.insertTaskMessagePush(task);
 	}
+	
+	public void pushMessageNotrans(Message msg,MessageEnum type) {
+		TaskMessagePush task=new TaskMessagePush();
+		task.setMessageId(msg.getId());
+		taskMessagePushMapper.insertTaskMessagePush(task);
+	}
+	
 	public void pushMessageByTask(Message msg) {
 		String alias=msg.getToUserId()+"_0";
 		 Map<String,String> extraMap = new HashMap<String, String>();
@@ -343,18 +546,17 @@ public class MessageService extends BaseService<MessageService>{
 	public List<Map<String,String>> getMsgMainTypes(Long userId){
 		Map<String,Object> paramMap=new HashMap<String,Object>();
 		paramMap.put("toUserId", userId);
-		boolean hadXT=false,hadSP=false,hadTT=false,hadKJ=false,hadCJ=false;
+		boolean hadSys=false,hadPerson=false,hadFamily=false;
 		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 		Map<String,String>  rtMap1=new HashMap<String,String>();
 		rtMap1.put("desc", "系统想对你说的话......");
+	
 		Map<String,String>  rtMap2=new HashMap<String,String>();
-		rtMap2.put("desc", "在这里查看您加入车族的申请、审核进度");
+		rtMap2.put("desc", "道具，成就等个人消息，快来看吧!");
+	 
 		Map<String,String>  rtMap3=new HashMap<String,String>();
-		rtMap3.put("desc", "不要错过给对方家族狠狠一贴的机会!");
-		Map<String,String>  rtMap4=new HashMap<String,String>();
-		rtMap4.put("desc", "大奖花落谁家？你也有机会!");
-		Map<String,String>  rtMap5=new HashMap<String,String>();
-		rtMap5.put("desc", "新成就达成！来看看奖励吧!");
+		rtMap3.put("desc", "家族审核/挑战/奖励消息，来看看吧!");
+		
 		List<Map<String,Object>> findList=messageMapper.getMsgMainTypes(userId);
 		for(Map<String,Object> map:findList) {
 			int parentType=Integer.valueOf(map.get("parentType").toString());
@@ -363,29 +565,23 @@ public class MessageService extends BaseService<MessageService>{
 				rtMap1.put("unRead", String.valueOf(map.get("typeCount")));
 				rtMap1.put("icon",MessageImgs.get("1"));
 				rtMap1.put("title", "系统消息");
-				hadXT=true;
+				hadSys=true;
 			}else if(parentType==2) {
 				rtMap2.put("msgType", "2");
 				rtMap2.put("unRead", String.valueOf(map.get("typeCount")));
 				rtMap2.put("icon",MessageImgs.get("2"));
-				rtMap2.put("title", "审批消息");
-				hadSP=true;
+				rtMap2.put("title", "个人消息");
+				hadPerson=true;
 			}else if(parentType==3) {
 				rtMap3.put("msgType", "3");
 				rtMap3.put("unRead", String.valueOf(map.get("typeCount")));
 				rtMap3.put("icon",MessageImgs.get("3"));
-				rtMap3.put("title", "贴条消息");
-				hadTT=true;
+				rtMap3.put("title", "家族消息");
+				hadFamily=true;
 			}
-			else if(parentType==5) {
-				rtMap5.put("msgType", "5");
-				rtMap5.put("unRead", String.valueOf(map.get("typeCount")));
-				rtMap5.put("icon",MessageImgs.get("5"));
-				rtMap5.put("title", "成就消息");
-				hadCJ=true;
-			}
+			 
 		}
-		if(!hadXT) {
+		if(!hadSys) {
 			rtMap1.put("msgType", "1");
 			rtMap1.put("unRead", "0");
 			rtMap1.put("icon",MessageImgs.get("1"));
@@ -403,11 +599,11 @@ public class MessageService extends BaseService<MessageService>{
 		}
 		
 		
-		if(!hadSP) {
+		if(!hadPerson) {
 			rtMap2.put("msgType", "2");
 			rtMap2.put("unRead", "0");
 			rtMap2.put("icon",MessageImgs.get("2"));
-			rtMap2.put("title", "审批消息");
+			rtMap2.put("title", "个人消息");
 		} 
 		paramMap.put("parentType", 2);
 		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
@@ -417,11 +613,11 @@ public class MessageService extends BaseService<MessageService>{
 		}else {
 			rtMap2.put("lastMsgTime", "");
 		}
-		if(!hadTT)  {
+		if(!hadFamily)  {
 			rtMap3.put("msgType", "3");
 			rtMap3.put("unRead","0");
 			rtMap3.put("icon",MessageImgs.get("3"));
-			rtMap3.put("title", "贴条消息");
+			rtMap3.put("title", "家族消息");
 		}
 		paramMap.put("parentType", 3);
 		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
@@ -432,45 +628,13 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap3.put("lastMsgTime", "");
 		}
 		
-		//开奖为特殊情况,从 awardInfo获取数据
-		if(!hadKJ){
-			rtMap4.put("msgType", "4");
-			rtMap4.put("unRead","0");
-			rtMap4.put("icon",MessageImgs.get("4"));
-			rtMap4.put("title", "开奖消息");	
-		}
-		paramMap.put("parentType", 4);
-		timeMsg=messageMapper.getMsgKaijiangTime(paramMap);
 		
 		
-		if(timeMsg!=null && timeMsg.size()>0) {
-			String time=String.valueOf(timeMsg.get("createTime"));
-			rtMap4.put("lastMsgTime", getMsgTyoeTimes(time));
-		}else {
-			rtMap4.put("lastMsgTime", "");
-		}
-		//开奖为特殊情况===end
-		if(!hadCJ)  {
-			rtMap5.put("msgType", "5");
-			rtMap5.put("unRead","0");
-			rtMap5.put("icon",MessageImgs.get("5"));
-			rtMap5.put("title", "成就消息");
-		}
-		paramMap.put("parentType", 5);
 		
-		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);
-		if(timeMsg!=null && timeMsg.size()>0) {
-			String time=String.valueOf(timeMsg.get("createTime"));
-			rtMap5.put("lastMsgTime", getMsgTyoeTimes(time));
-		}else {
-			rtMap5.put("lastMsgTime", "");
-		}
 		//23541
+		list.add(rtMap1);
 		list.add(rtMap2);
 		list.add(rtMap3);
-		list.add(rtMap5);
-	    list.add(rtMap4);
-	    list.add(rtMap1);
 		return list;
 	}
 	private String getMsgTyoeTimes(String time) {
@@ -578,6 +742,16 @@ public class MessageService extends BaseService<MessageService>{
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
 	}
 	
+	
+	private String getShopMessageDesc(String goodsName) {
+		return String.format(ShopMessage, goodsName);
+    }
+	private String getGoodsSendMessageDesc(String goodsName) {
+		return String.format(GoodsSendMessage, goodsName);
+    }
+	private String getLotterySendMessageDesc(String userName,String lotteryName) {
+		return String.format(LotterySendMessage,userName,lotteryName);
+    }
 	private String getH5RegMessageUrl(){
 		return RegMessageUrl;
 	}

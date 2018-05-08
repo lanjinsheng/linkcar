@@ -144,4 +144,6 @@ public interface FamilyMapper
 	 int insertPkRelation(Map<String,Object> map);
 	 long getCompetitorFamilyId(@Param("familyId") String matchKey);
 	 //挑选对战家族--end
+	 
+	 List<Map<String,Object>> findUsersByFamilyId(@Param("familyId") Long familyId);
 }

@@ -51,7 +51,7 @@ public class FamilyController extends BaseController
 	public Map<String, Object> removeMember(@RequestBody FamilyParamBean reqBean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(reqBean));
-		this.familyService.removeMember(reqBean);
+		this.familyService.removeMember(reqBean,this.getUserInfo());
 		return ResultUtils.rtSuccess(null);
 	}
 	

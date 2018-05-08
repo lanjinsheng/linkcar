@@ -49,9 +49,9 @@ public class MessageController  extends BaseController {
         Long userId=this.getUserId();
         Message message=messageService.buildMessage(0L, "", "",userId, null, MessageEnum.SYSTEM_REG);
 		//插入消息
-  		messageService.insertMessage(message, MessageEnum.SYSTEM_REG);
+  		 messageService.insertMessage(message, MessageEnum.SYSTEM_REG);
   		//推送消息 极光还没绑定设备，此时不宜推送
-         messageService.pushMessage(message,MessageEnum.SYSTEM_REG);
+         messageService.pushMessageTrans(message,MessageEnum.SYSTEM_REG);
     	return ResultUtils.rtSuccess(null);
     }
 	

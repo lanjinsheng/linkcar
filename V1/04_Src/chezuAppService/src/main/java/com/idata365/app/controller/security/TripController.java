@@ -106,7 +106,7 @@ public class TripController extends BaseController
 		rtMap.put("speedingState", "0");
 		rtMap.put("driveState", "0");
 		if(dbMap!=null) {
-			rtMap.put("score", dbMap.get("score"));
+			rtMap.put("score", String.valueOf(dbMap.get("score")));
 		} 
 	   return ResultUtils.rtSuccess(rtMap);
 	}

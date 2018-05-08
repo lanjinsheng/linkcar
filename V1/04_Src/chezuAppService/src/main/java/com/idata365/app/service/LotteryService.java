@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.LotteryLogConstant;
+import com.idata365.app.constant.MessageTypeConstant;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.LotteryBean;
 import com.idata365.app.entity.LotteryLogInfoParamBean;
@@ -26,15 +27,20 @@ import com.idata365.app.entity.LotteryMigrateInfoMsgResultBean;
 import com.idata365.app.entity.LotteryResultBean;
 import com.idata365.app.entity.LotteryResultUser;
 import com.idata365.app.entity.LotteryUser;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.SignatureDayLogBean;
 import com.idata365.app.entity.UserFamilyRelationBean;
 import com.idata365.app.entity.UserTravelLottery;
+import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.AchieveEnum;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.LotteryMigrateInfoMsgMapper;
 import com.idata365.app.mapper.SignatureDayLogMapper;
 import com.idata365.app.mapper.UserTravelLotteryMapper;
+import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.PhoneUtils;
@@ -60,6 +66,10 @@ public class LotteryService extends BaseService<LotteryService>
 	
 	@Autowired
 	private FamilyMapper familyMapper;
+	@Autowired
+	MessageService messageService;
+	@Autowired
+	UsersAccountMapper usersAccountMapper;
 	
 	/**
 	 * 道具列表
@@ -181,6 +191,16 @@ public class LotteryService extends BaseService<LotteryService>
 		}
 		return rtList;
 	}
+	
+	/**
+	 * 
+	    * @Title: receiveTravelLottery
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param bean    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@Transactional
 	public void receiveTravelLottery(UserTravelLottery bean)
 	{
@@ -293,7 +313,7 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param bean
 	 */
 	@Transactional
-	public int givenLottery(LotteryMigrateInfoMsgBean bean)
+	public int givenLottery(LotteryMigrateInfoMsgBean bean,UserInfo user)
 	{
 		LotteryBean countParam = new LotteryBean();
 		countParam.setUserId(bean.getUserId());
@@ -315,6 +335,15 @@ public class LotteryService extends BaseService<LotteryService>
 		reduceParamBean.setAwardId(bean.getAwardId());
 		
 		int result = this.lotteryMapper.reduceLotteryCount(reduceParamBean);
+		
+		//发送通知
+		String nickName=user.getNickName();
+		if(nickName==null) {
+			nickName=user.getPhone();
+		}
+		Message msg=messageService.buildLotterySendMessage(String.valueOf(bean.getId()),bean.getUserId(), Long.valueOf(bean.getToUserId()), nickName, 
+				LotteryConstant.getLotteryNameByRewardId(bean.getAwardId()));
+		messageService.pushMessageNotrans(msg, MessageEnum.LotterySend);
 		return result;
 	}
 	
@@ -439,7 +468,7 @@ public class LotteryService extends BaseService<LotteryService>
 	 * @param bean
 	 */
 	@Transactional
-	public void receiveLottery(LotteryMigrateInfoMsgParamBean bean)
+	public void receiveLottery(LotteryMigrateInfoMsgParamBean bean,UserInfo user)
 	{
 		LotteryMigrateInfoMsgBean migrateInfoMsgBean = this.lotteryMigrateInfoMsgMapper.queryById(bean);
 		int toUserId = migrateInfoMsgBean.getToUserId();
@@ -453,10 +482,50 @@ public class LotteryService extends BaseService<LotteryService>
 		lotteryBean.setAwardId(awardId);
 		lotteryBean.setAwardCount(awardCount);
 		this.lotteryMapper.saveOrUpdate(lotteryBean);
-		
 		this.lotteryMigrateInfoMsgMapper.updateStatus(bean);
+		String nickName=user.getNickName();
+		if(nickName==null) {
+			nickName=user.getPhone();
+		}
+		Message msg=messageService.buildLotteryRecMessage(migrateInfoMsgBean.getUserId(), Long.valueOf(migrateInfoMsgBean.getToUserId()), 
+				nickName, LotteryConstant.getLotteryNameByRewardId(awardId));
+		
+		messageService.pushMessageNotrans(msg, MessageEnum.LotterySend);
 	}
 	
+	/**
+	 * 
+	    * @Title: getLotteryById
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param id
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public Map<String,Object> getLotteryById(String id){
+		LotteryMigrateInfoMsgParamBean bean=new LotteryMigrateInfoMsgParamBean();
+		bean.setGivenId(Integer.valueOf(id));
+		LotteryMigrateInfoMsgBean migrateInfoMsgBean = this.lotteryMigrateInfoMsgMapper.queryById(bean);
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		rtMap.put("userId", migrateInfoMsgBean.getToUserId());
+		rtMap.put("date", migrateInfoMsgBean.getGivenTime());
+		rtMap.put("propType", migrateInfoMsgBean.getAwardId());
+		rtMap.put("propName", LotteryConstant.getLotteryNameByRewardId(migrateInfoMsgBean.getAwardId()));
+		rtMap.put("propNum", migrateInfoMsgBean.getAwardCount());
+		if(migrateInfoMsgBean.getStatus().equals("RECV")) {
+			rtMap.put("status", "1");
+		}else {
+			rtMap.put("status", "0");
+		}
+		UsersAccount user=usersAccountMapper.findAccountById(Long.valueOf(migrateInfoMsgBean.getToUserId()));
+		if(user.getNickName()!=null) {
+			rtMap.put("name", user.getNickName());
+		}else {
+			rtMap.put("name", user.getPhone());
+		}
+		return rtMap;
+	}
 	/**
 	 * 
 	    * @Title: getChest
