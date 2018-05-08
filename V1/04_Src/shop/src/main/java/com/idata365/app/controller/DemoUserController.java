@@ -1,4 +1,4 @@
-package com.idata365.app.controller;
+/*package com.idata365.app.controller;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.UserEntity;
 import com.idata365.app.mapper.UserMapper;
+import com.idata365.app.service.DemoUserService;
 
 
 @RestController
@@ -48,4 +49,4 @@ public class DemoUserController  {
     }
     
     
-}
+}*/
