@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.FamilyMapper">
 
+
+    <select id="findUsersByFamilyId" resultType="java.util.HashMap" parameterType="java.lang.Long">
+		select * from userFamilyRelation where familyId=#{familyId}
+	</select>
+
+
 	<select id="queryFamilyByUserId" resultType="com.idata365.app.entity.FamilyResultBean" parameterType="com.idata365.app.entity.FamilyParamBean">
 		select id as myFamilyId, familyName as myFamilyName, imgUrl as myFamilyImgUrl, memberNum, inviteCode from familyInfo where createUserId=#{userId}
 	</select>
@@ -290,8 +296,7 @@
 	
 	<!-- 锁定匹配用户 -->
 	<update id="updateFamilyPkKeyGet"   parameterType="java.util.HashMap">
- 	    update  familyInfo set matchKey=#{matchKey} select 
- 	    id from familyInfo where familyType=#{familyType} and id!=#{id}
+ 	    update  familyInfo set matchKey=#{matchKey}  where familyType=#{familyType} and id!=#{id}
  	     order by activeLevel desc limit 1
     </update>
     <select id="getCompetitorFamilyId" resultType="long" parameterType="java.lang.String">
