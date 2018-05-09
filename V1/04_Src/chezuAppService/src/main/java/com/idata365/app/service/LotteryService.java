@@ -343,6 +343,7 @@ public class LotteryService extends BaseService<LotteryService>
 		}
 		Message msg=messageService.buildLotterySendMessage(String.valueOf(bean.getId()),bean.getUserId(), Long.valueOf(bean.getToUserId()), nickName, 
 				LotteryConstant.getLotteryNameByRewardId(bean.getAwardId()));
+		messageService.insertMessage(msg, MessageEnum.LotterySend);
 		messageService.pushMessageNotrans(msg, MessageEnum.LotterySend);
 		return result;
 	}
@@ -489,7 +490,7 @@ public class LotteryService extends BaseService<LotteryService>
 		}
 		Message msg=messageService.buildLotteryRecMessage(migrateInfoMsgBean.getUserId(), Long.valueOf(migrateInfoMsgBean.getToUserId()), 
 				nickName, LotteryConstant.getLotteryNameByRewardId(awardId));
-		
+		messageService.insertMessage(msg, MessageEnum.LotterySend);
 		messageService.pushMessageNotrans(msg, MessageEnum.LotterySend);
 	}
 	

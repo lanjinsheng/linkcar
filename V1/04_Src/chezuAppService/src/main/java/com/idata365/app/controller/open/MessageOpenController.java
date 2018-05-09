@@ -69,4 +69,37 @@ public class MessageOpenController {
         messageService.pushMessageTrans(msg,MessageEnum.SHOP_GOODS_SEND);
     	return true;
     }  
+    /**
+     * 
+        * @Title: sendFamilyDiamondsMsg
+        * @Description: TODO(钻石分配通知)
+        * @param @param season
+        * @param @param familyId
+        * @param @param orderNum
+        * @param @param toUserId
+        * @param @param diamondNum
+        * @param @param sign
+        * @param @return    参数
+        * @return boolean    返回类型
+        * @throws
+        * @author LanYeYe
+     */
+    @RequestMapping("/app/msg/sendFamilyDiamondsMsg")
+    public boolean sendFamilyDiamondsMsg(@RequestParam (value = "season") String season,
+    		@RequestParam (value = "familyId") String familyId,
+    		@RequestParam (value = "orderNum") String orderNum,
+    		@RequestParam (value = "toUserId") Long toUserId,
+    		@RequestParam (value = "diamondNum") String diamondNum,
+    		@RequestParam (value = "sign") String sign){
+    	LOG.info("param:"+season+"=="+orderNum+"=="+diamondNum+"==sign="+sign);
+    	LOG.info("reSign:"+SignUtils.encryptHMAC(season+orderNum+diamondNum));
+    	Message msg=messageService.buildFamilyDiamondsMessage(null, toUserId, familyId, season, orderNum, orderNum);
+    	//插入消息
+ 		messageService.insertMessage(msg, MessageEnum.DiamondDistr);
+ 		//用定时器推送
+        messageService.pushMessageTrans(msg,MessageEnum.DiamondDistr);
+    	return true;
+    }  
+    
+    
 }

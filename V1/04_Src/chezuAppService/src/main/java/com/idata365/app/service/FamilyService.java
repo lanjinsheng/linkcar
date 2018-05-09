@@ -179,6 +179,7 @@ public class FamilyService extends BaseService<FamilyService>
 		familyParamBean.setFamilyId(bean.getFamilyId());
 		FamilyResultBean familyResultBean =familyMapper.queryFamilyById(familyParamBean);
 		Message msg=messageService.buildKickMemberMessage(user.getId(),bean.getUserId(),nickName,familyResultBean.getMyFamilyName());
+		messageService.insertMessage(msg, MessageEnum.Kick_Member);
 		messageService.pushMessageNotrans(msg, MessageEnum.Kick_Member);
 	}
 	
