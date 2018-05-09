@@ -54,12 +54,27 @@
     <property name="period" value="10000" />   
   </bean>  
    
+   <!-- 測試數據整理 -->
    
+  <bean id="calTaskDriveMain" class="com.idata365.col.schedule.CalTaskDriveDataMain">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+   
+  <bean id="calTaskDriveMainExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="calTaskDriveMain" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" /> 
+        <!-- 每次任务间隔 10秒-->  
+    <property name="period" value="5000" />   
+  </bean>   
+   <!-- 測試數據整理结束 -->
     <bean id="springScheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">  
     <property name="scheduledExecutorTasks">  
-      <list>  
+      <list> 
+      
 		 <ref bean="driveUploadScanTaskExe" />
-		 <ref bean="clearLockTaskExe"/> 
+		 <ref bean="clearLockTaskExe"/>   
+		 <!-- <ref bean="calTaskDriveMainExe"/>-->
       </list>  
     </property>  
   </bean>  
