@@ -239,7 +239,7 @@ public class LotteryService extends BaseService<LotteryService>
 	public boolean recChest(String id,long pUserId)
 	{
 		UserTravelLottery bean=new UserTravelLottery();
-		bean.setUserId(Long.valueOf(id));
+		bean.setId(Long.valueOf(id));
 		bean.setUserId(pUserId);
 		int receiveCount = userTravelLotteryMapper.recievedUserTravelLottery(bean);
 		if (receiveCount > 0)
