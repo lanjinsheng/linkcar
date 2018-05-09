@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import com.idata365.app.entity.UsersAccount;
 
 @Component
-public class ChezuHystric implements ChezuService {
-	private final static Logger LOG = LoggerFactory.getLogger(ChezuHystric.class);
+public class ChezuAccountHystric implements ChezuAccountService {
+	private final static Logger LOG = LoggerFactory.getLogger(ChezuAccountHystric.class);
 
 	@Override
 	public UsersAccount validToken(String token) {
@@ -41,8 +41,6 @@ public class ChezuHystric implements ChezuService {
 		LOG.error(" getFamiliesInfoByfamilyId 挂了  service-account-chezu");
 		return null;
 	}
-
-	 
 
 
 }
