@@ -285,90 +285,122 @@ public class GameService extends BaseService<GameService>
 		}
 	}
 	
-	public JudgeChallengeResultBean judgeChallengeFlag(GameFamilyParamBean bean)
+//	public JudgeChallengeResultBean judgeChallengeFlag(GameFamilyParamBean bean)
+//	{
+//		long prevFamilyId = bean.getFamilyId();
+//		
+//		FamilyChallengeLogParamBean familyChallengeLogParamBean = new FamilyChallengeLogParamBean();
+//		familyChallengeLogParamBean.setFamilyId(prevFamilyId);
+//		familyChallengeLogParamBean.setChallengeDay(getTomorrowDateStr());
+//		
+//		JudgeChallengeResultBean resultBean = new JudgeChallengeResultBean();
+//		if (judgeChallenged(familyChallengeLogParamBean))
+//		{
+//			FamilyRelationBean relationBean = new FamilyRelationBean();
+//			relationBean.setFamilyId(prevFamilyId);
+//			relationBean.setDaystamp(getTomorrowDateStr());
+//			
+//			List<FamilyRelationBean> relationList = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
+//			
+//			if (CollectionUtils.isNotEmpty(relationList))
+//			{
+//				FamilyRelationBean relationResultBean = relationList.get(0);
+//				long familyId1 = relationResultBean.getFamilyId1();
+//				long familyId2 = relationResultBean.getFamilyId2();
+//				
+//				long dstFamilyId;
+//				if (prevFamilyId != familyId1)
+//				{
+//					dstFamilyId = familyId1;
+//				}
+//				else
+//				{
+//					dstFamilyId = familyId2;
+//				}
+//				
+//				FamilyParamBean familyParamBean = new FamilyParamBean();
+//				familyParamBean.setFamilyId(dstFamilyId);
+//				FamilyInfoBean tempFamilyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+//				
+//				FamilyInfoResultBean familyObj = new FamilyInfoResultBean();
+//				familyObj.setFamilyId(String.valueOf(tempFamilyInfoBean.getId()));
+//				familyObj.setFamilyName(tempFamilyInfoBean.getFamilyName());
+//				familyObj.setFamilyType(String.valueOf(tempFamilyInfoBean.getFamilyType()));
+//				familyObj.setImgUrl(tempFamilyInfoBean.getImgUrl());
+//				
+//				resultBean.setFamilyObj(familyObj);
+//				resultBean.setChallengeFlag("CHALLENGE_PARTNER");
+//				resultBean.setChallengeMsg("已发起挑战已公布结果");
+//			}
+//			else
+//			{
+//				resultBean.setChallengeFlag("CHALLENGE");
+//				
+//				FamilyChallengeLogParamBean tempParamTypeBean = new FamilyChallengeLogParamBean();
+//				tempParamTypeBean.setFamilyId(prevFamilyId);
+//				tempParamTypeBean.setChallengeDay(getTomorrowDateStr());
+//				FamilyChallengeLogBean tempTypeResultBean = this.gameMapper.queryChallengeType(tempParamTypeBean);
+//				int challengeType = tempTypeResultBean.getChallengeType();
+//				
+//				String msgTemplate = "您已成功挑战FAMILY_HOLD家族\\n中午12：00将公布您的竞争对手，敬请期待！";
+//				String tempMsg;
+//				if (FamilyConstant.BRONZE_TYPE == challengeType)
+//				{
+//					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "青铜");
+//				}
+//				else if (FamilyConstant.SILVER_TYPE == challengeType)
+//				{
+//					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "白银");
+//				}
+//				else
+//				{
+//					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "黄金");
+//				}
+//				
+//				resultBean.setChallengeMsg(tempMsg);
+//			}
+//		}
+//		else
+//		{
+//			resultBean.setChallengeFlag("UN_CHALLENGE");
+//			resultBean.setChallengeMsg("未发起挑战");
+//		}
+//		
+//		return resultBean;
+//	}
+	public Map<String,Object> judgeChallengeFlag(GameFamilyParamBean bean,String imgBasePath)
 	{
-		long prevFamilyId = bean.getFamilyId();
-		
-		FamilyChallengeLogParamBean familyChallengeLogParamBean = new FamilyChallengeLogParamBean();
-		familyChallengeLogParamBean.setFamilyId(prevFamilyId);
-		familyChallengeLogParamBean.setChallengeDay(getTomorrowDateStr());
-		
-		JudgeChallengeResultBean resultBean = new JudgeChallengeResultBean();
-		if (judgeChallenged(familyChallengeLogParamBean))
-		{
-			FamilyRelationBean relationBean = new FamilyRelationBean();
-			relationBean.setFamilyId(prevFamilyId);
-			relationBean.setDaystamp(getTomorrowDateStr());
-			
-			List<FamilyRelationBean> relationList = this.familyMapper.queryFamilyIdByCompetitorId(relationBean);
-			
-			if (CollectionUtils.isNotEmpty(relationList))
-			{
-				FamilyRelationBean relationResultBean = relationList.get(0);
-				long familyId1 = relationResultBean.getFamilyId1();
-				long familyId2 = relationResultBean.getFamilyId2();
-				
-				long dstFamilyId;
-				if (prevFamilyId != familyId1)
-				{
-					dstFamilyId = familyId1;
-				}
-				else
-				{
-					dstFamilyId = familyId2;
-				}
-				
-				FamilyParamBean familyParamBean = new FamilyParamBean();
-				familyParamBean.setFamilyId(dstFamilyId);
-				FamilyInfoBean tempFamilyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
-				
-				FamilyInfoResultBean familyObj = new FamilyInfoResultBean();
-				familyObj.setFamilyId(String.valueOf(tempFamilyInfoBean.getId()));
-				familyObj.setFamilyName(tempFamilyInfoBean.getFamilyName());
-				familyObj.setFamilyType(String.valueOf(tempFamilyInfoBean.getFamilyType()));
-				familyObj.setImgUrl(tempFamilyInfoBean.getImgUrl());
-				
-				resultBean.setFamilyObj(familyObj);
-				resultBean.setChallengeFlag("CHALLENGE_PARTNER");
-				resultBean.setChallengeMsg("已发起挑战已公布结果");
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		long familyId = bean.getFamilyId();
+		rtMap.put("familyId", familyId);
+		rtMap.put("challengeDay", getTomorrowDateStr());
+		rtMap=gameMapper.getChallengeRelation(rtMap);
+		if(rtMap==null) {
+			rtMap=new HashMap<String,Object>();
+			rtMap.put("competitorFamilyId", "");
+			rtMap.put("familyName", "");
+			rtMap.put("familyType", "");
+			rtMap.put("imgUrl", "");
+			rtMap.put("hadMatch", "0");
+		}else {
+
+			FamilyParamBean paramBean=new FamilyParamBean();
+			if(familyId==Long.valueOf(rtMap.get("selfFamilyId").toString())) {
+				paramBean.setFamilyId(Long.valueOf(rtMap.get("competitorFamilyId").toString()));
+			}else {
+				paramBean.setFamilyId(familyId);
 			}
-			else
-			{
-				resultBean.setChallengeFlag("CHALLENGE");
-				
-				FamilyChallengeLogParamBean tempParamTypeBean = new FamilyChallengeLogParamBean();
-				tempParamTypeBean.setFamilyId(prevFamilyId);
-				tempParamTypeBean.setChallengeDay(getTomorrowDateStr());
-				FamilyChallengeLogBean tempTypeResultBean = this.gameMapper.queryChallengeType(tempParamTypeBean);
-				int challengeType = tempTypeResultBean.getChallengeType();
-				
-				String msgTemplate = "您已成功挑战FAMILY_HOLD家族\\n中午12：00将公布您的竞争对手，敬请期待！";
-				String tempMsg;
-				if (FamilyConstant.BRONZE_TYPE == challengeType)
-				{
-					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "青铜");
-				}
-				else if (FamilyConstant.SILVER_TYPE == challengeType)
-				{
-					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "白银");
-				}
-				else
-				{
-					tempMsg = StringUtils.replace(msgTemplate, "FAMILY_HOLD", "黄金");
-				}
-				
-				resultBean.setChallengeMsg(tempMsg);
-			}
+			//查询家族
+			FamilyInfoBean familyBean=familyMapper.queryFamilyInfo(paramBean);
+			rtMap.put("competitorFamilyId", familyBean.getId());
+			rtMap.put("familyName", familyBean.getFamilyName());
+			rtMap.put("familyType", familyBean.getFamilyType());
+			rtMap.put("imgUrl", imgBasePath+familyBean.getImgUrl());
+			rtMap.put("hadMatch", "1");
 		}
-		else
-		{
-			resultBean.setChallengeFlag("UN_CHALLENGE");
-			resultBean.setChallengeMsg("未发起挑战");
-		}
+		return rtMap;
 		
-		return resultBean;
 	}
-	
 	//查询正在对战的家族系信息
 	public CompetitorFamilyInfoResultBean queryCompetitorFamilyInfo(GameFamilyParamBean bean)
 	{

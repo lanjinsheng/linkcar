@@ -127,22 +127,31 @@ public class GameController extends BaseController
 	 * @param bean
 	 * @return
 	 */
+//	@RequestMapping("/game/judgeChallengeFlag")
+//	public Map<String, Object> judgeChallengeFlag(@RequestBody GameFamilyParamBean bean)
+//	{
+//		LOG.info("param==={}", JSON.toJSONString(bean));
+//		
+//		JudgeChallengeResultBean resultBean = this.gameService.judgeChallengeFlag(bean);
+//		FamilyInfoResultBean familyObj = resultBean.getFamilyObj();
+//		if (null != familyObj)
+//		{
+//			String imgUrl = familyObj.getImgUrl();
+//			if (StringUtils.isNoneBlank(imgUrl))
+//			{
+//				String imgBasePath = super.getImgBasePath();
+//				familyObj.setImgUrl(imgBasePath + imgUrl);
+//			}
+//		}
+//		
+//		return ResultUtils.rtSuccess(resultBean);
+//	}
 	@RequestMapping("/game/judgeChallengeFlag")
 	public Map<String, Object> judgeChallengeFlag(@RequestBody GameFamilyParamBean bean)
 	{
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		
-		JudgeChallengeResultBean resultBean = this.gameService.judgeChallengeFlag(bean);
-		FamilyInfoResultBean familyObj = resultBean.getFamilyObj();
-		if (null != familyObj)
-		{
-			String imgUrl = familyObj.getImgUrl();
-			if (StringUtils.isNoneBlank(imgUrl))
-			{
-				String imgBasePath = super.getImgBasePath();
-				familyObj.setImgUrl(imgBasePath + imgUrl);
-			}
-		}
+		Map<String,Object> resultBean = this.gameService.judgeChallengeFlag(bean,this.getImgBasePath());
 		
 		return ResultUtils.rtSuccess(resultBean);
 	}
