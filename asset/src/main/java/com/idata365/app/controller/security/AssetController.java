@@ -128,11 +128,11 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId(); 
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
+		long powerNum =Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfoByFamilyId = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
 
-		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
-		long powerNum =Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		Map<String, String> datas = new HashMap<>();
 		try {
 			assetService.stoleFamilyFightPowers(userId, familiesInfoByFamilyId, ballId, powerNum);

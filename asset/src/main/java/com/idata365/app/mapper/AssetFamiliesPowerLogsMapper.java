@@ -9,8 +9,8 @@ import com.idata365.app.entity.AssetFamiliesPowerLogs;
 public interface AssetFamiliesPowerLogsMapper {
 
 	int insertFamiliesPowerLogs(AssetFamiliesPowerLogs assetFamiliesPowerLogs);
-
-	int updateFamiliesPowerLogs(@Param("familyId") long familyId, @Param("powerNum") long powerNum);
+	
+	int updateFamiliesPowerLogs(@Param("ballId") long ballId, @Param("powerNum") long powerNum, @Param("count") long count);
 	
 	List<AssetFamiliesPowerLogs> getFamilyPowers(@Param("familyId") long familyId,
 			@Param("fightFamilyId") long fightFamilyId);

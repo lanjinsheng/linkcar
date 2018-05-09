@@ -41,16 +41,16 @@ import com.idata365.app.util.DateTools;
 public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
 	public final static int EventType_Buy = 3;
-	public final static int EventType_Power_Index_Get = 2;//首页拾取
-	public final static int EventType_Power_Trip = 4;//行程
-	public final static int EventType_Power_SignIn = 1;//签到
-	
-	public final static int EventType_Daimond_DayPower_User = 1;//每日分配
-	public final static int EventType_Daimond_GameEnd_User = 2;//比赛结束家族分配
-	
-	public final static int EventType_Daimond_GameEnd = 1;//比赛获取
-	public final static int EventType_Daimond_Distr = 2;//比赛分配消耗
-	
+	public final static int EventType_Power_Index_Get = 2;// 首页拾取
+	public final static int EventType_Power_Trip = 4;// 行程
+	public final static int EventType_Power_SignIn = 1;// 签到
+
+	public final static int EventType_Daimond_DayPower_User = 1;// 每日分配
+	public final static int EventType_Daimond_GameEnd_User = 2;// 比赛结束家族分配
+
+	public final static int EventType_Daimond_GameEnd = 1;// 比赛获取
+	public final static int EventType_Daimond_Distr = 2;// 比赛分配消耗
+
 	public final static int RecordType_2 = 2;// 减少
 	public final static int RecordType_1 = 1;// 增加
 	@Autowired
@@ -85,7 +85,7 @@ public class AssetService extends BaseService<AssetService> {
 
 		return assetUsersAssetMapper.getUserAssetByUserId(userId);
 	}
-	
+
 	/**
 	 * 
 	 * @Title: getTotalNums
@@ -106,7 +106,7 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("totalPowersNum", String.valueOf(totalPowersNum));
 		return map;
 	}
-	
+
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -289,20 +289,23 @@ public class AssetService extends BaseService<AssetService> {
 
 	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familyInfo,
 			Map<Object, Object> requestBodyParams) {
-//		long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
-//		long fightFamilyId = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
-//
-//		long familyUserCount = Long.valueOf(String.valueOf(familyInfo.get("familyUserCount")));
-//		long fightFamilyUserCount = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyUserCount")));
+		// long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
+		// long fightFamilyId =
+		// Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
+		//
+		// long familyUserCount =
+		// Long.valueOf(String.valueOf(familyInfo.get("familyUserCount")));
+		// long fightFamilyUserCount =
+		// Long.valueOf(String.valueOf(familyInfo.get("fightFamilyUserCount")));
 
-		 long familyId = 1000003;
-		 long fightFamilyId = 1000011;
-		 long familyUserCount = 5;
-		 long fightFamilyUserCount = 5;
+		long familyId = 1000003;
+		long fightFamilyId = 1000011;
+		long familyUserCount = 5;
+		long fightFamilyUserCount = 5;
 
 		long todayContribution = 0;
 		long todayReceive = 0;
-		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowers(userId);
+		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowersByOne(userId);
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getRecordType() == 1 && assetUsersPowerLogs.getEventType() == 3) {
 				todayReceive += assetUsersPowerLogs.getPowerNum();
@@ -315,7 +318,8 @@ public class AssetService extends BaseService<AssetService> {
 		List<Map<String, Object>> powerBalls = new ArrayList<>();
 		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : powerList) {
 			Map<String, Object> powerBall = new HashMap<>();
-			powerBall.put("ballId", String.valueOf(assetFamiliesPowerLogs.getId()));
+			String ballId = String.valueOf(assetFamiliesPowerLogs.getId());
+			powerBall.put("ballId", ballId);
 			powerBall.put("totalScore", String.valueOf(assetFamiliesPowerLogs.getRealNum()));
 
 			// 计算本次可领能量
@@ -323,19 +327,25 @@ public class AssetService extends BaseService<AssetService> {
 			Integer realCount = assetFamiliesPowerLogs.getCount();
 			Long realNum = assetFamiliesPowerLogs.getRealNum();// 当前实际总量
 			Long thisScore = 0L;
-			if (realCount != count) {
-				thisScore = RandomUtils.nextLong(1L, (long) (realNum * 0.6));
+			if (realCount != count - 1) {
+				if (realNum >= 2) {
+					thisScore = RandomUtils.nextLong(1L, (long) (realNum * 0.6));
+				} else {
+					thisScore = 1L;
+				}
 			} else {
 				thisScore = realNum;
 			}
 			powerBall.put("thisScore", String.valueOf(thisScore));
+			List<AssetUsersPowerLogs> allPowers = assetUsersPowerLogsMapper.getAllPowers();
 			String[] userIdsArray = {};
-			// 已经领取过该球能量的userId列表,clickFamilyId为用户点击的能量球familyID
+			// 已经领取过该球能量的userId列表
 			if (requestBodyParams != null && requestBodyParams.get("familyId") != null && realCount != 0) {
-				long clickFamilyId = Long.valueOf((String.valueOf(requestBodyParams.get("familyId"))));
+
 				String userIds = "";
-				for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
-					if (assetUsersPowerLogs.getEffectId() == clickFamilyId) {
+				for (AssetUsersPowerLogs assetUsersPowerLogs : allPowers) {
+					if ((assetUsersPowerLogs.getEffectId() == Long.valueOf(ballId))
+							&& !userIds.contains(assetUsersPowerLogs.getUserId().toString())) {
 						userIds += assetUsersPowerLogs.getUserId() + ",";
 					}
 				}
@@ -345,7 +355,13 @@ public class AssetService extends BaseService<AssetService> {
 			} else {
 				powerBall.put("receivelist", userIdsArray);
 			}
-			powerBall.put("createFamilyId", String.valueOf(assetFamiliesPowerLogs.getFamilyId()));
+			String createFamilyId = String.valueOf(assetFamiliesPowerLogs.getFamilyId());
+			powerBall.put("createFamilyId",createFamilyId);
+			if(createFamilyId.equals(String.valueOf(familyId))) {
+				powerBall.put("isMyFamily","1");
+			}else {
+				powerBall.put("isMyFamily","0");
+			}
 			powerBall.put("createTime",
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
@@ -374,17 +390,18 @@ public class AssetService extends BaseService<AssetService> {
 	@Transactional
 	public void stoleFamilyFightPowers(long userId, Map<String, Object> familyInfo, long ballId, long powerNum)
 			throws Exception {
-//		long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
-//		long fightFamilyId = Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
+		// long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
+		// long fightFamilyId =
+		// Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
 
-		 long familyId = 1000003;
-		 long fightFamilyId = 1000011;
+		long familyId = 1000003;
+		long fightFamilyId = 1000011;
 
 		// 修改个人相关数据
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 		assetUsersPowerLogs.setUserId(userId);
 		assetUsersPowerLogs.setPowerNum(powerNum);
-		assetUsersPowerLogs.setEffectId(fightFamilyId);
+		assetUsersPowerLogs.setEffectId(ballId);
 		assetUsersPowerLogs.setCreateTime(new Date());
 		assetUsersPowerLogs.setEventType(3);
 		assetUsersPowerLogs.setRecordType(1);
@@ -393,43 +410,16 @@ public class AssetService extends BaseService<AssetService> {
 
 		// 修改家族相关数据
 		AssetFamiliesPowerLogs assetFamiliesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(ballId);
+		long count = assetFamiliesPowerLogs.getCount() + 1;
 		if (assetFamiliesPowerLogs.getFamilyId() == familyId) {
-			// 自己家族动力日志表：一条添加记录，一条减少记录
-			// 添加
-			mySetter(powerNum, familyId, assetFamiliesPowerLogs);
-			// 减少
-			youSetter(powerNum, familyId, assetFamiliesPowerLogs);
-			
-			assetFamiliesPowerLogsMapper.updateFamiliesPowerLogs(familyId,powerNum);
+			assetFamiliesPowerLogsMapper.updateFamiliesPowerLogs(ballId, powerNum, count);
 		} else {
-			mySetter(powerNum, familyId, assetFamiliesPowerLogs);
-			// 修改资产
 			assetFamiliesAssetMapper.updateFamilyPowerAdd(familyId, powerNum);
-			youSetter(powerNum, fightFamilyId, assetFamiliesPowerLogs);
-			assetFamiliesPowerLogsMapper.updateFamiliesPowerLogs(fightFamilyId,powerNum);
+			assetFamiliesPowerLogsMapper.updateFamiliesPowerLogs(ballId, powerNum, count);
 			// 修改资产
 			assetFamiliesAssetMapper.updateFamilyPowerMinus(fightFamilyId, powerNum);
 		}
 
-	}
-	
-	private void youSetter(long powerNum, long familyId, AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
-		assetFamiliesPowerLogs.setFamilyId(familyId);
-		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum() - 2 * powerNum);
-		assetFamiliesPowerLogs.setPowerNum(assetFamiliesPowerLogs.getPowerNum() - powerNum);
-		assetFamiliesPowerLogs.setRecordType(2);
-		assetFamiliesPowerLogs.setEventType(1);
-		assetFamiliesPowerLogs.setCreateTime(new Date());
-		assetFamiliesPowerLogs.setCount(assetFamiliesPowerLogs.getCount() + 1);
-	}
-
-	private void mySetter(long powerNum, long familyId, AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
-		assetFamiliesPowerLogs.setFamilyId(familyId);
-		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum() + powerNum);
-		assetFamiliesPowerLogs.setPowerNum(assetFamiliesPowerLogs.getPowerNum() + powerNum);
-		assetFamiliesPowerLogs.setRecordType(1);
-		assetFamiliesPowerLogs.setEventType(1);
-		assetFamiliesPowerLogs.setCreateTime(new Date());
 	}
 
 	/**
@@ -450,63 +440,73 @@ public class AssetService extends BaseService<AssetService> {
 		List<AssetUsersPowerLogs> list = assetUsersPowerLogsMapper.getAllRecord();
 		return list;
 	}
+
 	/**
 	 * 
-	    * @Title: getUserPowerByEffectId
-	    * @Description: TODO(这里用一句话描述这个方法的作用)
-	    * @param @param effectId
-	    * @param @return    参数
-	    * @return String    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: getUserPowerByEffectId
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param @param
+	 *            effectId
+	 * @param @return
+	 *            参数
+	 * @return String 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	@Transactional
 	public String getUserPowerByEffectId(long effectId) {
-		AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
+		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 		assetUsersPowerLogs.setEffectId(effectId);
 		assetUsersPowerLogs.setEventType(EventType_Power_Trip);
-		AssetUsersPowerLogs apl=assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
-		if(apl==null) return "0";
+		AssetUsersPowerLogs apl = assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
+		if (apl == null)
+			return "0";
 		return String.valueOf(apl.getPowerNum());
 	}
-	
+
 	/**
 	 * 
-	    * @Title: initFamily
-	    * @Description: TODO(创建家族时候调用)
-	    * @param @param familyId
-	    * @param @return    参数
-	    * @return boolean    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: initFamily
+	 * @Description: TODO(创建家族时候调用)
+	 * @param @param
+	 *            familyId
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
-	
+
 	@Transactional
 	public boolean initFamily(long familyId) {
-		AssetFamiliesAsset assetFamiliesAsset=new AssetFamiliesAsset();
+		AssetFamiliesAsset assetFamiliesAsset = new AssetFamiliesAsset();
 		assetFamiliesAsset.setFamilyId(familyId);
 		assetFamiliesAssetMapper.initFamily(assetFamiliesAsset);
 		return true;
 	}
+
 	/**
 	 * 
-	    * @Title: initUser
-	    * @Description: TODO(创建用户初始化)
-	    * @param @param userId
-	    * @param @return    参数
-	    * @return boolean    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: initUser
+	 * @Description: TODO(创建用户初始化)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	@Transactional
 	public boolean initUser(long userId) {
-		AssetUsersAsset assetUsersAsset=new AssetUsersAsset();
+		AssetUsersAsset assetUsersAsset = new AssetUsersAsset();
 		assetUsersAsset.setUserId(userId);
 		assetUsersAssetMapper.initUser(assetUsersAsset);
 		return true;
 	}
+
 	@Transactional
-	public void userPowersSnapShot(String tableName){
+	public void userPowersSnapShot(String tableName) {
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
 	@Transactional
@@ -517,27 +517,29 @@ public class AssetService extends BaseService<AssetService> {
 	
 	/**
 	 * 
-	    * @Title: getDaySignInLog
-	    * @Description: TODO(签到获取动力)
-	    * @param @param userId
-	    * @param @return    参数
-	    * @return int    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: getDaySignInLog
+	 * @Description: TODO(签到获取动力)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return int 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	public int getDaySignInLog(Long userId) {
-		int c=assetUsersPowerLogsMapper.getSignInLogByUserId(userId);
-		if(c>0) {
+		int c = assetUsersPowerLogsMapper.getSignInLogByUserId(userId);
+		if (c > 0) {
 			return 0;
-		}else {
-			AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
+		} else {
+			AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 			assetUsersPowerLogs.setEffectId(0l);
 			assetUsersPowerLogs.setEventType(EventType_Power_SignIn);
 			assetUsersPowerLogs.setPowerNum(5l);
 			assetUsersPowerLogs.setRecordType(RecordType_1);
-			assetUsersPowerLogs.setRemark(userId+"签到获取");
+			assetUsersPowerLogs.setRemark(userId + "签到获取");
 			assetUsersPowerLogs.setUserId(userId);
-			 assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
+			assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
 			return assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
 		}
 	}
