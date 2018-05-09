@@ -1,6 +1,8 @@
 package com.idata365.app.controller.security;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.TripConstant;
 import com.idata365.app.entity.TaskPowerLogs;
 import com.idata365.app.enums.PowerEnum;
 import com.idata365.app.remote.ChezuAssetService;
@@ -44,36 +47,42 @@ public class TripController extends BaseController
 	@RequestMapping("/getTripByUserLatest")
 	public Map<String, Object> getTripByUserLatest(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams)
 	{
-		Map<String, Object> rtMap=new HashMap<String, Object>();
-		rtMap.put("travelId", "0");
-		rtMap.put("habitId", "0");
-		rtMap.put("time", "0");
-		rtMap.put("mileage", "0");
-		rtMap.put("driveTip", "0");
-		rtMap.put("dayStr", "0");
-		rtMap.put("score", "0");
-		rtMap.put("power", "0");
-		rtMap.put("isShowMapFlag", "0");
-		Map<String, Object> dbMap=tripService.getTripByUserLatest(this.getUserId());
-		if(dbMap!=null) {
-			rtMap.put("travelId", dbMap.get("id"));
-			rtMap.put("habitId", dbMap.get("habitId"));
-			rtMap.put("time", dbMap.get("time"));
-			rtMap.put("mileage", dbMap.get("mileage"));
-			rtMap.put("driveTip", "真是中国好司机");
-			rtMap.put("dayStr", dbMap.get("endTime"));
-			rtMap.put("score", dbMap.get("score"));
-			String sign=SignUtils.encryptHMAC(String.valueOf(dbMap.get("id")));
-			String power=chezuAssetService.getUserPowerByEffectId(Long.valueOf(String.valueOf(dbMap.get("id"))), sign);
-			rtMap.put("power", power);
-			if(String.valueOf(dbMap.get("hiddenFlag")).equals("1")) {
-				rtMap.put("isShowMapFlag", "0");
-			}else {
-				rtMap.put("isShowMapFlag", "1");
-			}
-			
-		} 
-	   return ResultUtils.rtSuccess(rtMap);
+		List<Map<String, Object>> rtList=new ArrayList<Map<String, Object>>();
+		Map<String,Object> paramMap=new HashMap<String,Object>();
+		paramMap.put("userId", this.getUserId());
+		if(requestBodyParams.get("id")==null || String.valueOf(requestBodyParams.get("id")).equals("0")) {
+			paramMap.put("recordNum", 1);
+			paramMap.put("id", 999999999999999999L);
+		}
+		else {
+			paramMap.put("recordNum", requestBodyParams.get("recordNum"));
+			paramMap.put("id", requestBodyParams.get("id"));
+		}
+		List<Map<String, Object>> list=tripService.getTripByUserLatest(paramMap);
+		
+		if(list!=null && list.size()>0) {
+			for(Map<String, Object> dbMap:list) {
+				String score= dbMap.get("score")==null?"0":String.valueOf(dbMap.get("score"));
+				Map<String, Object> rtMap=new HashMap<String, Object>();
+				rtMap.put("travelId", dbMap.get("id"));
+				rtMap.put("habitId", dbMap.get("habitId"));
+				rtMap.put("time", dbMap.get("time"));
+				rtMap.put("mileage", dbMap.get("mileage"));
+				rtMap.put("driveTip", TripConstant.getTipByScore(Double.valueOf(score)));
+				rtMap.put("dayStr", dbMap.get("endTime"));
+				rtMap.put("score", dbMap.get("score"));
+				String sign=SignUtils.encryptHMAC(String.valueOf(dbMap.get("id")));
+				String power=chezuAssetService.getUserPowerByEffectId(Long.valueOf(String.valueOf(dbMap.get("id"))), sign);
+				rtMap.put("power", power);
+				if(String.valueOf(dbMap.get("hiddenFlag")).equals("1")) {
+					rtMap.put("isShowMapFlag", "0");
+				}else {
+					rtMap.put("isShowMapFlag", "1");
+				}
+				rtList.add(rtMap);
+			} 
+		}
+	   return ResultUtils.rtSuccess(rtList);
 	}
 	/**
 	 * 
