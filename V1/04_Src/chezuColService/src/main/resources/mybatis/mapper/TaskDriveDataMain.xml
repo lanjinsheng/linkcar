@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.col.mapper.TaskDriveDataMainMapper">
+   <resultMap id="BaseTaskDriveDataMainMap" type="com.idata365.col.entity.TaskDriveDataMain" >
+    </resultMap>
+
+ <!-- 定时处理 -->
+    <update id="lockDriveDataMainTask" parameterType="com.idata365.col.entity.TaskDriveDataMain" >
+       UPDATE 
+            taskDriveDataMain 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskDealTime=now()
+       WHERE 
+            taskStatus = 0  and taskFlag='0'  LIMIT 50  
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getDriveDataMainTask"  resultMap="BaseTaskDriveDataMainMap" parameterType="com.idata365.col.entity.TaskDriveDataMain">
+		SELECT *  from taskDriveDataMain where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+	
+	 <!-- 更新任务 -->
+     <update id="updateDriveDataMainSuccTask" parameterType="com.idata365.col.entity.TaskDriveDataMain" >
+        update taskDriveDataMain set
+        taskStatus=1,taskDealTime=now(),
+            driveStartTime=#{driveStartTime}, 
+            driveEndTime=#{driveEndTime}, 
+            driveTimes=#{driveTimes},
+            driveDistance=#{driveDistance}, 
+           maxSpeed=#{maxSpeed},
+             avgSpeed= #{avgSpeed},
+            speedUpTimes= #{speedUpTimes}, 
+            brakeTimes=#{brakeTimes}, 
+           turnTimes= #{turnTimes},
+          overspeedTimes= #{overspeedTimes}, 
+         speed120To129Times= #{speed120To129Times},
+           speed130To139Times=#{speed130To139Times}, 
+           speed140To149Times=#{speed140To149Times}, 
+          speed150To159Times= #{speed150To159Times},
+           speed160UpTimes=#{speed160UpTimes},
+          labelFlag=#{labelFlag}
+            where  id=#{id}
+     </update>
+     <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,addDayStatFlag=2为失败-->
+    <update id="updateDriveDataMainFailTask" parameterType="com.idata365.col.entity.TaskDriveDataMain" >
+       UPDATE 
+           taskDriveDataMain 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskDealTime=now(),failTimes=failTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           taskDriveDataMain 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理结束-->		
+	
+	
+</mapper>
