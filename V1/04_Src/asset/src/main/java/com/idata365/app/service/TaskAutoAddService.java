@@ -29,6 +29,16 @@ public class TaskAutoAddService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
+	
+	public String getDateStr2(int diff)
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date diffDay = DateUtils.addDays(curDate, diff);
+		
+		String dayStr = DateFormatUtils.format(diffDay, "yyyyMMdd");
+		return dayStr;
+	}
+	
 	public String getDay(String format)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -57,9 +67,9 @@ public class TaskAutoAddService {
 		String dayStr=getDay("yyyy-MM-dd");
 		long curDay=DateTools.getDateTimeOfLong(dayStr+" 00:00:00");
 //		int i=300*1000;
-		long i=3600*20*10000;
+		long i=3600*1*10000;
 		if((now-curDay)>0 && (now-curDay)<i) {
-			String dayStr2=dayStr.replaceAll("-", "");
+			String dayStr2=getDateStr2(-1);
 			String taskKey=dayStr2+"_"+TaskGenericEnum.UserDayPowerSnapshot;
 			TaskGeneric task=new TaskGeneric();
 			task.setGenericKey(taskKey);
@@ -76,9 +86,9 @@ public class TaskAutoAddService {
 		String dayStr=getDay("yyyy-MM-dd");
 		long curDay=DateTools.getDateTimeOfLong(dayStr+" 00:00:00");
 //		int i=1800*1000;
-		long i=3600*20*10000;
+		long i=3600*1*10000;
 		if((now-curDay)>0 && (now-curDay)<i) {
-			String dayStr2=dayStr.replaceAll("-", "");
+			String dayStr2=getDateStr2(-1);
 			String snapKey=dayStr2+"_"+TaskGenericEnum.UserDayPowerSnapshot;
 			TaskGeneric task=taskGenericMapper.getByGenericKey(snapKey);
 			if(task!=null) {
@@ -105,8 +115,8 @@ public class TaskAutoAddService {
 	 */
 	@Transactional
 	public void syncFamilyGameEndAdd(String season){
-		    String dayStr=getDay("yyyy-MM-dd");
-			String dayStr2=dayStr.replaceAll("-", "");
+//		    String dayStr=getDay("yyyy-MM-dd");
+			String dayStr2=season.replaceAll("-", "");
 			String taskKey=dayStr2+"_"+TaskGenericEnum.InitFamilySeasonReward;
 			TaskGeneric task=new TaskGeneric();
 			task.setGenericKey(taskKey);

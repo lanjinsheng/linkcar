@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.entity.AssetFamiliesDiamondsLogs;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
 import com.idata365.app.entity.TaskGeneric;
@@ -53,6 +54,15 @@ public class TaskGenericService {
 		String dayStr = DateFormatUtils.format(diffDay, "yyyy-MM-dd");
 		return dayStr;
 	}
+	/**
+	 * 
+	    * @Title: initUserDayRewardTask
+	    * @Description: TODO(按power分配钻石资产任务产生)
+	    * @param @param task    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@Transactional
 	public void initUserDayRewardTask(TaskGeneric task) {
 		Map<String,Object> map=new HashMap<String,Object>();
@@ -66,6 +76,15 @@ public class TaskGenericService {
 		map.put("powerTotal", powerTotal);
 		taskGenericMapper.initUserDayRewardTask(map);
 	}
+	/**
+	 * 
+	    * @Title: initFamilySeasonReward
+	    * @Description: TODO(产生赛季日钻石分配任务)
+	    * @param @param task    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@Transactional
 	public void initFamilySeasonReward(TaskGeneric task) {
 		Map<String,Object> map=new HashMap<String,Object>();
@@ -89,6 +108,16 @@ public class TaskGenericService {
 	
 	public final int PowerDiamonds=500;
 	public final int PowerDiamondsFamily=500;
+	/**
+	 * 
+	    * @Title: doUserDayReward
+	    * @Description: TODO(用户每日个人power钻石分配)
+	    * @param @param task
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@Transactional
 	public boolean doUserDayReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
@@ -112,6 +141,16 @@ public class TaskGenericService {
 		return true;
 	}
 	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"diamonds\":%s}";
+	/**
+	 * 
+	    * @Title: doFamilySeasonReward
+	    * @Description: TODO(家族钻石分配，并增加子任务 家族内部成员钻石分配)
+	    * @param @param task
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@Transactional
 	public boolean doFamilySeasonReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
@@ -172,6 +211,16 @@ public class TaskGenericService {
 	    * @throws
 	    * @author LanYeYe
 	 */
+	/**
+	 * 
+	    * @Title: doUserSeasonReward
+	    * @Description: TODO(家族成员间进行钻石分配)
+	    * @param @param task
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@Transactional
 	public boolean doUserSeasonReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
@@ -212,7 +261,10 @@ public class TaskGenericService {
 			j++;
 			assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
+			//远程消息调用
+			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
 			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(assetUsersDiamondsLogs.getDiamondsNum().doubleValue()), sign);
+			}
 		}
 		//family减少
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();

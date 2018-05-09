@@ -509,7 +509,11 @@ public class AssetService extends BaseService<AssetService> {
 	public void userPowersSnapShot(String tableName){
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
-
+	@Transactional
+	public void userPowerClear() {
+		assetUsersAssetMapper.clearPowers(null);
+	}
+	
 	/**
 	 * 
 	    * @Title: getDaySignInLog
