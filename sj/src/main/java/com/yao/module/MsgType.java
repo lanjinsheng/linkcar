@@ -1,0 +1,8 @@
+package com.yao.module;
+
+/**
+ * Created by yaozb on 15-4-11.
+ */
+public enum  MsgType {
+    PING,ASK,REPLY,LOGIN,SENDCODE,RANDOM,COMMAND,UPDATE,REBOOT,KICK,MACBLACKlIST,MACWHILELIST,CERTIFICATE,CONFIG,MACS,HEALTH
+}

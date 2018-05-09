@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljs.dao.GroupMapper">
+	<select id="getRootDepartList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT id,sort,name,parent_id,parent_name FROM rrb_background_department where	parent_id=#{parent_id} order by sort 
+	</select>
+	<select id="getDepartList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT id,sort,name,parent_id,parent_name FROM rrb_background_department where	parent_id=0  order by sort
+	</select>
+	<select id="getDepartNodeById" resultType="java.util.HashMap" parameterType="String">
+		SELECT * from rrb_background_department  where id=#{id}
+	</select>
+	<select id="getDeptChildren" resultType="String" parameterType="String">
+		SELECT * from rrb_background_department  where parent_id=#{parent_id}
+	</select>
+	<select id="getIdLastIndex" resultType="int">
+		select max(id) from rrb_background_department
+	</select>
+	<insert id="addDepartNode" parameterType="java.util.HashMap">
+		INSERT INTO rrb_background_department (id,sort,name,parent_id,parent_name,tree_code)VALUE(#{id},#{sort},#{name},#{parent_id},#{parent_name},#{tree_code})
+	</insert>
+	<update id="updateDepartTreeCode" parameterType="java.util.HashMap">
+		update
+		rrb_background_department
+		set tree_code=#{tree_code} where id=#{id}
+	</update>
+	<update id="updateDepartNode" parameterType="java.util.HashMap">
+		update
+		rrb_background_department
+		set name=#{name},sort=#{sort},parent_id=#{parent_id},parent_name=#{parent_name},tree_code=#{tree_code} where id=#{id}
+	</update>
+	<delete id="deleteDepartNode">
+		delete from rrb_background_department  where id in
+		<foreach item="id" collection="list" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<select id="listPagePriv" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT id,sort,name from rrb_background_priv order by sort
+	</select>
+	<insert id="addPriv" parameterType="java.util.HashMap">
+		insert into	rrb_background_priv(sort,name) values(#{sort},#{name})
+	</insert>
+	<delete id="deletePriv">
+		delete from rrb_background_priv  where id in
+		<foreach item="id" collection="list" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<update id="updatePriv" parameterType="java.util.HashMap">
+		update	rrb_background_priv set name=#{name},sort=#{sort}	where id=#{id}
+	</update>
+	<select id="getPrivById" resultType="java.util.HashMap" parameterType="String">
+		SELECT * FROM rrb_background_priv WHERE id=#{id}
+	</select>
+	<select id="getDataPriv" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT * FROM rrb_background_user_data_priv WHERE master_id=#{master_id}
+	</select>
+	<delete id="deleteDataPriv" parameterType="java.util.HashMap">
+		delete from rrb_background_user_data_priv where master_id=#{master}
+	</delete>
+	<insert id="addDataPriv" >
+		insert into
+		rrb_background_user_data_priv(master_id,slave_id) values
+		<foreach item="item" collection="list" separator=",">
+			(#{item.master_id},#{item.slave_id})
+		</foreach>
+	</insert>
+	<select id="getSysMenuList" resultType="java.util.HashMap"	parameterType="java.util.HashMap">
+		SELECT * from rrb_background_menu where parent_id=#{parent_id}	order by sort
+	</select>
+	<update id="updatePrivMenu" parameterType="java.util.HashMap">
+		update rrb_background_priv	set menu = #{menu}	where id=#{id}
+	</update>
+	<select id="listPageUser" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select u.id,u.sort,u.username,u.truename,d.id as deptId,d.name as deptName,p.name as privName
+		from rrb_background_user u left join rrb_background_user_dept ud on u.id=ud.user_id left join rrb_background_department d on ud.dept_id=d.id
+		left join rrb_background_user_priv up on u.id=up.user_id left join rrb_background_priv p on up.priv_id=p.id
+		where u.is_del='0'
+		<if test="searchValue!=null and searchValue!=''">
+			AND  (u.username like CONCAT('%','${searchValue}','%') or u.truename like CONCAT('%','${searchValue}','%'))
+		</if>
+		
+		<if test="dept_id !=null and dept_id !=''">
+		    and ud.dept_id in (select d.id from rrb_background_department d where d.tree_code like CONCAT('%','${dept_id}','%'))
+
+		</if>
+		<if test="priv_id !=null and priv_id !=''">
+			AND up.priv_id=#{priv_id}
+		</if>
+		<if test="admin_id !=null and admin_id !=''">
+			AND u.id=#{admin_id}
+		</if>
+		
+		order by u.sort
+	</select>
+	<select id="getUserById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select u.*,ud.dept_id,up.priv_id
+		from rrb_background_user u left join rrb_background_user_dept ud on u.id=ud.user_id left join rrb_background_user_priv up on u.id=up.user_id
+		where u.id=#{id}
+	</select>
+	<select id="listPriv" resultType="java.util.HashMap">
+		select id,name from rrb_background_priv order by sort
+	</select>
+	<select id="getUserByUserName" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select * from rrb_background_user where username=#{username}
+	</select>
+	<insert id="addUser" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+		insert into rrb_background_user(sort,username,password,truename,sex,birthday,contact,email,fax)
+		value(#{sort},#{username},#{password},#{truename},#{sex},#{birthday},#{contact},#{email},#{fax})
+	</insert>
+	<insert id="addUserDept" parameterType="java.util.HashMap">
+		insert into rrb_background_user_dept(user_id,dept_id) value (#{user_id},#{dept_id})
+	</insert>
+	<insert id="addUserPriv" parameterType="java.util.HashMap">
+		insert into rrb_background_user_priv(user_id,priv_id) value (#{user_id},#{priv_id})
+	</insert>
+	<update id="updateUser" parameterType="java.util.HashMap">
+		update rrb_background_user set sort=#{sort},username=#{username},password=#{password},truename=#{truename},sex=#{sex},birthday=#{birthday},contact=#{contact},email=#{email},fax=#{fax}
+		where id=#{id}
+	</update>
+	<delete id="deleteUserDept" parameterType="java.util.HashMap">
+		delete from rrb_background_user_dept where user_id=#{id}
+	</delete>
+	<delete id="deleteUserPriv" parameterType="java.util.HashMap">
+		delete from rrb_background_user_priv where user_id=#{id}
+	</delete>
+	<delete id="deleteUser">
+		delete from rrb_background_user  where id in
+		<foreach item="id" collection="list" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<update id="deleteUser1" parameterType="String">
+		update rrb_background_user set is_del='1' where id in
+		<foreach item="id" collection="list" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+	<select id="getUsersByPrivName" resultType="String" parameterType="String">
+		SELECT up.user_id FROM 
+			rrb_background_priv p LEFT JOIN user_priv up ON p.id=up.priv_id
+			LEFT JOIN rrb_background_user u ON up.user_id=u.id
+			WHERE p.name=#{priv_name} AND u.id IS NOT null
+	</select>
+</mapper>
