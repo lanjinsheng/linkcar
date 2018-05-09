@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.AssetUsersPowerLogs;
-import com.idata365.app.remote.ChezuService;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.AssetService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
@@ -28,7 +28,7 @@ public class AssetController extends BaseController {
 	@Autowired
 	AssetService assetService;
 	@Autowired
-	ChezuService chezuService;
+	ChezuAccountService chezuService;
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
