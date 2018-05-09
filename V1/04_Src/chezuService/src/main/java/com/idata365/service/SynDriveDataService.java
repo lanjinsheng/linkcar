@@ -24,14 +24,21 @@ import com.idata365.entity.DriveDataEvent;
 import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.entity.UserTravelLottery;
+import com.idata365.mapper.app.CalDriveTaskMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
 import com.idata365.mapper.app.UserTravelLotteryMapper;
-import com.idata365.mapper.col.CalDriveTaskMapper;
 import com.idata365.mapper.col.DriveDataEventMapper;
 import com.idata365.mapper.col.DriveDataMainMapper;
 import com.idata365.util.DateTools;
 
-
+/**
+ * 
+    * @ClassName: SynDriveDataService
+    * @Description: TODO(同步行程数据)
+    * @author LanYeYe
+    * @date 2018年5月9日
+    *
+ */
 @Service
 public class SynDriveDataService extends BaseService<SynDriveDataService>{
 	private final static Logger LOG = LoggerFactory.getLogger(SynDriveDataService.class);
@@ -134,10 +141,7 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		driveDataMainMapper.clearLockTask(compareTimes);
 	}
-	@Transactional(value="colTransactionManager")
-	public List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive){
-		return driveDataEventMapper.listDriveEventByMainId(drive);
-	}
+
 	@Transactional(value="colTransactionManager")
 	public void updateSuccSendDriveTask(DriveDataMain drive) {
 		drive.setIsPost(1);

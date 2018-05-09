@@ -53,7 +53,7 @@ public class CalScoreMainTask extends TimerTask {
 			long taskFlag=System.currentTimeMillis();
 			TaskKeyLog key=new TaskKeyLog();
 			key.setTaskFlag(String.valueOf(taskFlag));
-			key.setTaskName("CalFamilyMonthOrderTask");
+			key.setTaskName("CalScoreMainTask");
 		    int hadKey=	taskKeyLogService.insertColKey(key);
 			if(hadKey==0) { pd=true;return;}
 			CalDriveTask task=new CalDriveTask();
