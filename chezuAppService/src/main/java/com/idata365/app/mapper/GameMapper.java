@@ -1,6 +1,7 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
@@ -60,6 +61,8 @@ public interface GameMapper
 	public void saveChallengeLog(FamilyChallengeLogParamBean bean);
 	
 	public int countChallengeByFamilyId(FamilyChallengeLogParamBean bean);
+	
+	public Map<String,Object> getChallengeRelation(Map<String,Object> map);
 	
 	public List<FamilyChallengeLogBean> queryChallengeLog(FamilyChallengeLogParamBean bean);
 	
