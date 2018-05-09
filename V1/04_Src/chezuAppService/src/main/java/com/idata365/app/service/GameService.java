@@ -246,7 +246,7 @@ public class GameService extends BaseService<GameService>
 			Map<String,Object> pkRelation=new HashMap<String,Object>();
 			pkRelation.put("selfFamilyId", bean.getFamilyId());
 			pkRelation.put("competitorFamilyId", competitorFamilyId);
-			pkKey.put("daystamp", tomorrowDateStr);
+			pkRelation.put("daystamp", tomorrowDateStr);
 			familyMapper.insertPkRelation(pkRelation);
 			//查询家族
 			FamilyParamBean paramBean=new FamilyParamBean();
