@@ -1,11 +1,9 @@
 package com.idata365.app.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 
@@ -16,12 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.entity.AssetFamiliesPowerLogs;
-import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
-import com.idata365.app.entity.AssetUsersPowerLogs;
 import com.idata365.app.entity.FamilyGameAsset;
-import com.idata365.app.entity.TempPowerReward;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
 import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
@@ -29,8 +23,7 @@ import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
 import com.idata365.app.mapper.FamilyGameAssetMapper;
 import com.idata365.app.mapper.TempPowerRewardMapper;
-import com.idata365.app.remote.ChezuService;
-import com.idata365.app.util.RandUtils;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.util.SignUtils;
 
 /**
@@ -60,7 +53,7 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 	@Autowired
 	FamilyGameAssetMapper familyGameAssetMapper;
 	@Autowired
-	ChezuService chezuService;
+	ChezuAccountService chezuAccountService;
 	
 	public FamilyGameAssetService() {
 
@@ -90,7 +83,7 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		}
 		String userIds=users.substring(0, users.length()-1);
 		String sign=SignUtils.encryptHMAC(userIds);
-		Map<String,Object> userInfos=chezuService.getUsersInfoByIds(userIds, sign);
+		Map<String,Object> userInfos=chezuAccountService.getUsersInfoByIds(userIds, sign);
 		String []nickNames=String.valueOf(userInfos.get("nickNames")).split(",");
 		String []userHeadUrls=String.valueOf(userInfos.get("userHeadUrls")).split(",");
 		int i=0;
