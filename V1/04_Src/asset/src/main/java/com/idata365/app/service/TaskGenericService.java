@@ -25,6 +25,7 @@ import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.TaskGenericMapper;
 import com.idata365.app.remote.ChezuAccountService;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -42,7 +43,8 @@ public class TaskGenericService {
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
 	@Autowired
 	ChezuAccountService chezuAccountService;
-	
+	@Autowired
+	ChezuAppService chezuAppService;
 	public String getDateStr(int diff)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -109,7 +111,7 @@ public class TaskGenericService {
 		}
 		return true;
 	}
-	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"familyId\":%d,\"diamonds\":%s}";
+	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"diamonds\":%s}";
 	@Transactional
 	public boolean doFamilySeasonReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
@@ -156,7 +158,7 @@ public class TaskGenericService {
 		tg.setGenericKey(taskKey);
 		tg.setTaskType(TaskGenericEnum.DoUserSeasonReward);
 		tg.setPriority(10);
-		tg.setJsonValue(String.format(jsonValue1,preKey,familyId,String.valueOf(gameDiamond.longValue())));
+		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.longValue())));
 		taskGenericMapper.insertTask(task);
 		return true;
 	}
@@ -175,6 +177,7 @@ public class TaskGenericService {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		String powerTableName=m.get("powerTableName").toString();
 		String diamonds= m.get("diamonds").toString();
+		String orderNum= String.valueOf(m.get("diamonds"));
 		long familyId=Long.valueOf(m.get("familyId").toString());
 		String daystamp=task.getGenericKey().split("_")[0];
 		String sign=SignUtils.encryptHMAC(String.valueOf(familyId));
@@ -209,6 +212,7 @@ public class TaskGenericService {
 			j++;
 			assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
+			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(assetUsersDiamondsLogs.getDiamondsNum().doubleValue()), sign);
 		}
 		//family减少
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
