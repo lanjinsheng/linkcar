@@ -27,7 +27,7 @@ public class TaskGenericThread implements Runnable{
 					case UserDayPowerSnapshot:{
 						Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 						assetService.userPowersSnapShot(String.valueOf(m.get("tableName")));
-						assetService.userPowerClear();
+						assetService.powerClear();
 						break;
 					}
 					case InitUserDayReward:{

@@ -510,8 +510,9 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
 	@Transactional
-	public void userPowerClear() {
+	public void powerClear() {
 		assetUsersAssetMapper.clearPowers(null);
+		assetFamiliesAssetMapper.clearPower(null);
 	}
 	
 	/**

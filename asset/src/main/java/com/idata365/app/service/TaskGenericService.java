@@ -266,7 +266,7 @@ public class TaskGenericService {
 			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(assetUsersDiamondsLogs.getDiamondsNum().doubleValue()), sign);
 			}
 		}
-		//family减少
+		//family钻石减少
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 		assetFamiliesDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(Double.valueOf(diamonds)));
 		assetFamiliesDiamondsLogs.setEffectId(task.getId());
