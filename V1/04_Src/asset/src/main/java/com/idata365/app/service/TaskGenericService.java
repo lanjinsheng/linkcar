@@ -21,11 +21,10 @@ import com.idata365.app.entity.TaskGeneric;
 import com.idata365.app.enums.TaskGenericEnum;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
 import com.idata365.app.mapper.AssetFamiliesDiamondsLogsMapper;
-import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.TaskGenericMapper;
-import com.idata365.app.remote.ChezuService;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -42,7 +41,7 @@ public class TaskGenericService {
 	@Autowired
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
 	@Autowired
-	ChezuService chezuService;
+	ChezuAccountService chezuAccountService;
 	
 	public String getDateStr(int diff)
 	{
@@ -180,7 +179,7 @@ public class TaskGenericService {
 		String daystamp=task.getGenericKey().split("_")[0];
 		String sign=SignUtils.encryptHMAC(String.valueOf(familyId));
 	    //通过familyId获取用户ids。
-		String users=chezuService.getUsersByFamilyId(familyId, daystamp, sign);
+		String users=chezuAccountService.getUsersByFamilyId(familyId, daystamp, sign);
 		String []userArray=users.split(",");
 		long total=0L;
 		
