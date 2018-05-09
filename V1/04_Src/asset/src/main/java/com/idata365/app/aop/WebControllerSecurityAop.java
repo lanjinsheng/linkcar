@@ -20,7 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
-import com.idata365.app.remote.ChezuService;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.util.ResultUtils;
 
 /**
@@ -31,7 +31,7 @@ import com.idata365.app.util.ResultUtils;
 public class WebControllerSecurityAop {
 	private final static Logger LOG = LoggerFactory.getLogger(WebControllerSecurityAop.class);
 	@Autowired
-	ChezuService chezuService;
+	ChezuAccountService chezuService;
 
 	public WebControllerSecurityAop() {
 		LOG.info("WebControllerAop init");
