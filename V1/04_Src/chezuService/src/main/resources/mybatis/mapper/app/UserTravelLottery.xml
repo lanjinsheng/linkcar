@@ -8,7 +8,7 @@
 		 (userId,habitId,awardId,awardCount,hadGet,createMilTimes)
 		  VALUES
     	<foreach collection="list" item="item" index="index" separator=",">
-    		(#{item.userId},#{item.habitId},#{item.awardId},#{item.awardCount},#{item.hadGet},#{createMilTimes}) 
+    		(#{item.userId},#{item.habitId},#{item.awardId},#{item.awardCount},#{item.hadGet},#{item.createMilTimes}) 
     	</foreach>
 	</insert>
 	 
