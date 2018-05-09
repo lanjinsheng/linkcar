@@ -12,7 +12,7 @@
     <insert id="updateUserConfig"  parameterType="com.idata365.app.entity.UserConfig" >
        insert   IGNORE INTO
             userConfig (userId,isHidden,updateTime) values (#{userId},#{isHidden},now())
-            N DUPLICATE KEY UPDATE isHidden=#{isHidden},updateTime=now()
+            ON DUPLICATE KEY UPDATE isHidden=#{isHidden},updateTime=now()
     </insert>  
     
 </mapper>
