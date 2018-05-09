@@ -40,6 +40,10 @@
            familyId=#{familyId} 
      </update>
      
+     
+     <update id="clearPower"   parameterType="com.idata365.app.entity.AssetFamiliesAsset">
+        update assetFamiliesAsset set powerNum=0
+     </update>
      <insert id="initFamily"   parameterType="com.idata365.app.entity.AssetFamiliesAsset">
             INSERT IGNORE  INTO 
             assetFamiliesAsset
