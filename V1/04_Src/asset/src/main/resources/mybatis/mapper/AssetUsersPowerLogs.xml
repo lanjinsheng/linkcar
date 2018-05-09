@@ -44,7 +44,7 @@
 	</select>
 	
 	
-	<select id="getSignInLogByUserId" resultType="java.lang.Long">
+	<select id="getSignInLogByUserId" resultType="java.lang.Integer" parameterType="java.lang.Long">
 		SELECT count(1) FROM assetUsersPowerLogs where userId=#{userId} and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
 	
