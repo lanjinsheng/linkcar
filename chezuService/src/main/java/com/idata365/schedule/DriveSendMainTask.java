@@ -57,7 +57,7 @@ public class DriveSendMainTask extends TimerTask {
 			key.setTaskName("CalFamilyMonthOrderTask");
 		    int hadKey=	taskKeyLogService.insertColKey(key);
 			if(hadKey==0) { pd=true;return;}
-			List<Map<String,Object>> postList=new ArrayList<Map<String,Object>>();
+//			List<Map<String,Object>> postList=new ArrayList<Map<String,Object>>();
 			DriveDataMain drive=new DriveDataMain();
 			drive.setTaskFlag(taskFlag);
 			try {
