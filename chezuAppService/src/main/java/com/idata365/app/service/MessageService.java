@@ -47,7 +47,7 @@ public class MessageService extends BaseService<MessageService>{
 	//踢人
 	public static final String KickMemberMessage="族长【%s】将您移出了【%s】家族，此处不留爷自有留爷处，咱们江湖再见！";
 	public static final String ChallengeMessage="下战书！您的家族被【%】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
-	
+	//获奖
 	public static final String RewardMessage="恭喜！您的家族在【%s】赛季中获得了第【%s】名的好成绩，奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
 	
 	
@@ -77,6 +77,8 @@ public class MessageService extends BaseService<MessageService>{
 	
 	//道具赠送通知
 	public static final String PropsSend="com.idata365.haochezu://propsReceive.push?msgId=%s";
+	//家族钻石分配记录
+	public static final String FamilyDiamondsDistr="com.idata365.haochezu://DEPNotes.push?enterType=0&familyId=%s";
 	
 	public static final String RegMessageUrl=H5Host+"share/home.html";
 	public static final String KaijiangMessageUrl=H5Host+"share/lottery.html";
@@ -363,6 +365,24 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUserId(toUserId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
 		message.setToUrl("");
+		return message;
+	}
+	
+	public Message buildFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String orderNum) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_Reward);
+		message.setContent(String.format(RewardMessage,season,orderNum,diamonds));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("奖励通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(FamilyDiamondsDistr, familyId));
 		return message;
 	}
 	

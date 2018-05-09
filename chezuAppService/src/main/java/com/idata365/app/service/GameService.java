@@ -265,6 +265,7 @@ public class GameService extends BaseService<GameService>
 			List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(bean.getFamilyId());
 			for(Map<String,Object> m:userList) {
 				Message msg=messageService.buildChallegeMessage(user.getId(), Long.valueOf(m.get("userId").toString()), familyResultBean.getMyFamilyName());
+				messageService.insertMessage(msg, MessageEnum.Challege);
 				messageService.pushMessageNotrans(msg, MessageEnum.Challege);
 			}
 			return rtMap;
