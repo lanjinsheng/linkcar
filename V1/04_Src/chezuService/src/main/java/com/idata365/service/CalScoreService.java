@@ -30,7 +30,7 @@ import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
 import com.idata365.mapper.col.DriveDataEventMapper;
 import com.idata365.mapper.col.DriveDataMainMapper;
-import com.idata365.mapper.col.DriveScoreMapper;
+import com.idata365.mapper.app.DriveScoreMapper;
 import com.idata365.util.DateTools;
 
 @Service
@@ -84,8 +84,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	 * @param consumeCount
 	 * @return	
 	 */
-	@Transactional
-	public boolean consumeLottery(List<ReadyLotteryBean> paramList,Long userId)
+	private boolean consumeLottery(List<ReadyLotteryBean> paramList,Long userId)
 	{
 		String currentDayStr = getCurrentDayStr();
 		
@@ -109,8 +108,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	@Transactional
-	public boolean updateTravelHistory(UserTravelHistory userTravelHistory)
+	private boolean updateTravelHistory(UserTravelHistory userTravelHistory)
 	{
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
 		return true;
@@ -713,8 +711,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	@Transactional(value="colTransactionManager")
-	public List<DriveScore> calScoreByUHInsertDb(Long userId,Long habitId){
+	@Transactional
+	public List<DriveScore> calScoreByUHInsertDb(Long userId,Long habitId,DriveDataMain dm){
 		List<DriveScore> driveScoreList=new ArrayList<DriveScore>();
 		List<ReadyLotteryBean> loteryBeans=new ArrayList<ReadyLotteryBean>();
 		DriveScore ds=new DriveScore();
@@ -725,11 +723,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		userTravelHistory.setHabitId(habitId);
 		userTravelHistory.setSpeedTimesOffset(0);
 		int phoneUserScore=10;
-		//获取行程main，获取行程event
-		DriveDataMain main=new DriveDataMain();
-		main.setUserId(userId);
-		main.setHabitId(habitId);
-		DriveDataMain dm=driveDataMainMapper.getDriveDataMainByUH(main);
+		
 		String driveEndTime=dm.getDriveEndTime().substring(0, 19);
 		//通过driveEndTime 获取用户的角色与familyId
 		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
@@ -794,27 +788,27 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			DriveScore nDs=(DriveScore) ds.clone();
 			int roleId=role.getRole();
 			if(roleId==1) {
-				int tempJianScore=10-2*(10-jianScore);
+				int tempJianScore=10-3*(10-jianScore);
 				tempJianScore=(tempJianScore>0?tempJianScore:0);
 				nDs.setBrakeScore(BigDecimal.valueOf(tempJianScore));
 			}else if(roleId==2) {
-				int tempZhuanScore=10-2*(10-zhuanScore);
+				int tempZhuanScore=10-3*(10-zhuanScore);
 				tempZhuanScore=(tempZhuanScore>0?tempZhuanScore:0);
 				nDs.setTurnScore(BigDecimal.valueOf(tempZhuanScore));
 			}else if(roleId==3) {
-				int tempMaxSpeedScore=10-2*(10-maxSpeedScore);
+				int tempMaxSpeedScore=10-3*(10-maxSpeedScore);
 				tempMaxSpeedScore=(tempMaxSpeedScore>0?tempMaxSpeedScore:0);
 				nDs.setMaxSpeedScore(BigDecimal.valueOf(tempMaxSpeedScore));
 			}else if(roleId==4) {
-				int tempTiredScore=10-2*(10-triedScore);
+				int tempTiredScore=10-3*(10-triedScore);
 				tempTiredScore=(tempTiredScore>0?tempTiredScore:0);
 				nDs.setTiredDrivingScore(BigDecimal.valueOf(tempTiredScore));
 			}else if(roleId==5) {
-				int tempNightScore=10-2*(10-nightScore);
+				int tempNightScore=10-3*(10-nightScore);
 				tempNightScore=(tempNightScore>0?tempNightScore:0);
 				nDs.setNightDrivingScore(BigDecimal.valueOf(tempNightScore));
 			}else if(roleId==6) {
-				int tempChaoScore=10-2*(10-chaoScore);
+				int tempChaoScore=10-3*(10-chaoScore);
 				tempChaoScore=(tempChaoScore>0?tempChaoScore:0);
 				nDs.setOverSpeedScore(BigDecimal.valueOf(tempChaoScore));				
 			}else if(roleId==7) {
@@ -855,8 +849,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
-	@Transactional(value="colTransactionManager")
-	public Map<String,Object> calScoreByUH(Long userId,Long habitId){
+	@Transactional
+	public Map<String,Object> calScoreByUH(Long userId,Long habitId,DriveDataMain dm){
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		List<DriveScore> driveScoreList=new ArrayList<DriveScore>();
 		List<ReadyLotteryBean> loteryBeans=new ArrayList<ReadyLotteryBean>();
@@ -868,11 +862,6 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		userTravelHistory.setHabitId(habitId);
 		userTravelHistory.setSpeedTimesOffset(0);
 		int phoneUserScore=10;
-		//获取行程main，获取行程event
-		DriveDataMain main=new DriveDataMain();
-		main.setUserId(userId);
-		main.setHabitId(habitId);
-		DriveDataMain dm=driveDataMainMapper.getDriveDataMainByUH(main);
 		String driveEndTime=dm.getDriveEndTime().substring(0, 19);
 		//通过driveEndTime 获取用户的角色与familyId
 		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
@@ -996,25 +985,31 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
-	@Transactional(value="colTransactionManager")
+	@Transactional
 	public List<CalDriveTask> getCalScoreTask(CalDriveTask driveScore){
 		//先锁定任务
 		calDriveTaskMapper.lockCalScoreTask(driveScore);
 		//返回任务列表
 		return calDriveTaskMapper.getCalScoreTask(driveScore);
 	}
-	@Transactional(value="colTransactionManager")
+	@Transactional
 	public	void updateSuccCalScoreTask(CalDriveTask driveScore) {
 		calDriveTaskMapper.updateSuccCalScoreTask(driveScore);
 	}
 //	
-	@Transactional(value="colTransactionManager")
+	@Transactional
 	public void updateFailCalScoreTask(CalDriveTask driveScore) {
+		if(driveScore.getCalFailTimes()>100) {
+			//状态置为2，代表计算次数已经极限
+			driveScore.setCalStatus(2);
+		}else {
+			driveScore.setCalStatus(0);
+		}
 		calDriveTaskMapper.updateFailCalScoreTask(driveScore);
 	}
 //	
 	
-	@Transactional(value="colTransactionManager")
+	@Transactional
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		calDriveTaskMapper.clearLockTask(compareTimes);

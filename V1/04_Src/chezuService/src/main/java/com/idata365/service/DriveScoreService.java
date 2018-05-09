@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DriveScore;
-import com.idata365.mapper.col.DriveScoreMapper;
+import com.idata365.mapper.app.DriveScoreMapper;
 @Service
 public class DriveScoreService extends BaseService<DriveScoreService>{
 	@Autowired
