@@ -79,7 +79,11 @@
 	</insert>
 	
 	<select id="countChallengeByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
-		select count(id) from familyChallengeLog where familyId=#{familyId} and challengeDay=#{challengeDay}
+		select count(id) from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and daystamp=#{challengeDay}
+	</select>
+	
+	<select id="getChallengeRelation" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and daystamp=#{challengeDay}
 	</select>
 	
 	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
