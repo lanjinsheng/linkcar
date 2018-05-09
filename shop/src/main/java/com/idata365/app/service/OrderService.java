@@ -16,6 +16,7 @@ import com.idata365.app.entity.Prize;
 import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
 import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.SignUtils;
 
 /**
@@ -74,7 +75,7 @@ public class OrderService {
 			Map<String, String> map = new HashMap<>();
 			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeid()));
 			map.put("convertId", String.valueOf(order.getOrderId()));
-			map.put("convertTime", String.valueOf(order.getOrdertime()));
+			map.put("convertTime",DateTools.formatDateMD(order.getOrdertime()));
 			map.put("rewardID", String.valueOf(order.getPrizeid()));
 			map.put("rewardName", prize.getPrizename());
 			map.put("rewardDesc", prize.getPrizedesc());
