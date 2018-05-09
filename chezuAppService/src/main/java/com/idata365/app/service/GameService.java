@@ -219,7 +219,6 @@ public class GameService extends BaseService<GameService>
 	{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		String tomorrowDateStr = getTomorrowDateStr();
-		
 		FamilyChallengeLogParamBean saveChallgenParamBean = new FamilyChallengeLogParamBean();
 		saveChallgenParamBean.setFamilyId(bean.getFamilyId());
 		saveChallgenParamBean.setChallengeType(bean.getFamilyType());
