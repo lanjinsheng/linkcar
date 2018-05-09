@@ -15,16 +15,16 @@
 	
 	<update id="updateFamiliesPowerLogs">
 		update assetFamiliesPowerLogs set
-		powerNum=(powerNum-#{powerNum,jdbcType=BIGINT})
+		realNum=realNum-#{powerNum,jdbcType=BIGINT},count=#{count,jdbcType=BIGINT},createTime=now()
 		where
-		familyId=#{familyId,jdbcType=BIGINT} and powerNum>#{powerNum}
+		id=#{ballId,jdbcType=BIGINT} and realNum>=#{powerNum}
 	</update>
 	
 	<select id="getFamilyPowers" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
 		FROM assetFamiliesPowerLogs where
-		familyId in (#{familyId},#{fightFamilyId}) AND
+		familyId in (#{familyId},#{fightFamilyId}) AND realNum>0 AND
 		 <![CDATA[ createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	<select id="getFamiliesPowerLogs" resultMap="BaseResultMap"

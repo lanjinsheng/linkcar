@@ -14,7 +14,9 @@ public interface AssetUsersPowerLogsMapper {
 
 	List<AssetUsersPowerLogs> getIndexPowersFirst(@Param("userId") long userId);
 	
-	List<AssetUsersPowerLogs> getAllPowers(@Param("userId") long userId);
+	List<AssetUsersPowerLogs> getAllPowersByOne(@Param("userId") long userId);
+	
+	List<AssetUsersPowerLogs> getAllPowers();
 
 	long getTotalPowersNum(@Param("userId") long userId);
 

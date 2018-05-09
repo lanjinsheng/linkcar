@@ -21,7 +21,7 @@
 		userId=#{userId} order by createTime desc limit 10
 	</select>
 	<select id="getTotalDiamondsNum" resultType="java.lang.Long">
-		SELECT sum(diamondsNum) FROM assetUsersDiamondsLogs where userId=#{userId}
+		SELECT IFNULL(sum(diamondsNum),0) FROM assetUsersDiamondsLogs where userId=#{userId}
 	</select>
 
     <insert id="insertDiamondsConsume"

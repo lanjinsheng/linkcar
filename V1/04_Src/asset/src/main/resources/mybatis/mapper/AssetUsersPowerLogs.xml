@@ -27,11 +27,17 @@
 		FROM assetUsersPowerLogs where
 		userId=#{userId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]> limit 10
 	</select>
-	<select id="getAllPowers" resultMap="BaseResultMap"
+	<select id="getAllPowersByOne" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
 		FROM assetUsersPowerLogs where
 		userId=#{userId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
+	</select>
+	<select id="getAllPowers" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersPowerLogs where
+		<![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	<select id="getTotalPowersNum" resultType="java.lang.Long">
 		SELECT sum(powerNum) FROM assetUsersPowerLogs where userId=#{userId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY)]]>
