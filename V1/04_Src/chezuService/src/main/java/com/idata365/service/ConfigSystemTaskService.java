@@ -148,7 +148,7 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 //				String nowDay=getDateStr(0);
 //				task.setDaystamp(nowDay);
 				taskFamilyPkRelationMapper.initTaskFamilyPkRelation(task);
-				//还原任务表
+				//还原匹配标识
 				taskFamilyPkRelationMapper.updateFamilyInfoMatchKey();
 				task.setInitPkRelation(1);
 //				task.setDaystamp(taskDay);
