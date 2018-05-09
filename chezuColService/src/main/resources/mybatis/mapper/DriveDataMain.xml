@@ -24,4 +24,8 @@
 		SELECT *  from driveDataMain where  userId=#{userId} and habitId=#{habitId}
 	 </select>
  
+ 	<select id="listPageDriveMainTest"  resultMap="driveDataMainMap" parameterType="java.util.HashMap">
+		SELECT *  from driveDataMain where userId in ${usersArray} order by id desc
+	</select>
+ 
 </mapper>
