@@ -12,4 +12,9 @@
        FROM  userTravelHistory where addDayStatFlag=1 and id=#{travelId}  order by id desc limit 1
      </select>
      
+    <select id="getTripLatest" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT *
+       FROM  userTravelHistory where addDayStatFlag=1 and userId=#{userId} and id<![CDATA[<]]>${id} order by id desc limit ${recordNum}
+     </select>
+     
 </mapper>
