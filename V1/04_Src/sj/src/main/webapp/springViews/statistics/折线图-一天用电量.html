@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+    title: {
+        text: '一天用电量分布',
+        subtext: '纯属虚构'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis:  {
+        type: 'category',
+        boundaryGap: false,
+        data: ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: {
+            formatter: '{value} W'
+        }
+    },
+    visualMap: {
+        show: false,
+        dimension: 0,
+        pieces: [{
+            lte: 6,
+            color: 'green'
+        }, {
+            gt: 6,
+            lte: 8,
+            color: 'red'
+        }, {
+            gt: 8,
+            lte: 14,
+            color: 'green'
+        }, {
+            gt: 14,
+            lte: 17,
+            color: 'red'
+        }, {
+            gt: 17,
+            color: 'green'
+        }]
+    },
+    series: [
+        {
+            name:'用户量',
+            type:'line',
+            smooth: true,
+            data: [300, 280, 250, 260, 270, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+            markArea: {
+                data: [ [{
+                    name: '早高峰',
+                    xAxis: '07:30'
+                }, {
+                    xAxis: '10:00'
+                }], [{
+                    name: '晚高峰',
+                    xAxis: '17:30'
+                }, {
+                    xAxis: '21:15'
+                }] ]
+            }
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+</html>

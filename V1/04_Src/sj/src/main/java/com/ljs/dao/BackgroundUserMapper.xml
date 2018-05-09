@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljs.dao.BackgroundUserMapper">
+	<!-- 登录 -->
+	<select id="findBackgroundUser"   resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT u.*,ud.dept_id,d.name AS dept_name,up.priv_id
+      FROM rrb_background_user u LEFT JOIN rrb_background_user_dept ud ON u.id=ud.user_id LEFT JOIN rrb_background_user_priv up ON u.id=up.user_id
+      LEFT JOIN rrb_background_department d ON ud.dept_id=d.id
+      WHERE u.username=#{username} and u.password = #{password} AND u.is_del='0'
+	</select>
+	
+	<!-- 后台用户列表查询方法 -->
+	<select id="listPageBackgroundUser"   resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	      select * from rrb_background_user where 1=1
+	      <if test="searchValue != null and searchValue != ''">
+	  	   and (user_tel like CONCAT ('%','${searchValue}','%') or user_name like CONCAT ('%','${searchValue}','%'))
+	      </if>
+	</select>
+	
+	<!-- 根据ID查找后台用户 -->
+	<select id="getBackgroundUserById"   resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	      select * from rrb_background_user where 1=1
+	       and id = #{id}
+	</select>
+	
+	<!-- 根据条件查找后台用户 -->
+	<select id="findBackgroundUserByMap"   resultType="java.util.HashMap" parameterType="java.util.HashMap">
+	      select * from rrb_background_user where 1=1
+	      <if test="user_name != null and user_name != ''">
+	       and user_name = #{user_name}
+	       </if>
+	</select>
+	
+	<!-- 后台用户新增 -->
+		<insert id="insertBackgroundUser" parameterType="java.util.HashMap">
+			INSERT INTO rrb_background_user  (user_tel,password,user_name,duty) 
+			VALUES ( #{user_tel}, #{password},#{user_name},#{duty});	
+	</insert>
+	
+	<!-- 后台用户更新 -->
+	<update id="updateBackgroundUser" parameterType="java.util.HashMap">
+		UPDATE rrb_background_user SET user_tel = #{user_tel},password = #{password},user_name = #{user_name},
+		duty = #{duty}
+		where  id=#{id}
+	</update>
+	
+	<!-- 后台用户删除方法 idArr 主键id字符串idArr-->
+	<delete id="delBackgroundUser" parameterType="java.util.HashMap">
+		DELETE FROM rrb_background_user WHERE id in
+			<foreach collection="idArr" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</delete>
+</mapper>

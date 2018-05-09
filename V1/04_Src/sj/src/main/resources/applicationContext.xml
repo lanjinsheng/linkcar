@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+
+	<!-- 数据库配置文件位置 -->
+	<context:property-placeholder location="classpath:jdbc_config.properties" ignore-unresolvable="true" />
+
+	<!-- 配置数据源[ https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_DruidDataSource%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE]-->
+	  <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+      	<!-- 基本属性 url、user、password -->
+      	<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+	      <!-- 配置初始化大小、最小、最大 -->
+	      <property name="initialSize" value="${initialSize}" />
+	      <property name="minIdle" value="${minIdle}" /> 
+	      <property name="maxActive" value="${maxActive}" />
+	
+	      <!-- 配置获取连接等待超时的时间 -->
+	      <property name="maxWait" value="60000" />
+		  <property name="useUnfairLock" value="true" />
+	
+	      <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	      <property name="testWhileIdle" value="true" />
+	      <property name="timeBetweenEvictionRunsMillis" value="60000" />
+	      <property name="validationQuery" value="${validationQuery.sqlserver}" />
+	      <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	      <property name="minEvictableIdleTimeMillis" value="25200000" />
+	
+	      <property name="testOnBorrow" value="false" />
+	      <property name="testOnReturn" value="false" />
+	
+	       <!-- 打开removeAbandoned功能 -->
+           <property name="removeAbandoned" value="true" />
+           <!-- 1800秒，也就是30分钟 -->
+           <property name="removeAbandonedTimeout" value="1800" />
+           <!-- 关闭abanded连接时输出错误日志 -->
+           <property name="logAbandoned" value="true" />
+           <!-- 配置监控统计拦截的filters -->
+	      <property name="filters" value="mergeStat" /> 
+  	</bean>
+	<!-- 对@Transaction这个注解进行的驱动，这是基于注解的方式使用事务配置声明 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	 <!-- MyBatis integration with spring as define sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-configuration.xml" />
+	</bean>
+	<bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ljs.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+		<!-- transaction manager -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+    <bean id="springContextUtil" class="com.ljs.util.SpringContextUtil"  scope="singleton" />
+    <context:component-scan base-package="com.ljs.service" />
+    <context:component-scan base-package="com.ljs.aop" />
+    <context:component-scan base-package="com.ljs.task" />
+    <aop:aspectj-autoproxy/>
+    <task:annotation-driven/>
+  
+  	   <!-- shiro登陆相关配置 -->	
+		<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
+		<bean id="myRealm"  class="com.ljs.security.ShiroRealm">
+		</bean>
+
+		<!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session -->
+		<!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
+		<!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
+		<bean id="securityManager"
+			class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+			<property name="realm" ref="myRealm" />
+		</bean>
+
+		<bean id="shiroFilter"  class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+			<!-- Shiro的核心安全接口,这个属性是必须的 -->
+			<property name="securityManager" ref="securityManager" />
+			<!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+			<!--  <property name="loginUrl" value="/jsp/test/loginform.action" />-->
+			<!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为main.jsp了) -->
+			<!--<property name="successUrl" value="/index.action"/> -->
+			<!-- 用户访问未对其授权的资源时,所显示的连接 -->
+			<property name="unauthorizedUrl" value="/public/404.jsp"/> 
+			<!-- Shiro连接约束配置,即过滤链的定义 -->
+			<!-- 此处可配合我的这篇文章来理解各个过滤连的作用http://blog.csdn.net/jadyer/article/details/12172839 -->
+			<!-- 下面value值的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的 -->
+			<!-- anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,比方说login.jsp?main这种 -->
+			<!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter -->
+			<property name="filterChainDefinitions">
+				<value>
+					/public/** = anon
+					/r/manage/login/userLogin = anon
+					/r/statistics/** = anon
+					/r/manage/login/userLogout = logout
+					/main.jsp = authc
+					/springViews/router/** = authc
+					/springViews/commandCnf/** = authc
+					/springViews/system/** = authc
+					/r/manage/** = authc
+				</value>
+			</property>
+		</bean>
+	
+		<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+		<bean id="lifecycleBeanPostProcessor"
+			class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+			
+ <bean id="taskTables" class="com.ljs.task.TaskMethods">
+  
+	<!-- 节点任务管理服务器 9998 Server -->
+	<!-- <constructor-arg name="methodsAllow" value="dealAPInitConfDatas,moveChannelsDatas,pingChannelsDatas,getHealthDatas,updateHealthDatas" /> -->
+	
+	<constructor-arg name="methodsAllow" value="" />
+ </bean>
+ <!-- 异步线程池 -->  
+  <bean id="threadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">  
+    <!-- 核心线程数  -->  
+    <property name="corePoolSize" value="10" />  
+    <!-- 最大线程数 -->  
+    <property name="maxPoolSize" value="50" />  
+    <!-- 队列最大长度 >=mainExecutor.maxSize -->  
+    <property name="queueCapacity" value="1000" />  
+    <!-- 线程池维护线程所允许的空闲时间 -->  
+    <property name="keepAliveSeconds" value="300" />  
+    <!-- 线程池对拒绝任务(无线程可用)的处理策略 -->  
+    <property name="rejectedExecutionHandler">  
+      <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />  
+    </property>  
+  </bean>  
+  <bean id="mainExecutor" class="com.ljs.task.MainExecutor">  
+    <property name="threadPool" ref="threadPool"></property>
+  </bean>  
+  
+  <bean id="springScheduleExecutorTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
+    <property name="runnable" ref="mainExecutor" />  
+    <!-- 容器加载10秒后开始执行 -->  
+    <property name="delay" value="10000" />  
+    <!-- 每次任务间隔 5秒-->  
+    <property name="period" value="60000000" />  
+  </bean>  
+ 
+ 
+    <bean id="springScheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">  
+    <property name="scheduledExecutorTasks">  
+      <list>  
+        <ref bean="springScheduleExecutorTask" />  
+      </list>  
+    </property>  
+  </bean>  
+</beans>

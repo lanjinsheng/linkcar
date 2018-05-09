@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration  
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">  
+      
+<configuration>  
+ <properties>  
+    	<property name="dialect" value="mysql" />  
+    	<property name="pageSqlId" value=".*Page.*" />  <!-- 包含关键字Page的正则表达式 -->
+    </properties>  
+     <plugins>  
+        <plugin interceptor="com.ljs.interceptor.PageInterceptor">   
+        </plugin>  
+    </plugins>  
+</configuration>

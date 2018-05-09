@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljs.dao.CoreMapper">
+	<select id="getMenus" resultType="java.util.HashMap">
+			SELECT seq_id,type,icon,text,id,home_page,collapsed,closeable,href,sort,parent_name,IF(parent_id=0,NULL,parent_id) AS _parentId from rrb_background_menu  order by sort
+	</select>
+	<select id="getShowMenu" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+			SELECT * from rrb_background_menu  where 1=1
+			<if test="type != '' and type != null">
+			and type=#{type} 
+			</if>
+			<if test="parent_id != '' and parent_id != null">
+			and parent_id=#{parent_id} 
+			</if>
+			order by sort
+	</select>
+	<select id="getMenuByType" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+			SELECT * from rrb_background_menu  where type=#{type} order by sort
+	</select>
+	<insert id="addMenu" parameterType="java.util.HashMap">
+		insert into rrb_background_menu(type,icon,text,id,home_page,collapsed,closeable,href,sort,parent_id,parent_name,tree_code) value
+		(#{type},#{icon},#{text},#{id},#{home_page},#{collapsed},#{closeable},#{href},#{sort},#{parent_id},#{parent_name},#{tree_code})
+	</insert>
+	<select id="getUserPriv" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+			SELECT * from rrb_background_priv  where id=#{priv_id}
+	</select>
+	<select id="hasPriv" resultType="int" parameterType="java.util.HashMap">
+		select	count(seq_id) from rrb_background_menu where tree_code like CONCAT('%',#{tree_code},'%') and seq_id=#{seq_id}
+	</select>
+	<select id="getMenuById" resultType="java.util.HashMap" parameterType="String">
+		select	* from rrb_background_menu where seq_id=#{seq_id}
+	</select>
+	<select id="getChildren" resultType="String" parameterType="String">
+		select	seq_id from rrb_background_menu where tree_code like CONCAT('%',#{id},'%')
+	</select>
+	<delete id="deleteMenu">
+		delete from rrb_background_menu  where seq_id in
+		<foreach item="seq_id" collection="list" open="(" separator=","
+			close=")">
+			#{seq_id}
+		</foreach>
+	</delete>
+	<update id="updateMenu" parameterType="String">
+		update rrb_background_menu set icon=#{icon},text=#{text},id=#{id},home_page=#{home_page},collapsed=#{collapsed},closeable=#{closeable},href=#{href},sort=#{sort} where seq_id=#{seq_id}
+	</update>
+	<select id="getMenuIdLastIndex" resultType="int" >
+		select    max(seq_id) from rrb_background_menu
+	</select>
+</mapper>
