@@ -21,5 +21,5 @@ public interface AssetUsersAssetMapper {
 	int initUser(AssetUsersAsset assetUsersAsset);
 
 	void userPowersSnapShot(@Param("tableName") String tableName);
-
+	int clearPowers(AssetUsersAsset assetUsersAsset);
 }
