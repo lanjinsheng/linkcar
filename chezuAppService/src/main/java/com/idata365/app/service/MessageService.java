@@ -46,7 +46,7 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
 	//踢人
 	public static final String KickMemberMessage="族长【%s】将您移出了【%s】家族，此处不留爷自有留爷处，咱们江湖再见！";
-	public static final String ChallengeMessage="下战书！您的家族被【%】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
+	public static final String ChallengeMessage="下战书！您的家族被【%s】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
 	//获奖
 	public static final String RewardMessage="恭喜！您的家族在【%s】赛季中获得了第【%s】名的好成绩，奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
 	
