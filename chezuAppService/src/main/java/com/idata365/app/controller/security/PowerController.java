@@ -27,7 +27,7 @@ public class PowerController extends BaseController
 	/**
 	 * 
 	    * @Title: submitSignInPower
-	    * @Description: TODO(签到接口)
+	    * @Description: TODO(签到接口，作废。直接从asset模块处理)
 	    * @param @param allRequestParams
 	    * @param @param requestBodyParams
 	    * @param @return    参数
