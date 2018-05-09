@@ -1,5 +1,6 @@
 package com.idata365.app.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -21,7 +22,10 @@ public class TripService extends BaseService<TripService>
 	public Map<String,Object> getTripByUserLatest(long userId) {
 		return tripMapper.getTripByUserLatest(userId);
 	}
-	 
+	@Transactional
+	public  List<Map<String,Object>> getTripByUserLatest(Map<String,Object> map) {
+		return tripMapper.getTripLatest(map);
+	} 
 	@Transactional
 	public Map<String,Object> getTripSpeciality(long travelId) {
 		return tripMapper.getTripSpeciality(travelId);
