@@ -233,7 +233,7 @@ public class GameService extends BaseService<GameService>
 		}
 		Map<String,Object> pkKey=new HashMap<String,Object>();
 		pkKey.put("id", bean.getFamilyId());
-		pkKey.put("familyType", bean.getFamilyId());
+		pkKey.put("familyType", bean.getFamilyType());
 		String matchKey=bean.getFamilyId()+""+System.currentTimeMillis();
 		pkKey.put("matchKey", matchKey);
 		int getPk=familyMapper.updateFamilyPkKeyGet(pkKey);
