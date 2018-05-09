@@ -7,17 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.idata365.entity.CalDriveTask;
+import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.TaskKeyLog;
+import com.idata365.mapper.col.DriveDataMainMapper;
 import com.idata365.service.CalScoreService;
+import com.idata365.service.DriveMainColService;
 import com.idata365.service.TaskKeyLogService;
 
 
 
 /**
  * 
-    * @ClassName: DriveSendMainTask
-    * @Description: TODO(同步行程任务给业务层)
+    * @ClassName: CalScoreMainTask
+    * @Description: TODO(通过DriveSendMain将采集层驾驶数据同步给用户后,进行驾驶数据业务计分)
     * @author LanYeYe
     * @date 2017年12月28日
     *
@@ -31,6 +34,8 @@ public class CalScoreMainTask extends TimerTask {
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
     CalScoreService calScoreService;
+    @Autowired
+    DriveMainColService driveMainColService;
     @Autowired
     TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
@@ -62,27 +67,17 @@ public class CalScoreMainTask extends TimerTask {
 			log.info("CalDriveTask do--list.size="+list.size());
 				for(CalDriveTask calDriveTask:list) {
 					try {
-						List<DriveScore> scores=calScoreService.calScoreByUHInsertDb(calDriveTask.getUserId(), calDriveTask.getHabitId());
+						DriveDataMain driveDatas=  driveMainColService.getDriveMain(calDriveTask.getUserId(), calDriveTask.getHabitId());
+						List<DriveScore> scores=calScoreService.calScoreByUHInsertDb(calDriveTask.getUserId(), calDriveTask.getHabitId(),driveDatas);
 					if(scores!=null) {
 						calScoreService.updateSuccCalScoreTask(calDriveTask);
 					}else {
-						if(calDriveTask.getCalFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							calDriveTask.setCalStatus(2);
-						}else {
-							calDriveTask.setCalStatus(0);
-						}
+					 
 						calScoreService.updateFailCalScoreTask(calDriveTask);
 					}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
-						if(calDriveTask.getCalFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							calDriveTask.setCalStatus(2);
-						}else {
-							calDriveTask.setCalStatus(0);
-						}
 						calScoreService.updateFailCalScoreTask(calDriveTask);
 					}
 					}

@@ -11,11 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
+import com.idata365.mapper.app.DriveScoreMapper;
 import com.idata365.mapper.app.FamilyInfoMapper;
 import com.idata365.mapper.app.TaskAchieveAddValueMapper;
 import com.idata365.mapper.app.UserFamilyScoreMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
-import com.idata365.mapper.col.DriveScoreMapper;
+
 
 @Service
 public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>{

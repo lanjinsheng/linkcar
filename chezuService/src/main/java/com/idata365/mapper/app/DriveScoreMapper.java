@@ -1,4 +1,4 @@
-package com.idata365.mapper.col;
+package com.idata365.mapper.app;
 
 import java.util.List;
 
