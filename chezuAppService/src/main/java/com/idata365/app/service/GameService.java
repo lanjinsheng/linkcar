@@ -256,16 +256,17 @@ public class GameService extends BaseService<GameService>
 			rtMap.put("familyName", familyBean.getFamilyName());
 			rtMap.put("familyType", familyBean.getFamilyType());
 			rtMap.put("imgUrl", basePath+familyBean.getImgUrl());
-			
+			if(competitorFamilyId!=FamilyConstant.ROBOT_FAMILY_ID) {
 			//循环查找出对方家族组员
-			FamilyParamBean familyParamBean=new FamilyParamBean();
-			familyParamBean.setFamilyId(bean.getFamilyId());
-			FamilyResultBean familyResultBean=familyMapper.queryFamilyById(familyParamBean);
-			List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(bean.getFamilyId());
-			for(Map<String,Object> m:userList) {
-				Message msg=messageService.buildChallegeMessage(user.getId(), Long.valueOf(m.get("userId").toString()), familyResultBean.getMyFamilyName());
-				messageService.insertMessage(msg, MessageEnum.Challege);
-				messageService.pushMessageNotrans(msg, MessageEnum.Challege);
+				FamilyParamBean familyParamBean=new FamilyParamBean();
+				familyParamBean.setFamilyId(competitorFamilyId);
+				FamilyResultBean familyResultBean=familyMapper.queryFamilyById(familyParamBean);
+				List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(bean.getFamilyId());
+				for(Map<String,Object> m:userList) {
+					Message msg=messageService.buildChallegeMessage(user.getId(), Long.valueOf(m.get("userId").toString()), familyResultBean.getMyFamilyName());
+					messageService.insertMessage(msg, MessageEnum.Challege);
+					messageService.pushMessageNotrans(msg, MessageEnum.Challege);
+				}
 			}
 			return rtMap;
 		}
