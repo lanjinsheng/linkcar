@@ -300,7 +300,7 @@
  	     order by activeLevel desc limit 1
     </update>
     <select id="getCompetitorFamilyId" resultType="long" parameterType="java.lang.String">
- 		 select competitorFamilyId from familyInfo where matchKey=#{matchKey}
+ 		 select id  from familyInfo where matchKey=#{matchKey}
  	</select>
    	<update id="updateFamilyPkSelfKey"   parameterType="java.util.HashMap">
  	    update familyInfo set matchKey=#{matchKey} where  id=#{id}
