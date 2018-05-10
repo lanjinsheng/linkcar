@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DriveScore;
-import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.mapper.app.DriveScoreMapper;
 import com.idata365.mapper.app.FamilyInfoMapper;
 import com.idata365.mapper.app.TaskAchieveAddValueMapper;
-import com.idata365.mapper.app.UserFamilyScoreMapper;
+import com.idata365.mapper.app.UserFamilyLogsMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 
 
@@ -23,7 +22,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 	@Autowired
 	UserScoreDayStatMapper userScoreDayStatMapper;
 	@Autowired
-	UserFamilyScoreMapper userFamilyScoreMapper;
+	UserFamilyLogsMapper userFamilyScoreMapper;
 	@Autowired
 	DriveScoreMapper driveScoreMapper;
 	@Autowired
@@ -33,14 +32,14 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 	@Transactional
 	public boolean calScoreUserDay(UserScoreDayStat userScoreDayStat) {
 		DriveScore driveScore=new DriveScore();
-		int role=0;
+//		int role=0;
 		driveScore.setUserId(userScoreDayStat.getUserId());
 		driveScore.setUserFamilyRoleLogId(userScoreDayStat.getUserFamilyScoreId());
 		List<DriveScore> driveScores=driveScoreMapper.getDriveScoreByUR(driveScore);
 //		score   mileageScore  timeScore(无) brakeTimesScore   turnTimesScore  speedTimesScore 
 //		 overspeedTimesScore   maxspeedScore   tiredDriveScore  phoneTimesScore  nightDriveScore
-		UserFamilyRoleLog userRoleLog=userFamilyScoreMapper.getUserRoleById(userScoreDayStat.getUserFamilyScoreId());
-		role=userRoleLog.getRole();
+//		UserFamilyRoleLog userRoleLog=userFamilyScoreMapper.getUserRoleById(userScoreDayStat.getUserFamilyScoreId());
+//		role=userRoleLog.getRole();
 		double score=0d;
 		double roleScore=0d;
 		double mileageScore=0d;
@@ -56,15 +55,16 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		double mazaScore=0d;
 		int penalTimes=0;
 		
-		if(role>=1 && role<=6) {
-			roleScore=10d;
-		}else {
-			roleScore=5d;
-		}
+		roleScore=10d;
+//		if(role>=1 && role<=6) {
+//			roleScore=10d;
+//		}else {
+//			roleScore=5d;
+//		}
 		
 		
 		for(DriveScore ds:driveScores) {
-			role=ds.getRole();
+
 			mileageScore+=ds.getDistanceScore().doubleValue();
 			brakeTimesScore+=ds.getBrakeScore().doubleValue();
 			turnTimesScore+=ds.getTurnScore().doubleValue();
@@ -100,7 +100,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			phoneTimesScore=BigDecimal.valueOf(phoneTimesScore).divide(BigDecimal.valueOf(size),2,RoundingMode.HALF_UP).doubleValue();
 		}
 		//角色得分
-		if(role>=1 && role<=6) {
+
 			userScoreDayStat.setScore(score+roleScore);
 			userScoreDayStat.setMileageScore(mileageScore);
 			userScoreDayStat.setBrakeTimesScore(brakeTimesScore);
@@ -113,9 +113,8 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 			userScoreDayStat.setTimeScore(timeScore);
 			userScoreDayStat.setIllegalStopTimesScore(Double.valueOf(-userScoreDayStat.getIllegalStopTimes()));
 			userScoreDayStat.setPhoneTimesScore(phoneTimesScore);
-		}else {
-			//煎饼侠角色
-			score=0d;
+		
+		
 			//摊位得分
 			int useMaza=userScoreDayStat.getUseMazha();
 			
@@ -131,18 +130,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 				mazaScore+=50;
 			}
 		
-			userScoreDayStat.setScore(score+roleScore+mazaScore);
-			userScoreDayStat.setMileageScore(0d);
-			userScoreDayStat.setBrakeTimesScore(0d);
-			userScoreDayStat.setTurnTimesScore(0d);
-			userScoreDayStat.setSpeedTimesScore(0d);
-			userScoreDayStat.setOverspeedTimesScore(0d);
-			userScoreDayStat.setMaxspeedScore(0d);
-			userScoreDayStat.setTiredDriveScore(0d);
-			userScoreDayStat.setNightDriveScore(0d);
-			userScoreDayStat.setTimeScore(0d);
-			userScoreDayStat.setPhoneTimesScore(0d);
-		}
+			
 		userScoreDayStat.setMazhaScore(mazaScore);
 		//增加其他加分项目:贴条等，待定
 		penalTimes+=userScoreDayStat.getBrakePenalTimes();

@@ -21,12 +21,14 @@ import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.ReadyLotteryBean;
 import com.idata365.entity.UserFamilyRoleLog;
+import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.entity.bean.FourAlarmBean;
 import com.idata365.entity.bean.TiredCalBean;
 import com.idata365.mapper.app.CalDriveTaskMapper;
 import com.idata365.mapper.app.LotteryMapper;
-import com.idata365.mapper.app.UserFamilyScoreMapper;
+import com.idata365.mapper.app.UserFamilyLogsMapper;
+import com.idata365.mapper.app.UserRoleLogMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
 import com.idata365.mapper.col.DriveDataEventMapper;
 import com.idata365.mapper.col.DriveDataMainMapper;
@@ -35,6 +37,7 @@ import com.idata365.util.DateTools;
 
 @Service
 public class CalScoreService extends BaseService<CalScoreService>{
+	
 	private final static Logger LOG = LoggerFactory.getLogger(CalScoreService.class);
 	@Autowired
 	DriveDataMainMapper driveDataMainMapper;
@@ -43,7 +46,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	@Autowired
 	DriveScoreMapper driveScoreMapper;
 	@Autowired
-	UserFamilyScoreMapper userFamilyScoreMapper;
+	UserFamilyLogsMapper userFamilyScoreMapper;
 	@Autowired
 	CalDriveTaskMapper calDriveTaskMapper;
 	
@@ -51,7 +54,8 @@ public class CalScoreService extends BaseService<CalScoreService>{
 	private LotteryMapper lotteryMapper;
 	@Autowired
 	UserTravelHistoryMapper userTravelHistoryMapper;
-	 
+	@Autowired 
+	UserRoleLogMapper userRoleLogMapper;
 	/**
 	 * 查询装配的道具列表
 	 * @param userId
@@ -127,14 +131,14 @@ public class CalScoreService extends BaseService<CalScoreService>{
 //	}
 //	
 //	
-	@Transactional
-	public List<UserFamilyRoleLog> getRolesByUserIdTime(Long userId,String driveEndTime){
-		Map<String,Object> m=new HashMap<String,Object>();
-		m.put("userId", userId);
-		m.put("driveEndTime", driveEndTime);
-		return userFamilyScoreMapper.getUserRoles(m);
-	}
-	
+//	@Transactional
+//	public List<UserFamilyRoleLog> getRolesByUserIdTime(Long userId,String driveEndTime){
+//		Map<String,Object> m=new HashMap<String,Object>();
+//		m.put("userId", userId);
+//		m.put("driveEndTime", driveEndTime);
+//		return userFamilyScoreMapper.getUserRoles(m);
+//	}
+//	
 	private int useFaDongJi(DriveDataMain dm,int fadongjiSecond) {
 		if(fadongjiSecond>0) {
 			fadongjiSecond=fadongjiSecond-dm.getSpeed160UpTimes();
@@ -726,7 +730,11 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		
 		String driveEndTime=dm.getDriveEndTime().substring(0, 19);
 		//通过driveEndTime 获取用户的角色与familyId
-		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
+//		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
+		UserRoleLog ur=new UserRoleLog();
+		ur.setUserId(userId);
+        ur.setEndTime(driveEndTime);
+        UserRoleLog getRole=userRoleLogMapper.getLatestUserRoleLogByTime(ur);
 		//通过userId,获取装配的道具
 		List<ReadyLotteryBean> lotterys=queryReadyLottery(userId);
 		int shachepian=0;//急刹
@@ -784,9 +792,9 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		.add(ds.getSpeedUpScore()).add(ds.getTiredDrivingScore()).add(ds.getTurnScore());
 		userTravelHistory.setScore(String.valueOf(tripScore.doubleValue()));
 		//叠加角色
-		for(UserFamilyRoleLog role:roles) {
+ 
 			DriveScore nDs=(DriveScore) ds.clone();
-			int roleId=role.getRole();
+			int roleId=getRole.getRole();
 			if(roleId==1) {
 				int tempJianScore=10-3*(10-jianScore);
 				tempJianScore=(tempJianScore>0?tempJianScore:0);
@@ -814,15 +822,21 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			}else if(roleId==7) {
 				
 			}
-			nDs.setRole(role.getRole());
-			nDs.setFamilyId(role.getFamilyId());
-			nDs.setUserFamilyRoleLogId(role.getId());
-			driveScoreMapper.insertScore(nDs);
-			driveScoreList.add(nDs);
-			role.getFamilyId();
 			
-		}
-		if(roles==null || roles.size()==0) {
+			//取用户familyIds
+			Map<String,Object> roleMapParam=new HashMap<String,Object>();
+			roleMapParam.put("userId", userId);
+			roleMapParam.put("startTime", driveEndTime);
+			roleMapParam.put("endTime", driveEndTime);
+			List<UserFamilyRoleLog> families=userFamilyScoreMapper.getUsersByFamilyId(roleMapParam);
+			for(UserFamilyRoleLog family:families) {
+				nDs.setRole(getRole.getRole());
+				nDs.setFamilyId(family.getFamilyId());
+				nDs.setUserFamilyRoleLogId(family.getId());
+				driveScoreMapper.insertScore(nDs);
+				driveScoreList.add(nDs);
+			}
+		if(families==null || families.size()==0) {
 			ds.setFamilyId(0L);
 			ds.setRole(0);
 			ds.setUserFamilyRoleLogId(0L);
@@ -864,7 +878,11 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		int phoneUserScore=10;
 		String driveEndTime=dm.getDriveEndTime().substring(0, 19);
 		//通过driveEndTime 获取用户的角色与familyId
-		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
+//		List<UserFamilyRoleLog> roles=this.getRolesByUserIdTime(userId, driveEndTime);
+		UserRoleLog ur=new UserRoleLog();
+		ur.setUserId(userId);
+        ur.setEndTime(driveEndTime);
+        UserRoleLog getRole=userRoleLogMapper.getLatestUserRoleLogByTime(ur);
 		//通过userId,获取装配的道具
 		List<ReadyLotteryBean> lotterys=queryReadyLottery(userId);
 		int shachepian=0;//急刹
@@ -917,9 +935,9 @@ public class CalScoreService extends BaseService<CalScoreService>{
 		ds.setSpeedUpScore(BigDecimal.valueOf(jiaScore));
 		ds.setTiredDrivingScore(BigDecimal.valueOf(triedScore));
 		ds.setTurnScore(BigDecimal.valueOf(zhuanScore));
-		for(UserFamilyRoleLog role:roles) {
+ 
 			DriveScore nDs=(DriveScore) ds.clone();
-			int roleId=role.getRole();
+			int roleId=getRole.getRole();
 			if(roleId==1) {
 				int tempJianScore=10-2*(10-jianScore);
 				tempJianScore=(tempJianScore>0?tempJianScore:0);
@@ -947,11 +965,19 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			}else if(roleId==7) {
 				
 			}
-			nDs.setRole(role.getRole());
-			nDs.setFamilyId(role.getFamilyId());
-			driveScoreList.add(nDs);
-		}
-		if(roles==null || roles.size()==0) {
+			
+			//取用户familyIds
+			Map<String,Object> roleMapParam=new HashMap<String,Object>();
+			roleMapParam.put("userId", userId);
+			roleMapParam.put("startTime", driveEndTime);
+			roleMapParam.put("endTime", driveEndTime);
+			List<UserFamilyRoleLog> families=userFamilyScoreMapper.getUsersByFamilyId(roleMapParam);
+			for(UserFamilyRoleLog family:families) {
+				nDs.setRole(getRole.getRole());
+				nDs.setFamilyId(family.getFamilyId());
+				driveScoreList.add(nDs);
+			}
+		if(families==null || families.size()==0) {
 			ds.setFamilyId(0L);
 			ds.setRole(0);
 			driveScoreList.add(ds);
