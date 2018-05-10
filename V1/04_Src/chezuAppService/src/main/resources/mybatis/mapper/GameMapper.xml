@@ -47,7 +47,7 @@
 	</insert>
 	
 	<select id="queryRoleByDay" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
-		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{daystamp} order by id desc
+		select role from userFamilyRoleLog where userId=#{userId}  and daystamp=#{daystamp} order by id desc limit 1
 	</select>
 	
 	<select id="queryFamilyRoleLog" resultType="com.idata365.app.entity.UserFamilyRoleLogBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
