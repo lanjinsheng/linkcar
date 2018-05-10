@@ -89,11 +89,13 @@
 	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
 		select familyId, prevType, challengeType from familyChallengeLog where challengeDay=#{challengeDay} order by id asc
 	</select>
-	
+	<!-- 
 	<select id="countRoleByRole" resultType="com.idata365.app.entity.RoleCountBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
 		select role, count(id) as roleNum from userFamilyRoleLog where userId=#{userId} group by role order by role asc
+	</select> -->
+	<select id="countRoleByRole" resultType="com.idata365.app.entity.RoleCountBean" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean">
+		select role, count(id) as roleNum from userRoleLog where userId=#{userId} group by role order by role asc
 	</select>
-	
 	<select id="queryChallengeType" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
 		select familyId, prevType, challengeType from familyChallengeLog where familyId=#{familyId} and challengeDay=#{challengeDay} 
 	</select>

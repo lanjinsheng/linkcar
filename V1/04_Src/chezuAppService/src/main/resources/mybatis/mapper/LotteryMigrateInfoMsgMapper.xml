@@ -9,7 +9,7 @@
 	join usersAccount t2 on (t1.userId=t2.id) where t1.toUserId=#{userId} order by t1.id desc limit #{start}, 5
     </select>
     
-    <insert id="save" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgBean">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.app.entity.LotteryMigrateInfoMsgBean">
     	insert into lotteryMigrateInfoMsg(userId, toUserId, awardId, awardCount, givenTime, status) values(#{userId}, #{toUserId}, #{awardId}, #{awardCount}, #{givenTime}, 'UN_RECV')
     </insert>
     
