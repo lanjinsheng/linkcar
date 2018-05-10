@@ -100,7 +100,7 @@
     </select>
  	
  	<select id="queryFamilyIdByUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select familyId from userFamilyRelation where userId=#{userId} limit 1
+ 		select familyId from userFamilyRelation where userId=#{userId}
  	</select>
  	
  	<select id="countUsersByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
