@@ -1,0 +1,43 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://product-eureka.idata365.com/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-expiration-duration-in-seconds: 30 
+    lease-renewal-interval-in-seconds: 10
+feign:
+  hystrix:
+    enabled: true
+ 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+server:
+  port: 8773
+spring:
+  application:
+    name: service-chezu
+  datasource:
+    app:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:6633/sjBss?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: shujin
+      password: shujin20180416!
+  
+    col:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:6633/sjData?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: shujin
+      password: shujin20180416!    
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/**.xml
+  type-aliases-package: com.idata365.entity
