@@ -82,7 +82,7 @@ public class UserRoleLogService extends BaseService<UserRoleLogService>
 		UserRoleLog urole= getLatestUserRoleLog(userId);
 		if(urole!=null) {
 			urole.setEndTime(now);
-			userRoleLogMapper.updateUserRole(urole);
+			userRoleLogMapper.updateUserRoleEndTime(urole);
 		}
 		UserRoleLog userRoleLog=new UserRoleLog();
 		userRoleLog.setUserId(userId);
