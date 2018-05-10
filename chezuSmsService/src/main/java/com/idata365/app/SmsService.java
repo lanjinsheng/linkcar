@@ -43,7 +43,7 @@ public class SmsService {
 	// static final String accessKeyId = "LTAIPq9ykK7vst75";
 	// static final String accessKeySecret = "QZXOr94KV41I2277ADFGdOdQ1lEv8U";
 
-	public SendSmsResponse sendSms(String mobile, String template_code, String param) throws ClientException {
+	public SendSmsResponse sendSms(String mobile, String template_code,String smsSignName, String param) throws ClientException {
 		if ("1".equals(template_code)) {
 			template_code = env.getProperty("signUpCode");
 		} else if ("2".equals(template_code)) {
@@ -68,7 +68,7 @@ public class SmsService {
 		// 必填:待发送手机号
 		request.setPhoneNumbers(mobile);
 		// 必填:短信签名-可在短信控制台中找到
-		request.setSignName("好车族");
+		request.setSignName(smsSignName);
 		// 必填:短信模板-可在短信控制台中找到
 		request.setTemplateCode(template_code);
 		// 可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
