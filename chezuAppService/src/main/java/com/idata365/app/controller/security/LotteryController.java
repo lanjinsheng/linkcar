@@ -149,7 +149,7 @@ public class LotteryController extends BaseController
 	{
 //		lotteryMigrateInfo
 		 String msgId=String.valueOf(map.get("msgId"));
-		 return lotteryService.getLotteryById(msgId);
+		 return ResultUtils.rtSuccess(lotteryService.getLotteryById(msgId));
 		 
 	}
 	

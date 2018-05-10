@@ -178,7 +178,7 @@ public class FamilyController extends BaseController
 	public Map<String, Object> createFamily(@RequestBody FamilyParamBean reqBean)
 	{
 		LOG.info("createFamily===========param==={}", JSON.toJSONString(reqBean));
-		long familyId = this.familyService.createFamily(reqBean);
+		long familyId = this.familyService.createFamily(reqBean,this.getUserId());
 		if (-1 == familyId)
 		{
 			return ResultUtils.rtFailRequest(null);
