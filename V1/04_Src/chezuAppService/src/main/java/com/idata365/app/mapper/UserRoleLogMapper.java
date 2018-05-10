@@ -20,7 +20,7 @@ public interface UserRoleLogMapper {
 	 UserRoleLog  getYestodayUserRoleLog(UserRoleLog userRoleLog);
 	 UserRoleLog  getLatestUserRoleLogByUserId(@Param("userId") Long  userId);
 	 int  insertUserRole(UserRoleLog userRoleLog);
-	 int  updateUserRole(UserRoleLog userRoleLog);
+	 int  updateUserRoleEndTime(UserRoleLog userRoleLog);
 	 
 	 int  updateUserFamilyRelationRole(UserRoleLog userRoleLog);
 }
