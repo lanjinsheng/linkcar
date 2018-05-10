@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.idata365.app.remote.ChezuSmsService;
 import com.idata365.app.service.SpringContextUtil;
+import com.idata365.app.util.SignUtils;
 
 @Component
 public class PhoneMsgTools {
@@ -24,6 +25,9 @@ public class PhoneMsgTools {
 		map.put("mobile", mobile);
 		map.put("templateType", String.valueOf(templateType));
 		map.put("validateCode", validateCode);
+		map.put("smsSignName", "好车族");
+		String sign=SignUtils.encryptHMAC(mobile+validateCode);
+		map.put("sign", sign);
 		boolean flag = phoneMsgTools.chezuSmsService.sendMessage(map);
 //		boolean flag = phoneMsgTools.chezuSmsService.sendMessageTest();
 		return flag;
