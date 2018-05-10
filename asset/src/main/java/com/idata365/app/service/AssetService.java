@@ -130,14 +130,7 @@ public class AssetService extends BaseService<AssetService> {
 		}
 
 		List<Map<String, String>> data = new ArrayList<>();
-		if (list.size() == 0) {
-			Map<String, String> rtMap = new HashMap<String, String>();
-			rtMap.put("id", "");
-			rtMap.put("receiveType", "");
-			rtMap.put("num", "");
-			rtMap.put("time", "");
-			data.add(rtMap);
-		} else {
+		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
 				Map<String, String> rtMap = new HashMap<String, String>();
 				rtMap.put("id", String.valueOf(list.get(i).getId()));
