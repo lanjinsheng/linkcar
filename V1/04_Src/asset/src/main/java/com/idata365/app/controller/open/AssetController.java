@@ -133,6 +133,8 @@ public class AssetController extends BaseController {
 	@RequestMapping(value = "/asset/addPowerFamilyTask", method = RequestMethod.POST)
 	boolean addPowerFamilyTask(@RequestParam(value = "jsonValue") String jsonValue,
 			@RequestParam(value = "sign") String sign, @RequestBody AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
+		assetFamiliesPowerLogs.setCount(0);
+		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum());
 		LOG.info("PARAM:" + jsonValue + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
 		return assetService.addFamiliesPowers(assetFamiliesPowerLogs);
