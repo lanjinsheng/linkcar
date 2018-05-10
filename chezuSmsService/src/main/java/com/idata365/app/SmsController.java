@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +28,9 @@ public class SmsController {
 	 * @Title: sendMessage
 	 * @Description: TODO(发送短信)
 	 * @param @param
-	 *            Map mobile---string---用户手机 templateType---string 注册：1 登入：2 找回密码：3
-	 *            ---消息模板类型 validateCode---string---验证码
+	 *            Map mobile---string---用户手机 
+	 *            templateType---string   注册：1            登入：2            找回密码：3     邀请：4        ---消息模板类型 
+	 *            validateCode---string---短信验证码
 	 * @param @param
 	 * 
 	 * @param @return
@@ -43,7 +43,7 @@ public class SmsController {
 	@RequestMapping("/sendMessage")
 	public boolean sendMessage(@RequestParam Map<String, String> map) {
 		try {
-			String sign=String.valueOf(map.get("sign"));
+			String sign=map.get("sign");
 			boolean validSign=SignUtils.security(map.get("mobile")+map.get("validateCode"), sign);
 			if(!validSign) {
 				LOG.error("短信验证失败"+map.get("mobile")+"==="+map.get("validateCode"));

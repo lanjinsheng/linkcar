@@ -6,6 +6,7 @@ accessKeySecret: QZXOr94KV41I2277ADFGdOdQ1lEv8U
 signUpCode: SMS_134135227
 signInCode: SMS_134135229
 findPwCode: SMS_134135226
+inviteCode: SMS_134135230
  
 eureka:
   client:
