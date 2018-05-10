@@ -370,6 +370,10 @@ public class UserInfoController extends BaseController{
 		    		   key=SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.DRIVER_LICENSE1);
 		    		      //处理图片
 		               File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+		               File fileParent = dealFile.getParentFile();
+		               if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
 		               is.close();
@@ -506,6 +510,10 @@ public class UserInfoController extends BaseController{
 		               InputStream is=file.getInputStream();
 		               SSOTools.saveOSS(is,key);
 		               File   dealFile = new File(systemProperties.getFileTmpDir()+"/"+key);
+		               File fileParent = dealFile.getParentFile();  
+	        			if(!fileParent.exists()){  
+	        			    fileParent.mkdirs();  
+	        			} 
 		               file.transferTo(dealFile);
 		               ImageUtils.dealImgXSZ(dealFile,rtMap);
 		               is.close();
