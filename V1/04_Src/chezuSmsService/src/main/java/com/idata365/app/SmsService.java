@@ -2,8 +2,6 @@ package com.idata365.app;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -48,8 +46,10 @@ public class SmsService {
 			template_code = env.getProperty("signUpCode");
 		} else if ("2".equals(template_code)) {
 			template_code = env.getProperty("signInCode");
-		} else {
+		} else if ("3".equals(template_code)) {
 			template_code = env.getProperty("findPwCode");
+		}else {
+			template_code = env.getProperty("inviteCode");
 		}
 		String accessKeyId = env.getProperty("accessKeyId");
 		String accessKeySecret = env.getProperty("accessKeySecret");
