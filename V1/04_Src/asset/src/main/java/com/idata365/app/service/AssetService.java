@@ -258,8 +258,6 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 	@Transactional
 	public boolean addFamiliesPowers(AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
-//		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum());
-//		assetFamiliesPowerLogs.setCount(0);
 		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 		assetFamiliesAssetMapper.updatePowerAdd(assetFamiliesPowerLogs);
 		return true;
@@ -295,7 +293,7 @@ public class AssetService extends BaseService<AssetService> {
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getRecordType() == 1 && assetUsersPowerLogs.getEventType() == 3) {
 				todayReceive += assetUsersPowerLogs.getPowerNum();
-			} else if (assetUsersPowerLogs.getRecordType() == 2 && assetUsersPowerLogs.getEventType() == 3) {
+			} else if (assetUsersPowerLogs.getEventType() == 4) {
 				todayContribution += assetUsersPowerLogs.getPowerNum();
 			}
 		}
