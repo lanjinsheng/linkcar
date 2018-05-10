@@ -1,0 +1,23 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://115.159.216.58:8761/eureka/
+server:
+  port: 8769
+spring:
+  application:
+    name: service-zuul
+zuul:
+  routes:
+    shop:
+      path: /shop/**
+      serviceId: service-shop-chezu
+    asset:
+      path: /asset/**
+      serviceId: service-asset-chezu
+    account:
+      path: /account/**
+      serviceId: service-account-chezu
+    other:
+      path: /app/**
+      serviceId: service-app-chezu
