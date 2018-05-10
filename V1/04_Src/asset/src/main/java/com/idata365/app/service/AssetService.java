@@ -258,8 +258,8 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 	@Transactional
 	public boolean addFamiliesPowers(AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
-		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum());
-		assetFamiliesPowerLogs.setCount(0);
+//		assetFamiliesPowerLogs.setRealNum(assetFamiliesPowerLogs.getPowerNum());
+//		assetFamiliesPowerLogs.setCount(0);
 		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 		assetFamiliesAssetMapper.updatePowerAdd(assetFamiliesPowerLogs);
 		return true;
