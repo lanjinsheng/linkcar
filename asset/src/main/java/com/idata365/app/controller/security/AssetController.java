@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import com.idata365.app.service.AssetService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
-import com.idata365.app.util.ValidTools;
 
 @RestController("securityAssetController")
 public class AssetController extends BaseController {
@@ -104,8 +102,8 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-		Map<String, Object> familiesInfoByFamilyId = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
-		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfoByFamilyId,requestBodyParams));
+		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
+		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo,requestBodyParams));
 	}
 
 	/**
@@ -131,11 +129,11 @@ public class AssetController extends BaseController {
 		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
 		long powerNum =Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-		Map<String, Object> familiesInfoByFamilyId = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
+		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
 
 		Map<String, String> datas = new HashMap<>();
 		try {
-			assetService.stoleFamilyFightPowers(userId, familiesInfoByFamilyId, ballId, powerNum);
+			assetService.stoleFamilyFightPowers(userId, familiesInfo, ballId, powerNum);
 			datas.put("isReceive", "1");
 			return ResultUtils.rtSuccess(datas);
 		} catch (Exception e) {
