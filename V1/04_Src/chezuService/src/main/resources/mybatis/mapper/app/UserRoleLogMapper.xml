@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.app.UserRoleLogMapper">
+    <resultMap id="BaseUserRoleLogMap" type="com.idata365.entity.UserRoleLog" >
+    </resultMap>
+    <select id="getUserRoleLogsByUserId" resultMap="BaseUserRoleLogMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId}
+     </select>
+     <select id="getLatestUserRoleLog" resultMap="BaseUserRoleLogMap" parameterType="com.idata365.entity.UserRoleLog">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId} order by id desc limit 1
+     </select>
+      <select id="getLatestUserRoleLogByTime" resultMap="BaseUserRoleLogMap" parameterType="com.idata365.entity.UserRoleLog">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId}  <![CDATA[ and startTime<#{endTime} and endTime>#{endTime}]]> order by id desc limit 1
+     </select>
+     
+</mapper>
