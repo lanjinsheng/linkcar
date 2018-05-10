@@ -4,17 +4,23 @@ import java.io.Serializable;
 
 public class UserFamilyRoleLogParamBean implements Serializable
 {
-	private long id;
 	
-	private long userFamilyRoleLogId;
+	    /**
+	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	    */
+	private static final long serialVersionUID = 6912615942518673514L;
+
+	private Long id;
 	
-	private long userId;
+	private Long userFamilyRoleLogId;
 	
-	private long familyId;
+	private Long userId;
+	
+	private Long familyId;
 	
 	private String daystamp;
 	
-	private int role;
+	private Integer role;
 
 	private String startTime;
 	
@@ -22,94 +28,78 @@ public class UserFamilyRoleLogParamBean implements Serializable
 	
 	private int count;
 
-	public long getId()
-	{
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id)
-	{
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getUserFamilyRoleLogId()
-	{
+	public Long getUserFamilyRoleLogId() {
 		return userFamilyRoleLogId;
 	}
 
-	public void setUserFamilyRoleLogId(long userFamilyRoleLogId)
-	{
+	public void setUserFamilyRoleLogId(Long userFamilyRoleLogId) {
 		this.userFamilyRoleLogId = userFamilyRoleLogId;
 	}
 
-	public long getUserId()
-	{
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId)
-	{
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public long getFamilyId()
-	{
+	public Long getFamilyId() {
 		return familyId;
 	}
 
-	public void setFamilyId(long familyId)
-	{
+	public void setFamilyId(Long familyId) {
 		this.familyId = familyId;
 	}
 
-	public String getDaystamp()
-	{
+	public String getDaystamp() {
 		return daystamp;
 	}
 
-	public void setDaystamp(String daystamp)
-	{
+	public void setDaystamp(String daystamp) {
 		this.daystamp = daystamp;
 	}
 
-	public int getRole()
-	{
+	public Integer getRole() {
 		return role;
 	}
 
-	public void setRole(int role)
-	{
+	public void setRole(Integer role) {
 		this.role = role;
 	}
 
-	public String getStartTime()
-	{
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime)
-	{
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public String getEndTime()
-	{
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime)
-	{
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 
-	public int getCount()
-	{
+	public int getCount() {
 		return count;
 	}
 
-	public void setCount(int count)
-	{
+	public void setCount(int count) {
 		this.count = count;
 	}
+
+	 
 	
 }
