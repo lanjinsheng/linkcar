@@ -59,6 +59,7 @@ import com.idata365.app.entity.TravelDetailResultBean;
 import com.idata365.app.entity.UserDetailResultBean;
 import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
+import com.idata365.app.entity.UserRoleLog;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
@@ -90,6 +91,8 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
+	@Autowired
+	UserRoleLogService  userRoleLogService;
 	/**
 	 * 
 	    * @Title: intiScoreFamilyInfoBeanByUser
@@ -344,12 +347,13 @@ public class ScoreService extends BaseService<ScoreService>
 			roleLogParamBean.setUserId(userId);
 			roleLogParamBean.setFamilyId(familyId);
 			roleLogParamBean.setDaystamp(tomorrowDateUndelimiterStr);
-			List<Integer> tomorrowRoleList = this.gameMapper.queryRoleByDay(roleLogParamBean);
-			if (CollectionUtils.isNotEmpty(tomorrowRoleList))
-			{
-				tempResultBean.setTomorrowRole(String.valueOf(tomorrowRoleList.get(0)));
-			}
-			
+			//去除明日角色
+//			List<Integer> tomorrowRoleList = this.gameMapper.queryRoleByDay(roleLogParamBean);
+//			if (CollectionUtils.isNotEmpty(tomorrowRoleList))
+//			{
+//				tempResultBean.setTomorrowRole(String.valueOf(tomorrowRoleList.get(0)));
+//			}
+			tempResultBean.setTomorrowRole(String.valueOf(tempBean.getRole()));
 			UserFamilyRoleLogParamBean  yesterdayRoleLogParamBean = new UserFamilyRoleLogParamBean();
 			yesterdayRoleLogParamBean.setUserId(userId);
 			yesterdayRoleLogParamBean.setFamilyId(familyId);
@@ -358,7 +362,9 @@ public class ScoreService extends BaseService<ScoreService>
 			if (CollectionUtils.isNotEmpty(yesterdayRoleLogList))
 			{
 				UserFamilyRoleLogBean yesterdayRoleLogBean = yesterdayRoleLogList.get(0);
-				int yesterdayRole = yesterdayRoleLogBean.getRole();
+//				int yesterdayRole = yesterdayRoleLogBean.getRole();
+				UserRoleLog yestodayRole=userRoleLogService.getYestodayUserRoleLogNoTrans(userId);
+				int yesterdayRole = yestodayRole.getRole();
 				tempResultBean.setYesterdayRole(String.valueOf(yesterdayRole));
 				
 				long userFamilyRoleLogId = yesterdayRoleLogBean.getId();

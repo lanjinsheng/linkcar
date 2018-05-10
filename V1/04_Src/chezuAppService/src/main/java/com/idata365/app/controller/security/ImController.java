@@ -115,9 +115,9 @@ public class ImController extends BaseController {
 					messageService.pushImMessageByTask(imMsg,userId);
 				}
 			    //暂时不从任务走,下面只插入任务，但不执行任务
-				TaskImMessagePush task=new TaskImMessagePush();
-				task.setImMessageId(imMsg.getId());
-				taskImMessagePushService.insertTaskImMessagePush(task);
+//				TaskImMessagePush task=new TaskImMessagePush();
+//				task.setImMessageId(imMsg.getId());
+//				taskImMessagePushService.insertTaskImMessagePush(task);
 			
 		}
 		return ResultUtils.rtSuccess(null);

@@ -21,11 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UserDeviceLogs;
 import com.idata365.app.entity.UserLoginSession;
+import com.idata365.app.entity.UserRoleLog;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.VerifyCode;
 import com.idata365.app.enums.AchieveEnum;
@@ -67,7 +69,8 @@ public class LoginRegService extends BaseService<LoginRegService>
 	AchieveCommService achieveCommService;
 	@Autowired
 	FamilyMapper familyMapper;
-	
+	@Autowired
+	UserRoleLogService userRoleLogService;
 	
 
 	public LoginRegService()
@@ -282,6 +285,9 @@ public class LoginRegService extends BaseService<LoginRegService>
 			loginSession.setToken(token);
 			userLoginSessionMapper.insertToken(loginSession);
 			rtMap.put("userId", account.getId());
+			
+			//插入角色
+			userRoleLogService.insertUserRoleLog(account.getId(), RoleConstant.LAOSIJI_ROLE);
 			try
 			{
 				//初始化账号

@@ -50,12 +50,11 @@ public class TripController extends BaseController
 		List<Map<String, Object>> rtList=new ArrayList<Map<String, Object>>();
 		Map<String,Object> paramMap=new HashMap<String,Object>();
 		paramMap.put("userId", this.getUserId());
+		paramMap.put("recordNum", requestBodyParams.get("recordNum"));
 		if(requestBodyParams.get("id")==null || String.valueOf(requestBodyParams.get("id")).equals("0")) {
-			paramMap.put("recordNum", 1);
 			paramMap.put("id", 999999999999999999L);
 		}
 		else {
-			paramMap.put("recordNum", requestBodyParams.get("recordNum"));
 			paramMap.put("id", requestBodyParams.get("id"));
 		}
 		List<Map<String, Object>> list=tripService.getTripByUserLatest(paramMap);

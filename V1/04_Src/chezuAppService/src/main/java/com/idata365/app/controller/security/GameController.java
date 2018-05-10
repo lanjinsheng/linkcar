@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.LotteryNotEnoughException;
+import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.FamilyInfoResultBean;
 import com.idata365.app.entity.GameFamilyParamBean;
@@ -30,10 +31,12 @@ import com.idata365.app.entity.SwitchLotteryParamBean;
 import com.idata365.app.entity.SwitchRoleResultBean;
 import com.idata365.app.entity.TravelHistoryParamBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
+import com.idata365.app.entity.UserRoleLog;
 import com.idata365.app.entity.ViolationStatParamBean;
 import com.idata365.app.entity.ViolationStatResultAllBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.GameService;
+import com.idata365.app.service.UserRoleLogService;
 import com.idata365.app.util.ResultUtils;
 
 @RestController
@@ -43,6 +46,8 @@ public class GameController extends BaseController
 	
 	@Autowired
 	private GameService gameService;
+	@Autowired
+	UserRoleLogService userRoleLogService;
 	
 	/**
 	 * 违规情况
@@ -377,15 +382,26 @@ public class GameController extends BaseController
 	 * @param bean
 	 * @return
 	 */
+//	@RequestMapping("/game/switchRole")
+//	public Map<String, Object> switchRole(@RequestBody UserFamilyRoleLogParamBean bean)
+//	{
+//		LOG.info("param==={}", JSON.toJSONString(bean));
+//		bean.setUserId(this.getUserId());
+//		SwitchRoleResultBean resultBean = this.gameService.switchRole(bean);
+//		return ResultUtils.rtSuccess(resultBean);
+//	}
 	@RequestMapping("/game/switchRole")
-	public Map<String, Object> switchRole(@RequestBody UserFamilyRoleLogParamBean bean)
+	public Map<String, Object> switchRole(@RequestBody Map<String,Object> map)
 	{
-		LOG.info("param==={}", JSON.toJSONString(bean));
-		bean.setUserId(this.getUserId());
-		SwitchRoleResultBean resultBean = this.gameService.switchRole(bean);
+		
+		long userId=this.getUserId();
+		Integer role=Integer.valueOf(map.get("role").toString());
+		userRoleLogService.insertUserRoleLog(userId, role);
+		//下面为了兼容，返回老接口类型
+		SwitchRoleResultBean resultBean = new SwitchRoleResultBean();
+		resultBean.setTryFlag("-1");
 		return ResultUtils.rtSuccess(resultBean);
 	}
-	
 	/**
 	 * 试用角色
 	 * @param bean
@@ -430,10 +446,15 @@ public class GameController extends BaseController
 	@RequestMapping("/game/findTodayRole")
 	public Map<String, Object> findTodayRole(@RequestBody UserFamilyRoleLogParamBean bean)
 	{
-		LOG.info("param==={}", JSON.toJSONString(bean));
-		int role = this.gameService.findTodayRole(bean);
+//		LOG.info("param==={}", JSON.toJSONString(bean));
+		UserRoleLog userRoleLog=userRoleLogService.getLatestUserRoleLog(this.getUserId());
+//		int role = this.gameService.findTodayRole(bean);
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("role", role);
+		if(userRoleLog!=null) {
+			resultMap.put("role", userRoleLog.getRole());
+		}else {
+			resultMap.put("role", RoleConstant.LAOSIJI_ROLE);
+		}
 		return ResultUtils.rtSuccess(resultMap);
 	}
 	

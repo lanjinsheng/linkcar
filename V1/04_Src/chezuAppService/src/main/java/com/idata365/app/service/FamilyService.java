@@ -41,6 +41,7 @@ import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
+import com.idata365.app.entity.UserRoleLog;
 import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 import com.idata365.app.entity.bean.UserInfo;
@@ -48,6 +49,7 @@ import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
+import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.PhoneUtils;
@@ -72,6 +74,8 @@ public class FamilyService extends BaseService<FamilyService>
 	
 	@Autowired
 	private TaskMapper taskMapper;
+	@Autowired
+	UserRoleLogMapper userRoleLogMapper;
 	
 	public FamilyResultBean findFamily(long userId)
 	{
@@ -242,7 +246,11 @@ public class FamilyService extends BaseService<FamilyService>
 		//记录用户、家族关系
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
-		bean.setRole(RoleConstant.JIANBING_ROLE);
+		
+		//查找用户当前角色
+		UserRoleLog role=userRoleLogMapper.getLatestUserRoleLogByUserId(bean.getUserId());
+		
+		bean.setRole(role.getRole());
 		this.familyMapper.saveUserFamily(bean);
 		
 		FamilyRelationBean familyRelationParam = new FamilyRelationBean();
@@ -256,7 +264,7 @@ public class FamilyService extends BaseService<FamilyService>
 			UserFamilyRoleLogParamBean roleLogParamBean = new UserFamilyRoleLogParamBean();
 			roleLogParamBean.setUserId(bean.getUserId());
 			roleLogParamBean.setFamilyId(bean.getFamilyId());
-			roleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+			roleLogParamBean.setRole(role.getRole());
 			this.taskMapper.updateUserRole(roleLogParamBean);
 			
 			//初始化用户角色、成绩记录表start------------------
@@ -265,7 +273,7 @@ public class FamilyService extends BaseService<FamilyService>
 			userFamilyRoleLogParamBean.setUserId(bean.getUserId());
 			userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
 			userFamilyRoleLogParamBean.setDaystamp(getCurrentDayStrWithUnDelimiter());
-			userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+			userFamilyRoleLogParamBean.setRole(role.getRole());
 			userFamilyRoleLogParamBean.setStartTime(timeStamp);
 			userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
 			this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
@@ -474,7 +482,7 @@ public class FamilyService extends BaseService<FamilyService>
 	 * @return
 	 */
 	@Transactional
-	public long createFamily(FamilyParamBean bean)
+	public long createFamily(FamilyParamBean bean,long userId)
 	{
 		int tempCounts = this.familyMapper.countByCreateUser(bean);
 		if (tempCounts > 0)
@@ -501,11 +509,12 @@ public class FamilyService extends BaseService<FamilyService>
 		tempHistoryParamBean.setRecord("家族(" + bean.getFamilyName() + ")成立");
 		this.familyMapper.saveFamilyHistory(tempHistoryParamBean);
 		
+		UserRoleLog role=userRoleLogMapper.getLatestUserRoleLogByUserId(userId);
 		//组长自己绑定新创建的家族
 		bean.setFamilyId(familyId);
 		Date todayDate = Calendar.getInstance().getTime();
 		bean.setJoinTime(generateTimeStamp());
-		bean.setRole(RoleConstant.JIANBING_ROLE);
+		bean.setRole(role.getRole());
 		this.familyMapper.saveUserFamily(bean);
 		
 		Date tomorrowDate = DateUtils.addDays(todayDate, 1);
@@ -514,12 +523,12 @@ public class FamilyService extends BaseService<FamilyService>
 		String curDayStr=getCurrentDayStr();
 		//初始化用户角色、成绩记录表start------------------
 		
-		//记录用户在新家族今天的角色
+		//记录用户在新家族的合约
 		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean0 = new UserFamilyRoleLogParamBean();
 		userFamilyRoleLogParamBean0.setUserId(bean.getUserId());
 		userFamilyRoleLogParamBean0.setFamilyId(familyId);
 		userFamilyRoleLogParamBean0.setDaystamp(getCurrentDateUndelimiterStr());
-		userFamilyRoleLogParamBean0.setRole(RoleConstant.JIANBING_ROLE);
+		userFamilyRoleLogParamBean0.setRole(RoleConstant.Family_NoRole);
 		userFamilyRoleLogParamBean0.setStartTime(curDayStr+ " 00:00:00");
 		userFamilyRoleLogParamBean0.setEndTime(curDayStr+ " 23:59:59");
 		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean0);
@@ -527,14 +536,14 @@ public class FamilyService extends BaseService<FamilyService>
 		
 		
 		//记录用户在新家族的明天的角色
-		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
-		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
-		userFamilyRoleLogParamBean.setFamilyId(familyId);
-		userFamilyRoleLogParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
-		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
-		userFamilyRoleLogParamBean.setStartTime(startTime);
-		userFamilyRoleLogParamBean.setEndTime(endTime);
-		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
+//		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
+//		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
+//		userFamilyRoleLogParamBean.setFamilyId(familyId);
+//		userFamilyRoleLogParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
+//		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
+//		userFamilyRoleLogParamBean.setStartTime(startTime);
+//		userFamilyRoleLogParamBean.setEndTime(endTime);
+//		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
 		
 		//初始化加入新家族后的userScoreDayStat记录
 		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
