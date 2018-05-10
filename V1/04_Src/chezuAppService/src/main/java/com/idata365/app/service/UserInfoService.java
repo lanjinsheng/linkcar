@@ -15,7 +15,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.entity.LicenseDriver;
@@ -210,7 +209,7 @@ public class UserInfoService extends BaseService<UserInfoService>{
 		UsersAccount account=new UsersAccount();
 		account.setPhone(phone);
 		account.setId(userId);
-		usersAccountMapper.updateImgUrl(account);
+		usersAccountMapper.updatePhone(account);
  
 	}
 	
