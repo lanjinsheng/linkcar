@@ -282,22 +282,13 @@ public class AssetService extends BaseService<AssetService> {
 
 	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familyInfo,
 			Map<Object, Object> requestBodyParams) {
-		// long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
-		// long fightFamilyId =
-		// Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
-		//
-		// long familyUserCount =
-		// Long.valueOf(String.valueOf(familyInfo.get("familyUserCount")));
-		// long fightFamilyUserCount =
-		// Long.valueOf(String.valueOf(familyInfo.get("fightFamilyUserCount")));
+		long familyId = Long.valueOf(familyInfo.get("familyId").toString());
+		long fightFamilyId = Long.valueOf(familyInfo.get("fightFamilyId").toString());
+		long familyUserCount = Long.valueOf(familyInfo.get("familyUserCount").toString());
+		long fightFamilyUserCount = Long.valueOf(familyInfo.get("fightFamilyUserCount").toString());
 
-		long familyId = 1000003;
-		long fightFamilyId = 1000011;
-		long familyUserCount = 5;
-		long fightFamilyUserCount = 5;
-
-		long todayContribution = 0;
-		long todayReceive = 0;
+		long todayContribution = 0L;
+		long todayReceive = 0L;
 		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowersByOne(userId);
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getRecordType() == 1 && assetUsersPowerLogs.getEventType() == 3) {
@@ -349,11 +340,11 @@ public class AssetService extends BaseService<AssetService> {
 				powerBall.put("receivelist", userIdsArray);
 			}
 			String createFamilyId = String.valueOf(assetFamiliesPowerLogs.getFamilyId());
-			powerBall.put("createFamilyId",createFamilyId);
-			if(createFamilyId.equals(String.valueOf(familyId))) {
-				powerBall.put("isMyFamily","1");
-			}else {
-				powerBall.put("isMyFamily","0");
+			powerBall.put("createFamilyId", createFamilyId);
+			if (createFamilyId.equals(String.valueOf(familyId))) {
+				powerBall.put("isMyFamily", "1");
+			} else {
+				powerBall.put("isMyFamily", "0");
 			}
 			powerBall.put("createTime",
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
@@ -383,12 +374,8 @@ public class AssetService extends BaseService<AssetService> {
 	@Transactional
 	public void stoleFamilyFightPowers(long userId, Map<String, Object> familyInfo, long ballId, long powerNum)
 			throws Exception {
-		// long familyId = Long.valueOf(String.valueOf(familyInfo.get("familyId")));
-		// long fightFamilyId =
-		// Long.valueOf(String.valueOf(familyInfo.get("fightFamilyId")));
-
-		long familyId = 1000003;
-		long fightFamilyId = 1000011;
+		long familyId = Long.valueOf(familyInfo.get("familyId").toString());
+		long fightFamilyId = Long.valueOf(familyInfo.get("fightFamilyId").toString());
 
 		// 修改个人相关数据
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
@@ -502,12 +489,13 @@ public class AssetService extends BaseService<AssetService> {
 	public void userPowersSnapShot(String tableName) {
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 	}
+
 	@Transactional
 	public void powerClear() {
 		assetUsersAssetMapper.clearPowers(null);
 		assetFamiliesAssetMapper.clearPower(null);
 	}
-	
+
 	/**
 	 * 
 	 * @Title: getDaySignInLog
