@@ -73,7 +73,7 @@ public class PowerService extends BaseService<PowerService>
 	public final static int EventType_MemberTrip=1;
 	public final static int EventType_UserTrip=4;
 	public final static int RecordType_2=2;//减少
-	public final static int RecordType_1=2;//增加
+	public final static int RecordType_1=1;//增加
 	public boolean calPower(TaskPowerLogs taskPowerLog) {
 		String jsonValue=taskPowerLog.getJsonValue();
 		String sign=SignUtils.encryptHMAC(jsonValue);
@@ -99,7 +99,7 @@ public class PowerService extends BaseService<PowerService>
 		 		familyPower.setPowerNum(Long.valueOf(String.valueOf(map.get("toFamilyValue"))));
 		 		familyPower.setRecordType(RecordType_1);//增加1，减少2
 		 		familyPower.setFamilyId(Long.valueOf(String.valueOf(map.get("familyId"))));
-		 		familyPower.setRemark("签到获取power");
+		 		familyPower.setRemark("行程贡献获取power");
 		 		rt=chezuAssetService.addPowerFamilyTask(jsonValue, sign, familyPower);
 //		 		rt=chezuAssetService.addPowerFamilyTask(jsonValue, sign);
 //		 		rt=chezuAssetService.addPowerFamilyTask2(familyPower);
