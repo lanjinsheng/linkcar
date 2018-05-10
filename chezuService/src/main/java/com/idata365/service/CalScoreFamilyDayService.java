@@ -20,7 +20,7 @@ import com.idata365.entity.TaskFamilyDayScore;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
-import com.idata365.mapper.app.UserFamilyScoreMapper;
+import com.idata365.mapper.app.UserFamilyLogsMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.util.DateTools;
 @Service
@@ -29,7 +29,7 @@ public class CalScoreFamilyDayService {
 	@Autowired
    TaskFamilyDayScoreMapper taskFamilyDayScoreMapper;
 	@Autowired
-	UserFamilyScoreMapper  userFamilyScoreMapper;
+	UserFamilyLogsMapper  userFamilyLogsMapper;
 	@Autowired
 	UserScoreDayStatMapper userScoreDayStatMapper;
 	
@@ -51,12 +51,12 @@ public class CalScoreFamilyDayService {
 		roleMapParam.put("familyId", familyId);
 		roleMapParam.put("startTime", daystamp+" 00:00:00");
 		roleMapParam.put("endTime", daystamp+" 23:59:59");
-		List<UserFamilyRoleLog> roleLogs=userFamilyScoreMapper.getUserRolesByFamilyId(roleMapParam);
-		int familyPersonNum=roleLogs.size();
+		List<UserFamilyRoleLog> users=userFamilyLogsMapper.getUsersByFamilyId(roleMapParam);
+		int familyPersonNum=users.size();
 		int familyRoleNum=0;
 		int activeNum=0;
 	
-		Map<Integer,Object> tempMap=new HashMap<Integer,Object>();
+//		Map<Integer,Object> tempMap=new HashMap<Integer,Object>();
 		
 	   Integer useHoldNum=0;
 	   Double score=0d;
@@ -105,13 +105,13 @@ public class CalScoreFamilyDayService {
 		Double maxspeed=0d;
 		
 		
-		for(UserFamilyRoleLog userRole:roleLogs) {
-			tempMap.put(userRole.getRole(), 1);
-			if(userRole.getActiveFlag()==1) {
+		for(UserFamilyRoleLog user:users) {
+//			tempMap.put(userRole.getRole(), 1);
+			if(user.getActiveFlag()==1) {
 				activeNum++;
 			}
 			
-			UserScoreDayStat userDayScore=userScoreDayStatMapper.getUserDayScoreByUserFamily(userRole);
+			UserScoreDayStat userDayScore=userScoreDayStatMapper.getUserDayScoreByUserFamily(user);
 			if(userDayScore!=null) {
 				mileage+=userDayScore.getMileage();
 				time+=userDayScore.getTime();
@@ -184,7 +184,7 @@ public class CalScoreFamilyDayService {
 				}
 			}
 		}
-		familyRoleNum=tempMap.size();
+//		familyRoleNum=tempMap.size();
 		
 		fscore.setFamilyId(familyId);
 		fscore.setDaystamp(daystamp);

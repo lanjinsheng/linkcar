@@ -19,13 +19,14 @@ import com.idata365.enums.PowerEnum;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.ParkStation;
 import com.idata365.entity.UserFamilyRoleLog;
+import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.mapper.app.FamilyInfoMapper;
 import com.idata365.mapper.app.ParkStationMapper;
 import com.idata365.mapper.app.TaskAchieveAddValueMapper;
 import com.idata365.mapper.app.TaskPowerLogsMapper;
-import com.idata365.mapper.app.UserFamilyScoreMapper;
+import com.idata365.mapper.app.UserFamilyLogsMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
 
@@ -36,7 +37,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	@Autowired
 	UserTravelHistoryMapper userTravelHistoryMapper;
 	@Autowired
-	UserFamilyScoreMapper userFamilyScoreMapper;
+	UserFamilyLogsMapper userFamilyScoreMapper;
 	@Autowired
 	UserScoreDayStatMapper userScoreDayStatMapper;
 	@Autowired
@@ -51,6 +52,8 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	TaskPowerLogsMapper taskPowerLogsMapper;
 	@Autowired
 	DriveScoreService driveScoreService;
+	@Autowired
+	UserRoleLogService userRoleLogService;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -146,26 +149,23 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 		m.put("userId", uth.getUserId());
 		m.put("driveEndTime", driveEndTime);
 		boolean isBestDrive=true;
-		List<UserFamilyRoleLog> roles= userFamilyScoreMapper.getUserRoles(m);
-		if(roles==null || roles.size()==0){//角色没创建，不处理。建议此处进行预警
-			return false;
-		}
+		UserRoleLog role= userRoleLogService.getLatestUserRoleLogNoTrans(uth.getUserId());
+ 
 		//行程power
 //		String score="0";
 		int power=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
-		for(UserFamilyRoleLog role:roles) {
+		//查询当前家族，并贡献分数与动力
+		List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
+		
+		for(Map<String,Object> map: families) {
 			
 			//进行家族行程热度增加
-			long familyId=role.getFamilyId();
+			long familyId=Long.valueOf(map.get("familyId").toString());
 			familyInfoMapper.updateFamilyDriveFlag(familyId);
 			familyInfoMapper.updateFamilyActiveLevel(familyId);
 			
 			//插入行程得分任务
 			addFamilyTripPowerLogs(role.getUserId(), uth.getHabitId(),familyId, power,uth.getId());
-			
-			if(role.getRole()==7) {//煎饼侠，行程不纳入
-				continue;
-			}
 			UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
 			userScoreDayStat.setUserId(uth.getUserId());
 			userScoreDayStat.setUserFamilyScoreId(role.getId());
@@ -217,7 +217,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			//更新车位
 			 ParkStation park=new ParkStation();
 			 park.setUserId(uth.getUserId());
-			 park.setFamilyId(role.getFamilyId());
+			 park.setFamilyId(familyId);
 			 park.setExpireTime(driveEndTime);
 			 park.setHabitId(uth.getHabitId());
 			 int updatePark=parkStationMapper.updateParkStation(park);
