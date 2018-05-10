@@ -1,6 +1,5 @@
 package com.idata365.app.controller.security;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.app.entity.AssetUsersPowerLogs;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.AssetService;
-import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.ValidTools;
@@ -28,6 +25,7 @@ public class AssetController extends BaseController {
 	AssetService assetService;
 	@Autowired
 	ChezuAccountService chezuService;
+
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -42,11 +40,10 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getTotalNums(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		Map<String,String> data = assetService.getTotalNums(userId);
+		Map<String, String> data = assetService.getTotalNums(userId);
 		return ResultUtils.rtSuccess(data);
 	}
-	
-	
+
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -61,7 +58,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexDiamonds(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		List<Map<String, String>> data = assetService.getIndexDiamonds(userId,requestBodyParams);
+		List<Map<String, String>> data = assetService.getIndexDiamonds(userId, requestBodyParams);
 		return ResultUtils.rtSuccess(data);
 	}
 
@@ -79,7 +76,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		List<Map<String, String>> data = assetService.getIndexPowers(userId,requestBodyParams);
+		List<Map<String, String>> data = assetService.getIndexPowers(userId, requestBodyParams);
 		return ResultUtils.rtSuccess(data);
 	}
 
@@ -98,13 +95,14 @@ public class AssetController extends BaseController {
 	 *             LiXing
 	 */
 	@RequestMapping("/getFamilyFightPowers")
-	public Map<String, Object> getFamilyFightPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> getFamilyFightPowers(
+			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
-		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo,requestBodyParams));
+		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
 	}
 
 	/**
@@ -125,10 +123,10 @@ public class AssetController extends BaseController {
 	public Map<String, Object> stoleFamilyFightPowers(
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		long userId = this.getUserId(); 
+		long userId = this.getUserId();
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
-		long powerNum =Long.valueOf(String.valueOf(requestBodyParams.get("power")));
+		long powerNum = Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
 
@@ -165,57 +163,54 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-
-		List<AssetUsersPowerLogs> list = assetService.getStoleFamilyFightPowers();
-		List<Map<String, String>> result = new ArrayList<>();
-
-		String Ids = "";
-		for (AssetUsersPowerLogs assetUsersPowerLogs : list) {
-			Map<String, String> data = new HashMap<>();
-			data.put("powerNum", String.valueOf(assetUsersPowerLogs.getPowerNum()));
-			data.put("time", String.valueOf(DateTools.formatDateD(assetUsersPowerLogs.getCreateTime())));
-			result.add(data);
-			Ids += assetUsersPowerLogs.getUserId() + ",";
+		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
+		StringBuilder sb = new StringBuilder();
+		List<Map<String, String>> result = assetService.getStoleFamilyFightPowers(familiesInfo);
+		for (Map<String, String> map : result) {
+			sb.append(map.get("userId") + ",");
 		}
-		Ids = Ids.substring(0, Ids.length());
+		String Ids = sb.toString().substring(0, sb.length());
 		Map<String, Object> map = chezuService.getUsersInfoByIds(Ids, sign);
-		
-		String nikeN;
-		if(ValidTools.isNotBlank(map)&&ValidTools.isNotBlank(map.get("nickNames"))){
-			String nikeNames = (String) map.get("nickNames");
+
+		if (ValidTools.isNotBlank(map) && ValidTools.isNotBlank(map.get("nickNames"))) {
+			String nikeNames = map.get("nickNames").toString();
 			String[] nikeName = nikeNames.split(",");
 			for (int i = 0; i < result.size(); i++) {
-				for (i = 0; i < nikeName.length; i++) {
-					nikeN =  nikeName[i];
-					result.get(i).put("nickname",nikeN);
+				for (int j = 0; j < nikeName.length; j++) {
+					if (j == i) {
+						result.get(i).put("nickname", nikeName[i]);
+						break;
+					}
 				}
 			}
 		}
 		return ResultUtils.rtSuccess(result);
 	}
-	
+
 	/**
 	 * 
-	    * @Title: signInPower
-	    * @Description: TODO(签到获取power)
-	    * @param @param allRequestParams
-	    * @param @param requestBodyParams
-	    * @param @return    参数
-	    * @return Map<String,Object>    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: signInPower
+	 * @Description: TODO(签到获取power)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
-	
+
 	@RequestMapping("/signInPower")
-	public Map<String, Object> signInPower(
-			@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> signInPower(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		
-		long userId=this.getUserId();
+
+		long userId = this.getUserId();
 		//
 		assetService.getDaySignInLog(userId);
 		return ResultUtils.rtSuccess(null);
 	}
-	
-	
+
 }
