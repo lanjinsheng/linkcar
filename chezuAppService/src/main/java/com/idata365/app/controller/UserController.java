@@ -274,14 +274,14 @@ public class UserController extends BaseController{
     public Map<String,Object> sendVerifyCode(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
    	     HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-         String sign=request.getHeader("sign");
+//         String sign=request.getHeader("sign");
     	if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("phone")) || ValidTools.isBlank(requestBodyParams.get("codeType")))
           return ResultUtils.rtFailParam(null);
     	String phone=String.valueOf(requestBodyParams.get("phone"));
-    	boolean signValid=SignUtils.security(phone, sign);
-    	if(!signValid) {
-    		  return ResultUtils.rtFailVerification(null);
-    	}
+//    	boolean signValid=SignUtils.security(phone, sign);
+//    	if(!signValid) {
+//    		  return ResultUtils.rtFailVerification(null);
+//    	}
     	loginRegService.getVerifyCode(phone, Integer.valueOf(requestBodyParams.get("codeType").toString()));
     	return ResultUtils.rtSuccess(null);
     }
