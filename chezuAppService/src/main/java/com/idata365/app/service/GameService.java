@@ -386,10 +386,12 @@ public class GameService extends BaseService<GameService>
 		}else {
 
 			FamilyParamBean paramBean=new FamilyParamBean();
-			if(familyId==Long.valueOf(rtMap.get("selfFamilyId").toString())) {
+			if(familyId==Long.valueOf(rtMap.get("selfFamilyId").toString())) {//我是发起方
 				paramBean.setFamilyId(Long.valueOf(rtMap.get("competitorFamilyId").toString()));
-			}else {
-				paramBean.setFamilyId(familyId);
+				rtMap.put("passive", "0");
+			}else {//我是被挑战方
+				paramBean.setFamilyId(Long.valueOf(rtMap.get("selfFamilyId").toString()));
+				rtMap.put("passive", "1");
 			}
 			//查询家族
 			FamilyInfoBean familyBean=familyMapper.queryFamilyInfo(paramBean);
