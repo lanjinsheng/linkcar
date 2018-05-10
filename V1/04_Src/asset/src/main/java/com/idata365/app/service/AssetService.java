@@ -28,6 +28,7 @@ import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.ValidTools;
 
 /**
  * 
@@ -280,12 +281,16 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LiXing
 	 */
 
-	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familyInfo,
+	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familiesInfo,
 			Map<Object, Object> requestBodyParams) {
-		long familyId = Long.valueOf(familyInfo.get("familyId").toString());
-		long fightFamilyId = Long.valueOf(familyInfo.get("fightFamilyId").toString());
-		long familyUserCount = Long.valueOf(familyInfo.get("familyUserCount").toString());
-		long fightFamilyUserCount = Long.valueOf(familyInfo.get("fightFamilyUserCount").toString());
+		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
+		long familyUserCount = Long.valueOf(familiesInfo.get("familyUserCount").toString());
+		long fightFamilyId = 0;
+		long fightFamilyUserCount = 0;
+		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
+			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
+			fightFamilyUserCount = Long.valueOf(familiesInfo.get("fightFamilyUserCount").toString());
+		}
 
 		long todayContribution = 0L;
 		long todayReceive = 0L;
@@ -372,10 +377,13 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LiXing
 	 */
 	@Transactional
-	public void stoleFamilyFightPowers(long userId, Map<String, Object> familyInfo, long ballId, long powerNum)
+	public void stoleFamilyFightPowers(long userId, Map<String, Object> familiesInfo, long ballId, long powerNum)
 			throws Exception {
-		long familyId = Long.valueOf(familyInfo.get("familyId").toString());
-		long fightFamilyId = Long.valueOf(familyInfo.get("fightFamilyId").toString());
+		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
+		long fightFamilyId = 0;
+		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
+			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
+		}
 
 		// 修改个人相关数据
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
@@ -416,9 +424,29 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 
 	@Transactional
-	public List<AssetUsersPowerLogs> getStoleFamilyFightPowers() {
+	public List<Map<String, String>> getStoleFamilyFightPowers(Map<String, Object> familiesInfo) {
+		List<Map<String, String>> result = new ArrayList<>();
+		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
+		long fightFamilyId = 0;
+		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
+			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
+		}
+
 		List<AssetUsersPowerLogs> list = assetUsersPowerLogsMapper.getAllRecord();
-		return list;
+
+		for (AssetUsersPowerLogs assetUsersPowerLogs : list) {
+			Long ballId = assetUsersPowerLogs.getEffectId();
+			AssetFamiliesPowerLogs familiesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(ballId);
+			if (familiesPowerLogs.getFamilyId() == familyId || familiesPowerLogs.getFamilyId() == fightFamilyId) {
+				Map<String, String> data = new HashMap<>();
+				data.put("powerNum", assetUsersPowerLogs.getPowerNum().toString());
+				data.put("time", DateTools.formatDateD(assetUsersPowerLogs.getCreateTime()));
+				data.put("userId", assetUsersPowerLogs.getUserId().toString());
+				result.add(data);
+			}
+		}
+
+		return result;
 	}
 
 	/**
