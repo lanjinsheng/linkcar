@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserRoleLogMapper">
+    <resultMap id="BaseUserRoleLogMap" type="com.idata365.app.entity.UserRoleLog" >
+    </resultMap>
+    <select id="getUserRoleLogsByUserId" resultMap="BaseUserRoleLogMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId}
+     </select>
+     <select id="getLatestUserRoleLog" resultMap="BaseUserRoleLogMap" parameterType="com.idata365.app.entity.UserRoleLog">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId} order by id desc limit 1
+     </select>
+       <select id="getYestodayUserRoleLog" resultMap="BaseUserRoleLogMap" parameterType="com.idata365.app.entity.UserRoleLog">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId} and daystamp=#{daystamp} order by id desc limit 1
+     </select>
+     
+      <select id="getLatestUserRoleLogByUserId" resultMap="BaseUserRoleLogMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userRoleLog where userId=#{userId} order by id desc limit 1
+     </select>
+     
+    <insert id="insertUserRole"  parameterType="com.idata365.app.entity.UserRoleLog" >
+       insert into userRoleLog (userId,daystamp,role,startTime,endTime)
+          values(#{userId},#{daystamp},#{role},#{startTime},#{endTime})
+    </insert>  
+    <update id="updateUserRoleEndTime"  parameterType="com.idata365.app.entity.UserRoleLog" >
+       update userRoleLog set endTime=#{endTime} where id=#{id}
+    </update>  
+      <update id="updateUserFamilyRelationRole"  parameterType="com.idata365.app.entity.UserRoleLog" >
+       update userFamilyRoleLog set role=#{role} where userId=#{userId}
+    </update>  
+    
+</mapper>
