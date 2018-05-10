@@ -19,6 +19,7 @@ import com.idata365.app.service.AssetService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
+import com.idata365.app.util.ValidTools;
 
 @RestController("securityAssetController")
 public class AssetController extends BaseController {
@@ -178,11 +179,16 @@ public class AssetController extends BaseController {
 		}
 		Ids = Ids.substring(0, Ids.length());
 		Map<String, Object> map = chezuService.getUsersInfoByIds(Ids, sign);
-		String nikeNames = (String) map.get("nickNames");
-		String[] nikeName = nikeNames.split(",");
-		for (int i = 0; i < result.size(); i++) {
-			for (i = 0; i < nikeName.length; i++) {
-				result.get(i).put("nickname", nikeName[i]);
+		
+		String nikeN;
+		if(ValidTools.isNotBlank(map)&&ValidTools.isNotBlank(map.get("nickNames"))){
+			String nikeNames = (String) map.get("nickNames");
+			String[] nikeName = nikeNames.split(",");
+			for (int i = 0; i < result.size(); i++) {
+				for (i = 0; i < nikeName.length; i++) {
+					nikeN =  nikeName[i];
+					result.get(i).put("nickname",nikeN);
+				}
 			}
 		}
 		return ResultUtils.rtSuccess(result);
