@@ -15,6 +15,7 @@ public class PhoneMsgTools {
 	public static int EventType1 = 1;// 注册
 	public static int EventType2 = 2;// 登入
 	public static int EventType3 = 3;// 找回密码
+	public static int EventType4 = 4;// 邀请
 	@Autowired
 	ChezuSmsService chezuSmsService;
 

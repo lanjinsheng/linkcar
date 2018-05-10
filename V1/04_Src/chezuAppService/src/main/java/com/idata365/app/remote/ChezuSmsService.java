@@ -22,7 +22,7 @@ public interface ChezuSmsService {
 	 * @param @param
 	 *            mobile
 	 * @param @param
-	 *            templateType			注册：1        登入：2        找回密码：3
+	 *            templateType			注册：1        登入：2        找回密码：3		邀请：4
 	 * @param @param
 	 *            validateCode
 	 * @param @return
