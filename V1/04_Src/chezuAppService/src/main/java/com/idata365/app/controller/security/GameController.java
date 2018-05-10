@@ -405,20 +405,20 @@ public class GameController extends BaseController
 	 * @return
 	 */
 	@RequestMapping("/game/findTomorrowRole")
-	public Map<String, Object> findTomorrowRole(@RequestBody UserFamilyRoleLogParamBean bean)
+	public Map<String, Object> findTomorrowRole(@RequestBody(required = false) UserFamilyRoleLogParamBean bean)
 	{
-		LOG.info("param==={}", JSON.toJSONString(bean));
-		int role = this.gameService.findTomorrowRole(bean);
 		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("flag", "0");
+		if(bean==null) {
+			return ResultUtils.rtSuccess(resultMap);
+		}
+		int role = this.gameService.findTomorrowRole(bean);
 		if (role > 0)
 		{
 			resultMap.put("flag", String.valueOf(1));
 			resultMap.put("role", String.valueOf(role));
 		}
-		else
-		{
-			resultMap.put("flag", "0");
-		}
+		 
 		return ResultUtils.rtSuccess(resultMap);
 	}
 	
