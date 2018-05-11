@@ -1,12 +1,13 @@
 package com.idata365.app.entity.bean;
 
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.util.PhoneUtils;
 
 public class UserInfo extends UsersAccount{
 
 	
 	    /**
-	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	    * @Fields serialVersionUID : TODO()
 	    */
 	private static final long serialVersionUID = 1L;
 	
@@ -16,7 +17,12 @@ public class UserInfo extends UsersAccount{
 		this.setLastLoginTime(account.getLastLoginTime());
 		this.setPhone(account.getPhone());
 		this.setPwd(account.getPwd());
-		this.setNickName(account.getNickName());
+		if(account.getNickName()==null){
+			this.setNickName("手机"+PhoneUtils.hidePhone(account.getPhone()));
+		}else{
+			this.setNickName(account.getNickName());
+		}
+		
 		this.setImgUrl(account.getImgUrl());
 	}
 
