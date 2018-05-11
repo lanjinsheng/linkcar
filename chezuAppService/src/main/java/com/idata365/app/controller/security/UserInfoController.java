@@ -45,6 +45,7 @@ public class UserInfoController extends BaseController{
 	@Autowired
 	private LoginRegService loginRegService;
 	
+	
     @Autowired
 	SystemProperties systemProperties;
 	/**
@@ -201,7 +202,8 @@ public class UserInfoController extends BaseController{
 		  }else {
 			  rtMap.put("isAuthenticated", "0"); 
 		  }
-		  
+		  UserConfig uc= userInfoService.getUserConfig(this.getUserId());
+		  rtMap.put("isGPSHidden", String.valueOf(uc.getIsHidden()));
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
 	    @RequestMapping(value = "/user/uploadHeadImg",method = RequestMethod.POST)
