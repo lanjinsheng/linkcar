@@ -101,10 +101,9 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 	public Map<String, String> getTotalNums(long userId) {
 		Map<String, String> map = new HashMap<>();
-		long totalDiamondsNum = assetUsersDiamondsLogsMapper.getTotalDiamondsNum(userId);
-		map.put("totalDiamondsNum", String.valueOf(totalDiamondsNum));
-		long totalPowersNum = assetUsersPowerLogsMapper.getTotalPowersNum(userId);
-		map.put("totalPowersNum", String.valueOf(totalPowersNum));
+		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
+		map.put("totalDiamondsNum", String.valueOf(usersAsset.getDiamondsNum()));
+		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
 		return map;
 	}
 

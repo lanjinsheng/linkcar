@@ -20,9 +20,6 @@
 		FROM assetUsersDiamondsLogs where
 		userId=#{userId} order by createTime desc limit 10
 	</select>
-	<select id="getTotalDiamondsNum" resultType="java.lang.Long">
-		SELECT IFNULL(sum(diamondsNum),0) FROM assetUsersDiamondsLogs where userId=#{userId}
-	</select>
 
     <insert id="insertDiamondsConsume"
 		parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
