@@ -142,7 +142,7 @@ public interface FamilyMapper
 	 int updateFamilyPkKeyGet(Map<String,Object> map);
 	 int updateFamilyPkSelfKey(Map<String,Object> map);
 	 int insertPkRelation(Map<String,Object> map);
-	 long getCompetitorFamilyId(@Param("matchKey") String matchKey);
+	 long getCompetitorFamilyId(Map<String,Object> pkKey);
 	 //挑选对战家族--end
 	 
 	 List<Map<String,Object>> findUsersByFamilyId(@Param("familyId") Long familyId);
