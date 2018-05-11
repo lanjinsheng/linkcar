@@ -35,7 +35,7 @@
 	</select>
 	<select id="getPowersByEffectId" resultType="java.lang.Long" parameterType="java.lang.Long">
 		SELECT DISTINCT(userId)
-		FROM assetUsersPowerLogs where effectId=#{ballId} and eventType=3
+		FROM assetUsersPowerLogs where effectId=#{ballId} and eventType=3 and
 		<![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	
@@ -43,8 +43,7 @@
 		SELECT count(1) FROM assetUsersPowerLogs where userId=#{userId} and eventType=1 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
 	
-	<select id="getRecordByEffectId" resultMap="BaseResultMap"
-		parameterType="java.lang.Long">
+	<select id="getRecordByEffectId" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		SELECT *
 		FROM assetUsersPowerLogs where effectId=#{effectId} and
 		 <![CDATA[ eventType=3 and createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
