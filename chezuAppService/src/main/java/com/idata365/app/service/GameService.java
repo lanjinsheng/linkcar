@@ -259,7 +259,7 @@ public class GameService extends BaseService<GameService>
 			if(competitorFamilyId!=FamilyConstant.ROBOT_FAMILY_ID) {
 			//循环查找出对方家族组员
 				FamilyParamBean familyParamBean=new FamilyParamBean();
-				familyParamBean.setFamilyId(competitorFamilyId);
+				familyParamBean.setFamilyId(bean.getFamilyId());
 				FamilyResultBean familyResultBean=familyMapper.queryFamilyById(familyParamBean);
 				List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(competitorFamilyId);
 				for(Map<String,Object> m:userList) {
