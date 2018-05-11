@@ -365,6 +365,9 @@ public class FamilyService extends BaseService<FamilyService>
 		List<FamilyRandBean> familys = this.familyMapper.queryFamilys(bean);
 		for (FamilyRandBean tempBean : familys)
 		{
+			if(tempBean.getFamilyId()==FamilyConstant.ROBOT_FAMILY_ID){
+				continue;
+			}
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
 			

@@ -237,7 +237,7 @@ public class GameService extends BaseService<GameService>
 		pkKey.put("matchKey", matchKey);
 		int getPk=familyMapper.updateFamilyPkKeyGet(pkKey);
 		if(getPk==0) {
-			rtMap.put("error", "该等级无可匹配家族!");
+			rtMap.put("error", "来迟了,该等级家族已被匹配光!");
 			return rtMap;
 		}else {
 			//插入匹配家族

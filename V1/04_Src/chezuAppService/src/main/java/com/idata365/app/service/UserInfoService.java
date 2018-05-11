@@ -47,7 +47,7 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	public UserInfoService() {
 	}
 	 
-	
+
 	public LicenseVehicleTravel getLicenseVehicleTravel(Long userId) {
 		return licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
 	}
@@ -264,6 +264,13 @@ public class UserInfoService extends BaseService<UserInfoService>{
 	    * @author LanYeYe
 	 */
 	public UserConfig getUserConfig(long userId) {
-		 return userConfigMapper.getUserConfigById(userId);
+		UserConfig uc=userConfigMapper.getUserConfigById(userId);
+		  if(uc==null) {
+			  uc=new UserConfig();
+			  uc.setIsHidden(1);
+		  }else {
+			  
+		  }
+		 return uc;
 	}
 }

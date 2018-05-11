@@ -327,7 +327,7 @@ public class ScoreService extends BaseService<ScoreService>
 		long createUserId = this.familyMapper.queryCreateUserId(familyParamBean);
 		
 		List<ScoreMemberInfoResultBean> resultList = new ArrayList<>();
-		
+	
 //		this.gameMapper.queryRoleByDay(bean);
 		long familyId = bean.getFamilyId();
 		String tomorrowDateUndelimiterStr = getTomorrowDateUndelimiterStr();
@@ -353,7 +353,8 @@ public class ScoreService extends BaseService<ScoreService>
 //			{
 //				tempResultBean.setTomorrowRole(String.valueOf(tomorrowRoleList.get(0)));
 //			}
-			tempResultBean.setTomorrowRole(String.valueOf(tempBean.getRole()));
+			UserRoleLog todayRole=userRoleLogService.getLatestUserRoleLog(userId);
+			tempResultBean.setTomorrowRole(String.valueOf(todayRole.getRole()));
 			UserFamilyRoleLogParamBean  yesterdayRoleLogParamBean = new UserFamilyRoleLogParamBean();
 			yesterdayRoleLogParamBean.setUserId(userId);
 			yesterdayRoleLogParamBean.setFamilyId(familyId);
@@ -398,7 +399,7 @@ public class ScoreService extends BaseService<ScoreService>
 				String formatJoinTime = formatTime(tempJoinTime);
 				tempResultBean.setJoinTime(formatJoinTime);
 			}
-			
+			tempResultBean.setRole(String.valueOf(todayRole.getRole()));
 			resultList.add(tempResultBean);
 		}
 		
@@ -831,8 +832,16 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		competitorObjParamBean.setDaystamp(beforeYesterdayDateStr);
 		FamilyDriveDayStatBean beforeYesterdayCompetitorObjFamilyStatBean = this.scoreMapper.queryFamilyDriveStat(competitorObjParamBean);
-		int competitorYesterdayOrderNo = competitorObjFamilyStatBean.getOrderNo();
-		int competitorBeforeYesterdayOrderNo = beforeYesterdayCompetitorObjFamilyStatBean.getOrderNo();
+		int competitorYesterdayOrderNo =0;
+		if(competitorObjFamilyStatBean!=null){
+			 competitorYesterdayOrderNo = competitorObjFamilyStatBean.getOrderNo();	
+		}
+		int competitorBeforeYesterdayOrderNo=0;
+		if(beforeYesterdayCompetitorObjFamilyStatBean!=null){
+			  competitorBeforeYesterdayOrderNo = beforeYesterdayCompetitorObjFamilyStatBean.getOrderNo();
+		 }
+		
+		
 		
 		int competitorObjOrderChange;
 		if (0 == competitorBeforeYesterdayOrderNo)
