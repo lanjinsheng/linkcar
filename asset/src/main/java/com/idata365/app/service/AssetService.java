@@ -298,8 +298,12 @@ public class AssetService extends BaseService<AssetService> {
 		long todayReceive = 0L;
 		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowersByOne(userId);
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
-			if (assetUsersPowerLogs.getRecordType() == 1 && assetUsersPowerLogs.getEventType() == 3) {
-				todayReceive += assetUsersPowerLogs.getPowerNum();
+			if (assetUsersPowerLogs.getEventType() == 3) {
+				Long effectId = assetUsersPowerLogs.getEffectId();
+				AssetFamiliesPowerLogs familiesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(effectId);
+				if(familiesPowerLogs.getFamilyId() == familyId) {
+					todayReceive += assetUsersPowerLogs.getPowerNum();
+				}
 			} else if (assetUsersPowerLogs.getEventType() == 4) {
 				todayContribution += assetUsersPowerLogs.getPowerNum();
 			}
