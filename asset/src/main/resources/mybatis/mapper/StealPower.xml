@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.idata365.app.mapper.StealPowerMapper">
+	<resultMap id="BaseStealPowerMap"
+		type="com.idata365.app.entity.StealPower">
+	</resultMap>
+
+ 
+	<select id="getStealPowerList" resultMap="BaseStealPowerMap"
+		parameterType="java.util.HashMap">
+		SELECT *
+		FROM stealPower where familyId=#{familyId} and userId=#{userId} and daystamp=#{daystamp}
+	</select>
+	
+ 
+     <insert id="insertSteal"   parameterType="com.idata365.app.entity.StealPower">
+            INSERT   INTO 
+            stealPower
+            (userId,familyId,ballId,powerNum,remark,daystamp,createTime) 
+        VALUES
+            (#{userId},#{familyId},#{ballId},#{powerNum},#{remark},#{daystamp},now())
+     </insert>
+</mapper>
