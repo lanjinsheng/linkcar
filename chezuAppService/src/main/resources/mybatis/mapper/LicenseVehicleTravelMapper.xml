@@ -23,7 +23,6 @@
              set plateNo=#{plateNo},carType=#{carType},useType=#{useType},modelType=#{modelType},
              vin=#{vin},
              issueDate=#{issueDate},regDate=#{regDate},engineNo=#{engineNo},
-             frontImgUrl=#{key},
              updateTime=now(),isTravelEdit=#{isTravelEdit}
              where userId=#{userId}
     </update>
