@@ -302,7 +302,7 @@ public class AssetService extends BaseService<AssetService> {
 				todayContribution += assetUsersPowerLogs.getPowerNum();
 			}
 		}
-
+		todayContribution = todayContribution / 2;
 		List<AssetFamiliesPowerLogs> powerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId, fightFamilyId);
 		List<Map<String, Object>> powerBalls = new ArrayList<>();
 		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : powerList) {
