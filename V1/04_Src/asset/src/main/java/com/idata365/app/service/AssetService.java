@@ -22,11 +22,13 @@ import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
 import com.idata365.app.entity.AssetUsersPowerLogs;
+import com.idata365.app.entity.StealPower;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
 import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
+import com.idata365.app.mapper.StealPowerMapper;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ValidTools;
 
@@ -64,6 +66,8 @@ public class AssetService extends BaseService<AssetService> {
 	AssetFamiliesPowerLogsMapper assetFamiliesPowerLogsMapper;
 	@Autowired
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
+	@Autowired
+	StealPowerMapper stealPowerMapper;
 
 	public AssetService() {
 
@@ -396,7 +400,7 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersPowerLogs.setRecordType(1);
 		assetUsersPowerLogs.setRemark("");
 		this.addUserPowers(assetUsersPowerLogs);
-
+           
 		// 修改家族相关数据
 		AssetFamiliesPowerLogs assetFamiliesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(ballId);
 		long count = assetFamiliesPowerLogs.getCount() + 1;
@@ -408,7 +412,17 @@ public class AssetService extends BaseService<AssetService> {
 			// 修改资产
 			assetFamiliesAssetMapper.updateFamilyPowerMinus(fightFamilyId, powerNum);
 		}
-
+		
+		
+		//插入日志
+		StealPower steal=new StealPower();
+		steal.setBallId(ballId);
+		steal.setDaystamp(DateTools.getCurDateYYYYMMDD());
+		steal.setFamilyId(familyId);
+		steal.setPowerNum((int)powerNum);
+		steal.setUserId(userId);
+		steal.setRemark("");
+		stealPowerMapper.insertSteal(steal);
 	}
 
 	/**
