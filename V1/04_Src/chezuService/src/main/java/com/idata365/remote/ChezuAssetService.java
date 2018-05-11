@@ -13,7 +13,7 @@ import com.idata365.entity.bean.AssetUsersPowerLogs;
 import com.idata365.entity.bean.FamilyGameAsset;
 
 
-@FeignClient(value = "service-asset-chezu-ll",fallback = ChezuAssetHystric.class)
+@FeignClient(value = "service-asset-chezu",fallback = ChezuAssetHystric.class)
 public interface ChezuAssetService {
     @RequestMapping(value = "/asset/addPowerUsersTask",method = RequestMethod.POST)
     boolean addPowerUsersTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign, @RequestBody AssetUsersPowerLogs assetUsersPowerLogs);
