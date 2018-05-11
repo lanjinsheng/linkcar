@@ -261,7 +261,7 @@ public class GameService extends BaseService<GameService>
 				FamilyParamBean familyParamBean=new FamilyParamBean();
 				familyParamBean.setFamilyId(competitorFamilyId);
 				FamilyResultBean familyResultBean=familyMapper.queryFamilyById(familyParamBean);
-				List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(bean.getFamilyId());
+				List<Map<String,Object>> userList=familyMapper.findUsersByFamilyId(competitorFamilyId);
 				for(Map<String,Object> m:userList) {
 					Message msg=messageService.buildChallegeMessage(user.getId(), Long.valueOf(m.get("userId").toString()), familyResultBean.getMyFamilyName());
 					messageService.insertMessage(msg, MessageEnum.Challege);
