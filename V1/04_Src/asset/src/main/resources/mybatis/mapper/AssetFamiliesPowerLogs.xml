@@ -15,7 +15,7 @@
 	
 	<update id="updateFamiliesPowerLogs">
 		update assetFamiliesPowerLogs set
-		realNum=realNum-#{powerNum,jdbcType=BIGINT},count=#{count,jdbcType=BIGINT},createTime=now()
+		realNum=realNum-#{powerNum,jdbcType=BIGINT},count=#{count,jdbcType=BIGINT}
 		where
 		id=#{ballId,jdbcType=BIGINT} and realNum>=#{powerNum}
 	</update>

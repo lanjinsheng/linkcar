@@ -1,7 +1,6 @@
 package com.idata365.app.service;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -103,9 +102,9 @@ public class AssetService extends BaseService<AssetService> {
 	public Map<String, String> getTotalNums(long userId) {
 		Map<String, String> map = new HashMap<>();
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
-		double totalDiamondsNum = usersAsset.getDiamondsNum().doubleValue();
-		DecimalFormat df = new DecimalFormat("#.00");
-		map.put("totalDiamondsNum", df.format(totalDiamondsNum));
+		String num = usersAsset.getDiamondsNum().toString();
+		num = num.substring(0, num.indexOf(".") + 3);
+		map.put("totalDiamondsNum", num);
 		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
 		return map;
 	}
@@ -301,7 +300,7 @@ public class AssetService extends BaseService<AssetService> {
 			if (assetUsersPowerLogs.getEventType() == 3) {
 				Long effectId = assetUsersPowerLogs.getEffectId();
 				AssetFamiliesPowerLogs familiesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(effectId);
-				if(familiesPowerLogs.getFamilyId() == familyId) {
+				if (familiesPowerLogs.getFamilyId() == familyId) {
 					todayReceive += assetUsersPowerLogs.getPowerNum();
 				}
 			} else if (assetUsersPowerLogs.getEventType() == 4) {
@@ -336,24 +335,16 @@ public class AssetService extends BaseService<AssetService> {
 				thisScore = realNum;
 			}
 			powerBall.put("thisScore", String.valueOf(thisScore));
-			List<AssetUsersPowerLogs> allPowers = assetUsersPowerLogsMapper.getAllPowers();
+			// 球的Id即是UserPowerLogs里的effectId，且用户eventtype=3
+			List<Long> ids = assetUsersPowerLogsMapper.getPowersByEffectId(Long.valueOf(ballId));
 			String[] userIdsArray = {};
-			// 已经领取过该球能量的userId列表
-			if (requestBodyParams != null && requestBodyParams.get("familyId") != null && realCount != 0) {
-
-				String userIds = "";
-				for (AssetUsersPowerLogs assetUsersPowerLogs : allPowers) {
-					if ((assetUsersPowerLogs.getEffectId() == Long.valueOf(ballId))
-							&& !userIds.contains(assetUsersPowerLogs.getUserId().toString())) {
-						userIds += assetUsersPowerLogs.getUserId() + ",";
-					}
+			if (ValidTools.isNotBlank(ids)) {
+				userIdsArray = new String[ids.size()];
+				for (int i = 0; i < ids.size(); i++) {
+					userIdsArray[i] = ids.get(i).toString();
 				}
-				userIds = userIds.substring(0, userIds.length());
-				userIdsArray = userIds.split(",");
-				powerBall.put("receivelist", userIdsArray);
-			} else {
-				powerBall.put("receivelist", userIdsArray);
 			}
+			powerBall.put("receivelist", userIdsArray);
 			String createFamilyId = String.valueOf(assetFamiliesPowerLogs.getFamilyId());
 			powerBall.put("createFamilyId", createFamilyId);
 			if (createFamilyId.equals(String.valueOf(familyId))) {
@@ -442,20 +433,19 @@ public class AssetService extends BaseService<AssetService> {
 			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
 		}
 
-		List<AssetUsersPowerLogs> list = assetUsersPowerLogsMapper.getAllRecord();
-
-		for (AssetUsersPowerLogs assetUsersPowerLogs : list) {
-			Long ballId = assetUsersPowerLogs.getEffectId();
-			AssetFamiliesPowerLogs familiesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(ballId);
-			if (familiesPowerLogs.getFamilyId() == familyId || familiesPowerLogs.getFamilyId() == fightFamilyId) {
+		List<AssetFamiliesPowerLogs> familyPowers = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
+				fightFamilyId);
+		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : familyPowers) {
+			Long effectId = assetFamiliesPowerLogs.getFamilyId();
+			AssetUsersPowerLogs user = assetUsersPowerLogsMapper.getRecordByEffectId(effectId);
+			if (ValidTools.isNotBlank(user)) {
 				Map<String, String> data = new HashMap<>();
-				data.put("powerNum", assetUsersPowerLogs.getPowerNum().toString());
-				data.put("time", DateTools.formatDateD(assetUsersPowerLogs.getCreateTime()));
-				data.put("userId", assetUsersPowerLogs.getUserId().toString());
+				data.put("powerNum", user.getPowerNum().toString());
+				data.put("time", DateTools.formatDateD(user.getCreateTime()));
+				data.put("userId", user.getUserId().toString());
 				result.add(data);
 			}
 		}
-
 		return result;
 	}
 

@@ -13,14 +13,14 @@ public interface AssetUsersPowerLogsMapper {
 	List<AssetUsersPowerLogs> getIndexPowers(@Param("userId") long userId, @Param("id") long id);
 
 	List<AssetUsersPowerLogs> getIndexPowersFirst(@Param("userId") long userId);
-	
-	List<AssetUsersPowerLogs> getAllPowersByOne(@Param("userId") long userId);
-	
-	List<AssetUsersPowerLogs> getAllPowers();
 
-	List<AssetUsersPowerLogs> getAllRecord();
+	List<AssetUsersPowerLogs> getAllPowersByOne(@Param("userId") long userId);
 
 	AssetUsersPowerLogs getUsersPowerLogsByEffectId(AssetUsersPowerLogs assetUsersPowerLogs);
-	
+
 	int getSignInLogByUserId(@Param("userId") long userId);
+
+	List<Long> getPowersByEffectId(@Param("ballId") Long ballId);
+
+	AssetUsersPowerLogs getRecordByEffectId(@Param("effectId") Long effectId);
 }
