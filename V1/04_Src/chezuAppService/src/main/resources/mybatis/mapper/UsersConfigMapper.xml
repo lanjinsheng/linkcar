@@ -6,7 +6,7 @@
  
      <select id="getUserConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
        SELECT *
-       FROM  userConfig where createUserId=#{userId} order by id desc limit 1
+       FROM  userConfig where userId=#{userId} order by id desc limit 1
      </select>
      
     <insert id="updateUserConfig"  parameterType="com.idata365.app.entity.UserConfig" >

@@ -296,7 +296,7 @@
 	
 	<!-- 锁定匹配用户 -->
 	<update id="updateFamilyPkKeyGet"   parameterType="java.util.HashMap">
- 	    update  familyInfo set matchKey=#{matchKey}  where familyType=#{familyType} and id!=#{id}
+ 	    update  familyInfo set matchKey=#{matchKey}  where familyType=#{familyType} and id!=#{id} and id!=999999
  	     order by activeLevel desc limit 1
     </update>
     <select id="getCompetitorFamilyId" resultType="long" parameterType="java.lang.String">
