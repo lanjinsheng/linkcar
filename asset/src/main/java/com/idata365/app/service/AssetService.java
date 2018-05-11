@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -102,7 +103,9 @@ public class AssetService extends BaseService<AssetService> {
 	public Map<String, String> getTotalNums(long userId) {
 		Map<String, String> map = new HashMap<>();
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
-		map.put("totalDiamondsNum", String.valueOf(usersAsset.getDiamondsNum()));
+		double totalDiamondsNum = usersAsset.getDiamondsNum().doubleValue();
+		DecimalFormat df = new DecimalFormat("#.00");
+		map.put("totalDiamondsNum", df.format(totalDiamondsNum));
 		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
 		return map;
 	}
