@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.Order;
+import com.idata365.app.entity.Prize;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.OrderService;
 import com.idata365.app.service.PrizeService;
@@ -44,7 +46,8 @@ public class ShopController extends BaseController {
 	private PrizeService prizeService;
 	@Autowired
 	private OrderService orderService;
-
+	@Autowired
+	private ChezuAppService chezuAppService;
 	// @Autowired
 	// private UsersService usersService;
 
@@ -84,35 +87,30 @@ public class ShopController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) throws Exception {
 		Long userId = super.getUserId();
 		System.out.println(userId);
-		Long prizeId = Long.valueOf(String.valueOf(requestBodyParams.get("rewardId")));
-		Integer orderNum = (Integer) requestBodyParams.get("rewardNum");
-		String name = (String) requestBodyParams.get("name");
-		String phone = (String) requestBodyParams.get("phone");
-		String address = (String) requestBodyParams.get("address");
-		String provinceCode = (String) requestBodyParams.get("provinceCode");
-		String cityCode = (String) requestBodyParams.get("cityCode");
-		String areaCode = (String) requestBodyParams.get("areaCode");
-		Integer diamondNum = (Integer) requestBodyParams.get("diamondNum");
+		Long prizeId = Long.valueOf(requestBodyParams.get("rewardId").toString());
+		Prize prize = prizeService.getPrize(prizeId);
+		String areaCode = requestBodyParams.get("areaCode").toString();
 
 		Order order = new Order();
 		order.setUserid(userId);
-		order.setDiamondnum(diamondNum);
+		order.setDiamondnum(Integer.valueOf(requestBodyParams.get("diamondNum").toString()));
 		order.setOrdertype("0");
-		order.setOrdernum(Integer.valueOf(orderNum));
-		order.setOrderstatus("0");
+		order.setOrdernum(Integer.valueOf(requestBodyParams.get("rewardNum").toString()));
+		order.setOrderstatus("1");
 		order.setOrdertime(new Date());
 		order.setPrizeid(prizeId);
-		order.setName(name);
-		order.setPhone(phone);
-		order.setAddress(address);
-		order.setProvincecode(provinceCode);
-		order.setCitycode(cityCode);
+		order.setName(requestBodyParams.get("name").toString());
+		order.setPhone(requestBodyParams.get("phone").toString());
+		order.setAddress(requestBodyParams.get("address").toString());
+		order.setProvincecode(requestBodyParams.get("provinceCode").toString());
+		order.setCitycode(requestBodyParams.get("cityCode").toString());
 		if (areaCode != null) {
 			order.setAreacode(areaCode);
 		}
-
 		try {
 			orderService.save(order);
+			boolean shopMsg = chezuAppService.sendShopMsg(userId, prize.getPrizename(), SignUtils.encryptHMAC(userId+""+prize.getPrizename()));
+			System.out.println("兑换成功："+shopMsg);
 			return ResultUtils.rtSuccess(null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
