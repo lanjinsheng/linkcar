@@ -241,7 +241,7 @@ public class GameService extends BaseService<GameService>
 			return rtMap;
 		}else {
 			//插入匹配家族
-			long  competitorFamilyId=familyMapper.getCompetitorFamilyId(matchKey);
+			long  competitorFamilyId=familyMapper.getCompetitorFamilyId(pkKey);
 			int updateSelf=familyMapper.updateFamilyPkSelfKey(pkKey);
 			Map<String,Object> pkRelation=new HashMap<String,Object>();
 			pkRelation.put("selfFamilyId", bean.getFamilyId());
