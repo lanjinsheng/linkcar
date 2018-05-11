@@ -50,38 +50,38 @@ public class CalFamilyPkService {
         if(fdds1.getScoreComm()>fdds2.getScoreComm()) {
         	//PK等级得分
         	if(level1Sub2==0) {
-        		fdds1.setFamilyLevelFactor(30d);
-        		fdds2.setFamilyLevelFactor(-30d);
+        		fdds1.setFamilyLevelFactor(6d);
+        		fdds2.setFamilyLevelFactor(-6d);
         	}else if(level1Sub2==10) {
-        		fdds1.setFamilyLevelFactor(20d);
-        		fdds2.setFamilyLevelFactor(-20d);
+        		fdds1.setFamilyLevelFactor(4d);
+        		fdds2.setFamilyLevelFactor(-6d);
         	}else if(level1Sub2==20) {
-        		fdds1.setFamilyLevelFactor(10d);
+        		fdds1.setFamilyLevelFactor(2d);
         		fdds2.setFamilyLevelFactor(-10d);
         	}else if(level1Sub2==-10) {
-        		fdds1.setFamilyLevelFactor(40d);
-        		fdds2.setFamilyLevelFactor(-40d);
+        		fdds1.setFamilyLevelFactor(8d);
+        		fdds2.setFamilyLevelFactor(-4d);
         	}else if(level1Sub2==-20) {
-        		fdds1.setFamilyLevelFactor(50d);
-        		fdds2.setFamilyLevelFactor(-50d);
+        		fdds1.setFamilyLevelFactor(10d);
+        		fdds2.setFamilyLevelFactor(-2d);
         	}
         }else if(fdds2.getScoreComm()>fdds1.getScoreComm()) {
         	//PK等级得分
         	if(level1Sub2==0) {
-        		fdds2.setFamilyLevelFactor(30d);
-        		fdds1.setFamilyLevelFactor(-30d);
+        		fdds2.setFamilyLevelFactor(6d);
+        		fdds1.setFamilyLevelFactor(-6d);
         	}else if(level1Sub2==10) {
-        		fdds2.setFamilyLevelFactor(40d);
-        		fdds1.setFamilyLevelFactor(-40d);
+        		fdds2.setFamilyLevelFactor(4d);
+        		fdds1.setFamilyLevelFactor(-6d);
         	}else if(level1Sub2==20) {
-        		fdds2.setFamilyLevelFactor(50d);
-        		fdds1.setFamilyLevelFactor(-50d);
+        		fdds2.setFamilyLevelFactor(2d);
+        		fdds1.setFamilyLevelFactor(-10d);
         	}else if(level1Sub2==-10) {
-        		fdds2.setFamilyLevelFactor(20d);
-        		fdds1.setFamilyLevelFactor(-20d);
+        		fdds2.setFamilyLevelFactor(8d);
+        		fdds1.setFamilyLevelFactor(-4d);
         	}else if(level1Sub2==-20) {
         		fdds2.setFamilyLevelFactor(10d);
-        		fdds1.setFamilyLevelFactor(-10d);
+        		fdds1.setFamilyLevelFactor(-2d);
         	}
         }else {//不得分
         	fdds2.setFamilyLevelFactor(0d);

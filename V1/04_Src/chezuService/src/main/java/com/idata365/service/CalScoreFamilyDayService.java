@@ -222,43 +222,44 @@ public class CalScoreFamilyDayService {
 		if(familyPersonNum==1) {
 			fscore.setFamilyNumFactor(0.5d);
 		}else if(familyPersonNum==2) {
-			fscore.setFamilyNumFactor(0.6d);
-		}else if(familyPersonNum==3) {
-			fscore.setFamilyNumFactor(0.7d);
-		}else if(familyPersonNum==4) {
 			fscore.setFamilyNumFactor(0.8d);
-		}else if(familyPersonNum==5) {
-			fscore.setFamilyNumFactor(0.9d);
-		}else if(familyPersonNum==6) {
-			fscore.setFamilyNumFactor(1d);
-		}else if(familyPersonNum==7) {
+		}else if(familyPersonNum==3) {
 			fscore.setFamilyNumFactor(1.1d);
-		}else if(familyPersonNum==8) {
-			fscore.setFamilyNumFactor(1.2d);
+		}else if(familyPersonNum==4) {
+			fscore.setFamilyNumFactor(1.3d);
+		}else if(familyPersonNum==5) {
+			fscore.setFamilyNumFactor(1.4d);
+		}else if(familyPersonNum==6) {
+			fscore.setFamilyNumFactor(1.5d);
+		}else if(familyPersonNum==7) {
+			fscore.setFamilyNumFactor(1.5d);
+		}else if(familyPersonNum>=8) {
+			fscore.setFamilyNumFactor(1.5d);
 		}else {
 			fscore.setFamilyNumFactor(0.5d);
 		}
 		
-		
-		if(familyRoleNum==1) {
-			fscore.setRoleFactor(0.75d);
-		}else if(familyRoleNum==2) {
-			fscore.setRoleFactor(0.8d);
-		}else if(familyRoleNum==3) {
-			fscore.setRoleFactor(0.85d);
-		}else if(familyRoleNum==4) {
-			fscore.setRoleFactor(0.9d);
-		}else if(familyRoleNum==5) {
-			fscore.setRoleFactor(0.95d);
-		}else if(familyRoleNum==6) {
-			fscore.setRoleFactor(1d);
-		}else if(familyRoleNum==7) {
-			fscore.setRoleFactor(1.05d);
-		}else if(familyRoleNum==8) {
-			fscore.setRoleFactor(1.1d);
-		}else {
-			fscore.setRoleFactor(0.75d);	
-		}
+		//去除角色影响
+		fscore.setRoleFactor(1d);
+//		if(familyRoleNum==1) {
+//			fscore.setRoleFactor(0.75d);
+//		}else if(familyRoleNum==2) {
+//			fscore.setRoleFactor(0.8d);
+//		}else if(familyRoleNum==3) {
+//			fscore.setRoleFactor(0.85d);
+//		}else if(familyRoleNum==4) {
+//			fscore.setRoleFactor(0.9d);
+//		}else if(familyRoleNum==5) {
+//			fscore.setRoleFactor(0.95d);
+//		}else if(familyRoleNum==6) {
+//			fscore.setRoleFactor(1d);
+//		}else if(familyRoleNum==7) {
+//			fscore.setRoleFactor(1.05d);
+//		}else if(familyRoleNum==8) {
+//			fscore.setRoleFactor(1.1d);
+//		}else {
+//			fscore.setRoleFactor(0.75d);	
+//		}
 		
 		if(activeNum==0) {
 			fscore.setMemberFactor(0.8d);
