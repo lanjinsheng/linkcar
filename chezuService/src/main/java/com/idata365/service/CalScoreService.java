@@ -828,7 +828,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			roleMapParam.put("userId", userId);
 			roleMapParam.put("startTime", driveEndTime);
 			roleMapParam.put("endTime", driveEndTime);
-			List<UserFamilyRoleLog> families=userFamilyScoreMapper.getUsersByFamilyId(roleMapParam);
+			List<UserFamilyRoleLog> families=userFamilyScoreMapper.getFamiliesByUserTime(roleMapParam);
 			for(UserFamilyRoleLog family:families) {
 				nDs.setRole(getRole.getRole());
 				nDs.setFamilyId(family.getFamilyId());
@@ -971,7 +971,7 @@ public class CalScoreService extends BaseService<CalScoreService>{
 			roleMapParam.put("userId", userId);
 			roleMapParam.put("startTime", driveEndTime);
 			roleMapParam.put("endTime", driveEndTime);
-			List<UserFamilyRoleLog> families=userFamilyScoreMapper.getUsersByFamilyId(roleMapParam);
+			List<UserFamilyRoleLog> families=userFamilyScoreMapper.getFamiliesByUserTime(roleMapParam);
 			for(UserFamilyRoleLog family:families) {
 				nDs.setRole(getRole.getRole());
 				nDs.setFamilyId(family.getFamilyId());
