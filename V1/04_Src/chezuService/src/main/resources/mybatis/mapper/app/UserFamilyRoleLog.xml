@@ -18,7 +18,7 @@
     </select>-->
     <select id="getUsersByFamilyId" parameterType="java.util.HashMap" resultMap="BaseUserFamilyRoleLogMap" >
         SELECT 
-      * from userFamilyRoleLog where familyId=#{familyId}  and startTime<![CDATA[>=]]>#{startTime} and endTime<![CDATA[<=]]>#{endTime}
+      * from userFamilyRoleLog where familyId=#{familyId}  and startTime<![CDATA[<=]]>#{startTime} and endTime<![CDATA[>=]]>#{endTime}
     </select>
     <select id="getFamiliesByUserTime" parameterType="java.util.HashMap" resultMap="BaseUserFamilyRoleLogMap" >
         SELECT 
