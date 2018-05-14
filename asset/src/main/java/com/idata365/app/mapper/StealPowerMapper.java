@@ -1,13 +1,14 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
-import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.StealPower;
 
 public interface StealPowerMapper {
 
 	int insertSteal(StealPower stealPower);
-    List<StealPower> getStealPowerList(Map<String,Object> map);
- 
+
+	List<StealPower> getStealPowerList(@Param("familyId") long familyId);
 }

@@ -1,7 +1,5 @@
 package com.idata365.app.controller.security;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,7 +129,6 @@ public class AssetController extends BaseController {
 		long powerNum = Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
-
 		Map<String, String> datas = new HashMap<>();
 		try {
 			assetService.stoleFamilyFightPowers(userId, familiesInfo, ballId, powerNum);
@@ -160,15 +157,13 @@ public class AssetController extends BaseController {
 	 *             LiXing
 	 */
 	@RequestMapping("/getFamilyFightPowersRecord")
-	public Map<String, Object> getStolePowersRecord(
-			@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> getStoleRecord(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
-		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
 		StringBuilder sb = new StringBuilder();
-		List<Map<String, String>> result = assetService.getStoleFamilyFightPowers(familiesInfo);
+		List<Map<String, String>> result = assetService.getStoleRecord(familyId);
 		for (Map<String, String> map : result) {
 			sb.append(map.get("userId") + ",");
 		}
@@ -187,14 +182,6 @@ public class AssetController extends BaseController {
 				}
 			}
 		}
-		// 将结果按照时间排序
-		Collections.sort(result, new Comparator<Map<String, String>>() {
-			public int compare(Map<String, String> o1, Map<String, String> o2) {
-				return (Double.valueOf(o2.get("time").replaceAll(":", "")))
-						.compareTo(Double.valueOf(o1.get("time").replaceAll(":", "")));
-			}
-		});
-
 		return ResultUtils.rtSuccess(result);
 	}
 

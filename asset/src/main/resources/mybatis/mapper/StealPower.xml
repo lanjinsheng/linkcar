@@ -8,14 +8,14 @@
 
  
 	<select id="getStealPowerList" resultMap="BaseStealPowerMap"
-		parameterType="java.util.HashMap">
+		parameterType="java.lang.Long">
 		SELECT *
-		FROM stealPower where familyId=#{familyId} and userId=#{userId} and daystamp=#{daystamp}
+		FROM stealPower where familyId=#{familyId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	
  
-     <insert id="insertSteal"   parameterType="com.idata365.app.entity.StealPower">
-            INSERT   INTO 
+     <insert id="insertSteal" parameterType="com.idata365.app.entity.StealPower">
+            INSERT INTO 
             stealPower
             (userId,familyId,ballId,powerNum,remark,daystamp,createTime) 
         VALUES
