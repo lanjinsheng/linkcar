@@ -48,11 +48,11 @@ public class DriveSendMainTask extends TimerTask {
 		synchronized (lock){
 		if(pd){
 			pd=false;
-		
+		try {
 			long taskFlag=System.currentTimeMillis();
 			TaskKeyLog key=new TaskKeyLog();
 			key.setTaskFlag(String.valueOf(taskFlag));
-			key.setTaskName("CalFamilyMonthOrderTask");
+			key.setTaskName("DriveSendMainTask");
 		    int hadKey=	taskKeyLogService.insertColKey(key);
 			if(hadKey==0) { pd=true;return;}
 //			List<Map<String,Object>> postList=new ArrayList<Map<String,Object>>();
@@ -69,9 +69,14 @@ public class DriveSendMainTask extends TimerTask {
 					dataService.updateFailSendDriveTask(drive);
 				}
 			}catch(Exception e) {
+				e.printStackTrace();
 				log.error(e);
 				dataService.updateFailSendDriveTask(drive);
 			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			log.error("严重未知异常:", e);
+		}
 			pd=true;
 		}
 			
