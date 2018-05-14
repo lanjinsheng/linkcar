@@ -89,7 +89,7 @@ public class CalFamilyMonthAvgOrderTask extends TimerTask {
 			if(list.size()==0) {//无任务
 				
 				String sign=SignUtils.encryptHMAC(tf.getDaystamp());
-				boolean r=chezuAssetService.addFamilyGameOrderEnd(sign, tf.getDaystamp());
+				boolean r=chezuAssetService.addFamilyGameOrderEnd( tf.getDaystamp(),sign);
 				if(r) {
 					configSystemTaskService.finishConfigSystemFamilyMonthAvgOrderTask(tf);
 				}
