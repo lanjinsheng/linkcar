@@ -43,7 +43,7 @@ public class DatasDealTask implements Runnable
 	{
 		 log.info("start=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
 		 DataService dataService=SpringContextUtil.getBean("dataService", DataService.class);
-		 YingyanService yingyanService=SpringContextUtil.getBean("yingyanService", YingyanService.class);
+//		 YingyanService yingyanService=SpringContextUtil.getBean("yingyanService", YingyanService.class);
 		 UploadDataStatus status=new UploadDataStatus();
 		 status.setTaskFlag(taskId);
 		 status.setId(id);
@@ -71,11 +71,11 @@ public class DatasDealTask implements Runnable
 	    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 	    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
 	    		 List<Map<String,Object>> alarmListZhuan= (List<Map<String,Object>>)datasMap.get("alarmListZhuan");
-	    		  List<Map<String,Object>> alarmListChao=yingyanService.dealListGaode(list);
+//	    		  List<Map<String,Object>> alarmListChao=yingyanService.dealListGaode(list);
 	    		 eventList.addAll(alarmListJia);
 	    		 eventList.addAll(alarmListJian);
 	    		 eventList.addAll(alarmListZhuan);
-	    		 eventList.addAll(alarmListChao);
+//	    		 eventList.addAll(alarmListChao);
 	    		 String startTime=String.valueOf(datasMap.get("startTime"));
 	    		 String endTime=String.valueOf(datasMap.get("endTime"));
 	    		 Double maxSpeed=Double.valueOf(datasMap.get("maxSpeed").toString());
@@ -126,7 +126,8 @@ public class DatasDealTask implements Runnable
 	    		 data.setSpeedUpTimes(alarmListJia.size());
 	    		 data.setBrakeTimes(alarmListJian.size());
 	    		 data.setTurnTimes(alarmListZhuan.size());
-	    		 data.setOverspeedTimes(alarmListChao.size());
+//	    		 data.setOverspeedTimes(alarmListChao.size());
+	    		 data.setOverspeedTimes(0);
 	    		  //插入数据
 	    		 dataService.insertEvents(data, eventList);
 	    
