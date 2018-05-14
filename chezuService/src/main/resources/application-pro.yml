@@ -30,13 +30,43 @@ spring:
       url: jdbc:mysql://localhost:6633/sjBss?useUnicode=true&characterEncoding=utf-8&useSSL=false
       username: shujin
       password: shujin20180416!
-  
+#连接池的配置信息
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,log4j
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  
+      
     col:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
       url: jdbc:mysql://localhost:6633/sjData?useUnicode=true&characterEncoding=utf-8&useSSL=false
       username: shujin
-      password: shujin20180416!    
+      password: shujin20180416!
+#连接池的配置信息   
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,log4j
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000     
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/**.xml
