@@ -20,7 +20,7 @@ public interface AssetUsersPowerLogsMapper {
 
 	int getSignInLogByUserId(@Param("userId") long userId);
 
-	List<Long> getPowersByEffectId(@Param("ballId") Long ballId);
+	List<Long> getPowersByEffectId(@Param("ballId") long ballId);
 
-	AssetUsersPowerLogs getRecordByEffectId(@Param("effectId") Long effectId);
+	List<AssetUsersPowerLogs> getRecordByEffectId(@Param("effectId") long effectId);
 }
