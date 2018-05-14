@@ -26,6 +26,7 @@ import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.UserLoginSessionMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.PhoneUtils;
  
 
 @Service
@@ -58,7 +59,7 @@ public class AccountService extends BaseService<AccountService>
 		for(String id:users) {
 			UsersAccount account=usersAccountMapper.findAccountById(Long.valueOf(id));
 			if(account!=null) {
-				userNickNames.append(account.getNickName()==null?account.getPhone():account.getNickName());
+				userNickNames.append(account.getNickName()==null?PhoneUtils.hidePhone(account.getPhone()):account.getNickName());
 				userNickNames.append(",");
 				userHeadUrls.append(account.getImgUrl()==null?"":getImgBasePath+account.getImgUrl());
 				userHeadUrls.append(",");
