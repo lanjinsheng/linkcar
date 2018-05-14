@@ -415,7 +415,7 @@ public class AssetService extends BaseService<AssetService> {
 		// 插入日志
 		StealPower steal = new StealPower();
 		steal.setBallId(ballId);
-		steal.setDaystamp(DateTools.getCurDateYYYYMMDD());
+		steal.setDaystamp(DateTools.formatDateD(new Date()));
 		steal.setFamilyId(familyId);
 		steal.setPowerNum((int) powerNum);
 		steal.setUserId(userId);
@@ -437,32 +437,17 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 
 	@Transactional
-	public List<Map<String, String>> getStoleFamilyFightPowers(Map<String, Object> familiesInfo) {
+	public List<Map<String, String>> getStoleRecord(long familyId) {
 		List<Map<String, String>> result = new ArrayList<>();
-		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
-		long fightFamilyId = 0;
-		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
-			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
-		}
 		LOG.info("familyId===============" + familyId);
-		LOG.info("fightFamilyId===============" + fightFamilyId);
-		List<AssetFamiliesPowerLogs> familyPowers = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
-				fightFamilyId);
-		LOG.info("familyPowers.size()===============" + familyPowers.size());
-		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : familyPowers) {
-			long effectId = assetFamiliesPowerLogs.getId();
-			List<AssetUsersPowerLogs> list = assetUsersPowerLogsMapper.getRecordByEffectId(effectId);
-			LOG.info("effectId===============" + effectId);
-			LOG.info("users.size()===============" + list.size());
-			for (AssetUsersPowerLogs user : list) {
-				if (ValidTools.isNotBlank(user)) {
-					Map<String, String> data = new HashMap<>();
-					data.put("powerNum", user.getPowerNum().toString());
-					data.put("time", DateTools.formatDateD(user.getCreateTime()));
-					data.put("userId", user.getUserId().toString());
-					result.add(data);
-				}
-			}
+		List<StealPower> recordList = stealPowerMapper.getStealPowerList(familyId);
+		LOG.info("recordList.size()===============" + recordList.size());
+		for (StealPower record : recordList) {
+			Map<String, String> data = new HashMap<>();
+			data.put("userId", record.getUserId().toString());
+			data.put("powerNum", record.getPowerNum().toString());
+			data.put("time", record.getDaystamp());
+			result.add(data);
 		}
 		return result;
 	}
