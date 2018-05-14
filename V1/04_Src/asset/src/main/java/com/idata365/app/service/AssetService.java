@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -106,9 +107,7 @@ public class AssetService extends BaseService<AssetService> {
 	public Map<String, String> getTotalNums(long userId) {
 		Map<String, String> map = new HashMap<>();
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
-		String num = usersAsset.getDiamondsNum().toString();
-		num = num.substring(0, num.indexOf(".") + 3);
-		map.put("totalDiamondsNum", num);
+		map.put("totalDiamondsNum", usersAsset.getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
 		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
 		return map;
 	}
@@ -304,7 +303,7 @@ public class AssetService extends BaseService<AssetService> {
 			if (assetUsersPowerLogs.getEventType() == 3) {
 				Long effectId = assetUsersPowerLogs.getEffectId();
 				AssetFamiliesPowerLogs familiesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(effectId);
-				if (familiesPowerLogs.getFamilyId() == familyId) {
+				if (familiesPowerLogs.getFamilyId() == familyId || familiesPowerLogs.getFamilyId() == fightFamilyId) {
 					todayReceive += assetUsersPowerLogs.getPowerNum();
 				}
 			} else if (assetUsersPowerLogs.getEventType() == 4) {
@@ -400,7 +399,7 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersPowerLogs.setRecordType(1);
 		assetUsersPowerLogs.setRemark("");
 		this.addUserPowers(assetUsersPowerLogs);
-           
+
 		// 修改家族相关数据
 		AssetFamiliesPowerLogs assetFamiliesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(ballId);
 		long count = assetFamiliesPowerLogs.getCount() + 1;
@@ -412,14 +411,13 @@ public class AssetService extends BaseService<AssetService> {
 			// 修改资产
 			assetFamiliesAssetMapper.updateFamilyPowerMinus(fightFamilyId, powerNum);
 		}
-		
-		
-		//插入日志
-		StealPower steal=new StealPower();
+
+		// 插入日志
+		StealPower steal = new StealPower();
 		steal.setBallId(ballId);
 		steal.setDaystamp(DateTools.getCurDateYYYYMMDD());
 		steal.setFamilyId(familyId);
-		steal.setPowerNum((int)powerNum);
+		steal.setPowerNum((int) powerNum);
 		steal.setUserId(userId);
 		steal.setRemark("");
 		stealPowerMapper.insertSteal(steal);
@@ -446,18 +444,24 @@ public class AssetService extends BaseService<AssetService> {
 		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
 			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
 		}
-
+		LOG.info("familyId===============" + familyId);
+		LOG.info("fightFamilyId===============" + fightFamilyId);
 		List<AssetFamiliesPowerLogs> familyPowers = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
 				fightFamilyId);
+		LOG.info("familyPowers.size()===============" + familyPowers.size());
 		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : familyPowers) {
-			Long effectId = assetFamiliesPowerLogs.getFamilyId();
-			AssetUsersPowerLogs user = assetUsersPowerLogsMapper.getRecordByEffectId(effectId);
-			if (ValidTools.isNotBlank(user)) {
-				Map<String, String> data = new HashMap<>();
-				data.put("powerNum", user.getPowerNum().toString());
-				data.put("time", DateTools.formatDateD(user.getCreateTime()));
-				data.put("userId", user.getUserId().toString());
-				result.add(data);
+			long effectId = assetFamiliesPowerLogs.getId();
+			List<AssetUsersPowerLogs> list = assetUsersPowerLogsMapper.getRecordByEffectId(effectId);
+			LOG.info("effectId===============" + effectId);
+			LOG.info("users.size()===============" + list.size());
+			for (AssetUsersPowerLogs user : list) {
+				if (ValidTools.isNotBlank(user)) {
+					Map<String, String> data = new HashMap<>();
+					data.put("powerNum", user.getPowerNum().toString());
+					data.put("time", DateTools.formatDateD(user.getCreateTime()));
+					data.put("userId", user.getUserId().toString());
+					result.add(data);
+				}
 			}
 		}
 		return result;
