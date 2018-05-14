@@ -123,7 +123,7 @@ public class TaskGenericService {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		long total=Long.valueOf(m.get("powerTotal").toString());
 		Map<String,Object> personPower=taskGenericMapper.getPersonPower(m);
-		Long power=Long.valueOf(personPower.get("hadPowerNum").toString());
+		Long power=Long.valueOf(personPower.get("powerNum").toString());
 		Long userId=Long.valueOf(personPower.get("userId").toString());
 		if(power>0) {
 		BigDecimal dayDiamond=BigDecimal.valueOf(power).multiply(BigDecimal.valueOf(PowerDiamonds)).divide(BigDecimal.valueOf(total), 5,RoundingMode.HALF_EVEN);
