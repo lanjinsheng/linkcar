@@ -1,5 +1,7 @@
 package com.idata365.app.controller.security;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,6 +187,14 @@ public class AssetController extends BaseController {
 				}
 			}
 		}
+		// 将结果按照时间排序
+		Collections.sort(result, new Comparator<Map<String, String>>() {
+			public int compare(Map<String, String> o1, Map<String, String> o2) {
+				return (Double.valueOf(o2.get("time").replaceAll(":", "")))
+						.compareTo(Double.valueOf(o1.get("time").replaceAll(":", "")));
+			}
+		});
+
 		return ResultUtils.rtSuccess(result);
 	}
 
