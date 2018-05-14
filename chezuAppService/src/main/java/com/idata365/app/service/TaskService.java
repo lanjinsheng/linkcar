@@ -85,8 +85,9 @@ public class TaskService extends BaseService<TaskService>
 				stationParamList.add(stationParamBean);
 			}
 		}
-		
-		this.taskMapper.delStations(delParamList);
+		if(delParamList.size()>0){
+			this.taskMapper.delStations(delParamList);
+		}
 		this.taskMapper.saveStations(stationParamList);
 	}
 	
