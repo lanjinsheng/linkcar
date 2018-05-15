@@ -417,6 +417,9 @@ public class AssetService extends BaseService<AssetService> {
 		steal.setBallId(ballId);
 		steal.setDaystamp(DateTools.formatDateD(new Date()));
 		steal.setFamilyId(familyId);
+		if(fightFamilyId!=0) {
+			steal.setFightFamilyId(fightFamilyId);
+		}
 		steal.setPowerNum((int) powerNum);
 		steal.setUserId(userId);
 		steal.setRemark("");
@@ -437,19 +440,10 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 
 	@Transactional
-	public List<Map<String, String>> getStoleRecord(Map<String, Object> familiesInfo) {
-		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
-		long fightFamilyId = 0;
-		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
-			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
-		}
-
+	public List<Map<String, String>> getStoleRecord(long familyId) {
 		List<Map<String, String>> result = new ArrayList<>();
 		LOG.info("familyId===============" + familyId);
 		List<StealPower> recordList = stealPowerMapper.getStealPowerList(familyId);
-		if (recordList == null || recordList.size() == 0) {
-			recordList = stealPowerMapper.getStealPowerList(fightFamilyId);
-		}
 		LOG.info("recordList.size()===============" + recordList.size());
 		for (StealPower record : recordList) {
 			Map<String, String> data = new HashMap<>();

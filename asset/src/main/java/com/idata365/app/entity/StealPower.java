@@ -26,7 +26,14 @@ public class StealPower implements Serializable {
 	private Date createTime;
 	private String daystamp;
 	private Long ballId;
+	private Long fightFamilyId;
 	
+	public Long getFightFamilyId() {
+		return fightFamilyId;
+	}
+	public void setFightFamilyId(Long fightFamilyId) {
+		this.fightFamilyId = fightFamilyId;
+	}
 	public Integer getPowerNum() {
 		return powerNum;
 	}

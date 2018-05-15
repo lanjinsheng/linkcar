@@ -10,15 +10,15 @@
 	<select id="getStealPowerList" resultMap="BaseStealPowerMap"
 		parameterType="java.lang.Long">
 		SELECT *
-		FROM stealPower where familyId=#{familyId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
+		FROM stealPower where #{familyId} in(familyId,fightFamilyId) and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	
  
      <insert id="insertSteal" parameterType="com.idata365.app.entity.StealPower">
             INSERT INTO 
             stealPower
-            (userId,familyId,ballId,powerNum,remark,daystamp,createTime) 
+            (userId,familyId,fightFamilyId,ballId,powerNum,remark,daystamp,createTime) 
         VALUES
-            (#{userId},#{familyId},#{ballId},#{powerNum},#{remark},#{daystamp},now())
+            (#{userId},#{familyId},#{fightFamilyId},#{ballId},#{powerNum},#{remark},#{daystamp},now())
      </insert>
 </mapper>

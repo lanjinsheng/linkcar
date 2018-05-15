@@ -162,9 +162,8 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
-		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
 		StringBuilder sb = new StringBuilder();
-		List<Map<String, String>> result = assetService.getStoleRecord(familiesInfo);
+		List<Map<String, String>> result = assetService.getStoleRecord(familyId);
 		for (Map<String, String> map : result) {
 			sb.append(map.get("userId") + ",");
 		}
