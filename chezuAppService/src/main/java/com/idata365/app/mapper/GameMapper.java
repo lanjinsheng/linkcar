@@ -52,7 +52,7 @@ public interface GameMapper
 	
 	public List<UserFamilyRelationBean> queryUserFamilyRelation();
 	
-	public void saveUserScoreDay(UserScoreDayParamBean bean);
+//	public void saveUserScoreDay(UserScoreDayParamBean bean);
 	
 	public int countBeChallenge(FamilyChallengeLogParamBean bean);
 	
