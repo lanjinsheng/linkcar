@@ -26,21 +26,22 @@ public class SystemVisionService extends BaseService<SystemVisionService> {
 		SystemVisionBean rsp_new = systemVisonMapper.querySystemVisionInfo(req);
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		int rspStatus = -1;
 		if (list.size() == 1) {
-			map.put("skipUrl", 0);
-			map.put("visionStatus", rspStatus);
+			map.put("visionStatus", -1);
 			return map;
 		}
 		for (int i = 0; i < list.size(); i++) {
 			long vv = Long.valueOf(list.get(i).getVision().replaceAll(".", ""));
 			if (vv > v && list.get(i).getStatus() == 1) {
 				map.put("visionStatus", 1);
+				break;
+			} else if (vv > v && list.get(i).getStatus() == 2) {
+				map.put("visionStatus", 2);
 			} else {
-				map.put("visionStatus", rsp_new.getStatus());
+				map.put("visionStatus", -1);
 			}
 		}
-		map.put("skipUrl", rsp_new.getUrl());
+		map.put("skipUrl", 0);
 		return map;
 	}
 }
