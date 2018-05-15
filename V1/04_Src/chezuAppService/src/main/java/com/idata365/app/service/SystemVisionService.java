@@ -36,12 +36,11 @@ public class SystemVisionService extends BaseService<SystemVisionService> {
 			long vv = Long.valueOf(list.get(i).getVision().replaceAll(".", ""));
 			if (vv > v && list.get(i).getStatus() == 1) {
 				map.put("visionStatus", 1);
-				map.put("skipUrl", list.get(i).getUrl());
 			} else {
 				map.put("visionStatus", rsp_new.getStatus());
-				map.put("skipUrl", rsp_new.getUrl());
 			}
 		}
+		map.put("skipUrl", rsp_new.getUrl());
 		return map;
 	}
 }
