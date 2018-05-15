@@ -283,6 +283,7 @@ public class FamilyService extends BaseService<FamilyService>
 			tempScoreDayParamBean.setUserId(bean.getUserId());
 			tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
 			tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
+			tempScoreDayParamBean.setFamilyId(bean.getFamilyId());
 			this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			//初始化用户角色、成绩记录表end------------------
 //		}
@@ -552,6 +553,7 @@ public class FamilyService extends BaseService<FamilyService>
 		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 		tempScoreDayParamBean.setUserId(bean.getUserId());
 		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean0.getId());
+		tempScoreDayParamBean.setFamilyId(familyId);
 		tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
 		this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 		//初始化用户角色、成绩记录表end------------------
