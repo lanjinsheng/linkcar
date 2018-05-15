@@ -198,7 +198,7 @@ public class TaskGenericService {
 		tg.setTaskType(TaskGenericEnum.DoUserSeasonReward);
 		tg.setPriority(10);
 		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.longValue())));
-		taskGenericMapper.insertTask(task);
+		taskGenericMapper.insertTask(tg);
 		return true;
 	}
 	/**
