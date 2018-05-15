@@ -193,7 +193,7 @@ public class TaskGenericService {
 		//增加跃迁下一个任务(成员内部分配)
 		TaskGeneric tg=new TaskGeneric();
 		String preKey=task.getGenericKey().split("_")[0];
-		String taskKey=preKey+"_"+TaskGenericEnum.DoUserSeasonReward;
+		String taskKey=preKey+"_"+TaskGenericEnum.DoUserSeasonReward+"_"+familyId;
 		tg.setGenericKey(taskKey);
 		tg.setTaskType(TaskGenericEnum.DoUserSeasonReward);
 		tg.setPriority(10);
@@ -239,16 +239,17 @@ public class TaskGenericService {
 		List<AssetUsersDiamondsLogs> userList=new ArrayList<AssetUsersDiamondsLogs>();
 		for(int i=0;i<userArray.length;i++) {
 			AssetUsersDiamondsLogs  assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
-			m.put("userId", userArray[0]);
+			m.put("userId", userArray[i]);
 			m.put("tableName", powerTableName);
 			Map<String,Object> power=taskGenericMapper.getUserPowerByUserId(m);
 			long hadPowerNum=Long.valueOf(power.get("hadPowerNum").toString());
 			powerList.add(hadPowerNum);
 			total+=hadPowerNum;
-			assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[0]));
+			assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[i]));
 			assetUsersDiamondsLogs.setRecordType(AssetService.RecordType_1);
+			assetUsersDiamondsLogs.setEffectId(task.getId());
 			assetUsersDiamondsLogs.setEventType(AssetService.EventType_Daimond_GameEnd_User);
-			assetUsersDiamondsLogs.setRemark(powerTableName+"赛季结束分配钻石");
+			assetUsersDiamondsLogs.setRemark("按"+powerTableName+"赛季结束分配钻石");
 			userList.add(assetUsersDiamondsLogs);
 		}
 		//通过用户ids获取用户的能量值。
