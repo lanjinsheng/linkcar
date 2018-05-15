@@ -60,15 +60,7 @@ ON DUPLICATE KEY UPDATE role=#{role}, startTime=#{startTime}, endTime=#{endTime}
 	</insert>
 	
 	<insert id="saveOrUpdateUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
-		<selectKey keyProperty="count" resultType="int" order="BEFORE">
-    		select count(*) from userScoreDayStat where userId=#{userId} and userFamilyScoreId=#{userFamilyScoreId} and daystamp=#{daystamp}
-    	</selectKey>
-    	<if test="count > 0">
-    		update userScoreDayStat set userId=#{userId}, userFamilyScoreId=#{userFamilyScoreId}, daystamp=#{daystamp} where userId=#{userId} and userFamilyScoreId=#{userFamilyScoreId} and daystamp=#{daystamp}
-    	</if>
-    	<if test="count == 0">
-			insert into userScoreDayStat(userId, userFamilyScoreId, daystamp) values(#{userId}, #{userFamilyScoreId}, #{daystamp})
-    	</if>
+		insert ignore into userScoreDayStat(userId, userFamilyScoreId,familyId,daystamp) values(#{userId}, #{userFamilyScoreId},#{familyId},#{daystamp})
 	</insert>
 		
 	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
