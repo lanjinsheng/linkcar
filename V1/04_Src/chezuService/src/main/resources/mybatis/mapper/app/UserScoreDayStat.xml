@@ -20,7 +20,7 @@
             nightDriveTimes=nightDriveTimes+${nightDriveTimes},
          nightDriveTimesUpdateTime= #{nightDriveTimesUpdateTime},
          maxspeed=GREATEST(maxspeed,${maxspeed})
-     where userId=#{userId} and  daystamp=#{daystamp} and userFamilyScoreId=#{userFamilyScoreId}
+     where userId=#{userId} and  daystamp=#{daystamp} and familyId=#{familyId}
     </update>
     
     <update id="updateUserScoreDayById" parameterType="com.idata365.entity.UserScoreDayStat" >
@@ -85,7 +85,7 @@
     </insert>
     
     <select id="getUserDayScoreByUserFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserFamilyRoleLog">
-		SELECT *  from userScoreDayStat where userFamilyScoreId=#{id} and userId=#{userId}
+		SELECT *  from userScoreDayStat where familyId=#{familyId} and userId=#{userId}
 	 </select>
     
 	
