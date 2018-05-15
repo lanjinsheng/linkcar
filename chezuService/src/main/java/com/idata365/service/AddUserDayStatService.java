@@ -168,7 +168,9 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			addFamilyTripPowerLogs(role.getUserId(), uth.getHabitId(),familyId, power,uth.getId());
 			UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
 			userScoreDayStat.setUserId(uth.getUserId());
-			userScoreDayStat.setUserFamilyScoreId(role.getId());
+			//这个错误，应该通过familyId
+			userScoreDayStat.setUserFamilyScoreId(0L);//这个id作废
+			userScoreDayStat.setFamilyId(familyId);
 			userScoreDayStat.setDaystamp(driveEndTime.substring(0,10));
 			userScoreDayStat.setBrakeTimes(uth.getBrakeTimes()-uth.getBrakeTimesOffset());
 			if(uth.getBrakeTimes()>0) {
