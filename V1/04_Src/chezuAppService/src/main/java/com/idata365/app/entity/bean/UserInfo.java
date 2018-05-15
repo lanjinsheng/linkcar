@@ -18,7 +18,7 @@ public class UserInfo extends UsersAccount{
 		this.setPhone(account.getPhone());
 		this.setPwd(account.getPwd());
 		if(account.getNickName()==null){
-			this.setNickName("手机"+PhoneUtils.hidePhone(account.getPhone()));
+			this.setNickName(PhoneUtils.hidePhone(account.getPhone()));
 		}else{
 			this.setNickName(account.getNickName());
 		}
