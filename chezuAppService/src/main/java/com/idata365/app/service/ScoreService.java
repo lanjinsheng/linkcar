@@ -1246,10 +1246,12 @@ public class ScoreService extends BaseService<ScoreService>
 		bean.setUserFamilyRoleIdList(userFamilyRoleIdList);
 		
 		double statMileage = this.scoreMapper.statMileage(bean);
+		LOGGER.info("statMileage============="+statMileage);
 		String mileageStr = BigDecimal.valueOf(statMileage).divide(BigDecimal.valueOf(1000), 1, BigDecimal.ROUND_HALF_UP).toString() + "km";
 		resultBean.setMileage(mileageStr);
 		
 		long statTime = (long)this.scoreMapper.statTime(bean);
+		LOGGER.info("statTime============="+statTime);
 		String timeStr = DurationFormatUtils.formatDuration(statTime*1000L, "HH") + "小时";
 		resultBean.setDuration(timeStr);
 		
