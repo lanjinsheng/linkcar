@@ -1,5 +1,7 @@
 package com.idata365.app.mapper;
 
+import java.util.List;
+
 import com.idata365.app.entity.SystemVisionBean;
 
 /**
@@ -15,4 +17,6 @@ public interface SystemVisionMapper
 	 * 查询版本信息
 	 */
 	SystemVisionBean querySystemVisionInfo(SystemVisionBean bean);
+
+	List<SystemVisionBean> queryAllSystemVisionInfo(SystemVisionBean bean);
 }

@@ -14,7 +14,7 @@ public class SystemVisionBean implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	private int phoneType;
-	// 1最新版本;2.强制升级;3.允许升级
+	// 1.强制升级;2.允许升级
 	private int status;
 	private String vision;
 	private String url;
