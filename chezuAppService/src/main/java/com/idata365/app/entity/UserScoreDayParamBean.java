@@ -12,6 +12,7 @@ public class UserScoreDayParamBean implements Serializable
 	private long id;
 	
 	private long userId;
+	private long familyId;
 	
 	private long userFamilyScoreId;
 	
@@ -20,6 +21,14 @@ public class UserScoreDayParamBean implements Serializable
 	private String day;
 	
 	private int count;
+
+	public long getFamilyId() {
+		return familyId;
+	}
+
+	public void setFamilyId(long familyId) {
+		this.familyId = familyId;
+	}
 
 	public int getCount()
 	{
