@@ -8,5 +8,11 @@
 		from systemVision 
 		where phoneType=#{phoneType} order by id desc limit 1
 	</select>
+	<select id="queryAllSystemVisionInfo" parameterType="com.idata365.app.entity.SystemVisionBean"
+		resultType="com.idata365.app.entity.SystemVisionBean">
+		select * 
+		from systemVision 
+		where phoneType=#{phoneType} order by id desc
+	</select>
 
 </mapper>
