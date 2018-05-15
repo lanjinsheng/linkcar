@@ -13,6 +13,7 @@ public class UserScoreDayStat implements Serializable {
 	
 	private Long userId;
 	private Long userFamilyScoreId;
+	private Long familyId;
 	private Long id;
 	private String daystamp;
 	private Double driveState;
@@ -94,6 +95,12 @@ public class UserScoreDayStat implements Serializable {
 	private int travelNum;
 	
 	
+	public Long getFamilyId() {
+		return familyId;
+	}
+	public void setFamilyId(Long familyId) {
+		this.familyId = familyId;
+	}
 	public Double getMazhaScore() {
 		return mazhaScore;
 	}
