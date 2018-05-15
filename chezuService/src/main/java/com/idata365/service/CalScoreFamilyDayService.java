@@ -53,7 +53,7 @@ public class CalScoreFamilyDayService {
 		roleMapParam.put("endTime", daystamp+" 23:59:59");
 		List<UserFamilyRoleLog> users=userFamilyLogsMapper.getUsersByFamilyId(roleMapParam);
 		int familyPersonNum=users.size();
-		int familyRoleNum=0;
+//		int familyRoleNum=0;
 		int activeNum=0;
 	
 //		Map<Integer,Object> tempMap=new HashMap<Integer,Object>();
