@@ -12,7 +12,7 @@ public class SystemConstant
 	/**
 	 * 邀请码开关(0关，1开)
 	 */
-	public static final int INVITECODE_SWITCH = 0;
+	public static final int INVITECODE_SWITCH = 1;
 
 	/**
 	 * 固定邀请码
