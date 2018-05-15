@@ -20,7 +20,7 @@
         INSERT IGNORE INTO  taskGeneric
 		 (genericKey,jsonValue,taskType,priority,createTime)
 		 select CONCAT(#{genericKey},'_do',id),
-		 CONCAT('{"id":',id,'"orderNo":',orderNo,'"familyId":',familyId,'"familyTotal":',${familyTotal},'}'),
+		 CONCAT('{"id":',id,',"orderNo":',orderNo,',"familyId":',familyId,',"familyTotal":',${familyTotal},'}'),
 		 #{taskType},
 		 #{priority},now() from familyGameAsset where
 		 seasonName=#{season} order by id limit ${limit}
