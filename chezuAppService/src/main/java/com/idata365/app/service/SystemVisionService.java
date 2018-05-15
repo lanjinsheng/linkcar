@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.idata365.app.entity.SystemVisionBean;
 import com.idata365.app.mapper.SystemVisionMapper;
+import com.idata365.app.util.ValidTools;
 
 @Service
 public class SystemVisionService extends BaseService<SystemVisionService> {
@@ -20,28 +21,30 @@ public class SystemVisionService extends BaseService<SystemVisionService> {
 		SystemVisionBean req = new SystemVisionBean();
 		req.setPhoneType(Integer.valueOf(phoneType));
 		req.setVision(vision);
-		long v = Long.valueOf(vision.replaceAll(".", ""));
-		List<SystemVisionBean> list = systemVisonMapper.queryAllSystemVisionInfo(req);
-		// 最新版本
-		SystemVisionBean rsp_new = systemVisonMapper.querySystemVisionInfo(req);
-
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (list.size() == 1) {
-			map.put("visionStatus", -1);
+		map.put("visionStatus", -1);
+		SystemVisionBean bean = systemVisonMapper.querySystemVisionInfo(req);
+		if (ValidTools.isNotBlank(bean)) {
 			return map;
 		}
+
+		int index = -1;
+		List<SystemVisionBean> list = systemVisonMapper.queryAllSystemVisionInfo(req);
 		for (int i = 0; i < list.size(); i++) {
-			long vv = Long.valueOf(list.get(i).getVision().replaceAll(".", ""));
-			if (vv > v && list.get(i).getStatus() == 1) {
-				map.put("visionStatus", 1);
-				break;
-			} else if (vv > v && list.get(i).getStatus() == 2) {
-				map.put("visionStatus", 2);
-			} else {
-				map.put("visionStatus", -1);
+			if (list.get(i).getVision().equals(bean.getVision())) {
+				index = i;
 			}
 		}
-		map.put("skipUrl", 0);
+		if (index > -1 && index + 1 < list.size()) {
+			for (int i = index + 1; i < list.size(); i++) {
+				if (list.get(i).getStatus() == 1) {
+					map.put("visionStatus", 1);
+					return map;
+				} else if (list.get(i).getStatus() == 2) {
+					map.put("visionStatus", 2);
+				}
+			}
+		}
 		return map;
 	}
 }
