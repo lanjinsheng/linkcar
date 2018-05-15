@@ -48,7 +48,7 @@
             speedTimes,speedTimesUpdateTime,overspeedTimes,overspeedTimesUpdateTime,
             tiredDrive,tiredDriveTimes,tiredDriveTimesUpdateTime,nightDriveTimes,nightDriveTimesUpdateTime,maxspeed,
             useShachepian,useHongniu,useYeshijing,useFadongji,
-            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage) 
+            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage,familyId) 
         VALUES
             (#{userId},#{daystamp}, #{userFamilyScoreId}, #{brakeTimes}, #{brakeTimesUpdateTime},#{turnTimes},
             #{turnTimesUpdateTime},
@@ -56,7 +56,7 @@
              #{tiredDrive}, #{tiredDriveTimes}, #{tiredDriveTimesUpdateTime}
             , #{nightDriveTimes}, #{nightDriveTimesUpdateTime},#{maxspeed},
             #{useShachepian},#{useHongniu},#{useYeshijing},#{useFadongji},
-             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage})
+             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage},#{familyId})
         ON DUPLICATE KEY UPDATE 
         brakeTimes=brakeTimes+${brakeTimes},
         brakeTimesUpdateTime=#{brakeTimesUpdateTime},
