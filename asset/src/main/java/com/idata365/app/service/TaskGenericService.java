@@ -226,7 +226,7 @@ public class TaskGenericService {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		String powerTableName=m.get("powerTableName").toString();
 		String diamonds= m.get("diamonds").toString();
-		String orderNum= String.valueOf(m.get("diamonds"));
+		String orderNum= String.valueOf(m.get("orderNum"));
 		long familyId=Long.valueOf(m.get("familyId").toString());
 		String daystamp=task.getGenericKey().split("_")[0];
 		String sign=SignUtils.encryptHMAC(String.valueOf(familyId));
