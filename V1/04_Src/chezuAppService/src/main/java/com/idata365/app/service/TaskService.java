@@ -182,6 +182,7 @@ public class TaskService extends BaseService<TaskService>
 				tempScoreDayParamBean.setUserId(tempBean.getUserId());
 				tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogId);
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
+				tempScoreDayParamBean.setFamilyId(tempBean.getFamilyId());
 				this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			}
 			else
@@ -198,6 +199,7 @@ public class TaskService extends BaseService<TaskService>
 				tempScoreDayParamBean.setUserId(tempBean.getUserId());
 				tempScoreDayParamBean.setUserFamilyScoreId(tomorrowRoleLog.getId());
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
+				tempScoreDayParamBean.setFamilyId(tempBean.getFamilyId());
 				this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			}
 		}
