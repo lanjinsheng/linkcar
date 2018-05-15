@@ -24,7 +24,7 @@ public class SystemVisionService extends BaseService<SystemVisionService> {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("visionStatus", -1);
 		SystemVisionBean bean = systemVisonMapper.querySystemVisionInfo(req);
-		if (ValidTools.isNotBlank(bean)) {
+		if (ValidTools.isBlank(bean)) {
 			return map;
 		}
 
