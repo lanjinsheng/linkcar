@@ -17,6 +17,7 @@ public class FamilyDriveDayStat  implements Serializable {
 	private Integer orderNo;
 	private Double score;
 	private Integer familyType;
+	private Integer familyFlag;
 	private Double scoreComm;
 	private Double scoreAdd;
 	private Integer speedTimes;
@@ -54,6 +55,12 @@ public class FamilyDriveDayStat  implements Serializable {
 	private String endDay;
 	
 	
+	public Integer getFamilyFlag() {
+		return familyFlag;
+	}
+	public void setFamilyFlag(Integer familyFlag) {
+		this.familyFlag = familyFlag;
+	}
 	public Integer getFamilyType() {
 		return familyType;
 	}
