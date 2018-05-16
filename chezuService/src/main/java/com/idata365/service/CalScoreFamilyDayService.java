@@ -110,7 +110,7 @@ public class CalScoreFamilyDayService {
 			if(user.getActiveFlag()==1) {
 				activeNum++;
 			}
-			
+			user.setDaystamp(daystamp);
 			UserScoreDayStat userDayScore=userScoreDayStatMapper.getUserDayScoreByUserFamily(user);
 			if(userDayScore!=null) {
 				mileage+=userDayScore.getMileage();
