@@ -22,7 +22,7 @@ public class MessageTypeConstant {
 	public static final int FamilyType_Kickout=4;
 	public static final int FamilyType_Challenge=5;
 	public static final int FamilyType_Reward=6;
-	
+	public static final int FamilyType_SeasonReward=7;
 	
 	//消息不跳转
 	public static final int MessageUrl_Href_False=2;

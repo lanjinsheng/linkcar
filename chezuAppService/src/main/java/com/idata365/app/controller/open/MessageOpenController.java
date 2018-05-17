@@ -92,7 +92,7 @@ public class MessageOpenController {
     		@RequestParam (value = "diamondNum") String diamondNum,
     		@RequestParam (value = "sign") String sign){
     	LOG.info("param:"+season+"=="+orderNum+"=="+diamondNum+"==sign="+sign);
-    	LOG.info("reSign:"+SignUtils.encryptHMAC(season+orderNum+diamondNum));
+    	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
     	Message msg=messageService.buildFamilyDiamondsMessage(null, toUserId, familyId, season, orderNum, orderNum);
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.DiamondDistr);
@@ -100,6 +100,21 @@ public class MessageOpenController {
         messageService.pushMessageTrans(msg,MessageEnum.DiamondDistr);
     	return true;
     }  
-    
+    @RequestMapping("/app/msg/sendFamilyDiamondsSeasonMsg")
+    public boolean sendFamilyDiamondsSeasonMsg(@RequestParam (value = "season") String season,
+    		@RequestParam (value = "familyId") String familyId,
+    		@RequestParam (value = "familyType") Integer familyType,
+    		@RequestParam (value = "toUserId") Long toUserId,
+    		@RequestParam (value = "diamondNum") String diamondNum,
+    		@RequestParam (value = "sign") String sign){
+    	LOG.info("param:"+season+"=="+familyType+"=="+diamondNum+"==sign="+sign);
+    	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
+    	Message msg=messageService.buildSeasonFamilyDiamondsMessage(null, toUserId, familyId, season, diamondNum, familyType);
+    	//插入消息
+ 		messageService.insertMessage(msg, MessageEnum.DiamondSeasonDistr);
+ 		//用定时器推送
+        messageService.pushMessageTrans(msg,MessageEnum.DiamondSeasonDistr);
+    	return true;
+    }
     
 }
