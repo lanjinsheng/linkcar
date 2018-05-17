@@ -21,6 +21,7 @@ public class UserScoreDayStat implements Serializable {
 	private Double mileageState;
 	private Double speedingState;
 	private Double score;
+	private Double avgScore;
 	private Double mileage;
 	private Double mileageProportion;
 	private Double mileageScore;
@@ -95,6 +96,12 @@ public class UserScoreDayStat implements Serializable {
 	private int travelNum;
 	
 	
+	public Double getAvgScore() {
+		return avgScore;
+	}
+	public void setAvgScore(Double avgScore) {
+		this.avgScore = avgScore;
+	}
 	public Long getFamilyId() {
 		return familyId;
 	}
