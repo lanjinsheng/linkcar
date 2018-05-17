@@ -8,7 +8,7 @@
     
     
  
-    <select id="getUsersDayScoreByFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">
+    <select id="getUsersDayScoreByFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.app.entity.UserScoreDayStat">
 		SELECT *  from userScoreDayStat where familyId=#{familyId}  and daystamp=#{daystamp} order by avgScore desc
 	 </select>
 	
