@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.remote.ChezuAccountService;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.service.AssetService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
@@ -24,8 +25,12 @@ public class AssetController extends BaseController {
 	@Autowired
 	AssetService assetService;
 	@Autowired
-	ChezuAccountService chezuService;
-
+	ChezuAccountService chezuAccountService;
+     
+	@Autowired
+	ChezuAppService chezuAppService;
+     
+	
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -101,7 +106,7 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
+		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
 		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
 	}
 
@@ -128,7 +133,7 @@ public class AssetController extends BaseController {
 		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
 		long powerNum = Long.valueOf(String.valueOf(requestBodyParams.get("power")));
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-		Map<String, Object> familiesInfo = chezuService.getFamiliesInfoByfamilyId(familyId, sign);
+		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
 		Map<String, String> datas = new HashMap<>();
 		try {
 			assetService.stoleFamilyFightPowers(userId, familiesInfo, ballId, powerNum);
@@ -168,7 +173,7 @@ public class AssetController extends BaseController {
 			sb.append(map.get("userId") + ",");
 		}
 		String Ids = sb.toString().substring(0, sb.length());
-		Map<String, Object> map = chezuService.getUsersInfoByIds(Ids, sign);
+		Map<String, Object> map = chezuAccountService.getUsersInfoByIds(Ids, sign);
 
 		if (ValidTools.isNotBlank(map) && ValidTools.isNotBlank(map.get("nickNames"))) {
 			String nikeNames = map.get("nickNames").toString();
@@ -207,6 +212,8 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		//
 		assetService.getDaySignInLog(userId);
+		String sign=SignUtils.encryptHMAC(String.valueOf(userId));
+		chezuAppService.updateLoginBss(userId, sign);
 		return ResultUtils.rtSuccess(null);
 	}
 
