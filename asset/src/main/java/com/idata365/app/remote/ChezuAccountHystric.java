@@ -43,4 +43,10 @@ public class ChezuAccountHystric implements ChezuAccountService {
 	}
 
 
+	@Override
+	public boolean updateLoginTime(long userId, String sign) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

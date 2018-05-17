@@ -38,16 +38,16 @@ public class TaskGenericThread implements Runnable{
 						taskGenericService.doUserDayReward(task);
 						break;
 					}
-					case InitFamilySeasonReward:{
-						taskGenericService.initFamilySeasonReward(task);
+					case InitFamilyDayReward:{
+						taskGenericService.initFamilyDayReward(task);
 						break;
 					}
-					case DoFamilySeasonReward:{
-						taskGenericService.doFamilySeasonReward(task);
+					case DoFamilyDayReward:{
+						taskGenericService.doFamilyDayReward(task);
 						break;
 					}
-					case DoUserSeasonReward:{
-						taskGenericService.doUserSeasonReward(task);
+					case DoUserFamilyDayReward:{
+						taskGenericService.doUserFamilyDayReward(task);
 						break;
 					}
 					default:

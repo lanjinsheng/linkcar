@@ -78,18 +78,18 @@ public class TaskGenericService {
 	}
 	/**
 	 * 
-	    * @Title: initFamilySeasonReward
-	    * @Description: TODO(产生赛季日钻石分配任务)
+	    * @Title: initFamilyDayReward
+	    * @Description: TODO(产生PK日钻石分配任务)
 	    * @param @param task    参数
 	    * @return void    返回类型
 	    * @throws
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public void initFamilySeasonReward(TaskGeneric task) {
+	public void initFamilyDayReward(TaskGeneric task) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("genericKey", task.getGenericKey());
-		map.put("taskType", TaskGenericEnum.DoFamilySeasonReward);
+		map.put("taskType", TaskGenericEnum.DoFamilyDayReward);
 		map.put("priority", 10);
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		long familyTotal=taskGenericMapper.getByFamilyTotal(m.get("season").toString());
@@ -143,7 +143,7 @@ public class TaskGenericService {
 	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"diamonds\":%s}";
 	/**
 	 * 
-	    * @Title: doFamilySeasonReward
+	    * @Title: doFamilyDayReward
 	    * @Description: TODO(家族钻石分配，并增加子任务 家族内部成员钻石分配)
 	    * @param @param task
 	    * @param @return    参数
@@ -152,7 +152,7 @@ public class TaskGenericService {
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public boolean doFamilySeasonReward(TaskGeneric task) {
+	public boolean doFamilyDayReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		long total=Long.valueOf(m.get("familyTotal").toString());
 		long orderNo=Long.valueOf(m.get("orderNo").toString());
@@ -193,9 +193,9 @@ public class TaskGenericService {
 		//增加跃迁下一个任务(成员内部分配)
 		TaskGeneric tg=new TaskGeneric();
 		String preKey=task.getGenericKey().split("_")[0];
-		String taskKey=preKey+"_"+TaskGenericEnum.DoUserSeasonReward+"_"+familyId;
+		String taskKey=preKey+"_"+TaskGenericEnum.DoUserFamilyDayReward+"_"+familyId;
 		tg.setGenericKey(taskKey);
-		tg.setTaskType(TaskGenericEnum.DoUserSeasonReward);
+		tg.setTaskType(TaskGenericEnum.DoUserFamilyDayReward);
 		tg.setPriority(10);
 		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.longValue())));
 		taskGenericMapper.insertTask(tg);
@@ -213,7 +213,7 @@ public class TaskGenericService {
 	 */
 	/**
 	 * 
-	    * @Title: doUserSeasonReward
+	    * @Title: doUserFamilyDayReward
 	    * @Description: TODO(家族成员间进行钻石分配)
 	    * @param @param task
 	    * @param @return    参数
@@ -222,7 +222,7 @@ public class TaskGenericService {
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public boolean doUserSeasonReward(TaskGeneric task) {
+	public boolean doUserFamilyDayReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		String powerTableName=m.get("powerTableName").toString();
 		String diamonds= m.get("diamonds").toString();
@@ -249,7 +249,7 @@ public class TaskGenericService {
 			assetUsersDiamondsLogs.setRecordType(AssetService.RecordType_1);
 			assetUsersDiamondsLogs.setEffectId(task.getId());
 			assetUsersDiamondsLogs.setEventType(AssetService.EventType_Daimond_GameEnd_User);
-			assetUsersDiamondsLogs.setRemark("按"+powerTableName+"赛季结束分配钻石");
+			assetUsersDiamondsLogs.setRemark("按"+powerTableName+"PK结束分配钻石");
 			userList.add(assetUsersDiamondsLogs);
 		}
 		//通过用户ids获取用户的能量值。
@@ -274,7 +274,7 @@ public class TaskGenericService {
 		assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_Distr);
 		assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_2);
 		assetFamiliesDiamondsLogs.setFamilyId(familyId);
-		assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 比赛分配给成员");
+		assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" PK比赛分配给成员");
 		assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
 		assetFamiliesAssetMapper.updateDiamondsReduce(assetFamiliesDiamondsLogs);
 		return true;

@@ -17,9 +17,11 @@ import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersPowerLogs;
 import com.idata365.app.entity.FamilyGameAsset;
+import com.idata365.app.entity.FamilySeasonAsset;
 import com.idata365.app.enums.PowerEnum;
 import com.idata365.app.service.AssetService;
 import com.idata365.app.service.FamilyGameAssetService;
+import com.idata365.app.service.FamilySeasonAssetService;
 import com.idata365.app.service.TaskAutoAddService;
 import com.idata365.app.util.SignUtils;
 
@@ -32,6 +34,8 @@ public class AssetController extends BaseController {
     TaskAutoAddService taskAutoAddService;
 	@Autowired
 	FamilyGameAssetService familyGameAssetService;
+	@Autowired
+	FamilySeasonAssetService familySeasonAssetService;
 	/**
 	 * 
 	 * @Title: getUserAsset
@@ -213,6 +217,23 @@ public class AssetController extends BaseController {
     	return true;
     }
 
+    
+    @RequestMapping(value = "/asset/addFamilySeason",method = RequestMethod.POST)
+    boolean addFamilySeason(@RequestParam(value="sign")   String sign, @RequestBody   FamilySeasonAsset familySeasonAsset){
+    	LOG.info("addFamilySeason:" + familySeasonAsset.getFamilyId()+familySeasonAsset.getTrophy() + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(familySeasonAsset.getFamilyId()+""+familySeasonAsset.getTrophy()));
+		familySeasonAssetService.insertSeasonAsset(familySeasonAsset);
+    	return true;
+    }
+    
+    @RequestMapping(value = "/asset/addFamilySeasonEnd",method = RequestMethod.POST)
+    boolean addFamilySeasonEnd(@RequestParam(value="season")   String season,@RequestParam(value="sign")   String sign) {
+    	LOG.info("addFamilySeasonEnd:" + season + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(season));
+		taskAutoAddService.syncFamilySeasonEndAdd(season);
+		return true;
+    }
+    
 	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
