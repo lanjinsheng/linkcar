@@ -79,6 +79,14 @@
              set lastLoginTime=now()
             where phone=#{phone}
     </update>
+    
+    <update id="updateUserLoginTime"  parameterType="com.idata365.app.entity.UsersAccount" >
+       update  
+            usersAccount
+             set lastLoginTime=now()
+            where id=#{id}
+    </update>
+    
    <update id="updateNickName"  parameterType="com.idata365.app.entity.UsersAccount" >
        update  
             usersAccount
