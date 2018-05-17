@@ -55,7 +55,6 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	SystemProperties systemProperties;
 	@Autowired
 	UserConfigService userConfigService;
-	@Autowired
 	
 	public String getDateStr(int diff)
 	{
