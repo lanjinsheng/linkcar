@@ -50,7 +50,7 @@
             familyScore
             (month,familyId,trophy,startDay,endDay) 
         VALUES
-              select #{month},familyId,trophy,#{startDay},#{endDay} from familyInfo
+              select #{month},id,trophy,#{startDay},#{endDay} from familyInfo
     </insert>	
  <!-- 定时处理行程逻辑 -->
     <update id="lockFamilyDayScoreTask" parameterType="com.idata365.entity.TaskFamilyDayScore" >
