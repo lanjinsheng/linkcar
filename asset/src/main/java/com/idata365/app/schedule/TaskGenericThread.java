@@ -50,6 +50,11 @@ public class TaskGenericThread implements Runnable{
 						taskGenericService.doUserFamilyDayReward(task);
 						break;
 					}
+					case InitFamilySeasonReward:{
+						taskGenericService.InitFamilySeasonReward(task);
+						break;
+					}
+					
 					default:
 						break;
 				}

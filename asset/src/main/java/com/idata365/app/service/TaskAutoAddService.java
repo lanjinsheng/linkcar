@@ -48,7 +48,7 @@ public class TaskAutoAddService {
 	} 
 	private static String jsonValue1="{\"tableName\":\"userPower%s\"}";
 	private static String jsonValue2="{\"season\":\"%s\"}";
-	
+	private static String jsonValue3="{\"season\":\"%s\",\"gameDayNum\":%s}";
 	
 	 
 	
@@ -128,7 +128,7 @@ public class TaskAutoAddService {
 	}
  
 	@Transactional
-	public void syncFamilySeasonEndAdd(String season){
+	public void syncFamilySeasonEndAdd(String season,String gameDayNum){
 //		    String dayStr=getDay("yyyy-MM-dd");
 			String dayStr2=season.replaceAll("-", "");
 			String taskKey=dayStr2+"_"+TaskGenericEnum.InitFamilySeasonReward;
@@ -136,7 +136,7 @@ public class TaskAutoAddService {
 			task.setGenericKey(taskKey);
 			task.setTaskType(TaskGenericEnum.InitFamilySeasonReward);
 			task.setPriority(10);
-			task.setJsonValue(String.format(jsonValue2,season));
+			task.setJsonValue(String.format(jsonValue3,season,gameDayNum));
 			taskGenericMapper.insertTask(task);
 		
 	}

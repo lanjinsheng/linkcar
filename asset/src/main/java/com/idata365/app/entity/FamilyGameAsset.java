@@ -25,6 +25,14 @@ public class FamilyGameAsset implements Serializable {
 	private Long orderNo;
 	private BigDecimal diamondsNum;
 	private String seasonName;
+	private Integer memberNum;
+	
+	public Integer getMemberNum() {
+		return memberNum;
+	}
+	public void setMemberNum(Integer memberNum) {
+		this.memberNum = memberNum;
+	}
 	public Long getId() {
 		return id;
 	}

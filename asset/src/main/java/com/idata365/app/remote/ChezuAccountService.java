@@ -73,7 +73,10 @@ public interface ChezuAccountService {
 	 */
 	@RequestMapping(value = "/account/getUsersByFamilyId",method = RequestMethod.POST)
 	public String  getUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign);
+	@RequestMapping(value = "/account/getUsersByFamilyId",method = RequestMethod.POST)
+	public String  getCurrentUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign);
 
+	
 	@RequestMapping(value = "/account/updateLoginTime",method = RequestMethod.POST)
 	public boolean  updateLoginTime(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign);
 

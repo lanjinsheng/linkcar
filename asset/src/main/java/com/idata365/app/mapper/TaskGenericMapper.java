@@ -21,9 +21,12 @@ public interface TaskGenericMapper {
 	Map<String, Object> getUserPowerByUserId(Map<String, Object> map);
 
 	long getByFamilyTotal(@Param("season") String season);
-
-	void initFamilySeasonReward(Map<String, Object> map);
-
+	
+	long getFamilyTotalByST(Map<String, Object> map);
+	
+	void initDoFamilyDayReward(Map<String, Object> map);
+	void initDoFamilySeasonReward(Map<String, Object> map);
+	
 	void lockTask(TaskGeneric task);
 
 	List<TaskGeneric> getTask(TaskGeneric task);

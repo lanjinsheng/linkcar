@@ -18,4 +18,13 @@ public class ChezuAppHystric implements ChezuAppService {
 		return false;
 	}
 
+
+	@Override
+	public boolean sendFamilyDiamondsSeasonMsg(String season, String familyId, Integer familyType, Long toUserId,
+			String diamondNum, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" sendFamilyDiamondsSeasonMsg 挂了  service-app-chezu");
+		return false;
+	}
+
 }
