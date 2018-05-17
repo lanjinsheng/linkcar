@@ -28,6 +28,7 @@ import com.idata365.mapper.app.TaskFamilyPkMapper;
 import com.idata365.mapper.app.TaskFamilyPkRelationMapper;
 import com.idata365.mapper.app.TaskGameEndMapper;
 import com.idata365.mapper.app.TaskSystemScoreFlagMapper;
+import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.util.DateTools;
 @Service
 public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskService>{
@@ -55,7 +56,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	SystemProperties systemProperties;
 	@Autowired
 	UserConfigService userConfigService;
-	
+	@Autowired
+	UserScoreDayStatMapper userScoreDayStatMapper;
 	public String getDateStr(int diff)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -85,6 +87,8 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			Long t1=DateTools.getDateTimeOfLong(task.getDaystamp()+" 23:59:59");
 			Long t2=System.currentTimeMillis();
 			if(t2>t1 && (t2-t1)<7200000) {//時間到了,未超過2小时，立馬促發
+				String nowDay=getDateStr(0);
+				userScoreDayStatMapper.initUserDayScore(nowDay);
 				task.setUserDayScoreInit(1);
 				taskSystemScoreFlagMapper.updateUserDayScoreInit(task);
 			}
