@@ -57,11 +57,19 @@
                  where familyId=#{familyId}  and startDay=#{startDay} and endDay=#{endDay}
        </insert>	-->
  <!-- 上面屏蔽v1版本，使用v2版本 -->
- 	   <insert id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
+ 	   <update id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
          update
             familyScore trophy=GREATEST(trophy+(${trophy})),0)
                  where familyId=#{familyId}  and startDay=#{startDay} and endDay=#{endDay}
-       </insert>
+       </update>
+       
+        <update id="updateFamilyInfo"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
+         update
+            familyInfo trophy=GREATEST(trophy+(${trophy})),0)
+                 where familyId=#{familyId}
+       </update>
+       
+       
  <!-- 定时处理 -->
     <update id="lockFamilyPkTask" parameterType="com.idata365.entity.TaskFamilyPk" >
        UPDATE 
