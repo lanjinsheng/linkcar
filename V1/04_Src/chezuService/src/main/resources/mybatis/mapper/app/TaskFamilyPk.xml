@@ -3,6 +3,8 @@
 <mapper namespace="com.idata365.mapper.app.TaskFamilyPkMapper">
    <resultMap id="BaseTaskFamilyPkMap" type="com.idata365.entity.TaskFamilyPk" >
     </resultMap>
+    <resultMap id="BaseTaskFamilyDriveDayMap" type="com.idata365.entity.FamilyDriveDayStat" >
+    </resultMap>
    <insert id="initTaskFamilyPk" parameterType="com.idata365.entity.TaskSystemScoreFlag">
       		 INSERT IGNORE INTO  taskFamilyPk
 		 (selfFamilyLevel,competitorFamilyLevel,selfFamilyId,competitorFamilyId,daystamp)
@@ -15,6 +17,20 @@
  	 <select id="getFamilyDayScoreByFD"  resultType="com.idata365.entity.FamilyDriveDayStat" parameterType="com.idata365.entity.FamilyDriveDayStat">
 		SELECT *  from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	 </select>
+	 
+	 
+	 <select id="getNewFamilyDayScore"  resultMap="BaseTaskFamilyDriveDayMap" parameterType="java.util.HashMap">
+		SELECT *  from familyDriveDayStat where daystamp=#{daystamp} and familyFlag=0
+	 </select>
+	 	
+    <update id="giveNewFamilyTrophy"   parameterType="java.util.HashMap">
+      update 
+        familyDriveDayStat   a,
+        familyScore b 
+        set a.trophy=10,b.trophy=10   where a.familyId=b.familyId and a.daystamp=#{daystamp} and a.familyFlag=0
+        and b.startDay=#{startDay} and b.endDay=#{endDay}
+    </update>
+	 <!-- 
 	<update id="updateFamilyDayScoreById" parameterType="com.idata365.entity.FamilyDriveDayStat" >
        UPDATE 
             familyDriveDayStat 
@@ -23,14 +39,29 @@
        WHERE 
             id=#{id}
     </update>	
-	
+	 -->
+	 <!-- 上面屏蔽v1版本，使用v2版本 -->
+	 <update id="updateFamilyDayScoreById" parameterType="com.idata365.entity.FamilyDriveDayStat" >
+       UPDATE 
+            familyDriveDayStat 
+       SET 
+        trophy=${trophy}
+       WHERE 
+            id=#{id}
+    </update>	
+	  <!-- 
 	   <insert id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
          update
             familyScore
                 set score=GREATEST(score+${familyLevelFactor},0),averScore=GREATEST(convert((score+${familyLevelFactor})/(dayTimes),decimal(10,2)),0)
                  where familyId=#{familyId}  and startDay=#{startDay} and endDay=#{endDay}
-       </insert>	
-
+       </insert>	-->
+ <!-- 上面屏蔽v1版本，使用v2版本 -->
+ 	   <insert id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
+         update
+            familyScore trophy=GREATEST(trophy+(${trophy})),0)
+                 where familyId=#{familyId}  and startDay=#{startDay} and endDay=#{endDay}
+       </insert>
  <!-- 定时处理 -->
     <update id="lockFamilyPkTask" parameterType="com.idata365.entity.TaskFamilyPk" >
        UPDATE 

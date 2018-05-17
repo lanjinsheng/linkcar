@@ -156,5 +156,15 @@
 		 update taskSystemScoreFlag
 		  set pkRelation=${pkRelation} where daystamp=#{daystamp}
 	</update>
-	<!--end  pk分配邏輯 --> 
+	<!--end  pk分配邏輯 -->
+	<!-- begin 用户日得分初始化 --> 
+	<select id="getUnInitUserDayScore" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where   userDayScoreInit=0
+	</select>
+	<update id="updatePkRelationInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set userDayScoreInit=${userDayScoreInit} where daystamp=#{daystamp}
+	</update>
+	
+	<!-- End 用户日得分初始化 --> 
 </mapper>

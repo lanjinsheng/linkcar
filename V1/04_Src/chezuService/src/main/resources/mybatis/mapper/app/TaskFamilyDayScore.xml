@@ -21,7 +21,7 @@
 		 speedTimesUpdateTime,brakeTimes,brakePenalTimes,brakeTimesUpdateTime,turnTimes,turnPenalTimes,turnTimesUpdateTime,
 		 overspeedTimes,overspeedPenalTimes,overspeedTimesUpdateTime,nightDriveTimes,nightDrivePenalTimes,nightDriveTimesUpdateTime,
 		 tiredDriveTimes,tiredDrivePenalTimes,tiredDriveTimesUpdateTime,illegalStopTimes,illegalStopPenalTimes,illegalStopUpdateTime,
-		 usePhoneTimes,maxspeed,familyNumFactor,roleFactor,memberFactor,familyLevelFactor,mileage,time)
+		 usePhoneTimes,maxspeed,familyNumFactor,roleFactor,memberFactor,familyLevelFactor,mileage,time,memberNum)
 		 
 		 VALUES(
 		 #{familyId}, #{daystamp}, #{useHoldNum}, #{score}, #{scoreComm}, #{scoreAdd}, #{speedTimes}, #{speedPenalTimes},
@@ -32,7 +32,7 @@
 		  #{tiredDriveTimes}, #{tiredDrivePenalTimes}, #{tiredDriveTimesUpdateTime}, #{illegalStopTimes},
 		   #{illegalStopPenalTimes}, #{illegalStopUpdateTime},
 		  #{usePhoneTimes}, #{maxspeed}, #{familyNumFactor}, #{roleFactor}, #{memberFactor}, #{familyLevelFactor},
-		   #{mileage}, #{time}
+		   #{mileage}, #{time},#{memberNum}
 		 )
 	</insert>
 

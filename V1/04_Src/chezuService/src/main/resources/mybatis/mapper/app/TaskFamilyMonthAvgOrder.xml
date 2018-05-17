@@ -8,18 +8,30 @@
         delete from  taskFamilyMonthAvgOrder
 		   where startDay=#{startDay} and endDay=#{endDay} 
 	</delete>
-    
+    <!--  
    <insert id="initTaskFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder">
           INSERT IGNORE INTO  taskFamilyMonthAvgOrder
 		 (avgScore,orderNo,month,familyId,taskFlag,taskStatus,failTimes,startDay,endDay)
          select averScore,0,month,familyId,0,0,0,startDay,endDay from familyScore  where startDay=#{startDay} and endDay=#{endDay}  order by averScore desc
+	</insert>-->
+	
+	<!-- 上面屏蔽掉，V2通过赛季奖杯进行排序 -->
+    <insert id="initTaskFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder">
+          INSERT IGNORE INTO  taskFamilyMonthAvgOrder
+		 (avgScore,orderNo,trophy,month,familyId,taskFlag,taskStatus,failTimes,startDay,endDay)
+         select averScore,0,trophy,month,familyId,0,0,0,startDay,endDay from familyScore  where startDay=#{startDay} and endDay=#{endDay}  order by averScore desc
 	</insert>
+	
     <update id="updateFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
         update familyScore set
-       beforeYesterdayOrderNo=yesterdayOrderNo,yesterdayOrderNo=#{orderNo} 
+       beforeYesterdayOrderNo=yesterdayOrderNo,yesterdayOrderNo=#{orderNo},familyType=#{familyType} 
         where  familyId=#{familyId} and startDay=#{startDay} and endDay=#{endDay} 
-     </update>
-	
+    </update>
+	 <update id="updateFamilyInfoType" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
+        update familyInfo set
+        familyType=#{familyType} 
+        where  familyId=#{familyId} 
+    </update>
  <!-- 定时处理逻辑 -->
       <select id="getPreTaskRecord" resultMap="BaseTaskFamilyMonthAvgOrderMap" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
       select * from taskFamilyMonthAvgOrder

@@ -16,5 +16,5 @@
 	<select id="getFamiliesByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
     	select * from userFamilyRelation where userId=#{userId}
     </select>
-	
+
 </mapper>
