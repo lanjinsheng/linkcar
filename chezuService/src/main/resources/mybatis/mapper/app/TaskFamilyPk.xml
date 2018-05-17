@@ -59,13 +59,13 @@
  <!-- 上面屏蔽v1版本，使用v2版本 -->
  	   <update id="updateFamilyScore"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
          update
-            familyScore trophy=GREATEST(trophy+(${trophy})),0)
+            familyScore trophy=GREATEST((trophy+(${trophy})),0)
                  where familyId=#{familyId}  and startDay=#{startDay} and endDay=#{endDay}
        </update>
        
         <update id="updateFamilyInfo"  parameterType="com.idata365.entity.FamilyDriveDayStat" >
          update
-            familyInfo trophy=GREATEST(trophy+(${trophy})),0)
+            familyInfo trophy=GREATEST((trophy+(${trophy})),0)
                  where familyId=#{familyId}
        </update>
        
