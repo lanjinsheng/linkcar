@@ -19,8 +19,16 @@ public class UserScoreDayParamBean implements Serializable
 	private String daystamp;
 	
 	private String day;
-	
+	private Double avgScore;
 	private int count;
+
+	public Double getAvgScore() {
+		return avgScore;
+	}
+
+	public void setAvgScore(Double avgScore) {
+		this.avgScore = avgScore;
+	}
 
 	public long getFamilyId() {
 		return familyId;

@@ -2,6 +2,8 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
@@ -18,6 +20,7 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 
 public interface TaskMapper
 {
+	public int updateUserScoreDayByUserId(@Param("userId") Long userId);
 	public List<FamilyRelationBean> queryFamilyRelations(FamilyRelationBean bean);
 	
 	public int countByFamily(FamilyRelationBean bean);

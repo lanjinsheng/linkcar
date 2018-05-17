@@ -43,7 +43,10 @@ public class TaskService extends BaseService<TaskService>
 
 	@Autowired
 	private TaskMapper taskMapper;
-	
+	@Transactional
+	public void updateUserScoreDayByUserId(Long userId){
+		taskMapper.updateUserScoreDayByUserId(userId);
+	}
 	@Transactional
 	public void resetStations()
 	{
@@ -130,29 +133,6 @@ public class TaskService extends BaseService<TaskService>
 			tempParamBean.setStartTime(startTime);
 			tempParamBean.setEndTime(endTime);
 			
-//			DriverVehicleResultBean driveEditStatus = this.taskMapper.queryDriveEditStatus(tempParamBean);
-//			DriverVehicleResultBean travelEditStatus = this.taskMapper.queryTravelEditStatus(tempParamBean);
-
-//			List<Integer> historyRoleList = this.taskMapper.queryRoleExceptDay(tempParamBean);
-			
-			//试用标记位,true表已经试用
-//			boolean flag = false;
-			//没有编辑过驾驶证、行驶证
-//			if (null == driveEditStatus
-//					|| null == travelEditStatus
-//							|| 0 != driveEditStatus.getIsDrivingEdit()
-//							|| 0 != travelEditStatus.getIsTravelEdit())
-//			{
-//				int role = tempBean.getRole();
-//				if (0 != role
-//						&& 7 != role
-//						&& CollectionUtils.isNotEmpty(historyRoleList)
-//						&& historyRoleList.contains(role))
-//				{
-//					flag = true;
-//				}
-//			}
-			
 			//count用户明天的角色
 			UserFamilyRoleLogBean tomorrowRoleLog = this.taskMapper.queryFamilyRoleLog(tempParamBean);
 			if (null == tomorrowRoleLog)
@@ -183,6 +163,7 @@ public class TaskService extends BaseService<TaskService>
 				tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogId);
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
 				tempScoreDayParamBean.setFamilyId(tempBean.getFamilyId());
+				tempScoreDayParamBean.setAvgScore(0d);
 				this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			}
 			else
@@ -200,21 +181,12 @@ public class TaskService extends BaseService<TaskService>
 				tempScoreDayParamBean.setUserFamilyScoreId(tomorrowRoleLog.getId());
 				tempScoreDayParamBean.setDaystamp(tomorrowDateStr);
 				tempScoreDayParamBean.setFamilyId(tempBean.getFamilyId());
+				tempScoreDayParamBean.setAvgScore(0d);
 				this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 			}
 		}
 		
-		//给每个用户赠送一张小纸条
-//		List<Long> userIds = this.taskMapper.queryUserIds();
-//		for (Long tempUserId : userIds)
-//		{
-//			LotteryBean tempLotteryParamBean = new LotteryBean();
-//			tempLotteryParamBean.setUserId(tempUserId);
-//			tempLotteryParamBean.setAwardId(LotteryConstant.ZHITIAO_LOTTERY);
-//			tempLotteryParamBean.setAwardCount(1);
-//			
-//			this.taskMapper.saveOrUpdate(tempLotteryParamBean);
-//		}
+
 	}
 	
 	/**
@@ -296,117 +268,6 @@ public class TaskService extends BaseService<TaskService>
 	 * 初始化第二天的家族PK关系
 	 */
 	@Transactional
-	public void initTomorrowFamilyRelation()
-	{
-		FamilyChallengeLogParamBean bean = new FamilyChallengeLogParamBean();
-		bean.setChallengeDay(getCurrentDayStr());
-		List<FamilyChallengeLogBean> tempList = this.taskMapper.queryChallengeLog(bean);
-		
-		FamilyParamBean bronzeParam = new FamilyParamBean();
-		bronzeParam.setFamilyType(FamilyConstant.BRONZE_TYPE);
-		List<FamilyInfoBean> bronzeList = this.taskMapper.queryFamilyByType(bronzeParam);
-		
-		FamilyParamBean silverParam = new FamilyParamBean();
-		silverParam.setFamilyType(FamilyConstant.SILVER_TYPE);
-		List<FamilyInfoBean> silverList = this.taskMapper.queryFamilyByType(silverParam);
-		
-		FamilyParamBean goldParam = new FamilyParamBean();
-		goldParam.setFamilyType(FamilyConstant.GOLD_TYPE);
-		List<FamilyInfoBean> goldList = this.taskMapper.queryFamilyByType(goldParam);
-		
-		String tomorrowDateStr = getTomorrowDateStr();
-		
-		FamilyRelationParamBean delFamilyRelationParamBean = new FamilyRelationParamBean();
-		delFamilyRelationParamBean.setDaystamp(tomorrowDateStr);
-		this.taskMapper.delFamilyRelations(delFamilyRelationParamBean);
-		
-		//tempList中的家族全部都能匹配上挑战的家族
-		for (FamilyChallengeLogBean tempBean : tempList)
-		{
-			long familyId = tempBean.getFamilyId();
-			int prevType = tempBean.getPrevType();
-			int challengeType = tempBean.getChallengeType();
-
-			if (challengeType == FamilyConstant.BRONZE_TYPE && CollectionUtils.isNotEmpty(bronzeList))
-			{
-				//绑定并从***List移除被配对的家族
-				bindFamily(bronzeList, familyId, tomorrowDateStr);
-				
-				//移除familyId对应的家族
-				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
-			}
-			else if (challengeType == FamilyConstant.SILVER_TYPE && CollectionUtils.isNotEmpty(silverList))
-			{
-				bindFamily(silverList, familyId, tomorrowDateStr);
-				
-				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
-			}
-			else if (challengeType == FamilyConstant.GOLD_TYPE && CollectionUtils.isNotEmpty(goldList))
-			{
-				bindFamily(goldList, familyId, tomorrowDateStr);
-				
-				getRidSelfFamily(bronzeList, silverList, goldList, familyId, prevType);
-			}
-		}
-		
-		List<FamilyInfoBean> leftFamilyList = new ArrayList<>();
-		if (CollectionUtils.isNotEmpty(bronzeList))
-		{
-			leftFamilyList.addAll(bronzeList);
-		}
-		if (CollectionUtils.isNotEmpty(silverList))
-		{
-			leftFamilyList.addAll(silverList);
-		}
-		if (CollectionUtils.isNotEmpty(goldList))
-		{
-			leftFamilyList.addAll(goldList);
-		}
-		
-		if (CollectionUtils.isNotEmpty(leftFamilyList))
-		{
-			if (leftFamilyList.size() == 1)
-			{
-				//temp settings robot
-				FamilyInfoBean lastFamilyInfo = leftFamilyList.get(0);
-				
-				FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
-				relationParamBean.setSelfFamilyId(lastFamilyInfo.getId());
-				relationParamBean.setCompetitorFamilyId(FamilyConstant.ROBOT_FAMILY_ID);
-				relationParamBean.setDaystamp(tomorrowDateStr);
-				this.taskMapper.saveFamilyRelation(relationParamBean);
-			}
-			else
-			{
-				for (int i = 0; i < leftFamilyList.size(); i++)
-				{
-					if (i%2 == 1)
-					{
-						FamilyInfoBean firstFamily = leftFamilyList.get(i-1);
-						FamilyInfoBean secondFamily = leftFamilyList.get(i);
-						long firstFamilyId = firstFamily.getId();
-						long secondFamilyId = secondFamily.getId();
-						FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
-						relationParamBean.setSelfFamilyId(firstFamilyId);
-						relationParamBean.setCompetitorFamilyId(secondFamilyId);
-						relationParamBean.setDaystamp(tomorrowDateStr);
-						this.taskMapper.saveFamilyRelation(relationParamBean);
-					}
-				}
-				
-				if (leftFamilyList.size() % 2 == 1)
-				{
-					FamilyInfoBean lastFamilyInfo = leftFamilyList.get(leftFamilyList.size() - 1);
-					//temp settings robot
-					FamilyRelationParamBean relationParamBean = new FamilyRelationParamBean();
-					relationParamBean.setSelfFamilyId(lastFamilyInfo.getId());
-					relationParamBean.setCompetitorFamilyId(FamilyConstant.ROBOT_FAMILY_ID);
-					relationParamBean.setDaystamp(tomorrowDateStr);
-					this.taskMapper.saveFamilyRelation(relationParamBean);
-				}
-			}
-		}
-	}
 	
 	/**
 	 * 随机familyList中的家族与familyId配对，并从familyList移除被配对的家族
@@ -439,47 +300,5 @@ public class TaskService extends BaseService<TaskService>
 		}
 	}
 	
-	//从前三个list中移除familyId对应的家族
-	private void getRidSelfFamily(List<FamilyInfoBean> bronzeList, List<FamilyInfoBean> silverList, List<FamilyInfoBean> goldList, long familyId, int prevType)
-	{
-		if (prevType == FamilyConstant.BRONZE_TYPE)
-		{
-			Iterator<FamilyInfoBean> iter = bronzeList.iterator();
-			while (iter.hasNext())
-			{
-				FamilyInfoBean tempFamilyInfo = iter.next();
-				if (tempFamilyInfo.getId() == familyId)
-				{
-					iter.remove();
-					break;
-				}
-			}
-		}
-		else if (prevType == FamilyConstant.SILVER_TYPE)
-		{
-			Iterator<FamilyInfoBean> iter = silverList.iterator();
-			while (iter.hasNext())
-			{
-				FamilyInfoBean tempFamilyInfo = iter.next();
-				if (tempFamilyInfo.getId() == familyId)
-				{
-					iter.remove();
-					break;
-				}
-			}
-		}
-		else
-		{
-			Iterator<FamilyInfoBean> iter = goldList.iterator();
-			while (iter.hasNext())
-			{
-				FamilyInfoBean tempFamilyInfo = iter.next();
-				if (tempFamilyInfo.getId() == familyId)
-				{
-					iter.remove();
-					break;
-				}
-			}
-		}
-	}
+	
 }
