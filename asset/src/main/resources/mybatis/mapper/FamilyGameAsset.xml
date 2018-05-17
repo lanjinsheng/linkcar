@@ -14,9 +14,9 @@
      <insert id="insertFamilyGameAsset"   parameterType="com.idata365.app.entity.FamilyGameAsset">
             INSERT IGNORE  INTO 
             familyGameAsset
-            (familyId,startDay,endDay,orderNo,seasonName) 
+            (familyId,startDay,endDay,orderNo,seasonName,memberNum) 
         VALUES
-            (#{familyId},#{startDay},#{endDay},#{orderNo},#{seasonName})
+            (#{familyId},#{startDay},#{endDay},#{orderNo},#{seasonName},#{memberNum})
      </insert>
      
      
