@@ -164,13 +164,13 @@ public class AccountController extends BaseController{
 
 	
 	
-	@RequestMapping(value = "/account/updateLoginTime",method = RequestMethod.POST)
-	public boolean  updateLoginTime(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
+	@RequestMapping(value = "/account/updateLoginBss",method = RequestMethod.POST)
+	public boolean  updateLoginBss(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
 
 	{
 		LOG.info("userId="+userId+"===sign="+sign);
 		LOG.info("valid sign="+SignUtils.encryptHMAC(String.valueOf(userId)));
-		 accountService.updateUserLoginTime(userId);
+		accountService.updateUserLoginTime(userId);
 		return true;
 	}
 }
