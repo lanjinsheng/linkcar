@@ -311,7 +311,7 @@
 		  VALUES
     		(#{selfFamilyId},#{competitorFamilyId},#{daystamp}) 
 	</insert>
-     <insert id="insertFamilyDriveDayStat" parameterType="com.idata365.entity.FamilyDriveDayStat">
+     <insert id="insertFamilyDriveDayStat" parameterType="com.idata365.app.entity.FamilyDriveDayStat">
 		 INSERT IGNORE INTO  familyDriveDayStat
 		 (familyId,daystamp,familyType,familyFlag)
 		 VALUES(
