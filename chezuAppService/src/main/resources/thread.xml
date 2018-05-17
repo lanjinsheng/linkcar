@@ -228,9 +228,9 @@
 	    class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
 	    <property name="triggers">  
 	        <list>  
+	         <!-- 
 	        	<ref bean="cronTriggerFactoryBean" />  
 	            <ref bean="stationTaskCronTriggerFactoryBean" />  
-	            <!-- 
 	            <ref bean="cronTriggerFactoryBean" />  
 	            <ref bean="familyRelationCronTriggerFactoryBean" />  
 	            <ref bean="stationTaskCronTriggerFactoryBean" />  
