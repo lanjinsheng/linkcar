@@ -91,8 +91,8 @@
     <property name="runnable" ref="configInitTask" />  
     <!-- 容器加载10秒后开始执行 -->  
     <property name="delay" value="10000" /> 
-        <!-- 每次任务间隔10*60*1000毫秒-->  
-    <property name="period" value="20000" />   
+        <!-- 每次任务间隔60*1000毫秒-->  
+    <property name="period" value="300000" />   
   </bean> 
   <!--End#######################初始化家族计分任务数据#######################################################-->
  
@@ -157,19 +157,6 @@
         <!-- 每次任务间隔10*60*1000毫秒-->  
     <property name="period" value="20000" />   
   </bean> 
-  
-    <bean id="calFamilyMonthOrderTask" class="com.idata365.schedule.CalFamilyMonthOrderTask">  
-    <property name="threadPool" ref="threadPool"></property>
-  </bean>  
-   
-  <bean id="calFamilyMonthOrderTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">  
-    <property name="runnable" ref="calFamilyMonthOrderTask" />  
-    <!-- 容器加载10秒后开始执行 -->  
-    <property name="delay" value="10000" /> 
-        <!-- 每次任务间隔10*60*1000毫秒-->  
-    <property name="period" value="20000" />   
-  </bean> 
-  
   
   <bean id="calFamilyMonthAvgOrderTask" class="com.idata365.schedule.CalFamilyMonthAvgOrderTask">  
     <property name="threadPool" ref="threadPool"></property>
@@ -294,8 +281,8 @@
 	   <ref bean="calFamilyDayPkTaskExe"/> 
 	   <ref bean="calFamilyDayOrderTaskExe"/> 
        <ref bean="calFamilyMonthAvgOrderTaskExe"/> 
-       <ref bean="calGameEndTaskExe"/>
-       <ref bean="calUserDayEndBestDriveTaskExe"/> 
+       <!--<ref bean="calGameEndTaskExe"/> -->
+     <!--  <ref bean="calUserDayEndBestDriveTaskExe"/> -->
        <ref bean="calFamilyDayEndLevelTaskExe"/> 
        
        <ref bean="configInitTaskExe"/> 
