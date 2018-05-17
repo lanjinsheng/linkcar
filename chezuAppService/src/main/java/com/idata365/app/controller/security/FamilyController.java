@@ -187,6 +187,8 @@ public class FamilyController extends BaseController
 		{
 			return ResultUtils.rtFailVerification(null);
 		}
+		//初始化家族分数
+		
 		//家族资产初始化
 		chezuAssetService.initFamilyCreate(familyId, SignUtils.encryptHMAC(String.valueOf(familyId)));
 		Map<String, Long> resultMap = new HashMap<>();
