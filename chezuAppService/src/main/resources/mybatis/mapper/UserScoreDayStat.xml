@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserScoreDayStatMapper">
+   <resultMap id="BaseUserScoreDayStatMap" type="com.idata365.app.entity.UserScoreDayStat" >
+   </resultMap>
+    
+ 
+    
+    
+ 
+    <select id="getUsersDayScoreByFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">
+		SELECT *  from userScoreDayStat where familyId=#{familyId}  and daystamp=#{daystamp} order by avgScore desc
+	 </select>
+	
+	 
+	
+</mapper>
