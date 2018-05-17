@@ -218,14 +218,6 @@ public class CalScoreFamilyDayServiceV2 {
 		fscore.setRoleFactor(1d);
 		fscore.setMemberFactor(1.0d);
 		fscore.setMemberNum(familyPersonNum);
-//		if(familyPersonNum==0) {
-//			scoreComm=0d;
-//		}else {
-//		scoreComm=BigDecimal.valueOf(scoreComm).divide(BigDecimal.valueOf(familyPersonNum),2,RoundingMode.HALF_UP)
-//				.multiply(BigDecimal.valueOf(fscore.getRoleFactor()))
-//				.multiply(BigDecimal.valueOf(fscore.getFamilyNumFactor())).doubleValue();
-//		}
-//		score=avgScore;
 		fscore.setScore(avgScore);
 		fscore.setScoreComm(scoreComm);
 		taskFamilyDayScoreMapper.insertFamilyDriveDayStat(fscore);

@@ -22,6 +22,7 @@ public interface TaskFamilyPkMapper {
 	 int updateFamilyDayScoreById(FamilyDriveDayStat familyDriveDayStat);
 	 int  initTaskFamilyPk(TaskSystemScoreFlag task);
 	 int updateFamilyScore(FamilyDriveDayStat familyDriveDayStat);
+	 int updateFamilyInfo(FamilyDriveDayStat familyDriveDayStat);
 	 int giveNewFamilyTrophy(Map<String,Object> map);
 	 List<FamilyDriveDayStat>  getNewFamilyDayScore(Map<String,Object> map);
 	 
