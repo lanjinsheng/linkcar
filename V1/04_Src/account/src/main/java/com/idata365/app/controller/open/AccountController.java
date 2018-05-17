@@ -146,6 +146,24 @@ public class AccountController extends BaseController{
 		return null;
 	}
 
+	@RequestMapping(value = "/account/getUsersByFamilyId",method = RequestMethod.POST)
+	public String  getCurrentUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign)
+	{
+		LOG.info("familyId="+familyId+"===sign="+sign);
+		StringBuffer sb=new StringBuffer();
+		List<Map<String,Object>> list= accountService.getCurrentUsersByFamilyId(familyId, daystamp);
+		for(Map<String,Object> m:list) {
+			sb.append(String.valueOf(m.get("userId")));
+			sb.append(",");
+		}
+		if(sb.length()>0) {
+			return sb.toString().substring(0, sb.length()-1);
+		}
+		return null;
+	}
+
+	
+	
 	@RequestMapping(value = "/account/updateLoginTime",method = RequestMethod.POST)
 	public boolean  updateLoginTime(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
 

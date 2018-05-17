@@ -31,5 +31,6 @@ public interface UsersAccountMapper {
 	 List<Map<String,Object>> findFamilyRelation(@Param("familyId") Long familyId);
 	 //
 	 List<Map<String,Object>> getUsersByFamilyId(Map<String,Object> map);
+	 List<Map<String,Object>> getCurrentUsersByFamilyId(Map<String,Object> map);
 	 
 }
