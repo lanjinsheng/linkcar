@@ -51,5 +51,8 @@ public interface ChezuAppService {
     		@RequestParam (value = "diamondNum") String diamondNum,
     		@RequestParam (value = "sign") String sign);
 	
+	@RequestMapping(value = "/app/updateLoginBss",method = RequestMethod.POST)
+	public boolean  updateLoginBss(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign);
+
 	
 }

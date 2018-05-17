@@ -27,4 +27,12 @@ public class ChezuAppHystric implements ChezuAppService {
 		return false;
 	}
 
+
+	@Override
+	public boolean updateLoginBss(long userId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" updateLoginBss 挂了  service-app-chezu");
+		return false;
+	}
+
 }
