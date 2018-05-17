@@ -16,19 +16,35 @@
 		 (genericKey,jsonValue,taskType,priority,createTime)
 		 select CONCAT(#{genericKey},'_do',id),CONCAT('{"id":',id,',"tableName":"',#{tableName},'","powerTotal":',${powerTotal},'}'),#{taskType},#{priority},now() from ${tableName}
     </insert>
-    <insert id="initFamilySeasonReward"  parameterType="java.util.HashMap">
+    <insert id="initDoFamilyDayReward"  parameterType="java.util.HashMap">
         INSERT IGNORE INTO  taskGeneric
 		 (genericKey,jsonValue,taskType,priority,createTime)
 		 select CONCAT(#{genericKey},'_do',id),
-		 CONCAT('{"id":',id,',"orderNo":',orderNo,',"familyId":',familyId,',"familyTotal":',${familyTotal},'}'),
+		 CONCAT('{"id":',id,',"orderNo":',orderNo,',"familyId":',familyId,',"familyPersonTotal":',${familyPersonTotal},'}'),
 		 #{taskType},
 		 #{priority},now() from familyGameAsset where
-		 seasonName=#{season} order by id limit ${limit}
+		 seasonName=#{season} order by id
     </insert>
+    
+    <insert id="initDoFamilySeasonReward"  parameterType="java.util.HashMap">
+        INSERT IGNORE INTO  taskGeneric
+		 (genericKey,jsonValue,taskType,priority,createTime)
+		 select CONCAT(#{genericKey},'_do',id),
+		 CONCAT('{"id":',id,',"orderNo":',orderNo,',"familyId":',familyId,',"familyType":',familyType,',"diamondsNum":',${diamondsNum},'}'),
+		 #{taskType},
+		 #{priority},now() from familySeasonAsset  
+		 		 
+		  where seasonName=#{season} and <![CDATA[familyType>=${familyTypeStart} and familyType<=${familyTypeEnd}]]>
+    </insert>
+    
+    
     <select id="getByFamilyTotal"  resultType="java.lang.Long" parameterType="java.lang.String">
-		SELECT count(1)  from familyGameAsset where seasonName=#{season}
+		SELECT sum(memberNum)  from familyGameAsset where seasonName=#{season}
 	 </select>
     
+    <select id="getByFamilyTotalByST"  resultType="java.lang.Long" parameterType="java.util.HashMap">
+		SELECT sum(memberNum)  from familySeasonAsset where seasonName=#{season} and <![CDATA[familyType>=${familyTypeStart} and familyType<=${familyTypeEnd}]]>
+	 </select>
  	<select id="getByGenericKey"  resultMap="BaseTaskGenericMap" parameterType="java.lang.String">
 		SELECT *  from taskGeneric where genericKey=#{genericKey} and taskStatus=1
 	 </select>
