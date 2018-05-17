@@ -55,14 +55,18 @@
 	 -->
 	<insert id="saveUserFamilyRole" parameterType="com.idata365.app.entity.UserFamilyRoleLogParamBean" useGeneratedKeys="true" keyProperty="id">
 		insert IGNORE into userFamilyRoleLog(userId, familyId, daystamp, role, startTime, endTime) 
-values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime}) 
-ON DUPLICATE KEY UPDATE role=#{role}, startTime=#{startTime}, endTime=#{endTime}
+		values(#{userId}, #{familyId}, #{daystamp}, #{role}, #{startTime}, #{endTime}) 
+		ON DUPLICATE KEY UPDATE role=#{role}, startTime=#{startTime}, endTime=#{endTime}
 	</insert>
 	
 	<insert id="saveOrUpdateUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
-		insert ignore into userScoreDayStat(userId, userFamilyScoreId,familyId,daystamp) values(#{userId}, #{userFamilyScoreId},#{familyId},#{daystamp})
+		insert ignore into userScoreDayStat(userId, userFamilyScoreId,familyId,daystamp,avgScore)
+		 values(#{userId}, #{userFamilyScoreId},#{familyId},#{daystamp},#{avgScore})
 	</insert>
-		
+	<update id="updateUserScoreDayByUserId" parameterType="java.lang.Long">
+		update userScoreDayStat set 
+ 			avgScore=30 where userId=#{userId} and avgScore=0
+	</update>	
 	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
 		select familyId, prevType, challengeType from familyChallengeLog where challengeDay=#{challengeDay} order by id asc
 	</select>
