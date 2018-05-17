@@ -77,27 +77,17 @@ public class CalFamilyDayEndLevelTask extends TimerTask {
 			task.setDaystamp(tf.getDaystamp());
 			task.setTaskFlag(String.valueOf(taskFlag));
 			List<TaskFamilyDayEnd> list=taskFamilyDayEndService.getFamilyLevelDayEndTask(task);
-			int level1=0,level2=0,level3=0;
 			if(list.size()==0) {//无任务
 				configSystemTaskService.finishFamilyLevelDayEndTask(tf);
 				continue;
-			}else {
-				int max=taskFamilyDayEndService.maxOrderNo(tf);
-				level1=(int)(max*0.1);
-				level2=(int)(max*0.3);
-				level3=max;
-			}
+			}else {}
 			log.info("CalFamilyDayEndLevelTask do--list.size="+list.size());
 			
 				for(TaskFamilyDayEnd taskDayEnd:list) {
 					try {
-						boolean result=taskFamilyDayEndService.calLevel(taskDayEnd, level1, level2, level3);
 						 
-					if(result) {
 						taskFamilyDayEndService.updateSuccFamilyDayEndTask(taskDayEnd);
-					}else {
-						taskFamilyDayEndService.updateFailFamilyDayEndTask(taskDayEnd);
-					}
+					 
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
