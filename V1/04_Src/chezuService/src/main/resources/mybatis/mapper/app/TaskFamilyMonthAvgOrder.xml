@@ -30,7 +30,7 @@
 	 <update id="updateFamilyInfoType" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
         update familyInfo set
         familyType=#{familyType} 
-        where  familyId=#{familyId} 
+        where  id=#{familyId} 
     </update>
  <!-- 定时处理逻辑 -->
       <select id="getPreTaskRecord" resultMap="BaseTaskFamilyMonthAvgOrderMap" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
