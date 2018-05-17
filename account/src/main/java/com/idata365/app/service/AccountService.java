@@ -159,6 +159,13 @@ public class AccountService extends BaseService<AccountService>
 		param.put("daystamp", daystamp);
 		return usersAccountMapper.getUsersByFamilyId(param);
 	}
+	@Transactional
+	public boolean updateUserLoginTime(long userId){
+		UsersAccount u=new UsersAccount();
+		u.setId(userId);
+		usersAccountMapper.updateUserLoginTime(u);
+		return true;
+	}
 	
 	
 }

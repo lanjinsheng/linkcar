@@ -15,6 +15,7 @@ import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.AccountService;
 import com.idata365.app.service.LoginRegService;
+import com.idata365.app.util.SignUtils;
 
 @RestController
 public class AccountController extends BaseController{
@@ -144,6 +145,14 @@ public class AccountController extends BaseController{
 		}
 		return null;
 	}
-	
-	
+
+	@RequestMapping(value = "/account/updateLoginTime",method = RequestMethod.POST)
+	public boolean  updateLoginTime(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
+
+	{
+		LOG.info("userId="+userId+"===sign="+sign);
+		LOG.info("valid sign="+SignUtils.encryptHMAC(String.valueOf(userId)));
+		 accountService.updateUserLoginTime(userId);
+		return true;
+	}
 }

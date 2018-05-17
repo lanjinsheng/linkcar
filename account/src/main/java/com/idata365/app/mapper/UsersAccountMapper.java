@@ -13,7 +13,7 @@ public interface UsersAccountMapper {
 	 void  insertUser(UsersAccount account);
 	 void  updateUserPwd(UsersAccount account);
 	 void  updateUserLogin(UsersAccount account);
-	 
+	 int  updateUserLoginTime(UsersAccount account);
 	 UsersAccount  findAccountById(@Param("id")  Long id);
 	 UsersAccount  findAccountByIdAndPwd(UsersAccount account);
 	 void  updateNickName(UsersAccount account);
