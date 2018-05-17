@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.FamilySeasonAssetMapper">
+    <resultMap id="BaseFamilySeasonAssetMap" type="com.idata365.app.entity.FamilySeasonAsset" >
+    </resultMap>
+
+     <insert id="insertFamilySeasonAsset"   parameterType="com.idata365.app.entity.FamilySeasonAsset">
+            INSERT IGNORE  INTO 
+            familySeasonAsset
+            (familyId,familyType,startDay,endDay,orderNo,seasonName,trophy) 
+        VALUES
+            (#{familyId},#{familyType},#{startDay},#{endDay},#{orderNo},#{seasonName},#{trophy})
+     </insert>
+     
+</mapper>
