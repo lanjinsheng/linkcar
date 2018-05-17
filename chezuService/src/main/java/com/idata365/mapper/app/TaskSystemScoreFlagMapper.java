@@ -70,4 +70,9 @@ public interface TaskSystemScoreFlagMapper {
 	 
 	 List<TaskSystemScoreFlag> getUnFinishPKRelationList();
 	 int  finishPKRelation(TaskSystemScoreFlag systemScoreFlag);
+	 
+	 //用戶日得分初始化
+	 List<TaskSystemScoreFlag> getUnInitUserDayScore(); 
+	 int  updateUserDayScoreInit(TaskSystemScoreFlag systemScoreFlag);
+	 
 }

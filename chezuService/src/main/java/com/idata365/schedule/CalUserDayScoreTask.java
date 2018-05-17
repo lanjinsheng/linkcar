@@ -10,6 +10,7 @@ import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.service.CalScoreUserDayService;
+import com.idata365.service.CalScoreUserDayServiceV2;
 import com.idata365.service.ConfigSystemTaskService;
 import com.idata365.service.TaskKeyLogService;
 
@@ -30,8 +31,10 @@ public class CalUserDayScoreTask extends TimerTask {
 	
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
+//    @Autowired
+//    CalScoreUserDayService calScoreUserDayService;
     @Autowired
-    CalScoreUserDayService calScoreUserDayService;
+    CalScoreUserDayServiceV2 calScoreUserDayService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
     @Autowired

@@ -9,16 +9,18 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.idata365.entity.TaskFamilyPk;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
-import com.idata365.service.CalFamilyPkService;
+import com.idata365.remote.ChezuAssetService;
+import com.idata365.service.CalFamilyPkServiceV2;
 import com.idata365.service.ConfigSystemTaskService;
 import com.idata365.service.TaskKeyLogService;
+import com.idata365.util.SignUtils;
 
 
 
 /**
  * 
     * @ClassName: CalFamilyDayPkTask
-    * @Description: TODO(家族pk结果统计并更新分数)
+    * @Description: TODO(家族pk结果统计并更新奖杯数，同步赢家到资产模块)
     * @author LanYeYe
     * @date 2017年12月31日
     *
@@ -31,9 +33,11 @@ public class CalFamilyDayPkTask extends TimerTask {
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
-    CalFamilyPkService calFamilyPkService;
+    CalFamilyPkServiceV2 calFamilyPkService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
+    @Autowired
+    ChezuAssetService chezuAssetService;
     @Autowired
     TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
@@ -70,7 +74,14 @@ public class CalFamilyDayPkTask extends TimerTask {
 			task.setTaskFlag(String.valueOf(taskFlag));
 			List<TaskFamilyPk> list=calFamilyPkService.getFamilyPkTask(task);
 			if(list.size()==0) {//无任务
-				configSystemTaskService.finishConfigSystemFamilyPkTask(tf);
+				//对新用户进行扫尾工作（进行更新新用户奖杯）(新用户按赢家发送到资产)
+				calFamilyPkService.giveNewFamilyTrophy(timestamp, tf.getStartDay(), tf.getEndDay());
+				//扫尾工作，
+				String sign=SignUtils.encryptHMAC(tf.getDaystamp());
+				boolean r=chezuAssetService.addFamilyGameOrderEnd( tf.getDaystamp(),sign);
+				if(r) {
+					configSystemTaskService.finishConfigSystemFamilyPkTask(tf);
+				}
 			}
 			log.info("CalFamilyDayPkTask do--list.size="+list.size());
 				for(TaskFamilyPk taskFamilyPk:list) {

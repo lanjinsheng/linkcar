@@ -78,7 +78,17 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			dicGameDayMapper.insertDicGameDay(gameDay);
 		}
 		
-		
+		//getUnInitUserDayScore 
+		List<TaskSystemScoreFlag> tasks1=taskSystemScoreFlagMapper.getUnInitUserDayScore();
+		for (TaskSystemScoreFlag task:tasks1) {
+			Long t1=DateTools.getDateTimeOfLong(task.getDaystamp()+" 23:59:59");
+			Long t2=System.currentTimeMillis();
+			if(t2>t1 && (t2-t1)<7200000) {//時間到了,未超過2小时，立馬促發
+				task.setUserDayScoreFlag(1);
+				taskSystemScoreFlagMapper.updateUserDayScoreInit(task);
+			}
+		}
+		  //getUnInitUserDayScore	
 		TaskSystemScoreFlag taskSystemScoreFlag=new TaskSystemScoreFlag();
 		taskSystemScoreFlag.setDaystamp(dayStamp);
 		taskSystemScoreFlag.setStartDay(gameDay.getStartDay());
@@ -107,12 +117,13 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		//order 任务是通过family日分与月分，pk分都统计好的情况下进行计算的。
 		List<TaskSystemScoreFlag> tasks3=taskSystemScoreFlagMapper.getUnInitOrderFlagList();
 		for (TaskSystemScoreFlag task:tasks3) {
-			taskFamilyDayOrderMapper.delTaskFamilyDayOrder(task.getDaystamp());
-			taskFamilyDayOrderMapper.initTaskFamilyDayOrder(task);
-			
-			String month=task.getDaystamp().replaceAll("-", "").substring(0,6);
-			taskFamilyMonthOrderMapper.delTaskFamilyMonthOrder(month);
-			taskFamilyMonthOrderMapper.initTaskFamilyMonthOrder(month);
+			//取消日排名
+//			taskFamilyDayOrderMapper.delTaskFamilyDayOrder(task.getDaystamp());
+//			taskFamilyDayOrderMapper.initTaskFamilyDayOrder(task);
+			//取消月排名
+//			String month=task.getDaystamp().replaceAll("-", "").substring(0,6);
+//			taskFamilyMonthOrderMapper.delTaskFamilyMonthOrder(month);
+//			taskFamilyMonthOrderMapper.initTaskFamilyMonthOrder(month);
 			
 			TaskFamilyMonthAvgOrder avgOrder=new TaskFamilyMonthAvgOrder();
 			avgOrder.setStartDay(gameDay.getStartDay());

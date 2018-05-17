@@ -60,9 +60,6 @@ public class CalFamilyDayOrderTask extends TimerTask {
 			List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishFamilyDayOrder();
 			for(TaskSystemScoreFlag tf:taskList) {
 				String timestamp=tf.getDaystamp();
-//				String yyyy=timestamp.substring(0, 4);
-//				String mm=timestamp.substring(4, 6);
-//				String dd=timestamp.substring(6, 8);
 			long taskFlag=System.currentTimeMillis();
 			TaskKeyLog key=new TaskKeyLog();
 			key.setTaskFlag(String.valueOf(taskFlag));
@@ -93,23 +90,12 @@ public class CalFamilyDayOrderTask extends TimerTask {
 						calFamilyOrderService.updateSuccFamilyDayOrderTask(taskFamilyOrder);
 						 
 					}else {
-						if(taskFamilyOrder.getFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							taskFamilyOrder.setTaskStatus(2);
-						}else {
-							taskFamilyOrder.setTaskStatus(0);
-						}
 						calFamilyOrderService.updateFailFamilyDayOrderTask(taskFamilyOrder);
 					}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
-						if(taskFamilyOrder.getFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							taskFamilyOrder.setTaskStatus(2);
-						}else {
-							taskFamilyOrder.setTaskStatus(0);
-						}
+					
 						calFamilyOrderService.updateFailFamilyDayOrderTask(taskFamilyOrder);
 					}
 				}

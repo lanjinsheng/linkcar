@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskGameEnd;
 import com.idata365.entity.TaskSystemScoreFlag;
 /**
@@ -18,8 +19,10 @@ public interface TaskGameEndMapper {
  
 	    
 	    int  initGameEnd(TaskSystemScoreFlag taskSystemScoreFlag);
-	 
+	    int updateFamilyInfo(FamilyScore familyScore);
 		void lockGameEndTask(TaskGameEnd taskGameEnd);
+		
+		FamilyScore getFamilyScore(TaskGameEnd taskGameEnd);
 		
 		List<TaskGameEnd> getGameEndTask(TaskGameEnd taskGameEnd);
 		

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.idata365.entity.bean.AssetFamiliesPowerLogs;
 import com.idata365.entity.bean.AssetUsersPowerLogs;
 import com.idata365.entity.bean.FamilyGameAsset;
+import com.idata365.entity.bean.FamilySeasonAsset;
 
 
 @FeignClient(value = "service-asset-chezu",fallback = ChezuAssetHystric.class)
@@ -37,7 +38,7 @@ public interface ChezuAssetService {
         * @Title: addFamilyGameOrderEnd
         * @Description: TODO(对season进行sign)
         * @param @param sign
-        * @param @param season
+        * @param @param season=daystamp
         * @param @return    参数
         * @return boolean    返回类型
         * @throws
@@ -45,5 +46,11 @@ public interface ChezuAssetService {
      */
     @RequestMapping(value = "/asset/addFamilyGameOrderEnd",method = RequestMethod.POST)
     boolean addFamilyGameOrderEnd(@RequestParam(value="season")   String season,@RequestParam(value="sign")   String sign);
-
+    
+    @RequestMapping(value = "/asset/addFamilySeason",method = RequestMethod.POST)
+    boolean addFamilySeason(@RequestParam(value="sign")   String sign, @RequestBody   FamilySeasonAsset familySeasonAsset);
+    @RequestMapping(value = "/asset/addFamilySeasonEnd",method = RequestMethod.POST)
+    boolean addFamilySeasonEnd(@RequestParam(value="season")   String season,@RequestParam(value="gameDayNum")   String gameDayNum,@RequestParam(value="sign")   String sign);
+    
+    
 }

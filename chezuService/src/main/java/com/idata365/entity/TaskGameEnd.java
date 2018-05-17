@@ -16,9 +16,16 @@ public class TaskGameEnd implements Serializable{
 	private Integer failTimes;
 	private Date taskDealTime;
 	private Integer dayTimes;
+	private Integer memberNum;
 	private Double addRatio;
 	
 	
+	public Integer getMemberNum() {
+		return memberNum;
+	}
+	public void setMemberNum(Integer memberNum) {
+		this.memberNum = memberNum;
+	}
 	public Double getAddRatio() {
 		return addRatio;
 	}

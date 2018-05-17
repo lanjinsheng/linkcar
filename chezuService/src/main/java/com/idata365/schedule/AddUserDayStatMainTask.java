@@ -9,6 +9,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.service.AddUserDayStatService;
+import com.idata365.service.AddUserDayStatServiceV2;
 import com.idata365.service.TaskKeyLogService;
 
 
@@ -19,6 +20,7 @@ import com.idata365.service.TaskKeyLogService;
     * @Description: TODO
     * 同步用户行程到每日分数中。(增加违章次数)
     * 将用户的travel行程值违章部分同步到userDayStat中
+    * 同时刷新familyDriveDayStat 数据
     * @author LanYeYe
     * @date 2017年12月31日
     *
@@ -30,8 +32,10 @@ public class AddUserDayStatMainTask extends TimerTask {
 	
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
+//    @Autowired
+//    AddUserDayStatService addUserDayStatService;
     @Autowired
-    AddUserDayStatService addUserDayStatService;
+    AddUserDayStatServiceV2 addUserDayStatService;
     @Autowired
     TaskKeyLogService taskKeyLogService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  

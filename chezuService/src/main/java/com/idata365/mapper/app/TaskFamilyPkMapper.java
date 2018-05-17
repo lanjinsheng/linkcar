@@ -1,11 +1,11 @@
 package com.idata365.mapper.app;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.idata365.entity.FamilyDriveDayStat;
-import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskFamilyPk;
 import com.idata365.entity.TaskSystemScoreFlag;
 /**
@@ -22,6 +22,8 @@ public interface TaskFamilyPkMapper {
 	 int updateFamilyDayScoreById(FamilyDriveDayStat familyDriveDayStat);
 	 int  initTaskFamilyPk(TaskSystemScoreFlag task);
 	 int updateFamilyScore(FamilyDriveDayStat familyDriveDayStat);
+	 int giveNewFamilyTrophy(Map<String,Object> map);
+	 List<FamilyDriveDayStat>  getNewFamilyDayScore(Map<String,Object> map);
 	 
 		void lockFamilyPkTask(TaskFamilyPk taskFamilyPk);
 		

@@ -10,6 +10,7 @@ import com.idata365.entity.TaskFamilyDayScore;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.service.CalScoreFamilyDayService;
+import com.idata365.service.CalScoreFamilyDayServiceV2;
 import com.idata365.service.ConfigSystemTaskService;
 import com.idata365.service.TaskKeyLogService;
 
@@ -30,8 +31,11 @@ public class CalFamilyDayScoreTask extends TimerTask {
 	
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
+	
+//    @Autowired
+//    CalScoreFamilyDayService calScoreFamilyDayService;
     @Autowired
-    CalScoreFamilyDayService calScoreFamilyDayService;
+    CalScoreFamilyDayServiceV2 calScoreFamilyDayService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
     @Autowired
@@ -80,23 +84,12 @@ public class CalFamilyDayScoreTask extends TimerTask {
 						calScoreFamilyDayService.updateSuccFamilyScoreDayTask(taskFamilyDayScore);
 						 
 					}else {
-						if(taskFamilyDayScore.getFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							taskFamilyDayScore.setTaskStatus(2);
-						}else {
-							taskFamilyDayScore.setTaskStatus(0);
-						}
 						calScoreFamilyDayService.updateFailFamilyScoreDayTask(taskFamilyDayScore);
 					}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
-						if(taskFamilyDayScore.getFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							taskFamilyDayScore.setTaskStatus(2);
-						}else {
-							taskFamilyDayScore.setTaskStatus(0);
-						}
+						
 						calScoreFamilyDayService.updateFailFamilyScoreDayTask(taskFamilyDayScore);
 					}
 				}

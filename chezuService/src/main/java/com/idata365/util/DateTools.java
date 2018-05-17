@@ -1,5 +1,6 @@
 package com.idata365.util;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,7 @@ public class DateTools
 	private static FastDateFormat yyMMddHHmmss = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 	private static FastDateFormat yyMMddHHmmssSSS = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
 	private static FastDateFormat yyyyMMdd = FastDateFormat.getInstance("yyyyMMdd");
-	
+	private static FastDateFormat yyyy_MM_dd = FastDateFormat.getInstance("yyyy-MM-dd");
 	public static String getYYYYMMDD() {
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
@@ -122,6 +123,26 @@ public class DateTools
 		return (int)left;
 	}
 	
+	/**
+	 * 时间间隔返回相差秒数
+	 * 
+	 * @param  
+	 * @return
+	 */
+	public static int rtDiffDay(String beginDateTime, String endDateTime)
+	{
+		try {
+			  Date begin = DateUtils.parseDate(beginDateTime,yyyy_MM_dd.getPattern());
+		        Date end = DateUtils.parseDate(endDateTime,yyyy_MM_dd.getPattern());
+			 
+			  long left=end.getTime()-begin.getTime();
+	     
+			return (int)(left/(3600*1000*24)+1);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 	
 	/**
 	 * 返回前天，昨天，明天，后天等
@@ -334,7 +355,7 @@ public class DateTools
 	{
 		 try
 		{
-			System.out.println(getTimesLongToStrBySSS(1511491678000L));
+			System.out.println(rtDiffDay("2018-06-11","2018-06-10"));
 		}
 		catch (Exception e)
 		{

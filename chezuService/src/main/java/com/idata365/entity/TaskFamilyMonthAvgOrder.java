@@ -12,16 +12,30 @@ public class TaskFamilyMonthAvgOrder implements Serializable {
 	
 	private Long id;
 	private Long familyId;
+	private Integer familyType;
 	private String taskFlag;
     private Integer taskStatus;
 	private String month;
 	private Integer failTimes;
 	private Double avgScore;
+	private Integer trophy;
 	private int orderNo;
 	private String startDay;
 	private String endDay;
 	
 	
+	public Integer getFamilyType() {
+		return familyType;
+	}
+	public void setFamilyType(Integer familyType) {
+		this.familyType = familyType;
+	}
+	public Integer getTrophy() {
+		return trophy;
+	}
+	public void setTrophy(Integer trophy) {
+		this.trophy = trophy;
+	}
 	public String getStartDay() {
 		return startDay;
 	}
