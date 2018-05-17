@@ -117,6 +117,20 @@ public class TaskAutoAddService {
 	public void syncFamilyGameEndAdd(String season){
 //		    String dayStr=getDay("yyyy-MM-dd");
 			String dayStr2=season.replaceAll("-", "");
+			String taskKey=dayStr2+"_"+TaskGenericEnum.InitFamilyDayReward;
+			TaskGeneric task=new TaskGeneric();
+			task.setGenericKey(taskKey);
+			task.setTaskType(TaskGenericEnum.InitFamilyDayReward);
+			task.setPriority(10);
+			task.setJsonValue(String.format(jsonValue2,season));
+			taskGenericMapper.insertTask(task);
+		
+	}
+ 
+	@Transactional
+	public void syncFamilySeasonEndAdd(String season){
+//		    String dayStr=getDay("yyyy-MM-dd");
+			String dayStr2=season.replaceAll("-", "");
 			String taskKey=dayStr2+"_"+TaskGenericEnum.InitFamilySeasonReward;
 			TaskGeneric task=new TaskGeneric();
 			task.setGenericKey(taskKey);
@@ -126,5 +140,4 @@ public class TaskAutoAddService {
 			taskGenericMapper.insertTask(task);
 		
 	}
-	
 }
