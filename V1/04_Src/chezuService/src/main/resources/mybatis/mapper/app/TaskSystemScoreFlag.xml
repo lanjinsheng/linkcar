@@ -167,4 +167,16 @@
 	</update>
 	
 	<!-- End 用户日得分初始化 --> 
+
+	<!-- begin 赛季得分继承初始化 --> 
+	<select id="getUnInitFamilyScore" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where   nextSeasonInit=0 and taskGameEnd=1
+	</select>
+	<update id="updateFamilyScoreInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set nextSeasonInit=${nextSeasonInit} where daystamp=#{daystamp}
+	</update>
+	
+	<!-- End 赛季得分继承初始化 --> 
+	
 </mapper>
