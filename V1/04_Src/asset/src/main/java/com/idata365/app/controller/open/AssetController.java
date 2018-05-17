@@ -183,7 +183,7 @@ public class AssetController extends BaseController {
     /**
      * 
         * @Title: addFamilyGameOrder
-        * @Description: TODO(对order进行sign)
+        * @Description: TODO(对familyId进行sign)
         * @param @param sign
         * @param @param assetFamiliesPowerLogs
         * @param @return    参数
@@ -193,8 +193,8 @@ public class AssetController extends BaseController {
      */
     @RequestMapping(value = "/asset/addFamilyGameOrder",method = RequestMethod.POST)
     boolean addFamilyGameOrder(@RequestParam(value="sign")   String sign, @RequestBody   FamilyGameAsset familyGameAsset) {
-    	LOG.info("familyGameAsset:" + familyGameAsset.getOrderNo() + "===sign:" + sign);
-		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(familyGameAsset.getOrderNo())));
+    	LOG.info("familyGameAsset:" + familyGameAsset.getFamilyId() + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(familyGameAsset.getFamilyId())));
 		familyGameAssetService.insertgameAsset(familyGameAsset);
 		return true;
     }
@@ -225,12 +225,12 @@ public class AssetController extends BaseController {
 		familySeasonAssetService.insertSeasonAsset(familySeasonAsset);
     	return true;
     }
-    
     @RequestMapping(value = "/asset/addFamilySeasonEnd",method = RequestMethod.POST)
-    boolean addFamilySeasonEnd(@RequestParam(value="season")   String season,@RequestParam(value="sign")   String sign) {
+    boolean addFamilySeasonEnd(@RequestParam(value="season")   String season,@RequestParam(value="gameDayNum")   String gameDayNum,@RequestParam(value="sign")   String sign)
+    {
     	LOG.info("addFamilySeasonEnd:" + season + "===sign:" + sign);
-		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(season));
-		taskAutoAddService.syncFamilySeasonEndAdd(season);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(season+gameDayNum));
+		taskAutoAddService.syncFamilySeasonEndAdd(season,gameDayNum);
 		return true;
     }
     

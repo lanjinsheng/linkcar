@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
+import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesDiamondsLogs;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
 import com.idata365.app.entity.TaskGeneric;
@@ -92,20 +94,146 @@ public class TaskGenericService {
 		map.put("taskType", TaskGenericEnum.DoFamilyDayReward);
 		map.put("priority", 10);
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
-		long familyTotal=taskGenericMapper.getByFamilyTotal(m.get("season").toString());
-		long limit=0;
-		if(familyTotal<=60) {
-			limit=12;
-		}else {
-			limit=BigDecimal.valueOf(familyTotal).multiply(BigDecimal.valueOf(0.3)).longValue();
-		}
+		long familyPersonTotal=taskGenericMapper.getByFamilyTotal(m.get("season").toString());
+//		long limit=0;
+		 
 		map.putAll(m);
-		map.put("limit", limit);
-		map.put("familyTotal", familyTotal);
-		taskGenericMapper.initFamilySeasonReward(map);
+//		map.put("limit", limit);
+		map.put("familyPersonTotal", familyPersonTotal);
+		taskGenericMapper.initDoFamilyDayReward(map);
 	}
 	
-	
+	@Transactional
+	public void InitFamilySeasonReward(TaskGeneric task) {
+		//待处理
+//		Map<String,Object> map=new HashMap<String,Object>();
+//		map.put("genericKey", task.getGenericKey());
+//		map.put("taskType", TaskGenericEnum.DoFamilyDayReward);
+//		map.put("priority", 10);
+		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
+		m.put("familyTypeStart", DicFamilyTypeConstant.GuanJun_1);
+		m.put("familyTypeEnd", DicFamilyTypeConstant.GuanJun_1000);
+		long familyGuanjunTotal=taskGenericMapper.getFamilyTotalByST(m);
+		
+		m.put("familyTypeStart", DicFamilyTypeConstant.ZuanShi_4);
+		m.put("familyTypeEnd", DicFamilyTypeConstant.ZuanShi_1);
+		long familyZuanshiTotal=taskGenericMapper.getFamilyTotalByST(m);
+//      钻石分配系数计算
+//		冠军	5b/人
+//		钻石	3b/人
+//		b=1200/（冠军段位总人数*5+钻石段位总人数*3）
+		BigDecimal diamondsNum=BigDecimal.valueOf(20).multiply(BigDecimal.valueOf(Integer.valueOf(m.get("gameDayNum").toString())));
+		long fenmu=familyGuanjunTotal*5+familyZuanshiTotal*3;
+		if(fenmu==0) {
+			//无冠军段位，资金滚动进入下个赛季
+//			assetFamiliesAsset 表中，系统账号为0;
+			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
+			assetFamiliesDiamondsLogs.setDiamondsNum(diamondsNum);
+			assetFamiliesDiamondsLogs.setEffectId(task.getId());
+			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd);
+			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_1);
+			assetFamiliesDiamondsLogs.setFamilyId(0L);
+			assetFamiliesDiamondsLogs.setRemark(m.get("season")+"无冠军段位,资金流入系统账号");
+			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
+			assetFamiliesAssetMapper.updateDiamondsAdd(assetFamiliesDiamondsLogs);
+
+		}else {
+			//获取系统池中的资金
+			AssetFamiliesAsset familyAsset=assetFamiliesAssetMapper.getFamiliesAssetByFamilyId(0L);
+			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
+			assetFamiliesDiamondsLogs.setDiamondsNum(familyAsset.getDiamondsNum());
+			assetFamiliesDiamondsLogs.setEffectId(task.getId());
+			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd_Distr);
+			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_2);
+			assetFamiliesDiamondsLogs.setFamilyId(0L);
+			assetFamiliesDiamondsLogs.setRemark(m.get("season")+"累积的资金池清空");
+			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
+			assetFamiliesAssetMapper.updateDiamondsReduce(assetFamiliesDiamondsLogs);
+			//任务跃迁
+			diamondsNum=diamondsNum.add(familyAsset.getDiamondsNum());
+			diamondsNum=diamondsNum.divide(BigDecimal.valueOf(fenmu),4,RoundingMode.HALF_DOWN);
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("genericKey", task.getGenericKey());
+			map.put("taskType", TaskGenericEnum.DoFamilySeasonReward);
+			map.put("priority", 10);
+			map.put("diamondsNum", diamondsNum);
+			map.put("season", m.get("season"));
+			map.put("familyTypeStart", DicFamilyTypeConstant.ZuanShi_4);
+			map.put("familyTypeEnd", DicFamilyTypeConstant.GuanJun_1000);
+			taskGenericMapper.initDoFamilySeasonReward(map);
+		}
+	}
+		@Transactional
+		public boolean doFamilySeasonReward(TaskGeneric task) {
+			Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
+			BigDecimal diamondsNum=BigDecimal.valueOf(Long.valueOf(m.get("diamondsNum").toString()));
+			long familyId=Long.valueOf(m.get("familyId").toString());
+			int memberNum=Integer.valueOf(m.get("memberNum").toString());
+			//进行分配
+			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
+			assetFamiliesDiamondsLogs.setDiamondsNum(diamondsNum.multiply(BigDecimal.valueOf(memberNum)));
+			assetFamiliesDiamondsLogs.setEffectId(task.getId());
+			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd);
+			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_1);
+			assetFamiliesDiamondsLogs.setFamilyId(familyId);
+			assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 赛季分配");
+			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
+			assetFamiliesAssetMapper.updateDiamondsAdd(assetFamiliesDiamondsLogs);
+			
+			//增加跃迁下一个任务(成员内部分配)
+			TaskGeneric tg=new TaskGeneric();
+			String preKey=task.getGenericKey().split("_")[0];
+			String taskKey=preKey+"_"+TaskGenericEnum.DoUserFamilySeasonReward+"_"+familyId;
+			tg.setGenericKey(taskKey);
+			tg.setTaskType(TaskGenericEnum.DoUserFamilySeasonReward);
+			tg.setPriority(10);
+			tg.setJsonValue(task.getJsonValue());
+			taskGenericMapper.insertTask(tg);
+			return true;
+	}
+		@Transactional
+		public boolean doUserFamilySeasonReward(TaskGeneric task) {
+			Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
+			BigDecimal diamondsNum=BigDecimal.valueOf(Long.valueOf(m.get("diamondsNum").toString()));
+			long familyId=Long.valueOf(m.get("familyId").toString());
+			int memberNum=Integer.valueOf(m.get("memberNum").toString());
+			int familyType=Integer.valueOf(m.get("familyType").toString());
+			String sign=SignUtils.encryptHMAC(String.valueOf(familyId));
+			String daystamp=task.getGenericKey().split("_")[0];
+		    //通过familyId获取用户ids。
+			String users=chezuAccountService.getCurrentUsersByFamilyId(familyId, daystamp, sign);
+			String []userArray=users.split(",");
+			BigDecimal familyDiamonds=diamondsNum.multiply(BigDecimal.valueOf(memberNum));
+			for(int i=0;i<userArray.length;i++) {
+				AssetUsersDiamondsLogs  assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
+				assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[i]));
+				assetUsersDiamondsLogs.setRecordType(AssetService.RecordType_1);
+				assetUsersDiamondsLogs.setEffectId(task.getId());
+				assetUsersDiamondsLogs.setEventType(AssetService.EventType_Daimond_GameEnd_User);
+				assetUsersDiamondsLogs.setRemark("赛季结束分配钻石");
+				assetUsersDiamondsLogs.setDiamondsNum(diamondsNum);
+				assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
+				assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
+				//远程消息调用,发送的diamonds是家族获取的
+				if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
+				chezuAppService.sendFamilyDiamondsSeasonMsg(daystamp, String.valueOf(familyId), familyType, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), sign);
+				}
+				
+			}
+			//family钻石减少
+			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
+			assetFamiliesDiamondsLogs.setDiamondsNum(familyDiamonds);
+			assetFamiliesDiamondsLogs.setEffectId(task.getId());
+			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd_Distr);
+			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_2);
+			assetFamiliesDiamondsLogs.setFamilyId(familyId);
+			assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 赛季分配给成员");
+			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
+			assetFamiliesAssetMapper.updateDiamondsReduce(assetFamiliesDiamondsLogs);
+			return true;
+		}
+		
+		
 	public final int PowerDiamonds=500;
 	public final int PowerDiamondsFamily=500;
 	/**
@@ -154,31 +282,11 @@ public class TaskGenericService {
 	@Transactional
 	public boolean doFamilyDayReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
-		long total=Long.valueOf(m.get("familyTotal").toString());
+		long total=Long.valueOf(m.get("familyPersonTotal").toString());
 		long orderNo=Long.valueOf(m.get("orderNo").toString());
 		long familyId=Long.valueOf(m.get("familyId").toString());
 		BigDecimal gameDiamond=BigDecimal.valueOf(0);
-		if(total<=60) {
-			  gameDiamond=BigDecimal.valueOf(PowerDiamondsFamily).divide(BigDecimal.valueOf(total), 5, RoundingMode.HALF_EVEN);
-		}else {
-			long rewardNum=BigDecimal.valueOf(total).multiply(BigDecimal.valueOf(0.2)).longValue();
-			rewardNum=rewardNum-3;
-			long midNum=BigDecimal.valueOf(rewardNum).multiply(BigDecimal.valueOf(0.3)).longValue();
-			long leftNum=rewardNum-midNum;
-			if(orderNo==1) {
-				gameDiamond=BigDecimal.valueOf(150);
-			}else if(orderNo==2) {
-				gameDiamond=BigDecimal.valueOf(100);
-			}else if(orderNo==3) {
-				gameDiamond=BigDecimal.valueOf(50);
-			}else {
-				if(orderNo<=midNum) {
-					gameDiamond=BigDecimal.valueOf(100).divide(BigDecimal.valueOf(midNum),5, RoundingMode.HALF_EVEN);
-				}else {
-					gameDiamond=BigDecimal.valueOf(100).divide(BigDecimal.valueOf(leftNum),5, RoundingMode.HALF_EVEN);
-				}
-			}
-		}
+		gameDiamond=BigDecimal.valueOf(480).divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_EVEN);
 		//进行分配
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 		assetFamiliesDiamondsLogs.setDiamondsNum(gameDiamond);
@@ -262,9 +370,9 @@ public class TaskGenericService {
 			j++;
 			assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
-			//远程消息调用
+			//远程消息调用,发送的diamonds是家族获取的
 			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(assetUsersDiamondsLogs.getDiamondsNum().doubleValue()), sign);
+			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(diamonds), sign);
 			}
 		}
 		//family钻石减少
