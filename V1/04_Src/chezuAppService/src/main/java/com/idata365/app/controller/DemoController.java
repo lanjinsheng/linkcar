@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.DicFamilyTypeConstant;
+import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.Message;
@@ -101,5 +103,11 @@ public class DemoController extends BaseController {
 		imMsg.setFamilyId(Long.valueOf(family.toString()));
 		imService.insertMsg(imMsg);
 		return ResultUtils.rtSuccess(null);
+	}	
+	
+	@RequestMapping("/test/getFamilyType")
+    public Map<String,Object> getFamilyType(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+		 DicFamilyType dic=DicFamilyTypeConstant.getDicFamilyType(90);
+		return ResultUtils.rtSuccess(dic);
 	}	
 }
