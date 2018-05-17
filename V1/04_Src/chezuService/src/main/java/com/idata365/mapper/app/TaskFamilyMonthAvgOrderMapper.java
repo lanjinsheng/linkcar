@@ -18,7 +18,7 @@ public interface TaskFamilyMonthAvgOrderMapper {
  
 	    int  delTaskFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    int   updateFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
-	    
+	    int updateFamilyInfoType(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    int  initTaskFamilyMonthAvgOrder(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	    TaskFamilyMonthAvgOrder  getPreTaskRecord(TaskFamilyMonthAvgOrder taskFamilyOrder);
 	 

@@ -28,7 +28,7 @@ import com.idata365.service.TaskKeyLogService;
 /**
  * 
     * @ClassName: CalFamilyDayEndLevelTask
-    * @Description: TODO(平均数)
+    * @Description: TODO(等级更新处理,V2作废)
     * @author LanYeYe
     * @date 2017年12月31日
     *

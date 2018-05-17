@@ -11,21 +11,23 @@ import java.math.BigDecimal;
     * @date 2018年4月27日
     *
  */
-public class FamilyGameAsset implements Serializable {
+public class FamilySeasonAsset implements Serializable {
 	
 	
 	    /**
 	    * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
 	    */
-	private static final long serialVersionUID = -6795900371476785023L;
+	private static final long serialVersionUID = 583367340713641367L;
 	private Long id;
 	private Long familyId;
+	private Integer familyType;
+	private Integer trophy;
+	private Integer memberNum;
 	private String startDay;
 	private String endDay;
 	private Long orderNo;
 	private BigDecimal diamondsNum;
 	private String seasonName;
-	private Integer memberNum;
 	
 	
 	public Integer getMemberNum() {
@@ -33,6 +35,18 @@ public class FamilyGameAsset implements Serializable {
 	}
 	public void setMemberNum(Integer memberNum) {
 		this.memberNum = memberNum;
+	}
+	public Integer getFamilyType() {
+		return familyType;
+	}
+	public void setFamilyType(Integer familyType) {
+		this.familyType = familyType;
+	}
+	public Integer getTrophy() {
+		return trophy;
+	}
+	public void setTrophy(Integer trophy) {
+		this.trophy = trophy;
 	}
 	public Long getId() {
 		return id;

@@ -17,6 +17,7 @@ import com.idata365.entity.bean.FamilyGameAsset;
 import com.idata365.remote.ChezuAssetService;
 import com.idata365.service.CalFamilyDayOrderService;
 import com.idata365.service.CalFamilyMonthAvgOrderService;
+import com.idata365.service.CalFamilyMonthAvgOrderServiceV2;
 import com.idata365.service.CalFamilyMonthOrderService;
 import com.idata365.service.CalFamilyPkService;
 import com.idata365.service.CalScoreFamilyDayService;
@@ -29,7 +30,7 @@ import com.idata365.util.SignUtils;
 /**
  * 
     * @ClassName: CalFamilyMonthAvgOrderTask
-    * @Description: TODO(平均数)
+    * @Description: TODO(赛季排名)
     * @author LanYeYe
     * @date 2017年12月31日
     *
@@ -42,7 +43,7 @@ public class CalFamilyMonthAvgOrderTask extends TimerTask {
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
-   CalFamilyMonthAvgOrderService calFamilyMonthAvgOrderService;
+   CalFamilyMonthAvgOrderServiceV2 calFamilyMonthAvgOrderService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
     @Autowired
@@ -87,12 +88,7 @@ public class CalFamilyMonthAvgOrderTask extends TimerTask {
 			List<TaskFamilyMonthAvgOrder> list=calFamilyMonthAvgOrderService.getFamilyMonthAvgOrderTask(task);
 			TaskFamilyMonthAvgOrder preOrder=null;
 			if(list.size()==0) {//无任务
-				
-				String sign=SignUtils.encryptHMAC(tf.getDaystamp());
-				boolean r=chezuAssetService.addFamilyGameOrderEnd( tf.getDaystamp(),sign);
-				if(r) {
-					configSystemTaskService.finishConfigSystemFamilyMonthAvgOrderTask(tf);
-				}
+				configSystemTaskService.finishConfigSystemFamilyMonthAvgOrderTask(tf);
 				continue;
 			}else {
 				preOrder=calFamilyMonthAvgOrderService.getAvgPre(list.get(0));
@@ -107,32 +103,18 @@ public class CalFamilyMonthAvgOrderTask extends TimerTask {
 						boolean result=calFamilyMonthAvgOrderService.calFamilyMonthAvgOrder(preOrder,taskFamilyMonthAvgOrder,timestamp);
 						preOrder=taskFamilyMonthAvgOrder;
 					if(result) {
-						//远程同步比赛结果名次
-						FamilyGameAsset fg=new FamilyGameAsset();
-						fg.setEndDay(taskFamilyMonthAvgOrder.getEndDay());
-						fg.setFamilyId(taskFamilyMonthAvgOrder.getFamilyId());
-						fg.setOrderNo(Long.valueOf(taskFamilyMonthAvgOrder.getOrderNo()));
-						fg.setSeasonName(tf.getDaystamp());
-						fg.setStartDay(taskFamilyMonthAvgOrder.getStartDay());
-						String sign=SignUtils.encryptHMAC(String.valueOf(fg.getOrderNo()));
-						boolean r=chezuAssetService.addFamilyGameOrder(sign, fg);
-						if(r) {
-							calFamilyMonthAvgOrderService.updateSuccFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
-						}else {
-							calFamilyMonthAvgOrderService.updateFailFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
-						}
+						calFamilyMonthAvgOrderService.updateSuccFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
+//						if(r) {
+//							calFamilyMonthAvgOrderService.updateSuccFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
+//						}else {
+//							calFamilyMonthAvgOrderService.updateFailFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
+//						}
 					}else {
 						calFamilyMonthAvgOrderService.updateFailFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
 					}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);
-						if(taskFamilyMonthAvgOrder.getFailTimes()>100) {
-							//状态置为2，代表计算次数已经极限
-							taskFamilyMonthAvgOrder.setTaskStatus(2);
-						}else {
-							taskFamilyMonthAvgOrder.setTaskStatus(0);
-						}
 						calFamilyMonthAvgOrderService.updateFailFamilyMonthAvgOrderTask(taskFamilyMonthAvgOrder);
 					}
 				}

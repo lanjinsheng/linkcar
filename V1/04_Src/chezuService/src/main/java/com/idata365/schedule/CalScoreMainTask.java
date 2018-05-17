@@ -12,6 +12,7 @@ import com.idata365.entity.DriveScore;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.mapper.col.DriveDataMainMapper;
 import com.idata365.service.CalScoreService;
+import com.idata365.service.CalScoreServiceV2;
 import com.idata365.service.DriveMainColService;
 import com.idata365.service.TaskKeyLogService;
 
@@ -32,8 +33,10 @@ public class CalScoreMainTask extends TimerTask {
 	
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
+//    @Autowired
+//    CalScoreService calScoreService;
     @Autowired
-    CalScoreService calScoreService;
+    CalScoreServiceV2 calScoreService;
     @Autowired
     DriveMainColService driveMainColService;
     @Autowired
@@ -68,13 +71,13 @@ public class CalScoreMainTask extends TimerTask {
 				for(CalDriveTask calDriveTask:list) {
 					try {
 						DriveDataMain driveDatas=  driveMainColService.getDriveMain(calDriveTask.getUserId(), calDriveTask.getHabitId());
-						List<DriveScore> scores=calScoreService.calScoreByUHInsertDb(calDriveTask.getUserId(), calDriveTask.getHabitId(),driveDatas);
-					if(scores!=null) {
-						calScoreService.updateSuccCalScoreTask(calDriveTask);
-					}else {
-					 
-						calScoreService.updateFailCalScoreTask(calDriveTask);
-					}
+						boolean scores=calScoreService.calScoreByUHInsertDb(calDriveTask.getUserId(), calDriveTask.getHabitId(),driveDatas);
+						if(scores) {
+							calScoreService.updateSuccCalScoreTask(calDriveTask);
+						}else {
+						 
+							calScoreService.updateFailCalScoreTask(calDriveTask);
+						}
 					}catch(Exception e) {
 						e.printStackTrace();
 						log.error(e);

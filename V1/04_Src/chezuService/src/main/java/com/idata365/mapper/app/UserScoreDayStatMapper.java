@@ -10,6 +10,8 @@ import com.idata365.entity.UserScoreDayStat;
 public interface  UserScoreDayStatMapper {
 //	int updateUserScoreDayStat(UserScoreDayStat userScoreDayStat);//更新驾驶行为
 	int updateUserScoreDayById(UserScoreDayStat userScoreDayStat);//更新驾驶得分
+	void initUserDayScore(@Param("daystamp") String daystamp);
+	List<UserScoreDayStat> getUsersDayScoreByFamily(UserScoreDayStat userScoreDayStat);
 	
 	int insertOrUpdateUserDayStat(UserScoreDayStat userScoreDayStat);
 	

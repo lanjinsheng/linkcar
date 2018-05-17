@@ -10,16 +10,20 @@ import com.idata365.entity.TaskGameEnd;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.entity.UserScoreDayStat;
+import com.idata365.remote.ChezuAssetService;
 import com.idata365.service.CalGameEndService;
+import com.idata365.service.CalGameEndServiceV2;
 import com.idata365.service.CalScoreUserDayService;
 import com.idata365.service.ConfigSystemTaskService;
 import com.idata365.service.TaskKeyLogService;
+import com.idata365.util.DateTools;
+import com.idata365.util.SignUtils;
 
 
 
 /**
  * 
-    * @ClassName: AddUserDayStatMainTask
+    * @ClassName: CalGameEndTask
     * @Description: TODO(增加违章次数)
     * @author LanYeYe
     * @date 2017年12月31日
@@ -33,11 +37,13 @@ public class CalGameEndTask extends TimerTask {
   //注入ThreadPoolTaskExecutor 到主线程中  
 	private ThreadPoolTaskExecutor threadPool;  
     @Autowired
-    CalGameEndService calGameEndService;
+    CalGameEndServiceV2 calGameEndService;
     @Autowired
     ConfigSystemTaskService configSystemTaskService;
     @Autowired
     TaskKeyLogService taskKeyLogService;
+    @Autowired
+    ChezuAssetService chezuAssetService;
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
 	 this.threadPool = threadPool;  
@@ -68,7 +74,12 @@ public class CalGameEndTask extends TimerTask {
 			task.setTaskFlag(String.valueOf(taskFlag));
 			List<TaskGameEnd> list=calGameEndService.geGameEndTask(task);
 			if(list.size()==0) {//无任务
-				configSystemTaskService.finishConfigSystemGameEndTask(tf);
+				Integer dayNum=DateTools.rtDiffDay(tf.getStartDay(), tf.getEndDay());
+				String sign=SignUtils.encryptHMAC(tf.getDaystamp()+dayNum);
+				boolean b=chezuAssetService.addFamilySeasonEnd(tf.getDaystamp(), String.valueOf(dayNum), sign);
+				if(b) {
+					configSystemTaskService.finishConfigSystemGameEndTask(tf);
+				}
 			}
 			log.info("CalGameEndTask do--list.size="+list.size());
 				for(TaskGameEnd taskGameEnd:list) {

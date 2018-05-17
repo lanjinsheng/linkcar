@@ -16,6 +16,7 @@ public class FamilyDriveDayStat  implements Serializable {
 	private Integer useHoldNum;
 	private Integer orderNo;
 	private Double score;
+	private Integer trophy;
 	private Double scoreComm;
 	private Double scoreAdd;
 	private Integer speedTimes;
@@ -52,7 +53,21 @@ public class FamilyDriveDayStat  implements Serializable {
 	private String startDay;
 	private String endDay;
 	
+	//附加
+	private Integer memberNum;
 	
+	public Integer getMemberNum() {
+		return memberNum;
+	}
+	public void setMemberNum(Integer memberNum) {
+		this.memberNum = memberNum;
+	}
+	public Integer getTrophy() {
+		return trophy;
+	}
+	public void setTrophy(Integer trophy) {
+		this.trophy = trophy;
+	}
 	public String getStartDay() {
 		return startDay;
 	}

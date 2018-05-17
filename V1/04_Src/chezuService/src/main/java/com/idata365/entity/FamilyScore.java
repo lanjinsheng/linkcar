@@ -15,7 +15,8 @@ private String month;
 private Long familyId;
 private Integer orderNo;
 private Double score;
-
+private Integer familyType;
+private Integer trophy;
 private Double averScore;
 private Integer yesterdayOrderNo;
 private Integer beforeYesterdayOrderNo;
@@ -24,6 +25,18 @@ private String startDay;
 private String endDay;
 
 
+public Integer getFamilyType() {
+	return familyType;
+}
+public void setFamilyType(Integer familyType) {
+	this.familyType = familyType;
+}
+public Integer getTrophy() {
+	return trophy;
+}
+public void setTrophy(Integer trophy) {
+	this.trophy = trophy;
+}
 public String getStartDay() {
 	return startDay;
 }
