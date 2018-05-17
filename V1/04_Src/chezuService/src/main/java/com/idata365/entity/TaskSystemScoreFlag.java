@@ -26,9 +26,22 @@ public class TaskSystemScoreFlag implements Serializable {
 	
 	private Integer pkRelation;
 	private Integer initPkRelation;
+	private Integer userDayScoreInit;
+	private Integer nextSeasonInit;
 	
 	
-	
+	public Integer getUserDayScoreInit() {
+		return userDayScoreInit;
+	}
+	public void setUserDayScoreInit(Integer userDayScoreInit) {
+		this.userDayScoreInit = userDayScoreInit;
+	}
+	public Integer getNextSeasonInit() {
+		return nextSeasonInit;
+	}
+	public void setNextSeasonInit(Integer nextSeasonInit) {
+		this.nextSeasonInit = nextSeasonInit;
+	}
 	public Integer getInitPkRelation() {
 		return initPkRelation;
 	}

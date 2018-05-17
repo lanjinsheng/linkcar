@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.config.SystemProperties;
 import com.idata365.entity.DicGameDay;
+import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskFamilyMonthAvgOrder;
 import com.idata365.entity.TaskSystemScoreFlag;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
@@ -54,6 +55,7 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	SystemProperties systemProperties;
 	@Autowired
 	UserConfigService userConfigService;
+	@Autowired
 	
 	public String getDateStr(int diff)
 	{
@@ -84,7 +86,7 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			Long t1=DateTools.getDateTimeOfLong(task.getDaystamp()+" 23:59:59");
 			Long t2=System.currentTimeMillis();
 			if(t2>t1 && (t2-t1)<7200000) {//時間到了,未超過2小时，立馬促發
-				task.setUserDayScoreFlag(1);
+				task.setUserDayScoreInit(1);
 				taskSystemScoreFlagMapper.updateUserDayScoreInit(task);
 			}
 		}
@@ -148,6 +150,24 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			taskSystemScoreFlagMapper.updateGameEndInit(task);
 		}
 		  //game End	
+		
+		//game End season init
+		List<TaskSystemScoreFlag> tasks10=taskSystemScoreFlagMapper.getUnInitFamilyScore();
+		for (TaskSystemScoreFlag task:tasks10) {
+			if(dayStamp.equals(task.getEndDay())) {
+				//比赛结算时间到了,初始化任务
+				FamilyScore familyScore=new FamilyScore();
+				familyScore.setStartDay(gameDay.getStartDay());
+				familyScore.setEndDay(gameDay.getEndDay());
+				taskFamilyDayScoreMapper.initFamilyScore(familyScore);
+			}else {
+				
+			}
+			task.setNextSeasonInit(1);
+			taskSystemScoreFlagMapper.updateFamilyScoreInit(task);
+		}
+		  
+		
 		
 		//初始化pk任務
 		List<TaskSystemScoreFlag> task5=taskSystemScoreFlagMapper.getUnInitPkRelationList();

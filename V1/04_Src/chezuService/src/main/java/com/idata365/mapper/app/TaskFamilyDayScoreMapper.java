@@ -22,7 +22,7 @@ public interface TaskFamilyDayScoreMapper {
 	 int  insertTaskFamilyDayScoreByTime(Map<String,Object> map);
 	 int insertFamilyDriveDayStat(FamilyDriveDayStat familyDriveDayStat);
 	 int  insertFamilyScore(FamilyScore task);
-	 
+	 int initFamilyScore(FamilyScore task);
 	 
 		void lockFamilyDayScoreTask(TaskFamilyDayScore taskFamilyDayScore);
 		

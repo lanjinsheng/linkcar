@@ -59,7 +59,11 @@ public class CalGameEndServiceV2 {
 		//回退familyInfo的familyType
 		DicFamilyType dft=DicFamilyTypeConstant.getDicFamilyType(fs.getFamilyType());
 		fs.setFamilyType(dft.getNextExtends());
+		fs.setTrophy(DicFamilyTypeConstant.getDicFamilyType(dft.getNextExtends()).getTrophy());
 		taskGameEndMapper.updateFamilyInfo(fs);
+		
+		
+		
 		return true;
 	}
 	

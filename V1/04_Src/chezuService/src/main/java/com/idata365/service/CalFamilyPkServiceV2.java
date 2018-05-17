@@ -126,6 +126,10 @@ public class CalFamilyPkServiceV2 {
         taskFamilyPkMapper.updateFamilyScore(fdds1);
         taskFamilyPkMapper.updateFamilyScore(fdds2);
         
+        //更新family结果
+        taskFamilyPkMapper.updateFamilyInfo(fdds1);
+        taskFamilyPkMapper.updateFamilyInfo(fdds2);
+        
 	    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum);
         
         if(!r) {

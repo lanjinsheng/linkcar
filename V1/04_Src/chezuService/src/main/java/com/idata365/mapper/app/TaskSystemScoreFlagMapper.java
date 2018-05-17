@@ -75,4 +75,8 @@ public interface TaskSystemScoreFlagMapper {
 	 List<TaskSystemScoreFlag> getUnInitUserDayScore(); 
 	 int  updateUserDayScoreInit(TaskSystemScoreFlag systemScoreFlag);
 	 
+	 
+	 //familyscore赛季继承初始化
+	 List<TaskSystemScoreFlag> getUnInitFamilyScore(); 
+	 int  updateFamilyScoreInit(TaskSystemScoreFlag systemScoreFlag);
 }
