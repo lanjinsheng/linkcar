@@ -3,26 +3,12 @@
 <mapper namespace="com.idata365.mapper.app.UserScoreDayStatMapper">
    <resultMap id="BaseUserScoreDayStatMap" type="com.idata365.entity.UserScoreDayStat" >
    </resultMap>
-	
-	<update id="updateUserScoreDayStat" parameterType="com.idata365.entity.UserScoreDayStat" >
-       update userScoreDayStat
-       set brakeTimes=brakeTimes+${brakeTimes},
-        brakeTimesUpdateTime=#{brakeTimesUpdateTime},
-         turnTimes=turnTimes+${turnTimes},
-         turnTimesUpdateTime=#{turnTimesUpdateTime},
-       speedTimes=speedTimes+${speedTimes},
-          speedTimesUpdateTime=#{speedTimesUpdateTime},
-          overspeedTimes=overspeedTimes+${overspeedTimes}, 
-         overspeedTimesUpdateTime= #{overspeedTimesUpdateTime}, 
-         tiredDrive= tiredDrive+${tiredDrive}, 
-         tiredDriveTimes= tiredDriveTimes+${tiredDriveTimes},
-         tiredDriveTimesUpdateTime= #{tiredDriveTimesUpdateTime},
-            nightDriveTimes=nightDriveTimes+${nightDriveTimes},
-         nightDriveTimesUpdateTime= #{nightDriveTimesUpdateTime},
-         maxspeed=GREATEST(maxspeed,${maxspeed})
-     where userId=#{userId} and  daystamp=#{daystamp} and familyId=#{familyId}
-    </update>
     
+    <insert id="initUserDayScore" parameterType="java.lang.String">
+          INSERT IGNORE INTO  userScoreDayStat
+	       (userId,familyId,daystamp,avgScore)   
+	      select userId,familyId,0 from userFamilyRelation
+	</insert>
     <update id="updateUserScoreDayById" parameterType="com.idata365.entity.UserScoreDayStat" >
        update userScoreDayStat
        set score=#{score},
@@ -48,7 +34,7 @@
             speedTimes,speedTimesUpdateTime,overspeedTimes,overspeedTimesUpdateTime,
             tiredDrive,tiredDriveTimes,tiredDriveTimesUpdateTime,nightDriveTimes,nightDriveTimesUpdateTime,maxspeed,
             useShachepian,useHongniu,useYeshijing,useFadongji,
-            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage,familyId) 
+            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage,familyId,avgScore) 
         VALUES
             (#{userId},#{daystamp}, #{userFamilyScoreId}, #{brakeTimes}, #{brakeTimesUpdateTime},#{turnTimes},
             #{turnTimesUpdateTime},
@@ -56,7 +42,7 @@
              #{tiredDrive}, #{tiredDriveTimes}, #{tiredDriveTimesUpdateTime}
             , #{nightDriveTimes}, #{nightDriveTimesUpdateTime},#{maxspeed},
             #{useShachepian},#{useHongniu},#{useYeshijing},#{useFadongji},
-             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage},#{familyId})
+             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage},#{familyId},#{avgScore})
         ON DUPLICATE KEY UPDATE 
         brakeTimes=brakeTimes+${brakeTimes},
         brakeTimesUpdateTime=#{brakeTimesUpdateTime},
@@ -80,14 +66,17 @@
       illegalStopTimes=illegalStopTimes+${illegalStopTimes},
       illegalStopUpdateTime=#{illegalStopUpdateTime},
       travelNum=travelNum+${travelNum},
-      mileage=mileage+${mileage}
+      mileage=mileage+${mileage},
+      avgScore=convert(IF(avgScore=30,${avgScore},avgScore+${avgScore})/(travelNum+${travelNum}),decimal(10,2))
          
     </insert>
     
     <select id="getUserDayScoreByUserFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserFamilyRoleLog">
 		SELECT *  from userScoreDayStat where familyId=#{familyId} and userId=#{userId} and daystamp=#{daystamp}
 	 </select>
-    
+    <select id="getUsersDayScoreByFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">
+		SELECT *  from userScoreDayStat where familyId=#{familyId}  and daystamp=#{daystamp} order by avgScore desc
+	 </select>
 	
 	
 		<!-- 定时处理行程逻辑 -->

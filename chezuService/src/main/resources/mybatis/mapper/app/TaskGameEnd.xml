@@ -5,9 +5,11 @@
     </resultMap>
     
    <insert id="initGameEnd" parameterType="com.idata365.entity.TaskSystemScoreFlag">
-        INSERT IGNORE INTO  taskGameEnd
-		 (familyScoreId,dayTimes)
-         select id,dayTimes from familyScore  where <![CDATA[startDay<=#{daystamp} and  endDay>=#{daystamp}]]>
+      INSERT IGNORE INTO  taskGameEnd
+		 (familyScoreId,dayTimes,memberNum)
+         select a.id,a.dayTimes,b.memberNum from familyScore a left join  familyInfo b on
+         
+         a.familyId=b.id   where <![CDATA[a.startDay<=#{daystamp} and  a.endDay>=#{daystamp}]]>
 	</insert>
 	 <update id="updateFamilyScore"  parameterType="com.idata365.entity.TaskGameEnd" >
          update
@@ -15,6 +17,16 @@
                 set averScore=convert((averScore*${addRatio}),decimal(10,2))
                  where id=#{familyScoreId}
      </update>	
+	
+		<update id="updateFamilyInfo"   parameterType="com.idata365.entity.FamilyScore">
+       update  
+            familyInfo
+             familyType=#{familyType}
+            where id=#{familyId}
+    </update>
+	<select id="getFamilyScore"  resultType="com.idata365.entity.FamilyScore" parameterType="com.idata365.entity.TaskGameEnd">
+		SELECT *  from familyScore where id=#{familyScoreId}
+	 </select>
 	
  <!-- 定时处理逻辑 -->
     <update id="lockGameEndTask" parameterType="com.idata365.entity.TaskGameEnd" >
