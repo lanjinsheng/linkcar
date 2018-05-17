@@ -35,10 +35,6 @@
        SELECT userId
        FROM  userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
      </select>
-     <select id="getUsersByFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-       SELECT userId
-       FROM  userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
-     </select>     
      
      <select id="getCurrentUsersByFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT userId
