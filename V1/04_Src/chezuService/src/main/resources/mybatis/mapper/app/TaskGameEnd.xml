@@ -20,7 +20,7 @@
 	
 		<update id="updateFamilyInfo"   parameterType="com.idata365.entity.FamilyScore">
        update  
-            familyInfo
+            familyInfo set
              familyType=#{familyType}
             where id=#{familyId}
     </update>
