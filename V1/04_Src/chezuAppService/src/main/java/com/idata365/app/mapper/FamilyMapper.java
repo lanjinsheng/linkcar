@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
@@ -146,4 +147,8 @@ public interface FamilyMapper
 	 //挑选对战家族--end
 	 
 	 List<Map<String,Object>> findUsersByFamilyId(@Param("familyId") Long familyId);
+	 
+	 //初始化家族日分
+	 int insertFamilyDriveDayStat(FamilyDriveDayStat familyDriveDayStat);
+	 
 }

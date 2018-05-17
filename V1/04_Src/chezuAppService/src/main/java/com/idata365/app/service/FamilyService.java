@@ -19,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
+import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
@@ -503,7 +505,7 @@ public class FamilyService extends BaseService<FamilyService>
 		}
 		
 		bean.setCreateTimeStr(generateTimeStampUndelimiter());
-		bean.setFamilyType(FamilyConstant.BRONZE_TYPE);
+		bean.setFamilyType(DicFamilyTypeConstant.QingTong_5);
 		this.familyMapper.save(bean);
 		
 		long familyId = bean.getId();
@@ -557,7 +559,16 @@ public class FamilyService extends BaseService<FamilyService>
 		tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
 		this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 		//初始化用户角色、成绩记录表end------------------
-				
+		
+		//初始化家族的分数信息用于实时展示家族得分
+		
+		FamilyDriveDayStat familyDriveDayStat=new FamilyDriveDayStat();
+		familyDriveDayStat.setFamilyId(familyId);
+		familyDriveDayStat.setDaystamp(curDayStr);
+		familyDriveDayStat.setFamilyType(DicFamilyTypeConstant.QingTong_5);
+		familyDriveDayStat.setFamilyFlag(0);
+		this.familyMapper.insertFamilyDriveDayStat(familyDriveDayStat);
+		
 		//更新是否通过邀请码加入状态
 		boolean inviteCodeFlag = bean.isInviteCodeFlag();
 		UsersAccountParamBean usersAccountParamBean = new UsersAccountParamBean();
