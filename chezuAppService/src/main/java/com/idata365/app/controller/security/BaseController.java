@@ -17,7 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.bean.UserInfo;
 
-abstract  class BaseController {
+public abstract  class BaseController {
 	@Autowired
 	private SystemProperties systemProperties;
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseController.class);
