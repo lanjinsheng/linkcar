@@ -82,17 +82,17 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		}
 		String userIds=users.substring(0, users.length()-1);
 		String sign=SignUtils.encryptHMAC(userIds);
-		Map<String,Object> userInfos=chezuAccountService.getUsersInfoByIds(userIds, sign);
+		Map<String,Object> userInfos=chezuAccountService.getUsersInfoByIds(userIds, familyId,sign);
 		String []nickNames=String.valueOf(userInfos.get("nickNames")).split(",");
 		String []userHeadUrls=String.valueOf(userInfos.get("userHeadUrls")).split(",");
-		String []roleTypes=String.valueOf(userInfos.get("roleTypes")).split(",");
+		String []isPatriarchs=String.valueOf(userInfos.get("isPatriarchs")).split(",");
 		int i=0;
 		for(AssetUsersDiamondsLogs d:diamondsLogs) {
 			Map<String,Object> m=new HashMap<String,Object>();
 			m.put("rewardNum",String.valueOf(d.getDiamondsNum().doubleValue()));
 			m.put("nickName",nickNames[i]);
 			m.put("headImg",userHeadUrls[i]);
-			m.put("roleType", roleTypes[i]);
+			m.put("isPatriarch", isPatriarchs[i]);
 			rtList.add(m);
 			i++;
 		}

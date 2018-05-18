@@ -173,7 +173,7 @@ public class AssetController extends BaseController {
 			sb.append(map.get("userId") + ",");
 		}
 		String Ids = sb.toString().substring(0, sb.length());
-		Map<String, Object> map = chezuAccountService.getUsersInfoByIds(Ids, sign);
+		Map<String, Object> map = chezuAccountService.getUsersInfoByIds(Ids,familyId, sign);
 
 		if (ValidTools.isNotBlank(map) && ValidTools.isNotBlank(map.get("nickNames"))) {
 			String nikeNames = map.get("nickNames").toString();
