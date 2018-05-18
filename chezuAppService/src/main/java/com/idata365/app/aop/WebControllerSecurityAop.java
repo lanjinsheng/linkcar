@@ -36,7 +36,7 @@ public WebControllerSecurityAop() {
 	LOG.info("WebControllerAop init");
 }
     //匹配com.idata365.col.controller包及其子包下的所有类的所有方法
-   @Pointcut("execution(* com.idata365.app.controller.security..*.*(..))")
+   @Pointcut("execution(* com.idata365.app.controller..*.*(..))")
     public Object executeService(){
 		return "ok";
 

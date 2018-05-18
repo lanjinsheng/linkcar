@@ -63,6 +63,7 @@ import com.idata365.app.entity.UserRoleLog;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
+import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
@@ -72,6 +73,7 @@ import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
 
@@ -342,6 +344,9 @@ public class ScoreService extends BaseService<ScoreService>
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
 			
 			long userId = tempBean.getUserId();
+			UsersAccount account = usersAccountMapper.findAccountById(userId);
+			Date lastLoginTime = account.getLastLoginTime();
+			tempResultBean.setRecOnlineTime(DateTools.formatDateMD(lastLoginTime));//
 			
 			UserFamilyRoleLogParamBean  roleLogParamBean = new UserFamilyRoleLogParamBean();
 			roleLogParamBean.setUserId(userId);
@@ -1257,4 +1262,19 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		return resultBean;
 	}
+	
+	// 获取家族成员实时分数
+		public double getAvgScore(String memberId, long myFamilyId) {
+			// TODO Auto-generated method stub
+			String daystamp = getCurrentDayStr();
+			if(scoreMapper.getAvgScore(memberId, myFamilyId, daystamp)==null) {
+				return 0;
+			}
+			return scoreMapper.getAvgScore(memberId, myFamilyId, daystamp);
+		}
+
+		public List<Map<String, Object>> getMemberInfoByTime(long familyId, String daystamp) {
+			// TODO Auto-generated method stub
+			return scoreMapper.getMemberInfoByTime(familyId, daystamp);
+		}
 }

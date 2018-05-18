@@ -147,12 +147,16 @@
  		select yesterdayOrderNo as orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
+ 	<!-- <select id="queryAllFamilyOrderNo" resultType="java.util.HashMap">
+ 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=#{daystamp} and startDay<=#{daystamp}]]> order by familyType limit 20
+ 	</select> -->
+ 	
  	<select id="queryAllFamilyOrderNo" resultType="java.util.HashMap">
- 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=${daystamp} and startDay<=${daystamp}]]> order by yesterdayOrderNo limit 70
+ 		select id,familyType,trophy,familyName,createUserId from familyInfo order by familyType desc limit 20
  	</select>
  	
  	<select id="getInfoByFamilyId" resultType="java.util.HashMap">
- 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=${daystamp} and startDay<=${daystamp}]]> and familyId=#{familyId}
+ 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=#{daystamp} and startDay<=#{daystamp}]]> and familyId=#{familyId}
  	</select>
  	 
  	<select id="queryUserIdsWithSpeedPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">

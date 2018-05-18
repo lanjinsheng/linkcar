@@ -1,13 +1,16 @@
 package com.idata365.app.serviceV2;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,15 +70,12 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		}
 		for (int i = 0; i < list.size(); i++) {
 			Map<String, String> bill = new HashMap<>();
-			FamilyParamBean bean = new FamilyParamBean();
-			bean.setFamilyId(Long.valueOf((String) list.get(i).get("familyId")));
-			FamilyInfoBean familyInfo = familyMapper.queryFamilyInfo(bean);
-			UsersAccount usersAccount = usersAccountMapper.findAccountById(familyInfo.getCreateUserId());
+			UsersAccount usersAccount = usersAccountMapper
+					.findAccountById(Long.valueOf(list.get(i).get("createUserId").toString()));
 			DicFamilyType familyType = DicFamilyTypeConstant
-					.getDicFamilyType(Integer.valueOf((String) list.get(i).get("familyType")));
-
-			bill.put("rank", list.get(i).get("yesterdayOrderNo").toString());
-			bill.put("name", familyInfo.getFamilyName());
+					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
+			bill.put("rank", String.valueOf(i + 1));
+			bill.put("name", list.get(i).get("familyName").toString());
 			bill.put("captainOrGroupName", usersAccount.getNickName());
 			bill.put("gradeOrNum", familyType.getFamilyTypeValue());
 			bill.put("trophyNum", list.get(i).get("trophy").toString());
@@ -86,20 +86,20 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	}
 
 	// 根据家族ID获取分数、名称、奖杯数、等级
-	public Map<String, String> getInfoByFamilyId(long familyId,String daystamp) {
-		if(daystamp == null) {
+	public Map<String, String> getInfoByFamilyId(long familyId, String daystamp) {
+		if (daystamp == null) {
 			daystamp = getCurrentDayStr();
 		}
-		Map<String, String> map = familyMapper.getInfoByFamilyId(familyId, daystamp);
+		Map<String, Object> map = familyMapper.getInfoByFamilyId(familyId, daystamp);
 		if (ValidTools.isBlank(map)) {
 			return null;
 		}
 		Map<String, String> bill = new HashMap<>();
 		FamilyParamBean bean = new FamilyParamBean();
-		bean.setFamilyId(Long.valueOf((String) map.get("familyId")));
+		bean.setFamilyId(Long.valueOf(map.get("familyId").toString()));
 		FamilyInfoBean familyInfo = familyMapper.queryFamilyInfo(bean);
 		DicFamilyType familyType = DicFamilyTypeConstant
-				.getDicFamilyType(Integer.valueOf((String) map.get("familyType")));
+				.getDicFamilyType(Integer.valueOf(map.get("familyType").toString()));
 
 		bill.put("rank", map.get("yesterdayOrderNo").toString());
 		bill.put("name", familyInfo.getFamilyName());
@@ -107,7 +107,6 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		bill.put("trophyNum", map.get("trophy").toString());
 		return bill;
 	}
-	
 
 	// 查询正在对战的家族系信息
 	public CompetitorFamilyInfoResultBean queryCompetitorFamilyInfo(long myFamilyId, String fightingTime) {
@@ -127,15 +126,74 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		long familyId2 = relationResultBean.getFamilyId2();
 
 		FamilyParamBean familyParamBean = new FamilyParamBean();
+		if (myFamilyId != familyId1) {
+			familyParamBean.setFamilyId(familyId1);
+		} else {
+			familyParamBean.setFamilyId(familyId2);
+		}
 
 		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
+
 		if (null == familyInfoBean) {
 			return null;
 		}
+
 		CompetitorFamilyInfoResultBean resultBean = new CompetitorFamilyInfoResultBean();
 		resultBean.setCompetitorFamilyId(String.valueOf(familyInfoBean.getId()));
 		resultBean.setFamilyName(familyInfoBean.getFamilyName());
+		resultBean.setImgUrl(familyInfoBean.getImgUrl());
+		resultBean.setCountdown(String.valueOf(calDown()));
+
 		return resultBean;
+	}
+
+	public static long calDown() {
+		try {
+			long calCountDown = calCountDown();
+			return calCountDown;
+		} catch (ParseException e) {
+			LOGGER.error("", e);
+		}
+
+		return 0;
+	}
+
+	private static final String ZERO_POINT = "00:00:00";
+
+	private static final String TEN_POINT = "10:00:00";
+
+	private static final String SIXTEEN_POINT = "16:00:00";
+
+	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+	public static long calCountDown() throws ParseException {
+		Date currentTs = Calendar.getInstance().getTime();
+		String prefixDayStr = DateFormatUtils.format(currentTs, "yyyy-MM-dd");
+
+		Date tomorrowDate = DateUtils.addDays(currentTs, 1);
+		String tomorrowDayStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
+
+		long currentSeconds = currentTs.getTime() / 1000L;
+
+		String zeroTsStr = prefixDayStr + " " + ZERO_POINT;
+		String tenTsStr = prefixDayStr + " " + TEN_POINT;
+		String sixteenTsStr = prefixDayStr + " " + SIXTEEN_POINT;
+
+		String tomorrowTsTr = tomorrowDayStr + " " + ZERO_POINT;
+
+		Date zeroTs = DateUtils.parseDate(zeroTsStr, DATE_PATTERN);
+		Date tenTs = DateUtils.parseDate(tenTsStr, DATE_PATTERN);
+		Date sixteenTs = DateUtils.parseDate(sixteenTsStr, DATE_PATTERN);
+
+		Date tomorrowTs = DateUtils.parseDate(tomorrowTsTr, DATE_PATTERN);
+
+		if (currentTs.compareTo(zeroTs) >= 0 && currentTs.compareTo(tenTs) < 0) {
+			return tenTs.getTime() / 1000 - currentSeconds;
+		} else if (currentTs.compareTo(tenTs) >= 0 && currentTs.compareTo(sixteenTs) < 0) {
+			return sixteenTs.getTime() / 1000 - currentSeconds;
+		} else {
+			return tomorrowTs.getTime() / 1000 - currentSeconds;
+		}
 	}
 
 	// 查询所在家族对战信息

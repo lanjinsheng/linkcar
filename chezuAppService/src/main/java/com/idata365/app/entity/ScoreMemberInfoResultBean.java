@@ -2,119 +2,110 @@ package com.idata365.app.entity;
 
 import java.io.Serializable;
 
-public class ScoreMemberInfoResultBean implements Serializable
-{
+public class ScoreMemberInfoResultBean implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4381063199344558779L;
 
 	private String imgUrl;
-	
+
 	private String name;
-	
+
 	private String userId;
-	
+
 	private String role;
-	
+
 	private String yesterdayRole;
-	
+
 	private String yesterdayScore;
-	
+
 	private String joinTime;
-	
+
+	private String recOnlineTime;
+
+	public String getRecOnlineTime() {
+		return recOnlineTime;
+	}
+
+	public void setRecOnlineTime(String recOnlineTime) {
+		this.recOnlineTime = recOnlineTime;
+	}
+
 	private String isCaptainFlag;
-	
+
 	private String tomorrowRole;
 
-	public String getImgUrl()
-	{
+	public String getImgUrl() {
 		return imgUrl;
 	}
 
-	public void setImgUrl(String imgUrl)
-	{
+	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getUserId()
-	{
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId)
-	{
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public String getRole()
-	{
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(String role)
-	{
+	public void setRole(String role) {
 		this.role = role;
 	}
 
-	public String getYesterdayRole()
-	{
+	public String getYesterdayRole() {
 		return yesterdayRole;
 	}
 
-	public void setYesterdayRole(String yesterdayRole)
-	{
+	public void setYesterdayRole(String yesterdayRole) {
 		this.yesterdayRole = yesterdayRole;
 	}
 
-	public String getYesterdayScore()
-	{
+	public String getYesterdayScore() {
 		return yesterdayScore;
 	}
 
-	public void setYesterdayScore(String yesterdayScore)
-	{
+	public void setYesterdayScore(String yesterdayScore) {
 		this.yesterdayScore = yesterdayScore;
 	}
 
-	public String getJoinTime()
-	{
+	public String getJoinTime() {
 		return joinTime;
 	}
 
-	public void setJoinTime(String joinTime)
-	{
+	public void setJoinTime(String joinTime) {
 		this.joinTime = joinTime;
 	}
 
-	public String getIsCaptainFlag()
-	{
+	public String getIsCaptainFlag() {
 		return isCaptainFlag;
 	}
 
-	public void setIsCaptainFlag(String isCaptainFlag)
-	{
+	public void setIsCaptainFlag(String isCaptainFlag) {
 		this.isCaptainFlag = isCaptainFlag;
 	}
 
-	public String getTomorrowRole()
-	{
+	public String getTomorrowRole() {
 		return tomorrowRole;
 	}
 
-	public void setTomorrowRole(String tomorrowRole)
-	{
+	public void setTomorrowRole(String tomorrowRole) {
 		this.tomorrowRole = tomorrowRole;
 	}
-	
+
 }

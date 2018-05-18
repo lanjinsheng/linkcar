@@ -85,9 +85,9 @@ public interface ScoreMapper
 	
 	public int updateUseZhitiao(ScoreFamilyInfoParamBean bean);
 
-	public double getAvgScore(@Param("memberId")String memberId,@Param("familyId") long myFamilyId, @Param("daystamp")String daystamp);
+	public Double getAvgScore(@Param("memberId")String memberId,@Param("familyId") long myFamilyId, @Param("daystamp")String daystamp);
 
-	public List<Map<String, Object>> getMemberInfoByTime(long familyId, String daystamp);
+	public List<Map<String, Object>> getMemberInfoByTime(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
 	
 	public int insertFamilyScore(FamilyScoreBean familyScoreBean);
 

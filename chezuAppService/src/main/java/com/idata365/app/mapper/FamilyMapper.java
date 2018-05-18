@@ -81,7 +81,7 @@ public interface FamilyMapper {
 
 	public List<Map<String, Object>> queryAllFamilyOrderNo(@Param("daystamp")String daystamp);
 	
-	public Map<String, String> getInfoByFamilyId(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
+	public Map<String, Object> getInfoByFamilyId(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
 
 	public List<Long> queryUserIdsWithSpeedPenal(FamilyParamBean bean);
 
