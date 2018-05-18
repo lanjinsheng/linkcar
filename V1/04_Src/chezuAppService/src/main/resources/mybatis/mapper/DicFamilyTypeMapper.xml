@@ -8,7 +8,7 @@
     </select>
     
     <select id="getSurPlusDays" resultType="java.util.HashMap" parameterType="java.lang.String">
- 		select startDay,endDay from dicFamilyType where <![CDATA[ endDay>=${dayStr} and startDay<=${dayStr}]]>
+ 		select startDay,endDay from dicGameDay where <![CDATA[ endDay>=#{dayStr} and startDay<=#{dayStr}]]>
  	</select>
     
 </mapper>

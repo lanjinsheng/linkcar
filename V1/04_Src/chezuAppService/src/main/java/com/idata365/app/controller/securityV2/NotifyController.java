@@ -23,7 +23,7 @@ public class NotifyController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(NotifyController.class);
 	@Autowired
 	DicService dicService;
-	@RequestMapping("/v2/indexNotice")
+	@RequestMapping("/indexNotice")
 	public Map<String, Object> getIndexFightInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 			long now=System.currentTimeMillis();
