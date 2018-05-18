@@ -1242,8 +1242,8 @@ public class ScoreService extends BaseService<ScoreService>
 		resultBean.setFamilyName(familyInfoBean.getFamilyName());
 		resultBean.setFamilyImgUrl(familyInfoBean.getImgUrl());
 		
-		List<Integer> userFamilyRoleIdList = this.scoreMapper.queryFamilyRoleIdList(bean);
-		bean.setUserFamilyRoleIdList(userFamilyRoleIdList);
+//		List<Integer> userFamilyRoleIdList = this.scoreMapper.queryFamilyRoleIdList(bean);
+//		bean.setUserFamilyRoleIdList(userFamilyRoleIdList);
 		
 		double statMileage = this.scoreMapper.statMileage(bean);
 		LOGGER.info("statMileage============="+statMileage);
