@@ -36,9 +36,9 @@
 		#{effectId},#{remark},now())
 	 </insert>
 
-	<select id="getDiamondsByEffectId" resultMap="BaseResultMap"
+	<select id="getPkDiamondsByEffectId" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
-		FROM assetUsersDiamondsLogs where effectId=#{effectId}
+		FROM assetUsersDiamondsLogs where effectId=#{effectId} and eventType=2 order by diamondsNum desc
 	</select>
 </mapper>
