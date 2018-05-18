@@ -11,7 +11,7 @@
     <insert id="initUserDayScore" parameterType="java.lang.String">
           INSERT IGNORE INTO  userScoreDayStat
 	       (userId,userFamilyScoreId,familyId,daystamp,avgScore)   
-	      select userId,id,familyId,#{daystamp},0 from userFamilyRoleLog where daystamp=#{daystamp}
+	      select userId,id,familyId,#{nowDay},0 from userFamilyRoleLog where daystamp=#{daystamp}
 	</insert>
     <update id="updateUserScoreDayById" parameterType="com.idata365.entity.UserScoreDayStat" >
        update userScoreDayStat
