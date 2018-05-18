@@ -21,7 +21,7 @@ public class ChezuAccountHystric implements ChezuAccountService {
 
 
 	@Override
-	public Map<String, Object> getUsersInfoByIds(String userIds, String sign) {
+	public Map<String, Object> getUsersInfoByIds(String userIds, Long familyId,String sign) {
 		// TODO Auto-generated method stub
 		LOG.error(" getUsersInfoByIds 挂了  service-account-chezu");
 		return null;
