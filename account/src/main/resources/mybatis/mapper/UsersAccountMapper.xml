@@ -35,7 +35,7 @@
        SELECT userId
        FROM  userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
      </select>
-       <select id="getCreateUserIdByFamilyId" resultType="java.lang.Long" parameterType="java.long.Long">
+       <select id="getCreateUserIdByFamilyId" resultType="java.lang.Long" parameterType="java.lang.Long">
        SELECT createUserId
        FROM  familyInfo where familyId=#{familyId} limit 1
      </select>
