@@ -48,9 +48,9 @@
 	  <insert id="initFamilyScore"  parameterType="com.idata365.entity.FamilyScore" >
        INSERT IGNORE  INTO 
             familyScore
-            (month,familyId,trophy,startDay,endDay) 
+            (month,familyId,trophy,startDay,endDay,familyType) 
         
-              select #{month},id,trophy,#{startDay},#{endDay} from familyInfo
+              select #{month},id,trophy,#{startDay},#{endDay},familyType from familyInfo
     </insert>	
  <!-- 定时处理行程逻辑 -->
     <update id="lockFamilyDayScoreTask" parameterType="com.idata365.entity.TaskFamilyDayScore" >
