@@ -15,7 +15,7 @@ public interface AssetUsersDiamondsLogsMapper {
 	List<AssetUsersDiamondsLogs> getIndexDiamondsFirst(@Param("userId") long userId);
 
 	int insertUsersDiamondsDay(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
-
-	List<AssetUsersDiamondsLogs> getDiamondsByEffectId(@Param("effectId") long effectId);
+	
+	List<AssetUsersDiamondsLogs> getPkDiamondsByEffectId(@Param("effectId") long effectId);
 
 }
