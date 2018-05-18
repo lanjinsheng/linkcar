@@ -283,7 +283,7 @@
        <ref bean="calFamilyMonthAvgOrderTaskExe"/> 
        <ref bean="calGameEndTaskExe"/>
      <!--  <ref bean="calUserDayEndBestDriveTaskExe"/> -->
-       <ref bean="calFamilyDayEndLevelTaskExe"/> 
+      <!--   <ref bean="calFamilyDayEndLevelTaskExe"/> -->
        
        <ref bean="configInitTaskExe"/> 
        <ref bean="calFamilyPkRelationTaskExe"/> 
