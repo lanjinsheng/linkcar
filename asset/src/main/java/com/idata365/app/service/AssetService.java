@@ -408,7 +408,7 @@ public class AssetService extends BaseService<AssetService> {
 		steal.setBallId(ballId);
 		steal.setDaystamp(DateTools.formatDateD(new Date()));
 		steal.setFamilyId(familyId);
-		if(fightFamilyId!=0) {
+		if (fightFamilyId != 0) {
 			steal.setFightFamilyId(fightFamilyId);
 		}
 		steal.setPowerNum((int) powerNum);
@@ -548,5 +548,52 @@ public class AssetService extends BaseService<AssetService> {
 			assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
 			return assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
 		}
+	}
+
+	/**
+	 * 
+	 * @Title: billBoard
+	 * @Description: TODO(用户分数、钻石排名)
+	 * @param @param
+	 *            billBoardType
+	 * @param @return
+	 *            参数
+	 * @return List<Map<String,String>> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
+	public List<Map<String, String>> billBoard(String billBoardType) {
+		List<Map<String, String>> billBoard = new ArrayList<>();
+		List<AssetUsersAsset> users = new ArrayList<>();
+		if ("2".equals(billBoardType)) {
+			// 按照今日动力排名
+			users = assetUsersAssetMapper.billBoardByPower();
+		} else {
+			// 按照钻石数量排名
+			users = assetUsersAssetMapper.billBoardByDiamond();
+		}
+		for (int i = 0; i < users.size(); i++) {
+			Map<String, String> bill = new HashMap<>();
+			bill.put("rank", String.valueOf(i + 1));
+			bill.put("userId", users.get(i).getUserId().toString());
+			if ("2".equals(billBoardType)) {
+				bill.put("gradeOrNum", users.get(i).getPowerNum().toString());
+			} else {
+				bill.put("gradeOrNum", users.get(i).getDiamondsNum().toString());
+			}
+			billBoard.add(bill);
+		}
+		return billBoard;
+	}
+
+	public Map<String, String> getCurOrderAndNum(long userId) {
+		Map<String, String> map = new HashMap<>();
+		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
+		map.put("diamondsNum", usersAsset.getDiamondsNum().toString());
+		map.put("powersNum", usersAsset.getPowerNum().toString());
+		map.put("diamondsNo", String.valueOf(assetUsersAssetMapper.getDiamondsCurOrder(userId)));
+		map.put("powersNo", String.valueOf(assetUsersAssetMapper.getPowersCurOrder(userId)));
+
+		return map;
 	}
 }

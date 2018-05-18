@@ -1,5 +1,6 @@
 package com.idata365.app.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,12 @@ public interface AssetUsersAssetMapper {
 
 	void userPowersSnapShot(@Param("tableName") String tableName);
 	int clearPowers(AssetUsersAsset assetUsersAsset);
+
+	List<AssetUsersAsset> billBoardByPower();
+
+	List<AssetUsersAsset> billBoardByDiamond();
+
+	int getDiamondsCurOrder(@Param("userId")long userId);
+	
+	int getPowersCurOrder(@Param("userId")long userId);
 }
