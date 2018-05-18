@@ -1,13 +1,17 @@
 package com.idata365.app.service;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.mapper.DicFamilyTypeMapper;
@@ -32,5 +36,20 @@ public class DicService extends BaseService<DicService>
 	{
 		return dicGameDayMapper.getGameDicByDaystamp(daystamp);
 	}
- 
+
+	public String getSurPlusDays() {
+		String dayStr = getCurrentDayStr();
+		Map<String, String> map = dicFamilyTypeMapper.getSurPlusDays(dayStr);
+		String endDay = map.get("endDay");
+		long ed = Long.valueOf(endDay.replaceAll("-", "")) - Long.valueOf(dayStr.replaceAll("-", ""));
+
+		return ed + "";
+	}
+
+	private String getCurrentDayStr() {
+		Calendar cal = Calendar.getInstance();
+		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
+		return dayStr;
+	}
+	
 }
