@@ -22,6 +22,7 @@ import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
+import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
@@ -48,6 +49,7 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccountParamBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
@@ -78,6 +80,8 @@ public class FamilyService extends BaseService<FamilyService>
 	private TaskMapper taskMapper;
 	@Autowired
 	UserRoleLogMapper userRoleLogMapper;
+	@Autowired
+	DicGameDayMapper dicGameDayMapper;
 	
 	public FamilyResultBean findFamily(long userId)
 	{
@@ -519,14 +523,10 @@ public class FamilyService extends BaseService<FamilyService>
 		UserRoleLog role=userRoleLogMapper.getLatestUserRoleLogByUserId(userId);
 		//组长自己绑定新创建的家族
 		bean.setFamilyId(familyId);
-		Date todayDate = Calendar.getInstance().getTime();
 		bean.setJoinTime(generateTimeStamp());
 		bean.setRole(role.getRole());
 		this.familyMapper.saveUserFamily(bean);
 		
-		Date tomorrowDate = DateUtils.addDays(todayDate, 1);
-		String startTime = DateFormatUtils.format(tomorrowDate, DateConstant.DAY_PATTERN_DELIMIT) + " 00:00:00";
-		String endTime = DateFormatUtils.format(tomorrowDate, DateConstant.DAY_PATTERN_DELIMIT) + " 23:59:59";
 		String curDayStr=getCurrentDayStr();
 		//初始化用户角色、成绩记录表start------------------
 		
@@ -540,18 +540,6 @@ public class FamilyService extends BaseService<FamilyService>
 		userFamilyRoleLogParamBean0.setEndTime(curDayStr+ " 23:59:59");
 		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean0);
 						
-		
-		
-		//记录用户在新家族的明天的角色
-//		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
-//		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
-//		userFamilyRoleLogParamBean.setFamilyId(familyId);
-//		userFamilyRoleLogParamBean.setDaystamp(getTomorrowDateUndelimiterStr());
-//		userFamilyRoleLogParamBean.setRole(RoleConstant.JIANBING_ROLE);
-//		userFamilyRoleLogParamBean.setStartTime(startTime);
-//		userFamilyRoleLogParamBean.setEndTime(endTime);
-//		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
-		
 		//初始化加入新家族后的userScoreDayStat记录
 		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 		tempScoreDayParamBean.setUserId(bean.getUserId());
@@ -570,7 +558,17 @@ public class FamilyService extends BaseService<FamilyService>
 		familyDriveDayStat.setFamilyType(DicFamilyTypeConstant.QingTong_5);
 		familyDriveDayStat.setFamilyFlag(0);
 		this.familyMapper.insertFamilyDriveDayStat(familyDriveDayStat);
-		
+		//初始化家族赛季
+		DicGameDay dicGameDay =dicGameDayMapper.getGameDicByDaystamp(curDayStr);
+		if(dicGameDay!=null){
+		FamilyScoreBean familyScoreBean=new FamilyScoreBean();
+			familyScoreBean.setFamilyId(familyId);
+			familyScoreBean.setFamilyType(DicFamilyTypeConstant.QingTong_5);
+			familyScoreBean.setTrophy(0);
+			familyScoreBean.setStartDay(dicGameDay.getStartDay());
+			familyScoreBean.setStartDay(dicGameDay.getEndDay());
+			scoreMapper.insertFamilyScore(familyScoreBean);
+		}
 		//更新是否通过邀请码加入状态
 		boolean inviteCodeFlag = bean.isInviteCodeFlag();
 		UsersAccountParamBean usersAccountParamBean = new UsersAccountParamBean();
