@@ -74,12 +74,11 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 	@Transactional
 	public List<Map<String,Object>> getFamilyDistribution(long familyId,long familySeasonId) {
 		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
-		List<AssetUsersDiamondsLogs>  diamondsLogs=assetUsersDiamondsLogsMapper.getDiamondsByEffectId(familySeasonId);
+		List<AssetUsersDiamondsLogs>  diamondsLogs=assetUsersDiamondsLogsMapper.getPkDiamondsByEffectId(familySeasonId);
 		StringBuffer users=new StringBuffer();
 		for(AssetUsersDiamondsLogs d:diamondsLogs) {
 			users.append(d.getUserId());
 			users.append(",");
-			
 		}
 		String userIds=users.substring(0, users.length()-1);
 		String sign=SignUtils.encryptHMAC(userIds);
