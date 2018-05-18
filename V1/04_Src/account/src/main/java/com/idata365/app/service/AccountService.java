@@ -49,24 +49,33 @@ public class AccountService extends BaseService<AccountService>
 	     * @author LanYeYe
 	  */
 	@Transactional
-	public Map<String,Object> getUsersInfoByIds(String userIds,String getImgBasePath)
+	public Map<String,Object> getUsersInfoByIds(String userIds,Long familyId,String getImgBasePath)
 	{
 		Map<String,Object> rtMap=new HashMap<String,Object>();
 		StringBuffer userNickNames=new StringBuffer();
 		StringBuffer userHeadUrls=new StringBuffer();
-
+		StringBuffer isPatriarchs=new StringBuffer();
+		long userId=usersAccountMapper.getCreateUserIdByFamilyId(familyId);
 		String []users=userIds.split(",");
 		for(String id:users) {
+		
 			UsersAccount account=usersAccountMapper.findAccountById(Long.valueOf(id));
 			if(account!=null) {
 				userNickNames.append(account.getNickName()==null?PhoneUtils.hidePhone(account.getPhone()):account.getNickName());
 				userNickNames.append(",");
 				userHeadUrls.append(account.getImgUrl()==null?"":getImgBasePath+account.getImgUrl());
 				userHeadUrls.append(",");
+				if(Long.valueOf(id).longValue()==userId) {
+					isPatriarchs.append("1");
+				}else {
+					isPatriarchs.append("0");
+				}
+				isPatriarchs.append(",");
 			}
 		}
 		rtMap.put("nickNames", userNickNames.substring(0, userNickNames.length()-1));
 		rtMap.put("userHeadUrls", userHeadUrls.substring(0, userHeadUrls.length()-1));
+		rtMap.put("isPatriarchs", isPatriarchs.substring(0, isPatriarchs.length()-1));
 		return rtMap;
 	}
 	

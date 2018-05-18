@@ -111,11 +111,11 @@ public class AccountController extends BaseController{
 	    * @author LanYeYe
 	 */
 	@RequestMapping(value = "/account/getUsersInfoByIds",method = RequestMethod.POST)
-	public Map<String,Object>  getUsersInfoByIds(@RequestParam(value="userIds") String userIds,@RequestParam(value="sign") String sign)
+	public Map<String,Object>  getUsersInfoByIds(@RequestParam(value="userIds") String userIds,@RequestParam(value="familyId") Long familyId,@RequestParam(value="sign") String sign)
 	{
 		
 		LOG.info("userIds="+userIds+"===sign="+sign);
-		return accountService.getUsersInfoByIds(userIds,this.getImgBasePath());
+		return accountService.getUsersInfoByIds(userIds,familyId,this.getImgBasePath());
 	}
 	
 
