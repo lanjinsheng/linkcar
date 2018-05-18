@@ -19,28 +19,26 @@ import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.DicNotifyMapper;
 
 @Service
-public class DicService extends BaseService<DicService>
-{
+public class DicService extends BaseService<DicService> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DicService.class);
-	
+
 	@Autowired
 	private DicFamilyTypeMapper dicFamilyTypeMapper;
 	@Autowired
 	DicGameDayMapper dicGameDayMapper;
 	@Autowired
 	DicNotifyMapper dicNotifyMapper;
-	
+
 	@Transactional
-	public List<DicFamilyType> getDicFamilyType()
-	{
+	public List<DicFamilyType> getDicFamilyType() {
 		return dicFamilyTypeMapper.getDicFamilyType(null);
 	}
+	
 	@Transactional
 	public String getNotify() {
 		  Map<String,String> map=dicNotifyMapper.getLatestNotify();
 		  return map.get("notifyText");
 	}
-
 	
 	@Transactional
 	public DicGameDay getDicGameDay(String daystamp)
@@ -57,8 +55,6 @@ public class DicService extends BaseService<DicService>
 		return ed + "";
 	}
 
-
-	
 	private String getCurrentDayStr() {
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
