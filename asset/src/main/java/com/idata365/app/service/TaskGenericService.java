@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.AssetConstant;
 import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.entity.AssetFamiliesAsset;
@@ -130,8 +131,8 @@ public class TaskGenericService {
 			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 			assetFamiliesDiamondsLogs.setDiamondsNum(diamondsNum);
 			assetFamiliesDiamondsLogs.setEffectId(task.getId());
-			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd);
-			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_1);
+			assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_SeasonEnd);
+			assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 			assetFamiliesDiamondsLogs.setFamilyId(0L);
 			assetFamiliesDiamondsLogs.setRemark(m.get("season")+"无冠军段位,资金流入系统账号");
 			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
@@ -143,8 +144,8 @@ public class TaskGenericService {
 			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 			assetFamiliesDiamondsLogs.setDiamondsNum(familyAsset.getDiamondsNum());
 			assetFamiliesDiamondsLogs.setEffectId(task.getId());
-			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd_Distr);
-			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_2);
+			assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_SeasonEnd_Distr);
+			assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 			assetFamiliesDiamondsLogs.setFamilyId(0L);
 			assetFamiliesDiamondsLogs.setRemark(m.get("season")+"累积的资金池清空");
 			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
@@ -173,8 +174,8 @@ public class TaskGenericService {
 			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 			assetFamiliesDiamondsLogs.setDiamondsNum(diamondsNum.multiply(BigDecimal.valueOf(memberNum)));
 			assetFamiliesDiamondsLogs.setEffectId(task.getId());
-			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd);
-			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_1);
+			assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_SeasonEnd);
+			assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 			assetFamiliesDiamondsLogs.setFamilyId(familyId);
 			assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 赛季分配");
 			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
@@ -207,9 +208,9 @@ public class TaskGenericService {
 			for(int i=0;i<userArray.length;i++) {
 				AssetUsersDiamondsLogs  assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
 				assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[i]));
-				assetUsersDiamondsLogs.setRecordType(AssetService.RecordType_1);
+				assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 				assetUsersDiamondsLogs.setEffectId(task.getId());
-				assetUsersDiamondsLogs.setEventType(AssetService.EventType_Daimond_GameEnd_User);
+				assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_GameEnd_User);
 				assetUsersDiamondsLogs.setRemark("赛季结束分配钻石");
 				assetUsersDiamondsLogs.setDiamondsNum(diamondsNum);
 				assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
@@ -224,8 +225,8 @@ public class TaskGenericService {
 			AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 			assetFamiliesDiamondsLogs.setDiamondsNum(familyDiamonds);
 			assetFamiliesDiamondsLogs.setEffectId(task.getId());
-			assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_SeasonEnd_Distr);
-			assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_2);
+			assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_SeasonEnd_Distr);
+			assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 			assetFamiliesDiamondsLogs.setFamilyId(familyId);
 			assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 赛季分配给成员");
 			assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
@@ -259,8 +260,8 @@ public class TaskGenericService {
 		AssetUsersDiamondsLogs assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
 		assetUsersDiamondsLogs.setDiamondsNum(dayDiamond);
 		assetUsersDiamondsLogs.setEffectId(task.getId());
-		assetUsersDiamondsLogs.setEventType(AssetService.EventType_Daimond_DayPower_User);
-		assetUsersDiamondsLogs.setRecordType(AssetService.RecordType_1);
+		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_DayPower_User);
+		assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 		assetUsersDiamondsLogs.setUserId(userId);
 		assetUsersDiamondsLogs.setRemark(task.getGenericKey()+" 每日分配");
 		assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
@@ -291,8 +292,8 @@ public class TaskGenericService {
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 		assetFamiliesDiamondsLogs.setDiamondsNum(gameDiamond);
 		assetFamiliesDiamondsLogs.setEffectId(task.getId());
-		assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_GameEnd);
-		assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_1);
+		assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_GameEnd);
+		assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 		assetFamiliesDiamondsLogs.setFamilyId(familyId);
 		assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 比赛分配");
 		assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
@@ -354,9 +355,9 @@ public class TaskGenericService {
 			powerList.add(hadPowerNum);
 			total+=hadPowerNum;
 			assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[i]));
-			assetUsersDiamondsLogs.setRecordType(AssetService.RecordType_1);
+			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 			assetUsersDiamondsLogs.setEffectId(task.getId());
-			assetUsersDiamondsLogs.setEventType(AssetService.EventType_Daimond_GameEnd_User);
+			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_GameEnd_User);
 			assetUsersDiamondsLogs.setRemark("按"+powerTableName+"PK结束分配钻石");
 			userList.add(assetUsersDiamondsLogs);
 		}
@@ -379,8 +380,8 @@ public class TaskGenericService {
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 		assetFamiliesDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(Double.valueOf(diamonds)));
 		assetFamiliesDiamondsLogs.setEffectId(task.getId());
-		assetFamiliesDiamondsLogs.setEventType(AssetService.EventType_Daimond_Distr);
-		assetFamiliesDiamondsLogs.setRecordType(AssetService.RecordType_2);
+		assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_Distr);
+		assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 		assetFamiliesDiamondsLogs.setFamilyId(familyId);
 		assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" PK比赛分配给成员");
 		assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);

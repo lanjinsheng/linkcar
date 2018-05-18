@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.AssetConstant;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
@@ -125,10 +126,10 @@ public class TempPowerRewardService extends BaseService<TempPowerRewardService> 
 			//
 			TempPowerReward r=tempPowerRewardMapper.getTempPowerReward(uuid);
 			AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
-			assetUsersPowerLogs.setEventType(AssetService.EventType_Power_Index_Get);
+			assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_Index_Get);
 			assetUsersPowerLogs.setEffectId(r.getId());
 			assetUsersPowerLogs.setPowerNum(r.getPowerNum());
-			assetUsersPowerLogs.setRecordType(AssetService.RecordType_1);
+			assetUsersPowerLogs.setRecordType(AssetConstant.RecordType_1);
 			assetUsersPowerLogs.setRemark("首页拾取增加动力");
 			assetUsersPowerLogs.setUserId(r.getUserId());
 			addUserPowers(assetUsersPowerLogs);
