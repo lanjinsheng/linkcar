@@ -67,7 +67,7 @@
    
    <!-- begin gameOver 逻辑处理 -->
      <select id="getUnInitGameEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
-	   select * from taskSystemScoreFlag where  taskGameEndInit=0 and taskFamilyPk=1
+	   select * from taskSystemScoreFlag where  taskGameEndInit=0 and taskFamilyPk=1 and taskFamilyMonthAvgOrder=1
 	</select>
    	<update id="updateGameEndInit" parameterType="com.idata365.entity.TaskSystemScoreFlag">
 		 update taskSystemScoreFlag
@@ -111,7 +111,6 @@
 	
 	<select id="getUnFinishFamilyMonthAvgOrderList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
 	   select * from taskSystemScoreFlag where taskFamilyOrderInit=1 and familyDayScoreFlag=1 and taskFamilyPk=1 
-	   and taskGameEnd=1
 	   and  taskFamilyMonthAvgOrder=0
 	</select>
 	<update id="finishFamilyMonthAvgOrderTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">

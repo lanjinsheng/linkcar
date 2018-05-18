@@ -3,11 +3,15 @@
 <mapper namespace="com.idata365.mapper.app.UserScoreDayStatMapper">
    <resultMap id="BaseUserScoreDayStatMap" type="com.idata365.entity.UserScoreDayStat" >
    </resultMap>
-    
+    <insert id="initUserFamilyRoleLog" parameterType="java.util.HashMap">
+          INSERT IGNORE INTO  userFamilyRoleLog
+	       (userId,familyId,daystamp,startTime,endTime)   
+	      select userId,familyId,#{daystamp}, #{startTime},#{endTime} from userFamilyRelation
+	</insert>
     <insert id="initUserDayScore" parameterType="java.lang.String">
           INSERT IGNORE INTO  userScoreDayStat
-	       (userId,familyId,daystamp,avgScore)   
-	      select userId,familyId,0 from userFamilyRelation
+	       (userId,userFamilyScoreId,familyId,daystamp,avgScore)   
+	      select userId,id,familyId,#{daystamp},0 from userFamilyRoleLog where daystamp=#{daystamp}
 	</insert>
     <update id="updateUserScoreDayById" parameterType="com.idata365.entity.UserScoreDayStat" >
        update userScoreDayStat
