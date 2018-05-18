@@ -89,11 +89,12 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			Long t2=System.currentTimeMillis();
 			if(t2>t1 && (t2-t1)<82800000) {//時間到了,未超過2小时，立馬促發
 				Map<String,Object> map=new HashMap<String,Object>();
-				map.put("daystamp", nowDay);
+				map.put("daystamp", nowDay.replaceAll("-", ""));
 				map.put("startTime", nowDay+" 00:00:00");
 				map.put("endTime", nowDay+" 23:59:59");
 				userScoreDayStatMapper.initUserFamilyRoleLog(map);
-				userScoreDayStatMapper.initUserDayScore(nowDay);
+				map.put("nowDay", nowDay);
+				userScoreDayStatMapper.initUserDayScore(map);
 				task.setUserDayScoreInit(1);
 				taskSystemScoreFlagMapper.updateUserDayScoreInit(task);
 			}

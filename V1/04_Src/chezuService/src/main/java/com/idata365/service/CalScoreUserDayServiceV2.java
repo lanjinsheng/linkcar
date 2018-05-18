@@ -41,11 +41,7 @@ public class CalScoreUserDayServiceV2  extends BaseService<CalScoreUserDayServic
 //		taskAchieveAddValueMapper.insertTaskAchieveAddValue(taskAchieveAddValue);
 //		return true;
 //	}
-	@Transactional
-	public void initUserDayScore(String  daystamp) {
-		userScoreDayStatMapper.initUserDayScore(daystamp);
-	}
-	
+ 
 	@Transactional
 	public void updateUserDayScore(UserScoreDayStat userScoreDayStat) {
 		userScoreDayStatMapper.updateUserScoreDayById(userScoreDayStat);
