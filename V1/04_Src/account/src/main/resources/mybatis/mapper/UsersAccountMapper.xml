@@ -35,7 +35,10 @@
        SELECT userId
        FROM  userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
      </select>
-     
+       <select id="getCreateUserIdByFamilyId" resultType="java.lang.Long" parameterType="java.long.Long">
+       SELECT createUserId
+       FROM  familyInfo where familyId=#{familyId} limit 1
+     </select>
      <select id="getCurrentUsersByFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT userId
        FROM  userFamilyRelation where familyId=#{familyId} and  where
