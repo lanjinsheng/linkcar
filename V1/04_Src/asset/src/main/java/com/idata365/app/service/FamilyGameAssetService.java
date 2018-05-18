@@ -85,12 +85,14 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		Map<String,Object> userInfos=chezuAccountService.getUsersInfoByIds(userIds, sign);
 		String []nickNames=String.valueOf(userInfos.get("nickNames")).split(",");
 		String []userHeadUrls=String.valueOf(userInfos.get("userHeadUrls")).split(",");
+		String []roleTypes=String.valueOf(userInfos.get("roleTypes")).split(",");
 		int i=0;
 		for(AssetUsersDiamondsLogs d:diamondsLogs) {
 			Map<String,Object> m=new HashMap<String,Object>();
 			m.put("rewardNum",String.valueOf(d.getDiamondsNum().doubleValue()));
 			m.put("nickName",nickNames[i]);
 			m.put("headImg",userHeadUrls[i]);
+			m.put("roleType", roleTypes[i]);
 			rtList.add(m);
 			i++;
 		}
