@@ -283,7 +283,7 @@ public class FamilyService extends BaseService<FamilyService>
 			//初始化加入新家族后的userScoreDayStat记录
 			UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 			tempScoreDayParamBean.setUserId(bean.getUserId());
-			tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
+//			tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
 			tempScoreDayParamBean.setDaystamp(getCurrentDayStr());
 			tempScoreDayParamBean.setFamilyId(bean.getFamilyId());
 			tempScoreDayParamBean.setAvgScore(0d);
