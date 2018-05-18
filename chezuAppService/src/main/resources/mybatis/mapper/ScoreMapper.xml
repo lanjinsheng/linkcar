@@ -85,7 +85,7 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t2.familyId=#{familyId} order by t2.daystamp desc limit #{start}, 10
 	</select>
 	
-	<select id="queryMemberAvgScore" resultType="java.lang.Double">
+	<select id="getAvgScore" resultType="java.lang.Double">
 		select avgScore from userScoreDayStat where userId=#{memberId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 
