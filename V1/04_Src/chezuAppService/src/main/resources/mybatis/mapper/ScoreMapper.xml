@@ -84,6 +84,10 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 		select t1.score as score, t2.role as role, t2.daystamp as dayStr from userScoreDayStat t1
 			join userFamilyRoleLog t2 on (t1.userFamilyScoreId=t2.id) where t1.userId=#{userId} and t2.familyId=#{familyId} order by t2.daystamp desc limit #{start}, 10
 	</select>
+	
+	<select id="queryMemberAvgScore" resultType="java.lang.Double">
+		select avgScore from userScoreDayStat where userId=#{memberId} and familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
 
 	<select id="queryHistoryRole" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
 		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{day}
@@ -176,4 +180,8 @@ select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as da
 	<update id="updateUseZhitiao" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		update userScoreDayStat set useZhitiao=useZhitiao+1 where userId=#{userId} and daystamp=#{daystamp}
 	</update>
+	
+	<select id="getMemberInfoByTime" resultType="java.util.HashMap">
+		select userId,score from userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
 </mapper>

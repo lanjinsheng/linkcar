@@ -1,6 +1,9 @@
 package com.idata365.app.remote;
 
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -29,6 +32,12 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		// TODO Auto-generated method stub
 		LOG.error("initFamilyCreate 挂了");
 		return false;
+	}
+
+	@Override
+	public List<Map<String, String>> billBoard(String billBoardType, String sign) {
+		LOG.error("billBoard 挂了");
+		return null;
 	}
 	 
 	

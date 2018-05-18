@@ -19,6 +19,10 @@
 	<select id="queryFamilyIdByCompetitorId" resultType="com.idata365.app.entity.FamilyRelationBean" parameterType="com.idata365.app.entity.FamilyRelationBean">
 		 select selfFamilyId as familyId1, competitorFamilyId as familyId2 from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and daystamp=#{daystamp}
 	</select>
+	
+	<select id="queryFightRecordByFamilyId" resultType="com.idata365.app.entity.FamilyRelation">
+		 select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) order by daystamp desc limit 20
+	</select>
 
 	<select id="queryFamilyRelationIds" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyRelationBean">
 		select id from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and daystamp=#{daystamp}
@@ -143,6 +147,14 @@
  		select yesterdayOrderNo as orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
+ 	<select id="queryAllFamilyOrderNo" resultType="java.util.HashMap">
+ 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=${daystamp} and startDay<=${daystamp}]]> order by yesterdayOrderNo limit 70
+ 	</select>
+ 	
+ 	<select id="getInfoByFamilyId" resultType="java.util.HashMap">
+ 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=${daystamp} and startDay<=${daystamp}]]> and familyId=#{familyId}
+ 	</select>
+ 	 
  	<select id="queryUserIdsWithSpeedPenal" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select t1.userId as userId from userFamilyRelation t1 
 			join userScoreDayStat t2 on (t1.userId=t2.userId) 
@@ -216,7 +228,7 @@
  	<select id="queryFamilyInfo" resultType="com.idata365.app.entity.FamilyInfoBean" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select * from familyInfo where id=#{familyId}
  	</select>
- 	 	
+ 	
  	<select id="countByType" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select count(id) from familyInfo where familyType=#{familyType} and id!=999999
  	</select>

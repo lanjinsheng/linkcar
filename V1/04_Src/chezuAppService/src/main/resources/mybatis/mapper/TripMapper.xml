@@ -7,6 +7,12 @@
        SELECT *
        FROM  userTravelHistory where addDayStatFlag=1 and userId=#{userId} order by id desc limit 1
      </select>
+     
+     <select id="getTripEndTimeOfUser" resultType="java.lang.String" parameterType="java.lang.Long">
+       SELECT endTime
+       FROM  userTravelHistory where userId=#{userId} order by id desc limit 1
+     </select>
+     
         <select id="getTripSpeciality" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
        FROM  userTravelHistory where addDayStatFlag=1 and id=#{travelId}  order by id desc limit 1
