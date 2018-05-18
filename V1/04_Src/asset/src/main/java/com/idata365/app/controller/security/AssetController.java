@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.service.AssetService;
@@ -64,7 +65,11 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		List<Map<String, String>> data = assetService.getIndexDiamonds(userId, requestBodyParams);
-		return ResultUtils.rtSuccess(data);
+		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
+		Map<String, Object> result = new HashMap<>();
+		result.put("data", data);
+		result.put("myorder", myorder);
+		return ResultUtils.rtSuccess(result);
 	}
 
 	/**
@@ -82,7 +87,11 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		List<Map<String, String>> data = assetService.getIndexPowers(userId, requestBodyParams);
-		return ResultUtils.rtSuccess(data);
+		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
+		Map<String, Object> result = new HashMap<>();
+		result.put("data", data);
+		result.put("myorder", myorder);
+		return ResultUtils.rtSuccess(result);
 	}
 
 	/**

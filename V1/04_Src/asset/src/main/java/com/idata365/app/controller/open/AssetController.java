@@ -217,6 +217,29 @@ public class AssetController extends BaseController {
     	return true;
     }
 
+    /**
+	 * 
+	 * @Title: billBoard
+	 * @Description: TODO(实时榜单)
+	 * @param @param
+	 *            familyId
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             Lixing
+	 */
+	@RequestMapping(value = "/asset/billBoard", method = RequestMethod.POST)
+	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("billBoard:" + billBoardType + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + sign);
+		
+		List<Map<String, String>> billList = assetService.billBoard(billBoardType);
+		return billList;
+	}
     
     @RequestMapping(value = "/asset/addFamilySeason",method = RequestMethod.POST)
     boolean addFamilySeason(@RequestParam(value="sign")   String sign, @RequestBody   FamilySeasonAsset familySeasonAsset){
@@ -233,7 +256,6 @@ public class AssetController extends BaseController {
 		taskAutoAddService.syncFamilySeasonEndAdd(season,gameDayNum);
 		return true;
     }
-    
 	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));

@@ -7,6 +7,25 @@
        SELECT *
        FROM  assetUsersAsset where userId=#{userId}
      </select>
+     <select id="billBoardByPower" resultMap="BaseResultMap">
+       SELECT *
+       FROM  assetUsersAsset order by powerNum desc limit 50
+     </select>
+     <select id="billBoardByDiamond" resultMap="BaseResultMap">
+       SELECT *
+       FROM  assetUsersAsset order by diamondsNum desc limit 50
+     </select>
+     
+     <select id="getDiamondsCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT count(*)
+       FROM  assetUsersAsset where diamondsNum>=(select diamondsNum from assetUsersAsset where userId=#{userId})
+     </select>
+     
+     <select id="getPowersCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT count(*)
+       FROM  assetUsersAsset where powerNum>=(select powerNum from assetUsersAsset where userId=#{userId})
+     </select>
+     
       <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
         update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}) where
            <![CDATA[ diamondsNum>=${diamondsNum} and userId=#{userId}]]>
