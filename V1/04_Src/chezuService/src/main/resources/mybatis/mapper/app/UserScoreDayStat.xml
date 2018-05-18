@@ -38,7 +38,7 @@
             speedTimes,speedTimesUpdateTime,overspeedTimes,overspeedTimesUpdateTime,
             tiredDrive,tiredDriveTimes,tiredDriveTimesUpdateTime,nightDriveTimes,nightDriveTimesUpdateTime,maxspeed,
             useShachepian,useHongniu,useYeshijing,useFadongji,
-            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage,familyId,avgScore) 
+            useCheluntai,useZengyaqi,illegalStopTimes,illegalStopUpdateTime,travelNum,mileage,familyId,avgScore,time) 
         VALUES
             (#{userId},#{daystamp}, #{userFamilyScoreId}, #{brakeTimes}, #{brakeTimesUpdateTime},#{turnTimes},
             #{turnTimesUpdateTime},
@@ -46,7 +46,8 @@
              #{tiredDrive}, #{tiredDriveTimes}, #{tiredDriveTimesUpdateTime}
             , #{nightDriveTimes}, #{nightDriveTimesUpdateTime},#{maxspeed},
             #{useShachepian},#{useHongniu},#{useYeshijing},#{useFadongji},
-             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage},#{familyId},#{avgScore})
+             #{useCheluntai},#{useZengyaqi},#{illegalStopTimes},#{illegalStopUpdateTime},#{travelNum},#{mileage},
+             #{familyId},#{avgScore},#{time})
         ON DUPLICATE KEY UPDATE 
         brakeTimes=brakeTimes+${brakeTimes},
         brakeTimesUpdateTime=#{brakeTimesUpdateTime},
@@ -71,6 +72,7 @@
       illegalStopUpdateTime=#{illegalStopUpdateTime},
       travelNum=travelNum+${travelNum},
       mileage=mileage+${mileage},
+      time=time+${time},
       avgScore=convert(IF(avgScore=30,${avgScore},avgScore+${avgScore})/(travelNum+${travelNum}),decimal(10,2))
          
     </insert>
