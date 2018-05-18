@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.AssetConstant;
 import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
@@ -44,24 +45,6 @@ import com.idata365.app.util.ValidTools;
 @Service
 public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
-
-	public final static int EventType_Power_Index_Get = 2;// 首页拾取
-	public final static int EventType_Power_Trip = 4;// 行程
-	public final static int EventType_Power_SignIn = 1;// 签到
-
-	public final static int EventType_Daimond_DayPower_User = 1;// 每日分配
-	public final static int EventType_Daimond_GameEnd_User = 2;// PK结束家族分配
-	public final static int EventType_Buy = 3;//购买消费
-	public final static int EventType_Daimond_SeasonEnd_User = 4;// 比赛赛季结束家族分配
-	
-	//家族
-	public final static int EventType_Daimond_GameEnd = 1;// 比赛获取
-	public final static int EventType_Daimond_Distr = 2;// PK比赛分配消耗
-	public final static int EventType_Daimond_SeasonEnd = 3;// 赛季获取
-	public final static int EventType_Daimond_SeasonEnd_Distr = 4;// 赛季分配消耗
-
-	public final static int RecordType_2 = 2;// 减少
-	public final static int RecordType_1 = 1;// 增加
 	@Autowired
 	AssetUsersAssetMapper assetUsersAssetMapper;
 	@Autowired
@@ -145,6 +128,7 @@ public class AssetService extends BaseService<AssetService> {
 				Map<String, String> rtMap = new HashMap<String, String>();
 				rtMap.put("id", String.valueOf(list.get(i).getId()));
 				rtMap.put("receiveType", String.valueOf(list.get(i).getEventType()));
+				rtMap.put("receiveTypeName",AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()) );
 				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
 				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
 				data.add(rtMap);
@@ -180,6 +164,7 @@ public class AssetService extends BaseService<AssetService> {
 			Map<String, String> rtMap = new HashMap<String, String>();
 			rtMap.put("id", "");
 			rtMap.put("receiveType", "");
+			rtMap.put("receiveTypeName", "");
 			rtMap.put("powerNum", "");
 			rtMap.put("time", "");
 			data.add(rtMap);
@@ -188,6 +173,7 @@ public class AssetService extends BaseService<AssetService> {
 				Map<String, String> rtMap = new HashMap<String, String>();
 				rtMap.put("id", String.valueOf(list.get(i).getId()));
 				rtMap.put("receiveType", String.valueOf(list.get(i).getEventType()));
+				rtMap.put("receiveTypeName", AssetConstant.UserPowerEventMap.get(list.get(i).getEventType()));
 				rtMap.put("powerNum", String.valueOf(list.get(i).getPowerNum()));
 				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
 
@@ -222,8 +208,8 @@ public class AssetService extends BaseService<AssetService> {
 			AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 			assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 			assetUsersDiamondsLogs.setEffectId(0L);
-			assetUsersDiamondsLogs.setEventType(EventType_Buy);
-			assetUsersDiamondsLogs.setRecordType(RecordType_2);
+			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Buy);
+			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 			assetUsersDiamondsLogs.setRemark("购买消费");
 			assetUsersDiamondsLogs.setUserId(userId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
@@ -476,7 +462,7 @@ public class AssetService extends BaseService<AssetService> {
 	public String getUserPowerByEffectId(long effectId) {
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 		assetUsersPowerLogs.setEffectId(effectId);
-		assetUsersPowerLogs.setEventType(EventType_Power_Trip);
+		assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_Trip);
 		AssetUsersPowerLogs apl = assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
 		if (apl == null)
 			return "0";
@@ -554,9 +540,9 @@ public class AssetService extends BaseService<AssetService> {
 		} else {
 			AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 			assetUsersPowerLogs.setEffectId(0l);
-			assetUsersPowerLogs.setEventType(EventType_Power_SignIn);
+			assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_SignIn);
 			assetUsersPowerLogs.setPowerNum(5l);
-			assetUsersPowerLogs.setRecordType(RecordType_1);
+			assetUsersPowerLogs.setRecordType(AssetConstant.RecordType_1);
 			assetUsersPowerLogs.setRemark(userId + "签到获取");
 			assetUsersPowerLogs.setUserId(userId);
 			assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
