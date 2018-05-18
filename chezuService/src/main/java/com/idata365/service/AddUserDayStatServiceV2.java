@@ -225,6 +225,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			userScoreDayStat.setTravelNum(1);
 			userScoreDayStat.setAvgScore(Double.valueOf(uth.getScore()));
 			userScoreDayStat.setIllegalStopPenalTimes(0);
+			userScoreDayStat.setIllegalStopTimes(0);
 			if(families!=null && families.size()>0) {
 				for(Map<String,Object> map: families) {
 					long familyId=Long.valueOf(map.get("familyId").toString());
