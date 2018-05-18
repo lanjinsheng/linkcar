@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.constant.DicFamilyTypeConstant;
 import com.idata365.entity.FamilyDriveDayStat;
 import com.idata365.entity.FamilyScore;
 import com.idata365.entity.TaskFamilyDayScore;
@@ -229,6 +230,7 @@ public class CalScoreFamilyDayServiceV2 {
 		fs.setDayTimes(1);
 		fs.setStartDay(startDay);
 		fs.setEndDay(endDay);
+		fs.setFamilyType(DicFamilyTypeConstant.QingTong_5);//默认青铜5级
 		taskFamilyDayScoreMapper.insertFamilyScore(fs);
 		return true;
 	}

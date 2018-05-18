@@ -9,11 +9,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.idata365.entity.TaskGameEnd;
 import com.idata365.entity.TaskKeyLog;
 import com.idata365.entity.TaskSystemScoreFlag;
-import com.idata365.entity.UserScoreDayStat;
 import com.idata365.remote.ChezuAssetService;
-import com.idata365.service.CalGameEndService;
 import com.idata365.service.CalGameEndServiceV2;
-import com.idata365.service.CalScoreUserDayService;
 import com.idata365.service.ConfigSystemTaskService;
 import com.idata365.service.TaskKeyLogService;
 import com.idata365.util.DateTools;
@@ -24,7 +21,7 @@ import com.idata365.util.SignUtils;
 /**
  * 
     * @ClassName: CalGameEndTask
-    * @Description: TODO(增加违章次数)
+    * @Description: TODO(赛季结束通知与家族荣誉回退)
     * @author LanYeYe
     * @date 2017年12月31日
     *
@@ -76,8 +73,13 @@ public class CalGameEndTask extends TimerTask {
 			if(list.size()==0) {//无任务
 				Integer dayNum=DateTools.rtDiffDay(tf.getStartDay(), tf.getEndDay());
 				String sign=SignUtils.encryptHMAC(tf.getDaystamp()+dayNum);
-				boolean b=chezuAssetService.addFamilySeasonEnd(tf.getDaystamp(), String.valueOf(dayNum), sign);
-				if(b) {
+				if(tf.getDaystamp().equals(tf.getEndDay())) {
+					//通知资产进行赛季奖励
+					boolean b=chezuAssetService.addFamilySeasonEnd(tf.getDaystamp(), String.valueOf(dayNum), sign);
+					if(b) {
+						configSystemTaskService.finishConfigSystemGameEndTask(tf);
+					}
+				}else {
 					configSystemTaskService.finishConfigSystemGameEndTask(tf);
 				}
 			}
