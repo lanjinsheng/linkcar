@@ -73,10 +73,11 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		userConfigService.getUserConfig();
 		//查询竞赛时间
 		String dayStamp=getDateStr(-1);
+		String nowDay=getDateStr(0);
 		DicGameDay gameDay=dicGameDayMapper.queryDicGameDay(dayStamp);
 		if(gameDay==null) {
 			gameDay=new DicGameDay();
-			gameDay.setStartDay(dayStamp);
+			gameDay.setStartDay(nowDay);
 			gameDay.setEndDay(getDateStr(systemProperties.getGameDay()));
 			dicGameDayMapper.insertDicGameDay(gameDay);
 		}
@@ -86,8 +87,12 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		for (TaskSystemScoreFlag task:tasks1) {
 			Long t1=DateTools.getDateTimeOfLong(task.getDaystamp()+" 23:59:59");
 			Long t2=System.currentTimeMillis();
-			if(t2>t1 && (t2-t1)<7200000) {//時間到了,未超過2小时，立馬促發
-				String nowDay=getDateStr(0);
+			if(t2>t1 && (t2-t1)<82800000) {//時間到了,未超過2小时，立馬促發
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("daystamp", nowDay);
+				map.put("startTime", nowDay+" 00:00:00");
+				map.put("endTime", nowDay+" 23:59:59");
+				userScoreDayStatMapper.initUserFamilyRoleLog(map);
 				userScoreDayStatMapper.initUserDayScore(nowDay);
 				task.setUserDayScoreInit(1);
 				taskSystemScoreFlagMapper.updateUserDayScoreInit(task);
@@ -158,10 +163,17 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 		List<TaskSystemScoreFlag> tasks10=taskSystemScoreFlagMapper.getUnInitFamilyScore();
 		for (TaskSystemScoreFlag task:tasks10) {
 			if(dayStamp.equals(task.getEndDay())) {
-				//比赛结算时间到了,初始化任务
+				//比赛结算时间到了,初始化下赛季任务
+				DicGameDay gameDayNext=dicGameDayMapper.queryDicGameDay(nowDay);
+				if(gameDayNext==null) {
+					gameDayNext=new DicGameDay();
+					gameDayNext.setStartDay(nowDay);
+					gameDayNext.setEndDay(getDateStr(systemProperties.getGameDay()));
+					dicGameDayMapper.insertDicGameDay(gameDayNext);
+				}
 				FamilyScore familyScore=new FamilyScore();
-				familyScore.setStartDay(gameDay.getStartDay());
-				familyScore.setEndDay(gameDay.getEndDay());
+				familyScore.setStartDay(gameDayNext.getStartDay());
+				familyScore.setEndDay(gameDayNext.getEndDay());
 				taskFamilyDayScoreMapper.initFamilyScore(familyScore);
 			}else {
 				
