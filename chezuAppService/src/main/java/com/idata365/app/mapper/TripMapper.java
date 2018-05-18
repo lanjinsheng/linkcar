@@ -16,5 +16,5 @@ public interface TripMapper
 	
 	public List<Map<String,Object>> getTripLatest(Map<String,Object> map);
 	
-	 
+	public String getTripEndTimeOfUser(@Param("userId") Long userId);
 }

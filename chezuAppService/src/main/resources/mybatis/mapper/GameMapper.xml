@@ -6,6 +6,10 @@
 		select * from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	
+	<select id="queryFamilyScore" resultType="com.idata365.app.entity.FamilyDriveDayStat">
+		select * from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
+	
 	<insert id="saveFamilyRelation" parameterType="com.idata365.app.entity.FamilyRelationParamBean" useGeneratedKeys="true" keyProperty="id" >
 		insert into familyRelation(selfFamilyId, competitorFamilyId, daystamp) values(#{selfFamilyId}, #{competitorFamilyId}, #{daystamp});
 	</insert>

@@ -23,6 +23,6 @@ public class ChezuHystric implements ChezuService {
 		LOG.info(" getGpsByUH 挂了   service-chezu");
 		return null;
 	}
-	
+
  
 }

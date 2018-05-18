@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
     * @date 2017年12月28日
     *
  */
+
 @FeignClient(value = "service-chezu",fallback = ChezuHystric.class)
 public interface ChezuService {
+	
     @RequestMapping(value = "/v1/updateUserDevice",method = RequestMethod.POST)
     boolean updateUserDevice(@RequestParam  Map<String,Object>  map);
     
@@ -39,4 +41,5 @@ public interface ChezuService {
      */
    @RequestMapping(value = "/drive/getGpsByUH",method = RequestMethod.POST)
    Map<String,Object> getGpsByUH(@RequestParam  Map<String,Object>  map);
+   
 }

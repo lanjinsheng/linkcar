@@ -3,9 +3,12 @@ package com.idata365.app.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.app.entity.DriverVehicleResultBean;
 import com.idata365.app.entity.FamilyChallengeLogBean;
 import com.idata365.app.entity.FamilyChallengeLogParamBean;
+import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyRelationParamBean;
 import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.ReviewBean;
@@ -24,6 +27,8 @@ public interface GameMapper
 {
 	public ViolationStatBean queryFamilyDriveDayStat(ViolationStatParamBean bean);
 	
+	public FamilyDriveDayStat queryFamilyScore(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
+
 	public void saveFamilyRelation(FamilyRelationParamBean bean);
 	
 	public List<StationBean> queryStations(FamilyRelationParamBean bean);

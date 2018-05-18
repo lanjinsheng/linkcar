@@ -1,6 +1,9 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyMemberBean;
@@ -81,4 +84,8 @@ public interface ScoreMapper
 	public int updateUseHoldNum(ScoreFamilyInfoParamBean bean);
 	
 	public int updateUseZhitiao(ScoreFamilyInfoParamBean bean);
+
+	public double getAvgScore(@Param("memberId")String memberId,@Param("familyId") long myFamilyId, @Param("daystamp")String daystamp);
+
+	public List<Map<String, Object>> getMemberInfoByTime(long familyId, String daystamp);
 }
