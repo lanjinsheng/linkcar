@@ -62,18 +62,10 @@
             nightDriveTimes=nightDriveTimes+${nightDriveTimes},
          nightDriveTimesUpdateTime= #{nightDriveTimesUpdateTime},
          maxspeed=GREATEST(maxspeed,${maxspeed}),
-         useShachepian=useShachepian+${useShachepian},
-         useHongniu=useHongniu+${useHongniu},
-        useYeshijing=useYeshijing+${useYeshijing},
-        useFadongji=useFadongji+${useFadongji},
-        useCheluntai=useCheluntai+${useCheluntai},
-      useZengyaqi=useZengyaqi+${useZengyaqi},
-      illegalStopTimes=illegalStopTimes+${illegalStopTimes},
-      illegalStopUpdateTime=#{illegalStopUpdateTime},
-      travelNum=travelNum+${travelNum},
       mileage=mileage+${mileage},
       time=time+${time},
-      avgScore=convert(IF(avgScore=30,${avgScore},avgScore+${avgScore})/(travelNum+${travelNum}),decimal(10,2))
+      avgScore=convert(IF(avgScore=30,${avgScore},avgScore+${avgScore})/(travelNum+${travelNum}),decimal(10,2)),
+      travelNum=travelNum+${travelNum}
          
     </insert>
     
