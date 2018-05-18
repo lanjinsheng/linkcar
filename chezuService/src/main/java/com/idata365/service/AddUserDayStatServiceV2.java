@@ -177,8 +177,6 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		int power=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
 		//查询当前家族，并贡献分数与动力
 		List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
-		
-
 			UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
 			userScoreDayStat.setUserId(uth.getUserId());
 			//这个错误，应该通过familyId
@@ -223,6 +221,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			userScoreDayStat.setUseYeshijing(uth.getUseYeshijing());
 			userScoreDayStat.setUseZengyaqi(uth.getUseZengyaqi());
 			userScoreDayStat.setMileage(uth.getMileage());
+			userScoreDayStat.setTime(Double.valueOf(uth.getTime()));
 			userScoreDayStat.setTravelNum(1);
 			userScoreDayStat.setAvgScore(Double.valueOf(uth.getScore()));
 			if(families!=null && families.size()>0) {
