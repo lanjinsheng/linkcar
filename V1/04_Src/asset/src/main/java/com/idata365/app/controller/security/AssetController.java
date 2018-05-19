@@ -46,6 +46,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getTotalNums(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		Map<String, String> data = assetService.getTotalNums(userId);
 		return ResultUtils.rtSuccess(data);
 	}
@@ -64,6 +65,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexDiamonds(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		List<Map<String, String>> data = assetService.getIndexDiamonds(userId, requestBodyParams);
 		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
@@ -86,6 +88,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		List<Map<String, String>> data = assetService.getIndexPowers(userId, requestBodyParams);
 		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
@@ -113,6 +116,7 @@ public class AssetController extends BaseController {
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
@@ -138,6 +142,7 @@ public class AssetController extends BaseController {
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
 		long powerNum = Long.valueOf(String.valueOf(requestBodyParams.get("power")));
@@ -174,6 +179,7 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getStoleRecord(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		StringBuilder sb = new StringBuilder();
@@ -219,6 +225,7 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 
 		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
 		//
 		assetService.getDaySignInLog(userId);
 		String sign=SignUtils.encryptHMAC(String.valueOf(userId));
