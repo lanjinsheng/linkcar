@@ -33,7 +33,7 @@ spring:
 # 驱动配置信息
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://115.159.216.58:6633/sjtest?useUnicode=true&useSSL=false
+    url: jdbc:mysql://115.159.216.58:6633/devBss?useUnicode=true&useSSL=false
     username: sjTest
     password: sjTest2962143!
 
