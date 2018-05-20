@@ -232,12 +232,12 @@ public class AssetController extends BaseController {
 	 *             Lixing
 	 */
 	@RequestMapping(value = "/asset/billBoard", method = RequestMethod.POST)
-	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,
+	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "sign") String sign) {
 		LOG.info("billBoard:" + billBoardType + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + sign);
-		
-		List<Map<String, String>> billList = assetService.billBoard(billBoardType);
+		LOG.info("userId:" + userId);
+		List<Map<String, String>> billList = assetService.billBoard(billBoardType,userId);
 		return billList;
 	}
     

@@ -31,4 +31,8 @@ public interface AssetUsersAssetMapper {
 	int getDiamondsCurOrder(@Param("userId")long userId);
 	
 	int getPowersCurOrder(@Param("userId")long userId);
+	
+	int queryDiamondsUserOrderByUId(@Param("userId")long userId);
+	
+	int queryPowersUserOrderByUId(@Param("userId")long userId);
 }
