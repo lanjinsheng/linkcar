@@ -37,7 +37,7 @@
      </select>
        <select id="getCreateUserIdByFamilyId" resultType="java.lang.Long" parameterType="java.lang.Long">
        SELECT createUserId
-       FROM  familyInfo where familyId=#{familyId} limit 1
+       FROM  familyInfo where id=#{familyId} limit 1
      </select>
      <select id="getCurrentUsersByFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT userId
