@@ -17,14 +17,24 @@
      </select>
      
      <select id="getDiamondsCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
-       SELECT count(*)
-       FROM  assetUsersAsset where diamondsNum>=(select diamondsNum from assetUsersAsset where userId=#{userId})
+       SELECT (count(*)+1)
+       FROM  assetUsersAsset where diamondsNum>(select diamondsNum from assetUsersAsset where userId=#{userId})
      </select>
      
      <select id="getPowersCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
-       SELECT count(*)
-       FROM  assetUsersAsset where powerNum>=(select powerNum from assetUsersAsset where userId=#{userId})
+       SELECT (count(*)+1)
+       FROM  assetUsersAsset where powerNum>(select powerNum from assetUsersAsset where userId=#{userId})
      </select>
+     
+     <select id="queryDiamondsUserOrderByUId" resultType="java.lang.Integer">
+ 		SELECT (count(*)+1)
+       FROM  assetUsersAsset where diamondsNum>(select diamondsNum from assetUsersAsset where userId=#{userId})
+ 	</select>
+ 	
+ 	<select id="queryPowersUserOrderByUId" resultType="java.lang.Integer">
+ 		SELECT (count(*)+1)
+       FROM  assetUsersAsset where powerNum>(select powerNum from assetUsersAsset where userId=#{userId})
+ 	</select>
      
       <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
         update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}) where

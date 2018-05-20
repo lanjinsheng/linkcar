@@ -67,11 +67,11 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		LOG.info("userId================="+userId);
 		List<Map<String, String>> data = assetService.getIndexDiamonds(userId, requestBodyParams);
-		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
+//		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
-		result.put("data", data);
-		result.put("myorder", myorder);
-		return ResultUtils.rtSuccess(result);
+//		result.put("data", data);
+//		result.put("myorder", myorder);
+		return ResultUtils.rtSuccess(data);
 	}
 
 	/**
@@ -90,11 +90,11 @@ public class AssetController extends BaseController {
 		long userId = this.getUserId();
 		LOG.info("userId================="+userId);
 		List<Map<String, String>> data = assetService.getIndexPowers(userId, requestBodyParams);
-		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
-		Map<String, Object> result = new HashMap<>();
-		result.put("data", data);
-		result.put("myorder", myorder);
-		return ResultUtils.rtSuccess(result);
+//		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
+//		Map<String, Object> result = new HashMap<>();
+//		result.put("data", data);
+//		result.put("myorder", myorder);
+		return ResultUtils.rtSuccess(data);
 	}
 
 	/**

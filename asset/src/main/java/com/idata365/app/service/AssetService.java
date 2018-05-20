@@ -128,7 +128,7 @@ public class AssetService extends BaseService<AssetService> {
 				Map<String, String> rtMap = new HashMap<String, String>();
 				rtMap.put("id", String.valueOf(list.get(i).getId()));
 				rtMap.put("receiveType", String.valueOf(list.get(i).getEventType()));
-				rtMap.put("receiveTypeName",AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()) );
+				rtMap.put("receiveTypeName", AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()));
 				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
 				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
 				data.add(rtMap);
@@ -562,9 +562,11 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LiXing
 	 */
-	public List<Map<String, String>> billBoard(String billBoardType) {
+	public List<Map<String, String>> billBoard(String billBoardType, long userId) {
 		List<Map<String, String>> billBoard = new ArrayList<>();
 		List<AssetUsersAsset> users = new ArrayList<>();
+		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
+
 		if ("2".equals(billBoardType)) {
 			// 按照今日动力排名
 			users = assetUsersAssetMapper.billBoardByPower();
@@ -572,9 +574,17 @@ public class AssetService extends BaseService<AssetService> {
 			// 按照钻石数量排名
 			users = assetUsersAssetMapper.billBoardByDiamond();
 		}
+		users.add(usersAsset);
 		for (int i = 0; i < users.size(); i++) {
 			Map<String, String> bill = new HashMap<>();
-			bill.put("rank", String.valueOf(i + 1));
+			if ("2".equals(billBoardType)) {
+				// 按照今日动力排名
+				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryPowersUserOrderByUId(users.get(i).getUserId())));
+			} else {
+				// 按照钻石数量排名
+				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryDiamondsUserOrderByUId(users.get(i).getUserId())));
+			}
+
 			bill.put("userId", users.get(i).getUserId().toString());
 			if ("2".equals(billBoardType)) {
 				bill.put("gradeOrNum", users.get(i).getPowerNum().toString());
