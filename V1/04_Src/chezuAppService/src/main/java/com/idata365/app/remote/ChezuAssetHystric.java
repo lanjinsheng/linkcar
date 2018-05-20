@@ -35,7 +35,8 @@ public class ChezuAssetHystric implements ChezuAssetService {
 	}
 
 	@Override
-	public List<Map<String, String>> billBoard(String billBoardType, String sign) {
+	public List<Map<String, String>> billBoard(String billBoardType, long userId, String sign) {
+		// TODO Auto-generated method stub
 		LOG.error("billBoard 挂了");
 		return null;
 	}

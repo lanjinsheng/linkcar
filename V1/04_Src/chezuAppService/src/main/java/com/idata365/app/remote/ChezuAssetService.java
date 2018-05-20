@@ -86,6 +86,6 @@ public interface ChezuAssetService {
 	 *             Lixing
 	 */
 	@RequestMapping(value = "/asset/billBoard", method = RequestMethod.POST)
-	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,
+	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "sign") String sign);
 }

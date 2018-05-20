@@ -27,6 +27,7 @@ import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelation;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.GameFamilyParamBean;
+import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
@@ -34,6 +35,7 @@ import com.idata365.app.mapper.LotteryMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ValidTools;
 
 @Service
@@ -61,10 +63,24 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	 * @param bean
 	 * @return
 	 */
-	public List<Map<String, String>> billBoard() {
+	public List<Map<String, String>> billBoard(ScoreFamilyInfoAllBean queryFamily) {
+
 		List<Map<String, String>> billList = new ArrayList<>();
-		String daystamp = getCurrentDayStr();
-		List<Map<String, Object>> list = familyMapper.queryAllFamilyOrderNo(daystamp);
+		List<Map<String, Object>> list = familyMapper.queryAllFamilyOrderNo();
+		long familyId = 0;
+		// 加入自己家族排名信息
+		if (ValidTools.isNotBlank(queryFamily)) {
+			if (ValidTools.isNotBlank(queryFamily.getOriFamily())) {
+				familyId = queryFamily.getOriFamily().getFamilyId();
+				Map<String, Object> map = familyMapper.queryFamilyByFId(familyId);
+				list.add(map);
+			}
+			if (ValidTools.isNotBlank(queryFamily.getJoinFamily())) {
+				familyId = queryFamily.getJoinFamily().getFamilyId();
+				Map<String, Object> map = familyMapper.queryFamilyByFId(familyId);
+				list.add(map);
+			}
+		}
 		if (ValidTools.isBlank(list)) {
 			return null;
 		}
@@ -74,9 +90,11 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					.findAccountById(Long.valueOf(list.get(i).get("createUserId").toString()));
 			DicFamilyType familyType = DicFamilyTypeConstant
 					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
-			bill.put("rank", String.valueOf(i + 1));
+			bill.put("rank", String.valueOf(familyMapper.queryFamilyOrderByFId(Long.valueOf(list.get(i).get("id").toString()))));
 			bill.put("name", list.get(i).get("familyName").toString());
-			bill.put("captainOrGroupName", usersAccount.getNickName());
+			bill.put("captainOrGroupName",
+					usersAccount.getNickName() == null ? PhoneUtils.hidePhone(usersAccount.getPhone())
+							: usersAccount.getNickName());
 			bill.put("gradeOrNum", familyType.getFamilyTypeValue());
 			bill.put("trophyNum", list.get(i).get("trophy").toString());
 			billList.add(bill);
@@ -197,11 +215,17 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	}
 
 	// 查询所在家族对战信息
-	public List<FamilyRelation> queryFightRecordByFamilyId(long myFamilyId) {
+	public List<FamilyRelation> queryFightRecordByFamilyId(long myFamilyId, long recordId) {
 		FamilyRelationBean relationBean = new FamilyRelationBean();
 		relationBean.setFamilyId(myFamilyId);
 		relationBean.setDaystamp(getCurrentDayStr());
-		List<FamilyRelation> familyRelationList = familyMapper.queryFightRecordByFamilyId(myFamilyId);
+		List<FamilyRelation> familyRelationList = new ArrayList<>();
+		if (recordId == 0) {
+			familyRelationList = familyMapper.queryFightRecordByFamilyIdFirst(myFamilyId);
+		} else {
+			familyRelationList = familyMapper.queryFightRecordByFamilyId(myFamilyId, recordId);
+		}
+
 		if (CollectionUtils.isEmpty(familyRelationList)) {
 			return null;
 		}

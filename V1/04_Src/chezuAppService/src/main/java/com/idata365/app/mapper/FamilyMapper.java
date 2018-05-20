@@ -27,7 +27,9 @@ public interface FamilyMapper {
 
 	public List<FamilyRelationBean> queryFamilyIdByCompetitorId(FamilyRelationBean bean);
 
-	public List<FamilyRelation> queryFightRecordByFamilyId(@Param("familyId")long familyId);
+	public List<FamilyRelation> queryFightRecordByFamilyId(@Param("familyId")long familyId,@Param("recordId")long recordId);
+	
+	public List<FamilyRelation> queryFightRecordByFamilyIdFirst(@Param("familyId")long familyId);
 	
 	public List<Long> queryFamilyRelationIds(FamilyRelationBean bean);
 
@@ -79,7 +81,11 @@ public interface FamilyMapper {
 
 	public Integer queryJoinFamilyOrderNo(FamilyParamBean bean);
 
-	public List<Map<String, Object>> queryAllFamilyOrderNo(@Param("daystamp")String daystamp);
+	public List<Map<String, Object>> queryAllFamilyOrderNo();
+	
+	public Map<String, Object> queryFamilyByFId(@Param("familyId")long familyId);
+	
+	int queryFamilyOrderByFId(@Param("familyId")long familyId);
 	
 	public Map<String, Object> getInfoByFamilyId(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
 
