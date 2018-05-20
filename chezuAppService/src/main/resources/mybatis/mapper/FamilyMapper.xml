@@ -21,7 +21,11 @@
 	</select>
 	
 	<select id="queryFightRecordByFamilyId" resultType="com.idata365.app.entity.FamilyRelation">
-		 select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) order by daystamp desc limit 20
+		 select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and <![CDATA[str_to_date(daystamp, '%Y-%m-%d') <= DATE_ADD(date(now()),INTERVAL -1 DAY)]]> and <![CDATA[ id<#{recordId}]]> order by daystamp desc limit 10
+	</select>
+	
+	<select id="queryFightRecordByFamilyIdFirst" resultType="com.idata365.app.entity.FamilyRelation">
+		 select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and <![CDATA[str_to_date(daystamp, '%Y-%m-%d') <= DATE_ADD(date(now()),INTERVAL -1 DAY)]]> order by daystamp desc limit 10
 	</select>
 
 	<select id="queryFamilyRelationIds" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyRelationBean">
@@ -147,12 +151,17 @@
  		select yesterdayOrderNo as orderNo from familyScore where familyId=#{familyId} and month=#{month}
  	</select>
  	
- 	<!-- <select id="queryAllFamilyOrderNo" resultType="java.util.HashMap">
- 		select familyId,yesterdayOrderNo,familyType,trophy from familyScore where <![CDATA[ endDay>=#{daystamp} and startDay<=#{daystamp}]]> order by familyType limit 20
- 	</select> -->
- 	
  	<select id="queryAllFamilyOrderNo" resultType="java.util.HashMap">
  		select id,familyType,trophy,familyName,createUserId from familyInfo order by familyType desc limit 20
+ 	</select>
+ 	
+ 	<select id="queryFamilyByFId" resultType="java.util.HashMap">
+ 		select id,familyType,trophy,familyName,createUserId from familyInfo where id=#{familyId}
+ 	</select>
+ 	  
+ 	<select id="queryFamilyOrderByFId" resultType="java.lang.Integer">
+ 		SELECT (count(*)+1)
+       FROM  familyInfo where familyType>(select familyType from familyInfo where id=#{familyId})
  	</select>
  	
  	<select id="getInfoByFamilyId" resultType="java.util.HashMap">
