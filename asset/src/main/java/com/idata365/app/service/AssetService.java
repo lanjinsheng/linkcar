@@ -161,13 +161,7 @@ public class AssetService extends BaseService<AssetService> {
 
 		List<Map<String, String>> data = new ArrayList<>();
 		if (list.size() == 0) {
-			Map<String, String> rtMap = new HashMap<String, String>();
-			rtMap.put("id", "");
-			rtMap.put("receiveType", "");
-			rtMap.put("receiveTypeName", "");
-			rtMap.put("powerNum", "");
-			rtMap.put("time", "");
-			data.add(rtMap);
+			return data;
 		} else {
 			for (int i = 0; i < list.size(); i++) {
 				Map<String, String> rtMap = new HashMap<String, String>();
@@ -606,4 +600,5 @@ public class AssetService extends BaseService<AssetService> {
 
 		return map;
 	}
+
 }

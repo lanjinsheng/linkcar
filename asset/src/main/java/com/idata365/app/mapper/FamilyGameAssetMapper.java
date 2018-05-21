@@ -15,5 +15,7 @@ public interface FamilyGameAssetMapper {
 
 	List<FamilyGameAsset> getFamilyGameAssetsPre(FamilyGameAsset familyGameAsset);
 
+	long getFamilySeasonID(@Param("familyId") long familyId, @Param("daystamp") String daystamp);
+
 	// int updateTempPowerReward(@Param("uuid") String uuid);
 }

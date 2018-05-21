@@ -18,6 +18,9 @@
         VALUES
             (#{familyId},#{startDay},#{endDay},#{orderNo},#{seasonName},#{memberNum})
      </insert>
-     
+     <select id="getFamilySeasonID" resultType="java.lang.Long">
+       SELECT id
+       FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}
+     </select> 
      
 </mapper>

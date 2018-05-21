@@ -31,11 +31,12 @@ public class AssetController extends BaseController {
 	@Autowired
 	AssetService assetService;
 	@Autowired
-    TaskAutoAddService taskAutoAddService;
+	TaskAutoAddService taskAutoAddService;
 	@Autowired
 	FamilyGameAssetService familyGameAssetService;
 	@Autowired
 	FamilySeasonAssetService familySeasonAssetService;
+
 	/**
 	 * 
 	 * @Title: getUserAsset
@@ -143,17 +144,21 @@ public class AssetController extends BaseController {
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
 		return assetService.addFamiliesPowers(assetFamiliesPowerLogs);
 	}
-/**
- * 
-    * @Title: getUserPowerByEffectId
-    * @Description: TODO(这里用一句话描述这个方法的作用)
-    * @param @param effectId
-    * @param @param sign
-    * @param @return    参数
-    * @return String    返回类型
-    * @throws
-    * @author LanYeYe
- */
+
+	/**
+	 * 
+	 * @Title: getUserPowerByEffectId
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param @param
+	 *            effectId
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return String 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
 	@RequestMapping(value = "/asset/getUserPowerByEffectId", method = RequestMethod.POST)
 	String getUserPowerByEffectId(@RequestParam(value = "effectId") long effectId,
 			@RequestParam(value = "sign") String sign) {
@@ -162,62 +167,70 @@ public class AssetController extends BaseController {
 		return assetService.getUserPowerByEffectId(effectId);
 	}
 
-	
 	@RequestMapping(value = "/asset/initUserCreate", method = RequestMethod.POST)
-	boolean initUserCreate(@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "sign") String sign) {
+	boolean initUserCreate(@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign) {
 		LOG.info("effectId:" + userId + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(userId)));
 		assetService.initUser(userId);
-		 return true;
+		return true;
 	}
+
 	@RequestMapping(value = "/asset/initFamilyCreate", method = RequestMethod.POST)
 	boolean initFamilyCreate(@RequestParam(value = "familyId") long familyId,
 			@RequestParam(value = "sign") String sign) {
 		LOG.info("effectId:" + familyId + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(familyId)));
 		assetService.initFamily(familyId);
-		 return true;
+		return true;
 	}
-	
-    /**
-     * 
-        * @Title: addFamilyGameOrder
-        * @Description: TODO(对familyId进行sign)
-        * @param @param sign
-        * @param @param assetFamiliesPowerLogs
-        * @param @return    参数
-        * @return boolean    返回类型
-        * @throws
-        * @author LanYeYe
-     */
-    @RequestMapping(value = "/asset/addFamilyGameOrder",method = RequestMethod.POST)
-    boolean addFamilyGameOrder(@RequestParam(value="sign")   String sign, @RequestBody   FamilyGameAsset familyGameAsset) {
-    	LOG.info("familyGameAsset:" + familyGameAsset.getFamilyId() + "===sign:" + sign);
+
+	/**
+	 * 
+	 * @Title: addFamilyGameOrder
+	 * @Description: TODO(对familyId进行sign)
+	 * @param @param
+	 *            sign
+	 * @param @param
+	 *            assetFamiliesPowerLogs
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
+	@RequestMapping(value = "/asset/addFamilyGameOrder", method = RequestMethod.POST)
+	boolean addFamilyGameOrder(@RequestParam(value = "sign") String sign,
+			@RequestBody FamilyGameAsset familyGameAsset) {
+		LOG.info("familyGameAsset:" + familyGameAsset.getFamilyId() + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(String.valueOf(familyGameAsset.getFamilyId())));
 		familyGameAssetService.insertgameAsset(familyGameAsset);
 		return true;
-    }
-    /**
-     * 
-        * @Title: addFamilyGameOrderEnd
-        * @Description: TODO(对season进行sign)
-        * @param @param sign
-        * @param @param season
-        * @param @return    参数
-        * @return boolean    返回类型
-        * @throws
-        * @author LanYeYe
-     */
-    @RequestMapping(value = "/asset/addFamilyGameOrderEnd",method = RequestMethod.POST)
-    boolean addFamilyGameOrderEnd(@RequestParam(value="season")   String season,@RequestParam(value="sign")   String sign) {
-    	LOG.info("addFamilyGameOrderEnd:" + season + "===sign:" + sign);
+	}
+
+	/**
+	 * 
+	 * @Title: addFamilyGameOrderEnd
+	 * @Description: TODO(对season进行sign)
+	 * @param @param
+	 *            sign
+	 * @param @param
+	 *            season
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
+	@RequestMapping(value = "/asset/addFamilyGameOrderEnd", method = RequestMethod.POST)
+	boolean addFamilyGameOrderEnd(@RequestParam(value = "season") String season,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("addFamilyGameOrderEnd:" + season + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + sign);
 		taskAutoAddService.syncFamilyGameEndAdd(season);
-    	return true;
-    }
+		return true;
+	}
 
-    /**
+	/**
 	 * 
 	 * @Title: billBoard
 	 * @Description: TODO(实时榜单)
@@ -232,31 +245,59 @@ public class AssetController extends BaseController {
 	 *             Lixing
 	 */
 	@RequestMapping(value = "/asset/billBoard", method = RequestMethod.POST)
-	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "sign") String sign) {
+	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,
+			@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign) {
 		LOG.info("billBoard:" + billBoardType + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:" + sign);
 		LOG.info("userId:" + userId);
-		List<Map<String, String>> billList = assetService.billBoard(billBoardType,userId);
+		List<Map<String, String>> billList = assetService.billBoard(billBoardType, userId);
 		return billList;
 	}
-    
-    @RequestMapping(value = "/asset/addFamilySeason",method = RequestMethod.POST)
-    boolean addFamilySeason(@RequestParam(value="sign")   String sign, @RequestBody   FamilySeasonAsset familySeasonAsset){
-    	LOG.info("addFamilySeason:" + familySeasonAsset.getFamilyId()+familySeasonAsset.getTrophy() + "===sign:" + sign);
-		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(familySeasonAsset.getFamilyId()+""+familySeasonAsset.getTrophy()));
+
+	@RequestMapping(value = "/asset/addFamilySeason", method = RequestMethod.POST)
+	boolean addFamilySeason(@RequestParam(value = "sign") String sign,
+			@RequestBody FamilySeasonAsset familySeasonAsset) {
+		LOG.info("addFamilySeason:" + familySeasonAsset.getFamilyId() + familySeasonAsset.getTrophy() + "===sign:"
+				+ sign);
+		LOG.info("校验逻辑待处理·~~~sign:"
+				+ SignUtils.encryptHMAC(familySeasonAsset.getFamilyId() + "" + familySeasonAsset.getTrophy()));
 		familySeasonAssetService.insertSeasonAsset(familySeasonAsset);
-    	return true;
-    }
-    @RequestMapping(value = "/asset/addFamilySeasonEnd",method = RequestMethod.POST)
-    boolean addFamilySeasonEnd(@RequestParam(value="season")   String season,@RequestParam(value="gameDayNum")   String gameDayNum,@RequestParam(value="sign")   String sign)
-    {
-    	LOG.info("addFamilySeasonEnd:" + season + "===sign:" + sign);
-		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(season+gameDayNum));
-		taskAutoAddService.syncFamilySeasonEndAdd(season,gameDayNum);
 		return true;
-    }
-	
+	}
+
+	@RequestMapping(value = "/asset/addFamilySeasonEnd", method = RequestMethod.POST)
+	boolean addFamilySeasonEnd(@RequestParam(value = "season") String season,
+			@RequestParam(value = "gameDayNum") String gameDayNum, @RequestParam(value = "sign") String sign) {
+		LOG.info("addFamilySeasonEnd:" + season + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(season + gameDayNum));
+		taskAutoAddService.syncFamilySeasonEndAdd(season, gameDayNum);
+		return true;
+	}
+
+	/**
+	 * 
+	 * @Title: getFamilySeasonID
+	 * @Description: TODO(获取赛季ID)
+	 * @param @param
+	 *            familyId
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return long 返回类型
+	 * @throws @author
+	 *             Lixing
+	 */
+	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
+	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,
+			@RequestParam(value = "myFamilyId") long myFamilyId, @RequestParam(value = "sign") String sign) {
+		LOG.info("myFamilyId:" + myFamilyId + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("getFamilySeasonID·~~~controller");
+		long familySeasonId = familyGameAssetService.getFamilySeasonID(myFamilyId, daystamp);
+		return familySeasonId;
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
 	}

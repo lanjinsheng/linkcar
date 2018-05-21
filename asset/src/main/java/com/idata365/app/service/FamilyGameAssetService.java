@@ -37,7 +37,7 @@ import com.idata365.app.util.SignUtils;
 @Service
 public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(FamilyGameAssetService.class);
- 
+
 	@Autowired
 	TempPowerRewardMapper tempPowerRewardMapper;
 	@Autowired
@@ -54,70 +54,72 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 	FamilyGameAssetMapper familyGameAssetMapper;
 	@Autowired
 	ChezuAccountService chezuAccountService;
-	
+
 	public FamilyGameAssetService() {
 
 	}
 
-	  
- /**
-  * 
-     * @Title: getFamilyDistribution
-     * @Description: TODO(effectId这里用一句话描述这个方法的作用)
-     * @param @param familyId
-     * @param @param familySeasonId
-     * @param @return    参数
-     * @return List<Map<String,Object>>    返回类型
-     * @throws
-     * @author LanYeYe
-  */
+	/**
+	 * 
+	 * @Title: getFamilyDistribution
+	 * @Description: TODO(effectId这里用一句话描述这个方法的作用)
+	 * @param @param
+	 *            familyId
+	 * @param @param
+	 *            familySeasonId
+	 * @param @return
+	 *            参数
+	 * @return List<Map<String,Object>> 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
 	@Transactional
-	public List<Map<String,Object>> getFamilyDistribution(long familyId,long familySeasonId) {
-		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
-		List<AssetUsersDiamondsLogs>  diamondsLogs=assetUsersDiamondsLogsMapper.getPkDiamondsByEffectId(familySeasonId);
-		StringBuffer users=new StringBuffer();
-		for(AssetUsersDiamondsLogs d:diamondsLogs) {
+	public List<Map<String, Object>> getFamilyDistribution(long familyId, long familySeasonId) {
+		List<Map<String, Object>> rtList = new ArrayList<Map<String, Object>>();
+		List<AssetUsersDiamondsLogs> diamondsLogs = assetUsersDiamondsLogsMapper
+				.getPkDiamondsByEffectId(familySeasonId);
+		StringBuffer users = new StringBuffer();
+		for (AssetUsersDiamondsLogs d : diamondsLogs) {
 			users.append(d.getUserId());
 			users.append(",");
 		}
-		String userIds=users.substring(0, users.length()-1);
-		String sign=SignUtils.encryptHMAC(userIds);
-		Map<String,Object> userInfos=chezuAccountService.getUsersInfoByIds(userIds, familyId,sign);
-		String []nickNames=String.valueOf(userInfos.get("nickNames")).split(",");
-		String []userHeadUrls=String.valueOf(userInfos.get("userHeadUrls")).split(",");
-		String []isPatriarchs=String.valueOf(userInfos.get("isPatriarchs")).split(",");
-		int i=0;
-		for(AssetUsersDiamondsLogs d:diamondsLogs) {
-			Map<String,Object> m=new HashMap<String,Object>();
-			m.put("rewardNum",String.valueOf(d.getDiamondsNum().doubleValue()));
-			m.put("nickName",nickNames[i]);
-			m.put("headImg",userHeadUrls[i]);
+		String userIds = users.substring(0, users.length() - 1);
+		String sign = SignUtils.encryptHMAC(userIds);
+		Map<String, Object> userInfos = chezuAccountService.getUsersInfoByIds(userIds, familyId, sign);
+		String[] nickNames = String.valueOf(userInfos.get("nickNames")).split(",");
+		String[] userHeadUrls = String.valueOf(userInfos.get("userHeadUrls")).split(",");
+		String[] isPatriarchs = String.valueOf(userInfos.get("isPatriarchs")).split(",");
+		int i = 0;
+		for (AssetUsersDiamondsLogs d : diamondsLogs) {
+			Map<String, Object> m = new HashMap<String, Object>();
+			m.put("rewardNum", String.valueOf(d.getDiamondsNum().doubleValue()));
+			m.put("nickName", nickNames[i]);
+			m.put("headImg", userHeadUrls[i]);
 			m.put("isPatriarch", isPatriarchs[i]);
 			rtList.add(m);
 			i++;
 		}
-		 
+
 		return rtList;
 	}
-	
-	
+
 	@Transactional
-	public List<Map<String,Object>> getFamilyGameAsset(long familyId,long familySeasonId) {
-		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
-		FamilyGameAsset familyGameAsset=new FamilyGameAsset();
+	public List<Map<String, Object>> getFamilyGameAsset(long familyId, long familySeasonId) {
+		List<Map<String, Object>> rtList = new ArrayList<Map<String, Object>>();
+		FamilyGameAsset familyGameAsset = new FamilyGameAsset();
 		familyGameAsset.setId(familySeasonId);
 		familyGameAsset.setFamilyId(familyId);
-		List<FamilyGameAsset> list=null;
-		if(familySeasonId==0) {
-			//首页查找
-			  list=familyGameAssetMapper.getFamilyGameAssets(familyGameAsset);
-		}else {
-			 list=familyGameAssetMapper.getFamilyGameAssetsPre(familyGameAsset);
+		List<FamilyGameAsset> list = null;
+		if (familySeasonId == 0) {
+			// 首页查找
+			list = familyGameAssetMapper.getFamilyGameAssets(familyGameAsset);
+		} else {
+			list = familyGameAssetMapper.getFamilyGameAssetsPre(familyGameAsset);
 		}
-		if(list!=null) {
-			for(FamilyGameAsset fga:list) {
-				Map<String,Object> m=new HashMap<String,Object>();
-				m.put("familySeasonID",String.valueOf(fga.getId()));
+		if (list != null) {
+			for (FamilyGameAsset fga : list) {
+				Map<String, Object> m = new HashMap<String, Object>();
+				m.put("familySeasonID", String.valueOf(fga.getId()));
 				m.put("seasonTimes", fga.getEndDay());
 				m.put("seasonRank", String.valueOf(fga.getOrderNo()));
 				m.put("seasonReward", fga.getDiamondsNum());
@@ -126,9 +128,15 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		}
 		return rtList;
 	}
+
 	@Transactional
 	public void insertgameAsset(FamilyGameAsset familyGameAsset) {
 		familyGameAssetMapper.insertFamilyGameAsset(familyGameAsset);
 	}
- 
+
+	@Transactional
+	public long getFamilySeasonID(long myFamilyId, String daystamp) {
+		return familyGameAssetMapper.getFamilySeasonID(myFamilyId, daystamp);
+	}
+
 }
