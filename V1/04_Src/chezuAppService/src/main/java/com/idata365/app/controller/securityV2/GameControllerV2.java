@@ -429,7 +429,7 @@ public class GameControllerV2 extends BaseController {
 			result.put("rewardAndPunishment", "和气生财！！！");
 			result.put("status", "0");
 		}
-		result.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, myFamilyId, sign)));
+//		result.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, myFamilyId, sign)));
 		return ResultUtils.rtSuccess(result);
 	}
 
