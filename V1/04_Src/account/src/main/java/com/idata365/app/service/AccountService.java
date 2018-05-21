@@ -63,7 +63,7 @@ public class AccountService extends BaseService<AccountService>
 			if(account!=null) {
 				userNickNames.append(account.getNickName()==null?PhoneUtils.hidePhone(account.getPhone()):account.getNickName());
 				userNickNames.append(",");
-				userHeadUrls.append(account.getImgUrl()==null?"":getImgBasePath+account.getImgUrl());
+				userHeadUrls.append(account.getImgUrl()==null?" ":getImgBasePath+account.getImgUrl());
 				userHeadUrls.append(",");
 				if(Long.valueOf(id).longValue()==userId) {
 					isPatriarchs.append("1");
