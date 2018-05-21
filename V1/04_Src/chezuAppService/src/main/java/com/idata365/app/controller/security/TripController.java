@@ -1,5 +1,7 @@
 package com.idata365.app.controller.security;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,18 +127,27 @@ public class TripController extends BaseController {
 				tiredNum = 0.95;
 			}
 			rtMap.put("tiredNum", tiredNum);
+
+			double mileage = Double.valueOf(dbMap.get("mileage").toString()).doubleValue();
 			// 超速系数
 			double over = Double.valueOf(dbMap.get("overspeedTimes").toString()).doubleValue();
-			double overspeedNum = (20 - over * 2) / 20;
-			rtMap.put("overspeedNum", overspeedNum<0?0:overspeedNum);
+			over = BigDecimal.valueOf(over).multiply(BigDecimal.valueOf(10000)).divide(BigDecimal.valueOf(mileage), 1,
+					RoundingMode.HALF_UP).doubleValue();
+			double overspeedNum = BigDecimal.valueOf((20 - over * 2) / 20).setScale(1, RoundingMode.HALF_UP).doubleValue();
+
+			rtMap.put("overspeedNum", overspeedNum < 0 ? 0 : overspeedNum);
 			// 急转系数
 			double turn = Double.valueOf(dbMap.get("turnTimes").toString()).doubleValue();
-			double turnNum = (20 - turn * 2) / 20;
-			rtMap.put("turnNum", turnNum<0?0:turnNum);
+			turn = BigDecimal.valueOf(turn).multiply(BigDecimal.valueOf(10000)).divide(BigDecimal.valueOf(mileage), 1,
+					RoundingMode.HALF_UP).doubleValue();
+			double turnNum = BigDecimal.valueOf((20 - turn * 2) / 20).setScale(1, RoundingMode.HALF_UP).doubleValue();
+			rtMap.put("turnNum", turnNum < 0 ? 0 : turnNum);
 			// 急刹系数
 			double breaK = Double.valueOf(dbMap.get("brakeTimes").toString()).doubleValue();
-			double brakeNum = (20 - breaK * 2) / 20;
-			rtMap.put("brakeNum", brakeNum<0?0:brakeNum);
+			breaK = BigDecimal.valueOf(breaK).multiply(BigDecimal.valueOf(10000)).divide(BigDecimal.valueOf(mileage), 1,
+					RoundingMode.HALF_UP).doubleValue();
+			double brakeNum = BigDecimal.valueOf((20 - breaK * 2) / 20).setScale(1, RoundingMode.HALF_UP).doubleValue();
+			rtMap.put("brakeNum", brakeNum < 0 ? 0 : brakeNum);
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}

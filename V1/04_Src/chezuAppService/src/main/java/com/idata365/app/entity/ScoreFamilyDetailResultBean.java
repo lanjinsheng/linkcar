@@ -17,6 +17,10 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	private String orderNo;
 	
 	private List<String> familys;
+	
+	private String trophyNum;
+	
+	private String grade;
 
 	public String getImgUrl()
 	{
@@ -26,6 +30,22 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	public void setImgUrl(String imgUrl)
 	{
 		this.imgUrl = imgUrl;
+	}
+
+	public String getTrophyNum() {
+		return trophyNum;
+	}
+
+	public void setTrophyNum(String trophyNum) {
+		this.trophyNum = trophyNum;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
 	}
 
 	public String getFamilyName()
