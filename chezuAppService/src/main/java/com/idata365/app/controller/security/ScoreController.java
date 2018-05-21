@@ -71,6 +71,8 @@ public class ScoreController extends BaseController {
 
 	@Autowired
 	private FamilyScoreService familyScoreService;
+	
+	
 
 	/**
 	 * 发起家族、参与家族查询
@@ -143,6 +145,11 @@ public class ScoreController extends BaseController {
 		}
 
 		List<ScoreFamilyDetailResultBean> resultList = new ArrayList<>();
+		String daystamp = null;
+		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(bean.getFamilyId(), daystamp);
+		resultBean.setTrophyNum(infoFamily.get("trophyNum"));
+		resultBean.setGrade(infoFamily.get("gradeOrNum"));
+		
 		resultList.add(resultBean);
 		return ResultUtils.rtSuccess(resultList);
 	}
