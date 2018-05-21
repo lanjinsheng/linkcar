@@ -134,9 +134,9 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		familyGameAssetMapper.insertFamilyGameAsset(familyGameAsset);
 	}
 
-	@Transactional
-	public long getFamilySeasonID(long myFamilyId, String daystamp) {
-		return familyGameAssetMapper.getFamilySeasonID(myFamilyId, daystamp);
-	}
+//	@Transactional
+//	public long getFamilySeasonID(long myFamilyId, String daystamp) {
+//		return familyGameAssetMapper.getFamilySeasonID(myFamilyId, daystamp);
+//	}
 
 }
