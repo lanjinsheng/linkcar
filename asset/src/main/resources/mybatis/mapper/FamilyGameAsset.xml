@@ -22,5 +22,13 @@
        SELECT id
        FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}
      </select> 
-     
+     <select id="getFamilyGameAssetsByDayFId" resultMap="BaseFamilyGameAssetMap" parameterType="com.idata365.app.entity.FamilyGameAsset">
+       SELECT *
+       FROM  familyGameAsset where familyId=#{familyId} and 
+       seasonName=#{seasonName}
+        order by id desc limit 1
+     </select> 
+    <update id="updateDiamonds"   parameterType="com.idata365.app.entity.FamilyGameAsset">
+           update familyGameAsset set diamondsNum=#{diamondsNum} where id=#{id}
+     </update>
 </mapper>
