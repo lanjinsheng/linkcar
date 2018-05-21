@@ -88,4 +88,22 @@ public interface ChezuAssetService {
 	@RequestMapping(value = "/asset/billBoard", method = RequestMethod.POST)
 	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "sign") String sign);
+	
+	/**
+	 * 
+	 * @Title: billBoard
+	 * @Description: TODO(获取赛季ID)
+	 * @param @param
+	 *            familyId
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return long 返回类型
+	 * @throws @author
+	 *             Lixing
+	 */
+	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
+	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "myFamilyId") long myFamilyId,
+			@RequestParam(value = "sign") String sign);
 }

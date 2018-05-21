@@ -173,6 +173,14 @@ select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as da
 		and familyId=#{familyId}  
 	</select>
 	
+	<!-- <select id="totalMileage" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select IFNULL(sum(mileage),0) as totalMileage from userTravelHistory where userId=#{userId}
+	</select>
+	
+	<select id="totalTime" resultType="java.lang.Double" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
+		select IFNULL(sum(mileage),0) as totalTime from userTravelHistory where userId=#{userId}
+	</select> -->
+	
 	<update id="updateUseHoldNum" parameterType="com.idata365.app.entity.ScoreFamilyInfoParamBean">
 		update userScoreDayStat set useHoldNum=useHoldNum+1 where userId=#{userId} and daystamp=#{daystamp}
 	</update>

@@ -1,5 +1,6 @@
 package com.idata365.app.controller.security;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -175,11 +176,15 @@ public class ScoreController extends BaseController {
 		long fightFamilyId = Long.valueOf(resultBean.getCompetitorFamilyId());
 		String daystamp = null;
 		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(myFamilyId, daystamp);
-		fightInfo.put("familyName1", infoFamily.get("name"));
-		fightInfo.put("familyScore1", familyScoreService.familyScore(myFamilyId, getCurrentDayStr()).toString());
+		fightInfo.put("familyName", infoFamily.get("name"));
+		double sc = familyScoreService.familyScore(Long.valueOf(myFamilyId), getCurrentDayStr());
+		BigDecimal b = new BigDecimal(sc);
+		fightInfo.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 		Map<String, String> infoFamily2 = gameServiceV2.getInfoByFamilyId(fightFamilyId, daystamp);
-		fightInfo.put("familyName2", infoFamily2.get("name"));
-		fightInfo.put("familyScore2", familyScoreService.familyScore(fightFamilyId, getCurrentDayStr()).toString());
+		fightInfo.put("fightFamilyName", infoFamily2.get("name"));
+		double scf = familyScoreService.familyScore(Long.valueOf(fightFamilyId), getCurrentDayStr());
+		BigDecimal bf = new BigDecimal(scf);
+		fightInfo.put("fightFamilyScore", bf.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 
 		result.put("fightInfo", fightInfo);
 		return ResultUtils.rtSuccess(result);

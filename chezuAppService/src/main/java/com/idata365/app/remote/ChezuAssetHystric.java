@@ -40,6 +40,12 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("billBoard 挂了");
 		return null;
 	}
+
+	@Override
+	public long getFamilySeasonID(String daystamp, long myFamilyId, String sign) {
+		LOG.error("getFamilySeasonID 挂了");
+		return 0;
+	}
 	 
 	
  
