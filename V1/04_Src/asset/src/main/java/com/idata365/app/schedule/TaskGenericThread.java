@@ -54,6 +54,14 @@ public class TaskGenericThread implements Runnable{
 						taskGenericService.InitFamilySeasonReward(task);
 						break;
 					}
+					case DoFamilySeasonReward:{
+						taskGenericService.doFamilySeasonReward(task);
+						break;
+					}
+					case DoUserFamilySeasonReward:{
+						taskGenericService.doUserFamilySeasonReward(task);
+						break;
+					}
 					
 					default:
 						break;
@@ -62,6 +70,7 @@ public class TaskGenericThread implements Runnable{
 			}catch(Exception e) {
 				e.printStackTrace();
 				taskGenericService.updateFailTask(task);
+				continue;
 			}
 			taskGenericService.updateSuccTask(task);
 		}
