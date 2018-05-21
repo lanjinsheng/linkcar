@@ -16,7 +16,7 @@ import com.idata365.app.util.DateTools;
 public class WebTestController   {
 
   
-    @RequestMapping(value = "/index",method = RequestMethod.GET)
+    @RequestMapping(value = "/index",method ={RequestMethod.POST,RequestMethod.GET})
     public ModelAndView index(Map<String, Object> model) {
     	model.put("time", DateTools.getCurDate());
 		model.put("message", "这是测试的内容。。。");
@@ -30,7 +30,7 @@ public class WebTestController   {
     	 ModelAndView mv = new ModelAndView("welcome");
     	 return mv;
     }
-    @RequestMapping(value = "/jsp",method = RequestMethod.GET)
+    @RequestMapping(value = "/jsp",method ={RequestMethod.POST,RequestMethod.GET})
     public String jsp(Map<String, Object> model) {
 		model.put("time", DateTools.getCurDate());
 		model.put("message", "这是测试的内容。。。");
