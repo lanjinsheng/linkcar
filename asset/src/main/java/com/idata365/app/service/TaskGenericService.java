@@ -21,12 +21,14 @@ import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesDiamondsLogs;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
+import com.idata365.app.entity.FamilyGameAsset;
 import com.idata365.app.entity.TaskGeneric;
 import com.idata365.app.enums.TaskGenericEnum;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
 import com.idata365.app.mapper.AssetFamiliesDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
+import com.idata365.app.mapper.FamilyGameAssetMapper;
 import com.idata365.app.mapper.TaskGenericMapper;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAppService;
@@ -43,6 +45,8 @@ public class TaskGenericService {
 	AssetFamiliesDiamondsLogsMapper  assetFamiliesDiamondsLogsMapper;
 	@Autowired
    TaskGenericMapper taskGenericMapper;
+	@Autowired
+	FamilyGameAssetMapper familyGameAssetMapper;
 	@Autowired
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
 	@Autowired
@@ -269,7 +273,8 @@ public class TaskGenericService {
 		}
 		return true;
 	}
-	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"diamonds\":%s}";
+	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"diamonds\":%s,\"assetFamilyGameId\":%s}";
+	
 	/**
 	 * 
 	    * @Title: doFamilyDayReward
@@ -286,6 +291,7 @@ public class TaskGenericService {
 		long total=Long.valueOf(m.get("familyPersonTotal").toString());
 		long orderNo=Long.valueOf(m.get("orderNo").toString());
 		long familyId=Long.valueOf(m.get("familyId").toString());
+		long assetFamilyGameId=Long.valueOf(m.get("id").toString());
 		BigDecimal gameDiamond=BigDecimal.valueOf(0);
 		gameDiamond=BigDecimal.valueOf(480).divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_EVEN);
 		//进行分配
@@ -298,7 +304,11 @@ public class TaskGenericService {
 		assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" 比赛分配");
 		assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
 		assetFamiliesAssetMapper.updateDiamondsAdd(assetFamiliesDiamondsLogs);
-		
+		//assetfamilyGame
+		FamilyGameAsset familyGameAsset=new FamilyGameAsset();
+		familyGameAsset.setDiamondsNum(gameDiamond);
+		familyGameAsset.setId(assetFamilyGameId);
+		familyGameAssetMapper.updateDiamonds(familyGameAsset);
 		//增加跃迁下一个任务(成员内部分配)
 		TaskGeneric tg=new TaskGeneric();
 		String preKey=task.getGenericKey().split("_")[0];
@@ -306,7 +316,7 @@ public class TaskGenericService {
 		tg.setGenericKey(taskKey);
 		tg.setTaskType(TaskGenericEnum.DoUserFamilyDayReward);
 		tg.setPriority(10);
-		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.longValue())));
+		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.longValue()),assetFamilyGameId));
 		taskGenericMapper.insertTask(tg);
 		return true;
 	}
@@ -336,10 +346,16 @@ public class TaskGenericService {
 		String powerTableName=m.get("powerTableName").toString();
 		String diamonds= m.get("diamonds").toString();
 		String orderNum= String.valueOf(m.get("orderNum"));
+		String assetFamilyGameId=String.valueOf(m.get("assetFamilyGameId"));
+		
 		long familyId=Long.valueOf(m.get("familyId").toString());
 		String daystamp=task.getGenericKey().split("_")[0];
 		String sign=SignUtils.encryptHMAC(String.valueOf(familyId));
 	    //通过familyId获取用户ids。
+		String yyyy=daystamp.substring(0,4);
+		String mm=daystamp.substring(4,6);
+		String dd=daystamp.substring(6,8);
+		daystamp=yyyy+"-"+mm+"-"+dd;
 		String users=chezuAccountService.getUsersByFamilyId(familyId, daystamp, sign);
 		String []userArray=users.split(",");
 		long total=0L;
@@ -356,9 +372,9 @@ public class TaskGenericService {
 			total+=hadPowerNum;
 			assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[i]));
 			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
-			assetUsersDiamondsLogs.setEffectId(task.getId());
+			assetUsersDiamondsLogs.setEffectId(Long.valueOf(assetFamilyGameId));
 			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_GameEnd_User);
-			assetUsersDiamondsLogs.setRemark("按"+powerTableName+"PK结束分配钻石");
+			assetUsersDiamondsLogs.setRemark(task.getId()+"按"+powerTableName+"PK结束分配钻石");
 			userList.add(assetUsersDiamondsLogs);
 		}
 		//通过用户ids获取用户的能量值。
@@ -373,17 +389,17 @@ public class TaskGenericService {
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
 			//远程消息调用,发送的diamonds是家族获取的
 			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(diamonds), sign);
+//			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(diamonds), sign);
 			}
 		}
 		//family钻石减少
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 		assetFamiliesDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(Double.valueOf(diamonds)));
-		assetFamiliesDiamondsLogs.setEffectId(task.getId());
+		assetFamiliesDiamondsLogs.setEffectId(Long.valueOf(assetFamilyGameId));
 		assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_Distr);
 		assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 		assetFamiliesDiamondsLogs.setFamilyId(familyId);
-		assetFamiliesDiamondsLogs.setRemark(task.getGenericKey()+" PK比赛分配给成员");
+		assetFamiliesDiamondsLogs.setRemark(task.getId()+"--"+task.getGenericKey()+" PK比赛分配给成员");
 		assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
 		assetFamiliesAssetMapper.updateDiamondsReduce(assetFamiliesDiamondsLogs);
 		return true;
@@ -434,6 +450,14 @@ public class TaskGenericService {
 	public	void clearLockTask() {
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 		taskGenericMapper.clearLockTask(compareTimes);
+	}
+	
+	public static void main(String []args) {
+		String daystamp="20180506";
+		String yyyy=daystamp.substring(0,4);
+		String mm=daystamp.substring(4,6);
+		String dd=daystamp.substring(6,8);
+		System.out.println(yyyy+mm+dd);
 	}
 	
 }

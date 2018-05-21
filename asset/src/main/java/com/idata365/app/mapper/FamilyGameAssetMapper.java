@@ -5,11 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.FamilyGameAsset;
-import com.idata365.app.entity.TempPowerReward;
 
 public interface FamilyGameAssetMapper {
 
 	int insertFamilyGameAsset(FamilyGameAsset familyGameAsset);
+    int  updateDiamonds(FamilyGameAsset familyGameAsset);
+    
+    FamilyGameAsset  getFamilyGameAssetsByDayFId(FamilyGameAsset familyGameAsset);
 
 	List<FamilyGameAsset> getFamilyGameAssets(FamilyGameAsset familyGameAsset);
 
