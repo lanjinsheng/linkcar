@@ -1,5 +1,6 @@
 package com.idata365.app.controller.securityV2;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -8,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.inject.Key;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
@@ -102,8 +101,9 @@ public class GameControllerV2 extends BaseController {
 			String familyId = String.valueOf(scoreFamilyInfoBean.getFamilyId());
 			map.put("familyId", familyId);
 			map.put("familyName", scoreFamilyInfoBean.getName());
-			map.put("familyScore",
-					familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr()).toString());
+			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
+			BigDecimal b = new BigDecimal(sc);
+			map.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 			String fightingTime = null;
 			CompetitorFamilyInfoResultBean resultBean = this.gameService
 					.queryCompetitorFamilyInfo(Long.valueOf(familyId), fightingTime);
@@ -137,16 +137,16 @@ public class GameControllerV2 extends BaseController {
 		LOG.info("userId=================" + userId);
 		String billBoardType = requestBodyParams.get("billBoardType").toString();
 		String sign = SignUtils.encryptHMAC(String.valueOf(billBoardType));
-		
+
 		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
 		bean.setUserId(userId);
 		ScoreFamilyInfoAllBean queryFamily = scoreService.queryFamily(bean);
-		
+
 		List<Map<String, String>> billList = new ArrayList<>();
 		if ("1".equals(billBoardType)) {
 			billList = gameService.billBoard(queryFamily);
 		} else if ("2".equals(billBoardType) || "3".equals(billBoardType)) {
-			billList = chezuAssetService.billBoard(billBoardType,userId, sign);
+			billList = chezuAssetService.billBoard(billBoardType, userId, sign);
 			if (ValidTools.isNotBlank(billList)) {
 				for (int i = 0; i < billList.size(); i++) {
 					long id = Long.valueOf(billList.get(i).get("userId"));
@@ -158,6 +158,10 @@ public class GameControllerV2 extends BaseController {
 		} else {
 			return ResultUtils.rtSuccess(null);
 		}
+		// 规则
+		// Map<String, Object> result = new HashMap<>();
+		// result.put("billList", billList);
+		// result.put("rule", RuleConstant.Rule);
 		return ResultUtils.rtSuccess(billList);
 	}
 
@@ -192,8 +196,9 @@ public class GameControllerV2 extends BaseController {
 			Map<String, String> infoFamily = gameService.getInfoByFamilyId(arr[i], daystamp);
 			Map<String, Object> familyInfo = new HashMap<>();
 			familyInfo.put("familyName", infoFamily.get("name"));
-			familyInfo.put("familyScore",
-					familyScoreService.familyScore(Long.valueOf(arr[i]), getCurrentDayStr()).toString());
+			double sc = familyScoreService.familyScore(Long.valueOf(arr[i]), getCurrentDayStr());
+			BigDecimal b = new BigDecimal(sc);
+			familyInfo.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 			familyInfo.put("trophyNum", infoFamily.get("trophyNum"));
 			familyInfo.put("grade", infoFamily.get("gradeOrNum"));
 
@@ -206,8 +211,8 @@ public class GameControllerV2 extends BaseController {
 				String memberId = member.get(j).getUserId();
 				double score = scoreService.getAvgScore(memberId, myFamilyId);
 				UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
-				String name = account.getNickName();
-				memberScore.put("name", name);
+				memberScore.put("name", account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+						: account.getNickName());
 				memberScore.put("score", String.valueOf(score));
 				memberScoreS.add(memberScore);
 			}
@@ -233,8 +238,13 @@ public class GameControllerV2 extends BaseController {
 				List<DicFamilyType> types = dicService.getDicFamilyType();
 				for (DicFamilyType type : types) {
 					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "奖杯+" + type.getWin() + "\n另有钻石奖励哦！";
-						loss = "奖杯-" + type.getLoss();
+						win = "奖杯+" + type.getWin() + " 大量钻石！";
+						if (type.getLoss() >= 0) {
+							loss = "奖杯+" + type.getLoss();
+						} else {
+							loss = "奖杯" + type.getLoss();
+						}
+
 					}
 				}
 				result.put("reward", win);
@@ -342,6 +352,7 @@ public class GameControllerV2 extends BaseController {
 		LOG.info("userId=================" + userId);
 		long myFamilyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String daystamp = requestBodyParams.get("fightingTime").toString();
+		String sign = SignUtils.encryptHMAC(daystamp);
 		CompetitorFamilyInfoResultBean resultBean = this.gameService.queryCompetitorFamilyInfo(myFamilyId, daystamp);
 		if (null == resultBean) {
 			return ResultUtils.rtSuccess(null);
@@ -373,8 +384,8 @@ public class GameControllerV2 extends BaseController {
 				String memberId = user.get(j).get("userId").toString();
 				String score = user.get(j).get("score").toString();
 				UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
-				String name = account.getNickName();
-				memberScore.put("name", name);
+				memberScore.put("name", account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+						: account.getNickName());
 				memberScore.put("score", score);
 				memberScoreS.add(memberScore);
 			}
@@ -394,11 +405,14 @@ public class GameControllerV2 extends BaseController {
 				List<DicFamilyType> types = dicService.getDicFamilyType();
 				for (DicFamilyType type : types) {
 					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "奖杯+" + type.getWin() + "\n加丰富钻石";
-						loss = "奖杯-" + type.getLoss();
+						win = "奖杯+"+type.getWin() + "";
+						if (type.getLoss() >= 0) {
+							loss = "奖杯+" + type.getLoss();
+						} else {
+							loss = "奖杯" + type.getLoss();
+						}
 					}
 				}
-
 			}
 		}
 		result.put("myFamilyInfo", data.get(0));
@@ -406,13 +420,16 @@ public class GameControllerV2 extends BaseController {
 		if (Double.valueOf(data.get(0).get("familyScore").toString()) > Double
 				.valueOf(data.get(1).get("familyScore").toString())) {
 			result.put("rewardAndPunishment", win);
+			result.put("status", "1");
 		} else if (Double.valueOf(data.get(0).get("familyScore").toString()) < Double
 				.valueOf(data.get(1).get("familyScore").toString())) {
 			result.put("rewardAndPunishment", loss);
+			result.put("status", "2");
 		} else {
 			result.put("rewardAndPunishment", "和气生财！！！");
+			result.put("status", "0");
 		}
-
+		result.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, myFamilyId, sign)));
 		return ResultUtils.rtSuccess(result);
 	}
 
