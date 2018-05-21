@@ -96,16 +96,16 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
 	static Map<Integer,Integer> ThreeAlarmScoreMap=new HashMap<Integer,Integer>();
 	static {
 		ThreeAlarmScoreMap.put(0, 20);
-		ThreeAlarmScoreMap.put(1, 18);
-		ThreeAlarmScoreMap.put(2, 16);
-		ThreeAlarmScoreMap.put(3, 14);
-		ThreeAlarmScoreMap.put(4, 12);
-		ThreeAlarmScoreMap.put(5, 10);
-		ThreeAlarmScoreMap.put(6, 8);
-		ThreeAlarmScoreMap.put(7, 6);
-		ThreeAlarmScoreMap.put(8, 4);
-		ThreeAlarmScoreMap.put(9, 2);
-		ThreeAlarmScoreMap.put(10, 0);
+		ThreeAlarmScoreMap.put(1, 17);
+		ThreeAlarmScoreMap.put(2, 12);
+		ThreeAlarmScoreMap.put(3, 8);
+		ThreeAlarmScoreMap.put(4, 3);
+		ThreeAlarmScoreMap.put(5, -3);
+		ThreeAlarmScoreMap.put(6, -9);
+		ThreeAlarmScoreMap.put(7, -15);
+		ThreeAlarmScoreMap.put(8, -20);
+		ThreeAlarmScoreMap.put(9, -20);
+		ThreeAlarmScoreMap.put(10, -20);
 	}
 	
 	/**
@@ -182,6 +182,9 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         	tireRatio=BigDecimal.valueOf(1);
         }
         int score=scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
+        if(score<30) {
+        	score=30;
+        }
         userTravelHistory.setScore(String.valueOf(score));
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
 		return true;
