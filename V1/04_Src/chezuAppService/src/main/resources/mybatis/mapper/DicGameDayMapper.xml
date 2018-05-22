@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.DicGameDayMapper">
+    <select id="getGameDicByDaystamp" resultType="com.idata365.app.entity.DicGameDay" parameterType="java.lang.String">
+    	select * from dicGameDay where <![CDATA[ endDay>=#{daystamp} and startDay<=#{daystamp} ]]> limit 1
+    </select>
+  
+</mapper>
