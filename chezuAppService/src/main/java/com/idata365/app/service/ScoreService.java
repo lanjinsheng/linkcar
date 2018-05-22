@@ -175,7 +175,7 @@ public class ScoreService extends BaseService<ScoreService>
 			oriYesterdayParamBean.setDaystamp(getYesterdayDateStr());
 			FamilyDriveDayStatBean oriYeterdayFamilyResultBean = this.scoreMapper.queryFamilyDriveStat(oriYesterdayParamBean);
 			
-			oriFamilyBean.setYesterdayScore(oriYeterdayFamilyResultBean.getScore());
+			oriFamilyBean.setYesterdayScore(oriYeterdayFamilyResultBean==null?0:oriYeterdayFamilyResultBean.getScore());
 			
 			int orderNo = oriFamilyBean.getOrderNo();
 			int beforeYesterdayOrderNo = oriFamilyBean.getBeforeYesterdayOrderNo();
