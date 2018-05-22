@@ -111,7 +111,7 @@ public class CalFamilyPkServiceV2 {
 			trophy2=d2.getDogfall();
 		}
 		fdds1.setTrophy(trophy1);
-		fdds1.setTrophy(trophy2);
+		fdds2.setTrophy(trophy2);
 	    //更新日pk结果
         taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
         taskFamilyPkMapper.updateFamilyDayScoreById(fdds2);
