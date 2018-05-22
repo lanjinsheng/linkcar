@@ -106,6 +106,33 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	    	}
 		return false;
 	}
+//	/**
+//	 * 
+//	    * @Title: addUserTripPowerLogs
+//	    * @Description: TODO(行程给个人贡献值)
+//	    * @param @param userId
+//	    * @param @param habitId
+//	    * @param @param distance
+//	    * @param @param score
+//	    * @param @return    参数
+//	    * @return int    返回类型
+//	    * @throws
+//	    * @author LanYeYe
+//	 */
+//	private int addUserTripPowerLogs(long effectId,long userId,long habitId,double distance,Double score) {
+//		 
+//		String jsonValue="{\"userId\":%d,\"habitId\":%d,\"toUserValue\":%s,\"effectId\":%d}";
+//		//(10+分数-45/10)*公里
+//		BigDecimal score1=(BigDecimal.valueOf(score).subtract(BigDecimal.valueOf(45))).divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_EVEN);
+//    	int power=(score1.add(BigDecimal.valueOf(10))).multiply(BigDecimal.valueOf(distance)).divide(BigDecimal.valueOf(1000),0,RoundingMode.HALF_EVEN).intValue();
+//      	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
+//    	taskPowerLogs.setUserId(userId);
+//    	taskPowerLogs.setTaskType(PowerEnum.TripToUser);
+//    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,String.valueOf(power),effectId));
+//    	taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
+//    	return power;
+//	}
+	
 	/**
 	 * 
 	    * @Title: addUserTripPowerLogs
@@ -122,16 +149,36 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 	private int addUserTripPowerLogs(long effectId,long userId,long habitId,double distance,Double score) {
 		 
 		String jsonValue="{\"userId\":%d,\"habitId\":%d,\"toUserValue\":%s,\"effectId\":%d}";
+		BigDecimal distanceKm=BigDecimal.valueOf(distance).divide(BigDecimal.valueOf(1000),1,RoundingMode.HALF_EVEN);
+		BigDecimal power=BigDecimal.valueOf(0);
+		double distanceKmDouble=distanceKm.doubleValue();
+		if(distanceKmDouble>100) {
+			power=BigDecimal.valueOf(score).multiply(distanceKm.subtract(BigDecimal.valueOf(100))).divide(BigDecimal.valueOf(160),1,RoundingMode.HALF_EVEN);
+		}
+		if(distanceKmDouble>50) {
+			power=power.add(BigDecimal.valueOf(score).multiply(distanceKm.subtract(BigDecimal.valueOf(50))).divide(BigDecimal.valueOf(80),1,RoundingMode.HALF_EVEN));
+		}
+		if(distanceKmDouble>20) {
+			power=power.add(BigDecimal.valueOf(score).multiply(distanceKm.subtract(BigDecimal.valueOf(20))).divide(BigDecimal.valueOf(40),1,RoundingMode.HALF_EVEN));
+		}
+		if(distanceKmDouble>10) {
+			power=power.add(BigDecimal.valueOf(score).multiply(distanceKm.subtract(BigDecimal.valueOf(10))).divide(BigDecimal.valueOf(20),1,RoundingMode.HALF_EVEN));
+		}
+		
+		if(distanceKmDouble>10) {
+			power=power.add(BigDecimal.valueOf(score).multiply(distanceKm.subtract(BigDecimal.valueOf(10))).divide(BigDecimal.valueOf(20),1,RoundingMode.HALF_EVEN));
+		}
 		//(10+分数-45/10)*公里
 		BigDecimal score1=(BigDecimal.valueOf(score).subtract(BigDecimal.valueOf(45))).divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_EVEN);
-    	int power=(score1.add(BigDecimal.valueOf(10))).multiply(BigDecimal.valueOf(distance)).divide(BigDecimal.valueOf(1000),0,RoundingMode.HALF_EVEN).intValue();
+    	int powerInt=power.intValue();
       	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
     	taskPowerLogs.setUserId(userId);
     	taskPowerLogs.setTaskType(PowerEnum.TripToUser);
-    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,String.valueOf(power),effectId));
+    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,String.valueOf(powerInt),effectId));
     	taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
-    	return power;
+    	return powerInt;
 	}
+	
 	/**
 	 * 
 	    * @Title: addUserDayStat
