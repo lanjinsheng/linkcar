@@ -290,6 +290,9 @@ public class GameControllerV2 extends BaseController {
 		long fightFamilyId;
 		List<FamilyRelation> recordList = gameService.queryFightRecordByFamilyId(Long.valueOf(familyId), recordId);
 		List<Map<String, String>> result = new ArrayList<>();
+		if(recordList==null||recordList.size()==0) {
+			return ResultUtils.rtSuccess(map);
+		}
 		for (int i = 0; i < recordList.size(); i++) {
 			Map<String, String> data = new HashMap<>();
 			String daystamp = recordList.get(i).getDaystamp();
