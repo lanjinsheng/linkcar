@@ -80,7 +80,6 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			if (ValidTools.isNotBlank(queryFamily.getJoinFamily())) {
 				familyId = queryFamily.getJoinFamily().getFamilyId();
 				Map<String, Object> map = familyMapper.queryFamilyByFId(familyId);
-				list.add(map);
 				if (map != null) {
 					list.add(map);
 				}
