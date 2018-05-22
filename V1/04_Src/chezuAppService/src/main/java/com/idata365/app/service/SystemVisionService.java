@@ -34,13 +34,16 @@ public class SystemVisionService extends BaseService<SystemVisionService> {
 			if (list.get(i).getVision().equals(bean.getVision())) {
 				index = i;
 			}
+			
 		}
 		if (index > -1 && index + 1 < list.size()) {
 			for (int i = index + 1; i < list.size(); i++) {
 				if (list.get(i).getStatus() == 1) {
 					map.put("visionStatus", 1);
+					map.put("url", list.get(i).getUrl());
 					return map;
 				} else if (list.get(i).getStatus() == 2) {
+					map.put("url", list.get(i).getUrl());
 					map.put("visionStatus", 2);
 				}
 			}
