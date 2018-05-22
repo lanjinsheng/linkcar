@@ -15,7 +15,7 @@ public class UserTravelHistory implements Serializable {
 	double mileage;
 	int time;
 	private int speedTimes=0;
-	private int brakeScore=0;
+	private double brakeScore=0;
 	private int brakeTimes=0;
 	private double turnScore=0;
 	private int turnTimes=0;
@@ -35,11 +35,11 @@ public class UserTravelHistory implements Serializable {
 	int highSpeedTimesOffset;
 	String hiddenFlag; 
 	String score;
-	
-	public int getBrakeScore() {
+ 
+	public double getBrakeScore() {
 		return brakeScore;
 	}
-	public void setBrakeScore(int brakeScore) {
+	public void setBrakeScore(double brakeScore) {
 		this.brakeScore = brakeScore;
 	}
 	public double getTurnScore() {
