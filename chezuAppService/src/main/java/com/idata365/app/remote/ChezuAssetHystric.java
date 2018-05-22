@@ -41,11 +41,11 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		return null;
 	}
 
-//	@Override
-//	public long getFamilySeasonID(String daystamp, long myFamilyId, String sign) {
-//		LOG.error("getFamilySeasonID 挂了");
-//		return 0;
-//	}
+	@Override
+	public long getFamilySeasonID(String daystamp, long myFamilyId, String sign) {
+		LOG.error("getFamilySeasonID 挂了");
+		return 0;
+	}
 	 
 	
  
