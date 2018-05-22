@@ -763,7 +763,7 @@ public class MessageService extends BaseService<MessageService>{
 	}
 	private String getPassMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
-			return String.format(PassFamilyMessage, fromUserNick+fromUserPhone,familyName);
+			return String.format(PassFamilyMessage, fromUserNick+PhoneUtils.hidePhone(fromUserPhone),familyName);
 		}else {
 			return String.format(PassFamilyMessage, fromUserPhone,familyName);
 		}
