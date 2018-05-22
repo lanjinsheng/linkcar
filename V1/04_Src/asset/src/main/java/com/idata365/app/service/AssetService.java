@@ -581,7 +581,7 @@ public class AssetService extends BaseService<AssetService> {
 
 			bill.put("userId", users.get(i).getUserId().toString());
 			if ("2".equals(billBoardType)) {
-				bill.put("gradeOrNum", BigDecimal.valueOf(users.get(i).getPowerNum()).setScale(2, RoundingMode.HALF_UP).toString());
+				bill.put("gradeOrNum", users.get(i).getPowerNum().toString());
 			} else {
 				bill.put("gradeOrNum", users.get(i).getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
 			}
@@ -593,7 +593,7 @@ public class AssetService extends BaseService<AssetService> {
 	public Map<String, String> getCurOrderAndNum(long userId) {
 		Map<String, String> map = new HashMap<>();
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
-		map.put("diamondsNum", usersAsset.getDiamondsNum().toString());
+		map.put("diamondsNum", usersAsset.getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
 		map.put("powersNum", usersAsset.getPowerNum().toString());
 		map.put("diamondsNo", String.valueOf(assetUsersAssetMapper.getDiamondsCurOrder(userId)));
 		map.put("powersNo", String.valueOf(assetUsersAssetMapper.getPowersCurOrder(userId)));
