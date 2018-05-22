@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,6 +142,7 @@ public class GameControllerV2 extends BaseController {
 
 		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
 		bean.setUserId(userId);
+		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyInfoAllBean queryFamily = scoreService.queryFamily(bean);
 
 		List<Map<String, String>> billList = new ArrayList<>();
@@ -441,5 +444,15 @@ public class GameControllerV2 extends BaseController {
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
+	}
+	
+	public String getYesterdayDateStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date yesterdayDate = DateUtils.addDays(curDate, -1);
+		
+		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyy-MM-dd");
+		LOG.info(yesterdayDateStr);
+		return yesterdayDateStr;
 	}
 }
