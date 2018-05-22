@@ -382,11 +382,11 @@ public class GameControllerV2 extends BaseController {
 			for (int j = 0; j < user.size(); j++) {
 				Map<String, String> memberScore = new HashMap<>();
 				String memberId = user.get(j).get("userId").toString();
-				String score = user.get(j).get("score").toString();
+				String score = user.get(j).get("avgScore").toString();
 				UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
 				memberScore.put("name", account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
 						: account.getNickName());
-				memberScore.put("avgScore", score);
+				memberScore.put("score", score);
 				memberScoreS.add(memberScore);
 			}
 			Collections.sort(memberScoreS, new Comparator<Map<String, String>>() {
