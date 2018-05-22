@@ -288,15 +288,15 @@ public class AssetController extends BaseController {
 	 * @throws @author
 	 *             Lixing
 	 */
-//	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
-//	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,
-//			@RequestParam(value = "myFamilyId") long myFamilyId, @RequestParam(value = "sign") String sign) {
-//		LOG.info("myFamilyId:" + myFamilyId + "===sign:" + sign);
-//		LOG.info("校验逻辑待处理·~~~sign:");
-//		LOG.info("getFamilySeasonID·~~~controller");
-//		long familySeasonId = familyGameAssetService.getFamilySeasonID(myFamilyId, daystamp);
-//		return familySeasonId;
-//	}
+	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
+	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,
+			@RequestParam(value = "myFamilyId") long myFamilyId, @RequestParam(value = "sign") String sign) {
+		LOG.info("myFamilyId:" + myFamilyId + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("getFamilySeasonID·~~~controller");
+		long familySeasonId = familyGameAssetService.getFamilySeasonID(myFamilyId, daystamp);
+		return familySeasonId;
+	}
 
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
