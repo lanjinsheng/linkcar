@@ -581,9 +581,9 @@ public class AssetService extends BaseService<AssetService> {
 
 			bill.put("userId", users.get(i).getUserId().toString());
 			if ("2".equals(billBoardType)) {
-				bill.put("gradeOrNum", users.get(i).getPowerNum().toString());
+				bill.put("gradeOrNum", BigDecimal.valueOf(users.get(i).getPowerNum()).setScale(2, RoundingMode.HALF_UP).toString());
 			} else {
-				bill.put("gradeOrNum", users.get(i).getDiamondsNum().toString());
+				bill.put("gradeOrNum", users.get(i).getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
 			}
 			billBoard.add(bill);
 		}
