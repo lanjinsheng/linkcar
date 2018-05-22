@@ -119,34 +119,18 @@ public class TripController extends BaseController {
 			// 驾驶得分
 			rtMap.put("score", String.valueOf(dbMap.get("score")));
 			// 疲劳驾驶系数
-			long time = Long.valueOf(dbMap.get("time").toString()).longValue();
-			double tiredNum = 1;
-			if (time > 4 * 3600) {
-				tiredNum = 0.9;
-			} else if (time > 3 * 3600 && time <= 4 * 3600) {
-				tiredNum = 0.95;
-			}
-			rtMap.put("tiredNum", tiredNum);
-
-			double mileage = Double.valueOf(dbMap.get("mileage").toString()).doubleValue();
+			rtMap.put("tiredNum", dbMap.get("tiredRate").toString());
 			// 超速系数
-			double over = Double.valueOf(dbMap.get("overspeedTimes").toString()).doubleValue();
-			over = BigDecimal.valueOf(over).multiply(BigDecimal.valueOf(10000)).divide(BigDecimal.valueOf(mileage), 1,
-					RoundingMode.HALF_UP).doubleValue();
-			double overspeedNum = BigDecimal.valueOf((20 - over * 2) / 20).setScale(1, RoundingMode.HALF_UP).doubleValue();
-
+			double over = Double.valueOf(dbMap.get("overspeedScore").toString()).doubleValue();
+			double overspeedNum = over / 20;
 			rtMap.put("overspeedNum", overspeedNum < 0 ? 0 : overspeedNum);
 			// 急转系数
-			double turn = Double.valueOf(dbMap.get("turnTimes").toString()).doubleValue();
-			turn = BigDecimal.valueOf(turn).multiply(BigDecimal.valueOf(10000)).divide(BigDecimal.valueOf(mileage), 1,
-					RoundingMode.HALF_UP).doubleValue();
-			double turnNum = BigDecimal.valueOf((20 - turn * 2) / 20).setScale(1, RoundingMode.HALF_UP).doubleValue();
+			double turn = Double.valueOf(dbMap.get("turnScore").toString()).doubleValue();
+			double turnNum = turn / 20;
 			rtMap.put("turnNum", turnNum < 0 ? 0 : turnNum);
 			// 急刹系数
-			double breaK = Double.valueOf(dbMap.get("brakeTimes").toString()).doubleValue();
-			breaK = BigDecimal.valueOf(breaK).multiply(BigDecimal.valueOf(10000)).divide(BigDecimal.valueOf(mileage), 1,
-					RoundingMode.HALF_UP).doubleValue();
-			double brakeNum = BigDecimal.valueOf((20 - breaK * 2) / 20).setScale(1, RoundingMode.HALF_UP).doubleValue();
+			double breaK = Double.valueOf(dbMap.get("brakeScore").toString()).doubleValue();
+			double brakeNum = breaK / 20;
 			rtMap.put("brakeNum", brakeNum < 0 ? 0 : brakeNum);
 		}
 		return ResultUtils.rtSuccess(rtMap);
