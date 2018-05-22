@@ -22,5 +22,5 @@ public class SystemConstant
 	/**
 	 * 登录验证码开关(0关，1开)
 	 */
-	public static final int LOGINCODE_SWITCH = 0;
+	public static final int LOGINCODE_SWITCH = 1;
 }
