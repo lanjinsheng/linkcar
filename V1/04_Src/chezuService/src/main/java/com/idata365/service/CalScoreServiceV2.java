@@ -147,11 +147,12 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         BigDecimal scoreBrakeTurn=BigDecimal.valueOf(20);
         
         BigDecimal brakeDown=BigDecimal.valueOf(dm.getBrakeTimes());
-        BigDecimal brakeUp=BigDecimal.valueOf(dm.getSpeedUpTimes());
+//        BigDecimal brakeUp=BigDecimal.valueOf(dm.getSpeedUpTimes());
+        BigDecimal overSpeed=BigDecimal.valueOf(0);
         BigDecimal brakeTurn=BigDecimal.valueOf(dm.getTurnTimes());
         
         brakeDown= brakeDown.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
-        brakeUp= brakeUp.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
+        overSpeed= overSpeed.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
         brakeTurn= brakeTurn.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
         //急减
         if(brakeDown.intValue()>=10) {
@@ -159,21 +160,21 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         }else {
         	scoreBrakeDown=BigDecimal.valueOf(ThreeAlarmScoreMap.get(brakeDown.intValue()));
         }
-        
-       //急加 
-        if(brakeUp.intValue()>=10) {
-        	scoreBrakeUp=BigDecimal.valueOf(ThreeAlarmScoreMap.get(10));
+        userTravelHistory.setBrakeScore(scoreBrakeDown.doubleValue());
+       //超速
+        if(overSpeed.intValue()>=10) {
+        	overSpeed=BigDecimal.valueOf(ThreeAlarmScoreMap.get(10));
         }else {
-        	scoreBrakeUp=BigDecimal.valueOf(ThreeAlarmScoreMap.get(brakeUp.intValue()));
+        	overSpeed=BigDecimal.valueOf(ThreeAlarmScoreMap.get(overSpeed.intValue()));
         }
-        
+        userTravelHistory.setOverspeedScore(overSpeed.doubleValue());
         //急转
         if(brakeTurn.intValue()>=10) {
         	scoreBrakeTurn=BigDecimal.valueOf(ThreeAlarmScoreMap.get(10));
         }else {
         	scoreBrakeTurn=BigDecimal.valueOf(ThreeAlarmScoreMap.get(brakeTurn.intValue()));
         }
-        
+        userTravelHistory.setTurnScore(scoreBrakeTurn.doubleValue());
         if(driveTimes>=4*3600) {
         	tireRatio=BigDecimal.valueOf(0.9);
         }else if(driveTimes>=3*3600) {
@@ -181,6 +182,7 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         }else {
         	tireRatio=BigDecimal.valueOf(1);
         }
+        userTravelHistory.setTiredRate(tireRatio.doubleValue());
         int score=scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
         if(score<30) {
         	score=30;
