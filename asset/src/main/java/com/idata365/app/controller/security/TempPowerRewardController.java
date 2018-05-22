@@ -39,7 +39,7 @@ public class TempPowerRewardController extends BaseController {
 		if(this.tempPowerRewardService.hadGet(uuid)) {
 			return ResultUtils.rtSuccess(null);
 		}else {
-			return ResultUtils.rtFailParam(null);
+			return ResultUtils.rtFailParam(null,"已领取");
 		}
 	}
 	 
