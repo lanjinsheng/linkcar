@@ -15,10 +15,14 @@ public class UserTravelHistory implements Serializable {
 	double mileage;
 	int time;
 	private int speedTimes=0;
+	private int brakeScore=0;
 	private int brakeTimes=0;
+	private double turnScore=0;
 	private int turnTimes=0;
+	private double overspeedScore=0;
 	private int overspeedTimes=0;
 	double nightDrive;
+	private double tiredRate;
 	double tiredDrive;
 	double maxspeed;
 	
@@ -32,6 +36,30 @@ public class UserTravelHistory implements Serializable {
 	String hiddenFlag; 
 	String score;
 	
+	public int getBrakeScore() {
+		return brakeScore;
+	}
+	public void setBrakeScore(int brakeScore) {
+		this.brakeScore = brakeScore;
+	}
+	public double getTurnScore() {
+		return turnScore;
+	}
+	public void setTurnScore(double turnScore) {
+		this.turnScore = turnScore;
+	}
+	public double getOverspeedScore() {
+		return overspeedScore;
+	}
+	public void setOverspeedScore(double overspeedScore) {
+		this.overspeedScore = overspeedScore;
+	}
+	public double getTiredRate() {
+		return tiredRate;
+	}
+	public void setTiredRate(double tiredRate) {
+		this.tiredRate = tiredRate;
+	}
 	private int addDayStatFlag;
 	private String taskFlag;
 	private Date taskDealTime;
