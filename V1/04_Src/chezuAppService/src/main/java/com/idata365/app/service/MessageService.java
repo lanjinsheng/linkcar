@@ -55,7 +55,7 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String SeasonRewardMessage="恭喜！您的家族在【%s】赛季中获得好成绩，奖励【%s钻石】，已经自动发放至您的账号，快去看看吧！";
 	
 	
-	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快来看看如何玩转车族吧！";
+	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";
@@ -139,8 +139,8 @@ public class MessageService extends BaseService<MessageService>{
 			message.setPicture("");
 			message.setTitle("欢迎您!");
 			message.setToUserId(toUserId);
-			message.setUrlType(1);
-			message.setToUrl(getH5RegMessageUrl());
+			message.setUrlType(2);
+			message.setToUrl("");
 			break;
 		case INVITE_FAMILY:
 			message.setFromUserId(fromUserId==null?0:fromUserId);
