@@ -756,7 +756,7 @@ public class MessageService extends BaseService<MessageService>{
 	//处理私有逻辑
 	private String getInviteMessageDesc(String fromUserPhone,String fromUserNick) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
-			return String.format(InviteMessage, fromUserNick+fromUserPhone);
+			return String.format(InviteMessage, fromUserNick+PhoneUtils.hidePhone(fromUserPhone));
 		}else {
 			return String.format(InviteMessage, fromUserPhone);
 		}
