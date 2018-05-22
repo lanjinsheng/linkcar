@@ -560,7 +560,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			familyScoreBean.setFamilyType(DicFamilyTypeConstant.QingTong_5);
 			familyScoreBean.setTrophy(0);
 			familyScoreBean.setStartDay(dicGameDay.getStartDay());
-			familyScoreBean.setStartDay(dicGameDay.getEndDay());
+			familyScoreBean.setEndDay(dicGameDay.getEndDay());
 			scoreMapper.insertFamilyScore(familyScoreBean);
 		}
 		// 更新是否通过邀请码加入状态
