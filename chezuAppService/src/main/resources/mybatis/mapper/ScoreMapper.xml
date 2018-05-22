@@ -190,7 +190,7 @@ select orderNo, date_format(str_to_date(daystamp, '%Y-%m-%d'), '%Y/%m/%d') as da
 	</update>
 	
 	<select id="getMemberInfoByTime" resultType="java.util.HashMap">
-		select userId,score from userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+		select userId,avgScore from userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
 	<insert id="insertFamilyScore" parameterType="com.idata365.app.entity.FamilyScoreBean">
 	INSERT IGNORE  INTO 
