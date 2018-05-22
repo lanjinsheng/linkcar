@@ -103,7 +103,7 @@ public interface ChezuAssetService {
 	 * @throws @author
 	 *             Lixing
 	 */
-//	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
-//	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "myFamilyId") long myFamilyId,
-//			@RequestParam(value = "sign") String sign);
+	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
+	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "myFamilyId") long myFamilyId,
+			@RequestParam(value = "sign") String sign);
 }
