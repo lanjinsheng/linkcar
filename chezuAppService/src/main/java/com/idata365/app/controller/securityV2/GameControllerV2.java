@@ -291,6 +291,7 @@ public class GameControllerV2 extends BaseController {
 		List<FamilyRelation> recordList = gameService.queryFightRecordByFamilyId(Long.valueOf(familyId), recordId);
 		List<Map<String, String>> result = new ArrayList<>();
 		if(recordList==null||recordList.size()==0) {
+			map.put("result", result);
 			return ResultUtils.rtSuccess(map);
 		}
 		for (int i = 0; i < recordList.size(); i++) {
