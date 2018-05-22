@@ -21,7 +21,8 @@
 		tiredDriveOffset=#{tiredDriveOffset},highSpeedTimesOffset=#{highSpeedTimesOffset},
 		useShachepian=#{useShachepian},useHongniu=#{useHongniu},useYeshijing=#{useYeshijing},
 		useFadongji=#{useFadongji},useCheluntai=#{useCheluntai},useZengyaqi=#{useZengyaqi},
-		taskFlag='0',addDayStatFlag=0,score=#{score}
+		taskFlag='0',addDayStatFlag=0,score=#{score},
+		breakScore=#{breakScore},turnScore=#{turnScore},overspeedScore=#{overspeedScore},tiredRate=#{tiredRate}
 		where userId=#{userId} and habitId=#{habitId}
 	 </update>
 	
