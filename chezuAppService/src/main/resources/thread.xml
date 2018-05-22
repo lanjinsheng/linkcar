@@ -200,8 +200,8 @@
 	    <!-- 每5s执行一次 -->
 	    <!-- 
 	    <property name="cronExpression" value="55 30 10 * * ?"></property>  
-	     -->
-	    <property name="cronExpression" value="01 0 12 * * ?"></property>  
+	    
+	    <property name="cronExpression" value="01 0 12 * * ?"></property> -->
 	</bean>
 	
 	<bean id="stationTask" class="com.idata365.app.schedule.StationTask"></bean>
