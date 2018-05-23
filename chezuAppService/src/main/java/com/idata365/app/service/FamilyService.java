@@ -543,12 +543,12 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		// 初始化家族的分数信息用于实时展示家族得分[实时分通过实时计算获得]
 
-//		FamilyDriveDayStat familyDriveDayStat = new FamilyDriveDayStat();
-//		familyDriveDayStat.setFamilyId(familyId);
-//		familyDriveDayStat.setDaystamp(curDayStr);
-//		familyDriveDayStat.setFamilyType(DicFamilyTypeConstant.QingTong_5);
-//		familyDriveDayStat.setFamilyFlag(0);
-//		this.familyMapper.insertFamilyDriveDayStat(familyDriveDayStat);
+		FamilyDriveDayStat familyDriveDayStat = new FamilyDriveDayStat();
+		familyDriveDayStat.setFamilyId(familyId);
+		familyDriveDayStat.setDaystamp(curDayStr);
+		familyDriveDayStat.setFamilyType(DicFamilyTypeConstant.QingTong_5);
+		familyDriveDayStat.setFamilyFlag(0);
+		this.familyMapper.insertFamilyDriveDayStat(familyDriveDayStat);
 
 		// 更新是否通过邀请码加入状态
 
