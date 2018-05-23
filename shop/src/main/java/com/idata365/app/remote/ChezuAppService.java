@@ -18,7 +18,7 @@ public interface ChezuAppService {
     /**
      * 
         * @Title: sendShopMsg
-        * @Description: TODO(交易成功)
+        * @Description: TODO(奖励兑换成功通知)
         * @param @param userId
         * @param @param goodsName
         * @param @param sign
@@ -33,7 +33,7 @@ public interface ChezuAppService {
     /**
 	 * 
 	    * @Title: sendGoodsSendMsg
-	    * @Description: TODO(发货)
+	    * @Description: TODO(发货成功通知)
 	    * @param @param userId
 	    * @param @param goodsName
 	    * @param @param sign

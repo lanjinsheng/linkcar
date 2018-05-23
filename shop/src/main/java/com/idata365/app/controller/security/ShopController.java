@@ -48,8 +48,6 @@ public class ShopController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private ChezuAppService chezuAppService;
-	// @Autowired
-	// private UsersService usersService;
 
 	/**
 	 * 
@@ -63,7 +61,8 @@ public class ShopController extends BaseController {
 	 */
 	@RequestMapping("/getPrizeList")
 	public Map<String, Object> getPrizeList() {
-		List<Map<String, String>> list = prizeService.getPrizes();
+		long userId = this.getUserId();
+		List<Map<String, String>> list = prizeService.getPrizes(userId);
 		return ResultUtils.rtSuccess(list);
 	}
 
@@ -110,8 +109,12 @@ public class ShopController extends BaseController {
 		try {
 			orderService.save(order);
 			boolean shopMsg = chezuAppService.sendShopMsg(userId, prize.getPrizename(), SignUtils.encryptHMAC(userId+""+prize.getPrizename()));
-			System.out.println("兑换成功："+shopMsg);
-			return ResultUtils.rtSuccess(null);
+			System.out.println("兑换结果："+shopMsg);
+			if(shopMsg) {
+				return ResultUtils.rtSuccess(null);
+			}else {
+				return ResultUtils.rtFail(null);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

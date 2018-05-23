@@ -28,8 +28,18 @@ public class Prize  implements Serializable{
     private String prizedetailpics;
 
     private String prizedetailtexts;
+    
+    private Integer stock;
 
-    public Long getPrizeid() {
+    public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
+
+	public Long getPrizeid() {
         return prizeid;
     }
 
