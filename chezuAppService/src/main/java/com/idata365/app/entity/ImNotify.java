@@ -3,6 +3,8 @@ package com.idata365.app.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ImNotify implements Serializable {
 	
 	    /**
@@ -13,6 +15,7 @@ public class ImNotify implements Serializable {
 	private String leaderName;
 	private Long leaderId;
 	private String notifyMsg;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date createTime;
 	private Integer inUse;
 	private Long familyId;
