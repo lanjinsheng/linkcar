@@ -58,7 +58,6 @@ public class CalFamilyPkServiceV2 {
 			   if(!r) {
 		        	throw new RemoteException();  
 		        }
-				return r;   
 		   }
 		   return true;
 	}
