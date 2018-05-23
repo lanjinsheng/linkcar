@@ -22,7 +22,6 @@
 		 overspeedTimes,overspeedPenalTimes,overspeedTimesUpdateTime,nightDriveTimes,nightDrivePenalTimes,nightDriveTimesUpdateTime,
 		 tiredDriveTimes,tiredDrivePenalTimes,tiredDriveTimesUpdateTime,illegalStopTimes,illegalStopPenalTimes,illegalStopUpdateTime,
 		 usePhoneTimes,maxspeed,familyNumFactor,roleFactor,memberFactor,familyLevelFactor,mileage,time,memberNum)
-		 
 		 VALUES(
 		 #{familyId}, #{daystamp}, #{useHoldNum}, #{score}, #{scoreComm}, #{scoreAdd}, #{speedTimes}, #{speedPenalTimes},
 		  #{speedTimesUpdateTime}, #{brakeTimes}, #{brakePenalTimes}, #{brakeTimesUpdateTime}, #{turnTimes}, #{turnPenalTimes},
@@ -33,6 +32,12 @@
 		   #{illegalStopPenalTimes}, #{illegalStopUpdateTime},
 		  #{usePhoneTimes}, #{maxspeed}, #{familyNumFactor}, #{roleFactor}, #{memberFactor}, #{familyLevelFactor},
 		   #{mileage}, #{time},#{memberNum})
+		 ON DUPLICATE KEY UPDATE 
+		 useHoldNum=#{useHoldNum},score=#{score},scoreComm=#{scoreComm},scoreAdd=#{scoreAdd},speedTimes=#{speedTimes},speedPenalTimes=#{speedPenalTimes},
+		 speedTimesUpdateTime=#{speedTimesUpdateTime},brakeTimes=#{brakeTimes},brakePenalTimes=#{brakePenalTimes},brakeTimesUpdateTime=#{brakeTimesUpdateTime},
+		 turnTimes=#{turnTimes},turnPenalTimes=#{turnPenalTimes},turnTimesUpdateTime=#{turnTimesUpdateTime},
+		 time=#{time},turnTimes=#{turnTimes}, overspeedTimes=#{overspeedTimes},
+		 memberNum=#{memberNum},mileage=#{mileage}
 	</insert>
 
    <insert id="insertFamilyScore"  useGeneratedKeys="true" keyProperty="id" parameterType="com.idata365.entity.FamilyScore" >
