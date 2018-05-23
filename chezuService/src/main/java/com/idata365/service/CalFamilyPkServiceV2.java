@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +22,11 @@ import com.idata365.entity.bean.FamilyGameAsset;
 import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
 import com.idata365.remote.ChezuAssetService;
+import com.idata365.schedule.CalFamilyDayPkTask;
 import com.idata365.util.SignUtils;
 @Service
 public class CalFamilyPkServiceV2 {
-
+	private static Logger log = Logger.getLogger(CalFamilyPkServiceV2.class);
 	@Autowired
     TaskFamilyPkMapper taskFamilyPkMapper;
 	@Autowired
@@ -48,8 +50,12 @@ public class CalFamilyPkServiceV2 {
 		   
 		   List<FamilyDriveDayStat> list=taskFamilyPkMapper.getNewFamilyDayScore(paramMap);
 		   for(FamilyDriveDayStat fd:list) {
+			   //更新familyInfo
+			   taskFamilyPkMapper.updateFamilyInfo(fd);
+			   log.info("新家族发送pk接口:"+fd.getFamilyId());
 			   boolean r=addFamilyGameOrder(startDay, endDay, fd.getFamilyId(), fd.getDaystamp(),fd.getMemberNum());
-		        if(!r) {
+			   log.info("新家族发送pk接口结束:"+fd.getFamilyId()+r);
+			   if(!r) {
 		        	throw new RemoteException();  
 		        }
 				return r;   
