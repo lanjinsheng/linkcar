@@ -20,8 +20,10 @@ import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.remote.ChezuService;
 import com.idata365.app.service.FamilyInviteService;
+import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ImService;
 import com.idata365.app.service.MessageService;
+import com.idata365.app.service.common.FamilyScoreService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.ValidTools;
@@ -35,6 +37,8 @@ public class DemoController extends BaseController {
 	ChezuService chezuService ;
 	@Autowired
 	ImService imService;
+	@Autowired
+	FamilyScoreService familyScoreService;
 	
 	@Autowired
 	MessageService messageService;
@@ -44,6 +48,13 @@ public class DemoController extends BaseController {
 		 List<FamilyInvite> list= familyInviteService.getFamilyInviteByPhone("15851750576");
 		return ResultUtils.rtSuccess(null);
 	}
+	 
+	 @RequestMapping("/test/getFamilyDayScoreTest")
+	public Map<String,Object> getFamilyDayScoreTest(){
+		 Double d= familyScoreService.familyScore(1000018L, "2018-05-23");
+		return ResultUtils.rtSuccess(d);
+	}
+	 
 	 
 	 @RequestMapping("/test/insertInvite")
 	public Map<String,Object> insertInvite(){
