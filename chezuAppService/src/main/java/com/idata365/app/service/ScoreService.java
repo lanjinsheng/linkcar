@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -1257,9 +1258,11 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		long statTime = (long)this.scoreMapper.statTime(bean);
 		LOGGER.info("statTime============="+statTime);
-		String timeStr = DurationFormatUtils.formatDuration(statTime*1000L, "HH") + "小时";
-		resultBean.setDuration(timeStr);
-		
+		resultBean.setDuration("0小时");
+		if(statTime>0){
+			BigDecimal hh=BigDecimal.valueOf(statTime).divide(BigDecimal.valueOf(3600),2,RoundingMode.HALF_EVEN);
+			resultBean.setDuration(hh.doubleValue()+"小时");
+		}
 		return resultBean;
 	}
 	
