@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.ImNotify;
 import com.idata365.app.mapper.ImMsgMapper;
 import com.idata365.app.mapper.ImNotifyMapper;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.StringTools;
 
 @Service
@@ -106,6 +108,7 @@ public class ImService extends BaseService<ImService>
     		imNotify.setLeaderId(Long.valueOf(leaderInfo.get("id").toString()));
     		imNotify.setLeaderPic(basePath+String.valueOf(leaderInfo.get("imgUrl")));
     		imNotify.setFamilyId(familyId);
+    		imNotify.setCreateTime(new Date());
     		rtMap.put("imNotify", imNotify);
     	}else {
     		imNotify.setLeaderPic(basePath+imNotify.getLeaderPic());
