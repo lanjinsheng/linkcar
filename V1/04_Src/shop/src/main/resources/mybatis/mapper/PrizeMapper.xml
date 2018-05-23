@@ -1,276 +1,133 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.idata365.app.mapper.PrizeMapper" >
-  <resultMap id="BaseResultMap" type="com.idata365.app.entity.Prize" >
-    <id column="prizeId" property="prizeid" jdbcType="BIGINT" />
-    <result column="prizeName" property="prizename" jdbcType="VARCHAR" />
-    <result column="prizeDesc" property="prizedesc" jdbcType="VARCHAR" />
-    <result column="is_marketable" property="isMarketable" jdbcType="INTEGER" />
-    <result column="prizePic" property="prizepic" jdbcType="VARCHAR" />
-    <result column="originalPrice" property="originalprice" jdbcType="DECIMAL" />
-    <result column="diamondValue" property="diamondvalue" jdbcType="INTEGER" />
-    <result column="prizeDetailPics" property="prizedetailpics" jdbcType="VARCHAR" />
-    <result column="prizeDetailTexts" property="prizedetailtexts" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    prizeId, prizeName, prizeDesc, is_marketable, prizePic, originalPrice, diamondValue, 
-    prizeDetailPics, prizeDetailTexts
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.PrizeExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from prize
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from prize
-    where prizeId = #{prizeid,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from prize
-    where prizeId = #{prizeid,jdbcType=BIGINT}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.idata365.app.entity.PrizeExample" >
-    delete from prize
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.idata365.app.entity.Prize" >
-    insert into prize (prizeId, prizeName, prizeDesc, 
-      is_marketable, prizePic, originalPrice, 
-      diamondValue, prizeDetailPics, prizeDetailTexts
-      )
-    values (#{prizeid,jdbcType=BIGINT}, #{prizename,jdbcType=VARCHAR}, #{prizedesc,jdbcType=VARCHAR}, 
-      #{isMarketable,jdbcType=INTEGER}, #{prizepic,jdbcType=VARCHAR}, #{originalprice,jdbcType=DECIMAL}, 
-      #{diamondvalue,jdbcType=INTEGER}, #{prizedetailpics,jdbcType=VARCHAR}, #{prizedetailtexts,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.idata365.app.entity.Prize" >
-    insert into prize
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="prizeid != null" >
-        prizeId,
-      </if>
-      <if test="prizename != null" >
-        prizeName,
-      </if>
-      <if test="prizedesc != null" >
-        prizeDesc,
-      </if>
-      <if test="isMarketable != null" >
-        is_marketable,
-      </if>
-      <if test="prizepic != null" >
-        prizePic,
-      </if>
-      <if test="originalprice != null" >
-        originalPrice,
-      </if>
-      <if test="diamondvalue != null" >
-        diamondValue,
-      </if>
-      <if test="prizedetailpics != null" >
-        prizeDetailPics,
-      </if>
-      <if test="prizedetailtexts != null" >
-        prizeDetailTexts,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="prizeid != null" >
-        #{prizeid,jdbcType=BIGINT},
-      </if>
-      <if test="prizename != null" >
-        #{prizename,jdbcType=VARCHAR},
-      </if>
-      <if test="prizedesc != null" >
-        #{prizedesc,jdbcType=VARCHAR},
-      </if>
-      <if test="isMarketable != null" >
-        #{isMarketable,jdbcType=INTEGER},
-      </if>
-      <if test="prizepic != null" >
-        #{prizepic,jdbcType=VARCHAR},
-      </if>
-      <if test="originalprice != null" >
-        #{originalprice,jdbcType=DECIMAL},
-      </if>
-      <if test="diamondvalue != null" >
-        #{diamondvalue,jdbcType=INTEGER},
-      </if>
-      <if test="prizedetailpics != null" >
-        #{prizedetailpics,jdbcType=VARCHAR},
-      </if>
-      <if test="prizedetailtexts != null" >
-        #{prizedetailtexts,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.idata365.app.entity.PrizeExample" resultType="java.lang.Integer" >
-    select count(*) from prize
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update prize
-    <set >
-      <if test="record.prizeid != null" >
-        prizeId = #{record.prizeid,jdbcType=BIGINT},
-      </if>
-      <if test="record.prizename != null" >
-        prizeName = #{record.prizename,jdbcType=VARCHAR},
-      </if>
-      <if test="record.prizedesc != null" >
-        prizeDesc = #{record.prizedesc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isMarketable != null" >
-        is_marketable = #{record.isMarketable,jdbcType=INTEGER},
-      </if>
-      <if test="record.prizepic != null" >
-        prizePic = #{record.prizepic,jdbcType=VARCHAR},
-      </if>
-      <if test="record.originalprice != null" >
-        originalPrice = #{record.originalprice,jdbcType=DECIMAL},
-      </if>
-      <if test="record.diamondvalue != null" >
-        diamondValue = #{record.diamondvalue,jdbcType=INTEGER},
-      </if>
-      <if test="record.prizedetailpics != null" >
-        prizeDetailPics = #{record.prizedetailpics,jdbcType=VARCHAR},
-      </if>
-      <if test="record.prizedetailtexts != null" >
-        prizeDetailTexts = #{record.prizedetailtexts,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update prize
-    set prizeId = #{record.prizeid,jdbcType=BIGINT},
-      prizeName = #{record.prizename,jdbcType=VARCHAR},
-      prizeDesc = #{record.prizedesc,jdbcType=VARCHAR},
-      is_marketable = #{record.isMarketable,jdbcType=INTEGER},
-      prizePic = #{record.prizepic,jdbcType=VARCHAR},
-      originalPrice = #{record.originalprice,jdbcType=DECIMAL},
-      diamondValue = #{record.diamondvalue,jdbcType=INTEGER},
-      prizeDetailPics = #{record.prizedetailpics,jdbcType=VARCHAR},
-      prizeDetailTexts = #{record.prizedetailtexts,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.idata365.app.entity.Prize" >
-    update prize
-    <set >
-      <if test="prizename != null" >
-        prizeName = #{prizename,jdbcType=VARCHAR},
-      </if>
-      <if test="prizedesc != null" >
-        prizeDesc = #{prizedesc,jdbcType=VARCHAR},
-      </if>
-      <if test="isMarketable != null" >
-        is_marketable = #{isMarketable,jdbcType=INTEGER},
-      </if>
-      <if test="prizepic != null" >
-        prizePic = #{prizepic,jdbcType=VARCHAR},
-      </if>
-      <if test="originalprice != null" >
-        originalPrice = #{originalprice,jdbcType=DECIMAL},
-      </if>
-      <if test="diamondvalue != null" >
-        diamondValue = #{diamondvalue,jdbcType=INTEGER},
-      </if>
-      <if test="prizedetailpics != null" >
-        prizeDetailPics = #{prizedetailpics,jdbcType=VARCHAR},
-      </if>
-      <if test="prizedetailtexts != null" >
-        prizeDetailTexts = #{prizedetailtexts,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where prizeId = #{prizeid,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.idata365.app.entity.Prize" >
-    update prize
-    set prizeName = #{prizename,jdbcType=VARCHAR},
-      prizeDesc = #{prizedesc,jdbcType=VARCHAR},
-      is_marketable = #{isMarketable,jdbcType=INTEGER},
-      prizePic = #{prizepic,jdbcType=VARCHAR},
-      originalPrice = #{originalprice,jdbcType=DECIMAL},
-      diamondValue = #{diamondvalue,jdbcType=INTEGER},
-      prizeDetailPics = #{prizedetailpics,jdbcType=VARCHAR},
-      prizeDetailTexts = #{prizedetailtexts,jdbcType=VARCHAR}
-    where prizeId = #{prizeid,jdbcType=BIGINT}
-  </update>
+<mapper namespace="com.idata365.app.mapper.PrizeMapper">
+	<resultMap id="BaseResultMap"
+		type="com.idata365.app.entity.Prize">
+		<id column="prizeId" property="prizeid" jdbcType="BIGINT" />
+		<result column="prizeName" property="prizename"
+			jdbcType="VARCHAR" />
+		<result column="prizeDesc" property="prizedesc"
+			jdbcType="VARCHAR" />
+		<result column="is_marketable" property="isMarketable"
+			jdbcType="INTEGER" />
+		<result column="prizePic" property="prizepic"
+			jdbcType="VARCHAR" />
+		<result column="originalPrice" property="originalprice"
+			jdbcType="DECIMAL" />
+		<result column="diamondValue" property="diamondvalue"
+			jdbcType="INTEGER" />
+		<result column="prizeDetailPics" property="prizedetailpics"
+			jdbcType="VARCHAR" />
+		<result column="prizeDetailTexts" property="prizedetailtexts"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		prizeId, prizeName, prizeDesc, is_marketable, prizePic,
+		originalPrice,
+		diamondValue,
+		prizeDetailPics, prizeDetailTexts
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap">
+		select * from prize where stock>0 and is_marketable=1 order 
+		by diamondValue desc
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from prize
+		where prizeId = #{prizeid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from prize
+		where prizeId = #{prizeid,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insert"
+		parameterType="com.idata365.app.entity.Prize">
+		insert into prize (prizeId, prizeName, prizeDesc,
+		is_marketable, prizePic, originalPrice,
+		diamondValue, prizeDetailPics,
+		prizeDetailTexts
+		)
+		values (#{prizeid,jdbcType=BIGINT},
+		#{prizename,jdbcType=VARCHAR},
+		#{prizedesc,jdbcType=VARCHAR},
+		#{isMarketable,jdbcType=INTEGER}, #{prizepic,jdbcType=VARCHAR},
+		#{originalprice,jdbcType=DECIMAL},
+		#{diamondvalue,jdbcType=INTEGER},
+		#{prizedetailpics,jdbcType=VARCHAR},
+		#{prizedetailtexts,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="div" parameterType="com.idata365.app.entity.Prize">
+		update prize set stock=(stock-#{ordernum}) where stock>=#{ordernum} and prizeId=#{prizeId}
+	</update>
 </mapper>

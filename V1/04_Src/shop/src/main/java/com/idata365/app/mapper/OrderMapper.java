@@ -1,30 +1,14 @@
 package com.idata365.app.mapper;
 
-import com.idata365.app.entity.Order;
-import com.idata365.app.entity.OrderExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
+
+import com.idata365.app.entity.Order;
 
 public interface OrderMapper {
-    int countByExample(OrderExample example);
-
-    int deleteByExample(OrderExample example);
-
-    int deleteByPrimaryKey(Long orderId);
 
     int insert(Order record);
 
-    int insertSelective(Order record);
-
-    List<Order> selectByExample(OrderExample example);
-
-    Order selectByPrimaryKey(Long orderId);
-
-    int updateByExampleSelective(@Param("record") Order record, @Param("example") OrderExample example);
-
-    int updateByExample(@Param("record") Order record, @Param("example") OrderExample example);
-
-    int updateByPrimaryKeySelective(Order record);
+    List<Order> selectByExample(Long userId);
 
     int updateByPrimaryKey(Order record);
 }

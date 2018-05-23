@@ -9,20 +9,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.Order;
 import com.idata365.app.entity.Prize;
+import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
 
 @Service
 @Transactional
 public class PrizeService {
-
+	public static final long PRIZE_NO10 = 149187842867964L;
+	public static final long PRIZE_NO25 = 149187842867965L;
+	public static final long PRIZE_NO50 = 149187842867966L;
 	@Autowired
 	private PrizeMapper prizeMapper;
+	@Autowired
+	private OrderMapper orderMapper;
 
-	public List<Map<String, String>> getPrizes() {
-		List<Prize> prizes = prizeMapper.selectByExample(null);
+	public List<Map<String, String>> getPrizes(long userId) {
+		boolean flag = false;
+		List<Order> orders = orderMapper.selectByExample(userId);
+		for (Order order : orders) {
+			if (order.getPrizeid() == PRIZE_NO10 || order.getPrizeid() == PRIZE_NO25
+					|| order.getPrizeid() == PRIZE_NO50) {
+				flag = true;
+			}
+		}
+
+		List<Prize> prizes = prizeMapper.selectByExample();
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Prize prize : prizes) {
+			long prizeId = prize.getPrizeid();
+			if (flag && (prizeId == PRIZE_NO10 || prizeId == PRIZE_NO25 || prizeId == PRIZE_NO50)) {
+				continue;
+			}
 			Map<String, String> map = new HashMap<>();
 			map.put("rewardID", String.valueOf(prize.getPrizeid()));
 			map.put("rewardName", prize.getPrizename());
@@ -33,6 +52,7 @@ public class PrizeService {
 			map.put("rewardDetailPics", prize.getPrizedetailpics());
 			map.put("rewardDetailTexts", prize.getPrizedetailtexts());
 			map.put("isMarketable", String.valueOf(prize.getIsMarketable()));
+			map.put("stock", prize.getStock().toString());
 
 			list.add(map);
 		}

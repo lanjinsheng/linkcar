@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.Order;
-import com.idata365.app.entity.OrderExample;
-import com.idata365.app.entity.OrderExample.Criteria;
 import com.idata365.app.entity.Prize;
 import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
@@ -66,16 +64,13 @@ public class OrderService {
 	 *             LiXing
 	 */
 	public List<Map<String, String>> getOrderList(Long userId) {
-		OrderExample example = new OrderExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andUseridEqualTo(userId);
-		List<Order> orders = orderMapper.selectByExample(example);
+		List<Order> orders = orderMapper.selectByExample(userId);
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Order order : orders) {
 			Map<String, String> map = new HashMap<>();
 			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeid()));
 			map.put("convertId", String.valueOf(order.getOrderId()));
-			map.put("convertTime",DateTools.formatDateMD(order.getOrdertime()));
+			map.put("convertTime", DateTools.formatDateMD(order.getOrdertime()));
 			map.put("rewardID", String.valueOf(order.getPrizeid()));
 			map.put("rewardName", prize.getPrizename());
 			map.put("rewardDesc", prize.getPrizedesc());
@@ -103,7 +98,16 @@ public class OrderService {
 	 */
 	@Transactional
 	public void save(Order order) throws Exception {
+		int ordernum = order.getOrdernum();
+		long prizeId = order.getPrizeid();
+		
+		int f = prizeMapper.div(ordernum,prizeId);
+		if(f<=0) {
+			throw new RuntimeException("库存不足");
+		}
+		
 		orderMapper.insert(order);
+		
 		String paramSign = order.getUserid() + String.valueOf(order.getDiamondnum());
 		String sign = SignUtils.encryptDataAes(paramSign);
 		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserid(), order.getDiamondnum(), sign);
@@ -115,10 +119,6 @@ public class OrderService {
 
 	public void update(Order order) {
 		orderMapper.updateByPrimaryKey(order);
-	}
-
-	public void delete(Long id) {
-		orderMapper.deleteByPrimaryKey(id);
 	}
 
 }

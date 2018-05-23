@@ -1,30 +1,22 @@
 package com.idata365.app.mapper;
 
-import com.idata365.app.entity.Prize;
-import com.idata365.app.entity.PrizeExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
+import com.idata365.app.entity.Prize;
+
 public interface PrizeMapper {
-    int countByExample(PrizeExample example);
 
-    int deleteByExample(PrizeExample example);
+	int deleteByPrimaryKey(Long prizeid);
 
-    int deleteByPrimaryKey(Long prizeid);
+	int insert(Prize record);
 
-    int insert(Prize record);
+	List<Prize> selectByExample();
 
-    int insertSelective(Prize record);
+	Prize selectByPrimaryKey(Long prizeid);
 
-    List<Prize> selectByExample(PrizeExample example);
+	int updateByPrimaryKey(Prize record);
 
-    Prize selectByPrimaryKey(Long prizeid);
-
-    int updateByExampleSelective(@Param("record") Prize record, @Param("example") PrizeExample example);
-
-    int updateByExample(@Param("record") Prize record, @Param("example") PrizeExample example);
-
-    int updateByPrimaryKeySelective(Prize record);
-
-    int updateByPrimaryKey(Prize record);
+	int div(@Param("ordernum") Integer ordernum, @Param("prizeId") Long prizeId);
 }
