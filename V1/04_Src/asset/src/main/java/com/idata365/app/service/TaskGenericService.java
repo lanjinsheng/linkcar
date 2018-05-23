@@ -127,7 +127,7 @@ public class TaskGenericService {
 //		冠军	5b/人
 //		钻石	3b/人
 //		b=1200/（冠军段位总人数*5+钻石段位总人数*3）
-		BigDecimal diamondsNum=BigDecimal.valueOf(20).multiply(BigDecimal.valueOf(Integer.valueOf(m.get("gameDayNum").toString())));
+		BigDecimal diamondsNum=BigDecimal.valueOf(AssetConstant.DAY_DAIMONDS_FOR_SEASON).multiply(BigDecimal.valueOf(Integer.valueOf(m.get("gameDayNum").toString())));
 		long fenmu=familyGuanjunTotal*5+familyZuanshiTotal*3;
 		if(fenmu==0) {
 			//无冠军段位，资金滚动进入下个赛季
@@ -239,8 +239,7 @@ public class TaskGenericService {
 		}
 		
 		
-	public final int PowerDiamonds=500;
-	public final int PowerDiamondsFamily=500;
+
 	/**
 	 * 
 	    * @Title: doUserDayReward
@@ -259,7 +258,7 @@ public class TaskGenericService {
 		Long power=Long.valueOf(personPower.get("powerNum").toString());
 		Long userId=Long.valueOf(personPower.get("userId").toString());
 		if(power>0) {
-		BigDecimal dayDiamond=BigDecimal.valueOf(power).multiply(BigDecimal.valueOf(PowerDiamonds)).divide(BigDecimal.valueOf(total), 5,RoundingMode.HALF_EVEN);
+		BigDecimal dayDiamond=BigDecimal.valueOf(power).multiply(BigDecimal.valueOf(AssetConstant.DAY_DAIMONDS_FOR_POWER)).divide(BigDecimal.valueOf(total), 5,RoundingMode.HALF_EVEN);
 		 //进行分配
 		AssetUsersDiamondsLogs assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
 		assetUsersDiamondsLogs.setDiamondsNum(dayDiamond);
@@ -293,7 +292,7 @@ public class TaskGenericService {
 		long familyId=Long.valueOf(m.get("familyId").toString());
 		long assetFamilyGameId=Long.valueOf(m.get("id").toString());
 		BigDecimal gameDiamond=BigDecimal.valueOf(0);
-		gameDiamond=BigDecimal.valueOf(480).divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_EVEN);
+		gameDiamond=BigDecimal.valueOf(AssetConstant.DAY_DAIMONDS_FOR_PK).divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_EVEN);
 		//进行分配
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
 		assetFamiliesDiamondsLogs.setDiamondsNum(gameDiamond);
