@@ -239,7 +239,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		}
 
 		int tempCount = this.familyMapper.countUsersByFamilyId(bean);
-		if (8 == tempCount) {
+		if (FamilyConstant.FAMILY_TOTAL_NUM== tempCount) {
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 2;
 		}
