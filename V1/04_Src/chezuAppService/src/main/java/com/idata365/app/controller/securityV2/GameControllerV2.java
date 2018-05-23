@@ -114,8 +114,9 @@ public class GameControllerV2 extends BaseController {
 				Map<String, Object> fightFamily = familyService.findFamilyByFamilyId(fightFamilyId);
 				map.put("fightFamilyId", String.valueOf(fightFamilyId));
 				map.put("fightFamilyName", fightFamily.get("familyName").toString());
-				map.put("fightFamilyScore",
-						familyScoreService.familyScore(Long.valueOf(fightFamilyId), getCurrentDayStr()).toString());
+				map.put("fightFamilyScore", BigDecimal
+						.valueOf(familyScoreService.familyScore(Long.valueOf(fightFamilyId), getCurrentDayStr()))
+						.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 				infoList.add(map);
 			}
 
@@ -142,7 +143,6 @@ public class GameControllerV2 extends BaseController {
 
 		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
 		bean.setUserId(userId);
-		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyInfoAllBean queryFamily = scoreService.queryFamily(bean);
 
 		List<Map<String, String>> billList = new ArrayList<>();
@@ -212,7 +212,7 @@ public class GameControllerV2 extends BaseController {
 			for (int j = 0; j < member.size(); j++) {
 				Map<String, String> memberScore = new HashMap<>();
 				String memberId = member.get(j).getUserId();
-				double score = scoreService.getAvgScore(memberId, myFamilyId);
+				double score = scoreService.getAvgScore(memberId, arr[i]);
 				UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
 				memberScore.put("name", account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
 						: account.getNickName());
@@ -293,7 +293,7 @@ public class GameControllerV2 extends BaseController {
 		long fightFamilyId;
 		List<FamilyRelation> recordList = gameService.queryFightRecordByFamilyId(Long.valueOf(familyId), recordId);
 		List<Map<String, String>> result = new ArrayList<>();
-		if(recordList==null||recordList.size()==0) {
+		if (recordList == null || recordList.size() == 0) {
 			map.put("result", result);
 			return ResultUtils.rtSuccess(map);
 		}
@@ -412,7 +412,7 @@ public class GameControllerV2 extends BaseController {
 				List<DicFamilyType> types = dicService.getDicFamilyType();
 				for (DicFamilyType type : types) {
 					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "奖杯+"+type.getWin() + "";
+						win = "奖杯+" + type.getWin() + "";
 						if (type.getLoss() >= 0) {
 							loss = "奖杯+" + type.getLoss();
 						} else {
@@ -445,12 +445,11 @@ public class GameControllerV2 extends BaseController {
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
 	}
-	
-	public String getYesterdayDateStr()
-	{
+
+	public String getYesterdayDateStr() {
 		Date curDate = Calendar.getInstance().getTime();
 		Date yesterdayDate = DateUtils.addDays(curDate, -1);
-		
+
 		String yesterdayDateStr = DateFormatUtils.format(yesterdayDate, "yyyy-MM-dd");
 		LOG.info(yesterdayDateStr);
 		return yesterdayDateStr;
