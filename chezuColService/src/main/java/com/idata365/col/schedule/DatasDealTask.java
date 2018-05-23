@@ -19,6 +19,7 @@ import com.idata365.col.service.SpringContextUtil;
 import com.idata365.col.service.YingyanService;
 import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
+import com.idata365.col.util.OverspeedUtil;
 import com.idata365.col.util.PhoneGpsUtil;
 
 public class DatasDealTask implements Runnable
@@ -53,6 +54,7 @@ public class DatasDealTask implements Runnable
 	    	  d.setHabitId(habitId);
 	    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
 	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+	    	  List<Map<String,Object>> jkList=new ArrayList<Map<String,Object>>();
 	    	  for(DriveDataLog drive:drives) {
 	    		     StringBuffer json=new StringBuffer();
 	    		     if(drive.getFilePath().endsWith("_Q")) {
@@ -64,6 +66,14 @@ public class DatasDealTask implements Runnable
 			         if(jMap.get("gpsInfos")!=null) {
 			        	 list.addAll((List)jMap.get("gpsInfos"));
 			         }
+			         try {
+				         if(jMap.get("overspeedGPSInfo")!=null) {
+				        	 jkList.addAll((List)jMap.get("overspeedGPSInfo"));
+				         }
+			         }catch(Exception e) {
+			        	 log.error(e);
+			        	 e.printStackTrace();
+			         }
 			 }
 	    	  if(list.size()>0) {
 	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+userId+"==habitId="+habitId);
@@ -71,11 +81,11 @@ public class DatasDealTask implements Runnable
 	    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 	    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
 	    		 List<Map<String,Object>> alarmListZhuan= (List<Map<String,Object>>)datasMap.get("alarmListZhuan");
-//	    		  List<Map<String,Object>> alarmListChao=yingyanService.dealListGaode(list);
+	    		  List<Map<String,Object>> alarmListChao=OverspeedUtil.dealOverSpeed(jkList);
 	    		 eventList.addAll(alarmListJia);
 	    		 eventList.addAll(alarmListJian);
 	    		 eventList.addAll(alarmListZhuan);
-//	    		 eventList.addAll(alarmListChao);
+	    		 eventList.addAll(alarmListChao);
 	    		 String startTime=String.valueOf(datasMap.get("startTime"));
 	    		 String endTime=String.valueOf(datasMap.get("endTime"));
 	    		 Double maxSpeed=Double.valueOf(datasMap.get("maxSpeed").toString());
@@ -126,8 +136,8 @@ public class DatasDealTask implements Runnable
 	    		 data.setSpeedUpTimes(alarmListJia.size());
 	    		 data.setBrakeTimes(alarmListJian.size());
 	    		 data.setTurnTimes(alarmListZhuan.size());
-//	    		 data.setOverspeedTimes(alarmListChao.size());
-	    		 data.setOverspeedTimes(0);
+	    		 data.setOverspeedTimes(alarmListChao.size());
+//	    		 data.setOverspeedTimes(0);
 	    		  //插入数据
 	    		 dataService.insertEvents(data, eventList);
 	    
@@ -149,6 +159,7 @@ public class DatasDealTask implements Runnable
 			}
 		 log.info("end=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
 	}
+	
 public static void main(String []args) {
 	 String day1="2018-01-12 12:00:00.666".substring(0,10).replaceAll("-", "");
 	 String day2=DateTools.getYYYYMMDD();
