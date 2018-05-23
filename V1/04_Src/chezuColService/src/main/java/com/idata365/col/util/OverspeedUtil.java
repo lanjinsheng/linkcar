@@ -98,15 +98,15 @@ public class OverspeedUtil {
 						 lastTime=0;		 
 					 }
 					if(count>=filterCount) {
-						String []xy=jkGps.split("|");
+						int j=jkGps.indexOf("|");
 						Map<String,Object> alarm=new HashMap<String,Object>();
 						alarm.put("startTime", t);
 						alarm.put("endTime", t);
 						alarm.put("alarmValue", s);
 						alarm.put("maxspeed", ls);
 						alarm.put("alarmType", "4");
-						alarm.put("lng",xy[1]);
-						alarm.put("lat",xy[0]);
+						alarm.put("lng",jkGps.substring(j+1,jkGps.length()));
+						alarm.put("lat",jkGps.substring(0,j));
 						overSpeedArray.add(alarm);
 						break;
 					}
