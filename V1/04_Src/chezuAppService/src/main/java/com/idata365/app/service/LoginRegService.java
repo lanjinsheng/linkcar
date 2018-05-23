@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.NameConstant;
 import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.FamilyParamBean;
@@ -269,11 +270,12 @@ public class LoginRegService extends BaseService<LoginRegService>
 		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGayTimes);
 	}
     @Transactional
-	public String regUser(String phone, String pwd, Map<String, Object> rtMap)
+	public String regUser(String phone, String pwd, String nickName,Map<String, Object> rtMap)
 	{
 		UsersAccount account = new UsersAccount();
 		account.setPhone(phone);
 		account.setPwd(pwd);
+		account.setNickName(nickName);
 		usersAccountMapper.insertUser(account);
 		if (account != null && account.getId() != null && account.getId() > 0)
 		{
