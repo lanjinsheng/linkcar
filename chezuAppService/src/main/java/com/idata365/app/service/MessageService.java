@@ -756,14 +756,14 @@ public class MessageService extends BaseService<MessageService>{
 	//处理私有逻辑
 	private String getInviteMessageDesc(String fromUserPhone,String fromUserNick) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
-			return String.format(InviteMessage, fromUserNick+PhoneUtils.hidePhone(fromUserPhone));
+			return String.format(InviteMessage, fromUserNick);
 		}else {
 			return String.format(InviteMessage, PhoneUtils.hidePhone(fromUserPhone));
 		}
 	}
 	private String getPassMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
-			return String.format(PassFamilyMessage, fromUserNick+PhoneUtils.hidePhone(fromUserPhone),familyName);
+			return String.format(PassFamilyMessage, fromUserNick,familyName);
 		}else {
 			return String.format(PassFamilyMessage, PhoneUtils.hidePhone(fromUserPhone),familyName);
 		}
