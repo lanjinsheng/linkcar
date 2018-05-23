@@ -118,6 +118,8 @@ public class GameControllerV2 extends BaseController {
 						.valueOf(familyScoreService.familyScore(Long.valueOf(fightFamilyId), getCurrentDayStr()))
 						.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 				infoList.add(map);
+			}else {
+				map.put("fightFamilyName", "好车族教官");
 			}
 
 		}
