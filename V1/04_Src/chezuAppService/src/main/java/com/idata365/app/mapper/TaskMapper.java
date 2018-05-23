@@ -21,6 +21,9 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 public interface TaskMapper
 {
 	public int updateUserScoreDayByUserId(@Param("userId") Long userId);
+
+	public int updateLastLoginTimeByUserId(@Param("userId") Long userId);
+
 	public List<FamilyRelationBean> queryFamilyRelations(FamilyRelationBean bean);
 	
 	public int countByFamily(FamilyRelationBean bean);

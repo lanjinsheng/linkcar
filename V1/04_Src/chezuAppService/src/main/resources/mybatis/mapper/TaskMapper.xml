@@ -67,6 +67,10 @@
 		update userScoreDayStat set 
  			avgScore=30 where userId=#{userId} and avgScore=0
 	</update>	
+	<update id="updateLastLoginTimeByUserId" parameterType="java.lang.Long">
+		update usersAccount set 
+ 			lastLoginTime=now() where id=#{userId}
+	</update>
 	<select id="queryChallengeLog" resultType="com.idata365.app.entity.FamilyChallengeLogBean" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
 		select familyId, prevType, challengeType from familyChallengeLog where challengeDay=#{challengeDay} order by id asc
 	</select>
