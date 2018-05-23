@@ -11,5 +11,5 @@ public class FamilyConstant
 	public static final Double USER_LOGIN_SCORE=30D;
 	public static final int ROBOT_FAMILY_ID = 999999;
 	//家族人数
-	public static final int FAMILY_TOTAL_NUM=6;
+	public static final int FAMILY_TOTAL_NUM=8;
 }
