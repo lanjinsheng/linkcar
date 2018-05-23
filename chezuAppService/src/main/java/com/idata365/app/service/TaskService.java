@@ -40,12 +40,16 @@ import com.idata365.app.util.RandUtils;
 public class TaskService extends BaseService<TaskService>
 {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(TaskService.class);
-
+	
 	@Autowired
 	private TaskMapper taskMapper;
 	@Transactional
 	public void updateUserScoreDayByUserId(Long userId){
 		taskMapper.updateUserScoreDayByUserId(userId);
+	}
+	@Transactional
+	public void updateLastLoginTimeByUserId(Long userId){
+		taskMapper.updateLastLoginTimeByUserId(userId);
 	}
 	@Transactional
 	public void resetStations()

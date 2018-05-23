@@ -24,6 +24,7 @@ public class OpenCommController {
 		LOG.info("userId="+userId+"===sign="+sign);
 		LOG.info("valid sign="+SignUtils.encryptHMAC(String.valueOf(userId)));
 		taskService.updateUserScoreDayByUserId(userId);
+		taskService.updateLastLoginTimeByUserId(userId);
 		return true;
 	}
 }
