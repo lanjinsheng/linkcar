@@ -758,14 +758,14 @@ public class MessageService extends BaseService<MessageService>{
 		if(ValidTools.isNotBlank(fromUserNick)) {
 			return String.format(InviteMessage, fromUserNick+PhoneUtils.hidePhone(fromUserPhone));
 		}else {
-			return String.format(InviteMessage, fromUserPhone);
+			return String.format(InviteMessage, PhoneUtils.hidePhone(fromUserPhone));
 		}
 	}
 	private String getPassMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
 			return String.format(PassFamilyMessage, fromUserNick+PhoneUtils.hidePhone(fromUserPhone),familyName);
 		}else {
-			return String.format(PassFamilyMessage, fromUserPhone,familyName);
+			return String.format(PassFamilyMessage, PhoneUtils.hidePhone(fromUserPhone),familyName);
 		}
 	}
 	
