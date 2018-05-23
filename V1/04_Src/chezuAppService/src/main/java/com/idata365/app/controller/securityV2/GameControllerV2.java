@@ -120,6 +120,7 @@ public class GameControllerV2 extends BaseController {
 				infoList.add(map);
 			}else {
 				map.put("fightFamilyName", "好车族教官");
+				infoList.add(map);
 			}
 
 		}
