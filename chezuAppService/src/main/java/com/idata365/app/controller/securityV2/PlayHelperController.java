@@ -21,12 +21,17 @@ public class PlayHelperController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(PlayHelperController.class);
 	@Autowired
 	DicService dicService;
-
+	private static long lastNotifyTime=0;
+	List<Map<String, String>> result = new ArrayList<>();
 	@RequestMapping("/playHelper")
 	public Map<String, Object> playHelper(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		List<Map<String, String>> result = new ArrayList<>();
-		result = dicService.playHelper();
+		long now=System.currentTimeMillis();
+		if((now-lastNotifyTime)>(3600*1000)){//一个小时重新去库获取
+			result=dicService.playHelper();
+			lastNotifyTime=now;
+		}
 		return ResultUtils.rtSuccess(result);
 	}
 
