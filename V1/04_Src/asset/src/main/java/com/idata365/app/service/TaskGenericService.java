@@ -315,7 +315,7 @@ public class TaskGenericService {
 		tg.setGenericKey(taskKey);
 		tg.setTaskType(TaskGenericEnum.DoUserFamilyDayReward);
 		tg.setPriority(10);
-		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.longValue()),assetFamilyGameId));
+		tg.setJsonValue(String.format(jsonValue1,preKey,orderNo,familyId,String.valueOf(gameDiamond.doubleValue()),assetFamilyGameId));
 		taskGenericMapper.insertTask(tg);
 		return true;
 	}
@@ -358,9 +358,11 @@ public class TaskGenericService {
 		String users=chezuAccountService.getUsersByFamilyId(familyId, daystamp, sign);
 		String []userArray=users.split(",");
 		long total=0L;
-		
+		int personNum=0;
 		List<Long> powerList=new ArrayList<Long>();
 		List<AssetUsersDiamondsLogs> userList=new ArrayList<AssetUsersDiamondsLogs>();
+		personNum=userArray.length;
+		BigDecimal familyDiamonds=BigDecimal.valueOf(Double.valueOf(diamonds)).multiply(BigDecimal.valueOf(personNum));
 		for(int i=0;i<userArray.length;i++) {
 			AssetUsersDiamondsLogs  assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
 			m.put("userId", userArray[i]);
@@ -380,7 +382,7 @@ public class TaskGenericService {
 		int j=0;
 		for(AssetUsersDiamondsLogs assetUsersDiamondsLogs:userList) {
 			long pow=powerList.get(j);
-			BigDecimal d=BigDecimal.valueOf(pow).multiply(BigDecimal.valueOf(Double.valueOf(diamonds)))
+			BigDecimal d=BigDecimal.valueOf(pow).multiply(familyDiamonds)
 					.divide(BigDecimal.valueOf(total),5,RoundingMode.HALF_DOWN);
 			assetUsersDiamondsLogs.setDiamondsNum(d);
 			j++;
@@ -388,12 +390,12 @@ public class TaskGenericService {
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
 			//远程消息调用,发送的diamonds是家族获取的
 			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(diamonds), sign);
+			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), sign);
 			}
 		}
 		//family钻石减少
 		AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs=new AssetFamiliesDiamondsLogs();
-		assetFamiliesDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(Double.valueOf(diamonds)));
+		assetFamiliesDiamondsLogs.setDiamondsNum(familyDiamonds);
 		assetFamiliesDiamondsLogs.setEffectId(Long.valueOf(assetFamilyGameId));
 		assetFamiliesDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_Distr);
 		assetFamiliesDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
