@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.IndexSlipPage;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.DicFamilyType;
@@ -107,6 +108,8 @@ public class GameControllerV2 extends BaseController {
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
 			BigDecimal b = new BigDecimal(sc);
 			map.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+			String haveNewPower = gameService.queryHaveNewPower(this.getUserId(),familyId);
+			map.put("haveNewPower", haveNewPower);
 			String fightingTime = null;
 			CompetitorFamilyInfoResultBean resultBean = this.gameService
 					.queryCompetitorFamilyInfo(Long.valueOf(familyId), fightingTime);
@@ -463,4 +466,26 @@ public class GameControllerV2 extends BaseController {
 		LOG.info(yesterdayDateStr);
 		return yesterdayDateStr;
 	}
+	
+	/**
+	 * 
+	 * @Title: getSlipPage
+	 * @Description: TODO(滑动引导页)
+	 * @param @return
+	 *            参数
+	 * @return <Map<String,String>> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
+	@RequestMapping("/getSlipPage")
+	public Map<String, Object> getSlip(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("isNew", "1");
+		map.put("fireDate", "1970-01-01");
+		String [] pages = {IndexSlipPage.ONE,IndexSlipPage.TWO,IndexSlipPage.THREE};
+		map.put("pages", pages);
+		return ResultUtils.rtSuccess(map);
+	}
+	
 }

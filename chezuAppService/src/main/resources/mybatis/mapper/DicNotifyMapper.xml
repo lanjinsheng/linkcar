@@ -5,4 +5,7 @@
  		select notifyText  from dicNotify order by id desc limit 1
  	</select>
     
+    <select id="playHelper" resultType="java.util.HashMap">
+ 		select *  from dicPlayHelp
+ 	</select>
 </mapper>
