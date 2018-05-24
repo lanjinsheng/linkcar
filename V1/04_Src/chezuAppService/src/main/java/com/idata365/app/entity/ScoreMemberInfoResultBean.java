@@ -13,6 +13,8 @@ public class ScoreMemberInfoResultBean implements Serializable {
 	private String name;
 
 	private String userId;
+	private String todayScore;
+	private String todayPower;
 
 	private String role;
 
@@ -23,6 +25,25 @@ public class ScoreMemberInfoResultBean implements Serializable {
 	private String joinTime;
 
 	private String recOnlineTime;
+
+	
+	
+	
+	public String getTodayScore() {
+		return todayScore;
+	}
+
+	public void setTodayScore(String todayScore) {
+		this.todayScore = todayScore;
+	}
+
+	public String getTodayPower() {
+		return todayPower;
+	}
+
+	public void setTodayPower(String todayPower) {
+		this.todayPower = todayPower;
+	}
 
 	public String getRecOnlineTime() {
 		return recOnlineTime;
