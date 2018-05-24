@@ -93,7 +93,7 @@ public class MessageOpenController {
     		@RequestParam (value = "sign") String sign){
     	LOG.info("param:"+season+"=="+orderNum+"=="+diamondNum+"==sign="+sign);
     	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
-    	Message msg=messageService.buildFamilyDiamondsMessage(null, toUserId, familyId, season, orderNum, orderNum);
+    	Message msg=messageService.buildFamilyDiamondsMessage(null, toUserId, familyId, season, diamondNum, orderNum);
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.DiamondDistr);
  		//用定时器推送
