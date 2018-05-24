@@ -125,6 +125,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				.getDicFamilyType(Integer.valueOf(map.get("familyType").toString()));
 
 		bill.put("rank", map.get("yesterdayOrderNo").toString());
+
+		// bill.put("rank",String.valueOf(familyMapper.queryFamilyOrderByFId(familyId)));
 		bill.put("name", familyInfo.getFamilyName());
 		bill.put("gradeOrNum", familyType.getFamilyTypeValue());
 		bill.put("trophyNum", map.get("trophy").toString());
@@ -247,6 +249,15 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
+	}
+
+	public String queryHaveNewPower(long userId, String familyId) {
+		return String.valueOf(gameMapper.queryHaveNewPower(userId, Long.valueOf(familyId)));
+	}
+
+	public void updateHavaNewPower(long userId, long familyId) {
+		// TODO Auto-generated method stub
+		gameMapper.updateHavaNewPower(userId, familyId);
 	}
 
 }
