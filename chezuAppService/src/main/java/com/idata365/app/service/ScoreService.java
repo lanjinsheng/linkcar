@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,7 @@ import com.idata365.app.entity.UserDetailResultBean;
 import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserRoleLog;
+import com.idata365.app.entity.UserScoreDayStat;
 import com.idata365.app.entity.UserTravelHistoryBean;
 import com.idata365.app.entity.UserTravelHistoryDetailBean;
 import com.idata365.app.entity.UserTravelHistoryResultBean;
@@ -72,11 +74,14 @@ import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.ScoreMapper;
+import com.idata365.app.mapper.UserScoreDayStatMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.RandUtils;
+import com.idata365.app.util.SignUtils;
 
 @Service
 public class ScoreService extends BaseService<ScoreService>
@@ -91,11 +96,15 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	@Autowired
 	private FamilyMapper familyMapper;
-	
+	@Autowired
+	UserScoreDayStatMapper userScoreDayStatMapper;
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
 	@Autowired
 	UserRoleLogService  userRoleLogService;
+	@Autowired
+	ChezuAssetService chezuAssetService;
+	
 	/**
 	 * 
 	    * @Title: intiScoreFamilyInfoBeanByUser
@@ -338,17 +347,29 @@ public class ScoreService extends BaseService<ScoreService>
 		String yesterdayDateUndelimiterStr = getYesterdayDateUndelimiterStr();
 		
 		String yesterdayDateStr = getYesterdayDateStr();
-		
+		UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
+		userScoreDayStat.setFamilyId(bean.getFamilyId());
+		userScoreDayStat.setDaystamp(getCurrentDayStr());
+		Map<Long,String> userDayScoreMap=new HashMap<Long,String>();
+		List<UserScoreDayStat> userScores=userScoreDayStatMapper.getUsersDayScoreByFamily(userScoreDayStat);
+		StringBuffer userIds=new StringBuffer();
+		for(UserScoreDayStat us:userScores){
+			userDayScoreMap.put(us.getUserId(), String.valueOf(us.getAvgScore()));
+			userIds.append(us.getUserId());
+			userIds.append(",");
+		}
+	    String users=userIds.substring(0, userIds.length()-1);
+		Map<Long,String> powerMap=chezuAssetService.getUsersAssetMap(users, SignUtils.encryptHMAC(users));
 		for (ScoreMemberInfoBean tempBean : tempList)
 		{
 			ScoreMemberInfoResultBean tempResultBean = new ScoreMemberInfoResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
-			
 			long userId = tempBean.getUserId();
 			UsersAccount account = usersAccountMapper.findAccountById(userId);
 			Date lastLoginTime = account.getLastLoginTime();
-			tempResultBean.setRecOnlineTime(DateTools.formatDateMD(lastLoginTime));//
-			
+			tempResultBean.setRecOnlineTime(DateTools.formatDateMD(lastLoginTime));
+			tempResultBean.setTodayScore(userDayScoreMap.get(userId));
+			tempResultBean.setTodayPower(powerMap.get(userId));
 			UserFamilyRoleLogParamBean  roleLogParamBean = new UserFamilyRoleLogParamBean();
 			roleLogParamBean.setUserId(userId);
 			roleLogParamBean.setFamilyId(familyId);

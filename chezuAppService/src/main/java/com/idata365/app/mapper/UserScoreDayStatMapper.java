@@ -10,5 +10,4 @@ public interface  UserScoreDayStatMapper {
 	
 	List<UserScoreDayStat> getUsersDayScoreByFamily(UserScoreDayStat userScoreDayStat);
 	
-	
 }

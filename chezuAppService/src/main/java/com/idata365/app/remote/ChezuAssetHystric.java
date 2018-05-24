@@ -46,6 +46,13 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("getFamilySeasonID 挂了");
 		return 0;
 	}
+
+	@Override
+	public Map<Long, String> getUsersAssetMap(String userIds, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("getUsersAssetMap 挂了");
+		return null;
+	}
 	 
 	
  
