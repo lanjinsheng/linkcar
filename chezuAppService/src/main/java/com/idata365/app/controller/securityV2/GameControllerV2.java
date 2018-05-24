@@ -483,7 +483,7 @@ public class GameControllerV2 extends BaseController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("isNew", "1");
 		map.put("fireDate", "1970-01-01");
-		String [] pages = {IndexSlipPage.ONE,IndexSlipPage.TWO,IndexSlipPage.THREE};
+		String [] pages = {IndexSlipPage.ONE,IndexSlipPage.TWO,IndexSlipPage.THREE,IndexSlipPage.FOUR};
 		map.put("pages", pages);
 		return ResultUtils.rtSuccess(map);
 	}
