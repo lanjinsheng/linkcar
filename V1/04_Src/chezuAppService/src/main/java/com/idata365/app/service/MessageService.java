@@ -55,7 +55,7 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String SeasonRewardMessage="恭喜！您的家族在【%s】赛季中获得好成绩，奖励【%s钻石】，已经自动发放至您的账号，快去看看吧！";
 	
 	
-	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！";
+	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";
@@ -66,8 +66,8 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String LotterySendMessage="一个惊喜!【%s】赠送给你一个【%s】,快去领取吧!";
 	public static final String LotteryRecMessage="【%s】已经收到你送的道具了,谢谢你的慷慨!";
 	
-	
-	
+	//帮助页面跳转
+	public static final String  HelpUrl="com.idata365.haochezu://GuideHelps.push";
 	public static final String  InviteMessageUrl="com.idata365.haochezu://check.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.idata365.haochezu://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	
@@ -139,8 +139,8 @@ public class MessageService extends BaseService<MessageService>{
 			message.setPicture("");
 			message.setTitle("欢迎您!");
 			message.setToUserId(toUserId);
-			message.setUrlType(2);
-			message.setToUrl("");
+			message.setUrlType(0);
+			message.setToUrl(HelpUrl);
 			break;
 		case INVITE_FAMILY:
 			message.setFromUserId(fromUserId==null?0:fromUserId);
