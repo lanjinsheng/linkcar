@@ -1,6 +1,9 @@
 package com.idata365.app.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,26 +36,31 @@ public class DicService extends BaseService<DicService> {
 	public List<DicFamilyType> getDicFamilyType() {
 		return dicFamilyTypeMapper.getDicFamilyType(null);
 	}
-	
+
 	@Transactional
 	public String getNotify() {
-		  Map<String,String> map=dicNotifyMapper.getLatestNotify();
-		  return map.get("notifyText");
+		Map<String, String> map = dicNotifyMapper.getLatestNotify();
+		return map.get("notifyText");
 	}
-	
+
 	@Transactional
-	public DicGameDay getDicGameDay(String daystamp)
-	{
+	public DicGameDay getDicGameDay(String daystamp) {
 		return dicGameDayMapper.getGameDicByDaystamp(daystamp);
 	}
 
-	public String getSurPlusDays() {
+	public String getSurPlusDays() throws ParseException {
 		String dayStr = getCurrentDayStr();
 		Map<String, String> map = dicFamilyTypeMapper.getSurPlusDays(dayStr);
 		String endDay = map.get("endDay");
-		long ed = Long.valueOf(endDay.replaceAll("-", "")) - Long.valueOf(dayStr.replaceAll("-", ""));
+		Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(dayStr);
+		Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDay);
 
-		return ed + "";
+		// 日期相减得到相差的日期
+		long day = (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000) > 0
+				? (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000)
+				: (date2.getTime() - date1.getTime()) / (24 * 60 * 60 * 1000);
+
+		return day + "";
 	}
 
 	private String getCurrentDayStr() {
@@ -60,5 +68,5 @@ public class DicService extends BaseService<DicService> {
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
 	}
-	
+
 }

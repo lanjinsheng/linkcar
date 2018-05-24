@@ -1,6 +1,7 @@
 package com.idata365.app.controller.securityV2;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -255,7 +256,12 @@ public class GameControllerV2 extends BaseController {
 				}
 				result.put("reward", win);
 				result.put("punishment", loss);
-				result.put("surPlusDays", dicService.getSurPlusDays());
+				try {
+					result.put("surPlusDays", dicService.getSurPlusDays());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				result.put("showInfo", showInfo);
 			}
 		}
