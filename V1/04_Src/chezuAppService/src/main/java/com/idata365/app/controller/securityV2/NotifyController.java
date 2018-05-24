@@ -27,7 +27,7 @@ public class NotifyController extends BaseController {
 	public Map<String, Object> getIndexFightInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 			long now=System.currentTimeMillis();
-			if((now-lastNotifyTime)>(60*3600*1000)){//一个小时重新去库获取
+			if((now-lastNotifyTime)>(3600*1000)){//一个小时重新去库获取
 				notifyText=dicService.getNotify();
 				lastNotifyTime=now;
 			}
