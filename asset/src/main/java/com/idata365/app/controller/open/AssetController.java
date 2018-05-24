@@ -70,7 +70,17 @@ public class AssetController extends BaseController {
 		return rtMap;
 	}
 	
-	
+	/**
+	 * 
+	    * @Title: getUsersAssetMap
+	    * @Description: TODO(通过userIds 返回动力值)
+	    * @param @param userIds
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return Map<Long,String>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	@RequestMapping(value = "/asset/getUsersAssetMap", method = RequestMethod.POST)
 	Map<Long, String> getUsersAssetMap(@RequestParam(value = "userIds") String userIds,
 			@RequestParam(value = "sign") String sign) {
