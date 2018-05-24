@@ -112,7 +112,11 @@
 		insert into review(userId, content, level, createTime) values(#{userId}, #{content}, #{level}, #{createTime})
 	</insert>
 	
-	<select id="queryReview" parameterType="com.idata365.app.entity.ReviewParamBean" resultType="com.idata365.app.entity.ReviewBean">
-		select content, level, createTime from review where userId=#{userId}
+	<select id="queryHaveNewPower" resultType="java.lang.Integer">
+		select hadNewPower from userFamilyRelation where familyId=#{familyId} and userId=#{userId}
 	</select>
+	
+	<update id="updateHavaNewPower" >
+		update userFamilyRelation set hadNewPower=0 where familyId=#{familyId} and userId=#{userId}
+	</update>
 </mapper>
