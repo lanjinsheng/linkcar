@@ -66,10 +66,6 @@
 		select userId, familyId, role, joinTime from userFamilyRelation where role is not NULL order by id asc
 	</select>
 	
-	<insert id="saveUserScoreDay" parameterType="com.idata365.app.entity.UserScoreDayParamBean" useGeneratedKeys="true" keyProperty="id" >
-		insert into userScoreDayStat(userId, userFamilyScoreId, daystamp) values(#{userId}, #{userFamilyScoreId}, #{daystamp})
-	</insert>
-	
 	<select id="countBeChallenge" resultType="int" parameterType="com.idata365.app.entity.FamilyChallengeLogParamBean">
 		select count(id) from familyChallengeLog where challengeType=#{challengeType} and challengeDay=#{challengeDay}
 	</select>
