@@ -171,16 +171,13 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	@Transactional
    public boolean addUserDayStat(UserTravelHistory uth) {
 	   String driveEndTime=uth.getEndTime().substring(0,19);
-		Map<String,Object> m=new HashMap<String,Object>();
-		m.put("userId", uth.getUserId());
-		m.put("driveEndTime", driveEndTime);
 //		UserRoleLog role= userRoleLogService.getLatestUserRoleLogNoTrans(uth.getUserId());
  
 		//行程power
 //		String score="0";
 		int power=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
 		//查询当前家族，并贡献分数与动力
-		List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
+		   List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
 			UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
 			userScoreDayStat.setUserId(uth.getUserId());
 			//这个错误，应该通过familyId
@@ -230,15 +227,20 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			userScoreDayStat.setAvgScore(Double.valueOf(uth.getScore()));
 			userScoreDayStat.setIllegalStopPenalTimes(0);
 			userScoreDayStat.setIllegalStopTimes(0);
+			Map<String,Object> m=new HashMap<String,Object>();
+			m.put("userId", uth.getUserId());
 			if(families!=null && families.size()>0) {
 				for(Map<String,Object> map: families) {
 					long familyId=Long.valueOf(map.get("familyId").toString());
+					m.put("familyId", familyId);
 	//				familyInfoMapper.updateFamilyDriveFlag(familyId);
 	//				familyInfoMapper.updateFamilyActiveLevel(familyId);
 					//插入行程得分任务
 					addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId());
 				    userScoreDayStat.setFamilyId(familyId);
-					 userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
+					userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
+					//更新userFamilyRelation
+					familyInfoMapper.updateHadNewPower(m);
 				}
 			}else {
 				userScoreDayStat.setFamilyId(0L);

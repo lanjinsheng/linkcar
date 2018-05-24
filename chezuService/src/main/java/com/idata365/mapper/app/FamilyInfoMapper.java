@@ -18,6 +18,7 @@ public interface FamilyInfoMapper {
  
 	 void  updateFamilyDriveFlag(@Param("familyId") Long familyId);
 	 void  updateFamilyActiveLevel(@Param("familyId") Long familyId);
+	 void  updateHadNewPower(Map<String,Object> map);
 	 
 	 List<Map<String,Object>> getFamiliesByUserId(@Param("userId") Long userId);
 }
