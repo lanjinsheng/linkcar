@@ -26,7 +26,6 @@ public class PlayHelperController extends BaseController {
 	@RequestMapping("/playHelper")
 	public Map<String, Object> playHelper(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		List<Map<String, String>> result = new ArrayList<>();
 		long now=System.currentTimeMillis();
 		if((now-lastNotifyTime)>(3600*1000)){//一个小时重新去库获取
 			result=dicService.playHelper();
