@@ -55,10 +55,7 @@ public class DicService extends BaseService<DicService> {
 		Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(dayStr);
 		Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDay);
 
-		// 日期相减得到相差的日期
-		long day = (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000) > 0
-				? (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000)
-				: (date2.getTime() - date1.getTime()) / (24 * 60 * 60 * 1000);
+		long day = (date2.getTime() - date1.getTime()) / (24 * 60 * 60 * 1000);
 
 		return day + "";
 	}
