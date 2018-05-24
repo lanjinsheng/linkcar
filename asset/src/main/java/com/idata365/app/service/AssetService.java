@@ -128,6 +128,7 @@ public class AssetService extends BaseService<AssetService> {
 				Map<String, String> rtMap = new HashMap<String, String>();
 				rtMap.put("id", String.valueOf(list.get(i).getId()));
 				rtMap.put("receiveType", String.valueOf(list.get(i).getEventType()));
+				rtMap.put("recordType", String.valueOf(list.get(i).getRecordType()));
 				rtMap.put("receiveTypeName", AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()));
 				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
 				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
