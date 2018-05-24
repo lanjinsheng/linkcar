@@ -69,6 +69,22 @@ public class AssetController extends BaseController {
 		}
 		return rtMap;
 	}
+	
+	
+	@RequestMapping(value = "/asset/getUsersAssetMap", method = RequestMethod.POST)
+	Map<Long, String> getUsersAssetMap(@RequestParam(value = "userIds") String userIds,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("PARAM:" + userIds + "===" + sign);
+		LOG.info("校验逻辑待处理·~~~");
+		Map<Long, String> rtMap = new HashMap<Long, String>();
+		String []arrayUsers=userIds.split(",");
+		for(int i=0;i<arrayUsers.length;i++) {
+			AssetUsersAsset usersAsset = assetService.getUserAssetByUserId(Long.valueOf(arrayUsers[i]));
+			rtMap.put(usersAsset.getUserId(), String.valueOf(usersAsset.getPowerNum()));
+		}
+		return rtMap;
+	}
+
 
 	/**
 	 * 
