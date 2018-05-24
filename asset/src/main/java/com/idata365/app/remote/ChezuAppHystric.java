@@ -4,6 +4,9 @@ package com.idata365.app.remote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Component
@@ -33,6 +36,12 @@ public class ChezuAppHystric implements ChezuAppService {
 		// TODO Auto-generated method stub
 		LOG.error(" updateLoginBss 挂了  service-app-chezu");
 		return false;
+	}
+
+	@Override
+	public void updateHadNewPower(long userId, long familyId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" updateHadNewPower 挂了  service-app-chezu");
 	}
 
 }

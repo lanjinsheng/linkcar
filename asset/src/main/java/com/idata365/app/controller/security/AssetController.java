@@ -120,6 +120,7 @@ public class AssetController extends BaseController {
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
+		chezuAppService.updateHadNewPower(userId,familyId,sign);
 		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
 	}
 

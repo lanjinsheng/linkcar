@@ -54,5 +54,8 @@ public interface ChezuAppService {
 	@RequestMapping(value = "/app/updateLoginBss",method = RequestMethod.POST)
 	public boolean  updateLoginBss(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign);
 
+	@RequestMapping(value = "/app/updateHadNewPower",method = RequestMethod.POST)
+	public void updateHadNewPower(@RequestParam(value="userId")long userId,@RequestParam(value="familyId") long familyId,@RequestParam(value="sign") String sign);
+
 	
 }
