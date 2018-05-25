@@ -150,7 +150,7 @@ public interface FamilyMapper {
 
 	void removeFamilyMemberNum(@Param("familyId") Long familyId);
 
-	void updateFamilyActiveLevel(@Param("familyId") Long familyId);
+//	void updateFamilyActiveLevel(@Param("familyId") Long familyId);
 
 	// 家族人数更新活跃度--end
 	// 挑选对战家族--begin
