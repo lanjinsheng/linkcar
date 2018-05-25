@@ -177,22 +177,24 @@ public class ScoreController extends BaseController {
 		String fightingTime = null;
 		CompetitorFamilyInfoResultBean resultBean = this.gameServiceV2.queryCompetitorFamilyInfo(myFamilyId,
 				fightingTime);
-		if (null == resultBean) {
-			return ResultUtils.rtSuccess(result);
-		}
-		long fightFamilyId = Long.valueOf(resultBean.getCompetitorFamilyId());
 		String daystamp = null;
 		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(myFamilyId, daystamp);
 		fightInfo.put("familyName", infoFamily.get("name"));
 		double sc = familyScoreService.familyScore(Long.valueOf(myFamilyId), getCurrentDayStr());
 		BigDecimal b = new BigDecimal(sc);
 		fightInfo.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-		Map<String, String> infoFamily2 = gameServiceV2.getInfoByFamilyId(fightFamilyId, daystamp);
-		fightInfo.put("fightFamilyName", infoFamily2.get("name"));
-		double scf = familyScoreService.familyScore(Long.valueOf(fightFamilyId), getCurrentDayStr());
-		BigDecimal bf = new BigDecimal(scf);
-		fightInfo.put("fightFamilyScore", bf.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-
+		if (null == resultBean) {
+			fightInfo.put("fightFamilyName", "好车族教官");
+			double score = sc*0.8;
+			fightInfo.put("fightFamilyScore", BigDecimal.valueOf(score).setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+		}else {
+			long fightFamilyId = Long.valueOf(resultBean.getCompetitorFamilyId());
+			Map<String, String> infoFamily2 = gameServiceV2.getInfoByFamilyId(fightFamilyId, daystamp);
+			fightInfo.put("fightFamilyName", infoFamily2.get("name"));
+			double scf = familyScoreService.familyScore(Long.valueOf(fightFamilyId), getCurrentDayStr());
+			BigDecimal bf = new BigDecimal(scf);
+			fightInfo.put("fightFamilyScore", bf.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+		}
 		result.put("fightInfo", fightInfo);
 		return ResultUtils.rtSuccess(result);
 	}
