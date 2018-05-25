@@ -69,7 +69,7 @@
     </select>
      
 	<insert id="saveUserFamily" parameterType="com.idata365.app.entity.FamilyParamBean" useGeneratedKeys="true" keyProperty="id" >
-		insert into userFamilyRelation(userId, familyId, joinTime,role) values(#{userId}, #{familyId}, #{joinTime},#{role})
+		insert into userFamilyRelation(userId, familyId, joinTime,role,isLeader) values(#{userId}, #{familyId}, #{joinTime},#{role},#{isLeader})
 	</insert>
      
     <select id="queryFamilyByCode" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -111,12 +111,15 @@
  		select familyId from userFamilyRelation where userId=#{userId}
  	</select>
  	
+ 	<select id="queryJoinFamilyIdByUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select familyId from userFamilyRelation where userId=#{userId} and isLeader=0
+ 	</select>
  	<select id="countUsersByFamilyId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
  		select count(id) from userFamilyRelation where familyId=#{familyId}
  	</select>
  	
  	<select id="countInviteByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId}
+ 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=0
  	</select>
  	
  	<delete id="delInviteByUserId" parameterType="com.idata365.app.entity.FamilyParamBean">
