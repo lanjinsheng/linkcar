@@ -209,7 +209,7 @@ public class AddUserDayStatService extends BaseService<AddUserDayStatService>{
 			//进行家族行程热度增加
 			long familyId=Long.valueOf(map.get("familyId").toString());
 			familyInfoMapper.updateFamilyDriveFlag(familyId);
-			familyInfoMapper.updateFamilyActiveLevel(familyId);
+//			familyInfoMapper.updateFamilyActiveLevel(familyId);
 			
 			//插入行程得分任务
 			addFamilyTripPowerLogs(role.getUserId(), uth.getHabitId(),familyId, power,uth.getId());
