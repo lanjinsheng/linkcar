@@ -6,13 +6,13 @@
    <insert id="initTaskFamilyPkRelation" parameterType="com.idata365.entity.TaskSystemScoreFlag">
       		 INSERT IGNORE INTO  taskFamilyPkRelation
 		 (familyId,familyType,activeLevel,daystamp)
-        select id,familyType,trophy,#{daystamp} from familyInfo where matchKey=0 and id!=999999 order by trophy desc
+        select id,familyType,trophy,#{daystamp} from familyInfo where matchKey=0 and id!=999999 order by trophy desc,activeLevel desc
   </insert>
     <update id="updateFamilyInfoMatchKey">
        UPDATE 
             familyInfo 
        SET 
-            matchKey = 0  
+            matchKey = 0,activeLevel=ceiling(rand()*1000)  
     </update>		
  	 <insert id="batchInsertRelation" parameterType="java.util.HashMap">
 		 INSERT IGNORE INTO  familyRelation
