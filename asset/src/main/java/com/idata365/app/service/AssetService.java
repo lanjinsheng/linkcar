@@ -171,8 +171,8 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("recordType", String.valueOf(list.get(i).getRecordType()));
 				rtMap.put("receiveTypeName", AssetConstant.UserPowerEventMap.get(list.get(i).getEventType()));
 				rtMap.put("powerNum", String.valueOf(list.get(i).getPowerNum()));
+				rtMap.put("num", String.valueOf(list.get(i).getPowerNum()));//兼容小波页面而附加
 				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
-
 				data.add(rtMap);
 			}
 		}
