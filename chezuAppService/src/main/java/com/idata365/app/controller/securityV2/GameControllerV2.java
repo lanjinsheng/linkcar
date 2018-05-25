@@ -90,10 +90,14 @@ public class GameControllerV2 extends BaseController {
 		}
 		List<Map<String, String>> infoList = new ArrayList<>();
 		if (ValidTools.isNotBlank(queryFamily.getOriFamily())) {
-			extractedList(queryFamily.getOriFamily(), infoList);
+			if(queryFamily.getOriFamily().getFamilyId()>0){
+				extractedList(queryFamily.getOriFamily(), infoList);
+			}
 		}
 		if (ValidTools.isNotBlank(queryFamily.getJoinFamily())) {
-			extractedList(queryFamily.getJoinFamily(), infoList);
+			if(queryFamily.getJoinFamily().getFamilyId()>0){
+				extractedList(queryFamily.getJoinFamily(), infoList);
+			}
 		}
 
 		return ResultUtils.rtSuccess(infoList);
@@ -108,10 +112,7 @@ public class GameControllerV2 extends BaseController {
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
 			BigDecimal b = new BigDecimal(sc);
 			map.put("familyScore", b.setScale(0, BigDecimal.ROUND_HALF_UP).toString());
-			String haveNewPower="0";
-			if(scoreFamilyInfoBean.getFamilyId()>0){
-				  haveNewPower = gameService.queryHaveNewPower(this.getUserId(),familyId);
-			} 
+			String haveNewPower = gameService.queryHaveNewPower(this.getUserId(),familyId);
 			map.put("haveNewPower", haveNewPower);
 			String fightingTime = null;
 			CompetitorFamilyInfoResultBean resultBean = this.gameService
