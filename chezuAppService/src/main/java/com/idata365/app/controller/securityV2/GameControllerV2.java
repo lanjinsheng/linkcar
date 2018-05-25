@@ -107,7 +107,7 @@ public class GameControllerV2 extends BaseController {
 			map.put("familyName", scoreFamilyInfoBean.getName());
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
 			BigDecimal b = new BigDecimal(sc);
-			map.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+			map.put("familyScore", b.setScale(0, BigDecimal.ROUND_HALF_UP).toString());
 			String haveNewPower = gameService.queryHaveNewPower(this.getUserId(),familyId);
 			map.put("haveNewPower", haveNewPower);
 			String fightingTime = null;
