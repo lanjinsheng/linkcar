@@ -16,7 +16,7 @@ public class FamilyParamBean implements Serializable
 	private long userId;
 	
 	private int familyType;
-	
+	private int isLeader=0;
 	private String provinceId;
 	
 	private String cityId;
@@ -55,6 +55,16 @@ public class FamilyParamBean implements Serializable
 	
 	private int hadGet;
 	
+	
+	
+	public int getIsLeader() {
+		return isLeader;
+	}
+
+	public void setIsLeader(int isLeader) {
+		this.isLeader = isLeader;
+	}
+
 	public String getStartTime()
 	{
 		return startTime;

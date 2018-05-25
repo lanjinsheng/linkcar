@@ -66,6 +66,7 @@ public interface FamilyMapper {
 	public int countByCode(FamilyParamBean bean);
 
 	public List<Long> queryFamilyIdByUserId(FamilyParamBean bean);
+	public List<Long> queryJoinFamilyIdByUserId(FamilyParamBean bean);
 
 	public int countUsersByFamilyId(FamilyParamBean bean);
 

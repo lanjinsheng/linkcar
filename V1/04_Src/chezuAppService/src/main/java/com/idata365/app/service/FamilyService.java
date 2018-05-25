@@ -231,9 +231,9 @@ public class FamilyService extends BaseService<FamilyService> {
 	 */
 	@Transactional
 	public int permitApply(FamilyParamBean bean, UserInfo userInfo) {
-		List<Long> familyIdList = this.familyMapper.queryFamilyIdByUserId(bean);
+		List<Long> familyIdList = this.familyMapper.queryJoinFamilyIdByUserId(bean);
 
-		if (CollectionUtils.isNotEmpty(familyIdList) && familyIdList.size() > 1) {
+		if (CollectionUtils.isNotEmpty(familyIdList) && familyIdList.size() >= 1) {
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 1;
 		}
@@ -252,6 +252,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		UserRoleLog role = userRoleLogMapper.getLatestUserRoleLogByUserId(bean.getUserId());
 
 		bean.setRole(role.getRole());
+		bean.setIsLeader(0);
 		this.familyMapper.saveUserFamily(bean);
 
 		FamilyRelationBean familyRelationParam = new FamilyRelationBean();
@@ -505,6 +506,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		bean.setFamilyId(familyId);
 		bean.setJoinTime(generateTimeStamp());
 		bean.setRole(role.getRole());
+		bean.setIsLeader(1);
 		this.familyMapper.saveUserFamily(bean);
 
 		String curDayStr = getCurrentDayStr();
