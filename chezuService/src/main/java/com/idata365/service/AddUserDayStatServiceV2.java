@@ -130,20 +130,24 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
     		double d=distance-100000;
     		power=BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(160000),1,RoundingMode.HALF_EVEN);
     	}
-    	if(distance>(50*1000)) {
-    		double d=distance-50000;
+    	if(distance>(50*1000)) {//50-100
+//    		double d=distance-50000;
+    		double d=Math.min(distance, 100000)-50000;
     		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(80000),1,RoundingMode.HALF_EVEN));
     	}
-    	if(distance>(20*1000)) {
-    		double d=distance-20000;
+    	if(distance>(20*1000)) {//20-50
+//    		double d=distance-20000;
+    		double d=Math.min(distance, 50000)-20000;
     		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(40000),1,RoundingMode.HALF_EVEN));
     	}
-    	if(distance>(10*1000)) {
-    		double d=distance-10000;
+    	if(distance>(10*1000)) {//10-20
+//    		double d=distance-10000;
+    		double d=Math.min(distance, 20000)-10000;
     		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(20000),1,RoundingMode.HALF_EVEN));
     	}
-    	if(distance>(0) ) {
-    		double d=distance;
+    	if(distance>(0) ) {//0-10
+//    		double d=distance;
+    		double d=Math.min(distance, 10000);
     		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(10000),1,RoundingMode.HALF_EVEN));
     	}
     	
@@ -155,9 +159,10 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
     	return power.intValue();
 	}
 	
-//	public static void main(String []args) {
-//		System.out.println(new AddUserDayStatServiceV2().addUserTripPowerLogs(1L,6L,334L,50000d,30d));
-//	}
+	public static void main(String []args) {
+		double d=Math.min(100000, 50000)-20000;
+		System.out.println(d);
+	}
 	/**
 	 * 
 	    * @Title: addUserDayStat
