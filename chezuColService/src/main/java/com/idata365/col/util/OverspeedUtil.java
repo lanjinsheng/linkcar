@@ -17,7 +17,7 @@ public class OverspeedUtil {
 	public static final BigDecimal overBei=BigDecimal.valueOf(1.1);
 	public static final int filterDist1=200;
 	public static final int filterDist2=300;
-	public static final int filterCount=4;
+	public static final int filterCount=3;
 	
 	
 	public String readToString(String fileName) {  
@@ -89,7 +89,7 @@ public class OverspeedUtil {
 				if(kmS>=overLs) {
 					 //记录超速点
 					 long pTime=DateTools.changeDateTimeToSecond(t);
-					 if((pTime-lastTime)<5) {//小于5秒
+					 if((pTime-lastTime)<10) {//小于10秒
 						 count++;
 						 lastTime=pTime;
 					 }else {

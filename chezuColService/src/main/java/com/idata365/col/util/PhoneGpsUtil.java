@@ -354,6 +354,20 @@ public class PhoneGpsUtil {
 		}
 		String course=first.get("c");	
 		String nextCoure=  list.get(now+1).get("c");
+		String t2=list.get(now+1).get("t");
+		try {
+			long dif=0;
+			dif = DateTools.getDiffTimeS(t2, t);
+			if(dif>8) {//2点差8秒的，就不用算急转了
+				return false;
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		
 		Double d=Math.abs(Double.valueOf(course) -Double.valueOf(nextCoure));
 		if(d>180 ){
 			d=360-d;
