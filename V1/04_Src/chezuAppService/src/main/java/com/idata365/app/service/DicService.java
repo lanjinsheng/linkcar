@@ -57,7 +57,8 @@ public class DicService extends BaseService<DicService> {
 
 		long day = (date2.getTime() - date1.getTime()) / (24 * 60 * 60 * 1000);
 
-		return "距离"+endDay+"赛季结束还剩："+day + "天";
+//		return "距离"+endDay+"赛季结束还剩："+day + "天";
+		return day+"";
 	}
 
 	private String getCurrentDayStr() {
