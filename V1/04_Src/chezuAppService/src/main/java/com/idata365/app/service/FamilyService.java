@@ -178,7 +178,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		this.familyMapper.updateFamilyRoleLog(bean);
 		// 更新家族热度
 		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
-		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
+//		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 
 		// 发送消息
 		String nickName = user.getNickName();
@@ -299,7 +299,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
 		// 增加用户热度
 		familyMapper.addFamilyMemberNum(bean.getFamilyId());
-		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
+//		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 
 		return 3;
 	}
