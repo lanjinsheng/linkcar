@@ -45,12 +45,12 @@ public class PrizeService {
 			Map<String, String> map = new HashMap<>();
 			map.put("rewardID", String.valueOf(prize.getPrizeid()));
 			map.put("rewardName", prize.getPrizename());
-			map.put("rewardDesc", prize.getPrizedesc());
+			map.put("rewardDesc", prize.getPrizedesc()+"  库存："+prize.getStock()+"件");
 			map.put("rewardImg", prize.getPrizepic());
 			map.put("originalPrice", String.valueOf(prize.getOriginalprice()));
 			map.put("diamondValue", String.valueOf(prize.getDiamondvalue()));
 			map.put("rewardDetailPics", prize.getPrizedetailpics());
-			map.put("rewardDetailTexts", prize.getPrizedetailtexts());
+			map.put("rewardDetailTexts", prize.getPrizedetailtexts()+"  库存："+prize.getStock()+"件");
 			map.put("isMarketable", String.valueOf(prize.getIsMarketable()));
 			map.put("stock", prize.getStock().toString());
 
