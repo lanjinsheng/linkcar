@@ -38,7 +38,7 @@ public class TempPowerRewardController extends BaseController {
 		String uuid=String.valueOf(requestBodyParams.get("uuid"));
 		String []uuids=uuid.split(",");
 		for(int i=0;i<uuids.length;i++) {
-			this.tempPowerRewardService.hadGet(uuid);
+			this.tempPowerRewardService.hadGet(uuids[i]);
 		}
 		return ResultUtils.rtSuccess(null);
 	}
