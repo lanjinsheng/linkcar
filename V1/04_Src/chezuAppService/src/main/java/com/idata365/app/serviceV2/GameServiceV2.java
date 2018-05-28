@@ -70,21 +70,18 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		if (ValidTools.isNotBlank(queryFamily)) {
 			if (ValidTools.isNotBlank(queryFamily.getOriFamily())) {
 				familyId = queryFamily.getOriFamily().getFamilyId();
-				Map<String, Object> map = familyMapper.queryFamilyByFId(familyId);
+				Map<String, Object> map = familyMapper.queryFamilyOrderNoByFamilyId(familyId);
 				if (map != null) {
 					list.add(map);
 				}
 			}
 			if (ValidTools.isNotBlank(queryFamily.getJoinFamily())) {
 				familyId = queryFamily.getJoinFamily().getFamilyId();
-				Map<String, Object> map = familyMapper.queryFamilyByFId(familyId);
+				Map<String, Object> map = familyMapper.queryFamilyOrderNoByFamilyId(familyId);
 				if (map != null) {
 					list.add(map);
 				}
 			}
-		}
-		if (ValidTools.isBlank(list)) {
-			return null;
 		}
 		for (int i = 0; i < list.size(); i++) {
 			Map<String, String> bill = new HashMap<>();
@@ -92,9 +89,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					.findAccountById(Long.valueOf(list.get(i).get("createUserId").toString()));
 			DicFamilyType familyType = DicFamilyTypeConstant
 					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
-			bill.put("id", (list.get(i).get("id").toString()));
-			bill.put("rank",
-					String.valueOf(familyMapper.queryFamilyOrderByFId(Long.valueOf(list.get(i).get("id").toString()))));
+			bill.put("id", (list.get(i).get("familyId").toString()));
+			bill.put("rank",(list.get(i).get("yesterdayOrderNo").toString()));
 			bill.put("name", list.get(i).get("familyName").toString());
 			bill.put("captainOrGroupName",
 					usersAccount.getNickName() == null ? PhoneUtils.hidePhone(usersAccount.getPhone())
