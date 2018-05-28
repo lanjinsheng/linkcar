@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.IndexSlipPage;
@@ -51,7 +52,7 @@ public class GameControllerV2 extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(GameControllerV2.class);
 
 	@Autowired
-	private GameServiceV2 gameService;
+	private GameServiceV2 gameServiceV2;
 	@Autowired
 	private ScoreService scoreService;
 	@Autowired
@@ -112,10 +113,11 @@ public class GameControllerV2 extends BaseController {
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
 			BigDecimal b = new BigDecimal(sc);
 			map.put("familyScore", b.setScale(0, BigDecimal.ROUND_HALF_UP).toString());
-			String haveNewPower = gameService.queryHaveNewPower(this.getUserId(),familyId);
+			
+			String haveNewPower = gameServiceV2.queryHaveNewPower(this.getUserId(),familyId);
 			map.put("haveNewPower", haveNewPower);
 			String fightingTime = null;
-			CompetitorFamilyInfoResultBean resultBean = this.gameService
+			CompetitorFamilyInfoResultBean resultBean = this.gameServiceV2
 					.queryCompetitorFamilyInfo(Long.valueOf(familyId), fightingTime);
 			if (null != resultBean) {
 				long fightFamilyId = Long.valueOf(resultBean.getCompetitorFamilyId());
@@ -160,7 +162,17 @@ public class GameControllerV2 extends BaseController {
 
 		List<Map<String, String>> billList = new ArrayList<>();
 		if ("1".equals(billBoardType)) {
-			billList = gameService.billBoard(queryFamily);
+			billList = gameServiceV2.billBoard(queryFamily);
+//			for (Map<String, String> bill : billList) {
+//				bean.setFamilyId(Long.valueOf(bill.get("id")));
+//				ScoreFamilyDetailResultBean familyDetail = scoreService.queryFamilyDetail(bean);
+//				bill.put("rank", familyDetail.getOrderNo());
+//			}
+//			Collections.sort(billList, new Comparator<Map<String, String>>() {
+//				public int compare(Map<String, String> o1, Map<String, String> o2) {
+//					return Double.valueOf(o1.get("rank")).compareTo(Double.valueOf(o2.get("rank")));
+//				}
+//			});
 		} else if ("2".equals(billBoardType) || "3".equals(billBoardType)) {
 			billList = chezuAssetService.billBoard(billBoardType, userId, sign);
 			if (ValidTools.isNotBlank(billList)) {
@@ -197,7 +209,7 @@ public class GameControllerV2 extends BaseController {
 		LOG.info("userId=================" + userId);
 		long myFamilyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String fightingTime = null;
-		CompetitorFamilyInfoResultBean resultBean = this.gameService.queryCompetitorFamilyInfo(myFamilyId,
+		CompetitorFamilyInfoResultBean resultBean = this.gameServiceV2.queryCompetitorFamilyInfo(myFamilyId,
 				fightingTime);
 		Map<String, Object> familyInfoX = new HashMap<>();
 		if (null == resultBean) {
@@ -230,7 +242,7 @@ public class GameControllerV2 extends BaseController {
 
 	private void method(Map<String, Object> result, List<Map<String, Object>> data, long myFamilyId,long familyId) {
 		String daystamp = null;
-			Map<String, String> infoFamily = gameService.getInfoByFamilyId(familyId, daystamp);
+			Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(familyId, daystamp);
 			Map<String, Object> familyInfo = new HashMap<>();
 			familyInfo.put("familyName", infoFamily.get("name"));
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
@@ -317,14 +329,15 @@ public class GameControllerV2 extends BaseController {
 		ScoreFamilyDetailResultBean familyDetail = scoreService.queryFamilyDetail(bean);
 		Map<String, Object> map = new HashMap<>();
 		String daystam = null;
-		Map<String, String> infoFamily = gameService.getInfoByFamilyId(familyId, daystam);
+		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(familyId, daystam);
 		map.put("familyName", familyDetail.getFamilyName());
-		map.put("rank", familyDetail.getOrderNo());
+//		map.put("rank", familyDetail.getOrderNo());
+		map.put("rank", gameServiceV2.queryFamilyOrderByFId(familyId));
 		map.put("trophyNum", infoFamily.get("trophyNum"));
 		map.put("familyImg", super.getImgBasePath() + familyDetail.getImgUrl());
 		map.put("grade", infoFamily.get("gradeOrNum"));
 		long fightFamilyId;
-		List<FamilyRelation> recordList = gameService.queryFightRecordByFamilyId(Long.valueOf(familyId), recordId);
+		List<FamilyRelation> recordList = gameServiceV2.queryFightRecordByFamilyId(Long.valueOf(familyId), recordId);
 		List<Map<String, String>> result = new ArrayList<>();
 		if (recordList == null || recordList.size() == 0) {
 			map.put("result", result);
@@ -344,11 +357,11 @@ public class GameControllerV2 extends BaseController {
 			String fightFamilyName = detail.getFamilyName();
 			String fightFamilyScore = "0";
 			String myFamilyScore = "0";
-			FamilyDriveDayStat familyDriveDayStat = gameService.queryFamilyScore(fightFamilyId, daystamp);
+			FamilyDriveDayStat familyDriveDayStat = gameServiceV2.queryFamilyScore(fightFamilyId, daystamp);
 			if (ValidTools.isNotBlank(familyDriveDayStat)) {
 				fightFamilyScore = familyDriveDayStat.getScore().toString();
 			}
-			FamilyDriveDayStat familyDriveDayStat2 = gameService.queryFamilyScore(familyId, daystamp);
+			FamilyDriveDayStat familyDriveDayStat2 = gameServiceV2.queryFamilyScore(familyId, daystamp);
 			if (ValidTools.isNotBlank(familyDriveDayStat2)) {
 				myFamilyScore = familyDriveDayStat2.getScore().toString();
 			}
@@ -393,7 +406,7 @@ public class GameControllerV2 extends BaseController {
 		long myFamilyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String daystamp = requestBodyParams.get("fightingTime").toString();
 		String sign = SignUtils.encryptHMAC(daystamp);
-		CompetitorFamilyInfoResultBean resultBean = this.gameService.queryCompetitorFamilyInfo(myFamilyId, daystamp);
+		CompetitorFamilyInfoResultBean resultBean = this.gameServiceV2.queryCompetitorFamilyInfo(myFamilyId, daystamp);
 		if (null == resultBean) {
 			return ResultUtils.rtSuccess(null);
 		}
@@ -405,10 +418,10 @@ public class GameControllerV2 extends BaseController {
 		List<Map<String, Object>> data = new ArrayList<>();
 		Map<String, Object> result = new HashMap<>();
 		for (int i = 0; i < arr.length; i++) {
-			Map<String, String> infoFamily = gameService.getInfoByFamilyId(arr[i], daystamp);
+			Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(arr[i], daystamp);
 			Map<String, Object> familyInfo = new HashMap<>();
 			familyInfo.put("familyName", infoFamily.get("name"));
-			FamilyDriveDayStat familyDriveDayStat = gameService.queryFamilyScore(arr[i], daystamp);
+			FamilyDriveDayStat familyDriveDayStat = gameServiceV2.queryFamilyScore(arr[i], daystamp);
 			String familyScore = familyDriveDayStat.getScore().toString();
 			familyInfo.put("familyScore", familyScore);
 			familyInfo.put("trophyNum", infoFamily.get("trophyNum"));

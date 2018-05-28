@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelation;
 import com.idata365.app.entity.FamilyRelationBean;
-import com.idata365.app.entity.GameFamilyParamBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.FamilyMapper;
@@ -94,6 +92,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					.findAccountById(Long.valueOf(list.get(i).get("createUserId").toString()));
 			DicFamilyType familyType = DicFamilyTypeConstant
 					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
+			bill.put("id", (list.get(i).get("id").toString()));
 			bill.put("rank",
 					String.valueOf(familyMapper.queryFamilyOrderByFId(Long.valueOf(list.get(i).get("id").toString()))));
 			bill.put("name", list.get(i).get("familyName").toString());
@@ -244,7 +243,14 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	public FamilyDriveDayStat queryFamilyScore(long familyId, String daystamp) {
 		return gameMapper.queryFamilyScore(familyId, daystamp);
 	}
+	
+	//获取家族实时排名
+	
 
+	public String queryFamilyOrderByFId(long familyId) {
+		return String.valueOf(familyMapper.queryFamilyOrderByFId(familyId)).toString();
+	}
+	
 	private String getCurrentDayStr() {
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
