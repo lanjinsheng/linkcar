@@ -303,8 +303,8 @@ public class ScoreService extends BaseService<ScoreService>
 		Integer tempFamilyOrderNo = this.scoreMapper.queryFamilyYesterdayOrder(bean);
 		if (null != tempFamilyOrderNo)
 		{
-//			tempBean.setOrderNo(tempFamilyOrderNo);
-			tempBean.setOrderNo(familyMapper.queryFamilyOrderByFId(bean.getFamilyId()));
+			tempBean.setOrderNo(tempFamilyOrderNo);
+//			tempBean.setOrderNo(familyMapper.queryFamilyOrderByFId(bean.getFamilyId()));
 		}
 		
 		List<String> recordsList = this.scoreMapper.queryFamilyRecords(bean);
