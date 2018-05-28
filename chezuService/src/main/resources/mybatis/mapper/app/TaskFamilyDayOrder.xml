@@ -6,7 +6,7 @@
    <insert id="initTaskFamilyDayOrder" parameterType="com.idata365.entity.TaskSystemScoreFlag">
           INSERT IGNORE INTO  taskFamilyDayOrder
 		 (score,trophy,orderNo,daystamp,familyId,taskFlag,taskStatus,failTimes)
-         select score,trophy,0,daystamp,familyId,0,0,0 from familyDriveDayStat  where daystamp=#{daystamp} order by score desc
+         select score,trophy,0,daystamp,familyId,0,0,0 from familyDriveDayStat  where daystamp=#{daystamp} order by trophy desc
 	</insert>
     <update id="updateFamilyDayOrder" parameterType="com.idata365.entity.TaskFamilyDayOrder" >
         update familyDriveDayStat set

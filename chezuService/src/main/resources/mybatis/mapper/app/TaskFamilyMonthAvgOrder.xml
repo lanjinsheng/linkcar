@@ -19,7 +19,7 @@
     <insert id="initTaskFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder">
           INSERT IGNORE INTO  taskFamilyMonthAvgOrder
 		 (avgScore,orderNo,trophy,month,familyId,taskFlag,taskStatus,failTimes,startDay,endDay)
-         select averScore,0,trophy,month,familyId,0,0,0,startDay,endDay from familyScore  where startDay=#{startDay} and endDay=#{endDay}  order by averScore desc
+         select averScore,0,trophy,month,familyId,0,0,0,startDay,endDay from familyScore  where startDay=#{startDay} and endDay=#{endDay}  order by trophy desc
 	</insert>
 	
     <update id="updateFamilyMonthAvgOrder" parameterType="com.idata365.entity.TaskFamilyMonthAvgOrder" >
