@@ -93,8 +93,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			DicFamilyType familyType = DicFamilyTypeConstant
 					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
 			bill.put("id", (list.get(i).get("id").toString()));
-			bill.put("rank",
-					String.valueOf(familyMapper.queryFamilyOrderByFId(Long.valueOf(list.get(i).get("id").toString()))));
+//			bill.put("rank",
+//					String.valueOf(familyMapper.queryFamilyOrderByFId(Long.valueOf(list.get(i).get("id").toString()))));
 			bill.put("name", list.get(i).get("familyName").toString());
 			bill.put("captainOrGroupName",
 					usersAccount.getNickName() == null ? PhoneUtils.hidePhone(usersAccount.getPhone())
