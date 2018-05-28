@@ -50,9 +50,9 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String KickMemberMessage="族长【%s】将您移出了【%s】家族，此处不留爷自有留爷处，咱们江湖再见！";
 	public static final String ChallengeMessage="下战书！您的家族被【%s】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
 	//获奖
-	public static final String RewardMessage="恭喜！您的家族在【%s】PK赛中获胜，奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
+	public static final String RewardMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
 	//获奖
-	public static final String SeasonRewardMessage="恭喜！您的家族在【%s】赛季中获得好成绩，奖励【%s钻石】，已经自动发放至您的账号，快去看看吧！";
+	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
 	
 	
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
@@ -372,12 +372,12 @@ public class MessageService extends BaseService<MessageService>{
 		return message;
 	}
 	
-	public Message buildFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String orderNum) {
+	public Message buildFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String orderNum,String familyName) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.FamilyType_Reward);
-		message.setContent(String.format(RewardMessage,season,diamonds));
+		message.setContent(String.format(RewardMessage,familyName,season,diamonds));
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
@@ -389,12 +389,12 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUrl(String.format(FamilyDiamondsDistr, familyId));
 		return message;
 	}
-	public Message buildSeasonFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, Integer familyType) {
+	public Message buildSeasonFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, Integer familyType,String familyName) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.FamilyType_SeasonReward);
-		message.setContent(String.format(SeasonRewardMessage,season,diamonds));
+		message.setContent(String.format(SeasonRewardMessage,familyName,season,diamonds));
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
