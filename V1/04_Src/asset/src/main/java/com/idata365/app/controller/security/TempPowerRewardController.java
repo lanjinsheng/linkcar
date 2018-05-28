@@ -36,11 +36,11 @@ public class TempPowerRewardController extends BaseController {
 	@RequestMapping(value = "/recPower")
 	Map<String, Object> recPower(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		String uuid=String.valueOf(requestBodyParams.get("uuid"));
-		if(this.tempPowerRewardService.hadGet(uuid)) {
-			return ResultUtils.rtSuccess(null);
-		}else {
-			return ResultUtils.rtFailParam(null,"已领取");
+		String []uuids=uuid.split(",");
+		for(int i=0;i<uuids.length;i++) {
+			this.tempPowerRewardService.hadGet(uuid);
 		}
+		return ResultUtils.rtSuccess(null);
 	}
 	 
 	 
