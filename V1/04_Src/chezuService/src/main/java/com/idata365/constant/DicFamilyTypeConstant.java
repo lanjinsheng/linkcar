@@ -100,7 +100,7 @@ public class DicFamilyTypeConstant {
 				  }else if(trophy>=110) {
 					  return BaiYing_4;
 				  }else if(trophy>=80) {
-					  return BaiYing_1;
+					  return BaiYing_5;
 				  }else if(trophy>=50) {
 					  return QingTong_1;
 				  }else if(trophy>=30) {
