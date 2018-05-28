@@ -42,7 +42,7 @@ public class AssetConstant {
 		
 		UserPowerEventMap.put(EventType_Power_SignIn, "每日签到奖励");
 		UserPowerEventMap.put(EventType_Power_Index_Get, "首页小车拾取");
-		UserPowerEventMap.put(EventType_Power_Steal, "家族对战偷取");
+		UserPowerEventMap.put(EventType_Power_Steal, "停车场偷取");
 		UserPowerEventMap.put(EventType_Power_Trip, "行程中获取");
 	}
 }
