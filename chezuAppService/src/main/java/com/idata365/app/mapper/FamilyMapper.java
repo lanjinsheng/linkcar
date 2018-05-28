@@ -84,6 +84,8 @@ public interface FamilyMapper {
 
 	public List<Map<String, Object>> queryAllFamilyOrderNo();
 	
+	public Map<String, Object> queryFamilyOrderNoByFamilyId(@Param("familyId")long familyId);
+	
 	public Map<String, Object> queryFamilyByFId(@Param("familyId")long familyId);
 	
 	int queryFamilyOrderByFId(@Param("familyId")long familyId);
