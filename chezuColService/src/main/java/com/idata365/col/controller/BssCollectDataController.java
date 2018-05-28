@@ -153,7 +153,6 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
     
     @RequestMapping(value = "/v1/devDriveLog",method = RequestMethod.POST)
     public Map<String,Object>  devDriveLog(@RequestParam CommonsMultipartFile file,@RequestHeader HttpHeaders headers) throws IOException {
-    	 long  startTime=System.currentTimeMillis();
   	   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
   	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String identificationJson=request.getHeader("identification");
