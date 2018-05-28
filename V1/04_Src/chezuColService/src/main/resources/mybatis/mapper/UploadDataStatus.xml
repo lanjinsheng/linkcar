@@ -41,7 +41,7 @@
        SET 
        scanStatus=-1,taskFlag=#{taskFlag},scanTime=now()
        WHERE 
-            scanStatus = 0  and (complete=1 or  createTimeSS<![CDATA[<]]>#{createTimeSS})
+            scanStatus = 0  and inValid=0 and (complete=1 or  createTimeSS<![CDATA[<]]>#{createTimeSS})
     </update>
     <!-- 调试使用的接口 -->
      <select id="getUploadDataDemo"  resultMap="uploadDataStatusMap" parameterType="java.util.HashMap">
@@ -59,7 +59,7 @@
        UPDATE 
             uploadDataStatus 
        SET 
-       scanStatus=#{scanStatus}
+       scanStatus=#{scanStatus},inValid=#{inValid}
        WHERE 
             id=#{id} and scanStatus =-1 and taskFlag=#{taskFlag}
      </update>
