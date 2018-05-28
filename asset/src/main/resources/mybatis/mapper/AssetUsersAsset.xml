@@ -17,12 +17,12 @@
      </select>
      
      <select id="getDiamondsCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
-       SELECT (count(*)+1)
+       select count(distinct(diamondsNum))+1
        FROM  assetUsersAsset where diamondsNum>(select diamondsNum from assetUsersAsset where userId=#{userId})
      </select>
      
      <select id="getPowersCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
-       SELECT (count(*)+1)
+       select count(distinct(powerNum))+1
        FROM  assetUsersAsset where powerNum>(select powerNum from assetUsersAsset where userId=#{userId})
      </select>
      
