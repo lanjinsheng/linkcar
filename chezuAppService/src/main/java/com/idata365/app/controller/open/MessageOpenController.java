@@ -1,5 +1,7 @@
 package com.idata365.app.controller.open;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.MessageService;
 import com.idata365.app.util.SignUtils;
 
@@ -19,6 +22,8 @@ public class MessageOpenController {
 
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+    FamilyService familyService;
 	public MessageOpenController() {
 	}
     /**
@@ -93,7 +98,9 @@ public class MessageOpenController {
     		@RequestParam (value = "sign") String sign){
     	LOG.info("param:"+season+"=="+orderNum+"=="+diamondNum+"==sign="+sign);
     	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
-    	Message msg=messageService.buildFamilyDiamondsMessage(null, toUserId, familyId, season, diamondNum, orderNum);
+    	
+    	Map<String, Object> familyInfo=familyService.findFamilyByFamilyId(Long.valueOf(familyId));
+    	Message msg=messageService.buildFamilyDiamondsMessage(null, toUserId, familyId, season, diamondNum, orderNum,String.valueOf(familyInfo.get("familyName")));
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.DiamondDistr);
  		//用定时器推送
@@ -109,7 +116,8 @@ public class MessageOpenController {
     		@RequestParam (value = "sign") String sign){
     	LOG.info("param:"+season+"=="+familyType+"=="+diamondNum+"==sign="+sign);
     	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
-    	Message msg=messageService.buildSeasonFamilyDiamondsMessage(null, toUserId, familyId, season, diamondNum, familyType);
+    	Map<String, Object> familyInfo=familyService.findFamilyByFamilyId(Long.valueOf(familyId));
+    	Message msg=messageService.buildSeasonFamilyDiamondsMessage(null, toUserId, familyId, season, diamondNum, familyType,String.valueOf(familyInfo.get("familyName")));
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.DiamondSeasonDistr);
  		//用定时器推送
