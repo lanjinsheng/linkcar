@@ -1,6 +1,8 @@
 package com.idata365.col.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -28,10 +30,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.config.SystemProperties;
+import com.idata365.col.entity.DevDriveLogs;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataStartLog;
 import com.idata365.col.entity.SensorDataLog;
 import com.idata365.col.service.DataService;
+import com.idata365.col.service.DevService;
 import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.ResultUtils;
@@ -48,6 +52,8 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
     DataService dataService;
     @Autowired
 	SystemProperties systemProPerties;
+    @Autowired
+    DevService devService;
     /**
      * 
         * @Title: uploadDriveData
@@ -143,6 +149,73 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         LOG.info("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return ResultUtils.rtSuccess(null); 
     } 
+    
+    
+    @RequestMapping(value = "/v1/devDriveLog",method = RequestMethod.POST)
+    public Map<String,Object>  devDriveLog(@RequestParam CommonsMultipartFile file,@RequestHeader HttpHeaders headers) throws IOException {
+    	 long  startTime=System.currentTimeMillis();
+  	   RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+  	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+        String identificationJson=request.getHeader("identification");
+        String sign=request.getHeader("sign");
+        String equipmentInfo=request.getHeader("equipmentInfo");
+        try {
+        	if(equipmentInfo!=null) {
+        		equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+        	}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        LOG.info("identification="+identificationJson);
+        LOG.info("equipmentInfo="+equipmentInfo);
+        LOG.info("sign="+sign);
+        if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
+      	  return ResultUtils.rtFailParam(null);
+        }
+        if(!SignUtils.security(identificationJson,sign)) {
+      	  return ResultUtils.rtFailVerification(null);
+        }
+        Map<String,Object> identificationM=GsonUtils.fromJson(identificationJson);
+        long userId=Long.valueOf(identificationM.get("userId").toString());
+        String YYYYMMDD=DateTools.getYYYYMMDD();
+        String filePath=userId+"/"+YYYYMMDD+"/C"+"_"+System.currentTimeMillis();
+		  LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
+		  File   dealFile = new File(systemProPerties.getFileTmpDir()+"/"+filePath);
+		  File fileParent = dealFile.getParentFile();  
+			if(!fileParent.exists()){  
+			    fileParent.mkdirs();  
+			} 
+        file.transferTo(dealFile);
+        StringBuffer text=new StringBuffer();
+      
+           BufferedReader reader = null;  
+           try {  
+               reader = new BufferedReader(new FileReader(dealFile));  
+               String tempString = null;  
+               // 一次读入一行，直到读入null为文件结束  
+               while ((tempString = reader.readLine()) != null) {  
+                   // 显示行号  
+            	   text.append(tempString);  
+               }  
+               reader.close();  
+           } catch (IOException e) {  
+               e.printStackTrace();  
+           } finally {  
+               if (reader != null) {  
+                   try {  
+                       reader.close();  
+                   } catch (IOException e1) {  
+                   }  
+               }  
+           }  
+        DevDriveLogs log=new DevDriveLogs();
+        log.setUserId(userId);
+        log.setLogDesc(text.toString());
+        devService.insertDevDriveLog(log);
+        return ResultUtils.rtSuccess(null); 
+    } 
+    
     /**
      * 
         * @Title: uploadDriveData

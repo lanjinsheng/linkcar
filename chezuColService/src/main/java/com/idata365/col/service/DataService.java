@@ -63,7 +63,7 @@ public class DataService extends BaseService<DataService>{
 		return driveDataLogMapper.getDriveDataLog(id);
 	}
 	
-	
+	@Transactional
 	public List<UploadDataStatus> getUploadDataDemo(Map<String,Object> m){
 		return uploadDataStatusMapper.getUploadDataDemo(m);
 	}
@@ -89,6 +89,7 @@ public class DataService extends BaseService<DataService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional
    public void insertStartEventLog(DriveDataStartLog startLog) {
 	   driveDataStartLogMapper.insertStartData(startLog);
    }
@@ -103,11 +104,12 @@ public class DataService extends BaseService<DataService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional
 	public List<DriveDataLog>  listDriveLogByUH(DriveDataLog log) {
 		  List<DriveDataLog> list= driveDataLogMapper.listDriveLogByUH(log);
 		  return list;
 	}
-	
+	@Transactional
 	public List<SensorDataLog>  listSensorByUH(DriveDataLog log) {
 		  List<SensorDataLog> list= sensorDataLogMapper.listSensorLogByUH(log);
 		  return list;
@@ -194,7 +196,7 @@ public class DataService extends BaseService<DataService>{
 	public void delSensorLog(DriveDataLog log) {
 		driveDataLogMapper.delDataLog(log);
 	}
-	
+	@Transactional
 	public String listPageDriveLog(Map<String,Object> map) {
 		  List<DriveDataLog> list= driveDataLogMapper.listPageDriveLog(map);
 			StringBuffer sb = new StringBuffer("");
@@ -202,6 +204,7 @@ public class DataService extends BaseService<DataService>{
 			ResultUtils.putSuccess(map);
 			return sb.toString();
 	}
+	@Transactional
 	public String listPageDriveLogTest(Map<String,Object> map) {
 		  List<DriveDataLog> list= driveDataLogMapper.listPageDriveLogTest(map);
 			StringBuffer sb = new StringBuffer("");
@@ -211,7 +214,7 @@ public class DataService extends BaseService<DataService>{
 	}
 	
 	
-	
+	@Transactional
 	public String listPageDriveMainTest(Map<String,Object> map) {
 		  List<DriveDataMain> list= driveDataMainMapper.listPageDriveMainTest(map);
 			StringBuffer sb = new StringBuffer("");
@@ -228,16 +231,18 @@ public class DataService extends BaseService<DataService>{
 	    * @throws
 	    * @author LanYeYe
 	 */
+	@Transactional
 	public List<UploadDataStatus>  getUploadDataStatusTask(UploadDataStatus status) {
 		   uploadDataStatusMapper.lockUploadStatusTask(status);
 		  List<UploadDataStatus> list= uploadDataStatusMapper.getUploadDataStatusTask(status);
 		  return list;
 	}
-	
+	@Transactional
 	public void updateDataStatusTask(UploadDataStatus status) {
 		   uploadDataStatusMapper.updateUploadStatusTask(status);
 		  
 	}
+	@Transactional
 	public void updateFailDataStatusTask(UploadDataStatus status) {
 		   uploadDataStatusMapper.updateFailUploadStatusTask(status);
 		  
@@ -289,12 +294,12 @@ public class DataService extends BaseService<DataService>{
 //		driveDataMainMapper.updateFailSendDriveTask(drive);
 //	}
 	
-	
+	@Transactional
 	public List<DriveDataEvent> listDriveEventByMainId(DriveDataMain drive){
 		return driveDataEventMapper.listDriveEventByMainId(drive);
 	}
 	
-	
+	@Transactional
 	public void clearLockTask(){
 		long compareTimes=System.currentTimeMillis()-(5*60*1000);
 //		driveDataMainMapper.clearLockTask(compareTimes);

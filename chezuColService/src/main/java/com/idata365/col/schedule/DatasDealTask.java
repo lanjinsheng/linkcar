@@ -56,6 +56,7 @@ public class DatasDealTask implements Runnable
 	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 	    	  List<Map<String,Object>> jkList=new ArrayList<Map<String,Object>>();
 	    	  for(DriveDataLog drive:drives) {
+	    		  log.info("进入drive for");
 	    		     StringBuffer json=new StringBuffer();
 	    		     if(drive.getFilePath().endsWith("_Q")) {
 	    		    	 QQSSOTools.getSSOFile(json, drive.getFilePath());
@@ -140,14 +141,23 @@ public class DatasDealTask implements Runnable
 //	    		 data.setOverspeedTimes(0);
 	    		  //插入数据
 	    		 dataService.insertEvents(data, eventList);
-	    
+	    		 status.setInValid(0);
 	    		 //更新任务数据
 	    		 status.setScanStatus(1);
-	    		 dataService.updateDataStatusTask(status);	    		 
+	    		 dataService.updateDataStatusTask(status);	
+	    		 log.info("进入正常更新");
+	    	  }else {
+	    		  //更新数据未无效
+	    		  log.info("进入无效");
+	    		  status.setScanStatus(1);
+	    		  status.setInValid(1);
+		    	  dataService.updateDataStatusTask(status);
+		    	  log.info("**************************无效数据空list");
 	    	  }
 			}catch(Exception e){
 				e.printStackTrace();
 				//有异常，进行回滚？
+				 log.info("进入异常");
 				if(dealTimes>100) {
 					status.setInValid(1);
 					status.setScanStatus(1);
