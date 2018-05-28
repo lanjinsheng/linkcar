@@ -163,7 +163,7 @@
  	</select>
  	  
  	<select id="queryFamilyOrderByFId" resultType="java.lang.Integer">
- 		SELECT (count(*)+1)
+       select count(distinct(trophy))+1
        FROM  familyInfo where trophy>(select trophy from familyInfo where id=#{familyId})
  	</select>
  	
