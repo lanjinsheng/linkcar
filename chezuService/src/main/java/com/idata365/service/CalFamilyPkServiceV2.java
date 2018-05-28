@@ -62,6 +62,9 @@ public class CalFamilyPkServiceV2 {
 		   return true;
 	}
 	private boolean addFamilyGameOrder(String startDay,String endDay,Long winFamily,String daystamp,Integer memberNum) {
+		if(memberNum<1) {
+			return true;
+		}
 		//远程同步比赛结果名次
 		FamilyGameAsset fg=new FamilyGameAsset();
 		fg.setEndDay(endDay);
@@ -134,7 +137,7 @@ public class CalFamilyPkServiceV2 {
         //更新family结果
         taskFamilyPkMapper.updateFamilyInfo(fdds1);
         taskFamilyPkMapper.updateFamilyInfo(fdds2);
-        
+
 	    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum);
         
         if(!r) {
