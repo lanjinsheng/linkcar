@@ -331,8 +331,8 @@ public class GameControllerV2 extends BaseController {
 		String daystam = null;
 		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(familyId, daystam);
 		map.put("familyName", familyDetail.getFamilyName());
-//		map.put("rank", familyDetail.getOrderNo());
-		map.put("rank", gameServiceV2.queryFamilyOrderByFId(familyId));
+		map.put("rank", familyDetail.getOrderNo());
+//		map.put("rank", gameServiceV2.queryFamilyOrderByFId(familyId));
 		map.put("trophyNum", infoFamily.get("trophyNum"));
 		map.put("familyImg", super.getImgBasePath() + familyDetail.getImgUrl());
 		map.put("grade", infoFamily.get("gradeOrNum"));
