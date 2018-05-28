@@ -163,16 +163,6 @@ public class GameControllerV2 extends BaseController {
 		List<Map<String, String>> billList = new ArrayList<>();
 		if ("1".equals(billBoardType)) {
 			billList = gameServiceV2.billBoard(queryFamily);
-			for (Map<String, String> bill : billList) {
-				bean.setFamilyId(Long.valueOf(bill.get("id")));
-				ScoreFamilyDetailResultBean familyDetail = scoreService.queryFamilyDetail(bean);
-				bill.put("rank", familyDetail.getOrderNo());
-			}
-			Collections.sort(billList, new Comparator<Map<String, String>>() {
-				public int compare(Map<String, String> o1, Map<String, String> o2) {
-					return Double.valueOf(o1.get("rank")).compareTo(Double.valueOf(o2.get("rank")));
-				}
-			});
 		} else if ("2".equals(billBoardType) || "3".equals(billBoardType)) {
 			billList = chezuAssetService.billBoard(billBoardType, userId, sign);
 			if (ValidTools.isNotBlank(billList)) {
