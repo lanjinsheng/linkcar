@@ -368,7 +368,18 @@ public class ScoreService extends BaseService<ScoreService>
 			long userId = tempBean.getUserId();
 			UsersAccount account = usersAccountMapper.findAccountById(userId);
 			Date lastLoginTime = account.getLastLoginTime();
-			tempResultBean.setRecOnlineTime(DateTools.formatDateMD(lastLoginTime));
+			long s = (new Date().getTime() - lastLoginTime.getTime())/(60*1000);
+			String recOnlineTime;
+			if(s>=60*24*7) {
+				recOnlineTime = "7天前活跃";
+			}else if(s>=(60*24)&&s<60*24*7){
+				recOnlineTime =s/60/24+ "天前活跃";
+			}else if(s>=60&&s<60*24) {
+				recOnlineTime = s/60+"小时前活跃";
+			}else {
+				recOnlineTime = (s==0?"1":s)+"分钟前活跃";
+			}
+			tempResultBean.setRecOnlineTime(recOnlineTime);
 			tempResultBean.setTodayScore(userDayScoreMap.get(userId));
 			tempResultBean.setTodayPower(powerMap.get(userId));
 			UserFamilyRoleLogParamBean  roleLogParamBean = new UserFamilyRoleLogParamBean();
