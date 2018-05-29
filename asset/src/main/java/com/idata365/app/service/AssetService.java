@@ -131,7 +131,11 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("recordType", String.valueOf(list.get(i).getRecordType()));
 				rtMap.put("receiveTypeName", AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()));
 				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
-				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
+				if((new Date().getTime() - list.get(i).getCreateTime().getTime())>(1000*3600*24*365)) {
+					rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())).substring(0,10));
+				}else {
+					rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())).substring(5,10));
+				}
 				data.add(rtMap);
 			}
 		}
@@ -172,7 +176,7 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("receiveTypeName", AssetConstant.UserPowerEventMap.get(list.get(i).getEventType()));
 				rtMap.put("powerNum", String.valueOf(list.get(i).getPowerNum()));
 				rtMap.put("num", String.valueOf(list.get(i).getPowerNum()));//兼容小波页面而附加
-				rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())));
+				rtMap.put("time", String.valueOf(DateTools.formatDateD(list.get(i).getCreateTime())).substring(0,5));
 				data.add(rtMap);
 			}
 		}
@@ -436,7 +440,7 @@ public class AssetService extends BaseService<AssetService> {
 			Map<String, String> data = new HashMap<>();
 			data.put("userId", record.getUserId().toString());
 			data.put("powerNum", record.getPowerNum().toString());
-			data.put("time", record.getDaystamp());
+			data.put("time", record.getDaystamp().substring(0, 5));
 			result.add(data);
 		}
 		return result;
