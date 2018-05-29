@@ -26,14 +26,14 @@
        FROM  assetUsersAsset where powerNum>(select powerNum from assetUsersAsset where userId=#{userId})
      </select>
      
-     <select id="queryDiamondsUserOrderByUId" resultType="java.lang.Integer">
- 		SELECT (count(*)+1)
-       FROM  assetUsersAsset where diamondsNum>(select diamondsNum from assetUsersAsset where userId=#{userId})
+     <select id="queryDiamondsUserOrderByDiamondsNum" resultType="java.lang.Integer">
+ 		SELECT count(distinct(diamondsNum))+1
+       FROM  assetUsersAsset where diamondsNum>#{diamondsNum}
  	</select>
  	
- 	<select id="queryPowersUserOrderByUId" resultType="java.lang.Integer">
- 		SELECT (count(*)+1)
-       FROM  assetUsersAsset where powerNum>(select powerNum from assetUsersAsset where userId=#{userId})
+ 	<select id="queryPowersUserOrderByPowerNum" resultType="java.lang.Integer">
+ 		SELECT count(distinct(powerNum))+1
+       FROM  assetUsersAsset where powerNum>#{powerNum}
  	</select>
      
       <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
