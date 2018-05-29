@@ -1,5 +1,6 @@
 package com.idata365.app.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public interface AssetUsersAssetMapper {
 	
 	int getPowersCurOrder(@Param("userId")long userId);
 	
-	int queryDiamondsUserOrderByUId(@Param("userId")long userId);
+	int queryDiamondsUserOrderByDiamondsNum(@Param("diamondsNum")BigDecimal diamondsNum);
 	
-	int queryPowersUserOrderByUId(@Param("userId")long userId);
+	int queryPowersUserOrderByPowerNum(@Param("powerNum")long powerNum);
 }

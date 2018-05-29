@@ -575,10 +575,11 @@ public class AssetService extends BaseService<AssetService> {
 			Map<String, String> bill = new HashMap<>();
 			if ("2".equals(billBoardType)) {
 				// 按照今日动力排名
-				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryPowersUserOrderByUId(users.get(i).getUserId())));
+				
+				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryPowersUserOrderByPowerNum(users.get(i).getPowerNum())));
 			} else {
 				// 按照钻石数量排名
-				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryDiamondsUserOrderByUId(users.get(i).getUserId())));
+				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryDiamondsUserOrderByDiamondsNum(users.get(i).getDiamondsNum())));
 			}
 
 			bill.put("userId", users.get(i).getUserId().toString());
