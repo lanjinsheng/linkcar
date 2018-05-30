@@ -20,7 +20,4 @@
 	<update id="updateHadNewPower"  parameterType="java.util.HashMap">
     	update   userFamilyRelation  set hadNewPower=1 where userId=#{userId} and familyId=#{familyId}
     </update>
-
-
-
 </mapper>
