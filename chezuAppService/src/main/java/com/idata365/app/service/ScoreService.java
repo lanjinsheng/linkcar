@@ -27,9 +27,6 @@ import com.idata365.app.entity.CompetitorResultBean;
 import com.idata365.app.entity.FamilyCompetitorResultBean;
 import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyInfoBean;
-import com.idata365.app.entity.FamilyMemberAllResultBean;
-import com.idata365.app.entity.FamilyMemberBean;
-import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
@@ -50,13 +47,10 @@ import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreFamilyOrderResultBean;
 import com.idata365.app.entity.ScoreMemberInfoBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
-import com.idata365.app.entity.ScoreUserBean;
 import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
-import com.idata365.app.entity.ScoreUserResultBean;
-import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
 import com.idata365.app.entity.UserDetailResultBean;
 import com.idata365.app.entity.UserFamilyRoleLogBean;
@@ -78,9 +72,7 @@ import com.idata365.app.mapper.UserScoreDayStatMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.AdBeanUtils;
-import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
-import com.idata365.app.util.RandUtils;
 import com.idata365.app.util.SignUtils;
 
 @Service
@@ -304,7 +296,6 @@ public class ScoreService extends BaseService<ScoreService>
 		if (null != tempFamilyOrderNo)
 		{
 			tempBean.setOrderNo(tempFamilyOrderNo);
-//			tempBean.setOrderNo(familyMapper.queryFamilyOrderByFId(bean.getFamilyId()));
 		}
 		
 		List<String> recordsList = this.scoreMapper.queryFamilyRecords(bean);
