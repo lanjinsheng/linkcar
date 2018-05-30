@@ -277,7 +277,7 @@ public class GameControllerV2 extends BaseController {
 				List<DicFamilyType> types = dicService.getDicFamilyType();
 				for (DicFamilyType type : types) {
 					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "+" + type.getWin() + " 大量";
+						win = "+" + type.getWin();
 						if (type.getLoss() >= 0) {
 							loss = "+" + type.getLoss();
 						} else {
@@ -285,7 +285,8 @@ public class GameControllerV2 extends BaseController {
 						}
 					}
 				}
-				result.put("reward", win);
+				result.put("trophyNumReward", win); 
+				result.put("diamondsReward", " 大量");
 				result.put("punishment", loss);
 				try {
 					result.put("surPlusDays", dicService.getSurPlusDays());
@@ -322,7 +323,6 @@ public class GameControllerV2 extends BaseController {
 		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(familyId, daystam);
 		map.put("familyName", familyDetail.getFamilyName());
 		map.put("rank", familyDetail.getOrderNo());
-//		map.put("rank", gameServiceV2.queryFamilyOrderByFId(familyId));
 		map.put("trophyNum", infoFamily.get("trophyNum"));
 		map.put("familyImg", super.getImgBasePath() + familyDetail.getImgUrl());
 		map.put("grade", infoFamily.get("gradeOrNum"));
