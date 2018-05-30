@@ -727,8 +727,7 @@ public class AssetService extends BaseService<AssetService> {
 		return map;
 	}
 
-	public String queryHavaNewPower(long userId, Map<String, Object> familiesInfo,
-			Map<Object, Object> requestBodyParams) {
+	public String queryHavaNewPower(long userId, Map<String, Object> familiesInfo) {
 		String s = "0";
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
 		long fightFamilyId = 0;
