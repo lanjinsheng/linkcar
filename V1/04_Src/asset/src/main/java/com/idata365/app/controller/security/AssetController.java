@@ -233,5 +233,23 @@ public class AssetController extends BaseController {
 		chezuAppService.updateLoginBss(userId, sign);
 		return ResultUtils.rtSuccess(null);
 	}
-
+	@RequestMapping("/getYestodayHarvest")
+	public Map<String, Object> getYestodayHarvest(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		long userId = this.getUserId();
+		Object familyId=requestBodyParams.get("familyId");
+		
+        if(familyId==null) {
+        	//通过userId获取全family分配值
+        	return ResultUtils.rtFailParam(null);
+        } 
+        	//通过familyId获取family分配值
+       Map<String,Object> familyHarvest=assetService.getFamilyHarvestYestoday(userId,Long.valueOf(familyId.toString()));
+      //通过userId获取昨日动力值
+      Map<String,Object> personHarvest=assetService.getPersonHarvestYestoday(userId);
+      rtMap.put("familyHarvest", familyHarvest);
+      rtMap.put("personHarvest", personHarvest);
+		return ResultUtils.rtSuccess(rtMap);
+	}
 }

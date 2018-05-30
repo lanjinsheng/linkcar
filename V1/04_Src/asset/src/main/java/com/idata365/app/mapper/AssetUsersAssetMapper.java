@@ -36,7 +36,8 @@ public interface AssetUsersAssetMapper {
 	int queryDiamondsUserOrderByDiamondsNum(@Param("diamondsNum")BigDecimal diamondsNum);
 	
 	int queryPowersUserOrderByPowerNum(@Param("powerNum")long powerNum);
-	
+	AssetUsersAsset getYestodayPower(Map<String,Object> map);
+	long getAllYestodayAppPowers();
 	long getAllAppPowers();
 	
 	BigDecimal getAllAppDiamonds();

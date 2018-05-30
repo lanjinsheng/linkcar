@@ -1,6 +1,7 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,7 @@ public interface AssetUsersPowerLogsMapper {
 	List<Long> getPowersByEffectId(@Param("ballId") long ballId);
 
 	List<AssetUsersPowerLogs> getRecordByEffectId(@Param("effectId") long effectId);
+	
+	
+	
 }

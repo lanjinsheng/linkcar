@@ -30,6 +30,8 @@ import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
+import com.idata365.app.mapper.FamilyGameAssetMapper;
+import com.idata365.app.mapper.FamilySeasonAssetMapper;
 import com.idata365.app.mapper.StealPowerMapper;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ValidTools;
@@ -57,7 +59,10 @@ public class AssetService extends BaseService<AssetService> {
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
 	@Autowired
 	StealPowerMapper stealPowerMapper;
-
+	@Autowired
+	FamilyGameAssetMapper  familyGameAssetMapper;
+	@Autowired
+	FamilySeasonAssetMapper familySeasonAssetMapper;
 	public AssetService() {
 
 	}
@@ -468,7 +473,64 @@ public class AssetService extends BaseService<AssetService> {
 			return "0";
 		return String.valueOf(apl.getPowerNum());
 	}
-
+	/**
+	 * 
+	    * @Title: getPersonHarvestYestoday
+	    * @Description: TODO(个人昨日资产获取情况)
+	    * @param @param userId
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@Transactional
+	public Map<String,Object> getPersonHarvestYestoday(long userId) {
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		
+		Map<String,Object> parmMap=new HashMap<String,Object>();
+		parmMap.put("userId", userId);
+		parmMap.put("daystamp", DateTools.getCurDateYYYY_MM_DD());
+		String powerTable="userPower"+DateTools.getCurDateAddDay(-1).replaceAll("-", "");
+		parmMap.put("powerTable",powerTable);
+		AssetUsersAsset yestodayPower=assetUsersAssetMapper.getYestodayPower(parmMap);
+		if(yestodayPower==null) {
+			rtMap.put("powers", 0);
+		}else {
+			rtMap.put("powers", yestodayPower.getPowerNum());
+		}
+		
+		AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPersonPowerDiamonds(userId);
+		if(diamonds==null) {
+			rtMap.put("diamonds", 0);
+		}else {
+			rtMap.put("diamonds", diamonds.getDiamondsNum());
+		}
+		return rtMap;
+	}
+	@Transactional
+	public Map<String,Object> getFamilyHarvestYestoday(long userId,long familyId) {
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+			rtMap.put("familyId",familyId);
+			long id =familyGameAssetMapper.getFamilySeasonID(familyId, DateTools.getCurDateAddDay(-1));
+			if(id<1) {
+				rtMap.put("pkDiamonds", 0);
+			}else {
+				AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId, id);
+				rtMap.put("pkDiamonds", diamonds.getDiamondsNum());
+				
+			}
+			
+			long id2 =familySeasonAssetMapper.getFamilySeasonID(familyId, DateTools.getCurDateAddDay(-1));
+			if(id2<1) {
+				rtMap.put("seasonDiamonds", 0);
+			}else {
+				AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId, id);
+				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum());
+			}
+			
+		return rtMap;
+	}
+	
 	/**
 	 * 
 	 * @Title: initFamily
