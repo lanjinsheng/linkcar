@@ -41,6 +41,7 @@ public interface ChezuAppService {
     		@RequestParam (value = "orderNum") String orderNum,
     		@RequestParam (value = "toUserId") Long toUserId,
     		@RequestParam (value = "diamondNum") String diamondNum,
+    		@RequestParam (value = "personDiamondNum") String personDiamondNum,
     		@RequestParam (value = "sign") String sign);
     
     @RequestMapping("/app/msg/sendFamilyDiamondsSeasonMsg")
@@ -49,6 +50,7 @@ public interface ChezuAppService {
     		@RequestParam (value = "familyType") Integer familyType,
     		@RequestParam (value = "toUserId") Long toUserId,
     		@RequestParam (value = "diamondNum") String diamondNum,
+    		@RequestParam (value = "personDiamondNum") String personDiamondNum,
     		@RequestParam (value = "sign") String sign);
 	
 	@RequestMapping(value = "/app/updateLoginBss",method = RequestMethod.POST)

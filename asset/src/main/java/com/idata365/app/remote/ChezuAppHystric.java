@@ -16,7 +16,7 @@ public class ChezuAppHystric implements ChezuAppService {
 
 	@Override
 	public boolean sendFamilyDiamondsMsg(String season, String familyId, String orderNum, Long toUserId,
-			String diamondNum, String sign) {
+			String diamondNum, String personDiamondNum,String sign) {
 		LOG.error(" sendFamilyDiamondsMsg 挂了  service-app-chezu");
 		return false;
 	}
@@ -24,7 +24,7 @@ public class ChezuAppHystric implements ChezuAppService {
 
 	@Override
 	public boolean sendFamilyDiamondsSeasonMsg(String season, String familyId, Integer familyType, Long toUserId,
-			String diamondNum, String sign) {
+			String diamondNum, String personDiamondNum,String sign) {
 		// TODO Auto-generated method stub
 		LOG.error(" sendFamilyDiamondsSeasonMsg 挂了  service-app-chezu");
 		return false;
