@@ -245,7 +245,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 				    userScoreDayStat.setFamilyId(familyId);
 					userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
 					//更新userFamilyRelation
-					familyInfoMapper.updateHadNewPower(m);
+//					familyInfoMapper.updateHadNewPower(m);
 				}
 			}else {
 				userScoreDayStat.setFamilyId(0L);
