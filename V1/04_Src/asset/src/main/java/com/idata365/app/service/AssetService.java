@@ -140,7 +140,7 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("receiveType", String.valueOf(list.get(i).getEventType()));
 				rtMap.put("recordType", String.valueOf(list.get(i).getRecordType()));
 				rtMap.put("receiveTypeName", AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()));
-				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
+				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum().setScale(2, RoundingMode.HALF_UP)));
 				String time = String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime()));
 				if ((new Date().getTime() - list.get(i).getCreateTime().getTime()) > (1000 * 3600 * 24 * 365)) {
 					rtMap.put("time", time.substring(0, 10));
