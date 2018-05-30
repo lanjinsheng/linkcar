@@ -35,22 +35,25 @@ public interface ChezuAssetService {
 	@RequestMapping(value = "/asset/getUserPowerByEffectId", method = RequestMethod.POST)
 	String getUserPowerByEffectId(@RequestParam(value = "effectId") long effectId,
 			@RequestParam(value = "sign") String sign);
+
 	/**
 	 * 
-	    * @Title: getUsersAssetMap
-	    * @Description: TODO(通过userIds 返回动力值)
-	    * @param @param userIds
-	    * @param @param sign
-	    * @param @return    参数
-	    * @return Map<Long,String>    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: getUsersAssetMap
+	 * @Description: TODO(通过userIds 返回动力值)
+	 * @param @param
+	 *            userIds
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return Map<Long,String> 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	@RequestMapping(value = "/asset/getUsersAssetMap", method = RequestMethod.POST)
 	Map<Long, String> getUsersAssetMap(@RequestParam(value = "userIds") String userIds,
-			@RequestParam(value = "sign") String sign) ;
+			@RequestParam(value = "sign") String sign);
 
-	
 	/**
 	 * 
 	 * @Title: initUserCreate
@@ -101,9 +104,9 @@ public interface ChezuAssetService {
 	 *             Lixing
 	 */
 	@RequestMapping(value = "/asset/billBoard", method = RequestMethod.POST)
-	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "sign") String sign);
-	
+	List<Map<String, String>> billBoard(@RequestParam(value = "billBoardType") String billBoardType,
+			@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign);
+
 	/**
 	 * 
 	 * @Title: billBoard
@@ -119,6 +122,10 @@ public interface ChezuAssetService {
 	 *             Lixing
 	 */
 	@RequestMapping(value = "/asset/getFamilySeasonID", method = RequestMethod.POST)
-	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "myFamilyId") long myFamilyId,
-			@RequestParam(value = "sign") String sign);
+	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,
+			@RequestParam(value = "myFamilyId") long myFamilyId, @RequestParam(value = "sign") String sign);
+
+	@RequestMapping(value = "/asset/queryHavaNewPower", method = RequestMethod.POST)
+	String queryHavaNewPower(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "familyId") long familyId, @RequestParam(value = "sign") String sign);
 }

@@ -53,6 +53,12 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("getUsersAssetMap 挂了");
 		return null;
 	}
+
+	@Override
+	public String queryHavaNewPower(long userId, long familyId, String sign) {
+		LOG.error("queryHavaNewPower 挂了");
+		return null;
+	}
 	 
 	
  
