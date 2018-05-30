@@ -72,9 +72,9 @@
         update assetUsersAsset set powerNum=0
      </update>
      <select id="getYestodayPower" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-		SELECT * FROM $powerTable where userId=#{userId}
+		SELECT * FROM ${powerTable} where userId=#{userId}
 	 </select>
 	 <select id="getAllYestodayAppPowers" resultType="java.lang.Long">
- 		select sum(powerNum) from powerTable
+ 		select sum(powerNum) from ${powerTable}
  	 </select>
 </mapper>
