@@ -11,4 +11,6 @@ public interface StealPowerMapper {
 	int insertSteal(StealPower stealPower);
 
 	List<StealPower> getStealPowerList(@Param("familyId") long familyId);
+	
+	List<StealPower> getStealPowerListByUserId(@Param("userId") long userId);
 }

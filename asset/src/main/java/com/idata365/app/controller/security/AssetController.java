@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.service.AssetService;
@@ -31,7 +30,34 @@ public class AssetController extends BaseController {
 	@Autowired
 	ChezuAppService chezuAppService;
      
-	
+	/**
+	 * 
+	 * @Title: queryHavaNewPower
+	 * @Description: TODO(查询现在是否有新能量可领)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
+	@RequestMapping("/queryHavaNewPower")
+	public Map<String, Object> queryHavaNewPower(
+			@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		LOG.info("userId================="+userId);
+		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
+		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
+		String havaNewPower = assetService.queryHavaNewPower(userId, familiesInfo, requestBodyParams);
+		Map<String, String> result = new HashMap<>();
+		result.put("havaNewPower", havaNewPower);
+		return ResultUtils.rtSuccess(result);
+	}
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -50,7 +76,7 @@ public class AssetController extends BaseController {
 		Map<String, String> data = assetService.getTotalNums(userId);
 		return ResultUtils.rtSuccess(data);
 	}
-
+	
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -120,7 +146,6 @@ public class AssetController extends BaseController {
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
-		chezuAppService.updateHadNewPower(userId,familyId,sign);
 		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
 	}
 

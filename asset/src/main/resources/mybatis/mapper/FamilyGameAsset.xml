@@ -22,6 +22,12 @@
        SELECT id
        FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}
      </select> 
+     
+     <select id="getFamilyIdByEffectId" resultType="java.lang.Long">
+       SELECT familyId
+       FROM  familyGameAsset where id=#{effectId}
+     </select>
+     
      <select id="getFamilyGameAssetByDay" resultMap="BaseFamilyGameAssetMap">
        SELECT *
        FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}

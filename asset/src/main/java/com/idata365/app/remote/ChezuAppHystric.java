@@ -38,10 +38,4 @@ public class ChezuAppHystric implements ChezuAppService {
 		return false;
 	}
 
-	@Override
-	public void updateHadNewPower(long userId, long familyId, String sign) {
-		// TODO Auto-generated method stub
-		LOG.error(" updateHadNewPower 挂了  service-app-chezu");
-	}
-
 }

@@ -20,6 +20,6 @@ public interface FamilyGameAssetMapper {
 	long getFamilySeasonID(@Param("familyId") long familyId, @Param("daystamp") String daystamp);
 	FamilyGameAsset getFamilyGameAssetByDay(@Param("familyId") long familyId, @Param("daystamp") String daystamp);
 
-
+	long getFamilyIdByEffectId(@Param("effectId") long effectId);
 	// int updateTempPowerReward(@Param("uuid") String uuid);
 }

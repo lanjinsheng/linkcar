@@ -62,9 +62,10 @@ public class AssetService extends BaseService<AssetService> {
 	@Autowired
 	StealPowerMapper stealPowerMapper;
 	@Autowired
-	FamilyGameAssetMapper  familyGameAssetMapper;
+	FamilyGameAssetMapper familyGameAssetMapper;
 	@Autowired
 	FamilySeasonAssetMapper familySeasonAssetMapper;
+
 	public AssetService() {
 
 	}
@@ -104,6 +105,8 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
 		map.put("totalDiamondsNum", usersAsset.getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
 		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
+		map.put("appdia", assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
+		map.put("apppow", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
 		return map;
 	}
 
@@ -138,10 +141,19 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("recordType", String.valueOf(list.get(i).getRecordType()));
 				rtMap.put("receiveTypeName", AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()));
 				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum()));
-				if((new Date().getTime() - list.get(i).getCreateTime().getTime())>(1000*3600*24*365)) {
-					rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())).substring(0,10));
-				}else {
-					rtMap.put("time", String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime())).substring(5,10));
+				String time = String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime()));
+				if ((new Date().getTime() - list.get(i).getCreateTime().getTime()) > (1000 * 3600 * 24 * 365)) {
+					rtMap.put("time", time.substring(0, 10));
+				} else {
+					rtMap.put("time", time.substring(5, 10));
+				}
+				rtMap.put("isCanQuery", "0");
+				if ("2".equals(String.valueOf(list.get(i).getEventType()))) {
+					String fightingTime = DateTools.getAddMinuteDateTime(time, -1 * 60 * 24).substring(0, 10);
+					rtMap.put("isCanQuery", "1");
+					rtMap.put("fightingTime", fightingTime);
+					long familyId = familyGameAssetMapper.getFamilyIdByEffectId(list.get(i).getEffectId());
+					rtMap.put("familyId", String.valueOf(familyId));
 				}
 				data.add(rtMap);
 			}
@@ -182,8 +194,8 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("recordType", String.valueOf(list.get(i).getRecordType()));
 				rtMap.put("receiveTypeName", AssetConstant.UserPowerEventMap.get(list.get(i).getEventType()));
 				rtMap.put("powerNum", String.valueOf(list.get(i).getPowerNum()));
-				rtMap.put("num", String.valueOf(list.get(i).getPowerNum()));//兼容小波页面而附加
-				rtMap.put("time", String.valueOf(DateTools.formatDateD(list.get(i).getCreateTime())).substring(0,5));
+				rtMap.put("num", String.valueOf(list.get(i).getPowerNum()));// 兼容小波页面而附加
+				rtMap.put("time", String.valueOf(DateTools.formatDateD(list.get(i).getCreateTime())).substring(0, 5));
 				data.add(rtMap);
 			}
 		}
@@ -285,6 +297,7 @@ public class AssetService extends BaseService<AssetService> {
 
 	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familiesInfo,
 			Map<Object, Object> requestBodyParams) {
+		Map<String, Object> data = new HashMap<>();
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
 		long familyUserCount = Long.valueOf(familiesInfo.get("familyUserCount").toString());
 		long fightFamilyId = 0;
@@ -292,10 +305,15 @@ public class AssetService extends BaseService<AssetService> {
 		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
 			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
 			fightFamilyUserCount = Long.valueOf(familiesInfo.get("fightFamilyUserCount").toString());
+			data.put("fightFamilyId", String.valueOf(fightFamilyId));
 		}
 
 		long todayContribution = 0L;
 		long todayReceive = 0L;
+		long myFamilyContribution = 0L;
+		long fightFamilyContribution = 0L;
+		long myFamilyRealPower = 0L;
+		long fightFamilyRealPower = 0L;
 		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowersByOne(userId);
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getEventType() == 3) {
@@ -350,16 +368,25 @@ public class AssetService extends BaseService<AssetService> {
 			powerBall.put("createFamilyId", createFamilyId);
 			if (createFamilyId.equals(String.valueOf(familyId))) {
 				powerBall.put("isMyFamily", "1");
+				myFamilyContribution += assetFamiliesPowerLogs.getPowerNum();
+				myFamilyRealPower += assetFamiliesPowerLogs.getRealNum();
 			} else {
 				powerBall.put("isMyFamily", "0");
+				fightFamilyContribution += assetFamiliesPowerLogs.getPowerNum();
+				fightFamilyRealPower += assetFamiliesPowerLogs.getRealNum();
 			}
 			powerBall.put("createTime",
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
-		Map<String, Object> data = new HashMap<>();
 		data.put("todayContribution", String.valueOf(todayContribution));
 		data.put("todayReceive", String.valueOf(todayReceive));
+		data.put("myFamilyId", String.valueOf(familyId));
+		data.put("todayReceive", String.valueOf(todayReceive));
+		data.put("myFamilyContribution", String.valueOf(myFamilyContribution));
+		data.put("fightFamilyContribution", String.valueOf(fightFamilyContribution));
+		data.put("myFamilyReceive", String.valueOf(fightFamilyContribution - fightFamilyRealPower));
+		data.put("fightFamilyReceive", String.valueOf(myFamilyContribution - myFamilyRealPower));
 		data.put("powerBalls", powerBalls);
 		return data;
 	}
@@ -475,80 +502,90 @@ public class AssetService extends BaseService<AssetService> {
 			return "0";
 		return String.valueOf(apl.getPowerNum());
 	}
+
 	/**
 	 * 
-	    * @Title: getPersonHarvestYestoday
-	    * @Description: TODO(个人昨日资产获取情况)
-	    * @param @param userId
-	    * @param @return    参数
-	    * @return Map<String,Object>    返回类型
-	    * @throws
-	    * @author LanYeYe
+	 * @Title: getPersonHarvestYestoday
+	 * @Description: TODO(个人昨日资产获取情况)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             LanYeYe
 	 */
 	@Transactional
-	public Map<String,Object> getPersonHarvestYestoday(long userId) {
-		Map<String,Object> rtMap=new HashMap<String,Object>();
-		
-		Map<String,Object> parmMap=new HashMap<String,Object>();
+	public Map<String, Object> getPersonHarvestYestoday(long userId) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+
+		Map<String, Object> parmMap = new HashMap<String, Object>();
 		parmMap.put("userId", userId);
 		parmMap.put("daystamp", DateTools.getCurDateYYYY_MM_DD());
-		String powerTable="userPower"+DateTools.getCurDateAddDay(-1).replaceAll("-", "");
-		parmMap.put("powerTable",powerTable);
-		AssetUsersAsset yestodayPower=assetUsersAssetMapper.getYestodayPower(parmMap);
-		if(yestodayPower==null) {
+		String powerTable = "userPower" + DateTools.getCurDateAddDay(-1).replaceAll("-", "");
+		parmMap.put("powerTable", powerTable);
+		AssetUsersAsset yestodayPower = assetUsersAssetMapper.getYestodayPower(parmMap);
+		if (yestodayPower == null) {
 			rtMap.put("powers", 0);
-		}else {
+		} else {
 			rtMap.put("powers", yestodayPower.getPowerNum());
 		}
-		
-		AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPersonPowerDiamonds(userId);
-		if(diamonds==null) {
+
+		AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodayPersonPowerDiamonds(userId);
+		if (diamonds == null) {
 			rtMap.put("diamonds", 0);
-		}else {
+		} else {
 			rtMap.put("diamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
 		}
 		return rtMap;
 	}
+
 	@Transactional
-	public Map<String,Object> getFamilyHarvestYestoday(long userId,long familyId) {
-		Map<String,Object> rtMap=new HashMap<String,Object>();
-		rtMap.put("familyId",familyId);
-		FamilyGameAsset gameAsset =familyGameAssetMapper.getFamilyGameAssetByDay(familyId, DateTools.getCurDateAddDay(-1));
-		if(gameAsset==null) {
+	public Map<String, Object> getFamilyHarvestYestoday(long userId, long familyId) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		rtMap.put("familyId", familyId);
+		FamilyGameAsset gameAsset = familyGameAssetMapper.getFamilyGameAssetByDay(familyId,
+				DateTools.getCurDateAddDay(-1));
+		if (gameAsset == null) {
 			rtMap.put("pkDiamonds", 0);
-		}else {
-			AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId, gameAsset.getId());
-			if(diamonds!=null) {
+		} else {
+			AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId,
+					gameAsset.getId());
+			if (diamonds != null) {
 				rtMap.put("pkDiamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
-			}else {
+			} else {
 				rtMap.put("pkDiamonds", 0);
 			}
-			
+
 		}
-			
-		FamilySeasonAsset familySeasonAsset =familySeasonAssetMapper.getFamilySeasonAssetByDay(familyId, DateTools.getCurDateAddDay(-1));
-		if(familySeasonAsset==null) {
+
+		FamilySeasonAsset familySeasonAsset = familySeasonAssetMapper.getFamilySeasonAssetByDay(familyId,
+				DateTools.getCurDateAddDay(-1));
+		if (familySeasonAsset == null) {
 			rtMap.put("seasonDiamonds", 0);
-		}else {
-			AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId, familySeasonAsset.getId());
-			if(diamonds!=null) {
+		} else {
+			AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId,
+					familySeasonAsset.getId());
+			if (diamonds != null) {
 				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
-			}else {
+			} else {
 				rtMap.put("seasonDiamonds", 0);
 			}
 		}
 		return rtMap;
 	}
+
 	@Transactional
-	public Map<String,Object> getGlobalYestoday() {
-		Map<String,Object> rtMap=new HashMap<String,Object>();
-		String powerTable="userPower"+DateTools.getCurDateAddDay(-1).replaceAll("-", "");
-		long power=assetUsersAssetMapper.getAllYestodayAppPowers(powerTable);
+	public Map<String, Object> getGlobalYestoday() {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		String powerTable = "userPower" + DateTools.getCurDateAddDay(-1).replaceAll("-", "");
+		long power = assetUsersAssetMapper.getAllYestodayAppPowers(powerTable);
 		rtMap.put("globalPower", power);
-		BigDecimal diamonds=assetUsersAssetMapper.getAllAppDiamonds();
-		rtMap.put("globalDiamonds",diamonds.setScale(0, RoundingMode.HALF_UP).intValue());
+		BigDecimal diamonds = assetUsersAssetMapper.getAllAppDiamonds();
+		rtMap.put("globalDiamonds", diamonds.setScale(0, RoundingMode.HALF_UP).intValue());
 		return rtMap;
 	}
+
 	/**
 	 * 
 	 * @Title: initFamily
@@ -659,11 +696,13 @@ public class AssetService extends BaseService<AssetService> {
 			Map<String, String> bill = new HashMap<>();
 			if ("2".equals(billBoardType)) {
 				// 按照今日动力排名
-				
-				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryPowersUserOrderByPowerNum(users.get(i).getPowerNum())));
+
+				bill.put("rank", String
+						.valueOf(assetUsersAssetMapper.queryPowersUserOrderByPowerNum(users.get(i).getPowerNum())));
 			} else {
 				// 按照钻石数量排名
-				bill.put("rank", String.valueOf(assetUsersAssetMapper.queryDiamondsUserOrderByDiamondsNum(users.get(i).getDiamondsNum())));
+				bill.put("rank", String.valueOf(
+						assetUsersAssetMapper.queryDiamondsUserOrderByDiamondsNum(users.get(i).getDiamondsNum())));
 			}
 
 			bill.put("userId", users.get(i).getUserId().toString());
@@ -688,4 +727,29 @@ public class AssetService extends BaseService<AssetService> {
 		return map;
 	}
 
+	public String queryHavaNewPower(long userId, Map<String, Object> familiesInfo,
+			Map<Object, Object> requestBodyParams) {
+		String s = "0";
+		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
+		long fightFamilyId = 0;
+		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
+			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
+		}
+		// 双方家族产生的所有动力球
+		List<AssetFamiliesPowerLogs> allPowerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
+				fightFamilyId);
+		// 当前个人已经领取过的动力球
+		List<StealPower> listOfCurUser = stealPowerMapper.getStealPowerListByUserId(userId);
+		List<Long> flagList = new ArrayList<>();
+		for (StealPower stealPower : listOfCurUser) {
+			flagList.add(stealPower.getBallId());
+		}
+		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : allPowerList) {
+			if(!flagList.contains(assetFamiliesPowerLogs.getId())) {
+				s = "1";
+				break;
+			}
+		}
+		return s;
+	}
 }
