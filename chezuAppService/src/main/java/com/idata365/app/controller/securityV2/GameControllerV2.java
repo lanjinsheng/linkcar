@@ -421,20 +421,21 @@ public class GameControllerV2 extends BaseController {
 			bean.setFamilyId(arr[i]);
 
 			List<Map<String, Object>> user = scoreService.getMemberInfoByTime(arr[i], daystamp);
-			List<Map<String, String>> memberScoreS = new ArrayList<>();
+			List<Map<String, Object>> memberScoreS = new ArrayList<>();
 			for (int j = 0; j < user.size(); j++) {
-				Map<String, String> memberScore = new HashMap<>();
+				Map<String, Object> memberScore = new HashMap<>();
 				String memberId = user.get(j).get("userId").toString();
 				String score = user.get(j).get("avgScore").toString();
 				UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
 				memberScore.put("name", account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
 						: account.getNickName());
 				memberScore.put("score", score);
+				memberScore.put("userId", user.get(j).get("userId"));
 				memberScoreS.add(memberScore);
 			}
-			Collections.sort(memberScoreS, new Comparator<Map<String, String>>() {
-				public int compare(Map<String, String> o1, Map<String, String> o2) {
-					return Double.valueOf(o2.get("score")).compareTo(Double.valueOf(o1.get("score")));
+			Collections.sort(memberScoreS, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+					return Double.valueOf(o2.get("score").toString()).compareTo(Double.valueOf(o1.get("score").toString()));
 				}
 			});
 			familyInfo.put("memberScoreS", memberScoreS);
