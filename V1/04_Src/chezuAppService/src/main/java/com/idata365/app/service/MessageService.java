@@ -50,9 +50,9 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String KickMemberMessage="族长【%s】将您移出了【%s】家族，此处不留爷自有留爷处，咱们江湖再见！";
 	public static final String ChallengeMessage="下战书！您的家族被【%s】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
 	//获奖
-	public static final String RewardMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
+	public static final String RewardMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族共获得【%s】钻石，按照贡献比例分配给您【%s】钻石，已发放至您的账户，点此查看昨日对战详情。";
 	//获奖
-	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族奖励【%s钻石】，按照贡献度比例已经自动发放至您的账号，快去看看吧！";
+	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族共获得【%s】钻石，分配给您【%s】钻石，已发放至您的账户.";
 	
 	
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
@@ -82,8 +82,9 @@ public class MessageService extends BaseService<MessageService>{
 	//道具赠送通知
 	public static final String PropsSend="com.idata365.haochezu://propsReceive.push?msgId=%s";
 	//家族钻石分配记录
-	public static final String FamilyDiamondsDistr="com.idata365.haochezu://DEPNotes.push?enterType=0&familyId=%s";
+//	public static final String FamilyDiamondsDistr="com.idata365.haochezu://DEPNotes.push?enterType=0&familyId=%s";
 	
+	public static final String FamilyFightHistoryDetailUrl="com.idata365.haochezu://FightHistoryDetail.push?familyId=%s&fightTime=%s";
 	public static final String RegMessageUrl=H5Host+"share/home.html";
 	public static final String KaijiangMessageUrl=H5Host+"share/lottery.html";
 	
@@ -372,12 +373,12 @@ public class MessageService extends BaseService<MessageService>{
 		return message;
 	}
 	
-	public Message buildFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String orderNum,String familyName) {
+	public Message buildFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String personDiamondNum,String orderNum,String familyName) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.FamilyType_Reward);
-		message.setContent(String.format(RewardMessage,familyName,season,diamonds));
+		message.setContent(String.format(RewardMessage,familyName,season,diamonds,personDiamondNum));
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
@@ -386,15 +387,15 @@ public class MessageService extends BaseService<MessageService>{
 		message.setTitle("奖励通知");
 		message.setToUserId(toUserId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
-		message.setToUrl(String.format(FamilyDiamondsDistr, familyId));
+		message.setToUrl(String.format(FamilyFightHistoryDetailUrl, familyId,DateTools.getCurDateAddDay(-1)));
 		return message;
 	}
-	public Message buildSeasonFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, Integer familyType,String familyName) {
+	public Message buildSeasonFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String personDiamondNum,Integer familyType,String familyName) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.FamilyType_SeasonReward);
-		message.setContent(String.format(SeasonRewardMessage,familyName,season,diamonds));
+		message.setContent(String.format(SeasonRewardMessage,familyName,season,diamonds,personDiamondNum));
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
@@ -402,8 +403,8 @@ public class MessageService extends BaseService<MessageService>{
 		message.setPicture("");
 		message.setTitle("奖励通知");
 		message.setToUserId(toUserId);
-		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
-		message.setToUrl(String.format(FamilyDiamondsDistr, familyId));
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
 		return message;
 	}
 	
