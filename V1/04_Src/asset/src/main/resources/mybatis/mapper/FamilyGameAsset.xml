@@ -22,6 +22,11 @@
        SELECT id
        FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}
      </select> 
+     <select id="getFamilyGameAssetByDay" resultMap="BaseFamilyGameAssetMap">
+       SELECT *
+       FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}
+     </select> 
+     
      <select id="getFamilyGameAssetsByDayFId" resultMap="BaseFamilyGameAssetMap" parameterType="com.idata365.app.entity.FamilyGameAsset">
        SELECT *
        FROM  familyGameAsset where familyId=#{familyId} and 

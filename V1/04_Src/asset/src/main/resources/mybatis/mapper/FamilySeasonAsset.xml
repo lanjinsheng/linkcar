@@ -11,8 +11,8 @@
         VALUES
             (#{familyId},#{familyType},#{startDay},#{endDay},#{orderNo},#{seasonName},#{trophy})
      </insert>
-     <select id="getFamilySeasonID" resultType="java.lang.Long">
-       SELECT id
-       FROM  familyGameAsset where familyId=#{familyId} and seasonName=#{daystamp}
+     <select id="getFamilySeasonAssetByDay" resultMap="BaseFamilySeasonAssetMap">
+       SELECT *
+       FROM  familySeasonAsset where familyId=#{familyId} and seasonName=#{daystamp}
      </select> 
 </mapper>
