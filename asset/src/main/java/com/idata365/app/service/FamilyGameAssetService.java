@@ -92,7 +92,7 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 		int i = 0;
 		for (AssetUsersDiamondsLogs d : diamondsLogs) {
 			Map<String, Object> m = new HashMap<String, Object>();
-			m.put("userId", d.getUserId());
+			m.put("userId", d.getUserId().toString());
 			m.put("rewardNum", String.valueOf(d.getDiamondsNum().doubleValue()));
 			m.put("nickName", nickNames[i]);
 			m.put("headImg", userHeadUrls[i]);
