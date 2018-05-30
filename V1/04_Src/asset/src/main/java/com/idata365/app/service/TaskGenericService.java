@@ -221,7 +221,7 @@ public class TaskGenericService {
 				assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
 				//远程消息调用,发送的diamonds是家族获取的
 				if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-				chezuAppService.sendFamilyDiamondsSeasonMsg(daystamp, String.valueOf(familyId), familyType, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), sign);
+				chezuAppService.sendFamilyDiamondsSeasonMsg(daystamp, String.valueOf(familyId), familyType, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), String.valueOf(diamondsNum.doubleValue()), sign);
 				}
 				
 			}
@@ -390,7 +390,7 @@ public class TaskGenericService {
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
 			//远程消息调用,发送的diamonds是家族获取的
 			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), sign);
+			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), String.valueOf(d.doubleValue()), sign);
 			}
 		}
 		//family钻石减少
