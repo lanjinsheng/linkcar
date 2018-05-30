@@ -41,4 +41,18 @@
 		SELECT *
 		FROM assetUsersDiamondsLogs where effectId=#{effectId} and eventType=2 order by diamondsNum desc
 	</select>
+	<select id="getYestodayPkDiamonds" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersDiamondsLogs where userId=#{userId} and eventType=2 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')  limit 1
+	</select>
+		<select id="getYestodaySeasonDiamonds" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersDiamondsLogs where userId=#{userId} and eventType=4 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')  limit 1
+	</select>
+	<select id="getYestodayPersonPowerDiamonds" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetUsersDiamondsLogs where userId=#{userId} and eventType=1 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')  limit 1
+	</select>
+	
 </mapper>
