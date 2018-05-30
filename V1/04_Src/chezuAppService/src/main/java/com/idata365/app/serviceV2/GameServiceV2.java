@@ -253,13 +253,4 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		return dayStr;
 	}
 
-	public String queryHaveNewPower(long userId, String familyId) {
-		return String.valueOf(gameMapper.queryHaveNewPower(userId, Long.valueOf(familyId)));
-	}
-
-	public void updateHavaNewPower(long userId, long familyId) {
-		// TODO Auto-generated method stub
-		gameMapper.updateHavaNewPower(userId, familyId);
-	}
-
 }

@@ -116,11 +116,4 @@
 		select * from review where userId=#{userId} order by createTime desc limit 1
 	</select>
 	
-	<select id="queryHaveNewPower" resultType="java.lang.Integer">
-		select hadNewPower from userFamilyRelation where familyId=#{familyId} and userId=#{userId}
-	</select>
-	
-	<update id="updateHavaNewPower" >
-		update userFamilyRelation set hadNewPower=0 where familyId=#{familyId} and userId=#{userId}
-	</update>
 </mapper>

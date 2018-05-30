@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.IndexSlipPage;
@@ -114,8 +113,6 @@ public class GameControllerV2 extends BaseController {
 			BigDecimal b = new BigDecimal(sc);
 			map.put("familyScore", b.setScale(0, BigDecimal.ROUND_HALF_UP).toString());
 			
-			String haveNewPower = gameServiceV2.queryHaveNewPower(this.getUserId(),familyId);
-			map.put("haveNewPower", haveNewPower);
 			String fightingTime = null;
 			CompetitorFamilyInfoResultBean resultBean = this.gameServiceV2
 					.queryCompetitorFamilyInfo(Long.valueOf(familyId), fightingTime);
@@ -204,6 +201,7 @@ public class GameControllerV2 extends BaseController {
 		Map<String, Object> familyInfoX = new HashMap<>();
 		if (null == resultBean) {
 			familyInfoX.put("familyName", "好车族教官");
+			familyInfoX.put("isPC", "1");
 			Double score = familyScoreService.familyScore(Long.valueOf(myFamilyId), getCurrentDayStr())*0.8;
 			familyInfoX.put("familyScore",  BigDecimal.valueOf(score).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
 			familyInfoX.put("trophyNum", "0");
@@ -235,6 +233,8 @@ public class GameControllerV2 extends BaseController {
 			Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(familyId, daystamp);
 			Map<String, Object> familyInfo = new HashMap<>();
 			familyInfo.put("familyName", infoFamily.get("name"));
+			familyInfo.put("isPC", "0");
+			familyInfo.put("familyId", String.valueOf(familyId));
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
 			BigDecimal b = new BigDecimal(sc);
 			familyInfo.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
@@ -277,11 +277,11 @@ public class GameControllerV2 extends BaseController {
 				List<DicFamilyType> types = dicService.getDicFamilyType();
 				for (DicFamilyType type : types) {
 					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "奖杯+" + type.getWin() + " 大量钻石！";
+						win = "+" + type.getWin() + " 大量";
 						if (type.getLoss() >= 0) {
-							loss = "奖杯+" + type.getLoss();
+							loss = "+" + type.getLoss();
 						} else {
-							loss = "奖杯" + type.getLoss();
+							loss = "" + type.getLoss();
 						}
 					}
 				}
@@ -449,11 +449,11 @@ public class GameControllerV2 extends BaseController {
 				List<DicFamilyType> types = dicService.getDicFamilyType();
 				for (DicFamilyType type : types) {
 					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "奖杯+" + type.getWin() + "";
+						win = "+" + type.getWin() + "";
 						if (type.getLoss() >= 0) {
-							loss = "奖杯+" + type.getLoss();
+							loss = "+" + type.getLoss();
 						} else {
-							loss = "奖杯" + type.getLoss();
+							loss = "" + type.getLoss();
 						}
 					}
 				}
