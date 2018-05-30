@@ -112,7 +112,9 @@ public class GameControllerV2 extends BaseController {
 			double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
 			BigDecimal b = new BigDecimal(sc);
 			map.put("familyScore", b.setScale(0, BigDecimal.ROUND_HALF_UP).toString());
-			
+			long userId = this.getUserId();
+			String havaNewPower = chezuAssetService.queryHavaNewPower(userId, scoreFamilyInfoBean.getFamilyId(), SignUtils.encryptHMAC(String.valueOf(userId)));
+			map.put("havaNewPower", havaNewPower);
 			String fightingTime = null;
 			CompetitorFamilyInfoResultBean resultBean = this.gameServiceV2
 					.queryCompetitorFamilyInfo(Long.valueOf(familyId), fightingTime);
