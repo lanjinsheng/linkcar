@@ -430,7 +430,7 @@ public class GameControllerV2 extends BaseController {
 				memberScore.put("name", account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
 						: account.getNickName());
 				memberScore.put("score", score);
-				memberScore.put("userId", user.get(j).get("userId"));
+				memberScore.put("userId", user.get(j).get("userId").toString());
 				memberScoreS.add(memberScore);
 			}
 			Collections.sort(memberScoreS, new Comparator<Map<String, Object>>() {
