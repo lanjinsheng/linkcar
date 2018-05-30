@@ -505,7 +505,7 @@ public class AssetService extends BaseService<AssetService> {
 		if(diamonds==null) {
 			rtMap.put("diamonds", 0);
 		}else {
-			rtMap.put("diamonds", diamonds.getDiamondsNum());
+			rtMap.put("diamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
 		}
 		return rtMap;
 	}
@@ -519,7 +519,7 @@ public class AssetService extends BaseService<AssetService> {
 		}else {
 			AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId, gameAsset.getId());
 			if(diamonds!=null) {
-				rtMap.put("pkDiamonds", diamonds.getDiamondsNum());
+				rtMap.put("pkDiamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
 			}else {
 				rtMap.put("pkDiamonds", 0);
 			}
@@ -532,7 +532,7 @@ public class AssetService extends BaseService<AssetService> {
 		}else {
 			AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId, familySeasonAsset.getId());
 			if(diamonds!=null) {
-				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum());
+				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
 			}else {
 				rtMap.put("seasonDiamonds", 0);
 			}
