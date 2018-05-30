@@ -83,7 +83,4 @@ public interface GameMapper
 	
 	public ReviewBean queryReview(ReviewParamBean bean);
 
-	public int queryHaveNewPower(@Param("userId")long userId, @Param("familyId")long familyId);
-
-	public void updateHavaNewPower(@Param("userId")long userId, @Param("familyId")long familyId);
 }
