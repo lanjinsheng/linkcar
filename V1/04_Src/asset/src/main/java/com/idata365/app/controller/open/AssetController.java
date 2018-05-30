@@ -19,6 +19,7 @@ import com.idata365.app.entity.AssetUsersPowerLogs;
 import com.idata365.app.entity.FamilyGameAsset;
 import com.idata365.app.entity.FamilySeasonAsset;
 import com.idata365.app.enums.PowerEnum;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.AssetService;
 import com.idata365.app.service.FamilyGameAssetService;
 import com.idata365.app.service.FamilySeasonAssetService;
@@ -36,6 +37,8 @@ public class AssetController extends BaseController {
 	FamilyGameAssetService familyGameAssetService;
 	@Autowired
 	FamilySeasonAssetService familySeasonAssetService;
+	@Autowired
+	ChezuAccountService chezuAccountService;
 
 	/**
 	 * 
@@ -322,6 +325,17 @@ public class AssetController extends BaseController {
 		LOG.info("getFamilySeasonID·~~~controller");
 		long familySeasonId = familyGameAssetService.getFamilySeasonID(myFamilyId, daystamp);
 		return familySeasonId;
+	}
+	
+	@RequestMapping(value = "/asset/queryHavaNewPower", method = RequestMethod.POST)
+	String queryHavaNewPower(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "familyId") long familyId, @RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"   familyId:" + familyId + "===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryHavaNewPower·~~~controller");
+		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
+		String havaNewPower = assetService.queryHavaNewPower(userId, familiesInfo);
+		return havaNewPower;
 	}
 
 	public static void main(String[] args) {
