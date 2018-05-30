@@ -24,6 +24,8 @@ import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
 import com.idata365.app.entity.AssetUsersPowerLogs;
+import com.idata365.app.entity.FamilyGameAsset;
+import com.idata365.app.entity.FamilySeasonAsset;
 import com.idata365.app.entity.StealPower;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
 import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
@@ -510,27 +512,43 @@ public class AssetService extends BaseService<AssetService> {
 	@Transactional
 	public Map<String,Object> getFamilyHarvestYestoday(long userId,long familyId) {
 		Map<String,Object> rtMap=new HashMap<String,Object>();
-			rtMap.put("familyId",familyId);
-			long id =familyGameAssetMapper.getFamilySeasonID(familyId, DateTools.getCurDateAddDay(-1));
-			if(id<1) {
-				rtMap.put("pkDiamonds", 0);
-			}else {
-				AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId, id);
+		rtMap.put("familyId",familyId);
+		FamilyGameAsset gameAsset =familyGameAssetMapper.getFamilyGameAssetByDay(familyId, DateTools.getCurDateAddDay(-1));
+		if(gameAsset==null) {
+			rtMap.put("pkDiamonds", 0);
+		}else {
+			AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId, gameAsset.getId());
+			if(diamonds!=null) {
 				rtMap.put("pkDiamonds", diamonds.getDiamondsNum());
-				
-			}
-			
-			long id2 =familySeasonAssetMapper.getFamilySeasonID(familyId, DateTools.getCurDateAddDay(-1));
-			if(id2<1) {
-				rtMap.put("seasonDiamonds", 0);
 			}else {
-				AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId, id);
-				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum());
+				rtMap.put("pkDiamonds", 0);
 			}
 			
+		}
+			
+		FamilySeasonAsset familySeasonAsset =familySeasonAssetMapper.getFamilySeasonAssetByDay(familyId, DateTools.getCurDateAddDay(-1));
+		if(familySeasonAsset==null) {
+			rtMap.put("seasonDiamonds", 0);
+		}else {
+			AssetUsersDiamondsLogs diamonds=assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId, familySeasonAsset.getId());
+			if(diamonds!=null) {
+				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum());
+			}else {
+				rtMap.put("seasonDiamonds", 0);
+			}
+		}
 		return rtMap;
 	}
-	
+	@Transactional
+	public Map<String,Object> getGlobalYestoday() {
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		String powerTable="userPower"+DateTools.getCurDateAddDay(-1).replaceAll("-", "");
+		long power=assetUsersAssetMapper.getAllYestodayAppPowers(powerTable);
+		rtMap.put("globalPower", power);
+		BigDecimal diamonds=assetUsersAssetMapper.getAllAppDiamonds();
+		rtMap.put("globalDiamonds",diamonds.setScale(0, RoundingMode.HALF_UP).intValue());
+		return rtMap;
+	}
 	/**
 	 * 
 	 * @Title: initFamily

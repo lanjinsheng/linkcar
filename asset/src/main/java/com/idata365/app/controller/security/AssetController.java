@@ -248,6 +248,9 @@ public class AssetController extends BaseController {
        Map<String,Object> familyHarvest=assetService.getFamilyHarvestYestoday(userId,Long.valueOf(familyId.toString()));
       //通过userId获取昨日动力值
       Map<String,Object> personHarvest=assetService.getPersonHarvestYestoday(userId);
+      Map<String,Object> global=assetService.getGlobalYestoday();
+      
+      rtMap.put("globalHarvest", global);
       rtMap.put("familyHarvest", familyHarvest);
       rtMap.put("personHarvest", personHarvest);
 		return ResultUtils.rtSuccess(rtMap);
