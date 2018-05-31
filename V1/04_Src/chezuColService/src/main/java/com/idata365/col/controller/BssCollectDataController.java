@@ -188,7 +188,7 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         ZipUtils.uncompressToString(file.getInputStream(),text);
         DevDriveLogs log=new DevDriveLogs();
         log.setUserId(userId);
-        log.setLogDesc(text.toString());
+        log.setLogDesc(request.getHeader("equipmentInfo")+text.toString());
         devService.insertDevDriveLog(log);
         return ResultUtils.rtSuccess(null); 
     } 
