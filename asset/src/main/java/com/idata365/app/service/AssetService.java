@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.AssetConstant;
+import com.idata365.app.constant.IntroduceConstant;
 import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
@@ -105,8 +106,12 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
 		map.put("totalDiamondsNum", usersAsset.getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
 		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
-		map.put("appdia", assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
-		map.put("apppow", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
+		map.put("allAppDiamonds",
+				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
+		map.put("yesterdayDiamonds", "1000");
+		map.put("allAppPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
+		map.put("diamondDesc", IntroduceConstant.DIAMONDINTRODUCE);
+		map.put("powerDesc", IntroduceConstant.POWERINTRODUCE);
 		return map;
 	}
 
@@ -204,6 +209,7 @@ public class AssetService extends BaseService<AssetService> {
 
 	/**
 	 * 
+	 * @param ofUserId
 	 * @Title: updateDiamondsConsume
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param @param
@@ -217,12 +223,16 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LanYeYe
 	 */
 	@Transactional
-	public boolean updateDiamondsConsume(long userId, double diamondsNum) {
+	public boolean updateDiamondsConsume(long userId, double diamondsNum, long ofUserId) {
 		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("userId", userId);
 		datas.put("diamondsNum", diamondsNum);
 		int hadUpdate = assetUsersAssetMapper.updateDiamondsConsume(datas);
-		if (hadUpdate > 0) {
+		Map<String, Object> earn = new HashMap<String, Object>();
+		earn.put("userId", ofUserId);
+		earn.put("diamondsNum", diamondsNum);
+		int addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);
+		if (hadUpdate > 0 && addUpdate > 0) {
 			// 钻石数量够买，则进行日志增加
 			AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 			assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
@@ -232,6 +242,16 @@ public class AssetService extends BaseService<AssetService> {
 			assetUsersDiamondsLogs.setRemark("购买消费");
 			assetUsersDiamondsLogs.setUserId(userId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
+			
+			AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
+			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+			logs.setEffectId(0L);
+			logs.setEventType(AssetConstant.EventType_Earn);
+			logs.setRecordType(AssetConstant.RecordType_1);
+			logs.setRemark("交易收入");
+			logs.setUserId(ofUserId);
+			assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
+			
 			return true;
 		} else {
 			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
@@ -716,6 +736,7 @@ public class AssetService extends BaseService<AssetService> {
 		return billBoard;
 	}
 
+	// 钻石、动力 数量及排名信息
 	public Map<String, String> getCurOrderAndNum(long userId) {
 		Map<String, String> map = new HashMap<>();
 		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
@@ -723,10 +744,35 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("powersNum", usersAsset.getPowerNum().toString());
 		map.put("diamondsNo", String.valueOf(assetUsersAssetMapper.getDiamondsCurOrder(userId)));
 		map.put("powersNo", String.valueOf(assetUsersAssetMapper.getPowersCurOrder(userId)));
-
 		return map;
 	}
 
+	// 钻石收支记录主信息
+	public Map<String, String> diamondsInfo(long userId) {
+		Map<String, String> map = new HashMap<>();
+		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
+		map.put("diamondsNum", usersAsset.getDiamondsNum().setScale(2, RoundingMode.HALF_UP).toString());
+		// 当前全网钻石总量（每日更新）
+		map.put("allAppDiamonds",
+				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
+		// 钻石介绍
+		map.put("diamondIntroduce", IntroduceConstant.DIAMONDINTRODUCE);
+		return map;
+	}
+
+	// 动力领取记录主信息
+	public Map<String, String> powersInfo(long userId) {
+		Map<String, String> map = new HashMap<>();
+		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
+		map.put("powersNum", usersAsset.getPowerNum().toString());
+		// 当前全网动力总量（每小时更新）
+		map.put("allCurPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
+		// 钻石介绍
+		map.put("powerIntroduce", IntroduceConstant.POWERINTRODUCE);
+		return map;
+	}
+
+	// 查询是否有新动力可领
 	public String queryHavaNewPower(long userId, Map<String, Object> familiesInfo) {
 		String s = "0";
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
@@ -744,7 +790,7 @@ public class AssetService extends BaseService<AssetService> {
 			flagList.add(stealPower.getBallId());
 		}
 		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : allPowerList) {
-			if(!flagList.contains(assetFamiliesPowerLogs.getId())) {
+			if (!flagList.contains(assetFamiliesPowerLogs.getId())) {
 				s = "1";
 				break;
 			}

@@ -45,9 +45,14 @@
  	</select>
      
       <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
-        update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}) where
+        update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}),updateTime=now() where
            <![CDATA[ diamondsNum>=${diamondsNum} and userId=#{userId}]]>
      </update>
+     
+     <update id="updateDiamondsEarn"   parameterType="java.util.HashMap">
+        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),updateTime=now() where userId=#{userId}
+     </update>
+     
       <update id="updateDiamondsAdd"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
         update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}) 
         where
