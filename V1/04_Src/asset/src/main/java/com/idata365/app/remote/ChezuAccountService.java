@@ -1,5 +1,6 @@
 package com.idata365.app.remote;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -17,7 +18,7 @@ import com.idata365.app.entity.UsersAccount;
  * @date 2017年12月28日
  *
  */
-@FeignClient(value = "service-account-chezu", fallback = ChezuAccountHystric.class)
+@FeignClient(value = "service-account-chezu-ljs", fallback = ChezuAccountHystric.class)
 public interface ChezuAccountService {
 	/**
 	 * 远程进行用户账户验证，待远程接口写入
@@ -80,6 +81,8 @@ public interface ChezuAccountService {
 	@RequestMapping(value = "/account/updateLoginBss",method = RequestMethod.POST)
 	public boolean  updateLoginBss(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign);
 
-	
+	@RequestMapping(value = "/account/getUsersScoreByFamilyId",method = RequestMethod.POST)
+	public List<Map<String,Object>>  getUsersScoreByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign);
+
 	
 }
