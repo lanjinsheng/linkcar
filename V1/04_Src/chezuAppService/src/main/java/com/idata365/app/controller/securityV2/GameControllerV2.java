@@ -289,6 +289,7 @@ public class GameControllerV2 extends BaseController {
 				}
 				result.put("trophyNumReward", win); 
 				result.put("diamondsReward", " 大量");
+				result.put("reward", "奖杯"+win+" 大量钻石");
 				result.put("punishment", loss);
 				try {
 					result.put("surPlusDays", dicService.getSurPlusDays());
@@ -472,7 +473,7 @@ public class GameControllerV2 extends BaseController {
 			result.put("rewardAndPunishment", loss);
 			result.put("status", "2");
 		} else {
-			result.put("rewardAndPunishment", "和气生财！！！");
+			result.put("rewardAndPunishment", "平局！");
 			result.put("status", "0");
 		}
 		result.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, myFamilyId, sign)));

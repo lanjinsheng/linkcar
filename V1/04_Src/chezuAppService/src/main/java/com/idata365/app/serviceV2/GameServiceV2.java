@@ -90,6 +90,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			DicFamilyType familyType = DicFamilyTypeConstant
 					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
 			bill.put("id", (list.get(i).get("familyId").toString()));
+			bill.put("familyId", (list.get(i).get("familyId").toString()));
 			bill.put("rank",(list.get(i).get("yesterdayOrderNo").toString()));
 			bill.put("name", list.get(i).get("familyName").toString());
 			bill.put("captainOrGroupName",
@@ -128,7 +129,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		return bill;
 	}
 
-	// 查询正在对战的家族系信息
+	// 根据时间查询正在对战的家族系信息
 	public CompetitorFamilyInfoResultBean queryCompetitorFamilyInfo(long myFamilyId, String fightingTime) {
 		FamilyRelationBean relationBean = new FamilyRelationBean();
 		relationBean.setFamilyId(myFamilyId);
