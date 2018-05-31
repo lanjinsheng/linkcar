@@ -334,8 +334,8 @@ public class AssetService extends BaseService<AssetService> {
 		long todayReceive = 0L;
 		long myFamilyContribution = 0L;
 		long fightFamilyContribution = 0L;
-		long myFamilyRealPower = 0L;
-		long fightFamilyRealPower = 0L;
+		long myFamilyReceive = 0L;
+		long fightFamilyReceive = 0L;
 		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowersByOne(userId);
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getEventType() == 3) {
@@ -391,24 +391,25 @@ public class AssetService extends BaseService<AssetService> {
 			if (createFamilyId.equals(String.valueOf(familyId))) {
 				powerBall.put("isMyFamily", "1");
 				myFamilyContribution += assetFamiliesPowerLogs.getPowerNum();
-				myFamilyRealPower += assetFamiliesPowerLogs.getRealNum();
 			} else {
 				powerBall.put("isMyFamily", "0");
 				fightFamilyContribution += assetFamiliesPowerLogs.getPowerNum();
-				fightFamilyRealPower += assetFamiliesPowerLogs.getRealNum();
 			}
 			powerBall.put("createTime",
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
+		myFamilyReceive = stealPowerMapper.getReceiveNum(familyId);
+		fightFamilyReceive = stealPowerMapper.getReceiveNum(fightFamilyId);
+		
 		data.put("todayContribution", String.valueOf(todayContribution));
 		data.put("todayReceive", String.valueOf(todayReceive));
 		data.put("myFamilyId", String.valueOf(familyId));
 		data.put("todayReceive", String.valueOf(todayReceive));
 		data.put("myFamilyContribution", String.valueOf(myFamilyContribution));
 		data.put("fightFamilyContribution", String.valueOf(fightFamilyContribution));
-		data.put("myFamilyReceive", String.valueOf(fightFamilyContribution - fightFamilyRealPower));
-		data.put("fightFamilyReceive", String.valueOf(myFamilyContribution - myFamilyRealPower));
+		data.put("myFamilyReceive", String.valueOf(myFamilyReceive));
+		data.put("fightFamilyReceive", String.valueOf(fightFamilyReceive));
 		data.put("powerBalls", powerBalls);
 		return data;
 	}

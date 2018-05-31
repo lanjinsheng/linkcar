@@ -13,6 +13,12 @@
 		FROM stealPower where #{familyId} in(familyId,fightFamilyId) and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	
+	<select id="getReceiveNum" resultType="java.lang.Long"
+		parameterType="java.lang.Long">
+		SELECT IFNULL(sum(powerNum),0)
+		FROM stealPower where familyId=#{familyId} and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY)]]>
+	</select>
+	
 	<select id="getStealPowerListByUserId" resultMap="BaseStealPowerMap"
 		parameterType="java.lang.Long">
 		SELECT *
