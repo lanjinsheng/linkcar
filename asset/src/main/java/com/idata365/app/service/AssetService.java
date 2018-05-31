@@ -110,8 +110,10 @@ public class AssetService extends BaseService<AssetService> {
 				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
 		map.put("yesterdayDiamonds", "1000");
 		map.put("allAppPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
-		map.put("diamondDesc", IntroduceConstant.DIAMONDINTRODUCE);
-		map.put("powerDesc", IntroduceConstant.POWERINTRODUCE);
+		map.put("allAppDiamondsDesc", "全网钻石总量");
+		map.put("yesterdayDiamondsDesc", "昨日钻石产量");
+		map.put("allAppPowersDesc", "全网总动力");
+		map.put("totalPowersNumDesc", "今日个人动力");
 		return map;
 	}
 
@@ -242,7 +244,7 @@ public class AssetService extends BaseService<AssetService> {
 			assetUsersDiamondsLogs.setRemark("购买消费");
 			assetUsersDiamondsLogs.setUserId(userId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
-			
+
 			AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
 			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 			logs.setEffectId(0L);
@@ -251,7 +253,7 @@ public class AssetService extends BaseService<AssetService> {
 			logs.setRemark("交易收入");
 			logs.setUserId(ofUserId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
-			
+
 			return true;
 		} else {
 			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
@@ -744,6 +746,17 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("powersNum", usersAsset.getPowerNum().toString());
 		map.put("diamondsNo", String.valueOf(assetUsersAssetMapper.getDiamondsCurOrder(userId)));
 		map.put("powersNo", String.valueOf(assetUsersAssetMapper.getPowersCurOrder(userId)));
+
+		// 当前全网钻石总量（每日更新）
+		map.put("allAppDiamonds",
+				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
+		// 钻石介绍
+		map.put("diamondDesc", IntroduceConstant.DIAMONDINTRODUCE);
+
+		map.put("allCurPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
+		// 钻石介绍
+		map.put("powerDesc", IntroduceConstant.POWERINTRODUCE);
+
 		return map;
 	}
 
@@ -756,7 +769,7 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("allAppDiamonds",
 				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
 		// 钻石介绍
-		map.put("diamondIntroduce", IntroduceConstant.DIAMONDINTRODUCE);
+		map.put("diamondDesc", IntroduceConstant.DIAMONDINTRODUCE);
 		return map;
 	}
 
@@ -768,7 +781,7 @@ public class AssetService extends BaseService<AssetService> {
 		// 当前全网动力总量（每小时更新）
 		map.put("allCurPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
 		// 钻石介绍
-		map.put("powerIntroduce", IntroduceConstant.POWERINTRODUCE);
+		map.put("powerDesc", IntroduceConstant.POWERINTRODUCE);
 		return map;
 	}
 
