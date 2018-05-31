@@ -108,7 +108,7 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("totalPowersNum", String.valueOf(usersAsset.getPowerNum()));
 		map.put("allAppDiamonds",
 				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
-		map.put("yesterdayDiamonds", "1000");
+		map.put("yesterdayDiamonds", "980");
 		map.put("allAppPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
 		map.put("allAppDiamondsDesc", "全网钻石总量");
 		map.put("yesterdayDiamondsDesc", "昨日钻石产量");
@@ -399,8 +399,16 @@ public class AssetService extends BaseService<AssetService> {
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
-		myFamilyReceive = stealPowerMapper.getReceiveNum(familyId);
-		fightFamilyReceive = stealPowerMapper.getReceiveNum(fightFamilyId);
+		
+		List<AssetFamiliesPowerLogs> allPowerList = assetFamiliesPowerLogsMapper.getAllFamilyPowers(familyId, fightFamilyId);
+		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : allPowerList) {
+			String createFamilyId = String.valueOf(assetFamiliesPowerLogs.getFamilyId());
+			if (createFamilyId.equals(String.valueOf(familyId))) {
+				myFamilyReceive += stealPowerMapper.getReceiveNum(familyId,assetFamiliesPowerLogs.getId());
+			} else {
+				fightFamilyReceive += stealPowerMapper.getReceiveNum(fightFamilyId,assetFamiliesPowerLogs.getId());
+			}
+		}
 		
 		data.put("todayContribution", String.valueOf(todayContribution));
 		data.put("todayReceive", String.valueOf(todayReceive));
