@@ -145,7 +145,15 @@ public class AccountController extends BaseController{
 		}
 		return null;
 	}
-
+	
+	@RequestMapping(value = "/account/getUsersScoreByFamilyId",method = RequestMethod.POST)
+	public List<Map<String,Object>>  getUsersScoreByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign)
+	{
+		LOG.info("familyId="+familyId+"===sign="+sign);
+		List<Map<String,Object>> list= accountService.getUsersScoreByFamilyId(familyId, daystamp);
+		return list;
+	}
+	
 	@RequestMapping(value = "/account/getCurrentUsersByFamilyId",method = RequestMethod.POST)
 	public String  getCurrentUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign)
 	{
