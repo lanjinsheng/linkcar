@@ -442,7 +442,8 @@ public class GameControllerV2 extends BaseController {
 				}
 			});
 			familyInfo.put("memberScoreS", memberScoreS);
-
+			familyInfo.put("familyId", String.valueOf(arr[i]));
+			familyInfo.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, arr[i], sign)));
 			data.add(familyInfo);
 
 			if (i == 0) {
@@ -476,7 +477,7 @@ public class GameControllerV2 extends BaseController {
 			result.put("rewardAndPunishment", "平局！");
 			result.put("status", "0");
 		}
-		result.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, myFamilyId, sign)));
+		
 		return ResultUtils.rtSuccess(result);
 	}
 
