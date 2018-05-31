@@ -91,7 +91,7 @@
 		prizeId, prizeName, prizeDesc, is_marketable, prizePic,
 		originalPrice,
 		diamondValue,
-		prizeDetailPics, prizeDetailTexts
+		prizeDetailPics, prizeDetailTexts,ofUserId
 	</sql>
 	<select id="selectByExample" resultMap="BaseResultMap">
 		select * from prize where stock>0 and is_marketable=1 order 

@@ -30,8 +30,18 @@ public class Prize  implements Serializable{
     private String prizedetailtexts;
     
     private Integer stock;
+    
+    private Long ofUserId;
 
-    public Integer getStock() {
+    public Long getOfUserId() {
+		return ofUserId;
+	}
+
+	public void setOfUserId(Long ofUserId) {
+		this.ofUserId = ofUserId;
+	}
+
+	public Integer getStock() {
 		return stock;
 	}
 

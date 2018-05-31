@@ -30,6 +30,7 @@ public interface ChezuAssetService {
 
 	/**
 	 * 
+	 * @param ofUserId 
 	 * @Title: submitDiamondAsset
 	 * @Description: TODO(返回false消费失败，true消费成功)
 	 * @param @param
@@ -46,6 +47,6 @@ public interface ChezuAssetService {
 	 */
 	@RequestMapping(value = "/asset/submitDiamondAsset", method = RequestMethod.POST)
 	boolean submitDiamondAsset(@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign);
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId);
 
 }
