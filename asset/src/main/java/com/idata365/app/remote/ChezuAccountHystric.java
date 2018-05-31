@@ -1,5 +1,6 @@
 package com.idata365.app.remote;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -53,6 +54,15 @@ public class ChezuAccountHystric implements ChezuAccountService {
 	@Override
 	public String getCurrentUsersByFamilyId(long familyId, String daystamp, String sign) {
 		LOG.error(" getCurrentUsersByFamilyId 挂了  service-account-chezu");
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public  List<Map<String,Object>> getUsersScoreByFamilyId(long familyId, String daystamp, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" getUsersScoreByFamilyId 挂了  service-account-chezu");
 		// TODO Auto-generated method stub
 		return null;
 	}
