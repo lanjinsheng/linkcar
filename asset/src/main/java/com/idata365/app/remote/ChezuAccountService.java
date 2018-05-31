@@ -18,7 +18,7 @@ import com.idata365.app.entity.UsersAccount;
  * @date 2017年12月28日
  *
  */
-@FeignClient(value = "service-account-chezu-ljs", fallback = ChezuAccountHystric.class)
+@FeignClient(value = "service-account-chezu", fallback = ChezuAccountHystric.class)
 public interface ChezuAccountService {
 	/**
 	 * 远程进行用户账户验证，待远程接口写入
