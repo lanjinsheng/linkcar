@@ -53,7 +53,7 @@ public class AssetController extends BaseController {
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
-	 * @Description: TODO(获取首页钻石数量)
+	 * @Description: TODO(个人钻石记录)
 	 * @param @return
 	 *            参数
 	 * @return List<Map<String,String>> 返回类型
@@ -70,13 +70,15 @@ public class AssetController extends BaseController {
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		result.put("orderInfo", myorder);
+//		result.put("diamondsInfo", assetService.diamondsInfo(userId));
+		
 		return ResultUtils.rtSuccess(result);
 	}
 
 	/**
 	 * 
 	 * @Title: getIndexPowers
-	 * @Description: TODO(获取首页动力数量)
+	 * @Description: TODO(个人动力记录)
 	 * @param @return
 	 *            参数
 	 * @return List<Map<String,String>> 返回类型
@@ -93,6 +95,7 @@ public class AssetController extends BaseController {
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		result.put("orderInfo", myorder);
+//		result.put("powersInfo", assetService.powersInfo(userId));
 		return ResultUtils.rtSuccess(result);
 	}
 

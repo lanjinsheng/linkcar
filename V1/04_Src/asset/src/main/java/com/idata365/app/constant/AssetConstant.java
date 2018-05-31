@@ -24,7 +24,7 @@ public class AssetConstant {
 	public final static int EventType_Daimond_GameEnd_User = 2;// PK结束家族分配
 	public final static int EventType_Buy = 3;//购买消费
 	public final static int EventType_Daimond_SeasonEnd_User = 4;// 比赛赛季结束家族分配      
-	public final static int EventType_Earn = 5;// 交易赚取
+	public final static int EventType_Earn = 5;// 交易收入
 	
 	//家族
 	public final static int EventType_Daimond_GameEnd = 1;// 比赛获取
@@ -40,7 +40,7 @@ public class AssetConstant {
 		UserDiamondsEventMap.put(EventType_Daimond_GameEnd_User, "家族每日PK获取");
 		UserDiamondsEventMap.put(EventType_Buy, "购买消耗");
 		UserDiamondsEventMap.put(EventType_Daimond_SeasonEnd_User, "赛季获胜获取");
-		UserDiamondsEventMap.put(EventType_Earn, "交易赚取");
+		UserDiamondsEventMap.put(EventType_Earn, "交易收入");
 		
 		UserPowerEventMap.put(EventType_Power_SignIn, "每日签到奖励");
 		UserPowerEventMap.put(EventType_Power_Index_Get, "首页小车拾取");

@@ -117,10 +117,10 @@ public class AssetController extends BaseController {
 	 */
 	@RequestMapping(value = "/asset/submitDiamondAsset", method = RequestMethod.POST)
 	boolean submitDiamondAsset(@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign) {
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId) {
 		LOG.info("PARAM:" + userId + "===" + diamondNum + "====" + sign);
 		LOG.info("校验逻辑待处理·~~~");
-		boolean bl = assetService.updateDiamondsConsume(userId, diamondNum);
+		boolean bl = assetService.updateDiamondsConsume(userId, diamondNum,ofUserId);
 		return bl;
 	}
 
