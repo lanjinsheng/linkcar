@@ -14,6 +14,9 @@ public interface AssetFamiliesPowerLogsMapper {
 	
 	List<AssetFamiliesPowerLogs> getFamilyPowers(@Param("familyId") long familyId,
 			@Param("fightFamilyId") long fightFamilyId);
+	
+	List<AssetFamiliesPowerLogs> getAllFamilyPowers(@Param("familyId") long familyId,
+			@Param("fightFamilyId") long fightFamilyId);
 
 	AssetFamiliesPowerLogs getFamiliesPowerLogs(@Param("ballId") long ballId);
 }

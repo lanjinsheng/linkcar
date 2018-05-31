@@ -27,6 +27,15 @@
 		familyId in (#{familyId},#{fightFamilyId}) AND realNum>0 AND
 		 <![CDATA[ createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime]]>
 	</select>
+	
+	<select id="getAllFamilyPowers" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		SELECT *
+		FROM assetFamiliesPowerLogs where
+		familyId in (#{familyId},#{fightFamilyId}) AND
+		 <![CDATA[ createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime]]>
+	</select>
+	
 	<select id="getFamiliesPowerLogs" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
