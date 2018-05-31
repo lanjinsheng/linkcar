@@ -342,7 +342,7 @@ public class TaskGenericService {
 	@Transactional
 	public boolean doUserFamilyDayReward(TaskGeneric task) {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
-		String powerTableName=m.get("powerTableName").toString();
+//		String powerTableName=m.get("powerTableName").toString();
 		String diamonds= m.get("diamonds").toString();
 		String orderNum= String.valueOf(m.get("orderNum"));
 		String assetFamilyGameId=String.valueOf(m.get("assetFamilyGameId"));
@@ -355,35 +355,37 @@ public class TaskGenericService {
 		String mm=daystamp.substring(4,6);
 		String dd=daystamp.substring(6,8);
 		daystamp=yyyy+"-"+mm+"-"+dd;
-		String users=chezuAccountService.getUsersByFamilyId(familyId, daystamp, sign);
-		String []userArray=users.split(",");
-		long total=0L;
+//		String users2=chezuAccountService.getUsersByFamilyId(familyId, daystamp, sign);
+//		String []userArray=users.split(",");
+		List<Map<String,Object>> users=chezuAccountService.getUsersScoreByFamilyId(familyId, daystamp, sign);
+		
+		BigDecimal total=BigDecimal.valueOf(0D);
 		int personNum=0;
-		List<Long> powerList=new ArrayList<Long>();
+		List<Double> powerList=new ArrayList<Double>();
 		List<AssetUsersDiamondsLogs> userList=new ArrayList<AssetUsersDiamondsLogs>();
-		personNum=userArray.length;
+		personNum=users.size();
 		BigDecimal familyDiamonds=BigDecimal.valueOf(Double.valueOf(diamonds)).multiply(BigDecimal.valueOf(personNum));
-		for(int i=0;i<userArray.length;i++) {
+		for(Map<String,Object> user:users) {
 			AssetUsersDiamondsLogs  assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
-			m.put("userId", userArray[i]);
-			m.put("tableName", powerTableName);
-			Map<String,Object> power=taskGenericMapper.getUserPowerByUserId(m);
-			long hadPowerNum=Long.valueOf(power.get("hadPowerNum").toString());
-			powerList.add(hadPowerNum);
-			total+=hadPowerNum;
-			assetUsersDiamondsLogs.setUserId(Long.valueOf(userArray[i]));
+//			m.put("userId", user.get("userId"));
+//			m.put("tableName", powerTableName);
+//			Map<String,Object> power=taskGenericMapper.getUserPowerByUserId(m);
+ 			Double score=Double.valueOf(user.get("avgScore").toString());
+			powerList.add(score);
+			total=total.add(BigDecimal.valueOf(score));
+			assetUsersDiamondsLogs.setUserId(Long.valueOf(user.get("userId").toString()));
 			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
 			assetUsersDiamondsLogs.setEffectId(Long.valueOf(assetFamilyGameId));
 			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_GameEnd_User);
-			assetUsersDiamondsLogs.setRemark(task.getId()+"按"+powerTableName+"PK结束分配钻石");
+			assetUsersDiamondsLogs.setRemark(task.getId()+"按得分"+score+"PK结束分配钻石");
 			userList.add(assetUsersDiamondsLogs);
 		}
 		//通过用户ids获取用户的能量值。
 		int j=0;
 		for(AssetUsersDiamondsLogs assetUsersDiamondsLogs:userList) {
-			long pow=powerList.get(j);
-			BigDecimal d=BigDecimal.valueOf(pow).multiply(familyDiamonds)
-					.divide(BigDecimal.valueOf(total),5,RoundingMode.HALF_DOWN);
+			Double score=powerList.get(j);
+			BigDecimal d=BigDecimal.valueOf(score).multiply(familyDiamonds)
+					.divide(total,5,RoundingMode.HALF_DOWN);
 			assetUsersDiamondsLogs.setDiamondsNum(d);
 			j++;
 			assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
