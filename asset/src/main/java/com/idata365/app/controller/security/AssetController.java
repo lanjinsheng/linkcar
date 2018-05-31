@@ -30,35 +30,6 @@ public class AssetController extends BaseController {
 	@Autowired
 	ChezuAppService chezuAppService;
      
-//	/**
-//	 * 
-//	 * @Title: queryHavaNewPower
-//	 * @Description: TODO(查询现在是否有新能量可领)
-//	 * @param @param
-//	 *            allRequestParams
-//	 * @param @param
-//	 *            requestBodyParams
-//	 * @param @return
-//	 *            参数
-//	 * @return Map<String,Object> 返回类型
-//	 * @throws @author
-//	 *             LiXing
-//	 */
-//	@RequestMapping("/queryHavaNewPower")
-//	public Map<String, Object> queryHavaNewPower(
-//			@RequestParam(required = false) Map<String, String> allRequestParams,
-//			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-//		long userId = this.getUserId();
-//		LOG.info("userId================="+userId);
-//		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
-//		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
-//		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
-//		String havaNewPower = assetService.queryHavaNewPower(userId, familiesInfo);
-//		Map<String, String> result = new HashMap<>();
-//		result.put("havaNewPower", havaNewPower);
-//		return ResultUtils.rtSuccess(result);
-//	}
-	
 	
 	/**
 	 * 
@@ -94,10 +65,10 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		LOG.info("userId================="+userId);
-		List<Map<String, String>> data = assetService.getIndexDiamonds(userId, requestBodyParams);
+		List<Map<String, String>> list = assetService.getIndexDiamonds(userId, requestBodyParams);
 		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
-		result.put("list", data);
+		result.put("list", list);
 		result.put("orderInfo", myorder);
 		return ResultUtils.rtSuccess(result);
 	}
@@ -117,10 +88,10 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		LOG.info("userId================="+userId);
-		List<Map<String, String>> data = assetService.getIndexPowers(userId, requestBodyParams);
+		List<Map<String, String>> list = assetService.getIndexPowers(userId, requestBodyParams);
 		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
-		result.put("list", data);
+		result.put("list", list);
 		result.put("orderInfo", myorder);
 		return ResultUtils.rtSuccess(result);
 	}
@@ -128,7 +99,7 @@ public class AssetController extends BaseController {
 	/**
 	 * 
 	 * @Title: getFamilyFightPowers
-	 * @Description: TODO(获取家族对战动力情况)
+	 * @Description: TODO(获取家族对战动力情况---停车场)
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param
