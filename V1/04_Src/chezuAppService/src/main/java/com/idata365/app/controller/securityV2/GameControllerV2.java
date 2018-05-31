@@ -465,6 +465,7 @@ public class GameControllerV2 extends BaseController {
 		}
 		result.put("myFamilyInfo", data.get(0));
 		result.put("fightFamilyInfo", data.get(1));
+		result.put("familySeasonID", String.valueOf(chezuAssetService.getFamilySeasonID(daystamp, myFamilyId, sign)));
 		if (Double.valueOf(data.get(0).get("familyScore").toString()) > Double
 				.valueOf(data.get(1).get("familyScore").toString())) {
 			result.put("rewardAndPunishment", win);
