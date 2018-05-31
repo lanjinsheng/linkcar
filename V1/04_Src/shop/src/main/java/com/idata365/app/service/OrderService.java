@@ -86,6 +86,7 @@ public class OrderService {
 
 	/**
 	 * 
+	 * @param ofUserId 
 	 * @Title: save
 	 * @Description: TODO(保存交易记录操作)
 	 * @param @param
@@ -97,7 +98,7 @@ public class OrderService {
 	 *             LiXing
 	 */
 	@Transactional
-	public void save(Order order) throws Exception {
+	public void save(Order order, long ofUserId) throws Exception {
 		int ordernum = order.getOrdernum();
 		long prizeId = order.getPrizeid();
 		
@@ -110,7 +111,7 @@ public class OrderService {
 		
 		String paramSign = order.getUserid() + String.valueOf(order.getDiamondnum());
 		String sign = SignUtils.encryptDataAes(paramSign);
-		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserid(), order.getDiamondnum(), sign);
+		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserid(), order.getDiamondnum(), sign,ofUserId);
 		if (!flag) {
 			throw new RuntimeException("交易失败");
 		}

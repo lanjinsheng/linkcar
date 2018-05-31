@@ -107,7 +107,7 @@ public class ShopController extends BaseController {
 			order.setAreacode(areaCode);
 		}
 		try {
-			orderService.save(order);
+			orderService.save(order,prize.getOfUserId());
 			boolean shopMsg = chezuAppService.sendShopMsg(userId, prize.getPrizename(), SignUtils.encryptHMAC(userId+""+prize.getPrizename()));
 			System.out.println("兑换结果："+shopMsg);
 			if(shopMsg) {
