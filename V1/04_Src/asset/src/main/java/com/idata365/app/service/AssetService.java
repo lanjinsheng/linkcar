@@ -549,16 +549,16 @@ public class AssetService extends BaseService<AssetService> {
 		parmMap.put("powerTable", powerTable);
 		AssetUsersAsset yestodayPower = assetUsersAssetMapper.getYestodayPower(parmMap);
 		if (yestodayPower == null) {
-			rtMap.put("powers", 0);
+			rtMap.put("powers", "0");
 		} else {
-			rtMap.put("powers", yestodayPower.getPowerNum());
+			rtMap.put("powers", String.valueOf(yestodayPower.getPowerNum()));
 		}
 
 		AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodayPersonPowerDiamonds(userId);
 		if (diamonds == null) {
-			rtMap.put("diamonds", 0);
+			rtMap.put("diamonds", "0");
 		} else {
-			rtMap.put("diamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
+			rtMap.put("diamonds", String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
 		}
 		return rtMap;
 	}
@@ -570,14 +570,14 @@ public class AssetService extends BaseService<AssetService> {
 		FamilyGameAsset gameAsset = familyGameAssetMapper.getFamilyGameAssetByDay(familyId,
 				DateTools.getCurDateAddDay(-1));
 		if (gameAsset == null) {
-			rtMap.put("pkDiamonds", 0);
+			rtMap.put("pkDiamonds", "0");
 		} else {
 			AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodayPkDiamonds(userId,
 					gameAsset.getId());
 			if (diamonds != null) {
-				rtMap.put("pkDiamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
+				rtMap.put("pkDiamonds", String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
 			} else {
-				rtMap.put("pkDiamonds", 0);
+				rtMap.put("pkDiamonds", "0");
 			}
 
 		}
@@ -585,14 +585,14 @@ public class AssetService extends BaseService<AssetService> {
 		FamilySeasonAsset familySeasonAsset = familySeasonAssetMapper.getFamilySeasonAssetByDay(familyId,
 				DateTools.getCurDateAddDay(-1));
 		if (familySeasonAsset == null) {
-			rtMap.put("seasonDiamonds", 0);
+			rtMap.put("seasonDiamonds","0");
 		} else {
 			AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId,
 					familySeasonAsset.getId());
 			if (diamonds != null) {
-				rtMap.put("seasonDiamonds", diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN));
+				rtMap.put("seasonDiamonds", String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
 			} else {
-				rtMap.put("seasonDiamonds", 0);
+				rtMap.put("seasonDiamonds", "0");
 			}
 		}
 		return rtMap;
@@ -603,9 +603,9 @@ public class AssetService extends BaseService<AssetService> {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		String powerTable = "userPower" + DateTools.getCurDateAddDay(-1).replaceAll("-", "");
 		long power = assetUsersAssetMapper.getAllYestodayAppPowers(powerTable);
-		rtMap.put("globalPower", power);
+		rtMap.put("globalPower", String.valueOf(power));
 		BigDecimal diamonds = assetUsersAssetMapper.getAllAppDiamonds();
-		rtMap.put("globalDiamonds", diamonds.setScale(0, RoundingMode.HALF_UP).intValue());
+		rtMap.put("globalDiamonds", String.valueOf(diamonds.setScale(0, RoundingMode.HALF_UP).intValue()));
 		return rtMap;
 	}
 
