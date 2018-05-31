@@ -168,6 +168,13 @@ public class AccountService extends BaseService<AccountService>
 		param.put("daystamp", daystamp);
 		return usersAccountMapper.getUsersByFamilyId(param);
 	}
+	@Transactional
+	public List<Map<String,Object>> getUsersScoreByFamilyId(long familyId,String daystamp){
+		Map<String,Object> param=new HashMap<String,Object>();
+		param.put("familyId", familyId);
+		param.put("daystamp", daystamp);
+		return usersAccountMapper.getUsersScoreByFamilyId(param);
+	}
 	
 	@Transactional
 	public List<Map<String,Object>> getCurrentUsersByFamilyId(long familyId,String daystamp){
