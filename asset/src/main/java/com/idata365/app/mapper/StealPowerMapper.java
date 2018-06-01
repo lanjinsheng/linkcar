@@ -14,5 +14,5 @@ public interface StealPowerMapper {
 	
 	List<StealPower> getStealPowerListByUserId(@Param("userId") long userId);
 
-	long getReceiveNum(@Param("familyId") long familyId,@Param("ballId") long ballId);
+	long getReceiveNum(@Param("familyId") long familyId);
 }

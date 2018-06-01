@@ -28,18 +28,17 @@
 		 <![CDATA[ createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime]]>
 	</select>
 	
-	<select id="getAllFamilyPowers" resultMap="BaseResultMap"
-		parameterType="java.lang.Long">
-		SELECT *
-		FROM assetFamiliesPowerLogs where
-		familyId in (#{familyId},#{fightFamilyId}) AND
-		 <![CDATA[ createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime]]>
-	</select>
-	
 	<select id="getFamiliesPowerLogs" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		SELECT *
 		FROM assetFamiliesPowerLogs where
 		id=#{ballId}
+	</select>
+	
+	<select id="getContributionNum" resultType="java.lang.Long"
+		parameterType="java.lang.Long">
+		SELECT IFNULL(sum(powerNum),0)
+		FROM assetFamiliesPowerLogs where familyId=#{familyId} AND
+		 <![CDATA[ createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY)]]>
 	</select>
 </mapper>
