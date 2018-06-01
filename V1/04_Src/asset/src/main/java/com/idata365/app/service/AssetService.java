@@ -390,25 +390,19 @@ public class AssetService extends BaseService<AssetService> {
 			powerBall.put("createFamilyId", createFamilyId);
 			if (createFamilyId.equals(String.valueOf(familyId))) {
 				powerBall.put("isMyFamily", "1");
-				myFamilyContribution += assetFamiliesPowerLogs.getPowerNum();
 			} else {
 				powerBall.put("isMyFamily", "0");
-				fightFamilyContribution += assetFamiliesPowerLogs.getPowerNum();
 			}
 			powerBall.put("createTime",
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
 		
-		List<AssetFamiliesPowerLogs> allPowerList = assetFamiliesPowerLogsMapper.getAllFamilyPowers(familyId, fightFamilyId);
-		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : allPowerList) {
-			String createFamilyId = String.valueOf(assetFamiliesPowerLogs.getFamilyId());
-			if (createFamilyId.equals(String.valueOf(familyId))) {
-				myFamilyReceive += stealPowerMapper.getReceiveNum(familyId,assetFamiliesPowerLogs.getId());
-			} else {
-				fightFamilyReceive += stealPowerMapper.getReceiveNum(fightFamilyId,assetFamiliesPowerLogs.getId());
-			}
-		}
+		myFamilyContribution = assetFamiliesPowerLogsMapper.getContributionNum(familyId);
+		fightFamilyContribution = assetFamiliesPowerLogsMapper.getContributionNum(fightFamilyId);
+		myFamilyReceive = stealPowerMapper.getReceiveNum(familyId);
+		fightFamilyReceive = stealPowerMapper.getReceiveNum(fightFamilyId);
+		
 		
 		data.put("todayContribution", String.valueOf(todayContribution));
 		data.put("todayReceive", String.valueOf(todayReceive));
