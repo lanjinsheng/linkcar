@@ -348,11 +348,7 @@ public class AssetService extends BaseService<AssetService> {
 				todayContribution += assetUsersPowerLogs.getPowerNum();
 			}
 		}
-		if (todayContribution % 2 == 0) {
-			todayContribution = todayContribution / 2;
-		} else {
-			todayContribution = todayContribution / 2 + 1;
-		}
+		todayContribution = todayContribution / 2;
 		List<AssetFamiliesPowerLogs> powerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId, fightFamilyId);
 		List<Map<String, Object>> powerBalls = new ArrayList<>();
 		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : powerList) {
@@ -397,13 +393,12 @@ public class AssetService extends BaseService<AssetService> {
 					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
 			powerBalls.add(powerBall);
 		}
-		
+
 		myFamilyContribution = assetFamiliesPowerLogsMapper.getContributionNum(familyId);
 		fightFamilyContribution = assetFamiliesPowerLogsMapper.getContributionNum(fightFamilyId);
 		myFamilyReceive = stealPowerMapper.getReceiveNum(familyId);
 		fightFamilyReceive = stealPowerMapper.getReceiveNum(fightFamilyId);
-		
-		
+
 		data.put("todayContribution", String.valueOf(todayContribution));
 		data.put("todayReceive", String.valueOf(todayReceive));
 		data.put("myFamilyId", String.valueOf(familyId));
@@ -587,12 +582,13 @@ public class AssetService extends BaseService<AssetService> {
 		FamilySeasonAsset familySeasonAsset = familySeasonAssetMapper.getFamilySeasonAssetByDay(familyId,
 				DateTools.getCurDateAddDay(-1));
 		if (familySeasonAsset == null) {
-			rtMap.put("seasonDiamonds","0");
+			rtMap.put("seasonDiamonds", "0");
 		} else {
 			AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodaySeasonDiamonds(userId,
 					familySeasonAsset.getId());
 			if (diamonds != null) {
-				rtMap.put("seasonDiamonds", String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
+				rtMap.put("seasonDiamonds",
+						String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
 			} else {
 				rtMap.put("seasonDiamonds", "0");
 			}
