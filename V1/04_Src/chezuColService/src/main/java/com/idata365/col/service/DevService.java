@@ -19,17 +19,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.col.entity.AppConfigLogs;
 import com.idata365.col.entity.DevDriveLogs;
+import com.idata365.col.mapper.AppConfigLogsMapper;
 import com.idata365.col.mapper.DevDriveLogsMapper;
 @Service
 public class DevService extends BaseService<DevService>{
 	private final static Logger LOG = LoggerFactory.getLogger(DevService.class);
 	@Autowired
 	DevDriveLogsMapper devDriveLogsMapper;
+	@Autowired
+	AppConfigLogsMapper appConfigLogsMapper;
+	
 	@Transactional
 	public void insertDevDriveLog(DevDriveLogs log){
 		devDriveLogsMapper.insertDevLogs(log);
 	}
-	
+	@Transactional
+	public void insertAppConfigLog(AppConfigLogs log){
+		appConfigLogsMapper.insertAppConfigLogs(log);
+	}
 	
 }
