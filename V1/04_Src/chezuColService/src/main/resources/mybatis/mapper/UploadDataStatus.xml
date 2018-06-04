@@ -42,6 +42,8 @@
        scanStatus=-1,taskFlag=#{taskFlag},scanTime=now()
        WHERE 
             scanStatus = 0  and inValid=0 and (complete=1 or  createTimeSS<![CDATA[<]]>#{createTimeSS})
+            
+            limit 10
     </update>
     <!-- 调试使用的接口 -->
      <select id="getUploadDataDemo"  resultMap="uploadDataStatusMap" parameterType="java.util.HashMap">
