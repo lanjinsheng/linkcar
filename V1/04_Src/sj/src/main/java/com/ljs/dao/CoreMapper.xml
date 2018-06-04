@@ -17,10 +17,15 @@
 	<select id="getMenuByType" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 			SELECT * from rrb_background_menu  where type=#{type} order by sort
 	</select>
-	<insert id="addMenu" parameterType="java.util.HashMap">
+	<insert id="addMenu" useGeneratedKeys="true" keyProperty="seq_id" parameterType="java.util.HashMap">
 		insert into rrb_background_menu(type,icon,text,id,home_page,collapsed,closeable,href,sort,parent_id,parent_name,tree_code) value
 		(#{type},#{icon},#{text},#{id},#{home_page},#{collapsed},#{closeable},#{href},#{sort},#{parent_id},#{parent_name},#{tree_code})
 	</insert>
+	
+	<update id="updateTreeCode" parameterType="java.util.HashMap">
+		update rrb_background_menu set tree_code=#{tree_code} where seq_id=#{seq_id}
+	</update>
+	
 	<select id="getUserPriv" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 			SELECT * from rrb_background_priv  where id=#{priv_id}
 	</select>

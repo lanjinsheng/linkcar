@@ -23,4 +23,6 @@ public interface CoreMapper {
 	public List<String> getChildren(String id);
 	public void deleteMenu(List<String> list);
 	public int getMenuIdLastIndex();
+	public void updateTreeCode(Map<String,Object> map);
+	
 }
