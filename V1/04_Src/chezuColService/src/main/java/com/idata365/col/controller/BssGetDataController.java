@@ -48,9 +48,10 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
     	return null;
     } 
     @RequestMapping(value = "/v1/listPageDriveLog",produces = "application/json;charset=UTF-8")
-    public String listPageDriveLog(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    public String listPageDriveLog(@RequestParam (required = false) Map<String, Object> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams){
     	    LOG.info("start");
     	    Map<String,Object> pageMap=this.getPagerMap(allRequestParams);
+    	    pageMap.putAll(requestBodyParams);
         	String s=dataService.listPageDriveLog(pageMap);
         	LOG.info("end");
         	return s;
