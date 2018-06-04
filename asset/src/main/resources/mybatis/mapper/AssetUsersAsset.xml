@@ -50,7 +50,7 @@
      </update>
      
      <update id="updateDiamondsEarn"   parameterType="java.util.HashMap">
-        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),updateTime=now() where userId=#{userId}
+        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}),updateTime=now() where userId=#{userId}
      </update>
      
       <update id="updateDiamondsAdd"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
