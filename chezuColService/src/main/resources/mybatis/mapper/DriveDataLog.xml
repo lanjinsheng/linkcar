@@ -31,7 +31,17 @@
 		SELECT *  from driveDataLog where userId=#{userId} and habitId=#{habitId} order by seq;
 	</select>
     <select id="listPageDriveLog"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
-		SELECT *  from driveDataLog order by id desc
+		SELECT *  from driveDataLog  where 1=1 
+		<if test="userId !=null and userId gt 0">
+			and userId=#{userId}
+		</if>
+		 <if test="startTime != null and startTime != ''">
+		   <![CDATA[ and createTime >= #{startTime}]]>
+		 </if>
+		<if test="endTime !=null and endTime != ''">
+			<![CDATA[ and createTime <= #{endTime}]]>
+		</if>
+		order by id desc
 	</select>
 	<select id="listPageDriveLogTest"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
 		SELECT *  from driveDataLog where userId in ${usersArray} order by id desc
