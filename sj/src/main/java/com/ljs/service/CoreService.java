@@ -157,17 +157,20 @@ public class CoreService {
 		return sb.toString();
 	}
 	public String addMenu(Map<String,Object> map){
-		int seq_id = coreMapper.getMenuIdLastIndex();
-		seq_id=seq_id+1;
+//		int seq_id = coreMapper.getMenuIdLastIndex();
+//		seq_id=seq_id+1;
+		Map<String,Object> parentMap = coreMapper.getMenuById(String.valueOf(map.get("parent_id")));
+		coreMapper.addMenu(map);
+		String seq_id=String.valueOf(map.get("seq_id"));
 		if("1".equals(String.valueOf(map.get("type")))){
 			map.put("tree_code", "'0','"+seq_id+"'");
 		}else{
-			Map<String,Object> parentMap = coreMapper.getMenuById(String.valueOf(map.get("parent_id")));
+			
 			if(parentMap != null){
 				map.put("tree_code", parentMap.get("tree_code")+",'"+seq_id+"'");
 			}
 		}
-		coreMapper.addMenu(map);
+		coreMapper.updateTreeCode(map);
 		return Utility.rtJson(Utility.RETURN_OK, "操作成功", null);
 	}
 	public String updateMenu(Map<String,Object> map){
