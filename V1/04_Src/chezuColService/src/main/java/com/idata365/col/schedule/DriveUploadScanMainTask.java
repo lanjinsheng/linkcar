@@ -33,7 +33,7 @@ public class DriveUploadScanMainTask extends TimerTask {
 		if(!pd){
 			return;
 		}
-		if(threadPool.getActiveCount()==5) return;
+		if(threadPool.getActiveCount()>=10) return;
 		synchronized (lock){
 		if(pd){
 			pd=false;
