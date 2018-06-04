@@ -16,7 +16,6 @@ import com.idata365.col.entity.DriveDataMain;
 import com.idata365.col.entity.UploadDataStatus;
 import com.idata365.col.service.DataService;
 import com.idata365.col.service.SpringContextUtil;
-import com.idata365.col.service.YingyanService;
 import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.OverspeedUtil;
