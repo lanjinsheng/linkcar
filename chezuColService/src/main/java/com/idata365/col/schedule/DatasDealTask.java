@@ -110,7 +110,10 @@ public class DatasDealTask implements Runnable
 		    		 }else if(maxSpeed<7 && driveTimes<900) {
 		    			 data.setValidStatus(-1);
 		    			 data.setLabelFlag("电动车/自行车");
-		    		 }else   if(avgSpeed>41){
+		    		 }else if(avgSpeed.doubleValue()<6 && distance.doubleValue()<1000){
+		    			 data.setValidStatus(-1);
+		    			 data.setLabelFlag("速度过小且路程过短");
+		    		 } else   if(avgSpeed>41){
 		    			 data.setValidStatus(-1);
 		    			 data.setLabelFlag("高铁");
 		    		 }else {
