@@ -64,7 +64,7 @@
          maxspeed=GREATEST(maxspeed,${maxspeed}),
       mileage=mileage+${mileage},
       time=time+${time},
-      avgScore=convert(IF(avgScore=30 && travelNum=0,${avgScore},(avgScore*travelNum)+${avgScore})/(travelNum+${travelNum}),decimal(10,2)),
+      avgScore=<![CDATA[convert(IF(avgScore=30 && travelNum=0,${avgScore},(avgScore*travelNum)+${avgScore})/(travelNum+${travelNum}),decimal(10,2)),]]>
       travelNum=travelNum+${travelNum}
          
     </insert>
