@@ -28,6 +28,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
 import com.idata365.col.config.SystemProperties;
+import com.idata365.col.entity.AppConfigLogs;
 import com.idata365.col.entity.DevDriveLogs;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataStartLog;
@@ -192,6 +193,42 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
         devService.insertDevDriveLog(log);
         return ResultUtils.rtSuccess(null); 
     } 
+    @RequestMapping(value = "/v1/appConfigLog",method = RequestMethod.POST)
+    public Map<String,Object>  appConfigLog(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams) {
+        //获取RequestAttributes
+  	  RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+  	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+        String identificationJson=request.getHeader("identification");
+        String sign=request.getHeader("sign");
+        String equipmentInfo=request.getHeader("equipmentInfo");
+        try {
+      	  if(equipmentInfo!=null) {
+        		equipmentInfo=URLDecoder.decode(equipmentInfo,"UTF-8");
+            }
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        LOG.info("identification="+identificationJson);
+        LOG.info("sign="+sign);
+        if(ValidTools.isBlank(identificationJson) || ValidTools.isBlank(sign)) {
+      	  return ResultUtils.rtFailParam(null);
+        }
+        if(!SignUtils.security(identificationJson,sign)) {
+      	  return ResultUtils.rtFailVerification(null);
+        }
+        Map<String,Object> identificationM=GsonUtils.fromJson(identificationJson);
+        long userId=Long.valueOf(identificationM.get("userId").toString());
+        
+        
+        AppConfigLogs log=new AppConfigLogs();
+        log.setUserId(userId);
+        log.setIsBgActive(String.valueOf(identificationM.get("isBgActive")));
+        log.setIsLocationStatus(String.valueOf(identificationM.get("isLocationStatus")));
+        log.setIsStepActive(String.valueOf(identificationM.get("isStepActive")));
+        devService.insertAppConfigLog(log);
+        return ResultUtils.rtSuccess(null);
+  } 
     
     /**
      * 
