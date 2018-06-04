@@ -26,7 +26,7 @@ public class QQSSOTools {
      //内网
 //  private static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";
     //外网
-    private static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+//    private static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
     private static String accessKeyId = "AKIDAbwBJFoY4SdeVC4SHyW3OWRAi4QiBrFf";
     private static String accessKeySecret = "Rhsw9C3h9ORN8h5JOHyXu53rWyPvHVXf";
     private static String bucketName = "softtootest1-1252395822";
