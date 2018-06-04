@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +19,14 @@ import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.service.DataService;
 import com.idata365.col.service.YingyanService;
 import com.idata365.col.util.GsonUtils;
+import com.idata365.col.util.OverspeedUtil;
 import com.idata365.col.util.PhoneGpsUtil;
 import com.idata365.col.util.ResultUtils;
 
 
 @RestController
 public class MngCoreController extends BaseController<MngCoreController> {
-	private final static Logger LOG = LoggerFactory.getLogger(MngCoreController.class);
+	private final static Logger LOG = Logger.getLogger(MngCoreController.class);
     @Autowired
     DataService dataService;
     @Autowired
@@ -51,6 +51,7 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	    	  d.setHabitId(Long.valueOf(map.get("habitId").toString()));
 	    	  List<DriveDataLog> drives=dataService.listDriveLogByUH(d);
 	    	  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+	    	  List<Map<String,Object>> jkList=new ArrayList<Map<String,Object>>();
 	    	  for(DriveDataLog drive:drives) {
 	    		     StringBuffer json=new StringBuffer();
 	    		     if(drive.getFilePath().endsWith("_Q")) {
@@ -62,10 +63,18 @@ public class MngCoreController extends BaseController<MngCoreController> {
 			         if(jMap.get("gpsInfos")!=null) {
 			        	 list.addAll((List)jMap.get("gpsInfos"));
 			         }
+			         try {
+				         if(jMap.get("overspeedGPSInfo")!=null) {
+				        	 jkList.addAll((List)jMap.get("overspeedGPSInfo"));
+				         }
+			         }catch(Exception e) {
+			        	 LOG.error(e);
+			        	 e.printStackTrace();
+			         }
 			 }
 	    	  if(list.size()>0) {
 	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
-	    		  List<Map<String,Object>> alarmList=yingyanService.dealListGaode(list);
+	    		  List<Map<String,Object>> alarmList=OverspeedUtil.dealOverSpeed(jkList);
 	    		  datasMap.put("alarmListChao", alarmList);
 	    		  return ResultUtils.rtSuccess(datasMap);
 	    	  }
