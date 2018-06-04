@@ -33,9 +33,11 @@ import com.idata365.col.mapper.DriveDataStartLogMapper;
 import com.idata365.col.mapper.SensorDataLogMapper;
 import com.idata365.col.mapper.UploadDataStatusMapper;
 import com.idata365.col.mapper.UserDeviceMapper;
+import com.idata365.col.remote.ChezuAccountService;
 import com.idata365.col.util.DateTools;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.ResultUtils;
+import com.idata365.col.util.SignUtils;
 
 @Service
 public class DataService extends BaseService<DataService>{
@@ -55,6 +57,8 @@ public class DataService extends BaseService<DataService>{
 	UserDeviceMapper userDeviceMapper;
 	@Autowired
 	DriveDataStartLogMapper driveDataStartLogMapper;
+	@Autowired
+	ChezuAccountService chezuAccountService;
 	
 	public DataService() {
 		LOG.info("DataService DataService DataService DataService");
@@ -198,6 +202,14 @@ public class DataService extends BaseService<DataService>{
 	}
 	@Transactional
 	public String listPageDriveLog(Map<String,Object> map) {
+		if(map.get("userId")!=null && !map.get("userId").equals("")) {
+			 map.put("userId", Long.valueOf(map.get("userId").toString()));
+		}
+		else if(map.get("phone")!=null && !map.get("phone").equals("")) {
+			 String phone=String.valueOf(map.get("phone"));
+			 long userId=chezuAccountService.getUserIdByPhone(phone, SignUtils.encryptHMAC(phone));
+			 map.put("userId", userId);
+		 }
 		  List<DriveDataLog> list= driveDataLogMapper.listPageDriveLog(map);
 			StringBuffer sb = new StringBuffer("");
 			sb.append(ResultUtils.toJson(list));
