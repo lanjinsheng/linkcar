@@ -47,7 +47,7 @@ public class UsersInfoController extends BaseController {
 	 * @throws @author
 	 *             lixing
 	 */
-	@RequestMapping(value = "/test/getUserLicenseDrivers",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/ment/getUserLicenseDrivers",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageUserLicenseDrivers(HttpServletRequest request) {
 		Map<String, Object> map=this.getPagerMap(request);
     	map.putAll(requestParameterToMap(request));
@@ -65,6 +65,7 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("virginDay", licenseDrive.getVirginDay());
 				rtMap.put("validDay", licenseDrive.getValidDay());
 				rtMap.put("validYears", String.valueOf(licenseDrive.getValidYears()));
+				rtMap.put("userId", licenseDrive.getUserId().toString());
 				if (ValidTools.isBlank(licenseDrive.getFrontImgUrl())) {
 					rtMap.put("frontDrivingImg", "");
 				} else {
@@ -88,6 +89,7 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("frontDrivingImg", "");
 				rtMap.put("backDrivingImg", "");
 				rtMap.put("isDrivingEdit", "1");
+				rtMap.put("userId", "");
 			}
 			result.add(rtMap);
 		}
@@ -97,7 +99,7 @@ public class UsersInfoController extends BaseController {
 		return sb.toString();
 	}
 
-	@RequestMapping(value = "/test/getPageUserLicenseVehicleTravels",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/ment/getPageUserLicenseVehicleTravels",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageUserLicenseVehicleTravels(HttpServletRequest request) {
 		Map<String, Object> map=this.getPagerMap(request);
     	map.putAll(requestParameterToMap(request));
@@ -130,6 +132,7 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("issueDate", licenseVehicleTravel.getIssueDate());
 				rtMap.put("regDate", licenseVehicleTravel.getRegDate());
 				rtMap.put("isTravelEdit", String.valueOf(licenseVehicleTravel.getIsTravelEdit()));
+				rtMap.put("userId", licenseVehicleTravel.getUserId().toString());
 			} else {
 				rtMap.put("plateNo", "");
 				rtMap.put("cardTypeDesc", "");
@@ -142,6 +145,7 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("issueDate", "");
 				rtMap.put("regDate", "");
 				rtMap.put("isTravelEdit", "1");
+				rtMap.put("userId", "");
 			}
 			result.add(rtMap);
 		}
@@ -150,4 +154,33 @@ public class UsersInfoController extends BaseController {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
+	
+	//审核驾驶证
+	@RequestMapping(value = "/ment/verifyLicenseDriver",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getPageLicenseDriver(HttpServletRequest request) {
+		Map<String, Object> map=this.getPagerMap(request);
+    	map.putAll(requestParameterToMap(request));
+		Long userId = Long.valueOf(request.getAttribute("userId").toString());
+		Long operatingUserId = this.getUserId();
+		int status = userInfoService.verifyLicenseDriver(userId,operatingUserId);
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(status));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
+	}
+	
+	//审核行驶证
+		@RequestMapping(value = "/ment/verifyLicenseVehicleTravel",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+		public @ResponseBody String getPageLicenseVehicleTravel(HttpServletRequest request) {
+			Map<String, Object> map=this.getPagerMap(request);
+	    	map.putAll(requestParameterToMap(request));
+			String plateNo = request.getAttribute("plateNo").toString();
+			Long operatingUserId = this.getUserId();
+			int status = userInfoService.verifyLicenseVehicleTravel(plateNo,operatingUserId);
+			StringBuffer sb = new StringBuffer("");
+			sb.append(ServerUtil.toJson(status));
+			ServerUtil.putSuccess(map);
+			return sb.toString();
+		}
+	
 }

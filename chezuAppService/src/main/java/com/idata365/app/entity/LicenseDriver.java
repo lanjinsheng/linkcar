@@ -20,7 +20,21 @@ public class LicenseDriver implements Serializable {
 	private String  remark;
 	private String licenseNumber;
 	private int isDrivingEdit;
+	private int status;
+	private Long operatingUserId;
 	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public Long getOperatingUserId() {
+		return operatingUserId;
+	}
+	public void setOperatingUserId(Long operatingUserId) {
+		this.operatingUserId = operatingUserId;
+	}
 	public int getIsDrivingEdit() {
 		return isDrivingEdit;
 	}

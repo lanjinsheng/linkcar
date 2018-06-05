@@ -9,9 +9,16 @@ import com.idata365.app.entity.LicenseDriver;
 
 public interface LicenseDriverMapper {
 
-	 void  insertImgDriverFrontImg(Map<String,Object> jsz);
-	 void  modifyImgDriverFront(Map<String,Object> jsz);
-	 void  insertImgDriverBackImg(Map<String,Object> jsz);
-	 LicenseDriver  findLicenseDriverByUserId(@Param("userId")  Long userId);
-	 List<LicenseDriver> getUserLicenseDrivers();
+	void insertImgDriverFrontImg(Map<String, Object> jsz);
+
+	void modifyImgDriverFront(Map<String, Object> jsz);
+
+	void insertImgDriverBackImg(Map<String, Object> jsz);
+
+	LicenseDriver findLicenseDriverByUserId(@Param("userId") Long userId);
+
+	List<LicenseDriver> getUserLicenseDrivers();
+	
+	int verifyLicenseDriver(@Param("userId")Long userId, @Param("operatingUserId")Long operatingUserId);
+	
 }
