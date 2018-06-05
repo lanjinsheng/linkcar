@@ -153,4 +153,8 @@ public class OrderService {
 		orderMapper.updateByPrimaryKey(order);
 	}
 
+	public int sendReward(Long convertId, Long operatingUserId) {
+		return orderMapper.sendReward(convertId,operatingUserId);
+	}
+
 }
