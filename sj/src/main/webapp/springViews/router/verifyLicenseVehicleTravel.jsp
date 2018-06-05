@@ -50,12 +50,12 @@
 					}},
 					{title:'行驶证正面',field:'frontTravelImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var frontTravelImg=rowData.frontTravelImg;
-	                    var img = '<img style="width:30px; height:30px" src="' + frontTravelImg + '">';
+	                    var img = '<img style="width:30px; height:30px" src="' + frontTravelImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
 					{title:'行驶证背面',field:'backTravelImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var backTravelImg=rowData.backTravelImg;
-	                    var img = '<img style="width:30px; height:30px" src="' + backTravelImg + '">';
+	                    var img = '<img style="width:30px; height:30px" src="' + backTravelImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
 					{title:'可编辑',field:'isTravelEdit',width:50,align:'center',formatter:function(value,rowData,rowIndex){
@@ -67,7 +67,7 @@
 					    }
 	                    return t;
 					}},
-					{title:'审核操作',field:'plateNo',width:100,align:'center',formatter:function(value,rowData,rowIndex){
+					{title:'审核操作',field:'opearting',width:100,align:'center',formatter:function(value,rowData,rowIndex){
 					    var plateNo=rowData.plateNo;
 	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:verifySuccess('"+plateNo+"');\"> 通过</span>";
 					}}
@@ -113,8 +113,8 @@
 				data:param,
 				dataType:'json',
 				success:function(rtJson){
-					if(rtJson.status == '1'){
-						$.messager.alert("提示","审核通过！");
+					if(rtJson.rtState == '1'){
+						window.location.reload();
 					}
 					else{
 						$.messager.alert("提示",rtJson.errorMsg);
