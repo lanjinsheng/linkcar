@@ -72,6 +72,7 @@ import com.idata365.app.mapper.UserScoreDayStatMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.AdBeanUtils;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -370,6 +371,7 @@ public class ScoreService extends BaseService<ScoreService>
 			}else {
 				recOnlineTime = (s==0?"1":s)+"分钟前活跃";
 			}
+			
 			tempResultBean.setRecOnlineTime(recOnlineTime);
 			tempResultBean.setTodayScore(userDayScoreMap.get(userId));
 			tempResultBean.setTodayPower(powerMap.get(userId));
