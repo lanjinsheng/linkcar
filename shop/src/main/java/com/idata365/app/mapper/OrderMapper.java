@@ -2,6 +2,8 @@ package com.idata365.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.idata365.app.entity.Order;
 
 public interface OrderMapper {
@@ -13,4 +15,6 @@ public interface OrderMapper {
     List<Order> orderList();
 
     int updateByPrimaryKey(Order record);
+
+	int sendReward(@Param("convertId")Long convertId, @Param("operatingUserId")Long operatingUserId);
 }

@@ -34,29 +34,12 @@ public class OpenController extends BaseController {
 	@Autowired
 	ChezuAssetService chezuAssetService;
 
-
 	@Autowired
 	private PrizeService prizeService;
 	@Autowired
 	private OrderService orderService;
 	@Autowired
 	private ChezuAppService chezuAppService;
-
-	/**
-	 * 
-	 * @Title: getPrizeList
-	 * @Description: TODO(获取所有可兑换奖品)
-	 * @param @return
-	 *            参数
-	 * @return Map<String,Object> 返回类型
-	 * @throws @author
-	 *             LiXing
-	 */
-	@RequestMapping("/test/getPrizeList")
-	public Map<String, Object> getPrizeList() {
-		List<Map<String, String>> list = prizeService.getPrize();
-		return ResultUtils.rtSuccess(list);
-	}
 
 	/**
 	 * 
@@ -73,10 +56,26 @@ public class OpenController extends BaseController {
 	 * @throws @author
 	 *             LiXing
 	 */
-	@RequestMapping(value = "/test/getOrderPageList",  method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/ment/getOrderPageList", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getOrderPageList(HttpServletRequest request) {
-		Map<String, Object> map=this.getPagerMap(request);
-    	map.putAll(requestParameterToMap(request));
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
 		return orderService.orderList(map);
+	}
+
+	// 发货
+	@RequestMapping(value = "/ment/sendReward", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getPageSendReward(HttpServletRequest request) {
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
+		Long convertId = Long.valueOf(request.getParameter("convertId").toString());
+		Long operatingUserId = 700L;
+		int status = orderService.sendReward(convertId, operatingUserId);
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(status));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
 	}
 }

@@ -112,7 +112,7 @@
 		select
 		*
 		from `order`
-		
+		where orderStatus='1'
 		order by orderTime desc
 	</select>
 
@@ -169,4 +169,11 @@
 		areaCode = #{areacode,jdbcType=VARCHAR}
 		where order_id = #{orderId,jdbcType=BIGINT}
 	</update>
+	
+	<update id="sendReward">
+     update
+            `order`
+             set orderStatus=4,operatingUserId=#{operatingUserId},operatingTime=now()
+             where order_id=#{convertId}
+    </update>
 </mapper>
