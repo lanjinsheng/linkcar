@@ -2,7 +2,7 @@
 <%@ include file="/public/header.jsp"%>
 <html>
 <head>
-<title>数据监控管理</title>
+<title>商品兑换管理</title>
 </head>
 <script type="text/javascript">
 		$(function(){
@@ -13,10 +13,10 @@
 	       	} 
 	   	}); 
 			$("#table").datagrid({
-				title:"日志接受管理",
+				title:"兑换管理",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:'<%=contextPath%>/r/manage/view/netOperaList?time=' + new Date().getTime(),
+				url:'http://127.0.0.1:7082/test/getOrderPageList',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -24,68 +24,42 @@
 				    {title:'主键',field:'id',hidden:true}
 				]],
 				columns:[[
-					{title:'处理时间',field:'ctime',width:50,align:'center',formatter:function(value,rowData,rowIndex){
-					    var startTime=rowData.ctime;
-	                    return startTime;
+					{title:'交易时间',field:'convertTime',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var convertTime=rowData.convertTime;
+	                    return convertTime;
 					}},
-					{title:'T',field:'type',width:30,align:'center',formatter:function(value,rowData,rowIndex){
-	                    var t='无';
-	                    if(value=='01'){
-	                    	t="登入";
-	                    }else if(value=='02'){
-	                    	t="ping";
-	                    }else if(value=='03'){
-	                    	t="路由认证";
-	                    }else if(value=='04'){
-	                    	t="更新";
-	                    }else if(value=='05'){
-	                    	t="ping";
-	                    }else if(value=='06'){
-	                    	t="重启";
-	                    }else if(value=='08'){
-	                    	t="踢用户";
-	                    }else if(value=='0C'){
-	                    	t="免认证";
-	                    }else if(value=='0D'){
-	                    	t="黑名单";
-	                    }else if(value=='0E'){
-	                    	t="白名单";
-	                    }else if(value=='0F'){
-	                    	t="资源配置";
-	                    }else if(value=='10'){
-	                    	t="MACS上传";
-	                    }else if(value=='11'){
-	                    	t="健康数据";
-	                    }
-	                    else if(value=='1001'){
-	                    	t="理想认证";
-	                    }else if(value=='1002'){
-	                    	t="理想踢用户";
-	                    }else if(value=='1003'){
-	                    	t="理想黑名单";
-	                    }else if(value=='1004'){
-	                    	t="理想白名单";
-	                    }else if(value=='1005'){
-	                    	t="理想免认证";
-	                    }else{
-	                    	t=value;
-	                    }
-	                    return  t ;
+					{title:'奖励名称',field:'rewardName',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var rewardName=rowData.rewardName;
+	                    return rewardName;
 					}},
-					{title:'类型',field:'recieve_or_send',width:20,align:'center',formatter:function(value,rowData,rowIndex){
-	                    var type='无';
-	                    if(rowData.recieve_or_send==1){
-	                    	type="接收";
-	                    }else if(rowData.recieve_or_send==2){
-	                    	type="发送";
-	                    }
-	                    return  type ;
+					{title:'订单ID',field:'convertId',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var convertId=rowData.convertId;
+	                    return convertId;
 					}},
-					{title:'报文1',field:'log_remark',width:400,align:'center',editor:{
-						type:'textarea'
-					},formatter:function(value,rowData,rowIndex){
-						 return  '<div style="width:100%;display:block;word-break: break-all;word-wrap: break-word">'+value+'</div>';
-	                   
+					{title:'用户名称',field:'userName',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var userName=rowData.userName;
+	                    return userName;
+					}},
+					{title:'钻石数量',field:'diamondNum',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var diamondNum=rowData.diamondNum;
+	                    return diamondNum;
+					}},
+					{title:'电话号码',field:'phone',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var phone=rowData.phone;
+	                    return phone;
+					}},
+					{title:'订单数量',field:'convertNum',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var convertNum=rowData.convertNum;
+	                    return convertNum;
+					}},
+					{title:'订单状态',field:'convertStatus',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var t='无';
+					    if(value == '1'){
+					    	t="未发放";
+					    }else if(value == '2'){
+					    	t="已发放";
+					    }
+	                    return t;
 					}}
 				
 				]],
