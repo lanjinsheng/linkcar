@@ -1,15 +1,12 @@
 package com.idata365.app.controller.open;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +14,6 @@ import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.OrderService;
 import com.idata365.app.service.PrizeService;
-import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ServerUtil;
 
 /**
@@ -71,8 +67,8 @@ public class OpenController extends BaseController {
 		Map<String, Object> map = this.getPagerMap(request);
 		map.putAll(requestParameterToMap(request));
 		Long convertId = Long.valueOf(request.getParameter("convertId").toString());
-		Long operatingUserId = 700L;
-		int status = orderService.sendReward(convertId, operatingUserId);
+		String operatingUser = request.getParameter("operatingUser").toString();
+		int status = orderService.sendReward(convertId, operatingUser);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);

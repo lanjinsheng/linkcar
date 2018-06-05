@@ -173,7 +173,7 @@
 	<update id="sendReward">
      update
             `order`
-             set orderStatus=4,operatingUserId=#{operatingUserId},operatingTime=now()
+             set orderStatus=4,operatingUser=#{operatingUser},operatingTime=now()
              where order_id=#{convertId}
     </update>
 </mapper>
