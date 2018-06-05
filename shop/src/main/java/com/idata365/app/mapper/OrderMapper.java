@@ -7,8 +7,10 @@ import com.idata365.app.entity.Order;
 public interface OrderMapper {
 
     int insert(Order record);
-
+    
     List<Order> selectByExample(Long userId);
+    
+    List<Order> orderList();
 
     int updateByPrimaryKey(Order record);
 }

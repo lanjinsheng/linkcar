@@ -15,6 +15,7 @@ import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.ServerUtil;
 import com.idata365.app.util.SignUtils;
 
 /**
@@ -83,6 +84,36 @@ public class OrderService {
 		}
 		return list;
 	}
+	
+	
+	public String orderList(Map<String,Object> map) {
+		List<Order> orders = orderMapper.orderList();
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for (Order order : orders) {
+			Map<String, String> rtMap = new HashMap<>();
+			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeid()));
+			rtMap.put("convertId", String.valueOf(order.getOrderId()));
+			rtMap.put("convertTime", DateTools.formatDateYMD(order.getOrdertime()));
+			rtMap.put("userName", order.getName());
+			rtMap.put("rewardID", String.valueOf(order.getPrizeid()));
+			rtMap.put("rewardName", prize.getPrizename());
+			rtMap.put("rewardDesc", prize.getPrizedesc());
+			rtMap.put("rewardImg", prize.getPrizepic());
+			rtMap.put("convertType", order.getOrdertype());
+			rtMap.put("convertStatus", order.getOrderstatus());
+			rtMap.put("convertNum", String.valueOf(order.getOrdernum()));
+			rtMap.put("diamondNum", order.getDiamondnum().toString());
+			rtMap.put("phone", order.getPhone());
+			rtMap.put("address",order.getAddress());
+
+			list.add(rtMap);
+		}
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(list));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
+	}
+	
 
 	/**
 	 * 
