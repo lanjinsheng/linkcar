@@ -160,8 +160,8 @@ public class UsersInfoController extends BaseController {
 	public @ResponseBody String getPageLicenseDriver(HttpServletRequest request) {
 		Map<String, Object> map=this.getPagerMap(request);
     	map.putAll(requestParameterToMap(request));
-		Long userId = Long.valueOf(request.getAttribute("userId").toString());
-		Long operatingUserId = this.getUserId();
+		Long userId = Long.valueOf(request.getParameter("userId").toString());
+		Long operatingUserId = 700L;
 		int status = userInfoService.verifyLicenseDriver(userId,operatingUserId);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
@@ -174,8 +174,8 @@ public class UsersInfoController extends BaseController {
 		public @ResponseBody String getPageLicenseVehicleTravel(HttpServletRequest request) {
 			Map<String, Object> map=this.getPagerMap(request);
 	    	map.putAll(requestParameterToMap(request));
-			String plateNo = request.getAttribute("plateNo").toString();
-			Long operatingUserId = this.getUserId();
+			String plateNo = request.getParameter("plateNo").toString();
+			Long operatingUserId = 700L;
 			int status = userInfoService.verifyLicenseVehicleTravel(plateNo,operatingUserId);
 			StringBuffer sb = new StringBuffer("");
 			sb.append(ServerUtil.toJson(status));
