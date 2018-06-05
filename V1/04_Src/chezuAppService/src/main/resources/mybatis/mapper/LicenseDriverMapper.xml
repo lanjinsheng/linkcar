@@ -42,6 +42,13 @@
      
       <select id="getUserLicenseDrivers" resultMap="BaseResultMap">
        SELECT *
-       FROM  licenseDriver order by updateTime desc
+       FROM  licenseDriver where status=0 order by updateTime desc
      </select>
+     
+     <update id="verifyLicenseDriver">
+     update
+            licenseDriver
+             set status=1,operatingUserId=#{operatingUserId},updateTime=now()
+             where userId=#{userId}
+    </update>
 </mapper>

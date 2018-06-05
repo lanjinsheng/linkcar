@@ -51,6 +51,13 @@
 
 	<select id="findLicenseVehicleTravels" resultMap="BaseResultMap">
 		SELECT *
-		FROM licenseVehicleTravel order by updateTime desc
+		FROM licenseVehicleTravel where status=0 order by updateTime desc
 	</select>
+	
+	 <update id="verifyLicenseVehicleTravel">
+     update
+            licenseVehicleTravel
+             set status=1,operatingUserId=#{operatingUserId},updateTime=now()
+             where plateNo=#{plateNo}
+    </update>
 </mapper>

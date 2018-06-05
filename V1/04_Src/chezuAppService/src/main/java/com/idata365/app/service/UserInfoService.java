@@ -309,4 +309,11 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	public UsersAccount getUsersAccount(Long userId) {
 		return usersAccountMapper.findAccountById(userId);
 	}
+	
+	public int verifyLicenseDriver(Long userId, Long operatingUserId) {
+		return licenseDriverMapper.verifyLicenseDriver(userId,operatingUserId);
+	}
+	public int verifyLicenseVehicleTravel(String plateNo, Long operatingUserId) {
+		return licenseVehicleTravelMapper.verifyLicenseVehicleTravel(plateNo,operatingUserId);
+	}
 }
