@@ -52,12 +52,12 @@
 					}},
 					{title:'驾驶证正面',field:'frontDrivingImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var frontDrivingImg=rowData.frontDrivingImg;
-				      	var img = '<img style="width:30px; height:30px" src="' + frontDrivingImg + '">';
+				      	var img = '<img style="width:30px; height:30px" src="' + frontDrivingImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
 					{title:'驾驶证背面',field:'backDrivingImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var backDrivingImg=rowData.backDrivingImg;
-	                    var img = '<img style="width:30px; height:30px" src="' + backDrivingImg + '">';
+	                    var img = '<img style="width:30px; height:30px" src="' + backDrivingImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
 					{title:'初次领证日期',field:'virginDay',width:50,align:'center',formatter:function(value,rowData,rowIndex){
@@ -87,7 +87,7 @@
 					}},
 					{title:'审核操作',field:'userId',width:100,align:'center',formatter:function(value,rowData,rowIndex){
 					    var userId=rowData.userId;
-	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:verifySuccess('"+userId+"');\"> 通过</span>";
+	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:verifySuccess("+userId+");\"> 通过</span>";
 					}}
 				]],
 				onClickCell:function(rowIndex,field,value){
@@ -130,8 +130,8 @@
 				data:param,
 				dataType:'json',
 				success:function(rtJson){
-					if(rtJson.status == '1'){
-						$.messager.alert("提示","审核通过！");
+					if(rtJson.rtState == '1'){
+						window.location.reload();
 					}
 					else{
 						$.messager.alert("提示",rtJson.errorMsg);

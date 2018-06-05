@@ -16,7 +16,7 @@
 				title:"兑换管理",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:'http://127.0.0.1:7082/test/getOrderPageList',
+				url:'http://127.0.0.1:7082/ment/getOrderPageList',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -56,12 +56,15 @@
 					    var t='无';
 					    if(value == '1'){
 					    	t="未发放";
-					    }else if(value == '2'){
+					    }else if(value == '4'){
 					    	t="已发放";
 					    }
 	                    return t;
+					}},
+					{title:'操作',field:'opearting',width:100,align:'center',formatter:function(value,rowData,rowIndex){
+					    var convertId=rowData.convertId;
+	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 发货</span>";
 					}}
-				
 				]],
 				onClickCell:function(rowIndex,field,value){
 					if (lastIndex != rowIndex){
@@ -95,6 +98,24 @@
 				endTime:endTime				
 			});
 		}
+		function sendReward(convertId){
+        	var param="convertId="+convertId;
+        	$.ajax({
+				type:'POST',
+				url:"http://127.0.0.1:7082/ment/sendReward",
+				data:param,
+				dataType:'json',
+				success:function(rtJson){
+					if(rtJson.rtState == '1'){
+						window.location.reload();
+					}
+					else{
+						$.messager.alert("提示",rtJson.errorMsg);
+						//window.close();
+					}
+				}
+			});
+        }
 </script>
 <body style="height: 97%">
 	<div id="table" data-options="fit:true"></div>
