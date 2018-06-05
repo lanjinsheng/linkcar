@@ -1,9 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/public/header.jsp"%>
+<%@page import = "com.ljs.util.CommentUtil" %>
 <%
 Map<String, Object> sessionMap = (Map<String, Object>) session.getAttribute("LOGIN_USER");
 String person_id = String.valueOf(sessionMap.get("id"));
 String person = String.valueOf(sessionMap.get("truename"));
+String shopUrl = CommentUtil.shopUrl;
 %>
 <html>
 <head>
@@ -21,7 +23,7 @@ String person = String.valueOf(sessionMap.get("truename"));
 				title:"兑换管理",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:'http://127.0.0.1:7082/ment/getOrderPageList',
+				url:<%=shopUrl%>+'/ment/getOrderPageList',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -108,7 +110,7 @@ String person = String.valueOf(sessionMap.get("truename"));
         	var param="convertId="+convertId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
-				url:"http://127.0.0.1:7082/ment/sendReward",
+				url:<%=shopUrl%>+"/ment/sendReward",
 				data:param,
 				dataType:'json',
 				success:function(rtJson){

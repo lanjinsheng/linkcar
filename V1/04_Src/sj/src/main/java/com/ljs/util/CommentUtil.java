@@ -12,6 +12,8 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 public class CommentUtil {
 	public static boolean isSocket=false;
+	public static String appUrl = "";
+	public static String shopUrl = "";
 	public static boolean createDir(String destDirName) {  
         File dir = new File(destDirName);  
         if (dir.exists()) {  

@@ -23,6 +23,8 @@ public class ContextInitListener  implements  ServletContextListener {
             props.load(inputStream); 
             String isSocket = (String) props.get("isSocket"); 
             CommentUtil.isSocket=Boolean.valueOf(isSocket);
+            CommentUtil.appUrl = (String)props.getProperty("appUrl");
+            CommentUtil.shopUrl = (String)props.getProperty("shopUrl");
         } catch (IOException ex) { 
             ex.printStackTrace(); 
         } 

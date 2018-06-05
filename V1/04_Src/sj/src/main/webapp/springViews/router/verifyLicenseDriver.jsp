@@ -1,9 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/public/header.jsp"%>
+<%@page import = "com.ljs.util.CommentUtil" %>
 <%
 Map<String, Object> sessionMap = (Map<String, Object>) session.getAttribute("LOGIN_USER");
 String person_id = String.valueOf(sessionMap.get("id"));
 String person = String.valueOf(sessionMap.get("truename"));
+String appUrl = CommentUtil.appUrl;
 %>
 <html>
 <head>
@@ -21,7 +23,7 @@ String person = String.valueOf(sessionMap.get("truename"));
 				title:"驾驶证审核",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:'http://127.0.0.1:8082/ment/getUserLicenseDrivers',
+				url:<%=appUrl%>+'/ment/getUserLicenseDrivers',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -132,7 +134,7 @@ String person = String.valueOf(sessionMap.get("truename"));
         	var param="userId="+userId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
-				url:"http://127.0.0.1:8082/ment/verifyLicenseDriver",
+				url:<%=appUrl%>+"/ment/verifyLicenseDriver",
 				data:param,
 				dataType:'json',
 				success:function(rtJson){
