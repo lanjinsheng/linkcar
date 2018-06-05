@@ -66,4 +66,5 @@ public class DataViewControl extends BaseControl{
     	map.putAll(requestParameterToMap(request));
     	return dataService.listPageNetOpera(map);
 	}
+	
 }
