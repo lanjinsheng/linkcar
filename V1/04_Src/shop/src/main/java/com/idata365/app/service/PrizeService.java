@@ -58,6 +58,30 @@ public class PrizeService {
 		}
 		return list;
 	}
+	
+	
+	public List<Map<String, String>> getPrize() {
+
+		List<Prize> prizes = prizeMapper.selectByExample();
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for (Prize prize : prizes) {
+			Map<String, String> map = new HashMap<>();
+			map.put("rewardID", String.valueOf(prize.getPrizeid()));
+			map.put("rewardName", prize.getPrizename());
+			map.put("rewardDesc", prize.getPrizedesc()+"  库存："+prize.getStock()+"件");
+			map.put("rewardImg", prize.getPrizepic());
+			map.put("originalPrice", String.valueOf(prize.getOriginalprice()));
+			map.put("diamondValue", String.valueOf(prize.getDiamondvalue()));
+			map.put("rewardDetailPics", prize.getPrizedetailpics());
+			map.put("rewardDetailTexts", prize.getPrizedetailtexts()+"  库存："+prize.getStock()+"件");
+			map.put("isMarketable", String.valueOf(prize.getIsMarketable()));
+			map.put("stock", prize.getStock().toString());
+
+			list.add(map);
+		}
+		return list;
+	}
+	
 
 	public Prize getPrize(Long prizeid) {
 		Prize prize = prizeMapper.selectByPrimaryKey(prizeid);

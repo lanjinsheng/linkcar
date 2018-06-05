@@ -1,6 +1,8 @@
 package com.idata365.app.controller.open;
 
 
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +59,24 @@ abstract  class BaseController {
 				m.put(key,value );
 			}
 		}
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getPagerMap(HttpServletRequest request) {
+		return (Map<String, Object>) request.getAttribute("pageMap");
+	}
+	/**
+	 * 将request参数转换成Map
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public Map<String, Object> requestParameterToMap(HttpServletRequest request) {
+		Map<String, Object> m = new HashMap<String, Object>();
+		Enumeration<String> names = request.getParameterNames();
+		while (names.hasMoreElements()) {
+			String name = names.nextElement();
+			m.put(name, request.getParameter(name).trim());
+		}
+		return m;
 	}
 }
