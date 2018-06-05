@@ -20,19 +20,12 @@ public class LicenseVehicleTravel implements Serializable {
 	private String remark;
 	private int isTravelEdit;
 	private int status;
-	private Long operatingUserId;
 	
 	public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
 		this.status = status;
-	}
-	public Long getOperatingUserId() {
-		return operatingUserId;
-	}
-	public void setOperatingUserId(Long operatingUserId) {
-		this.operatingUserId = operatingUserId;
 	}
 	public int getIsTravelEdit() {
 		return isTravelEdit;

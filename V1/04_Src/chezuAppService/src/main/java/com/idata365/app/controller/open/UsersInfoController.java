@@ -182,5 +182,4 @@ public class UsersInfoController extends BaseController {
 			ServerUtil.putSuccess(map);
 			return sb.toString();
 		}
-	
 }
