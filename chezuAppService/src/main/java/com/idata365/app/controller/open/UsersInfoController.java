@@ -161,8 +161,8 @@ public class UsersInfoController extends BaseController {
 		Map<String, Object> map=this.getPagerMap(request);
     	map.putAll(requestParameterToMap(request));
 		Long userId = Long.valueOf(request.getParameter("userId").toString());
-		Long operatingUserId = 700L;
-		int status = userInfoService.verifyLicenseDriver(userId,operatingUserId);
+		String operatingUser = request.getParameter("operatingUser").toString();
+		int status = userInfoService.verifyLicenseDriver(userId,operatingUser);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);
@@ -175,8 +175,8 @@ public class UsersInfoController extends BaseController {
 			Map<String, Object> map=this.getPagerMap(request);
 	    	map.putAll(requestParameterToMap(request));
 			String plateNo = request.getParameter("plateNo").toString();
-			Long operatingUserId = 700L;
-			int status = userInfoService.verifyLicenseVehicleTravel(plateNo,operatingUserId);
+			String operatingUser = request.getParameter("operatingUser").toString();
+			int status = userInfoService.verifyLicenseVehicleTravel(plateNo,operatingUser);
 			StringBuffer sb = new StringBuffer("");
 			sb.append(ServerUtil.toJson(status));
 			ServerUtil.putSuccess(map);

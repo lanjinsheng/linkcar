@@ -19,6 +19,6 @@ public interface LicenseDriverMapper {
 
 	List<LicenseDriver> getUserLicenseDrivers();
 	
-	int verifyLicenseDriver(@Param("userId")Long userId, @Param("operatingUserId")Long operatingUserId);
+	int verifyLicenseDriver(@Param("userId")Long userId, @Param("operatingUser")String operatingUser);
 	
 }
