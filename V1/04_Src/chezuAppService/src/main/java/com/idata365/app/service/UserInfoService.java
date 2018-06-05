@@ -310,10 +310,10 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		return usersAccountMapper.findAccountById(userId);
 	}
 	
-	public int verifyLicenseDriver(Long userId, Long operatingUserId) {
-		return licenseDriverMapper.verifyLicenseDriver(userId,operatingUserId);
+	public int verifyLicenseDriver(Long userId, String operatingUser) {
+		return licenseDriverMapper.verifyLicenseDriver(userId,operatingUser);
 	}
-	public int verifyLicenseVehicleTravel(String plateNo, Long operatingUserId) {
-		return licenseVehicleTravelMapper.verifyLicenseVehicleTravel(plateNo,operatingUserId);
+	public int verifyLicenseVehicleTravel(String plateNo, String operatingUser) {
+		return licenseVehicleTravelMapper.verifyLicenseVehicleTravel(plateNo,operatingUser);
 	}
 }

@@ -48,7 +48,7 @@
      <update id="verifyLicenseDriver">
      update
             licenseDriver
-             set status=1,operatingUserId=#{operatingUserId},updateTime=now()
+             set status=1,operatingUser=#{operatingUser},operatingTime=now()
              where userId=#{userId}
     </update>
 </mapper>
