@@ -1,5 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/public/header.jsp"%>
+<%
+Map<String, Object> sessionMap = (Map<String, Object>) session.getAttribute("LOGIN_USER");
+String person_id = String.valueOf(sessionMap.get("id"));
+String person = String.valueOf(sessionMap.get("truename"));
+%>
 <html>
 <head>
 <title>商品兑换管理</title>
@@ -99,7 +104,8 @@
 			});
 		}
 		function sendReward(convertId){
-        	var param="convertId="+convertId;
+			var person = "<%=person %>";
+        	var param="convertId="+convertId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
 				url:"http://127.0.0.1:7082/ment/sendReward",

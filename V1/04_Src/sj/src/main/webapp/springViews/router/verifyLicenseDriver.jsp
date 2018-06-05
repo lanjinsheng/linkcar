@@ -1,5 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/public/header.jsp"%>
+<%
+Map<String, Object> sessionMap = (Map<String, Object>) session.getAttribute("LOGIN_USER");
+String person_id = String.valueOf(sessionMap.get("id"));
+String person = String.valueOf(sessionMap.get("truename"));
+%>
 <html>
 <head>
 <title>驾驶证审核</title>
@@ -123,7 +128,8 @@
 			});
 		}
 		function verifySuccess(userId){
-        	var param="userId="+userId;
+			var person = "<%=person %>";
+        	var param="userId="+userId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
 				url:"http://127.0.0.1:8082/ment/verifyLicenseDriver",
