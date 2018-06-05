@@ -260,6 +260,24 @@ public class DateTools
 		}
 		return dd;
 	}
+	
+	/**
+	 * 将日期转为年-月-日 -时-分-秒
+	 */
+	public static String formatDateYMD(Date date)
+	{
+		String dd = null;
+		try
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			dd = sdf.format(date);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return dd;
+	}
 	/**
 	 * 时间比较，格式为 yyyy-MM-dd HH:mm:ss dateTime1>=dateTime2 返回true
 	 * 

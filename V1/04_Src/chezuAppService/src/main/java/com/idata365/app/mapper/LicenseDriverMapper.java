@@ -1,5 +1,6 @@
 package com.idata365.app.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
@@ -12,4 +13,5 @@ public interface LicenseDriverMapper {
 	 void  modifyImgDriverFront(Map<String,Object> jsz);
 	 void  insertImgDriverBackImg(Map<String,Object> jsz);
 	 LicenseDriver  findLicenseDriverByUserId(@Param("userId")  Long userId);
+	 List<LicenseDriver> getUserLicenseDrivers();
 }

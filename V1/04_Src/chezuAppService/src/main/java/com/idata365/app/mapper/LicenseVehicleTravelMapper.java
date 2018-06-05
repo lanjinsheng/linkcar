@@ -1,5 +1,6 @@
 package com.idata365.app.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
@@ -13,4 +14,5 @@ public interface LicenseVehicleTravelMapper {
 	 void  modifyImgVehicleFront(Map<String,Object> xsz);
 	 void  insertImgVehicleBackImg(Map<String,Object> xsz);
 	 LicenseVehicleTravel  findLicenseVehicleTravelByUserId(@Param("userId")  Long userId);
+	 List<LicenseVehicleTravel> findLicenseVehicleTravels();
 }

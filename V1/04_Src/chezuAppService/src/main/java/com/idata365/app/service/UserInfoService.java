@@ -9,6 +9,7 @@ package com.idata365.app.service;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -48,8 +49,16 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		return licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
 	}
 
+	public List<LicenseVehicleTravel> findLicenseVehicleTravels() {
+		return licenseVehicleTravelMapper.findLicenseVehicleTravels();
+	}
+
 	public LicenseDriver getLicenseDriver(Long userId) {
 		return licenseDriverMapper.findLicenseDriverByUserId(userId);
+	}
+
+	public List<LicenseDriver> getUserLicenseDrivers() {
+		return licenseDriverMapper.getUserLicenseDrivers();
 	}
 
 	public void updateNickName(Long userId, String nickName) {

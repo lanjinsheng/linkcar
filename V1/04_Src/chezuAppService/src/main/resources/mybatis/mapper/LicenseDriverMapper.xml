@@ -39,4 +39,9 @@
        SELECT *
        FROM  licenseDriver where userId=#{userId}
      </select>
+     
+      <select id="getUserLicenseDrivers" resultMap="BaseResultMap">
+       SELECT *
+       FROM  licenseDriver order by updateTime desc
+     </select>
 </mapper>
