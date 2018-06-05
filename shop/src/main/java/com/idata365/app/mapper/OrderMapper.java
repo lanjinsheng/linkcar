@@ -16,5 +16,5 @@ public interface OrderMapper {
 
     int updateByPrimaryKey(Order record);
 
-	int sendReward(@Param("convertId")Long convertId, @Param("operatingUserId")Long operatingUserId);
+	int sendReward(@Param("convertId")Long convertId, @Param("operatingUser")String operatingUser);
 }

@@ -153,8 +153,8 @@ public class OrderService {
 		orderMapper.updateByPrimaryKey(order);
 	}
 
-	public int sendReward(Long convertId, Long operatingUserId) {
-		return orderMapper.sendReward(convertId,operatingUserId);
+	public int sendReward(Long convertId, String operatingUser) {
+		return orderMapper.sendReward(convertId,operatingUser);
 	}
 
 }
