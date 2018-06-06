@@ -55,7 +55,7 @@ public class DicService extends BaseService<DicService> {
 		Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(dayStr);
 		Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(endDay);
 
-		long day = (date2.getTime() - date1.getTime()) / (24 * 60 * 60 * 1000);
+		long day = ((date2.getTime() - date1.getTime()) / (24 * 60 * 60 * 1000))+1;
 
 		return "距离"+endDay+"赛季结束还剩："+day + "天";
 	}
