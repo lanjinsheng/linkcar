@@ -41,6 +41,11 @@
     <select id="getByFamilyTotal"  resultType="java.lang.Long" parameterType="java.lang.String">
 		SELECT sum(memberNum)  from familyGameAsset where seasonName=#{season}
 	 </select>
+	 
+	 <select id="getFamilyTotalByST"   resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+       select sum(memberNum) as totalMembers from familySeasonAsset where seasonName=#{season} <![CDATA[and familyType>=${familyTypeStart}
+       and familyType<=${familyTypeEnd}]]>
+  	 </select>
     
     <select id="getByFamilyTotalByST"  resultType="java.lang.Long" parameterType="java.util.HashMap">
 		SELECT sum(memberNum)  from familySeasonAsset where seasonName=#{season} and <![CDATA[familyType>=${familyTypeStart} and familyType<=${familyTypeEnd}]]>
