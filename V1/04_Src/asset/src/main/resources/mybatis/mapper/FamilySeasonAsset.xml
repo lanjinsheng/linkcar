@@ -7,9 +7,9 @@
      <insert id="insertFamilySeasonAsset"   parameterType="com.idata365.app.entity.FamilySeasonAsset">
             INSERT IGNORE  INTO 
             familySeasonAsset
-            (familyId,familyType,startDay,endDay,orderNo,seasonName,trophy) 
+            (familyId,familyType,startDay,endDay,orderNo,memberNum,seasonName,trophy) 
         VALUES
-            (#{familyId},#{familyType},#{startDay},#{endDay},#{orderNo},#{seasonName},#{trophy})
+            (#{familyId},#{familyType},#{startDay},#{endDay},#{orderNo},#{memberNum},#{seasonName},#{trophy})
      </insert>
      <select id="getFamilySeasonAssetByDay" resultMap="BaseFamilySeasonAssetMap">
        SELECT *
