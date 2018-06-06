@@ -22,7 +22,7 @@ public interface TaskGenericMapper {
 
 	long getByFamilyTotal(@Param("season") String season);
 	
-	long getFamilyTotalByST(Map<String, Object> map);
+	Map<String,Object> getFamilyTotalByST(Map<String, Object> map);
 	
 	void initDoFamilyDayReward(Map<String, Object> map);
 	void initDoFamilySeasonReward(Map<String, Object> map);
