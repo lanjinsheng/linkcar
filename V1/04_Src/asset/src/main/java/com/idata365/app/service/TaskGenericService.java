@@ -118,11 +118,19 @@ public class TaskGenericService {
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
 		m.put("familyTypeStart", DicFamilyTypeConstant.GuanJun_1);
 		m.put("familyTypeEnd", DicFamilyTypeConstant.GuanJun_1000);
-		long familyGuanjunTotal=taskGenericMapper.getFamilyTotalByST(m);
-		
+		long familyGuanjunTotal=0l;
+		Map<String,Object> familyGuanjunTotalM=taskGenericMapper.getFamilyTotalByST(m);
+		if(familyGuanjunTotalM!=null) {
+			familyGuanjunTotal=Long.valueOf(familyGuanjunTotalM.get("totalMembers").toString());
+		}
 		m.put("familyTypeStart", DicFamilyTypeConstant.ZuanShi_4);
 		m.put("familyTypeEnd", DicFamilyTypeConstant.ZuanShi_1);
-		long familyZuanshiTotal=taskGenericMapper.getFamilyTotalByST(m);
+		long familyZuanshiTotal=0l;
+		
+		Map<String,Object> familyZuanshiTotalM=taskGenericMapper.getFamilyTotalByST(m);
+		if(familyZuanshiTotalM!=null) {
+			familyZuanshiTotal=Long.valueOf(familyZuanshiTotalM.get("totalMembers").toString());
+		}
 //      钻石分配系数计算
 //		冠军	5b/人
 //		钻石	3b/人
