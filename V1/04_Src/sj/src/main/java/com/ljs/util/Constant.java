@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Constant {
-
+    public static String colHost="http://product-col.idata365.com";
 	public static boolean noValid=false;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
