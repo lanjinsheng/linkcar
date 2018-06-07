@@ -23,7 +23,7 @@ String appUrl = CommentUtil.appUrl;
 				title:"驾驶证审核",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:<%=appUrl%>+'/ment/getUserLicenseDrivers',
+				url:'<%=appUrl%>/ment/getUserLicenseDrivers',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -134,7 +134,7 @@ String appUrl = CommentUtil.appUrl;
         	var param="userId="+userId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
-				url:<%=appUrl%>+"/ment/verifyLicenseDriver",
+				url:"<%=appUrl%>/ment/verifyLicenseDriver",
 				data:param,
 				dataType:'json',
 				success:function(rtJson){
