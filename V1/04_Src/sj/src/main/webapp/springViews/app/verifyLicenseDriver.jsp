@@ -59,11 +59,17 @@ String appUrl = CommentUtil.appUrl;
 					}},
 					{title:'驾驶证正面',field:'frontDrivingImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var frontDrivingImg=rowData.frontDrivingImg;
+					    if(frontDrivingImg==""){
+					    	return "";
+					    }
 				      	var img = '<img style="width:30px; height:30px" src="' + frontDrivingImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
 					{title:'驾驶证背面',field:'backDrivingImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var backDrivingImg=rowData.backDrivingImg;
+					    if(backDrivingImg==""){
+					    	return "";
+					    }
 	                    var img = '<img style="width:30px; height:30px" src="' + backDrivingImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},

@@ -57,11 +57,17 @@ String appUrl = CommentUtil.appUrl;
 					}},
 					{title:'行驶证正面',field:'frontTravelImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var frontTravelImg=rowData.frontTravelImg;
+					    if(frontTravelImg==""){
+					    	return "";
+					    }
 	                    var img = '<img style="width:30px; height:30px" src="' + frontTravelImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
 					{title:'行驶证背面',field:'backTravelImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var backTravelImg=rowData.backTravelImg;
+					    if(backTravelImg==""){
+					    	return "";
+					    }
 	                    var img = '<img style="width:30px; height:30px" src="' + backTravelImg + '" onclick="javascript:window.open(this.src)">';
 				      	return  img;
 					}},
