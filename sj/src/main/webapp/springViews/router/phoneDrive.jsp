@@ -23,7 +23,7 @@ String shopUrl = CommentUtil.shopUrl;
 				title:"兑换管理",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:<%=shopUrl%>+'/ment/getOrderPageList',
+				url:'<%=shopUrl%>/ment/getOrderPageList',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -110,7 +110,7 @@ String shopUrl = CommentUtil.shopUrl;
         	var param="convertId="+convertId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
-				url:<%=shopUrl%>+"/ment/sendReward",
+				url:"<%=shopUrl%>/ment/sendReward",
 				data:param,
 				dataType:'json',
 				success:function(rtJson){
