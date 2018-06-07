@@ -1,5 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/public/header.jsp"%>
+
+<%@page import = "com.ljs.util.Constant" %>
+<%
+String colHost = Constant.colHost;
+%>
 <html>
 <head>
 <title>数瑾駕駛日志管理</title>
@@ -30,7 +35,7 @@
 				title:"驾驶数据",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:'http://product-col.idata365.com/v1/listPageDriveLog?time=' + new Date().getTime(),
+				url:'<%=colHost%>/v1/listPageDriveLog?time=' + new Date().getTime(),
 				rownumbers:true,
 				contentType : 'application/json;charset=utf-8', 
 				singleSelect:true,
@@ -108,23 +113,23 @@
 			});
 		}
 		function downLoad1(id){
-			var pUrl="http://product-col.idata365.com/v1/downLoadDrive?id="+id;
+			var pUrl="<%=colHost%>/v1/downLoadDrive?id="+id;
 			window.open(pUrl);
 		}
 		function downLoad2(id){
-			var pUrl="http://product-col.idata365.com/v1/downLoadGpsExcel?id="+id;
+			var pUrl="<%=colHost%>/v1/downLoadGpsExcel?id="+id;
 			window.open(pUrl);
 		}
 		function downLoad3(id){
-			var pUrl="http://product-col.idata365.com/v1/downLoadSensorExcel?id="+id;
+			var pUrl="<%=colHost%>/v1/downLoadSensorExcel?id="+id;
 			window.open(pUrl);
 		}
 	     function downLoad4(id){
-			var pUrl="http://product-col.idata365.com/v1/downLoadAlarmExcel?id="+id;
+			var pUrl="<%=colHost%>/v1/downLoadAlarmExcel?id="+id;
 			window.open(pUrl);
 		}
 		 function viewEvent(userId,habitId){
-			var pUrl="http://product-col.idata365.com/v1/getDriveResultByUH?userId="+userId+"&habitId="+habitId;
+			var pUrl="<%=colHost%>/v1/getDriveResultByUH?userId="+userId+"&habitId="+habitId;
 			window.open(pUrl);
 		}
 		
