@@ -270,10 +270,10 @@ public class GameControllerV2 extends BaseController {
 			if (familyId == myFamilyId) {
 				// 我的家族等级
 				String familyTypeValue = infoFamily.get("gradeOrNum");
-				String showInfo = "赛季结束后钻石段位玩家可获得：1200钻石";
-				if (familyTypeValue.contains("钻石") || familyTypeValue.contains("冠军")) {
-					showInfo = "当前段位赛季结束后可获得：1200钻石";
-				}
+//				String showInfo = "赛季结束后钻石段位玩家可获得：1200钻石";
+//				if (familyTypeValue.contains("钻石") || familyTypeValue.contains("冠军")) {
+//					showInfo = "当前段位赛季结束后可获得：1200钻石";
+//				}
 				String win = null;
 				String loss = null;
 				List<DicFamilyType> types = dicService.getDicFamilyType();
@@ -291,13 +291,13 @@ public class GameControllerV2 extends BaseController {
 				result.put("diamondsReward", " 大量");
 				result.put("reward", "奖杯"+win+" 大量钻石");
 				result.put("punishment", loss);
-				try {
-					result.put("surPlusDays", dicService.getSurPlusDays());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				result.put("showInfo", showInfo);
+//				try {
+//					result.put("surPlusDays", dicService.getSurPlusDays());
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				result.put("showInfo", showInfo);
 			}
 	}
 
