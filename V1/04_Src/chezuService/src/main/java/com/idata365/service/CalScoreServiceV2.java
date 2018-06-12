@@ -176,8 +176,10 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         }
         userTravelHistory.setTurnScore(scoreBrakeTurn.doubleValue());
         if(driveTimes>=4*3600) {
-        	tireRatio=BigDecimal.valueOf(0.9);
+        	tireRatio=BigDecimal.valueOf(0.85);
         }else if(driveTimes>=3*3600) {
+        	tireRatio=BigDecimal.valueOf(0.9);
+        }else if(driveTimes>=2*3600){
         	tireRatio=BigDecimal.valueOf(0.95);
         }else {
         	tireRatio=BigDecimal.valueOf(1);
