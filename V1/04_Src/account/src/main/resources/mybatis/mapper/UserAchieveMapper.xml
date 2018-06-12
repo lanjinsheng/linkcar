@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserAchieveMapper">
+	<resultMap id="BaseResultMap" type="com.idata365.app.entity.UserAchieveBean">
+	</resultMap>
+
+	<!-- 初始化用户成就 -->
+	<insert id="insertUserAchieveInfo" useGeneratedKeys="true" keyProperty="id" parameterType="java.lang.Long">
+		INSERT ignore INTO
+		userAchieveInfo
+		(userId,achieveId,awardId,awardNum,lev,flag,num,nowNum,type,createTime,status)
+		SELECT
+		#{userId},achieveId,awardId,awardNum,lev,flag,num,nowNum,type,NOW(),status
+		FROM userAchieveInfo WHERE userId=0
+	</insert>
+
+	<!-- 查询用户成就列表 -->
+	<select id="getUserAchieveList" resultType="java.util.HashMap" parameterType="java.lang.Long">
+		SELECT d.id AS achieveId,d.achieveName,d.maxLev,d.imgUrl,IFNULL(a.flag,0) flag,IFNULL(a.lev,0) lev
+		FROM dicUserAchieve d
+		LEFT JOIN userAchieveInfo a ON a.id=(SELECT MAX(id) id FROM userAchieveInfo WHERE flag=1 AND userId=#{userId} AND d.id=achieveId )
+		GROUP BY d.id
+	</select>
+
+	<!-- 查询用户某项成就详情 -->
+	<select id="getUserAchieveListById" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select a.achieveId,d.achieveName,a.awardId,dy.awardValue,a.awardNum,a.nowNum,a.num,a.type,a.flag,d.describe
+		from userAchieveInfo a
+		inner join dicUserAchieve d ON d.id=a.achieveId
+		left join dicLottery dy on dy.awardId=a.awardId
+		where a.userId=#{userId} and a.achieveId=#{achieveId}
+		order by d.maxLev
+	</select>
+
+	<!-- 查看用户某项成就最新记录id -->
+	<select id="queryLatelyAchieveInfo" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
+		SELECT  a.id, a.num, a.nowNum,d.maxLev,a.lev
+		FROM userAchieveInfo a
+		inner join dicUserAchieve d ON d.id=a.achieveId
+		WHERE a.userId=#{userId} AND a.flag=0 AND a.achieveId=#{achieveId}
+		and<![CDATA[  a.nowNum<a.num and a.lev <= d.maxLev ]]> 
+		ORDER BY a.lev
+		LIMIT 1
+	</select>
+
+	<!-- 更新用户成就次数 -->
+	<update id="updateAchieveTimesById" parameterType="java.lang.Long">
+		update userAchieveInfo
+		set nowNum=nowNum+1,editTime=now()
+		where id=#{id} AND flag=0
+	</update>
+	
+	<!-- 更新用户成就值 -->
+	<update id="updateAchieveNumById" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userAchieveInfo
+		set nowNum=nowNum+#{nowNum},editTime=now()
+		where id=#{id} AND flag=0
+	</update>
+	
+	<!-- 更新用户该成就解锁标记-->
+	<update id="updateFlagToLock" parameterType="java.lang.Long">
+		update userAchieveInfo
+		set nowNum=num,editTime=now(),flag=1
+		where id=#{id} AND flag=0
+	</update>
+
+	<!-- 查询用户可以解锁的成就记录 -->
+	<select id="queryUserCanDeblockAchieve" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
+		SELECT a.id,a.awardId,a.awardNum,a.type,a.lev,d.maxLev
+		FROM userAchieveInfo a
+		inner join dicUserAchieve d on d.id=a.achieveId
+		WHERE a.userId=#{userId} AND a.flag=0  AND a.achieveId=#{achieveId} AND a.nowNum>=a.num
+	</select>
+
+	<!-- 通过成就等级查询成就信息 -->
+	<select id="queryUserAchieveByLev" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="java.util.HashMap">
+		SELECT id,awardId,awardNum,type,lev
+		FROM userAchieveInfo 
+		WHERE userId=#{userId} AND flag=0  AND achieveId=#{achieveId} AND lev=#{lev}
+	</select>
+
+	<!-- 查询可以解锁的成就记录(定时器) -->
+	<select id="queryCanDeblockAchieveTask" resultType="com.idata365.app.entity.UserAchieveBean" parameterType="int">
+		SELECT a.id,a.awardId,a.awardNum,a.userId,a.lev,d.maxLev
+		FROM userAchieveInfo a
+		inner join dicUserAchieve d on d.id=a.achieveId
+		WHERE a.flag=0  AND a.achieveId=#{achieveId} AND a.nowNum>=a.num
+	</select>
+	
+	<!-- 更新用户当日评分 -->
+	<update id="updateUserPointsToday" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userScoreDayStat set extraPlusScore=extraPlusScore+#{extraPlusScore} where userId=#{userId} and daystamp=#{daystamp}
+	</update>
+	
+	<!-- 更新用户当日里程 -->
+	<update id="updateUserMileageToday" parameterType="com.idata365.app.entity.UserAchieveBean">
+		update userScoreDayStat set ahieveMileage=ahieveMileage+#{ahieveMileage} where userId=#{userId} and daystamp=#{daystamp}
+	</update>
+	
+	<!-- 更新下一等级的成就值 -->
+	<update id="updateNextLevAchieveValue" parameterType="java.util.HashMap">
+		update userAchieveInfo set nowNum=nowNum+#{nowNum},editTime=now() where userId=#{userId} AND achieveId=#{achieveId} and lev=#{lev}
+	</update>
+	
+	<!-- 查询家族登榜信息 -->
+	<select id="queryFamilyStayGoldInfo" parameterType="java.lang.Long" resultType="com.idata365.app.entity.FamilyStayGoldLogBean">
+		SELECT id,familyId,goldCountDays,lev,TO_DAYS(NOW())-TO_DAYS(editTime) AS continueFlag
+		FROM familyStayGoldLog 
+		WHERE familyId=#{familyId}
+	</select>
+	
+	<!-- 插入家族登榜信息 -->
+	<insert id="insertFamilyStayGoldLog" parameterType="java.lang.Long">
+	insert into familyStayGoldLog
+	(familyId,goldCountDays,addTime,editTime)
+	values
+	(#{familyId},0,now(),now())
+	</insert>
+	
+	<!-- 更新家族登榜信息 -->
+	<update id="updateFamilyStayGoldLog" parameterType="com.idata365.app.entity.FamilyStayGoldLogBean">
+	update familyStayGoldLog 
+	set goldCountDays=#{goldCountDays},editTime=now(),lev=#{lev}
+	where familyId=#{familyId}
+	</update>
+	
+	<select id="getFamilyUsers" resultType="java.lang.Long" parameterType="java.lang.Long">
+ 		select userId from userFamilyRelation where familyId=#{familyId}
+ 	</select>
+ 	
+ 	<!-- 解锁黄金家族 -->
+ 	<update id="unlockGoldFamilyAchieve" parameterType="java.util.HashMap">
+ 		UPDATE userAchieveInfo 
+ 		SET flag=1 
+ 		WHERE userId=#{userId} AND achieveId=7 AND flag=0 and lev=#{lev}
+ 	</update>
+ 	
+ 	 	
+ 	<!-- 更新用户黄金家族成就值 -->
+ 	<update id="updateGoldFamilyAchieveValue" parameterType="java.util.HashMap">
+ 		UPDATE userAchieveInfo SET nowNum=#{nowNum} WHERE userId=#{userId} AND achieveId=7 AND flag=0 and lev=#{lev}
+ 	</update>
+ 	
+ 	<!-- 查询用户参加的另一个家族的今日连续天数 -->
+ 	<select id="queryUserOtherStayGoldDays" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.FamilyStayGoldLogBean">
+		select r.familyId,g.goldCountDays 
+		from userFamilyRelation r
+		inner join familyStayGoldLog g on g.familyId=r.familyId
+		where r.userId=#{userId}  and r.familyId!=#{familyId} 
+ 	</select>
+ 	
+ 	<!-- 校验用户成就记录数量 -->
+ 	<select id="checkUserAchieveCount"  resultType="int" parameterType="java.lang.Long">
+ 		SELECT COUNT(1) FROM userAchieveInfo a WHERE a.userId=#{userId}
+ 	</select>
+</mapper>
