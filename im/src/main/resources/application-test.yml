@@ -1,0 +1,64 @@
+server:
+  port: 4082
+  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://115.159.216.58:8761/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-expiration-duration-in-seconds: 30 
+    lease-renewal-interval-in-seconds: 10
+    ip-address: 115.159.216.58
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+ 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+  
+spring:
+  application:
+    name: service-im-chezu
+ 
+    
+
+# 驱动配置信息
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://115.159.216.58:6633/devBss?useUnicode=true&useSSL=false
+    username: sjTest
+    password: sjTest2962143!
+
+#连接池的配置信息
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  
+    
+    
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+ 
+  type-aliases-package: com.idata365.app.entity
+  
+multipart:
+  enabled: true

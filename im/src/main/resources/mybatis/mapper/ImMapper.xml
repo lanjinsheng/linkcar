@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.ImMapper">
+    <select id="getMsg" resultType="java.util.HashMap">
+       SELECT cast(userId as  CHAR(32)) as userId,content,nick,createTime as time
+       FROM  imGlobal order by id desc limit 30
+    </select>
+    
+    <insert id="insert"   useGeneratedKeys="true" keyProperty="id"  parameterType="java.util.HashMap" >
+       INSERT    INTO 
+            imGlobal
+            (userId,content,nick,createTime) 
+        VALUES
+            (#{userId}, #{content}, #{nick}, #{time})
+    </insert>
+    
+</mapper>
