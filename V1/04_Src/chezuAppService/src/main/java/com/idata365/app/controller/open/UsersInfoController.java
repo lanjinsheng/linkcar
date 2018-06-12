@@ -47,10 +47,11 @@ public class UsersInfoController extends BaseController {
 	 * @throws @author
 	 *             lixing
 	 */
-	@RequestMapping(value = "/ment/getUserLicenseDrivers",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/ment/getUserLicenseDrivers", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageUserLicenseDrivers(HttpServletRequest request) {
-		Map<String, Object> map=this.getPagerMap(request);
-    	map.putAll(requestParameterToMap(request));
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
 		String imgBase = getImgBasePath();
 		List<LicenseDriver> licenseDrives = userInfoService.getUserLicenseDrivers();
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
@@ -99,10 +100,11 @@ public class UsersInfoController extends BaseController {
 		return sb.toString();
 	}
 
-	@RequestMapping(value = "/ment/getPageUserLicenseVehicleTravels",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/ment/getPageUserLicenseVehicleTravels", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageUserLicenseVehicleTravels(HttpServletRequest request) {
-		Map<String, Object> map=this.getPagerMap(request);
-    	map.putAll(requestParameterToMap(request));
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
 		String imgBase = getImgBasePath();
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		List<LicenseVehicleTravel> licenseVehicleTravels = userInfoService.findLicenseVehicleTravels();
@@ -111,7 +113,7 @@ public class UsersInfoController extends BaseController {
 
 			if (licenseVehicleTravel != null) {// 行驶证
 				licenseVehicleTravel.getUserId();
-				
+
 				rtMap.put("plateNo", licenseVehicleTravel.getPlateNo());
 				rtMap.put("cardTypeDesc", StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
 				rtMap.put("userTypeDesc", StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
@@ -154,32 +156,35 @@ public class UsersInfoController extends BaseController {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
-	
-	//审核驾驶证
-	@RequestMapping(value = "/ment/verifyLicenseDriver",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
+
+	// 审核驾驶证
+	@RequestMapping(value = "/ment/verifyLicenseDriver", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageLicenseDriver(HttpServletRequest request) {
-		Map<String, Object> map=this.getPagerMap(request);
-    	map.putAll(requestParameterToMap(request));
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
 		Long userId = Long.valueOf(request.getParameter("userId").toString());
 		String operatingUser = request.getParameter("operatingUser").toString();
-		int status = userInfoService.verifyLicenseDriver(userId,operatingUser);
+		int status = userInfoService.verifyLicenseDriver(userId, operatingUser);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
-	
-	//审核行驶证
-		@RequestMapping(value = "/ment/verifyLicenseVehicleTravel",method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json;charset=UTF-8")
-		public @ResponseBody String getPageLicenseVehicleTravel(HttpServletRequest request) {
-			Map<String, Object> map=this.getPagerMap(request);
-	    	map.putAll(requestParameterToMap(request));
-			String plateNo = request.getParameter("plateNo").toString();
-			String operatingUser = request.getParameter("operatingUser").toString();
-			int status = userInfoService.verifyLicenseVehicleTravel(plateNo,operatingUser);
-			StringBuffer sb = new StringBuffer("");
-			sb.append(ServerUtil.toJson(status));
-			ServerUtil.putSuccess(map);
-			return sb.toString();
-		}
+
+	// 审核行驶证
+	@RequestMapping(value = "/ment/verifyLicenseVehicleTravel", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getPageLicenseVehicleTravel(HttpServletRequest request) {
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
+		String plateNo = request.getParameter("plateNo").toString();
+		String operatingUser = request.getParameter("operatingUser").toString();
+		int status = userInfoService.verifyLicenseVehicleTravel(plateNo, operatingUser);
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(status));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
+	}
+
 }

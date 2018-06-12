@@ -1,7 +1,6 @@
 package com.idata365.app.controller.securityV2;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -38,6 +37,7 @@ import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.DicService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ScoreService;
+import com.idata365.app.service.TaskService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.service.common.FamilyScoreService;
 import com.idata365.app.serviceV2.GameServiceV2;
@@ -64,6 +64,8 @@ public class GameControllerV2 extends BaseController {
 	private FamilyScoreService familyScoreService;
 	@Autowired
 	private FamilyService familyService;
+	@Autowired
+	TaskService taskService;
 
 	/**
 	 * 
@@ -80,6 +82,8 @@ public class GameControllerV2 extends BaseController {
 	public Map<String, Object> getIndexFightInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
+		//更新活跃时间
+		taskService.updateLastLoginTimeByUserId(userId);
 		LOG.info("userId=================" + userId);
 		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
 		bean.setUserId(userId);

@@ -75,6 +75,10 @@
     <select id="queryFamilyByCode" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
     	select imgUrl, memberNum as num, familyName as name, id as familyId, createUserId as userId from familyInfo where inviteCode=#{inviteCode}
     </select>
+    
+    <select id="queryFamilyByName" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
+    	select imgUrl, memberNum as num, familyName as name, id as familyId, createUserId as userId from familyInfo where familyName LIKE #{familyName}
+    </select>
      
      <!-- 
     <select id="queryFamilyByCreateUserId" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
