@@ -35,7 +35,7 @@ public class UserLoginControl extends BaseControl{
 	@RequestMapping(value = "/userLogin", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String userLogin(String username,String password) {
-		
+		System.out.println("666");
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username,password);
 		token.setRememberMe(true);

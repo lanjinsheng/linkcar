@@ -14,6 +14,7 @@ public class CommentUtil {
 	public static boolean isSocket=false;
 	public static String appUrl = "";
 	public static String shopUrl = "";
+	public static String accountUrl = "";
 	public static boolean createDir(String destDirName) {  
         File dir = new File(destDirName);  
         if (dir.exists()) {  
