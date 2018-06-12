@@ -15,10 +15,10 @@ String appUrl = CommentUtil.appUrl;
 		$(function(){
 			$("#box_id").keypress(function(e) { 
 	    	// 回车键事件 
-	     	if(e.which == 13) { 
-	     		 doSearch();
-	       	} 
-	   	}); 
+		     	if(e.which == 13) { 
+		     		 doSearch();
+		       	} 
+	   		}); 
 			$("#table").datagrid({
 				title:"驾驶证审核",
 				iconCls:'icon-edit',

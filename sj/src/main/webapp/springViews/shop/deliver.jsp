@@ -115,7 +115,10 @@ String shopUrl = CommentUtil.shopUrl;
 				dataType:'json',
 				success:function(rtJson){
 					if(rtJson.rtState == '1'){
-						window.location.reload();
+						$.messager.alert("提示","操作成功");
+		                setTimeout(function () {
+		                    window.location.reload();
+		                }, 1000);
 					}
 					else{
 						$.messager.alert("提示",rtJson.errorMsg);
