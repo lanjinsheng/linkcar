@@ -69,16 +69,16 @@ public class OrderService {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Order order : orders) {
 			Map<String, String> map = new HashMap<>();
-			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeid()));
+			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeId()));
 			map.put("convertId", String.valueOf(order.getOrderId()));
-			map.put("convertTime", DateTools.formatDateMD(order.getOrdertime()));
-			map.put("rewardID", String.valueOf(order.getPrizeid()));
-			map.put("rewardName", prize.getPrizename());
-			map.put("rewardDesc", prize.getPrizedesc());
-			map.put("rewardImg", prize.getPrizepic());
-			map.put("convertType", order.getOrdertype());
-			map.put("convertStatus", order.getOrderstatus());
-			map.put("convertNum", String.valueOf(order.getOrdernum()));
+			map.put("convertTime", DateTools.formatDateMD(order.getOrderTime()));
+			map.put("rewardID", String.valueOf(order.getPrizeId()));
+			map.put("rewardName", prize.getPrizeName());
+			map.put("rewardDesc", prize.getPrizeDesc());
+			map.put("rewardImg", prize.getPrizePic());
+			map.put("convertType", order.getOrderType());
+			map.put("convertStatus", order.getOrderStatus());
+			map.put("convertNum", String.valueOf(order.getOrderNum()));
 
 			list.add(map);
 		}
@@ -91,18 +91,18 @@ public class OrderService {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Order order : orders) {
 			Map<String, String> rtMap = new HashMap<>();
-			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeid()));
+			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeId()));
 			rtMap.put("convertId", String.valueOf(order.getOrderId()));
-			rtMap.put("convertTime", DateTools.formatDateYMD(order.getOrdertime()));
+			rtMap.put("convertTime", DateTools.formatDateYMD(order.getOrderTime()));
 			rtMap.put("userName", order.getName());
-			rtMap.put("rewardID", String.valueOf(order.getPrizeid()));
-			rtMap.put("rewardName", prize.getPrizename());
-			rtMap.put("rewardDesc", prize.getPrizedesc());
-			rtMap.put("rewardImg", prize.getPrizepic());
-			rtMap.put("convertType", order.getOrdertype());
-			rtMap.put("convertStatus", order.getOrderstatus());
-			rtMap.put("convertNum", String.valueOf(order.getOrdernum()));
-			rtMap.put("diamondNum", order.getDiamondnum().toString());
+			rtMap.put("rewardID", String.valueOf(order.getPrizeId()));
+			rtMap.put("rewardName", prize.getPrizeName());
+			rtMap.put("rewardDesc", prize.getPrizeDesc());
+			rtMap.put("rewardImg", prize.getPrizePic());
+			rtMap.put("convertType", order.getOrderType());
+			rtMap.put("convertStatus", order.getOrderStatus());
+			rtMap.put("convertNum", String.valueOf(order.getOrderNum()));
+			rtMap.put("diamondNum", order.getDiamondNum().toString());
 			rtMap.put("phone", order.getPhone());
 			rtMap.put("address",order.getAddress());
 
@@ -130,8 +130,8 @@ public class OrderService {
 	 */
 	@Transactional
 	public void save(Order order, long ofUserId) throws Exception {
-		int ordernum = order.getOrdernum();
-		long prizeId = order.getPrizeid();
+		int ordernum = order.getOrderNum();
+		long prizeId = order.getPrizeId();
 		
 		int f = prizeMapper.div(ordernum,prizeId);
 		if(f<=0) {
@@ -140,17 +140,13 @@ public class OrderService {
 		
 		orderMapper.insert(order);
 		
-		String paramSign = order.getUserid() + String.valueOf(order.getDiamondnum());
+		String paramSign = order.getUserId() + String.valueOf(order.getDiamondNum());
 		String sign = SignUtils.encryptDataAes(paramSign);
-		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserid(), order.getDiamondnum(), sign,ofUserId);
+		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserId(), order.getDiamondNum(), sign,ofUserId);
 		if (!flag) {
 			throw new RuntimeException("交易失败");
 		}
 
-	}
-
-	public void update(Order order) {
-		orderMapper.updateByPrimaryKey(order);
 	}
 
 	public int sendReward(Long convertId, String operatingUser) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.OrderTypeConstant;
 import com.idata365.app.entity.Order;
 import com.idata365.app.entity.Prize;
 import com.idata365.app.remote.ChezuAppService;
@@ -91,24 +92,25 @@ public class ShopController extends BaseController {
 		String areaCode = requestBodyParams.get("areaCode").toString();
 
 		Order order = new Order();
-		order.setUserid(userId);
-		order.setDiamondnum(Integer.valueOf(requestBodyParams.get("diamondNum").toString()));
-		order.setOrdertype("0");
-		order.setOrdernum(Integer.valueOf(requestBodyParams.get("rewardNum").toString()));
-		order.setOrderstatus("1");
-		order.setOrdertime(new Date());
-		order.setPrizeid(prizeId);
+		order.setUserId(userId);
+		order.setDiamondNum(Integer.valueOf(requestBodyParams.get("diamondNum").toString()));
+		order.setOrderType("0");
+		order.setOrderNum(Integer.valueOf(requestBodyParams.get("rewardNum").toString()));
+		order.setOrderStatus("1");
+		order.setOrderTime(new Date());
+		order.setPrizeId(prizeId);
 		order.setName(requestBodyParams.get("name").toString());
 		order.setPhone(requestBodyParams.get("phone").toString());
 		order.setAddress(requestBodyParams.get("address").toString());
-		order.setProvincecode(requestBodyParams.get("provinceCode").toString());
-		order.setCitycode(requestBodyParams.get("cityCode").toString());
+		order.setProvinceCode(requestBodyParams.get("provinceCode").toString());
+		order.setCityCode(requestBodyParams.get("cityCode").toString());
+		order.setBusinessType(OrderTypeConstant.AUCTION);
 		if (areaCode != null) {
-			order.setAreacode(areaCode);
+			order.setAreaCode(areaCode);
 		}
 		try {
 			orderService.save(order,prize.getOfUserId());
-			boolean shopMsg = chezuAppService.sendShopMsg(userId, prize.getPrizename(), SignUtils.encryptHMAC(userId+""+prize.getPrizename()));
+			boolean shopMsg = chezuAppService.sendShopMsg(userId, prize.getPrizeName(), SignUtils.encryptHMAC(userId+""+prize.getPrizeName()));
 			System.out.println("兑换结果："+shopMsg);
 			if(shopMsg) {
 				return ResultUtils.rtSuccess(null);

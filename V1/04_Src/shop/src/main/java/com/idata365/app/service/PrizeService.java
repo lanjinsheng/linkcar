@@ -29,8 +29,8 @@ public class PrizeService {
 		boolean flag = false;
 		List<Order> orders = orderMapper.selectByExample(userId);
 		for (Order order : orders) {
-			if (order.getPrizeid() == PRIZE_NO10 || order.getPrizeid() == PRIZE_NO25
-					|| order.getPrizeid() == PRIZE_NO50) {
+			if (order.getPrizeId() == PRIZE_NO10 || order.getPrizeId() == PRIZE_NO25
+					|| order.getPrizeId() == PRIZE_NO50) {
 				flag = true;
 			}
 		}
@@ -38,19 +38,19 @@ public class PrizeService {
 		List<Prize> prizes = prizeMapper.selectByExample();
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Prize prize : prizes) {
-			long prizeId = prize.getPrizeid();
+			long prizeId = prize.getPrizeId();
 			if (flag && (prizeId == PRIZE_NO10 || prizeId == PRIZE_NO25 || prizeId == PRIZE_NO50)) {
 				continue;
 			}
 			Map<String, String> map = new HashMap<>();
-			map.put("rewardID", String.valueOf(prize.getPrizeid()));
-			map.put("rewardName", prize.getPrizename());
-			map.put("rewardDesc", prize.getPrizedesc()+"  库存："+prize.getStock()+"件");
-			map.put("rewardImg", prize.getPrizepic());
-			map.put("originalPrice", String.valueOf(prize.getOriginalprice()));
-			map.put("diamondValue", String.valueOf(prize.getDiamondvalue()));
-			map.put("rewardDetailPics", prize.getPrizedetailpics());
-			map.put("rewardDetailTexts", prize.getPrizedetailtexts()+"  库存："+prize.getStock()+"件");
+			map.put("rewardID", String.valueOf(prize.getPrizeId()));
+			map.put("rewardName", prize.getPrizeName());
+			map.put("rewardDesc", prize.getPrizeDesc()+"  库存："+prize.getStock()+"件");
+			map.put("rewardImg", prize.getPrizePic());
+			map.put("originalPrice", String.valueOf(prize.getOriginalPrice()));
+			map.put("diamondValue", String.valueOf(prize.getDiamondValue()));
+			map.put("rewardDetailPics", prize.getPrizeDetailPics());
+			map.put("rewardDetailTexts", prize.getPrizeDetailTexts()+"  库存："+prize.getStock()+"件");
 			map.put("isMarketable", String.valueOf(prize.getIsMarketable()));
 			map.put("stock", prize.getStock().toString());
 
@@ -66,14 +66,14 @@ public class PrizeService {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Prize prize : prizes) {
 			Map<String, String> map = new HashMap<>();
-			map.put("rewardID", String.valueOf(prize.getPrizeid()));
-			map.put("rewardName", prize.getPrizename());
-			map.put("rewardDesc", prize.getPrizedesc()+"  库存："+prize.getStock()+"件");
-			map.put("rewardImg", prize.getPrizepic());
-			map.put("originalPrice", String.valueOf(prize.getOriginalprice()));
-			map.put("diamondValue", String.valueOf(prize.getDiamondvalue()));
-			map.put("rewardDetailPics", prize.getPrizedetailpics());
-			map.put("rewardDetailTexts", prize.getPrizedetailtexts()+"  库存："+prize.getStock()+"件");
+			map.put("rewardID", String.valueOf(prize.getPrizeId()));
+			map.put("rewardName", prize.getPrizeName());
+			map.put("rewardDesc", prize.getPrizeDesc()+"  库存："+prize.getStock()+"件");
+			map.put("rewardImg", prize.getPrizePic());
+			map.put("originalPrice", String.valueOf(prize.getOriginalPrice()));
+			map.put("diamondValue", String.valueOf(prize.getDiamondValue()));
+			map.put("rewardDetailPics", prize.getPrizeDetailPics());
+			map.put("rewardDetailTexts", prize.getPrizeDetailTexts()+"  库存："+prize.getStock()+"件");
 			map.put("isMarketable", String.valueOf(prize.getIsMarketable()));
 			map.put("stock", prize.getStock().toString());
 
@@ -83,21 +83,9 @@ public class PrizeService {
 	}
 	
 
-	public Prize getPrize(Long prizeid) {
-		Prize prize = prizeMapper.selectByPrimaryKey(prizeid);
+	public Prize getPrize(Long prizeId) {
+		Prize prize = prizeMapper.selectByPrimaryKey(prizeId);
 		return prize;
-	}
-
-	public void save(Prize prize) {
-		prizeMapper.insert(prize);
-	}
-
-	public void update(Prize prize) {
-		prizeMapper.updateByPrimaryKey(prize);
-	}
-
-	public void delete(Long id) {
-		prizeMapper.deleteByPrimaryKey(id);
 	}
 
 }

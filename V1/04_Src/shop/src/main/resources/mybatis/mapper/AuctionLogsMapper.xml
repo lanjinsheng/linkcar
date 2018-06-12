@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.AuctionLogsMapper">
+	<resultMap id="BaseResultMap" type="com.idata365.app.entity.AuctionLogs">
+	</resultMap>
+	
+	<select id="myListAuctionGoods" resultMap="BaseResultMap">
+		SELECT b.* FROM(SELECT max(a.auctionLogsId) id FROM auctionLogs AS a WHERE a.auctionUserId = #{auctionUserId} GROUP BY a.auctionGoodsId) a
+		LEFT JOIN auctionLogs b ON a.id = b.auctionLogsId order by auctionTime desc
+	</select>
+	
+	<select id="joinPersons" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       select count(distinct(auctionUserId))
+       FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId}
+     </select>
+     
+     <select id="joinTimes" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       select count(*)
+       FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId}
+     </select>
+	
+</mapper>
