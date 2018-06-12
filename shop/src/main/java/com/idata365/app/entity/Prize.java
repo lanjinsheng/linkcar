@@ -11,34 +11,98 @@ public class Prize  implements Serializable{
 	    
 	private static final long serialVersionUID = 7939225107680860121L;
 
-	private Long prizeid;
+	private Long prizeId;
 
-    private String prizename;
+    private String prizeName;
 
-    private String prizedesc;
+    private String prizeDesc;
 
     private Integer isMarketable;
 
-    private String prizepic;
+    private String prizePic;
 
-    private BigDecimal originalprice;
+    private BigDecimal originalPrice;
 
-    private Integer diamondvalue;
+    private BigDecimal diamondValue;
 
-    private String prizedetailpics;
+    private String prizeDetailPics;
 
-    private String prizedetailtexts;
+    private String prizeDetailTexts;
     
     private Integer stock;
     
     private Long ofUserId;
 
-    public Long getOfUserId() {
-		return ofUserId;
+	public Long getPrizeId() {
+		return prizeId;
 	}
 
-	public void setOfUserId(Long ofUserId) {
-		this.ofUserId = ofUserId;
+	public void setPrizeId(Long prizeId) {
+		this.prizeId = prizeId;
+	}
+
+	public String getPrizeName() {
+		return prizeName;
+	}
+
+	public void setPrizeName(String prizeName) {
+		this.prizeName = prizeName;
+	}
+
+	public String getPrizeDesc() {
+		return prizeDesc;
+	}
+
+	public void setPrizeDesc(String prizeDesc) {
+		this.prizeDesc = prizeDesc;
+	}
+
+	public Integer getIsMarketable() {
+		return isMarketable;
+	}
+
+	public void setIsMarketable(Integer isMarketable) {
+		this.isMarketable = isMarketable;
+	}
+
+	public String getPrizePic() {
+		return prizePic;
+	}
+
+	public void setPrizePic(String prizePic) {
+		this.prizePic = prizePic;
+	}
+
+	public BigDecimal getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(BigDecimal originalPrice) {
+		this.originalPrice = originalPrice;
+	}
+
+	public BigDecimal getDiamondValue() {
+		return diamondValue;
+	}
+
+	public void setDiamondValue(BigDecimal diamondValue) {
+		this.diamondValue = diamondValue;
+	}
+
+	public String getPrizeDetailPics() {
+		return prizeDetailPics;
+	}
+
+	public void setPrizeDetailPics(String prizeDetailPics) {
+		this.prizeDetailPics = prizeDetailPics;
+	}
+
+	public String getPrizeDetailTexts() {
+		return prizeDetailTexts;
+	}
+
+	public void setPrizeDetailTexts(String prizeDetailTexts) {
+		this.prizeDetailTexts = prizeDetailTexts;
 	}
 
 	public Integer getStock() {
@@ -49,75 +113,11 @@ public class Prize  implements Serializable{
 		this.stock = stock;
 	}
 
-	public Long getPrizeid() {
-        return prizeid;
-    }
+	public Long getOfUserId() {
+		return ofUserId;
+	}
 
-    public void setPrizeid(Long prizeid) {
-        this.prizeid = prizeid;
-    }
-
-    public String getPrizename() {
-        return prizename;
-    }
-
-    public void setPrizename(String prizename) {
-        this.prizename = prizename == null ? null : prizename.trim();
-    }
-
-    public String getPrizedesc() {
-        return prizedesc;
-    }
-
-    public void setPrizedesc(String prizedesc) {
-        this.prizedesc = prizedesc == null ? null : prizedesc.trim();
-    }
-
-    public Integer getIsMarketable() {
-        return isMarketable;
-    }
-
-    public void setIsMarketable(Integer isMarketable) {
-        this.isMarketable = isMarketable;
-    }
-
-    public String getPrizepic() {
-        return prizepic;
-    }
-
-    public void setPrizepic(String prizepic) {
-        this.prizepic = prizepic == null ? null : prizepic.trim();
-    }
-
-    public BigDecimal getOriginalprice() {
-        return originalprice;
-    }
-
-    public void setOriginalprice(BigDecimal originalprice) {
-        this.originalprice = originalprice;
-    }
-
-    public Integer getDiamondvalue() {
-        return diamondvalue;
-    }
-
-    public void setDiamondvalue(Integer diamondvalue) {
-        this.diamondvalue = diamondvalue;
-    }
-
-    public String getPrizedetailpics() {
-        return prizedetailpics;
-    }
-
-    public void setPrizedetailpics(String prizedetailpics) {
-        this.prizedetailpics = prizedetailpics == null ? null : prizedetailpics.trim();
-    }
-
-    public String getPrizedetailtexts() {
-        return prizedetailtexts;
-    }
-
-    public void setPrizedetailtexts(String prizedetailtexts) {
-        this.prizedetailtexts = prizedetailtexts == null ? null : prizedetailtexts.trim();
-    }
+	public void setOfUserId(Long ofUserId) {
+		this.ofUserId = ofUserId;
+	}
 }

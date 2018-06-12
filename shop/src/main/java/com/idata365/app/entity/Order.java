@@ -13,141 +13,153 @@ public class Order implements Serializable{
 
 	private Long orderId;
 
-    private Integer diamondnum;
+    private Integer diamondNum;
 
-    private String ordertype;
+    private String orderType;
 
-    private Integer ordernum;
+    private Integer orderNum;
 
-    private String orderstatus;
+    private String orderStatus;
 
-    private Date ordertime;
+    private Date orderTime;
 
-    private Long userid;
+    private Long userId;
 
     private String name;
 
-    private Long prizeid;
+    private Long prizeId;
 
     private String phone;
 
     private String address;
 
-    private String provincecode;
+    private String provinceCode;
 
-    private String citycode;
+    private String cityCode;
 
-    private String areacode;
+    private String areaCode;
+    
+    private String businessType;
 
-    public Long getOrderId() {
-        return orderId;
-    }
+	public String getBusinessType() {
+		return businessType;
+	}
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
 
-    public Integer getDiamondnum() {
-        return diamondnum;
-    }
+	public Long getOrderId() {
+		return orderId;
+	}
 
-    public void setDiamondnum(Integer diamondnum) {
-        this.diamondnum = diamondnum;
-    }
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
 
-    public String getOrdertype() {
-        return ordertype;
-    }
+	public Integer getDiamondNum() {
+		return diamondNum;
+	}
 
-    public void setOrdertype(String ordertype) {
-        this.ordertype = ordertype == null ? null : ordertype.trim();
-    }
+	public void setDiamondNum(Integer diamondNum) {
+		this.diamondNum = diamondNum;
+	}
 
-    public Integer getOrdernum() {
-        return ordernum;
-    }
+	public String getOrderType() {
+		return orderType;
+	}
 
-    public void setOrdernum(Integer ordernum) {
-        this.ordernum = ordernum;
-    }
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
 
-    public String getOrderstatus() {
-        return orderstatus;
-    }
+	public Integer getOrderNum() {
+		return orderNum;
+	}
 
-    public void setOrderstatus(String orderstatus) {
-        this.orderstatus = orderstatus == null ? null : orderstatus.trim();
-    }
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
 
-    public Date getOrdertime() {
-        return ordertime;
-    }
+	public String getOrderStatus() {
+		return orderStatus;
+	}
 
-    public void setOrdertime(Date ordertime) {
-        this.ordertime = ordertime;
-    }
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 
-    public Long getUserid() {
-        return userid;
-    }
+	public Date getOrderTime() {
+		return orderTime;
+	}
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
-    }
+	public void setOrderTime(Date orderTime) {
+		this.orderTime = orderTime;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Long getUserId() {
+		return userId;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    public Long getPrizeid() {
-        return prizeid;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setPrizeid(Long prizeid) {
-        this.prizeid = prizeid;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public Long getPrizeId() {
+		return prizeId;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
+	public void setPrizeId(Long prizeId) {
+		this.prizeId = prizeId;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public String getProvincecode() {
-        return provincecode;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public void setProvincecode(String provincecode) {
-        this.provincecode = provincecode == null ? null : provincecode.trim();
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public String getCitycode() {
-        return citycode;
-    }
+	public String getProvinceCode() {
+		return provinceCode;
+	}
 
-    public void setCitycode(String citycode) {
-        this.citycode = citycode == null ? null : citycode.trim();
-    }
+	public void setProvinceCode(String provinceCode) {
+		this.provinceCode = provinceCode;
+	}
 
-    public String getAreacode() {
-        return areacode;
-    }
+	public String getCityCode() {
+		return cityCode;
+	}
 
-    public void setAreacode(String areacode) {
-        this.areacode = areacode == null ? null : areacode.trim();
-    }
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
+	}
+
+	public String getAreaCode() {
+		return areaCode;
+	}
+
+	public void setAreaCode(String areaCode) {
+		this.areaCode = areaCode;
+	}
+
+    
 }

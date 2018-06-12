@@ -14,7 +14,5 @@ public interface OrderMapper {
     
     List<Order> orderList();
 
-    int updateByPrimaryKey(Order record);
-
 	int sendReward(@Param("convertId")Long convertId, @Param("operatingUser")String operatingUser);
 }
