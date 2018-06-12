@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.idCardMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.idCard" >
+    </resultMap>
+
+  <insert id="insertImgidCardFrontImg"   parameterType="java.util.HashMap" >
+       INSERT IGNORE   INTO 
+            idCard
+            (userId,gender,nation,userName,birthday,frontImgUrl,cardNumber,address,createTime) 
+        VALUES
+            (#{userId},#{gender},#{nation},#{userName},#{birthday},#{key},#{cardNumber},#{address},now()
+             ON DUPLICATE KEY UPDATE frontImgUrl=#{key}
+    </insert>
+
+   <update id="modifyidCard"   parameterType="java.util.HashMap" >
+     update
+             idCard
+             set gender=#{gender},nation=#{nation},cardNumber=#{cardNumber},birthday=#{birthday},
+             address=#{address},
+             firstDay=#{firstDay},lastDay=#{lastDay},userName=#{userName},operatingUser=#{operatingUser},office=#{office},status=1,
+             operatingTime=now()
+             where userId=#{userId}
+    </update>
+    
+    
+     <insert id="insertImgidCardBackImg"   parameterType="java.util.HashMap" >
+       INSERT IGNORE   INTO 
+            idCard
+            (userId,backImgUrl,office,firstDay,lastDay,createTime) 
+        VALUES
+            (#{userId},#{key},#{office},#{firstDay},#{lastDay},now())
+             ON DUPLICATE KEY UPDATE backImgUrl=#{key}
+    </insert>
+    
+     <select id="findidCardByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  idCard where userId=#{userId}
+     </select>
+     
+      <select id="getUseridCards" resultMap="BaseResultMap">
+       SELECT *
+       FROM  idCard where status=0 order by createTime desc
+     </select>
+     
+</mapper>

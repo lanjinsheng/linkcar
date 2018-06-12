@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.LotteryMapper">
+    
+    <select id="query" resultType="com.idata365.app.entity.LotteryBean"
+    	parameterType="com.idata365.app.entity.LotteryBean">
+    	select * from lottery where userId=#{userId} order by awardId asc;
+    </select>
+    
+    <insert id="saveOrUpdate" parameterType="com.idata365.app.entity.LotteryBean">
+    	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+    		select count(*) from lottery where userId=#{userId} and awardId=#{awardId}
+    	</selectKey>
+    	<if test="count > 0">
+    		update lottery set awardCount=awardCount+${awardCount} where userId=#{userId} and awardId=#{awardId}
+    	</if>
+    	<if test="count == 0">
+    		insert into lottery(userId, awardId, awardCount) values(#{userId}, #{awardId}, #{awardCount})
+    	</if>
+    </insert>
+    
+    <select id="countLottery" resultType="Integer" parameterType="com.idata365.app.entity.LotteryBean">
+    	select awardCount from lottery where userId=#{userId} and awardId=#{awardId}
+    </select>
+    
+    <update id="updateLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <update id="increLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount+${addedCount} where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <select id="queryReadyLotteryAwardId" resultType="com.idata365.app.entity.ReadyLotteryBean" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	 select awardId, awardCount from readyLottery where userId=#{userId} and daystamp=#{daystamp} order by id desc
+    </select>
+    
+    <select id="queryReadyLottery" resultType="com.idata365.app.entity.LotteryBean" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	select id, userId, awardId, awardCount from readyLottery where userId=#{userId} and daystamp=#{daystamp}
+    </select>
+    
+    <update id="updateReadyLotteryStatus" parameterType="com.idata365.app.entity.LotteryBean">
+    	update readyLottery set awardCount=awardCount-${awardCount} where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </update>
+    
+    <update id="addLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount+1 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <update id="delLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update lottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId}
+    </update>
+    
+    <update id="increReadyLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update readyLottery set awardCount=awardCount+1 where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </update>
+    
+    <update id="decreReadyLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+    	update readyLottery set awardCount=awardCount-1 where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </update>
+    
+    <insert id="saveOrUpdateReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	insert into readyLottery(userId, awardId, awardCount, daystamp) values(#{userId}, #{awardId}, 1, #{daystamp})
+    </insert>
+    
+    <select id="countReadyLottery" resultType="int" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	select awardCount from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </select>
+    
+    <delete id="delReadyLottery" parameterType="com.idata365.app.entity.ReadyLotteryBean">
+    	delete from readyLottery where userId=#{userId} and awardId=#{awardId} and daystamp=#{daystamp}
+    </delete>
+    
+    <insert id="saveLotteryLog" parameterType="com.idata365.app.entity.LotteryLogInfoParamBean">
+    	insert into lotteryLogInfo(userId, awardId, awardCount, type, timestamp) values(#{userId}, #{awardId}, #{awardCount}, #{type}, #{timestamp})
+    </insert>
+
+	<update id="reduceLotteryCount" parameterType="com.idata365.app.entity.LotteryBean">
+		update lottery set awardCount=awardCount-${reducedCount} where userId=#{userId} and awardId=#{awardId}
+	</update>
+	
+	
+	
+	
+	<select id="getChest" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	select id,awardId,awardCount from userTravelLottery where userId=#{userId} and createMilTimes<![CDATA[>]]>${createMilTimes} and hadGet=0 limit 1
+    </select>
+    <update id="recChest"  parameterType="java.lang.Long">
+    	update userTravelLottery set hadGet=1 where id=#{id}
+    </update>
+    
+</mapper>
