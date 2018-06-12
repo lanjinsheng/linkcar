@@ -115,6 +115,10 @@ public class TripController extends BaseController {
 		rtMap.put("turnNum", "0");
 		rtMap.put("brakeNum", "0");
 
+		rtMap.put("tripTime", "0");
+		rtMap.put("brakeScore", "0");
+		rtMap.put("overspeedScore", "0");
+		rtMap.put("turnScoire", "0");
 		if (dbMap != null) {
 			// 驾驶得分
 			rtMap.put("score", String.valueOf(dbMap.get("score")));
@@ -132,8 +136,35 @@ public class TripController extends BaseController {
 			double breaK = Double.valueOf(dbMap.get("brakeScore").toString()).doubleValue();
 			double brakeNum = breaK / 20;
 			rtMap.put("brakeNum", brakeNum < 0 ? 0 : brakeNum);
+			rtMap.put("brakeScore", breaK);
+			rtMap.put("overspeedScore", over);
+			rtMap.put("turnScoire", turn);
+			rtMap.put("tripTime", BigDecimal.valueOf(Double.valueOf(dbMap.get("time").toString())/3600).setScale(1, RoundingMode.HALF_UP));
+			
 		}
 		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	/**
+	 * 
+	 * @Title: getHiddenTrip
+	 * @Description: TODO(删除行程--逻辑删除)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
+	@RequestMapping("/getHiddenTrip")
+	public Map<String, Object> getHiddenTrip(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long travelId = Long.valueOf(requestBodyParams.get("travelId").toString());
+		tripService.getHiddenTrip(travelId);
+		return ResultUtils.rtSuccess(null);
 	}
 
 }

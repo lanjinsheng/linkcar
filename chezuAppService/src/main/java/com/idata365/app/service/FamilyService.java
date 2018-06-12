@@ -178,7 +178,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		this.familyMapper.updateFamilyRoleLog(bean);
 		// 更新家族热度
 		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
-//		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
+		// familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 
 		// 发送消息
 		String nickName = user.getNickName();
@@ -239,7 +239,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		}
 
 		int tempCount = this.familyMapper.countUsersByFamilyId(bean);
-		if (FamilyConstant.FAMILY_TOTAL_NUM== tempCount) {
+		if (FamilyConstant.FAMILY_TOTAL_NUM == tempCount) {
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 			return 2;
 		}
@@ -300,7 +300,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
 		// 增加用户热度
 		familyMapper.addFamilyMemberNum(bean.getFamilyId());
-//		familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
+		// familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 
 		return 3;
 	}
@@ -420,6 +420,42 @@ public class FamilyService extends BaseService<FamilyService> {
 		}
 
 		return tempResultBean;
+	}
+
+	/**
+	 * 根据名字模糊查询家族
+	 * 
+	 * @param bean
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
+	public List<FamilyRandResultBean> queryFamilyByName(FamilyParamBean bean, long userId) {
+		List<FamilyRandResultBean> list = new ArrayList<>();
+		bean.setFamilyName("%" + bean.getFamilyName() + "%");
+		List<FamilyRandBean> tempRandBeans = this.familyMapper.queryFamilyByName(bean);
+
+		if (null == tempRandBeans && tempRandBeans.size() != 0) {
+			for (FamilyRandBean tempRandBean : tempRandBeans) {
+				FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
+				AdBeanUtils.copyOtherPropToStr(tempResultBean, tempRandBean);
+
+				long familyId = tempRandBean.getFamilyId();
+				FamilyParamBean paramBean = new FamilyParamBean();
+				paramBean.setUserId(userId);
+				paramBean.setFamilyId(familyId);
+				int inviteCount = this.familyMapper.countInviteByUserId(paramBean);
+				if (inviteCount > 0) {
+					tempResultBean.setIsAlreadyRecommend("1");
+				} else {
+					tempResultBean.setIsAlreadyRecommend("0");
+				}
+				list.add(tempResultBean);
+			}
+		} else {
+			return null;
+		}
+		return list;
 	}
 
 	/**

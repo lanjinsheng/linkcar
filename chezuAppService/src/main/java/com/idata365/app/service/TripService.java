@@ -30,6 +30,8 @@ public class TripService extends BaseService<TripService>
 	public Map<String,Object> getTripSpeciality(long travelId) {
 		return tripMapper.getTripSpeciality(travelId);
 	}
-	 
+	public void getHiddenTrip(long travelId) {
+		tripMapper.getHiddenTrip(travelId);
+	}
 	
 }

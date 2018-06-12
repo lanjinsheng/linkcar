@@ -50,6 +50,8 @@ public interface FamilyMapper {
 	public int countStranger(FamilyParamBean bean);
 
 	public FamilyRandBean queryFamilyByCode(FamilyParamBean bean);
+	
+	public List<FamilyRandBean> queryFamilyByName(FamilyParamBean bean);
 
 	public long saveFamilyInvite(FamilyInviteParamBean bean);
 

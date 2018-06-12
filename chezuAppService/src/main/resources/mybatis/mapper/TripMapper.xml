@@ -5,7 +5,7 @@
  
     <select id="getTripByUserLatest" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
-       FROM  userTravelHistory where addDayStatFlag=1 and userId=#{userId} order by id desc limit 1
+       FROM  userTravelHistory where addDayStatFlag=1 and userId=#{userId} and flag=1 order by id desc limit 1
      </select>
      
      <select id="getTripEndTimeOfUser" resultType="java.lang.String" parameterType="java.lang.Long">
@@ -13,6 +13,10 @@
        FROM  userTravelHistory where userId=#{userId} order by id desc limit 1
      </select>
      
+     <update id="getHiddenTrip" parameterType="java.lang.Long">
+		update userTravelHistory set flag=0 where id=#{travelId}
+	 </update>
+	
         <select id="getTripSpeciality" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
        FROM  userTravelHistory where addDayStatFlag=1 and id=#{travelId}  order by id desc limit 1
@@ -20,7 +24,7 @@
      
     <select id="getTripLatest" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT *
-       FROM  userTravelHistory where addDayStatFlag=1 and userId=#{userId} and id<![CDATA[<]]>${id} order by id desc limit ${recordNum}
+       FROM  userTravelHistory where addDayStatFlag=1 and flag=1 and userId=#{userId} and id<![CDATA[<]]>${id} order by id desc limit ${recordNum}
      </select>
      
 </mapper>
