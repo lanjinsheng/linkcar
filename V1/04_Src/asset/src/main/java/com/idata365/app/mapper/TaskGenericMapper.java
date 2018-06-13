@@ -20,7 +20,7 @@ public interface TaskGenericMapper {
 
 	Map<String, Object> getUserPowerByUserId(Map<String, Object> map);
 
-	long getByFamilyTotal(@Param("season") String season);
+	Long getByFamilyTotal(@Param("season") String season);
 	
 	Map<String,Object> getFamilyTotalByST(Map<String, Object> map);
 	
