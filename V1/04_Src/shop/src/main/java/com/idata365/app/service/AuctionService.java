@@ -142,7 +142,7 @@ public class AuctionService {
 		return auctionBean;
 	}
 
-	public void doAuction(AuctionGoods auctionGoods, AuctionLogs auctionLogs, long userId, long winnerId)
+	public void doAuction(AuctionGoods auctionGoods, AuctionLogs auctionLogs, long userId, long preUserId)
 			throws Exception {
 		int a = auctionMapper.updateAuctionGoods(auctionGoods);
 		if (a <= 0) {
@@ -156,7 +156,7 @@ public class AuctionService {
 		String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
 		String sign = SignUtils.encryptDataAes(paramSign);
 		boolean flag = chezuAssetService.freezeDiamondAsset(userId, auctionLogs.getAuctionDiamond().doubleValue(), sign,
-				winnerId);
+				preUserId,auctionGoods.getAuctionGoodsId());
 		if (!flag) {
 			throw new RuntimeException("交易失败");
 		}

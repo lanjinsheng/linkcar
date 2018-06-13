@@ -26,9 +26,8 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		return false;
 	}
 
-
 	@Override
-	public boolean freezeDiamondAsset(long userId, double diamondNum, String sign, long ofUserId) {
+	public boolean freezeDiamondAsset(long userId, double diamondNum, String sign, long preUserId, long auctionGoodsId) {
 		LOG.info(" freezeDiamondAsset 挂了   ChezuAssetService");
 		return false;
 	}
