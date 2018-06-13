@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
+import com.idata365.app.entity.bean.AuctionBean;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
 import com.idata365.app.util.DateTools;
@@ -125,4 +126,14 @@ public class AuctionService {
 		// TODO Auto-generated method stub
 		return auctionMapper.updateAuctionGoods(auctionGoods);
 	}
+	
+	public AuctionBean getAuctionBean(Long auctionGoodsId) {
+		 AuctionBean auctionBean=new AuctionBean();
+		 AuctionGoods goods=auctionMapper.findAuctionGoodById(auctionGoodsId);
+		 auctionBean.setAuctionGoods(goods);
+		 List<AuctionLogs> auctionLogs= auctionLogsMapper.listAuctionGoodsRecord(auctionGoodsId);
+		 auctionBean.setAuctionLogsList(auctionLogs);
+		 return auctionBean;
+	}
+	
 }
