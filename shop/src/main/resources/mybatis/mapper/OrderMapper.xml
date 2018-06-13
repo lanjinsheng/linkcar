@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.OrderMapper">
-	<resultMap id="BaseResultMap" type="com.idata365.app.entity.Order">
+	<resultMap id="BaseResultMap"
+		type="com.idata365.app.entity.Order">
 	</resultMap>
-	
+
 	<select id="selectByExample" resultMap="BaseResultMap">
 		select
 		*
@@ -12,34 +13,22 @@
 		userId=#{userId}
 		order by orderTime desc
 	</select>
-	
+
 	<select id="orderList" resultMap="BaseResultMap">
 		select
 		*
 		from `order`
-		where orderStatus='1'
+		where
+		orderStatus='1'
 		order by orderTime desc
 	</select>
 
 	<insert id="insert"
 		parameterType="com.idata365.app.entity.Order">
-		insert into `order` (diamondNum, orderType,
-		orderNum, orderStatus,
-		orderTime,
-		userId, userName, prizeId,
-		phone, address, provinceCode,
-		cityCode, areaCode,businessType)
-		values (#{diamondNum,jdbcType=java.math.BigDecimal},
-		#{orderType,jdbcType=VARCHAR},
-		#{orderNum,jdbcType=INTEGER},
-		#{orderStatus,jdbcType=VARCHAR},
-		#{orderTime,jdbcType=TIMESTAMP},
-		#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
-		#{prizeId,jdbcType=BIGINT},
-		#{phone,jdbcType=VARCHAR},
-		#{address,jdbcType=VARCHAR},
-		#{provinceCode,jdbcType=VARCHAR},
-		#{cityCode,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR},#{businessType})
+		insert into `order` (diamondNum,orderType,orderNum,orderStatus,orderTime,userId,userName,prizeId,phone,address,
+		provinceCode,cityCode,areaCode,businessType) values (#{diamondNum},#{orderType},#{orderNum},#{orderStatus},
+		#{orderTime},#{userId}, #{userName},#{prizeId},#{phone},#{address},#{provinceCode},#{cityCode},
+		#{areaCode},#{businessType})
 		<selectKey keyProperty="orderId" order="AFTER"
 			resultType="java.lang.Long">
 			SELECT LAST_INSERT_ID()
@@ -47,9 +36,11 @@
 	</insert>
 
 	<update id="sendReward">
-     update
-            `order`
-             set orderStatus=4,operatingUser=#{operatingUser},operatingTime=now()
-             where orderId=#{convertId}
-    </update>
+		update
+		`order`
+		set
+		orderStatus=4,operatingUser=#{operatingUser},operatingTime=now()
+		where
+		orderId=#{convertId}
+	</update>
 </mapper>
