@@ -191,6 +191,7 @@ public class UserInfoController extends BaseController {
 	public Map<String, Object> uploadFrontIDCardImg(@RequestParam CommonsMultipartFile file,
 			@RequestParam Map<String, Object> map) {
 		Long userId = this.getUserId();
+		LOG.info("userId=================" + userId);
 		if (file == null) {
 			return ResultUtils.rtFailParam(null, "附件为空");
 		}
@@ -242,7 +243,7 @@ public class UserInfoController extends BaseController {
 		}
 		rtMap.remove("key");
 		rtMap.remove("userId");
-		return ResultUtils.rtSuccess(rtMap);
+		return ResultUtils.rtSuccess(null);
 	}
 
 	/**
