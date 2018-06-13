@@ -6,7 +6,6 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.idata365.app.entity.UsersAccount;
 
 /**
  * 
@@ -69,5 +68,9 @@ public interface ChezuAssetService {
 	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
 	boolean freezeDiamondAsset(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId);
+ 
+	@RequestMapping(value = "/asset/unfreezeDiamondAsset", method = RequestMethod.POST)
+	boolean unfreezeDiamondAsset(@RequestParam(value = "buyerId") long buyerId,@RequestParam(value = "sellerId") long sellerId,
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign );
 
 }

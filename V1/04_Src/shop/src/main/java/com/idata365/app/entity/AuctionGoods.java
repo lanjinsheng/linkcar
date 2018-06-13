@@ -30,6 +30,35 @@ public class AuctionGoods implements Serializable {
 	private Integer auctionStatus;
 	private String remark;
 
+	private Integer taskStatus;
+	private Integer failTimes;
+	private String taskFlag;
+	
+	
+	public Integer getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(Integer taskStatus) {
+		this.taskStatus = taskStatus;
+	}
+
+	public Integer getFailTimes() {
+		return failTimes;
+	}
+
+	public void setFailTimes(Integer failTimes) {
+		this.failTimes = failTimes;
+	}
+
+	public String getTaskFlag() {
+		return taskFlag;
+	}
+
+	public void setTaskFlag(String taskFlag) {
+		this.taskFlag = taskFlag;
+	}
+
 	public Long getAuctionGoodsId() {
 		return auctionGoodsId;
 	}
