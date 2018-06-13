@@ -99,7 +99,10 @@ public class TaskGenericService {
 		map.put("taskType", TaskGenericEnum.DoFamilyDayReward);
 		map.put("priority", 10);
 		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
-		long familyPersonTotal=taskGenericMapper.getByFamilyTotal(m.get("season").toString());
+		Long familyPersonTotal=taskGenericMapper.getByFamilyTotal(m.get("season").toString());
+		if(familyPersonTotal==null) {
+			familyPersonTotal=0L;
+		}
 //		long limit=0;
 		 
 		map.putAll(m);
@@ -107,7 +110,14 @@ public class TaskGenericService {
 		map.put("familyPersonTotal", familyPersonTotal);
 		taskGenericMapper.initDoFamilyDayReward(map);
 	}
-	
+	@Transactional
+	public void test() {
+		 
+		Long familyPersonTotal=taskGenericMapper.getByFamilyTotal("2016-06-13");
+		if(familyPersonTotal==null) {
+			familyPersonTotal=0L;
+		}
+	}
 	@Transactional
 	public void InitFamilySeasonReward(TaskGeneric task) {
 		//待处理
