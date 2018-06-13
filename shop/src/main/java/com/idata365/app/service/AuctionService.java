@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.entity.AuctionGood;
+import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
@@ -25,9 +25,9 @@ public class AuctionService {
 
 	public List<Map<String, String>> listAuctionGoods() {
 
-		List<AuctionGood> auctionGoods = auctionMapper.listAuctionGoods();
+		List<AuctionGoods> auctionGoods = auctionMapper.listAuctionGoods();
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		for (AuctionGood auctionGood : auctionGoods) {
+		for (AuctionGoods auctionGood : auctionGoods) {
 			Map<String, String> map = new HashMap<>();
 			map.put("auctionId", auctionGood.getAuctionGoodsId().toString());
 			map.put("auctionName", auctionGood.getPrizeName());
@@ -50,7 +50,7 @@ public class AuctionService {
 		if(auctionLogs!=null&&auctionLogs.size()!=0) {
 			for (AuctionLogs auctionLog : auctionLogs) {
 				Map<String, String> map = new HashMap<>();
-				AuctionGood auctionGood = auctionMapper.findAuctionGoodById(auctionLog.getAuctionGoodsId());
+				AuctionGoods auctionGood = auctionMapper.findAuctionGoodById(auctionLog.getAuctionGoodsId());
 				map.put("convertId", auctionLog.getAuctionLogsId().toString());
 				map.put("convertTime",  DateTools.formatDateYMD(auctionLog.getAuctionTime()));
 				map.put("auctionId", auctionLog.getAuctionGoodsId().toString());
@@ -66,5 +66,10 @@ public class AuctionService {
 			}
 		}
 		return result;
+	}
+
+	public List<AuctionLogs> listAuctionGoodsRecord(Long auctionGoodsId) {
+		List<AuctionLogs> auctionLogs= auctionLogsMapper.listAuctionGoodsRecord(auctionGoodsId);
+		return auctionLogs;
 	}
 }
