@@ -24,12 +24,53 @@
 		update auctionGoods set
 		winnerId=#{winnerId},doneDiamond=#{doneDiamond},auctionRealEndTime=#{auctionRealEndTime}
 		where
-		auctionGoodsId=#{auctionGoodsId}
+		auctionGoodsId=#{auctionGoodsId} and <![CDATA[doneDiamond<#{doneDiamond}]]>
 	</update>
 	
 	<update id="updateGoodsStatus" >
 		update auctionGoods set
 		auctionStatus=2 where auctionGoodsId=#{auctionGoodsId}
 	</update>
-	
+		<!-- 竞拍定时任务 -->
+		<!-- 定时处理行程逻辑 -->
+    <update id="lockAuctionTask" parameterType="com.idata365.app.entity.AuctionGoods" >
+       UPDATE 
+            auctionGoods 
+       SET 
+        taskStatus=-1,taskFlag=#{taskFlag},taskTime=now()
+       WHERE 
+            taskStatus = 0  and taskFlag='0' and auctionStatus=0 and <![CDATA[auctionRealEndTime<now()]]>
+    </update>	
+	<!-- 获取任务 -->
+	 <select id="getAuctionTask"  resultMap="BaseResultMap" parameterType="com.idata365.app.entity.AuctionGoods">
+		SELECT *  from auctionGoods where taskStatus=-1 and taskFlag=#{taskFlag}
+	 </select>
+ 
+	 <!-- 更新任务 -->
+     <update id="updateAuctionSuccTask" parameterType="com.idata365.app.entity.AuctionGoods" >
+        update auctionGoods set
+        taskStatus=1,taskTime=now()
+        where  id=#{id}
+     </update>
+
+    <update id="updateAuctionFailTask" parameterType="com.idata365.app.entity.AuctionGoods" >
+       UPDATE 
+           auctionGoods 
+       SET 
+           taskStatus=#{taskStatus},taskFlag='0',taskTime=now(),failTimes=failTimes+1
+       WHERE 
+            id=#{id} 
+     </update>
+     
+     <!-- 清除锁定的记录 -->
+    <update id="clearLockTask" parameterType="java.lang.Long" >
+       UPDATE 
+           auctionGoods 
+       SET 
+           taskStatus=0,taskFlag='0',failTimes=failTimes+1
+       WHERE 
+              taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
+     </update>
+     
+<!-- 定时处理行程逻辑 结束-->	
 </mapper>
