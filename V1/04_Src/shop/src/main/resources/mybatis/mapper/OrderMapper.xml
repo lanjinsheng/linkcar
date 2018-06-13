@@ -1,106 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.OrderMapper">
-	<resultMap id="BaseResultMap"
-		type="com.idata365.app.entity.Order">
-		<id column="orderId" property="orderId" jdbcType="BIGINT" />
-		<result column="diamondNum" property="diamondNum"
-			jdbcType="INTEGER" />
-		<result column="orderType" property="orderType"
-			jdbcType="VARCHAR" />
-		<result column="orderNum" property="orderNum"
-			jdbcType="INTEGER" />
-		<result column="orderStatus" property="orderStatus"
-			jdbcType="VARCHAR" />
-		<result column="orderTime" property="orderTime"
-			jdbcType="TIMESTAMP" />
-		<result column="userId" property="userId" jdbcType="BIGINT" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="prizeId" property="prizeId" jdbcType="BIGINT" />
-		<result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="address" property="address" jdbcType="VARCHAR" />
-		<result column="provinceCode" property="provinceCode"
-			jdbcType="VARCHAR" />
-		<result column="cityCode" property="cityCode"
-			jdbcType="VARCHAR" />
-		<result column="areaCode" property="areaCode"
-			jdbcType="VARCHAR" />
-		<result column="businessType" property="businessType"
-		jdbcType="VARCHAR" />
+	<resultMap id="BaseResultMap" type="com.idata365.app.entity.Order">
 	</resultMap>
-	<sql id="Example_Where_Clause">
-		<where>
-			<foreach collection="oredCriteria" item="criteria"
-				separator="or">
-				<if test="criteria.valid">
-					<trim prefix="(" suffix=")" prefixOverrides="and">
-						<foreach collection="criteria.criteria" item="criterion">
-							<choose>
-								<when test="criterion.noValue">
-									and ${criterion.condition}
-								</when>
-								<when test="criterion.singleValue">
-									and ${criterion.condition} #{criterion.value}
-								</when>
-								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
-									#{criterion.secondValue}
-								</when>
-								<when test="criterion.listValue">
-									and ${criterion.condition}
-									<foreach collection="criterion.value" item="listItem"
-										open="(" close=")" separator=",">
-										#{listItem}
-									</foreach>
-								</when>
-							</choose>
-						</foreach>
-					</trim>
-				</if>
-			</foreach>
-		</where>
-	</sql>
-	<sql id="Update_By_Example_Where_Clause">
-		<where>
-			<foreach collection="example.oredCriteria" item="criteria"
-				separator="or">
-				<if test="criteria.valid">
-					<trim prefix="(" suffix=")" prefixOverrides="and">
-						<foreach collection="criteria.criteria" item="criterion">
-							<choose>
-								<when test="criterion.noValue">
-									and ${criterion.condition}
-								</when>
-								<when test="criterion.singleValue">
-									and ${criterion.condition} #{criterion.value}
-								</when>
-								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
-									#{criterion.secondValue}
-								</when>
-								<when test="criterion.listValue">
-									and ${criterion.condition}
-									<foreach collection="criterion.value" item="listItem"
-										open="(" close=")" separator=",">
-										#{listItem}
-									</foreach>
-								</when>
-							</choose>
-						</foreach>
-					</trim>
-				</if>
-			</foreach>
-		</where>
-	</sql>
-	<sql id="Base_Column_List">
-		orderId, diamondNum, orderType, orderNum, orderStatus,
-		orderTime, userId,
-		`name`,
-		prizeId, phone, address, provinceCode,
-		cityCode, areaCode,businessType
-	</sql>
+	
 	<select id="selectByExample" resultMap="BaseResultMap">
 		select
 		*
@@ -123,15 +26,15 @@
 		insert into `order` (diamondNum, orderType,
 		orderNum, orderStatus,
 		orderTime,
-		userId, `name`, prizeId,
+		userId, userName, prizeId,
 		phone, address, provinceCode,
 		cityCode, areaCode,businessType)
-		values (#{diamondNum,jdbcType=INTEGER},
+		values (#{diamondNum,jdbcType=java.math.BigDecimal},
 		#{orderType,jdbcType=VARCHAR},
 		#{orderNum,jdbcType=INTEGER},
 		#{orderStatus,jdbcType=VARCHAR},
 		#{orderTime,jdbcType=TIMESTAMP},
-		#{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+		#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
 		#{prizeId,jdbcType=BIGINT},
 		#{phone,jdbcType=VARCHAR},
 		#{address,jdbcType=VARCHAR},

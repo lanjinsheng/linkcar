@@ -1,5 +1,6 @@
 package com.idata365.app.controller.security;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -86,14 +87,14 @@ public class ShopController extends BaseController {
 	public Map<String, Object> saveOrder(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) throws Exception {
 		Long userId = super.getUserId();
-		System.out.println(userId);
+		LOG.info("userId=================" + userId);
 		Long prizeId = Long.valueOf(requestBodyParams.get("rewardId").toString());
 		Prize prize = prizeService.getPrize(prizeId);
 		String areaCode = requestBodyParams.get("areaCode").toString();
 
 		Order order = new Order();
 		order.setUserId(userId);
-		order.setDiamondNum(Integer.valueOf(requestBodyParams.get("diamondNum").toString()));
+		order.setDiamondNum(BigDecimal.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("auctionDiamond")))));
 		order.setOrderType("0");
 		order.setOrderNum(Integer.valueOf(requestBodyParams.get("rewardNum").toString()));
 		order.setOrderStatus("1");
@@ -111,7 +112,7 @@ public class ShopController extends BaseController {
 		try {
 			orderService.save(order,prize.getOfUserId());
 			boolean shopMsg = chezuAppService.sendShopMsg(userId, prize.getPrizeName(), SignUtils.encryptHMAC(userId+""+prize.getPrizeName()));
-			System.out.println("兑换结果："+shopMsg);
+			LOG.info("兑换结果=================" + shopMsg);
 			if(shopMsg) {
 				return ResultUtils.rtSuccess(null);
 			}else {
@@ -143,6 +144,7 @@ public class ShopController extends BaseController {
 	public Map<String, Object> getOrderList(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Long userId = super.getUserId();
+		LOG.info("userId=================" + userId);
 		List<Map<String, String>> list = orderService.getOrderList(userId);
 		return ResultUtils.rtSuccess(list);
 	}

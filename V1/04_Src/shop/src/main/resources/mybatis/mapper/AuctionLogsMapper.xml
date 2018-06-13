@@ -22,5 +22,17 @@
        select count(*)
        FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId}
      </select>
+     
+     <select id="myJoinTimes" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       select count(*)
+       FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId} and auctionUserId=#{userId}
+     </select>
+     
+     <insert id="insertAuctionLogs"
+		parameterType="com.idata365.app.entity.AuctionLogs">
+		insert into auctionLogs
+		(auctionTime,auctionUserId,auctionUserNick,auctionDiamond,auctionGoodsId)
+		values(#{auctionTime},#{auctionUserId},#{auctionUserNick},#{auctionDiamond},#{auctionGoodsId})
+	 </insert>
 	
 </mapper>

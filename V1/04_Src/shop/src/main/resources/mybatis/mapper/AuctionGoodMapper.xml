@@ -12,4 +12,19 @@
 		select * from auctionGoods where auctionGoodsId=#{auctionGoodsId}
 	</select>
 	
+	<insert id="insertAuctionGoods"
+		parameterType="com.idata365.app.entity.AuctionGoods">
+		insert into auctionGoods
+		(prizeName,prizeDesc,prizePic,startDiamond,stepPrice,auctionStartTime,auctionEndTime,auctionRealEndTime,ofUserId)
+		values(#{prizeName},#{prizeDesc},#{prizePic},#{startDiamond},#{stepPrice},#{auctionStartTime},#{auctionEndTime},#{auctionRealEndTime},#{ofUserId})
+	 </insert>
+	 
+	 <update id="updateAuctionGoods"
+		parameterType="com.idata365.app.entity.AuctionGoods">
+		update auctionGoods set
+		winnerId=#{winnerId},doneDiamond=#{doneDiamond},auctionRealEndTime=#{auctionRealEndTime}
+		where
+		auctionGoodsId=#{auctionGoodsId}
+	</update>
+	
 </mapper>
