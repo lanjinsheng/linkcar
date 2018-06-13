@@ -84,14 +84,15 @@ public class AuctionController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) throws Exception {
 		Long userId = super.getUserId();
 		LOG.info("userId=================" + userId);
-		String prizeName = requestBodyParams.get("prizeName").toString();
-		String prizeDesc = requestBodyParams.get("prizeDesc").toString();
-		String prizePic = requestBodyParams.get("prizePic").toString();
+		String prizeName = requestBodyParams.get("title").toString();
+		String prizeDesc = requestBodyParams.get("desc").toString();
+		String prizePic = requestBodyParams.get("imgs").toString();
+		String type = requestBodyParams.get("type").toString();
 		BigDecimal startDiamond = BigDecimal
-				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("startDiamond"))));
-		BigDecimal stepPrice = BigDecimal.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("stepPrice"))));
-		Date auctionStartTime = DateTools.getDateTimeOfStr(requestBodyParams.get("auctionStartTime").toString());
-		Date auctionEndTime = DateTools.getDateTimeOfStr(requestBodyParams.get("auctionEndTime").toString());
+				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("startValue"))));
+		BigDecimal stepPrice = BigDecimal.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("difference"))));
+		Date auctionStartTime = DateTools.getDateTimeOfStr(requestBodyParams.get("startTime").toString(),"yyyy-MM-dd HH:mm");
+		Date auctionEndTime = DateTools.getDateTimeOfStr(requestBodyParams.get("endTime").toString(),"yyyy-MM-dd HH:mm");
 
 		AuctionGoods auctionGoods = new AuctionGoods();
 		auctionGoods.setPrizeName(prizeName);
