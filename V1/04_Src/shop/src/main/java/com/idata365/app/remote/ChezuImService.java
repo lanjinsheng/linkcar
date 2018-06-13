@@ -21,7 +21,7 @@ import com.idata365.app.entity.bean.AuctionBean;
  * @date 2017年12月28日
  *
  */
-@FeignClient(value = "service-im-chezu-ljs", fallback = ChezuImHystric.class)
+@FeignClient(value = "service-im-chezu", fallback = ChezuImHystric.class)
 public interface ChezuImService {
 	@RequestMapping(value = "/im/notifyAuction",method = RequestMethod.POST)
 	public Map<String,Object>  notifyAuction(@RequestBody  AuctionBean auctionBean);
