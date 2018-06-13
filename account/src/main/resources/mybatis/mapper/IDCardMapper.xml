@@ -9,8 +9,17 @@
             idCard
             (userId,gender,nation,userName,birthday,frontImgUrl,cardNumber,address,createTime) 
         VALUES
-            (#{userId},#{gender},#{nation},#{userName},#{birthday},#{key},#{cardNumber},#{address},now()
+            (#{userId},#{gender},#{nation},#{userName},#{birthday},#{key},#{cardNumber},#{address},now())
              ON DUPLICATE KEY UPDATE frontImgUrl=#{key}
+    </insert>
+    
+    <insert id="insertImgIDCardBackImg"   parameterType="java.util.HashMap" >
+       INSERT IGNORE   INTO 
+            idCard
+            (userId,backImgUrl,office,firstDay,lastDay,createTime) 
+        VALUES
+            (#{userId},#{key},#{office},#{firstDay},#{lastDay},now())
+             ON DUPLICATE KEY UPDATE backImgUrl=#{key}
     </insert>
 
    <update id="modifyIDCard"   parameterType="java.util.HashMap" >
@@ -22,16 +31,6 @@
              operatingTime=now()
              where userId=#{userId}
     </update>
-    
-    
-     <insert id="insertImgIDCardBackImg"   parameterType="java.util.HashMap" >
-       INSERT IGNORE   INTO 
-            idCard
-            (userId,backImgUrl,office,firstDay,lastDay,createTime) 
-        VALUES
-            (#{userId},#{key},#{office},#{firstDay},#{lastDay},now())
-             ON DUPLICATE KEY UPDATE backImgUrl=#{key}
-    </insert>
     
      <select id="findIDCardByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
        SELECT *
