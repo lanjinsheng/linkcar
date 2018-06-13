@@ -143,6 +143,18 @@ public class DateTools
 		return customDate;
 	}
 
+	
+	public static String getCurDateAddSecond(int diffdate)
+	{
+		String customDate = "";
+		FastDateFormat formatter = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+		Date curdate = new Date();
+		long myTime = (curdate.getTime() / 1000) + diffdate;
+		curdate.setTime(myTime * 1000);
+		customDate = formatter.format(curdate);
+		return customDate;
+	}
+
 	/**
 	 * 返回前天，昨天，明天，后天等 格式为天
 	 * 

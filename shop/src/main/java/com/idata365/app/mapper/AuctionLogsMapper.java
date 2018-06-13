@@ -19,4 +19,8 @@ public interface AuctionLogsMapper {
 	List<AuctionLogs> listAuctionGoodsRecord(@Param("auctionGoodsId") Long auctionGoodsId);
 
 	int insertAuctionLogs(AuctionLogs auctionLogs);
+	
+	AuctionLogs getMaxAuctionDiamond(@Param("auctionGoodsId")long auctionGoodsId);
+	
+	
 }
