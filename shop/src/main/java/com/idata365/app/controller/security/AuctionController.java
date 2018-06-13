@@ -192,7 +192,7 @@ public class AuctionController extends BaseController {
 	 * @throws @author
 	 *             Lcc
 	 */
-	@RequestMapping("/user/uploadAuctionImg")
+	@RequestMapping("/uploadAuctionImg")
 	public Map<String, Object> uploadAuctionImg(@RequestParam CommonsMultipartFile file,
 			@RequestParam Map<String, Object> map) {
 		Long userId = this.getUserId();
@@ -202,12 +202,6 @@ public class AuctionController extends BaseController {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("userId", userId);
 		rtMap.put("imgUrl", "");
-		rtMap.put("userName", "");
-		rtMap.put("nation", "");
-		rtMap.put("gender", "");
-		rtMap.put("birthday", "");
-		rtMap.put("address", "");
-		rtMap.put("cardNumber", "");
 		try {
 			String key = "";
 			if (systemProperties.getSsoQQ().equals("1")) {// 走qq
