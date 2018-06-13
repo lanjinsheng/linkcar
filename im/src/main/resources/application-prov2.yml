@@ -24,7 +24,7 @@ hystrix:
   
 spring:
   application:
-    name: service-account-chezu
+    name: service-im-chezu
  
     
 
