@@ -9,6 +9,10 @@
 		LEFT JOIN auctionLogs b ON a.id = b.auctionLogsId order by auctionTime desc
 	</select>
 	
+	<select id="listAuctionGoodsRecord" resultMap="BaseResultMap">
+		SELECT * FROM auctionLogs where auctionGoodsId=#{auctionGoodsId} order by auctionTime desc limit 5
+	</select>
+	
 	<select id="joinPersons" resultType="java.lang.Integer" parameterType="java.lang.Long">
        select count(distinct(auctionUserId))
        FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId}
