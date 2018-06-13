@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.idata365.app.entity.AuctionGood;
+import com.idata365.app.entity.AuctionGoods;
 
 public interface AuctionGoodMapper {
 
-	List<AuctionGood> listAuctionGoods();
+	List<AuctionGoods> listAuctionGoods();
 	
-	AuctionGood findAuctionGoodById(@Param("auctionGoodsId") long auctionGoodsId);
+	AuctionGoods findAuctionGoodById(@Param("auctionGoodsId") long auctionGoodsId);
 
 }

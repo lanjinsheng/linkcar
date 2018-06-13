@@ -13,4 +13,6 @@ public interface AuctionLogsMapper {
 	int joinPersons(@Param("auctionGoodsId")long auctionGoodsId);
 	
 	int joinTimes(@Param("auctionGoodsId")long auctionGoodsId);
+
+	List<AuctionLogs> listAuctionGoodsRecord(@Param("auctionGoodsId") Long auctionGoodsId);
 }
