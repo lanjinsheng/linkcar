@@ -70,6 +70,13 @@ public class AuctionService {
 		}
 		return map;
 	}
+	
+	public int joinPersons(long auctionGoodsId) {
+		return auctionLogsMapper.joinPersons(auctionGoodsId);
+	}
+	public int joinTimes(long auctionGoodsId) {
+		return auctionLogsMapper.joinTimes(auctionGoodsId);
+	}
 
 	public List<Map<String, String>> myListAuctionGoods(Long userId) {
 		List<Map<String, String>> result = new ArrayList<>();

@@ -309,7 +309,10 @@ public class AuctionController extends BaseController {
 		AuctionBean auctionBean = new AuctionBean();
 		auctionBean.setAuctionGoods(auctionGoods);
 		auctionBean.setAuctionLogsList(auctionLogsList);
-		
+		Map<String, Object> notifyAuction = chezuImService.notifyAuction(auctionBean,
+				String.valueOf(auctionService.joinPersons(auctionGoodsId)),
+				String.valueOf(auctionService.joinTimes(auctionGoodsId)));
+
 		return ResultUtils.rtSuccess(null);
 	}
 }
