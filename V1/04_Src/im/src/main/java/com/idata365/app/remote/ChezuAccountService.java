@@ -12,7 +12,7 @@ import com.idata365.app.entity.UsersAccount;
 
 /**
  * 
- * @ClassName: ChezuService
+ * @ClassName: ChezuAccountService
  * @Description: TODO(远程调用更新userId 与 deviceToken)
  * @author LanYeYe
  * @date 2017年12月28日
