@@ -1,7 +1,9 @@
 package com.idata365.websocket;
 
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -84,4 +86,22 @@ public class Global {
 		Global.group.writeAndFlush(new TextWebSocketFrame(String.format(globalImMsg, json)));
 	}
 	
+	static String auctionMsg="{	\"msgType\": \"30\",\"notifyMoudle\": \"auctionList\",\"data\": {\"goods\": [%s" + 
+			"] } }";
+	
+	static String auctionDetailMsg="{\"msgType\": \"40\",\"notifyMoudle\": \"auctionDoing\",\"data\": %s}";
+	public static void sendAuctionMsg(String goodsJson,String detailJson) {
+		if(socketBeanMap.size()==0) return;
+		Collection c=socketBeanMap.values();
+		Iterator it=c.iterator();
+		while(it.hasNext()) {
+			SocketBean s=(SocketBean)it.next();
+			if(s.getAuctionListMsg()!=null) {
+				s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionMsg, goodsJson)));
+			}
+			if(s.getAuctionDoingMsg()!=null) {
+				s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionDetailMsg, detailJson)));
+			}
+		}
+	}
 } 

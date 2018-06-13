@@ -33,6 +33,12 @@ public class DateTools
 		customDate = yyMMddHHmmss.format(curdate);
 		return customDate;
 	}
+	public static String getDateTime(Date date)
+	{
+		String customDate = "";
+		customDate = yyMMddHHmmss.format(date);
+		return customDate;
+	}
 	
 	public static String getCurDateYYYY_MM_dd()
 	{

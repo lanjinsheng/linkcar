@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AuctionGoods implements Serializable {
 
 	/**
@@ -22,9 +24,13 @@ public class AuctionGoods implements Serializable {
 	private String prizeDetailPics;
 	private String prizeDetailTexts;
 	private Long ofUserId;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date auctionStartTime;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date auctionEndTime;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date auctionRealEndTime;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date createTime;
 	private BigDecimal stepPrice;
 	private Integer auctionStatus;
