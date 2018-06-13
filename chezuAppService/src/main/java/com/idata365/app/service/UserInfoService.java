@@ -45,7 +45,7 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	public UserInfoService() {
 	}
 
-	public LicenseVehicleTravel getLicenseVehicleTravel(Long userId) {
+	public List<LicenseVehicleTravel> getLicenseVehicleTravel(Long userId) {
 		return licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
 	}
 
@@ -150,10 +150,15 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	 *             LanYeYe
 	 */
 	public boolean isVehicleTravelOK(Long userId) {
-		LicenseVehicleTravel travel = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
-		if (travel != null && travel.getIsTravelEdit() == 0) {
-			return true;
+		List<LicenseVehicleTravel> travels = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
+		if(travels!=null&&travels.size()!=0) {
+			for (LicenseVehicleTravel travel : travels) {
+				if (travel.getIsTravelEdit() == 0) {
+					return true;
+				}
+			}
 		}
+		
 		return false;
 	}
 

@@ -16,7 +16,7 @@ public interface LicenseVehicleTravelMapper {
 
 	void insertImgVehicleBackImg(Map<String, Object> xsz);
 
-	LicenseVehicleTravel findLicenseVehicleTravelByUserId(@Param("userId") Long userId);
+	List<LicenseVehicleTravel> findLicenseVehicleTravelByUserId(@Param("userId") Long userId);
 
 	List<LicenseVehicleTravel> findLicenseVehicleTravels();
 

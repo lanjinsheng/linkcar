@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,126 +87,6 @@ public class UserInfoController extends BaseController{
 		  return ResultUtils.rtSuccess(null);
 	  }  
 	  
-	  
-	  /**
-	   * 
-	      * @Title: getUserInfo
-	      * @Description: TODO(获取证件信息)
-	      * @param @param allRequestParams
-	      * @param @param requestBodyParams
-	      * @param @return    参数
-	      * @return Map<String,Object>    返回类型
-	      * @throws
-	      * @author LanYeYe
-	   */
-	  @RequestMapping("/user/getUserInfo")	  
-	  public Map<String,Object> getUserInfo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-		  String imgBase=getImgBasePath();
-		  Map<String,String> rtMap=new HashMap<String,String>();
-		  Long userId=Long.valueOf(requestBodyParams.get("userId").toString());
-		  LicenseDriver licenseDrive=userInfoService.getLicenseDriver(userId);
-		  LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(userId);
-		  rtMap.put("enableStranger",String.valueOf(userInfoService.getEnableStranger(userId)));
-		  if(licenseDrive!=null) {//驾驶证
-			  rtMap.put("userName", licenseDrive.getUserName());
-			  rtMap.put("gender",licenseDrive.getGender());
-			  rtMap.put("nation",licenseDrive.getNation());
-			  rtMap.put("driveCardType",licenseDrive.getDriveCardType());
-			  rtMap.put("birthday",licenseDrive.getBirthday());
-			  rtMap.put("virginDay",licenseDrive.getVirginDay());
-			  rtMap.put("validDay",licenseDrive.getValidDay());
-			  rtMap.put("validYears",String.valueOf(licenseDrive.getValidYears()));
-			  if(ValidTools.isBlank(licenseDrive.getFrontImgUrl())) {
-				  rtMap.put("frontDrivingImg","");
-			  }else {
-				  rtMap.put("frontDrivingImg",imgBase+licenseDrive.getFrontImgUrl());
-			  }
-			  if(ValidTools.isBlank(licenseDrive.getBackImgUrl())) {
-			    rtMap.put("backDrivingImg","");
-			  }else {
-				  rtMap.put("backDrivingImg",imgBase+licenseDrive.getBackImgUrl());
-			  }
-			  rtMap.put("isDrivingEdit", String.valueOf(licenseDrive.getIsDrivingEdit()));
-		  }else {
-			  rtMap.put("userName", "");
-			  rtMap.put("gender","");
-			  rtMap.put("nation","");
-			  rtMap.put("driveCardType","");
-			  rtMap.put("birthday","");
-			  rtMap.put("virginDay","");
-			  rtMap.put("validYears","");
-			  rtMap.put("validDay","");
-			  rtMap.put("frontDrivingImg","");
-			  rtMap.put("backDrivingImg","");
-			  rtMap.put("isDrivingEdit", "1");
-		  }
-		  if(licenseVehicleTravel!=null) {//行驶证
-			  rtMap.put("plateNo",licenseVehicleTravel.getPlateNo());
-			  rtMap.put("cardTypeDesc",StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
-			  rtMap.put("userTypeDesc",StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
-			  rtMap.put("modelTypeDesc",licenseVehicleTravel.getModelType());
-			  rtMap.put("vin",licenseVehicleTravel.getVin());
-			  rtMap.put("engineNo",licenseVehicleTravel.getEngineNo());
-			  if(ValidTools.isBlank(licenseVehicleTravel.getFrontImgUrl())) {
-				  rtMap.put("frontTravelImg",""); 
-			  }else {
-				  rtMap.put("frontTravelImg",imgBase+licenseVehicleTravel.getFrontImgUrl());
-			  }
-			  
-			  if(ValidTools.isBlank(licenseVehicleTravel.getBackImgUrl())) {
-				  rtMap.put("backTravelImg","");
-			  }else {
-				  rtMap.put("backTravelImg",imgBase+licenseVehicleTravel.getBackImgUrl());
-			  }
-			  rtMap.put("issueDate",licenseVehicleTravel.getIssueDate());
-			  rtMap.put("regDate",licenseVehicleTravel.getRegDate());
-			  rtMap.put("isTravelEdit",String.valueOf(licenseVehicleTravel.getIsTravelEdit()));
-		  }else {
-			  rtMap.put("plateNo","");
-			  rtMap.put("cardTypeDesc","");
-			  rtMap.put("userTypeDesc","");
-			  rtMap.put("modelTypeDesc","");
-			  rtMap.put("vin","");
-			  rtMap.put("engineNo","");
-			  rtMap.put("frontTravelImg","");
-			  rtMap.put("backTravelImg","");
-			  rtMap.put("issueDate","");
-			  rtMap.put("regDate",""); 
-			  rtMap.put("isTravelEdit","1");
-		  }
-		  return ResultUtils.rtSuccess(rtMap);
-	  }
-	  @RequestMapping("/user/getUserBaseInfo")	  
-	  public Map<String,Object> getUserBaseInfo(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-		  String imgBase=getImgBasePath();
-		  Map<String,String> rtMap=new HashMap<String,String>();
-		  UserInfo userInfo=this.getUserInfo();
-		  LicenseDriver licenseDrive=userInfoService.getLicenseDriver(userInfo.getId());
-		  LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(userInfo.getId());
-		  String phone = userInfo.getPhone();
-		  rtMap.put("phone", phone);
-		  
-		  String nickName = userInfo.getNickName();
-		  if (StringUtils.isBlank(nickName))
-		  {
-			  rtMap.put("nickName", PhoneUtils.hidePhone(phone));
-		  }
-		  else
-		  {
-			  rtMap.put("nickName", nickName);
-		  }
-		  
-		  rtMap.put("headImg", imgBase+userInfo.getImgUrl());
-		  if(licenseDrive!=null && licenseVehicleTravel!=null && licenseDrive.getIsDrivingEdit()==0 && licenseVehicleTravel.getIsTravelEdit()==0) {
-			  //证件上传即认证
-			  rtMap.put("isAuthenticated", "1");
-		  }else {
-			  rtMap.put("isAuthenticated", "0"); 
-		  }
-		  UserConfig uc= userInfoService.getUserConfig(this.getUserId());
-		  rtMap.put("isGPSHidden", String.valueOf(uc.getIsHidden()));
-		  return ResultUtils.rtSuccess(rtMap);
-	  }
 	    @RequestMapping(value = "/user/uploadHeadImg",method = RequestMethod.POST)
 	    public Map<String,Object>  uploadHeadImg(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
 	    	Long userId=this.getUserId();

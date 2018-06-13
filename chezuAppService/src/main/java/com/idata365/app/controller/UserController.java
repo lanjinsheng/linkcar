@@ -1,6 +1,7 @@
 package com.idata365.app.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -93,8 +94,8 @@ public class UserController extends BaseController{
     			rtMap.put("nickName", account.getNickName()==null?PhoneUtils.hidePhone(phone): account.getNickName());
     			rtMap.put("headImg", this.getImgBasePath()+account.getImgUrl());
     			LicenseDriver licenseDrive=userInfoService.getLicenseDriver(account.getId());
-    			LicenseVehicleTravel licenseVehicleTravel=userInfoService.getLicenseVehicleTravel(account.getId());
-    			 if(licenseDrive!=null && licenseVehicleTravel!=null && licenseDrive.getIsDrivingEdit()==0 && licenseVehicleTravel.getIsTravelEdit()==0) {
+    			List<LicenseVehicleTravel> licenseVehicleTravels=userInfoService.getLicenseVehicleTravel(account.getId());
+    			 if(licenseDrive!=null && licenseVehicleTravels!=null) {
     				  //证件上传即认证
     				  rtMap.put("isAuthenticated", "1");
     			  }else {
