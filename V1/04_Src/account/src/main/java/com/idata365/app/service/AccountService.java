@@ -175,6 +175,18 @@ public class AccountService extends BaseService<AccountService>
 		param.put("daystamp", daystamp);
 		return usersAccountMapper.getUsersScoreByFamilyId(param);
 	}
+	@Transactional
+	public long getUserIdByPhone(String phone) {
+		UsersAccount param=new UsersAccount();
+		param.setPhone(phone);
+		UsersAccount rt= usersAccountMapper.findAccountByPhone(param);
+		if(rt==null) {
+			return 0L;
+		}
+		else {
+			return rt.getId();
+		}
+	}
 	
 	@Transactional
 	public List<Map<String,Object>> getCurrentUsersByFamilyId(long familyId,String daystamp){

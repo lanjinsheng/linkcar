@@ -146,6 +146,11 @@ public class AccountController extends BaseController{
 		return null;
 	}
 	
+	@RequestMapping(value = "/account/getUserIdByPhone", method = RequestMethod.POST)
+	long getUserIdByPhone(@RequestParam(value = "phone") String phone,@RequestParam(value="sign") String sign) {
+		return accountService.getUserIdByPhone(phone);
+	}
+
 	@RequestMapping(value = "/account/getUsersScoreByFamilyId",method = RequestMethod.POST)
 	public List<Map<String,Object>>  getUsersScoreByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign)
 	{
