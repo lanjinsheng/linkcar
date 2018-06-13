@@ -14,13 +14,10 @@ public class ChezuImHystric implements ChezuImService {
 	private final static Logger LOG = LoggerFactory.getLogger(ChezuImHystric.class);
 
 	@Override
-	public Map<String,Object>  notifyAuction(@RequestBody  AuctionBean auctionBean){
-	// TODO Auto-generated method stub
+	public Map<String, Object> notifyAuction(AuctionBean auctionBean, String auctionPerson, String auctionTimes) {
+		// TODO Auto-generated method stub
 		LOG.error("notifyAuction 挂了");
 		return null;
 	}
-
- 
- 
 
 }
