@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AuctionLogs implements Serializable {
 
 	/**
@@ -15,6 +17,7 @@ public class AuctionLogs implements Serializable {
 	private Long auctionLogsId;
 	private Long auctionGoodsId;
 	private Long auctionUserId;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date auctionTime;
 	private BigDecimal auctionDiamond;
 	private String auctionUserNick;

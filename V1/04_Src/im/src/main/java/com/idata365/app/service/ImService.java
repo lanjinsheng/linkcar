@@ -48,10 +48,32 @@ public class ImService extends BaseService<ImService>
 	{
 		imMapper.insert(msg);
 	}
-	
+	/**
+	 * 
+	    * @Title: sendGloadIm
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param msg    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
 	public void sendGloadIm(Map<String,Object> msg) {
 		Global.sendImGlobal(GsonUtils.toJson(msg, false));
 	}
+	/**
+	 * 
+	    * @Title: sendAuctionMsg
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param goods
+	    * @param @param goodDetail    参数
+	    * @return void    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	public void sendAuctionMsg(Map<String,String> goods,Map<String,Object> goodDetail) {
+		Global.sendAuctionMsg(GsonUtils.toJson(goods, false), GsonUtils.toJson(goodDetail, false));
+	}
+	
 	public List<Map<String,String>>  getMsgs()
 	{
 		return imMapper.getMsg();
