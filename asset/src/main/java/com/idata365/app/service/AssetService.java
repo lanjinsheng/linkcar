@@ -266,6 +266,45 @@ public class AssetService extends BaseService<AssetService> {
 	}
 	
 	@Transactional
+	public boolean unfreezeDiamondAsset(long buyer,long sellerId,long auctionGoodsId,double diamondsNum) {
+			//总收入增加
+			Map<String, Object> earn = new HashMap<String, Object>();
+			earn.put("userId", sellerId);
+			earn.put("diamondsNum", diamondsNum);
+			int addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);//+
+			//插入商品消费与赚取流水记录
+			AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
+			assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+			assetUsersDiamondsLogs.setEffectId(0L);
+			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Auction_Buy);
+			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
+			assetUsersDiamondsLogs.setRemark("竞拍消费"+auctionGoodsId);
+			assetUsersDiamondsLogs.setUserId(buyer);
+			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
+
+			AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
+			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+			logs.setEffectId(0L);
+			logs.setEventType(AssetConstant.EventType_Auction_Earn);
+			logs.setRecordType(AssetConstant.RecordType_1);
+			logs.setRemark("竞拍收入"+auctionGoodsId);
+			logs.setUserId(sellerId);
+			assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
+			
+			//竞拍解冻
+			AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
+			auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+			auctionLog.setEffectId(auctionGoodsId);
+			auctionLog.setEventType(AssetConstant.EventType_Thaw);
+			auctionLog.setRecordType(AssetConstant.RecordType_1);
+			auctionLog.setRemark("竞拍成功,解冻");
+			auctionLog.setUserId(buyer);
+			logs.setCreateTime(new Date());
+			auctionUsersDiamondsLogsMapper.insertDiamondsConsume(auctionLog);
+			return true;
+		 
+	}
+	@Transactional
 	public boolean freezeDiamondAsset(long userId, double diamondsNum, long winnerId) {
 		int addUpdate = 1;
 		if (0 != winnerId) {
