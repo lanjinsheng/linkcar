@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.idata365.app.mapper.AuctionUsersDiamondsLogsMapper">
+	<resultMap id="BaseResultMap"
+		type="com.idata365.app.entity.AuctionUsersDiamondsLogs">
+	</resultMap>
+
+    <insert id="insertDiamondsConsume"
+		parameterType="com.idata365.app.entity.AuctionUsersDiamondsLogs">
+		insert into auctionUsersDiamondsLogs
+		(userId,diamondsNum,recordType,eventType,effectId,remark,createTime)
+		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
+		#{effectId},#{remark},#{createTime})
+	</insert>
+
+</mapper>

@@ -25,6 +25,7 @@ import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
 import com.idata365.app.entity.AssetUsersPowerLogs;
+import com.idata365.app.entity.AuctionUsersDiamondsLogs;
 import com.idata365.app.entity.FamilyGameAsset;
 import com.idata365.app.entity.FamilySeasonAsset;
 import com.idata365.app.entity.StealPower;
@@ -33,6 +34,7 @@ import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
+import com.idata365.app.mapper.AuctionUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.FamilyGameAssetMapper;
 import com.idata365.app.mapper.FamilySeasonAssetMapper;
 import com.idata365.app.mapper.StealPowerMapper;
@@ -66,6 +68,8 @@ public class AssetService extends BaseService<AssetService> {
 	FamilyGameAssetMapper familyGameAssetMapper;
 	@Autowired
 	FamilySeasonAssetMapper familySeasonAssetMapper;
+	@Autowired
+	AuctionUsersDiamondsLogsMapper auctionUsersDiamondsLogsMapper;
 
 	public AssetService() {
 
@@ -253,6 +257,49 @@ public class AssetService extends BaseService<AssetService> {
 			logs.setRemark("交易收入");
 			logs.setUserId(ofUserId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
+
+			return true;
+		} else {
+			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
+			return false;
+		}
+	}
+	
+	@Transactional
+	public boolean freezeDiamondAsset(long userId, double diamondsNum, long winnerId) {
+		int addUpdate = 1;
+		if (0 != winnerId) {
+			Map<String, Object> earn = new HashMap<String, Object>();
+			earn.put("userId", winnerId);
+			earn.put("diamondsNum", diamondsNum);
+			addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);//+
+		}
+		Map<String, Object> datas = new HashMap<String, Object>();
+		datas.put("userId", userId);
+		datas.put("diamondsNum", diamondsNum);
+		int hadUpdate = assetUsersAssetMapper.updateDiamondsConsume(datas);//-
+		
+		if (hadUpdate != 0 && addUpdate != 0) {
+			// 钻石数量够买，则进行日志增加
+			AuctionUsersDiamondsLogs auctionUsersDiamondsLogs = new AuctionUsersDiamondsLogs();
+			auctionUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+			auctionUsersDiamondsLogs.setEffectId(0L);
+			auctionUsersDiamondsLogs.setEventType(AssetConstant.EventType_Freeze);
+			auctionUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
+			auctionUsersDiamondsLogs.setRemark("竞拍冻结");
+			auctionUsersDiamondsLogs.setUserId(userId);
+			auctionUsersDiamondsLogs.setCreateTime(new Date());
+			auctionUsersDiamondsLogsMapper.insertDiamondsConsume(auctionUsersDiamondsLogs);
+
+			AuctionUsersDiamondsLogs logs = new AuctionUsersDiamondsLogs();
+			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+			logs.setEffectId(0L);
+			logs.setEventType(AssetConstant.EventType_Thaw);
+			logs.setRecordType(AssetConstant.RecordType_1);
+			logs.setRemark("竞拍解冻");
+			logs.setUserId(winnerId);
+			logs.setCreateTime(new Date());
+			auctionUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
 
 			return true;
 		} else {

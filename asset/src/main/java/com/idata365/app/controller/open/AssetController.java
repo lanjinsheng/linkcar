@@ -123,6 +123,32 @@ public class AssetController extends BaseController {
 		boolean bl = assetService.updateDiamondsConsume(userId, diamondNum,ofUserId);
 		return bl;
 	}
+	
+	/**
+	 * 
+	 * @Title: freezeDiamondAsset
+	 * @Description: TODO(diamondNum冻结解冻)
+	 * @param @param
+	 *            userId
+	 * @param @param
+	 *            diamondNum
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
+	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
+	boolean freezeDiamondAsset(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId) {
+		LOG.info("PARAM:" + userId + "===" + diamondNum + "====" + sign);
+		LOG.info("校验逻辑待处理·~~~");
+		
+		boolean bl = assetService.freezeDiamondAsset(userId, diamondNum,ofUserId);
+		return bl;
+	}
 
 	/**
 	 * 

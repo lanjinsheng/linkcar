@@ -21,5 +21,6 @@ public interface AssetFamiliesAssetMapper {
 	int updateDiamondsReduce(AssetFamiliesDiamondsLogs assetFamiliesDiamondsLogs);
 
 	int initFamily(AssetFamiliesAsset assetFamiliesAsset);
+
 	int clearPower(AssetFamiliesAsset assetFamiliesAsset);
 }
