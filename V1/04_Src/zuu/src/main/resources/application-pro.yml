@@ -24,6 +24,9 @@ zuul:
     account:
       path: /account/**
       serviceId: service-account-chezu
+    im:
+      path: /im/**
+      serviceId: service-im-chezu
     other:
       path: /app/**
       serviceId: service-app-chezu
