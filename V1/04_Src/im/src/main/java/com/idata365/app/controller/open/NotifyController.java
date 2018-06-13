@@ -45,7 +45,7 @@ public class NotifyController extends BaseController{
 		goodsList.put("endTime", DateTools.getDateTime(auctionBean.getAuctionGoods().getAuctionRealEndTime()));
 //		goodsList.put("auctionTime", String.valueOf(auctionBean.getAuctionGoods().getAuctionEndTime()));
 		goodsList.put("auctionDiamond", String.valueOf(auctionBean.getAuctionGoods().getDoneDiamond().doubleValue()));
-		goodsList.put("isEnd", String.valueOf(auctionBean.getAuctionGoods().getAuctionStatus()));
+		goodsList.put("isEnd", String.valueOf(auctionBean.getAuctionGoods().getAuctionStatus()==0?0:1));
 		
 		 
  
@@ -56,7 +56,7 @@ public class NotifyController extends BaseController{
 		notifyInfo.put("auctionTimes", auctionTimes);
 		notifyInfo.put("auctionPerson", auctionPerson);
 		notifyInfo.put("auctionDiamond", String.valueOf(auctionBean.getAuctionGoods().getDoneDiamond().doubleValue()));
-		notifyInfo.put("isEnd", String.valueOf(auctionBean.getAuctionGoods().getAuctionStatus()));
+		notifyInfo.put("isEnd", String.valueOf(auctionBean.getAuctionGoods().getAuctionStatus()==0?0:1));
 		
 		List<Map<String,String>> actionLogs=new ArrayList<Map<String,String>>();
 		List<AuctionLogs> list=auctionBean.getAuctionLogsList();
