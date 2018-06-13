@@ -140,7 +140,7 @@ public class FamilyController extends BaseController {
 		Long userId = super.getUserId();
 		List<FamilyRandResultBean> resultBeans = this.familyService.queryFamilyByName(reqBean, userId);
 
-		if (null == resultBeans && resultBeans.size() != 0) {
+		if (null != resultBeans && resultBeans.size() != 0) {
 			for (FamilyRandResultBean resultBean : resultBeans) {
 				String imgBasePath = super.getImgBasePath();
 				String imgUrl = resultBean.getImgUrl();
