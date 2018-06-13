@@ -14,6 +14,7 @@ import com.idata365.app.entity.AuctionLogs;
 import com.idata365.app.entity.bean.AuctionBean;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
+import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.SignUtils;
@@ -27,6 +28,8 @@ public class AuctionService {
 	private AuctionLogsMapper auctionLogsMapper;
 	@Autowired
 	private ChezuAssetService chezuAssetService;
+	@Autowired
+	private OrderMapper orderMapper;
 
 	public AuctionGoods findOneAuctionGoodById(long auctionGoodsId) {
 		return auctionMapper.findAuctionGoodById(auctionGoodsId);
@@ -156,5 +159,11 @@ public class AuctionService {
 		if (!flag) {
 			throw new RuntimeException("交易失败");
 		}
+	}
+
+	public void writeChangeInfo(Long userId, Long auctionGoodsId, String phone) {
+		// 修改商品状态
+		auctionMapper.updateGoodsStatus(auctionGoodsId);
+		orderMapper.updateOrderPhone(userId, auctionGoodsId, phone);
 	}
 }

@@ -16,4 +16,6 @@ public interface AuctionGoodMapper {
 
 	int updateAuctionGoods(AuctionGoods auctionGoods);
 
+	int updateGoodsStatus(@Param("auctionGoodsId") long auctionGoodsId);
+
 }
