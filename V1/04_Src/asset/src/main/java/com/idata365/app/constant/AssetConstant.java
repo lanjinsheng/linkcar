@@ -26,6 +26,9 @@ public class AssetConstant {
 	public final static int EventType_Daimond_SeasonEnd_User = 4;// 比赛赛季结束家族分配      
 	public final static int EventType_Earn = 5;// 交易收入
 	
+	public final static int EventType_Auction_Buy = 10;//竞拍消费
+	public final static int EventType_Auction_Earn = 11;//竞拍收入
+	
 	
 	public final static int EventType_Freeze = 6;// 竞拍冻结
 	public final static int EventType_Thaw = 7;// 竞拍解冻
