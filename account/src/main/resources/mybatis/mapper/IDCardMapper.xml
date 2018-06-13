@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.idata365.app.entity.IDCard" >
     </resultMap>
 
-  <insert id="insertImgidCardFrontImg"   parameterType="java.util.HashMap" >
+  <insert id="insertImgIDCardFrontImg"   parameterType="java.util.HashMap" >
        INSERT IGNORE   INTO 
             idCard
             (userId,gender,nation,userName,birthday,frontImgUrl,cardNumber,address,createTime) 
@@ -13,7 +13,7 @@
              ON DUPLICATE KEY UPDATE frontImgUrl=#{key}
     </insert>
 
-   <update id="modifyidCard"   parameterType="java.util.HashMap" >
+   <update id="modifyIDCard"   parameterType="java.util.HashMap" >
      update
              idCard
              set gender=#{gender},nation=#{nation},cardNumber=#{cardNumber},birthday=#{birthday},
@@ -24,7 +24,7 @@
     </update>
     
     
-     <insert id="insertImgidCardBackImg"   parameterType="java.util.HashMap" >
+     <insert id="insertImgIDCardBackImg"   parameterType="java.util.HashMap" >
        INSERT IGNORE   INTO 
             idCard
             (userId,backImgUrl,office,firstDay,lastDay,createTime) 
@@ -33,12 +33,12 @@
              ON DUPLICATE KEY UPDATE backImgUrl=#{key}
     </insert>
     
-     <select id="findidCardByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+     <select id="findIDCardByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
        SELECT *
        FROM  idCard where userId=#{userId}
      </select>
      
-      <select id="getUseridCards" resultMap="BaseResultMap">
+      <select id="getUserIDCards" resultMap="BaseResultMap">
        SELECT *
        FROM  idCard where status=0 order by createTime desc
      </select>
