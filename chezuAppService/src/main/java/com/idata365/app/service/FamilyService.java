@@ -435,7 +435,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		bean.setFamilyName("%" + bean.getFamilyName() + "%");
 		List<FamilyRandBean> tempRandBeans = this.familyMapper.queryFamilyByName(bean);
 
-		if (null == tempRandBeans && tempRandBeans.size() != 0) {
+		if (null != tempRandBeans && tempRandBeans.size() != 0) {
 			for (FamilyRandBean tempRandBean : tempRandBeans) {
 				FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 				AdBeanUtils.copyOtherPropToStr(tempResultBean, tempRandBean);
