@@ -15,11 +15,12 @@ public interface AssetUsersDiamondsLogsMapper {
 	List<AssetUsersDiamondsLogs> getIndexDiamondsFirst(@Param("userId") long userId);
 
 	int insertUsersDiamondsDay(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
-	
+
 	List<AssetUsersDiamondsLogs> getPkDiamondsByEffectId(@Param("effectId") long effectId);
-	
-	AssetUsersDiamondsLogs getYestodayPkDiamonds(@Param("userId") long userId,@Param("effectId") long effectId);
-	AssetUsersDiamondsLogs getYestodaySeasonDiamonds(@Param("userId") long userId,@Param("effectId") long effectId);
-	
+
+	AssetUsersDiamondsLogs getYestodayPkDiamonds(@Param("userId") long userId, @Param("effectId") long effectId);
+
+	AssetUsersDiamondsLogs getYestodaySeasonDiamonds(@Param("userId") long userId, @Param("effectId") long effectId);
+
 	AssetUsersDiamondsLogs getYestodayPersonPowerDiamonds(@Param("userId") long userId);
 }
