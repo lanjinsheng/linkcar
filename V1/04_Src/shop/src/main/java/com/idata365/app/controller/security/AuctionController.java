@@ -62,6 +62,17 @@ public class AuctionController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 
+	@RequestMapping("/publishAuthority")
+	public  Map<String, Object> publishAuthority(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String,String> rtMap=new HashMap<String,String>();
+		rtMap.put("authority", "0");
+		if(this.getUserId()==1) {
+			rtMap.put("authority", "1");
+		}
+		return ResultUtils.rtSuccess(rtMap);
+	}
+
 
 	
 	/**
