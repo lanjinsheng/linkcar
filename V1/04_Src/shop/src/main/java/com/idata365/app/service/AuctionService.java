@@ -14,7 +14,9 @@ import com.idata365.app.entity.AuctionLogs;
 import com.idata365.app.entity.bean.AuctionBean;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
+import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.SignUtils;
 
 @Service
 @Transactional
@@ -23,8 +25,9 @@ public class AuctionService {
 	private AuctionGoodMapper auctionMapper;
 	@Autowired
 	private AuctionLogsMapper auctionLogsMapper;
+	@Autowired
+	private ChezuAssetService chezuAssetService;
 
-	
 	public AuctionGoods findOneAuctionGoodById(long auctionGoodsId) {
 		return auctionMapper.findAuctionGoodById(auctionGoodsId);
 	}
@@ -70,10 +73,11 @@ public class AuctionService {
 		}
 		return map;
 	}
-	
+
 	public int joinPersons(long auctionGoodsId) {
 		return auctionLogsMapper.joinPersons(auctionGoodsId);
 	}
+
 	public int joinTimes(long auctionGoodsId) {
 		return auctionLogsMapper.joinTimes(auctionGoodsId);
 	}
@@ -115,13 +119,9 @@ public class AuctionService {
 		}
 		return result;
 	}
-	
+
 	public List<AuctionLogs> listAuctionGoodsBeanRecord(Long auctionGoodsId) {
 		return auctionLogsMapper.listAuctionGoodsRecord(auctionGoodsId);
-	}
-
-	public void insertAuctionLogs(AuctionLogs auctionLogs) {
-		auctionLogsMapper.insertAuctionLogs(auctionLogs);
 	}
 
 	public int insertAuctionGoods(AuctionGoods auctionGoods) {
@@ -129,18 +129,32 @@ public class AuctionService {
 		return auctionMapper.insertAuctionGoods(auctionGoods);
 	}
 
-	public int updateAuctionGoods(AuctionGoods auctionGoods) {
-		// TODO Auto-generated method stub
-		return auctionMapper.updateAuctionGoods(auctionGoods);
-	}
-	
 	public AuctionBean getAuctionBean(Long auctionGoodsId) {
-		 AuctionBean auctionBean=new AuctionBean();
-		 AuctionGoods goods=auctionMapper.findAuctionGoodById(auctionGoodsId);
-		 auctionBean.setAuctionGoods(goods);
-		 List<AuctionLogs> auctionLogs= auctionLogsMapper.listAuctionGoodsRecord(auctionGoodsId);
-		 auctionBean.setAuctionLogsList(auctionLogs);
-		 return auctionBean;
+		AuctionBean auctionBean = new AuctionBean();
+		AuctionGoods goods = auctionMapper.findAuctionGoodById(auctionGoodsId);
+		auctionBean.setAuctionGoods(goods);
+		List<AuctionLogs> auctionLogs = auctionLogsMapper.listAuctionGoodsRecord(auctionGoodsId);
+		auctionBean.setAuctionLogsList(auctionLogs);
+		return auctionBean;
 	}
-	
+
+	public void doAuction(AuctionGoods auctionGoods, AuctionLogs auctionLogs, long userId, long winnerId)
+			throws Exception {
+		int a = auctionMapper.updateAuctionGoods(auctionGoods);
+		if (a <= 0) {
+			throw new RuntimeException("修改商品失败");
+		}
+		int b = auctionLogsMapper.insertAuctionLogs(auctionLogs);
+		if (b <= 0) {
+			throw new RuntimeException("插入日志失败");
+		}
+		// 资产操作
+		String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
+		String sign = SignUtils.encryptDataAes(paramSign);
+		boolean flag = chezuAssetService.freezeDiamondAsset(userId, auctionLogs.getAuctionDiamond().doubleValue(), sign,
+				winnerId);
+		if (!flag) {
+			throw new RuntimeException("交易失败");
+		}
+	}
 }

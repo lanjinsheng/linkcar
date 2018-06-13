@@ -290,19 +290,9 @@ public class AuctionController extends BaseController {
 		auctionLogs.setAuctionGoodsId(auctionGoodsId);
 		auctionLogs.setAuctionUserId(userId);
 		auctionLogs.setAuctionUserNick(userName);
-		auctionService.insertAuctionLogs(auctionLogs);
-
-		// 用户资产操作
-		String paramSign = userId + auctionDiamond.toString();
-		String sign = SignUtils.encryptDataAes(paramSign);
-		boolean flag = chezuAssetService.submitDiamondAsset(userId, auctionDiamond.doubleValue(), sign, winnerId);
-		if (!flag) {
-			LOG.info("交易失败");
-			return ResultUtils.rtFail(null);
-		}
-
+		
 		// 修改商品信息
-		auctionGoods.setWinnerId(winnerId);
+		auctionGoods.setWinnerId(userId);
 		auctionGoods.setDoneDiamond(auctionDiamond);
 		Date auctionRealEndTime = auctionGoods.getAuctionRealEndTime();
 		if ((auctionRealEndTime.getTime() - new Date().getTime()) < 2 * 1000 * 60) {
@@ -310,20 +300,21 @@ public class AuctionController extends BaseController {
 		} else {
 			auctionGoods.setAuctionRealEndTime(auctionRealEndTime);
 		}
-
-		int f = auctionService.updateAuctionGoods(auctionGoods);
-		if (f == 0) {
-			LOG.info("修改商品失败");
+		
+		try {
+			auctionService.doAuction(auctionGoods,auctionLogs,userId,winnerId);
+			List<AuctionLogs> auctionLogsList = auctionService.listAuctionGoodsBeanRecord(auctionGoodsId);
+			AuctionBean auctionBean = new AuctionBean();
+			auctionBean.setAuctionGoods(auctionGoods);
+			auctionBean.setAuctionLogsList(auctionLogsList);
+			Map<String, Object> notifyAuction = chezuImService.notifyAuction(auctionBean,
+					String.valueOf(auctionService.joinPersons(auctionGoodsId)),
+					String.valueOf(auctionService.joinTimes(auctionGoodsId)));
+			return ResultUtils.rtSuccess(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return ResultUtils.rtFail(null);
 		}
-		List<AuctionLogs> auctionLogsList = auctionService.listAuctionGoodsBeanRecord(auctionGoodsId);
-		AuctionBean auctionBean = new AuctionBean();
-		auctionBean.setAuctionGoods(auctionGoods);
-		auctionBean.setAuctionLogsList(auctionLogsList);
-		Map<String, Object> notifyAuction = chezuImService.notifyAuction(auctionBean,
-				String.valueOf(auctionService.joinPersons(auctionGoodsId)),
-				String.valueOf(auctionService.joinTimes(auctionGoodsId)));
-
-		return ResultUtils.rtSuccess(null);
 	}
 }
