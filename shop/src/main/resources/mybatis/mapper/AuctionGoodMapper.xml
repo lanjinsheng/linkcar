@@ -31,8 +31,19 @@
 		update auctionGoods set
 		auctionStatus=2 where auctionGoodsId=#{auctionGoodsId}
 	</update>
+	
+	
 		<!-- 竞拍定时任务 -->
 		<!-- 定时处理行程逻辑 -->
+		
+   <update id="updateGoodsStatusByTask"  parameterType="com.idata365.app.entity.AuctionGoods">
+		update auctionGoods set
+		auctionStatus=#{auctionStatus} where auctionGoodsId=#{auctionGoodsId}
+	</update>
+	 <update id="updateGoodsByTask"  parameterType="com.idata365.app.entity.AuctionGoods">
+		update auctionGoods set
+		winnerId=#{winnerId},doneDiamond=#{doneDiamond},auctionStatus=#{auctionStatus} where auctionGoodsId=#{auctionGoodsId}
+	</update>	
     <update id="lockAuctionTask" parameterType="com.idata365.app.entity.AuctionGoods" >
        UPDATE 
             auctionGoods 
