@@ -45,7 +45,7 @@ public class AuctionService {
 				map.put("auctionName", auctionGood.getPrizeName());
 				map.put("auctionDesc", auctionGood.getPrizeDesc());
 				map.put("auctionImg", auctionGood.getPrizePic());
-				map.put("auctionValue", auctionGood.getDoneDiamond().toString());
+				map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
 				map.put("joinPersons", String.valueOf(auctionLogsMapper.joinPersons(auctionGood.getAuctionGoodsId())));
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
@@ -101,7 +101,7 @@ public class AuctionService {
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
-				map.put("auctionValue", auctionGood.getDoneDiamond().toString());
+				map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
 				map.put("auctionStatus", auctionGood.getStepPrice().toString());
 				result.add(map);
 			}
@@ -117,7 +117,7 @@ public class AuctionService {
 				Map<String, String> map = new HashMap<>();
 				map.put("auctionUserNick", auctionLog.getAuctionUserNick().toString());
 				map.put("auctionTime", DateTools.formatDateYMD(auctionLog.getAuctionTime()));
-				map.put("auctionDiamond", auctionLog.getAuctionDiamond().toString());
+				map.put("auctionDiamond", auctionLog.getAuctionDiamond().stripTrailingZeros().toPlainString());
 				result.add(map);
 			}
 		}
