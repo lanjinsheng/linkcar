@@ -155,6 +155,27 @@ public class AuctionController extends BaseController {
 		List<Map<String, String>> list = auctionService.myListAuctionGoods(userId);
 		return ResultUtils.rtSuccess(list);
 	}
+	
+	/**
+	 * 
+	 * @Title: writeChangeInfo
+	 * @Description: TODO(填写兑换信息)
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             lcc
+	 */
+	@RequestMapping("/writeChangeInfo")
+	public Map<String, Object> writeChangeInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Long userId = this.getUserId();
+		LOG.info("userId=================" + userId);
+		String phone = requestBodyParams.get("phone").toString();
+		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
+		auctionService.writeChangeInfo(userId,auctionGoodsId,phone);
+		return ResultUtils.rtSuccess(null);
+	}
 
 	/**
 	 * 

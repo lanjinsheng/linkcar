@@ -43,4 +43,9 @@
 		where
 		orderId=#{convertId}
 	</update>
+	
+	<update id="updateOrderPhone" >
+		update `order` set phone=#{phone},orderStatus=1
+		where prizeId=#{auctionGoodsId} and userId=#{userId}
+	</update>
 </mapper>

@@ -8,11 +8,13 @@ import com.idata365.app.entity.Order;
 
 public interface OrderMapper {
 
-    int insert(Order record);
-    
-    List<Order> selectByExample(Long userId);
-    
-    List<Order> orderList();
+	int insert(Order record);
 
-	int sendReward(@Param("convertId")Long convertId, @Param("operatingUser")String operatingUser);
+	List<Order> selectByExample(Long userId);
+
+	List<Order> orderList();
+
+	int sendReward(@Param("convertId") Long convertId, @Param("operatingUser") String operatingUser);
+
+	int updateOrderPhone(@Param("userId") Long userId, @Param("auctionGoodsId") Long auctionGoodsId,@Param("phone") String phone);
 }

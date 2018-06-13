@@ -27,4 +27,9 @@
 		auctionGoodsId=#{auctionGoodsId}
 	</update>
 	
+	<update id="updateGoodsStatus" >
+		update auctionGoods set
+		auctionStatus=2 where auctionGoodsId=#{auctionGoodsId}
+	</update>
+	
 </mapper>
