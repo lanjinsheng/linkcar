@@ -52,7 +52,18 @@ public class AuctionController extends BaseController {
 	SystemProperties systemProperties;
 	@Autowired
 	ChezuImService chezuImService;
+	
+	
+	@RequestMapping("/test/doTest2")
+	public Map<String, Object> doTest(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		 AuctionBean auctionBean=auctionService.getAuctionBean(3L);
+		 chezuImService.notifyAuction(auctionBean,"20","30");
+		return ResultUtils.rtSuccess(null);
+	}
 
+
+	
 	/**
 	 * 
 	 * @Title: publishAuction
