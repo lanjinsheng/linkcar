@@ -118,7 +118,7 @@ public class TripController extends BaseController {
 		rtMap.put("tripTime", "0");
 		rtMap.put("brakeScore", "0");
 		rtMap.put("overspeedScore", "0");
-		rtMap.put("turnScoire", "0");
+		rtMap.put("turnScore", "0");
 		if (dbMap != null) {
 			// 驾驶得分
 			rtMap.put("score", String.valueOf(dbMap.get("score")));
@@ -138,7 +138,7 @@ public class TripController extends BaseController {
 			rtMap.put("brakeNum", brakeNum < 0 ? 0 : brakeNum);
 			rtMap.put("brakeScore", breaK);
 			rtMap.put("overspeedScore", over);
-			rtMap.put("turnScoire", turn);
+			rtMap.put("turnScore", turn);
 			rtMap.put("tripTime", BigDecimal.valueOf(Double.valueOf(dbMap.get("time").toString())/3600).setScale(1, RoundingMode.HALF_UP));
 			
 		}
