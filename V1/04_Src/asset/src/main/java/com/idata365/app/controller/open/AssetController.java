@@ -142,7 +142,7 @@ public class AssetController extends BaseController {
 	 */
 	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
 	boolean freezeDiamondAsset(@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "preUserId") long preUserId,@RequestParam(value = "ofUserId")long auctionGoodsId) {
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "preUserId") long preUserId,@RequestParam(value = "auctionGoodsId")long auctionGoodsId) {
 		LOG.info("PARAM:" + userId + "===" + diamondNum + "====" + sign);
 		LOG.info("校验逻辑待处理·~~~");
 		
