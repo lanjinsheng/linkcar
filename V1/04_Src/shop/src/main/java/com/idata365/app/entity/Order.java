@@ -1,6 +1,7 @@
 package com.idata365.app.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Order implements Serializable{
@@ -13,7 +14,7 @@ public class Order implements Serializable{
 
 	private Long orderId;
 
-    private Integer diamondNum;
+    private BigDecimal diamondNum;
 
     private String orderType;
 
@@ -25,7 +26,7 @@ public class Order implements Serializable{
 
     private Long userId;
 
-    private String name;
+    private String userName;
 
     private Long prizeId;
 
@@ -57,11 +58,11 @@ public class Order implements Serializable{
 		this.orderId = orderId;
 	}
 
-	public Integer getDiamondNum() {
+	public BigDecimal getDiamondNum() {
 		return diamondNum;
 	}
 
-	public void setDiamondNum(Integer diamondNum) {
+	public void setDiamondNum(BigDecimal diamondNum) {
 		this.diamondNum = diamondNum;
 	}
 
@@ -105,12 +106,12 @@ public class Order implements Serializable{
 		this.userId = userId;
 	}
 
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String userName) {
+		this.userName = userName;
 	}
 
 	public Long getPrizeId() {
