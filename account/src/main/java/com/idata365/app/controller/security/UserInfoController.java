@@ -67,17 +67,14 @@ public class UserInfoController extends BaseController {
 		Long userId = Long.valueOf(requestBodyParams.get("userId").toString());
 		IDCard idCard = userInfoService.getIDCard(userId);
 		List<LicenseVehicleTravel> licenseVehicleTravels = userInfoService.getLicenseVehicleTravelByUserId(userId);
-		if (idCard != null) {// 驾驶证
-			rtIDCardInfo.put("userName",idCard.getUserName());
+		if (idCard != null) {// 身份证
 			rtIDCardInfo.put("gender",idCard.getGender());
 			rtIDCardInfo.put("nation",idCard.getNation());
 			rtIDCardInfo.put("birthday",idCard.getBirthday());
 			rtIDCardInfo.put("firstDay",idCard.getFirstDay());
 			rtIDCardInfo.put("lastDay",idCard.getLastDay());
-			rtIDCardInfo.put("cardNumber",idCard.getCardNumber());
 			rtIDCardInfo.put("address",idCard.getAddress());
 			rtIDCardInfo.put("office",idCard.getOffice());
-			rtIDCardInfo.put("status",String.valueOf(idCard.getStatus()));
 			if (ValidTools.isBlank(idCard.getFrontImgUrl())) {
 				rtIDCardInfo.put("frontImgUrl", "");
 			} else {
@@ -88,20 +85,17 @@ public class UserInfoController extends BaseController {
 			} else {
 				rtIDCardInfo.put("backImgUrl", imgBase + idCard.getBackImgUrl());
 			}
-		} else {
-			rtIDCardInfo.put("userName", "" );
-			rtIDCardInfo.put("gender",  "");
-			rtIDCardInfo.put("nation", "");
-			rtIDCardInfo.put("driveCardType", "" );
-			rtIDCardInfo.put("birthday", "");
-			rtIDCardInfo.put("firstDay", "");
-			rtIDCardInfo.put("lastDay",  "");
-			rtIDCardInfo.put("cardNumber", "");
-			rtIDCardInfo.put("address",  "");
-			rtIDCardInfo.put("office",  "");
-			rtIDCardInfo.put("status", "" );
-			rtIDCardInfo.put("frontImgUrl", "");
-			rtIDCardInfo.put("backImgUrl", "");
+			
+			if (idCard.getStatus() == 1) {// 身份证
+				rtIDCardInfo.put("userName", idCard.getUserName());
+				rtIDCardInfo.put("cardNumber", idCard.getCardNumber().substring(0, 1)+"**************"+idCard.getCardNumber().substring(idCard.getCardNumber().length()-1));
+				rtIDCardInfo.put("status", "1");
+			} else{
+				rtIDCardInfo.put("userName", "***");
+				rtIDCardInfo.put("cardNumber", "****************");
+				rtIDCardInfo.put("status", "0");
+			}
+			
 		}
 		result.put("rtIDCardInfo", rtIDCardInfo);
 		
@@ -109,14 +103,10 @@ public class UserInfoController extends BaseController {
 		if(licenseVehicleTravels!=null&&licenseVehicleTravels.size()!=0) {
 			for (LicenseVehicleTravel licenseVehicleTravel : licenseVehicleTravels) {
 				Map<String, String> vehicleTravel = new HashMap<String, String>();
-				vehicleTravel.put("plateNo", licenseVehicleTravel.getPlateNo());
 				vehicleTravel.put("cardTypeDesc", StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
 				vehicleTravel.put("userTypeDesc", StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
 				vehicleTravel.put("modelTypeDesc", licenseVehicleTravel.getModelType());
-				vehicleTravel.put("vin", licenseVehicleTravel.getVin());
 				vehicleTravel.put("engineNo", licenseVehicleTravel.getEngineNo());
-				vehicleTravel.put("status",String.valueOf(licenseVehicleTravel.getStatus()));
-				vehicleTravel.put("userName",licenseVehicleTravel.getOwnerName());
 				if (ValidTools.isBlank(licenseVehicleTravel.getFrontImgUrl())) {
 					vehicleTravel.put("frontTravelImg", "");
 				} else {
@@ -124,23 +114,21 @@ public class UserInfoController extends BaseController {
 				}
 				vehicleTravel.put("issueDate", licenseVehicleTravel.getIssueDate());
 				vehicleTravel.put("regDate", licenseVehicleTravel.getRegDate());
+				
+				if (licenseVehicleTravel.getStatus() == 1) {// 行驶证
+					vehicleTravel.put("userName", licenseVehicleTravel.getOwnerName());
+					vehicleTravel.put("plateNo", licenseVehicleTravel.getPlateNo().substring(0, 1)+"****"+licenseVehicleTravel.getPlateNo().substring(licenseVehicleTravel.getPlateNo().length()-2));
+					vehicleTravel.put("vin", licenseVehicleTravel.getVin().substring(0, 2)+""+licenseVehicleTravel.getVin().substring(licenseVehicleTravel.getVin().length()-4));
+					vehicleTravel.put("status", "1");
+				} else {
+					vehicleTravel.put("userName", "***");
+					vehicleTravel.put("plateNo", "*******");
+					vehicleTravel.put("vin", "***********");
+					vehicleTravel.put("status", "0");
+				}
+				
 				rtVehicleTravel.add(vehicleTravel);
 			}
-		}else {
-			Map<String, String> vehicleTravel = new HashMap<String, String>();
-			vehicleTravel.put("plateNo", "");
-			vehicleTravel.put("cardTypeDesc", "");
-			vehicleTravel.put("userTypeDesc", "");
-			vehicleTravel.put("modelTypeDesc", "");
-			vehicleTravel.put("vin", "");
-			vehicleTravel.put("engineNo", "");
-			vehicleTravel.put("frontTravelImg", "");
-			vehicleTravel.put("backTravelImg", "");
-			vehicleTravel.put("issueDate", "");
-			vehicleTravel.put("regDate", "");
-			vehicleTravel.put("status","");
-			vehicleTravel.put("userName","");
-			rtVehicleTravel.add(vehicleTravel);
 		}
 		
 		result.put("rtVehicleTravel", rtVehicleTravel);
