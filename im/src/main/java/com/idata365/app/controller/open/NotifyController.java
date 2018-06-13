@@ -68,7 +68,7 @@ public class NotifyController extends BaseController{
 			actionLogs.add(logMap);
 		}
 		notifyInfo.put("actionLogs", actionLogs);
-		imService.sendAuctionMsg(goodsList,notifyInfo);
+		imService.sendAuctionMsg(goodsList,notifyInfo, String.valueOf(auctionBean.getAuctionGoods().getAuctionGoodsId()));
 	    LOG.info(auctionBean.getAuctionGoods().getPrizeName());
 		return null;
 	}

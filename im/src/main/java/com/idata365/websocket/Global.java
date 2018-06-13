@@ -90,7 +90,7 @@ public class Global {
 			"] } }";
 	
 	static String auctionDetailMsg="{\"msgType\": \"40\",\"notifyMoudle\": \"auctionDoing\",\"data\": %s}";
-	public static void sendAuctionMsg(String goodsJson,String detailJson) {
+	public static void sendAuctionMsg(String goodsJson,String detailJson,String datas) {
 		if(socketBeanMap.size()==0) return;
 		Collection c=socketBeanMap.values();
 		Iterator it=c.iterator();
@@ -100,7 +100,9 @@ public class Global {
 				s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionMsg, goodsJson)));
 			}
 			if(s.getAuctionDoingMsg()!=null) {
-				s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionDetailMsg, detailJson)));
+				if(s.getAuctionDoingMsg().getDatas().equals(datas)) {
+					s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionDetailMsg, detailJson)));
+				}
 			}
 		}
 	}
