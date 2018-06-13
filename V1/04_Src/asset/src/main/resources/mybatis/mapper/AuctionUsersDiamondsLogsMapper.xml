@@ -13,5 +13,9 @@
 		values(#{userId},#{diamondsNum},#{recordType},#{eventType},
 		#{effectId},#{remark},#{createTime})
 	</insert>
+	
+	<select id="getAuctionUsersDiamondsLogsById" resultMap="BaseResultMap">
+		select * from auctionUsersDiamondsLogs where userId=#{preUserId} and effectId=#{auctionGoodsId} order by createTime desc limit 1
+	</select>
 
 </mapper>
