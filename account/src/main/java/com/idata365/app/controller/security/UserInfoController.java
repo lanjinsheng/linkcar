@@ -115,6 +115,8 @@ public class UserInfoController extends BaseController {
 				vehicleTravel.put("modelTypeDesc", licenseVehicleTravel.getModelType());
 				vehicleTravel.put("vin", licenseVehicleTravel.getVin());
 				vehicleTravel.put("engineNo", licenseVehicleTravel.getEngineNo());
+				vehicleTravel.put("status",String.valueOf(licenseVehicleTravel.getStatus()));
+				vehicleTravel.put("userName",licenseVehicleTravel.getOwnerName());
 				if (ValidTools.isBlank(licenseVehicleTravel.getFrontImgUrl())) {
 					vehicleTravel.put("frontTravelImg", "");
 				} else {
@@ -136,6 +138,8 @@ public class UserInfoController extends BaseController {
 			vehicleTravel.put("backTravelImg", "");
 			vehicleTravel.put("issueDate", "");
 			vehicleTravel.put("regDate", "");
+			vehicleTravel.put("status","");
+			vehicleTravel.put("userName","");
 			rtVehicleTravel.add(vehicleTravel);
 		}
 		
