@@ -118,6 +118,7 @@ public class AuctionService {
 				map.put("auctionUserNick", auctionLog.getAuctionUserNick().toString());
 				map.put("auctionTime", DateTools.formatDateYMD(auctionLog.getAuctionTime()));
 				map.put("auctionDiamond", auctionLog.getAuctionDiamond().toString());
+				result.add(map);
 			}
 		}
 		return result;
