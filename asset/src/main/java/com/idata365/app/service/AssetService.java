@@ -264,87 +264,93 @@ public class AssetService extends BaseService<AssetService> {
 			return false;
 		}
 	}
-	
-	@Transactional
-	public boolean unfreezeDiamondAsset(long buyer,long sellerId,long auctionGoodsId,double diamondsNum) {
-			//总收入增加
-			Map<String, Object> earn = new HashMap<String, Object>();
-			earn.put("userId", sellerId);
-			earn.put("diamondsNum", diamondsNum);
-			int addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);//+
-			//插入商品消费与赚取流水记录
-			AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
-			assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-			assetUsersDiamondsLogs.setEffectId(0L);
-			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Auction_Buy);
-			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
-			assetUsersDiamondsLogs.setRemark("竞拍消费"+auctionGoodsId);
-			assetUsersDiamondsLogs.setUserId(buyer);
-			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
 
-			AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
-			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-			logs.setEffectId(0L);
-			logs.setEventType(AssetConstant.EventType_Auction_Earn);
-			logs.setRecordType(AssetConstant.RecordType_1);
-			logs.setRemark("竞拍收入"+auctionGoodsId);
-			logs.setUserId(sellerId);
-			assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
-			
-			//竞拍解冻
-			AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
-			auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-			auctionLog.setEffectId(auctionGoodsId);
-			auctionLog.setEventType(AssetConstant.EventType_Thaw);
-			auctionLog.setRecordType(AssetConstant.RecordType_1);
-			auctionLog.setRemark("竞拍成功,解冻");
-			auctionLog.setUserId(buyer);
-			logs.setCreateTime(new Date());
-			auctionUsersDiamondsLogsMapper.insertDiamondsConsume(auctionLog);
-			return true;
-		 
-	}
 	@Transactional
-	public boolean freezeDiamondAsset(long userId, double diamondsNum, long winnerId) {
-		int addUpdate = 1;
-		if (0 != winnerId) {
+	public boolean freezeDiamondAsset(long userId, double diamondsNum, long preUserId, long auctionGoodsId) {
+		int addUpdate = 0;
+		BigDecimal preUserDiamondsNum = null;
+
+		if (0 != preUserId) {
+			AuctionUsersDiamondsLogs logsById = auctionUsersDiamondsLogsMapper
+					.getAuctionUsersDiamondsLogsById(preUserId, auctionGoodsId);
+			preUserDiamondsNum = logsById.getDiamondsNum();
 			Map<String, Object> earn = new HashMap<String, Object>();
-			earn.put("userId", winnerId);
-			earn.put("diamondsNum", diamondsNum);
-			addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);//+
+			earn.put("userId", preUserId);
+			earn.put("diamondsNum", preUserDiamondsNum);
+			addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);// +
 		}
+
 		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("userId", userId);
 		datas.put("diamondsNum", diamondsNum);
-		int hadUpdate = assetUsersAssetMapper.updateDiamondsConsume(datas);//-
-		
-		if (hadUpdate != 0 && addUpdate != 0) {
+		int hadUpdate = assetUsersAssetMapper.updateDiamondsConsume(datas);// -
+
+		if (hadUpdate != 0) {
 			// 钻石数量够买，则进行日志增加
 			AuctionUsersDiamondsLogs auctionUsersDiamondsLogs = new AuctionUsersDiamondsLogs();
 			auctionUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-			auctionUsersDiamondsLogs.setEffectId(0L);
+			auctionUsersDiamondsLogs.setEffectId(auctionGoodsId);
 			auctionUsersDiamondsLogs.setEventType(AssetConstant.EventType_Freeze);
 			auctionUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 			auctionUsersDiamondsLogs.setRemark("竞拍冻结");
 			auctionUsersDiamondsLogs.setUserId(userId);
 			auctionUsersDiamondsLogs.setCreateTime(new Date());
 			auctionUsersDiamondsLogsMapper.insertDiamondsConsume(auctionUsersDiamondsLogs);
-
-			AuctionUsersDiamondsLogs logs = new AuctionUsersDiamondsLogs();
-			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-			logs.setEffectId(0L);
-			logs.setEventType(AssetConstant.EventType_Thaw);
-			logs.setRecordType(AssetConstant.RecordType_1);
-			logs.setRemark("竞拍解冻");
-			logs.setUserId(winnerId);
-			logs.setCreateTime(new Date());
-			auctionUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
-
+			if (addUpdate != 0) {
+				AuctionUsersDiamondsLogs logs = new AuctionUsersDiamondsLogs();
+				logs.setDiamondsNum(preUserDiamondsNum);
+				logs.setEffectId(auctionGoodsId);
+				logs.setEventType(AssetConstant.EventType_Thaw);
+				logs.setRecordType(AssetConstant.RecordType_1);
+				logs.setRemark("竞拍解冻");
+				logs.setUserId(preUserId);
+				logs.setCreateTime(new Date());
+				auctionUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
+			}
 			return true;
 		} else {
 			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
 			return false;
 		}
+	}
+
+	public boolean unfreezeDiamondAsset(long buyer, long sellerId, long auctionGoodsId, double diamondsNum) {
+		// 总收入增加
+		Map<String, Object> earn = new HashMap<String, Object>();
+		earn.put("userId", sellerId);
+		earn.put("diamondsNum", diamondsNum);
+		int addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);// +
+		// 插入商品消费与赚取流水记录
+		AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
+		assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+		assetUsersDiamondsLogs.setEffectId(0L);
+		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Auction_Buy);
+		assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
+		assetUsersDiamondsLogs.setRemark("竞拍消费" + auctionGoodsId);
+		assetUsersDiamondsLogs.setUserId(buyer);
+		assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
+
+		AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
+		logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+		logs.setEffectId(0L);
+		logs.setEventType(AssetConstant.EventType_Auction_Earn);
+		logs.setRecordType(AssetConstant.RecordType_1);
+		logs.setRemark("竞拍收入" + auctionGoodsId);
+		logs.setUserId(sellerId);
+		assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
+
+		// 竞拍解冻
+		AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
+		auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+		auctionLog.setEffectId(auctionGoodsId);
+		auctionLog.setEventType(AssetConstant.EventType_Thaw);
+		auctionLog.setRecordType(AssetConstant.RecordType_1);
+		auctionLog.setRemark("竞拍成功,解冻");
+		auctionLog.setUserId(buyer);
+		logs.setCreateTime(new Date());
+		auctionUsersDiamondsLogsMapper.insertDiamondsConsume(auctionLog);
+		return true;
+
 	}
 
 	/**
