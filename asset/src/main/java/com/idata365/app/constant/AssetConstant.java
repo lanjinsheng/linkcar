@@ -48,6 +48,9 @@ public class AssetConstant {
 		UserDiamondsEventMap.put(EventType_Buy, "购买消耗");
 		UserDiamondsEventMap.put(EventType_Daimond_SeasonEnd_User, "赛季获胜获取");
 		UserDiamondsEventMap.put(EventType_Earn, "交易收入");
+		UserDiamondsEventMap.put(EventType_Auction_Buy, "竞拍消费");
+		UserDiamondsEventMap.put(EventType_Auction_Earn, "竞拍收入");
+		
 		
 		UserPowerEventMap.put(EventType_Power_SignIn, "每日签到奖励");
 		UserPowerEventMap.put(EventType_Power_Index_Get, "首页小车拾取");
