@@ -9,6 +9,7 @@ package com.idata365.app.serviceV2;
  */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	public UserInfoServiceV2() {
 	}
 
-	public LicenseVehicleTravel getLicenseVehicleTravel(Long userId) {
+	public List<LicenseVehicleTravel> getLicenseVehicleTravel(Long userId) {
 		return licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
 	}
 
@@ -142,10 +143,15 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	 *             LanYeYe
 	 */
 	public boolean isVehicleTravelOK(Long userId) {
-		LicenseVehicleTravel travel = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
-		if (travel != null && travel.getIsTravelEdit() == 0) {
-			return true;
+		List<LicenseVehicleTravel> travels = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
+		if(travels!=null&&travels.size()!=0) {
+			for (LicenseVehicleTravel travel : travels) {
+				if (travel.getIsTravelEdit() == 0) {
+					return true;
+				}
+			}
 		}
+		
 		return false;
 	}
 
