@@ -49,4 +49,25 @@ public interface ChezuAssetService {
 	boolean submitDiamondAsset(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId);
 
+	/**
+	 * 
+	 * @param ofUserId 
+	 * @Title: freezeDiamondAsset
+	 * @Description: TODO(返回false消费失败，true消费成功)
+	 * @param @param
+	 *            userId
+	 * @param @param
+	 *            diamondNum
+	 * @param @param
+	 *            sign
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
+	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
+	boolean freezeDiamondAsset(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId);
+
 }

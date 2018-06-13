@@ -94,7 +94,7 @@ public class OrderService {
 			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeId()));
 			rtMap.put("convertId", String.valueOf(order.getOrderId()));
 			rtMap.put("convertTime", DateTools.formatDateYMD(order.getOrderTime()));
-			rtMap.put("userName", order.getName());
+			rtMap.put("userName", order.getUserName());
 			rtMap.put("rewardID", String.valueOf(order.getPrizeId()));
 			rtMap.put("rewardName", prize.getPrizeName());
 			rtMap.put("rewardDesc", prize.getPrizeDesc());
@@ -142,7 +142,7 @@ public class OrderService {
 		
 		String paramSign = order.getUserId() + String.valueOf(order.getDiamondNum());
 		String sign = SignUtils.encryptDataAes(paramSign);
-		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserId(), order.getDiamondNum(), sign,ofUserId);
+		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserId(), order.getDiamondNum().doubleValue(), sign,ofUserId);
 		if (!flag) {
 			throw new RuntimeException("交易失败");
 		}
