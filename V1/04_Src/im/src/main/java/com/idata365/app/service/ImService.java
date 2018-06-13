@@ -70,8 +70,8 @@ public class ImService extends BaseService<ImService>
 	    * @throws
 	    * @author LanYeYe
 	 */
-	public void sendAuctionMsg(Map<String,String> goods,Map<String,Object> goodDetail) {
-		Global.sendAuctionMsg(GsonUtils.toJson(goods, false), GsonUtils.toJson(goodDetail, false));
+	public void sendAuctionMsg(Map<String,String> goods,Map<String,Object> goodDetail,String keyId) {
+		Global.sendAuctionMsg(GsonUtils.toJson(goods, false), GsonUtils.toJson(goodDetail, false),keyId);
 	}
 	
 	public List<Map<String,String>>  getMsgs()
