@@ -45,7 +45,7 @@
 
 	<bean id="auctionEndTaskExe"
 		class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
-		<property name="runnable" ref="scanTask" />
+		<property name="runnable" ref="auctionEndTask" />
 		<!-- 容器加载10秒后开始执行 -->
 		<property name="delay" value="10000" />
 		<!-- 每次任务间隔 5秒 -->
