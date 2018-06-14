@@ -29,6 +29,7 @@ import com.idata365.app.service.FamilyInviteService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.MessageService;
+import com.idata365.app.service.UserInfoService;
 import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
@@ -50,6 +51,8 @@ public class ShareCommController extends BaseController
 	private SystemProperties systemProperties;
 	@Autowired
 	private AchieveCommService acchieveCommService;
+	@Autowired
+	private UserInfoService userInfoService;
 
 	public ShareCommController()
 	{
@@ -111,6 +114,45 @@ public class ShareCommController extends BaseController
 			}
 			String datas = familyId + ":" + inviteCode + ":" + System.currentTimeMillis();
 			String sign = SignUtils.encryptDataAes(datas);
+
+			rt.put("sign", sign);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResultUtils.rtFail(null);
+		}
+		return ResultUtils.rtSuccess(rt);
+	}
+	
+	@RequestMapping("/share/goInviteNew")
+	public Map<String, Object> goInviteNew(@RequestParam(required = false) Map<String, String> allRequestParams,@RequestBody(required = false) Map<String, Object> requestBodyParams)
+	{
+		String content = String.valueOf(requestBodyParams.get("key"));
+		if (content == null)
+		{
+			return ResultUtils.rtFailParam(null, "无效参数");
+
+		}
+		Map<String, Object> rt = new HashMap<String, Object>();
+		try
+		{
+			String key = SignUtils.decryptDataAes(content);
+			String[] arrayString = key.split(":");
+			Long familyId = Long.valueOf(arrayString[0]);
+			Long createTimeLong = Long.valueOf(arrayString[2]);
+			String inviteCode = arrayString[1];
+			Long now = System.currentTimeMillis() - (100*24*3600*1000);// 100天过期
+			if (now > createTimeLong)
+			{
+				LOG.info("过期的数据 key：" + key);
+				return ResultUtils.rtFailParam(null, "过期数据");
+			}
+			String userName = userInfoService.getUsersAccount(Long.valueOf(inviteCode)).getNickName();
+			String familyName = String.valueOf(familyService.findFamilyByFamilyId(familyId).get("familyName"));
+			
+			String sign [] = {userName,familyName};
 
 			rt.put("sign", sign);
 		}
