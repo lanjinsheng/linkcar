@@ -10,8 +10,16 @@
 		*
 		from `order`
 		where
-		userId=#{userId}
+		userId=#{userId} and businessType='2'
 		order by orderTime desc
+	</select>
+	
+	<select id="getOrderByOrderId" resultMap="BaseResultMap">
+		select
+		*
+		from `order`
+		where
+		orderId=#{orderId}
 	</select>
 
 	<select id="orderList" resultMap="BaseResultMap">
@@ -19,7 +27,16 @@
 		*
 		from `order`
 		where
-		orderStatus='1'
+		orderStatus='1' and businessType='2'
+		order by orderTime desc
+	</select>
+	
+	<select id="orderListVirtual" resultMap="BaseResultMap">
+		select
+		*
+		from `order`
+		where
+		orderStatus='1' and businessType='1'
 		order by orderTime desc
 	</select>
 

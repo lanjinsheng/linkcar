@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.Order;
 import com.idata365.app.entity.Prize;
+import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
 import com.idata365.app.remote.ChezuAssetService;
@@ -36,6 +37,8 @@ public class OrderService {
 	private PrizeMapper prizeMapper;
 	@Autowired
 	private ChezuAssetService chezuAssetService;
+	@Autowired
+	private AuctionGoodMapper auctionGoodMapper;
 
 	/**
 	 * 
@@ -84,9 +87,8 @@ public class OrderService {
 		}
 		return list;
 	}
-	
-	
-	public String orderList(Map<String,Object> map) {
+
+	public String orderList(Map<String, Object> map) {
 		List<Order> orders = orderMapper.orderList();
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Order order : orders) {
@@ -104,7 +106,7 @@ public class OrderService {
 			rtMap.put("convertNum", String.valueOf(order.getOrderNum()));
 			rtMap.put("diamondNum", order.getDiamondNum().toString());
 			rtMap.put("phone", order.getPhone());
-			rtMap.put("address",order.getAddress());
+			rtMap.put("address", order.getAddress());
 
 			list.add(rtMap);
 		}
@@ -113,11 +115,38 @@ public class OrderService {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
-	
+
+	public String orderListVirtual(Map<String, Object> map) {
+		List<Order> orders = orderMapper.orderListVirtual();
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for (Order order : orders) {
+			Map<String, String> rtMap = new HashMap<>();
+			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeId()));
+			rtMap.put("convertId", String.valueOf(order.getOrderId()));
+			rtMap.put("convertTime", DateTools.formatDateYMD(order.getOrderTime()));
+			rtMap.put("userName", order.getUserName());
+			rtMap.put("rewardID", String.valueOf(order.getPrizeId()));
+			rtMap.put("rewardName", prize.getPrizeName());
+			rtMap.put("rewardDesc", prize.getPrizeDesc());
+			rtMap.put("rewardImg", prize.getPrizePic());
+			rtMap.put("convertType", order.getOrderType());
+			rtMap.put("convertStatus", order.getOrderStatus());
+			rtMap.put("convertNum", String.valueOf(order.getOrderNum()));
+			rtMap.put("diamondNum", order.getDiamondNum().toString());
+			rtMap.put("phone", order.getPhone());
+			rtMap.put("address", order.getAddress());
+
+			list.add(rtMap);
+		}
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(list));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
+	}
 
 	/**
 	 * 
-	 * @param ofUserId 
+	 * @param ofUserId
 	 * @Title: save
 	 * @Description: TODO(保存交易记录操作)
 	 * @param @param
@@ -132,25 +161,34 @@ public class OrderService {
 	public void save(Order order, long ofUserId) throws Exception {
 		int ordernum = order.getOrderNum();
 		long prizeId = order.getPrizeId();
-		
-		int f = prizeMapper.div(ordernum,prizeId);
-		if(f<=0) {
+
+		int f = prizeMapper.div(ordernum, prizeId);
+		if (f <= 0) {
 			throw new RuntimeException("库存不足");
 		}
-		
+
 		orderMapper.insert(order);
-		
+
 		String paramSign = order.getUserId() + String.valueOf(order.getDiamondNum());
 		String sign = SignUtils.encryptDataAes(paramSign);
-		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserId(), order.getDiamondNum().doubleValue(), sign,ofUserId);
+		boolean flag = chezuAssetService.submitDiamondAsset(order.getUserId(), order.getDiamondNum().doubleValue(),
+				sign, ofUserId);
 		if (!flag) {
 			throw new RuntimeException("交易失败");
 		}
 
 	}
 
-	public int sendReward(Long convertId, String operatingUser) {
-		return orderMapper.sendReward(convertId,operatingUser);
+	public int sendReward(Long orderId, String operatingUser) {
+		return orderMapper.sendReward(orderId, operatingUser);
+	}
+
+	public int sendVirtualReward(Long orderId, String operatingUser) {
+		Order order = orderMapper.getOrderByOrderId(orderId);
+		Long goodsId = order.getPrizeId();
+		int a = auctionGoodMapper.updateGoodsStatus(goodsId, 3);
+		int b = orderMapper.sendReward(orderId, operatingUser);
+		return a + b;
 	}
 
 }

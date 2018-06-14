@@ -29,7 +29,7 @@
 	
 	<update id="updateGoodsStatus" >
 		update auctionGoods set
-		auctionStatus=2 where auctionGoodsId=#{auctionGoodsId}
+		auctionStatus=#{auctionStatus} where auctionGoodsId=#{auctionGoodsId}
 	</update>
 	
 	

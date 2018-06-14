@@ -190,9 +190,11 @@ public class AuctionController extends BaseController {
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
 		AuctionGoods goods = auctionService.findOneAuctionGoodById(auctionGoodsId);
 		Map<String, Object> data = new HashMap<>();
+		data.put("name", this.getUserInfo().getNickName());
 		if (goods.getAuctionGoodsType() == 1) {
 			String phone = requestBodyParams.get("phone").toString();
 			data.put("phone", phone);
+			
 		} else {
 			String phone = requestBodyParams.get("phone").toString();
 			String name = requestBodyParams.get("name").toString();
@@ -326,12 +328,6 @@ public class AuctionController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) throws Exception {
 		Long userId = super.getUserId();
 
-		Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
-				SignUtils.encryptHMAC(String.valueOf(userId)));
-		if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
-			return ResultUtils.rtFail(null,"亲！请先去认证身份哦", "100");
-		}
-
 		String userName = this.getUserInfo().getNickName();
 		LOG.info("userId=================" + userId);
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
@@ -339,6 +335,14 @@ public class AuctionController extends BaseController {
 		BigDecimal auctionDiamond = BigDecimal
 				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("auctionDiamond"))));
 		AuctionGoods auctionGoods = auctionService.findOneAuctionGoodById(auctionGoodsId);
+		if(auctionGoods.getIsMustVerify()==1) {//需要身份验证
+			Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
+					SignUtils.encryptHMAC(String.valueOf(userId)));
+			if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
+				return ResultUtils.rtFail(null,"亲！请先去认证身份哦", "100");
+			}
+		}
+		
 		long winnerId = auctionGoods.getWinnerId();
 
 		// 插入竞拍记录
