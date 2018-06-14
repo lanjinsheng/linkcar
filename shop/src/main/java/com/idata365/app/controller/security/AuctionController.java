@@ -52,29 +52,26 @@ public class AuctionController extends BaseController {
 	SystemProperties systemProperties;
 	@Autowired
 	ChezuImService chezuImService;
-	
-	
+
 	@RequestMapping("/test/doTest2")
 	public Map<String, Object> doTest(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		 AuctionBean auctionBean=auctionService.getAuctionBean(3L);
-		 chezuImService.notifyAuction(auctionBean,"20","30");
+		AuctionBean auctionBean = auctionService.getAuctionBean(3L);
+		chezuImService.notifyAuction(auctionBean, "20", "30");
 		return ResultUtils.rtSuccess(null);
 	}
 
 	@RequestMapping("/publishAuthority")
-	public  Map<String, Object> publishAuthority(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> publishAuthority(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Map<String,String> rtMap=new HashMap<String,String>();
+		Map<String, String> rtMap = new HashMap<String, String>();
 		rtMap.put("authority", "0");
-		if(this.getUserId()==1) {
+		if (this.getUserId() == 1) {
 			rtMap.put("authority", "1");
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
 
-
-	
 	/**
 	 * 
 	 * @Title: publishAuction
@@ -98,12 +95,14 @@ public class AuctionController extends BaseController {
 		String prizeName = requestBodyParams.get("title").toString();
 		String prizeDesc = requestBodyParams.get("desc").toString();
 		String prizePic = requestBodyParams.get("imgs").toString();
-		String type = requestBodyParams.get("type").toString();
+		int type = Integer.valueOf(requestBodyParams.get("type").toString());
 		BigDecimal startDiamond = BigDecimal
 				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("startValue"))));
 		BigDecimal stepPrice = BigDecimal.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("difference"))));
-		Date auctionStartTime = DateTools.getDateTimeOfStr(requestBodyParams.get("startTime").toString(),"yyyy-MM-dd HH:mm");
-		Date auctionEndTime = DateTools.getDateTimeOfStr(requestBodyParams.get("endTime").toString(),"yyyy-MM-dd HH:mm");
+		Date auctionStartTime = DateTools.getDateTimeOfStr(requestBodyParams.get("startTime").toString(),
+				"yyyy-MM-dd HH:mm");
+		Date auctionEndTime = DateTools.getDateTimeOfStr(requestBodyParams.get("endTime").toString(),
+				"yyyy-MM-dd HH:mm");
 
 		AuctionGoods auctionGoods = new AuctionGoods();
 		auctionGoods.setPrizeName(prizeName);
@@ -115,6 +114,7 @@ public class AuctionController extends BaseController {
 		auctionGoods.setAuctionEndTime(auctionEndTime);
 		auctionGoods.setAuctionRealEndTime(auctionEndTime);
 		auctionGoods.setOfUserId(userId);
+		auctionGoods.setAuctionGoodsType(type);
 		int f = auctionService.insertAuctionGoods(auctionGoods);
 		if (f == 0) {
 			return ResultUtils.rtFail(null);
@@ -167,7 +167,7 @@ public class AuctionController extends BaseController {
 		List<Map<String, String>> list = auctionService.myListAuctionGoods(userId);
 		return ResultUtils.rtSuccess(list);
 	}
-	
+
 	/**
 	 * 
 	 * @Title: writeChangeInfo
@@ -183,9 +183,30 @@ public class AuctionController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Long userId = this.getUserId();
 		LOG.info("userId=================" + userId);
-		String phone = requestBodyParams.get("phone").toString();
+		
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
-		auctionService.writeChangeInfo(userId,auctionGoodsId,phone);
+		AuctionGoods goods = auctionService.findOneAuctionGoodById(auctionGoodsId);
+		Map<String,Object> data = new HashMap<>();
+		if (goods.getAuctionGoodsType() == 1) {
+			String phone = requestBodyParams.get("phone").toString();
+			data.put("phone", phone);
+		} else {
+			String phone = requestBodyParams.get("phone").toString();
+			String name = requestBodyParams.get("name").toString();
+			String address = requestBodyParams.get("address").toString();
+			String provinceCode = requestBodyParams.get("provinceCode").toString();
+			String cityCode = requestBodyParams.get("cityCode").toString();
+			String areaCode = requestBodyParams.get("areaCode").toString();
+			data.put("phone", phone);
+			data.put("name", name);
+			data.put("address", address);
+			data.put("provinceCode", provinceCode);
+			data.put("cityCode", cityCode);
+			data.put("areaCode", areaCode);
+		}
+		data.put("userId", userId);
+		data.put("auctionGoodsId", auctionGoodsId);
+		auctionService.writeChangeInfo(data);
 		return ResultUtils.rtSuccess(null);
 	}
 
@@ -317,7 +338,7 @@ public class AuctionController extends BaseController {
 		auctionLogs.setAuctionGoodsId(auctionGoodsId);
 		auctionLogs.setAuctionUserId(userId);
 		auctionLogs.setAuctionUserNick(userName);
-		
+
 		// 修改商品信息
 		auctionGoods.setWinnerId(userId);
 		auctionGoods.setDoneDiamond(auctionDiamond);
@@ -327,9 +348,9 @@ public class AuctionController extends BaseController {
 		} else {
 			auctionGoods.setAuctionRealEndTime(auctionRealEndTime);
 		}
-		
+
 		try {
-			auctionService.doAuction(auctionGoods,auctionLogs,userId,winnerId);
+			auctionService.doAuction(auctionGoods, auctionLogs, userId, winnerId);
 			List<AuctionLogs> auctionLogsList = auctionService.listAuctionGoodsBeanRecord(auctionGoodsId);
 			AuctionBean auctionBean = new AuctionBean();
 			auctionBean.setAuctionGoods(auctionGoods);
@@ -341,7 +362,7 @@ public class AuctionController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ResultUtils.rtFail(null,e.getMessage(),"100");
+			return ResultUtils.rtFail(null, e.getMessage(), "100");
 		}
 	}
 }

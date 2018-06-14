@@ -30,12 +30,21 @@ public class AuctionGoods implements Serializable {
 	private Integer auctionStatus;
 	private String remark;
 	private Integer isMustVerify;
+	private Integer auctionGoodsType;
 
 	private Integer taskStatus;
 	private Integer failTimes;
 	private String taskFlag;
 	
 	
+	public Integer getAuctionGoodsType() {
+		return auctionGoodsType;
+	}
+
+	public void setAuctionGoodsType(Integer auctionGoodsType) {
+		this.auctionGoodsType = auctionGoodsType;
+	}
+
 	public Integer getIsMustVerify() {
 		return isMustVerify;
 	}

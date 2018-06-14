@@ -54,8 +54,8 @@ public class AuctionService {
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
-				map.put("difference", auctionGood.getStepPrice().toString());
-//				map.put("isMustVerify", auctionGood);
+				map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
+				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
 				list.add(map);
 			}
 		}
@@ -77,7 +77,8 @@ public class AuctionService {
 			map.put("myJoinTimes", String.valueOf(auctionLogsMapper.myJoinTimes(auctionGoodsId, userId)));
 			map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 			map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
-			map.put("difference", auctionGood.getStepPrice().toString());
+			map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
+			map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
 		}
 		return map;
 	}
@@ -174,9 +175,9 @@ public class AuctionService {
 		}
 	}
 
-	public void writeChangeInfo(Long userId, Long auctionGoodsId, String phone) {
+	public void writeChangeInfo(Map<String,Object> data) {
 		// 修改商品状态
-		auctionMapper.updateGoodsStatus(auctionGoodsId);
-		orderMapper.updateOrderPhone(userId, auctionGoodsId, phone);
+		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()));
+		orderMapper.updateOrder(data);
 	}
 }
