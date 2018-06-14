@@ -21,6 +21,7 @@ import com.idata365.app.constant.SystemConstant;
 import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.PhoneUtils;
@@ -38,6 +39,8 @@ public class UserController extends BaseController{
 	private SystemProperties systemProperties;
 	@Autowired
 	private UserInfoService userInfoService;
+	@Autowired
+	private ChezuAccountService chezuAccountService;
 	public UserController() {
 		System.out.println("UserController");
 	}
@@ -93,14 +96,13 @@ public class UserController extends BaseController{
     			rtMap.put("userId", account.getId());
     			rtMap.put("nickName", account.getNickName()==null?PhoneUtils.hidePhone(phone): account.getNickName());
     			rtMap.put("headImg", this.getImgBasePath()+account.getImgUrl());
-    			LicenseDriver licenseDrive=userInfoService.getLicenseDriver(account.getId());
-    			List<LicenseVehicleTravel> licenseVehicleTravels=userInfoService.getLicenseVehicleTravel(account.getId());
-    			 if(licenseDrive!=null && licenseVehicleTravels!=null) {
-    				  //证件上传即认证
-    				  rtMap.put("isAuthenticated", "1");
-    			  }else {
-    				  rtMap.put("isAuthenticated", "0"); 
-    			  }
+    			
+    			Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(), SignUtils.encryptHMAC(String.valueOf(account.getId())));
+    			if("1".equals(authenticated.get("IdCardIsOK"))&&"1".equals(authenticated.get("VehicleTravelIsOK"))) {
+	    			rtMap.put("isAuthenticated", "1");
+	  			}else {
+	  				rtMap.put("isAuthenticated", "0"); 
+	  			}
     			
     		}else {
     			
