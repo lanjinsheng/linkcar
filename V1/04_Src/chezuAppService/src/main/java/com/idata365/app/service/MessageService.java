@@ -62,6 +62,8 @@ public class MessageService extends BaseService<MessageService>{
 	//兑换
 	public static final String ShopMessage="恭喜您兑换【%s】成功，工作人员会在1~3个工作日内处理您的兑换请求，请耐心等待通知";
 	public static final String GoodsSendMessage="您兑换的【%s】工作人员已经寄出，正在飞向您的路上，惊喜马上就到~";
+	//身份证审核通过
+	public static final String IDCardMessage="恭喜您名为【%s】的证件【%s】审核成功，感谢您的支持";
 	//道具赠送
 	public static final String LotterySendMessage="一个惊喜!【%s】赠送给你一个【%s】,快去领取吧!";
 	public static final String LotteryRecMessage="【%s】已经收到你送的道具了,谢谢你的慷慨!";
@@ -220,6 +222,35 @@ public class MessageService extends BaseService<MessageService>{
 		message.setPicture("");
 		message.setTitle("");
 		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	/**
+	 * 
+	    * @Title: buildIDCardMessage
+	    * @Description: TODO(身份证消息)
+	    * @param @param 
+	    * @param @param 
+	    * @param @param 
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author lcc
+	 */
+	public Message buildIDCardMessage(Long userId, String userName, String cardNumber) {
+		Message message=new Message();
+		message.setFromUserId(0L);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_VerifyIDCard_Ok);
+		message.setContent(getIDCardMessageDesc(userName,cardNumber));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("");
+		message.setToUserId(userId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
 		message.setToUrl("");
 		return message;
@@ -787,6 +818,9 @@ public class MessageService extends BaseService<MessageService>{
 	
 	private String getShopMessageDesc(String goodsName) {
 		return String.format(ShopMessage, goodsName);
+    }
+	private String getIDCardMessageDesc(String userName,String cardNumber) {
+		return String.format(IDCardMessage, userName,cardNumber.substring(0, 1)+"**************"+cardNumber.substring(cardNumber.length()-1));
     }
 	private String getGoodsSendMessageDesc(String goodsName) {
 		return String.format(GoodsSendMessage, goodsName);
