@@ -28,7 +28,6 @@ import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.TaskMessagePush;
-import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.MessageMapper;
 import com.idata365.app.mapper.TaskMessagePushMapper;
@@ -54,7 +53,6 @@ public class MessageService extends BaseService<MessageService>{
 	//获奖
 	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族共获得【%s】钻石，分配给您【%s】钻石，已发放至您的账户.";
 	
-	
 	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
@@ -62,6 +60,13 @@ public class MessageService extends BaseService<MessageService>{
 	//兑换
 	public static final String ShopMessage="恭喜您兑换【%s】成功，工作人员会在1~3个工作日内处理您的兑换请求，请耐心等待通知";
 	public static final String GoodsSendMessage="您兑换的【%s】工作人员已经寄出，正在飞向您的路上，惊喜马上就到~";
+	
+	public static final String AuctionFailMassage="您参与的竞拍 %s 被别人抢走啦，请继续关注我们的竞拍活动，下一个大奖就是你！";
+	public static final String AuctionSuccMassage="恭喜您成功拍下 %s ！请尽快填写相关信息，以便我们将奖品顺利无误的下发给您。";
+	public static final String AuctionExchangeMassage="您获拍的%s 已经由工作人员下发给您，请注意查看手机短信提示。您还可以继续关注我们其他的竞拍活动，各种大奖拿到手软！";
+	
+	
+	
 	//身份证审核通过
 	public static final String IDCardMessage="恭喜您名为【%s】的证件【%s】审核成功，感谢您的支持";
 	//道具赠送
@@ -226,6 +231,61 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUrl("");
 		return message;
 	}
+	
+	
+	public Message buildAuctionFailMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_Auction_Fail);
+		message.setContent(String.format(AuctionFailMassage, goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	
+	public Message buildAuctionSuccMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_Auction_Succ);
+		message.setContent(String.format(AuctionSuccMassage, goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	public Message buildAuctionExchangeMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_Auction_Exchange);
+		message.setContent(String.format(AuctionExchangeMassage, goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("");
+		return message;
+	}
+	
 	/**
 	 * 
 	    * @Title: buildIDCardMessage

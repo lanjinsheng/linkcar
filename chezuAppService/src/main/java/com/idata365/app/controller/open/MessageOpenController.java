@@ -98,7 +98,57 @@ public class MessageOpenController {
  		//用定时器推送
         messageService.pushMessageTrans(msg,MessageEnum.SHOP_GOODS_SEND);
     	return true;
-    }  
+    } 
+    /**
+     * 
+     * @param auctionGoodsId
+     * @param auctionGoodsType
+     * @param eventType 0 失敗人員发送，1，成功人员去填寫，2，工作人員已发货处理
+     * @param userIds
+     * @param goodsName
+     * @param sign  auctionGoodsId+eventType+userIds 进行签名
+     * @return
+     */
+    @RequestMapping("/app/msg/sendAuctionMsg")
+    public boolean sendAuctionMsg(@RequestParam (value = "auctionGoodsId") Long auctionGoodsId,
+    		@RequestParam (value = "auctionGoodsType") Integer auctionGoodsType,
+    		@RequestParam (value = "eventType") Integer eventType,
+    		@RequestParam (value = "userIds") String userIds,
+    		@RequestParam (value = "goodsName") String goodsName,
+    		@RequestParam (value = "sign") String sign){
+    	LOG.info("param:"+auctionGoodsId+"=="+auctionGoodsType+"==="+userIds+"==="+goodsName+"==sign="+sign);
+    	
+    	String []users=userIds.split(",");
+    	if(eventType==0){
+	    	for(String userId:users){
+	    		Message msg=messageService.buildAuctionFailMessage(null,Long.valueOf(userId),goodsName,auctionGoodsId);
+	        	//插入消息
+	     		messageService.insertMessage(msg, MessageEnum.AuctionFail);
+	     		//用定时器推送
+	            messageService.pushMessageTrans(msg,MessageEnum.AuctionFail);
+	    	}
+    	}else if(eventType==1){
+    		for(String userId:users){
+	    		Message msg=messageService.buildAuctionSuccMessage(null,Long.valueOf(userId),goodsName,auctionGoodsId);
+	        	//插入消息
+	     		messageService.insertMessage(msg, MessageEnum.AuctionSucc);
+	     		//用定时器推送
+	            messageService.pushMessageTrans(msg,MessageEnum.AuctionSucc);
+	    	}
+    	}else if(eventType==2){
+    		for(String userId:users){
+	    		Message msg=messageService.buildAuctionExchangeMessage(null,Long.valueOf(userId),goodsName,auctionGoodsId);
+	        	//插入消息
+	     		messageService.insertMessage(msg, MessageEnum.AuctionExchange);
+	     		//用定时器推送
+	            messageService.pushMessageTrans(msg,MessageEnum.AuctionExchange);
+	    	}
+    	}
+    	 
+    	return true;
+    } 
+    
+    
     /**
      * 
         * @Title: sendFamilyDiamondsMsg
