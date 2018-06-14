@@ -340,7 +340,7 @@ public class AuctionController extends BaseController {
 					SignUtils.encryptHMAC(String.valueOf(userId)));
 			if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
 				HashMap<String, Object> datas = new HashMap<String, Object>();
-				datas.put("code", 100);
+				datas.put("code", "-1");
 				datas.put("msg", "亲！请先去认证身份哦");
 				return ResultUtils.rtSuccess(datas);
 			}
@@ -375,11 +375,17 @@ public class AuctionController extends BaseController {
 			Map<String, Object> notifyAuction = chezuImService.notifyAuction(auctionBean,
 					String.valueOf(auctionService.joinPersons(auctionGoodsId)),
 					String.valueOf(auctionService.joinTimes(auctionGoodsId)));
-			return ResultUtils.rtSuccess(null);
+			HashMap<String, Object> datas = new HashMap<String, Object>();
+			datas.put("code", "1");
+			datas.put("msg", "交易成功");
+			return ResultUtils.rtSuccess(datas);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ResultUtils.rtFail(null, e.getMessage(), "100");
+			HashMap<String, Object> datas = new HashMap<String, Object>();
+			datas.put("code", "0");
+			datas.put("msg", e.getMessage());
+			return ResultUtils.rtSuccess(datas);
 		}
 	}
 }
