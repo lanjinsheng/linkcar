@@ -96,7 +96,10 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 
 			//远程处理资产信息
 			String sign=SignUtils.encryptHMAC(max.getAuctionUserId()+"");
-			boolean bl=chezuAssetService.unfreezeDiamondAsset(max.getAuctionUserId(), auctionGoods.getOfUserId(), max.getAuctionDiamond().doubleValue(), sign);
+			boolean bl=chezuAssetService.unfreezeDiamondAsset(max.getAuctionUserId(), 
+					auctionGoods.getOfUserId(), 
+					auctionGoods.getAuctionGoodsId(),
+					max.getAuctionDiamond().doubleValue(), sign);
 			if(!bl) {
 				throw new RuntimeException("远程资产调用失败");
 			}
