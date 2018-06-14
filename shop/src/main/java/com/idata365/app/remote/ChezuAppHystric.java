@@ -23,6 +23,14 @@ public class ChezuAppHystric implements ChezuAppService {
 		LOG.error("userId="+userId+"兑换"+goodsName+" sign="+sign+"消息发送失败");
 		return false;
 	}
+
+	@Override
+	public boolean sendAuctionMsg(Long auctionGoodsId, Integer auctionGoodsType, Integer eventType, String userIds,
+			String goodsName, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("sendAuctionMsg==userIds="+userIds+"竞拍推送消息"+goodsName+" sign="+sign+"消息发送失败");
+		return false;
+	}
  
  
 }

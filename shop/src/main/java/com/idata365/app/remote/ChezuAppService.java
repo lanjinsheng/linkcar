@@ -45,5 +45,21 @@ public interface ChezuAppService {
     @RequestMapping("/app/msg/sendGoodsSendMsg")
     public boolean sendGoodsSendMsg(@RequestParam (value = "userId") Long userId,
     		@RequestParam (value = "goodsName") String goodsName,@RequestParam (value = "sign") String sign);
-
+    /**
+     * 
+     * @param auctionGoodsId
+     * @param auctionGoodsType
+     * @param eventType 0 失敗人員发送，1，成功人员去填寫，2，工作人員已发货处理
+     * @param userIds
+     * @param goodsName
+     * @param sign  auctionGoodsId+eventType+userIds 进行签名
+     * @return
+     */
+    @RequestMapping("/app/msg/sendAuctionMsg")
+    public boolean sendAuctionMsg(@RequestParam (value = "auctionGoodsId") Long auctionGoodsId,
+    		@RequestParam (value = "auctionGoodsType") Integer auctionGoodsType,
+    		@RequestParam (value = "eventType") Integer eventType,
+    		@RequestParam (value = "userIds") String userIds,
+    		@RequestParam (value = "goodsName") String goodsName,
+    		@RequestParam (value = "sign") String sign);
 }
