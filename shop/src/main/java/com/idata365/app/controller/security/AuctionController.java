@@ -25,6 +25,7 @@ import com.idata365.app.entity.bean.AuctionBean;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.service.AuctionService;
@@ -52,6 +53,8 @@ public class AuctionController extends BaseController {
 	SystemProperties systemProperties;
 	@Autowired
 	ChezuImService chezuImService;
+	@Autowired
+	ChezuAccountService chezuAccountService;
 
 	@RequestMapping("/test/doTest2")
 	public Map<String, Object> doTest(@RequestParam(required = false) Map<String, String> allRequestParams,
@@ -183,10 +186,10 @@ public class AuctionController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Long userId = this.getUserId();
 		LOG.info("userId=================" + userId);
-		
+
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
 		AuctionGoods goods = auctionService.findOneAuctionGoodById(auctionGoodsId);
-		Map<String,Object> data = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		if (goods.getAuctionGoodsType() == 1) {
 			String phone = requestBodyParams.get("phone").toString();
 			data.put("phone", phone);
@@ -322,6 +325,13 @@ public class AuctionController extends BaseController {
 	public Map<String, Object> doAuction(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) throws Exception {
 		Long userId = super.getUserId();
+
+		Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
+				SignUtils.encryptHMAC(String.valueOf(userId)));
+		if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
+			return ResultUtils.rtFail(null,"亲！请先去认证身份哦", "100");
+		}
+
 		String userName = this.getUserInfo().getNickName();
 		LOG.info("userId=================" + userId);
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
