@@ -95,6 +95,10 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String RegMessageUrl=H5Host+"share/home.html";
 	public static final String KaijiangMessageUrl=H5Host+"share/lottery.html";
 	
+	public static final String MyAuctionUrl="com.shujin.haochezu://AuctionNotes.push";           
+	public static final String MyAuctionInfoApendUrl="com.shujin.haochezu://convertAddress.push?type=%s&convertId=%s";
+	
+	
 	@Autowired
 	SystemProperties systemProperties;
 	public static final Map<String,String> MessageImgs=new HashMap<String,String>();
@@ -246,12 +250,12 @@ public class MessageService extends BaseService<MessageService>{
 		message.setPicture("");
 		message.setTitle("");
 		message.setToUserId(toUserId);
-		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
-		message.setToUrl("");
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(MyAuctionUrl);
 		return message;
 	}
 	
-	public Message buildAuctionSuccMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
+	public Message buildAuctionSuccMessage(Long fromUserId,Long toUserId,String goodsName,Integer auctionGoodsType,Long auctionGoodsId) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
@@ -264,8 +268,10 @@ public class MessageService extends BaseService<MessageService>{
 		message.setPicture("");
 		message.setTitle("");
 		message.setToUserId(toUserId);
-		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
-		message.setToUrl("");
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		String convertId=String.valueOf(auctionGoodsId);
+		String type=String.valueOf(auctionGoodsType);
+		message.setToUrl(String.format(MyAuctionInfoApendUrl,type,convertId));
 		return message;
 	}
 	public Message buildAuctionExchangeMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
@@ -281,8 +287,8 @@ public class MessageService extends BaseService<MessageService>{
 		message.setPicture("");
 		message.setTitle("");
 		message.setToUserId(toUserId);
-		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
-		message.setToUrl("");
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(MyAuctionUrl);
 		return message;
 	}
 	
