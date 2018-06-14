@@ -57,8 +57,9 @@ public class ImgsInfoController {
 	        	 if(key.endsWith("_Q")) {//走qq
 	        		 QQSSOTools.getSSOFile(key, os);
 	        	 }else {
-	        	
-	        	  SSOTools.getSSOFile(key,os);
+	        		 if(systemProperties.getSsoQQ().equals("0")){
+	        			 SSOTools.getSSOFile(key,os);
+	        		 }
 	        	 }
 	        	 InputStream inputStream = file.getInputStream();
 	             byte[] data = new byte[(int)file.contentLength()];
