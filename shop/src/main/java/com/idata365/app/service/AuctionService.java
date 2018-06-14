@@ -1,6 +1,7 @@
 package com.idata365.app.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,11 @@ public class AuctionService {
 			map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
 			map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 			map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
+			if (auctionGood.getWinnerId() == userId
+					&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
+				map.put("auctionStatus", auctionGood.getAuctionStatus().toString());
+			}
+			map.put("auctionStatus","0");
 		}
 		return map;
 	}
@@ -108,7 +114,12 @@ public class AuctionService {
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
 				map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
-				map.put("auctionStatus", auctionGood.getStepPrice().toString());
+				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
+				if (auctionGood.getWinnerId() == userId
+						&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
+					map.put("auctionStatus", auctionGood.getAuctionStatus().toString());
+				}
+				map.put("auctionStatus","0");
 				result.add(map);
 			}
 		}
@@ -121,7 +132,7 @@ public class AuctionService {
 		if (auctionLogs != null && auctionLogs.size() != 0) {
 			for (AuctionLogs auctionLog : auctionLogs) {
 				Map<String, String> map = new HashMap<>();
-				map.put("auctionUserNick", auctionLog.getAuctionUserNick().toString());
+				map.put("nick", auctionLog.getAuctionUserNick().toString());
 				map.put("auctionTime", DateTools.formatDateYMD(auctionLog.getAuctionTime()));
 				map.put("auctionDiamond", auctionLog.getAuctionDiamond().stripTrailingZeros().toPlainString());
 				result.add(map);
@@ -152,30 +163,30 @@ public class AuctionService {
 			throws Exception {
 		int a = auctionMapper.updateAuctionGoods(auctionGoods);
 		if (a <= 0) {
-			LOG.error("修改商品失败"+auctionGoods.getAuctionGoodsId()+"=="+userId+"=="+preUserId);
+			LOG.error("修改商品失败" + auctionGoods.getAuctionGoodsId() + "==" + userId + "==" + preUserId);
 			throw new RuntimeException("系统异常交易失败");
 		}
 		int b = auctionLogsMapper.insertAuctionLogs(auctionLogs);
 		if (b <= 0) {
-			LOG.error("插入日志失败"+auctionGoods.getAuctionGoodsId()+"=="+userId+"=="+preUserId);
+			LOG.error("插入日志失败" + auctionGoods.getAuctionGoodsId() + "==" + userId + "==" + preUserId);
 			throw new RuntimeException("系统异常交易失败");
 		}
 		// 资产操作
 		String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
 		String sign = SignUtils.encryptDataAes(paramSign);
-		Map<String,String> remoteMap = chezuAssetService.freezeDiamondAsset(userId, auctionLogs.getAuctionDiamond().doubleValue(), sign,
-				preUserId,auctionGoods.getAuctionGoodsId());
-		if (remoteMap==null) {
+		Map<String, String> remoteMap = chezuAssetService.freezeDiamondAsset(userId,
+				auctionLogs.getAuctionDiamond().doubleValue(), sign, preUserId, auctionGoods.getAuctionGoodsId());
+		if (remoteMap == null) {
 			throw new RuntimeException("系统异常交易失败");
-		}else {
-			if(remoteMap.get("flag").equals("0")) {
+		} else {
+			if (remoteMap.get("flag").equals("0")) {
 				throw new RuntimeException(remoteMap.get("msg"));
 			}
-			
+
 		}
 	}
 
-	public void writeChangeInfo(Map<String,Object> data) {
+	public void writeChangeInfo(Map<String, Object> data) {
 		// 修改商品状态
 		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()));
 		orderMapper.updateOrder(data);
