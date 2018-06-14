@@ -139,7 +139,7 @@ public class FamilyController extends BaseController {
 		List<FamilyRandResultBean> result = new ArrayList<>();
 		Long userId = super.getUserId();
 		List<FamilyRandResultBean> resultBeans = this.familyService.queryFamilyByName(reqBean, userId);
-
+		Map<String, Object> resultMap = new HashMap<>();
 		if (null != resultBeans && resultBeans.size() != 0) {
 			for (FamilyRandResultBean resultBean : resultBeans) {
 				String imgBasePath = super.getImgBasePath();
@@ -150,7 +150,8 @@ public class FamilyController extends BaseController {
 		} else {
 			return ResultUtils.rtSuccess(null);
 		}
-		return ResultUtils.rtSuccess(result);
+		resultMap.put("families", result);
+		return ResultUtils.rtSuccess(resultMap);
 	}
 
 	@RequestMapping("/family/applyByFamily")
