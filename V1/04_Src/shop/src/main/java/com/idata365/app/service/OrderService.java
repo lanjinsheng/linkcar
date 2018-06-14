@@ -125,14 +125,14 @@ public class OrderService {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Order order : orders) {
 			Map<String, String> rtMap = new HashMap<>();
-			Prize prize = prizeMapper.selectByPrimaryKey(Long.valueOf(order.getPrizeId()));
+			AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(order.getPrizeId());
 			rtMap.put("convertId", String.valueOf(order.getOrderId()));
 			rtMap.put("convertTime", DateTools.formatDateYMD(order.getOrderTime()));
 			rtMap.put("userName", order.getUserName());
 			rtMap.put("rewardID", String.valueOf(order.getPrizeId()));
-			rtMap.put("rewardName", prize.getPrizeName());
-			rtMap.put("rewardDesc", prize.getPrizeDesc());
-			rtMap.put("rewardImg", prize.getPrizePic());
+			rtMap.put("rewardName", goods.getPrizeName());
+			rtMap.put("rewardDesc", goods.getPrizeDesc());
+			rtMap.put("rewardImg", goods.getPrizePic());
 			rtMap.put("convertType", order.getOrderType());
 			rtMap.put("convertStatus", order.getOrderStatus());
 			rtMap.put("convertNum", String.valueOf(order.getOrderNum()));
