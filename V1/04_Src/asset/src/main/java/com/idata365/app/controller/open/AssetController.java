@@ -141,13 +141,13 @@ public class AssetController extends BaseController {
 	 *             LanYeYe
 	 */
 	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
-	boolean freezeDiamondAsset(@RequestParam(value = "userId") long userId,
+	Map<String,String> freezeDiamondAsset(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "preUserId") long preUserId,@RequestParam(value = "auctionGoodsId")long auctionGoodsId) {
 		LOG.info("PARAM:" + userId + "===" + diamondNum + "====" + sign);
 		LOG.info("校验逻辑待处理·~~~");
 		
-		boolean bl = assetService.freezeDiamondAsset(userId, diamondNum,preUserId,auctionGoodsId);
-		return bl;
+		Map<String,String> rtMap = assetService.freezeDiamondAsset(userId, diamondNum,preUserId,auctionGoodsId);
+		return rtMap;
 	}
 
 	/**
