@@ -20,10 +20,10 @@ String shopUrl = CommentUtil.shopUrl;
 	       	} 
 	   	}); 
 			$("#table").datagrid({
-				title:"实物商品兑换管理",
+				title:"虚拟商品兑换管理",
 				iconCls:'icon-edit',
 				loadMsg:'正在加载数据，请稍后......',
-				url:'<%=shopUrl%>/ment/getOrderPageList',
+				url:'<%=shopUrl%>/ment/getVirtualOrderPageList',
 				rownumbers:false,
 				fitColumns:true,
 				idField:'id',
@@ -110,7 +110,7 @@ String shopUrl = CommentUtil.shopUrl;
         	var param="convertId="+convertId+"&operatingUser="+person;
         	$.ajax({
 				type:'POST',
-				url:"<%=shopUrl%>/ment/sendReward",
+				url:"<%=shopUrl%>/ment/sendVirtualReward",
 				data:param,
 				dataType:'json',
 				success:function(rtJson){
