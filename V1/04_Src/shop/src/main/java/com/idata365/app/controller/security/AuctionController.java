@@ -194,7 +194,7 @@ public class AuctionController extends BaseController {
 		if (goods.getAuctionGoodsType() == 1) {
 			String phone = requestBodyParams.get("phone").toString();
 			data.put("phone", phone);
-			
+
 		} else {
 			String phone = requestBodyParams.get("phone").toString();
 			String name = requestBodyParams.get("name").toString();
@@ -335,14 +335,17 @@ public class AuctionController extends BaseController {
 		BigDecimal auctionDiamond = BigDecimal
 				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("auctionDiamond"))));
 		AuctionGoods auctionGoods = auctionService.findOneAuctionGoodById(auctionGoodsId);
-		if(auctionGoods.getIsMustVerify()==1) {//需要身份验证
+		if (auctionGoods.getIsMustVerify() == 1) {// 需要身份验证
 			Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
 					SignUtils.encryptHMAC(String.valueOf(userId)));
 			if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
-				return ResultUtils.rtFail(null,"亲！请先去认证身份哦", "100");
+				HashMap<String, Object> datas = new HashMap<String, Object>();
+				datas.put("code", 100);
+				datas.put("msg", "亲！请先去认证身份哦");
+				return ResultUtils.rtSuccess(datas);
 			}
 		}
-		
+
 		long winnerId = auctionGoods.getWinnerId();
 
 		// 插入竞拍记录
