@@ -1,5 +1,6 @@
 package com.idata365.app.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -89,7 +90,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			order.setOrderType("0");//付款类型
 			order.setOrderNum(1);
 			order.setOrderStatus("1");
-			order.setOrderTime(max.getAuctionTime());
+			order.setOrderTime(new Date());
 			order.setPrizeId(max.getAuctionGoodsId());
 			order.setBusinessType(OrderTypeConstant.AUCTION);
 			orderMapper.insert(order);
