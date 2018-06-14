@@ -15,8 +15,8 @@
 	<insert id="insertAuctionGoods"
 		parameterType="com.idata365.app.entity.AuctionGoods">
 		insert into auctionGoods
-		(prizeName,prizeDesc,prizePic,startDiamond,doneDiamond,stepPrice,auctionStartTime,auctionEndTime,auctionRealEndTime,ofUserId,createTime)
-		values(#{prizeName},#{prizeDesc},#{prizePic},#{startDiamond},#{startDiamond},#{stepPrice},#{auctionStartTime},#{auctionEndTime},#{auctionRealEndTime},#{ofUserId},now())
+		(prizeName,prizeDesc,prizePic,startDiamond,doneDiamond,stepPrice,auctionStartTime,auctionEndTime,auctionRealEndTime,ofUserId,createTime,auctionGoodsType)
+		values(#{prizeName},#{prizeDesc},#{prizePic},#{startDiamond},#{startDiamond},#{stepPrice},#{auctionStartTime},#{auctionEndTime},#{auctionRealEndTime},#{ofUserId},now(),#{auctionGoodsType})
 	 </insert>
 	 
 	 <update id="updateAuctionGoods"
