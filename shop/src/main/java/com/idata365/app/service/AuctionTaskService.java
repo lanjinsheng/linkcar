@@ -125,7 +125,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 							auctionGoods.getPrizeName(), sign);
 				}
 			}catch(Exception e) {
-				
+				e.printStackTrace();
 			}
 			return true;
 		}
