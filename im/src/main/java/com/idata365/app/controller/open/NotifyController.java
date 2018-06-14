@@ -40,6 +40,7 @@ public class NotifyController extends BaseController{
 	public Map<String,Object>  notifyAuction(@RequestBody AuctionBean auctionBean,String auctionPerson,String auctionTimes)
 	{
 //		LOG.info("userId="+userId+"===sign="+sign);
+		LOG.info("notifyAuction"+"=="+auctionBean.getAuctionGoods().getAuctionGoodsId()+"=="+auctionPerson+"=="+auctionTimes);
 		Map<String,String> goodsList=new HashMap<String,String>();
 		goodsList.put("goodsId", String.valueOf(auctionBean.getAuctionGoods().getAuctionGoodsId()));
 		goodsList.put("endTime", DateTools.getDateTime(auctionBean.getAuctionGoods().getAuctionRealEndTime()));
