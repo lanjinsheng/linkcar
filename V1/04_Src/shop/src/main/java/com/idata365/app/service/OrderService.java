@@ -186,7 +186,7 @@ public class OrderService {
 	public int sendVirtualReward(Long orderId, String operatingUser) {
 		Order order = orderMapper.getOrderByOrderId(orderId);
 		Long goodsId = order.getPrizeId();
-		int a = auctionGoodMapper.updateGoodsStatus(goodsId, 3);
+		int a = auctionGoodMapper.updateGoodsStatus(goodsId,3);
 		int b = orderMapper.sendReward(orderId, operatingUser);
 		return a + b;
 	}
