@@ -57,6 +57,7 @@ public class AuctionService {
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
 				map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
+				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 				list.add(map);
 			}
 		}
@@ -80,11 +81,13 @@ public class AuctionService {
 			map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
 			map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 			map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
+			map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 			if (auctionGood.getWinnerId() == userId
 					&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
-				map.put("auctionStatus", auctionGood.getAuctionStatus().toString());
+				map.put("convertStatus", auctionGood.getAuctionStatus().toString());
+			}else {
+				map.put("convertStatus","0");
 			}
-			map.put("auctionStatus","0");
 		}
 		return map;
 	}
@@ -108,18 +111,21 @@ public class AuctionService {
 				map.put("convertTime", DateTools.formatDateYMD(auctionLog.getAuctionTime()));
 				map.put("auctionId", auctionLog.getAuctionGoodsId().toString());
 				map.put("auctionName", auctionGood.getPrizeName());
-				map.put("prizeDesc", auctionGood.getPrizeDesc());
+				map.put("auctionDesc", auctionGood.getPrizeDesc());
 				map.put("auctionImg", auctionGood.getPrizePic());
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
 				map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
 				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
+				map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
+				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 				if (auctionGood.getWinnerId() == userId
 						&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
-					map.put("auctionStatus", auctionGood.getAuctionStatus().toString());
+					map.put("convertStatus", auctionGood.getAuctionStatus().toString());
+				}else {
+					map.put("convertStatus","0");
 				}
-				map.put("auctionStatus","0");
 				result.add(map);
 			}
 		}
