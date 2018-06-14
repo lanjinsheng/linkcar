@@ -59,6 +59,8 @@ public class ImgsInfoController {
 	        	 }else {
 	        		 if(systemProperties.getSsoQQ().equals("0")){
 	        			 SSOTools.getSSOFile(key,os);
+	        		 }else{
+	        			 return;
 	        		 }
 	        	 }
 	        	 InputStream inputStream = file.getInputStream();
