@@ -86,6 +86,9 @@ public class MessageService extends BaseService<MessageService>{
 	//我的奖励(购买记录)
 	public static final String RewardNotes="com.idata365.haochezu://rewardNotes.push";
 	
+	//(证件审核)
+	public static final String CardNotes="com.idata365.haochezu://AuthenticationResultVC.push?status=1";
+	
 	//道具赠送通知
 	public static final String PropsSend="com.idata365.haochezu://propsReceive.push?msgId=%s";
 	//家族钻石分配记录
@@ -318,7 +321,7 @@ public class MessageService extends BaseService<MessageService>{
 		message.setTitle("");
 		message.setToUserId(userId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
-		message.setToUrl("");
+		message.setToUrl(CardNotes);
 		return message;
 	}
 	/**
