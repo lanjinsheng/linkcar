@@ -61,7 +61,7 @@
      <update id="updateAuctionSuccTask" parameterType="com.idata365.app.entity.AuctionGoods" >
         update auctionGoods set
         taskStatus=1,taskTime=now()
-        where  id=#{id}
+        where  auctionGoodsId=#{auctionGoodsId}
      </update>
 
     <update id="updateAuctionFailTask" parameterType="com.idata365.app.entity.AuctionGoods" >
@@ -70,7 +70,7 @@
        SET 
            taskStatus=#{taskStatus},taskFlag='0',taskTime=now(),failTimes=failTimes+1
        WHERE 
-            id=#{id} 
+            auctionGoodsId=#{auctionGoodsId} 
      </update>
      
      <!-- 清除锁定的记录 -->
