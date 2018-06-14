@@ -15,6 +15,7 @@ import com.idata365.app.entity.Order;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
 import com.idata365.app.mapper.OrderMapper;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.SignUtils;
  
@@ -30,7 +31,8 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
     ChezuAssetService chezuAssetService;
 	@Autowired
 	private OrderMapper orderMapper;
-	 
+	@Autowired
+	private ChezuAppService chezuAppService;
  //任务执行
 	@Transactional
 	public List<AuctionGoods> getAuctionTask(AuctionGoods auctionGoods){
@@ -99,6 +101,31 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			boolean bl=chezuAssetService.unfreezeDiamondAsset(max.getAuctionUserId(), auctionGoods.getOfUserId(), max.getAuctionDiamond().doubleValue(), sign);
 			if(!bl) {
 				throw new RuntimeException("远程资产调用失败");
+			}
+			StringBuffer usersStr=new StringBuffer("");
+			try {
+				//发送成功竞价者消息
+				sign=SignUtils.encryptHMAC(auctionGoods.getAuctionGoodsId()+""+1+max.getAuctionUserId());
+				chezuAppService.sendAuctionMsg(auctionGoods.getAuctionGoodsId(),
+						auctionGoods.getAuctionGoodsType(),1, String.valueOf(max.getAuctionUserId()), 
+						auctionGoods.getPrizeName(), sign);
+				List<AuctionLogs> users=auctionLogsMapper.listAllAuctionUsers(auctionGoods.getAuctionGoodsId());
+				for(AuctionLogs user:users) {
+					if(user.getAuctionUserId().longValue()!=max.getAuctionGoodsId().longValue()) {
+						usersStr.append(user.getAuctionUserId());
+						usersStr.append(",");
+					}
+				}
+				if(usersStr.length()>0) {
+					String usersArray=usersStr.substring(0, usersStr.length()-1);
+					sign=SignUtils.encryptHMAC(auctionGoods.getAuctionGoodsId()+""+0+usersArray);
+					//发送失败竞价者消息
+					chezuAppService.sendAuctionMsg(auctionGoods.getAuctionGoodsId(),
+							auctionGoods.getAuctionGoodsType(), 0, usersArray, 
+							auctionGoods.getPrizeName(), sign);
+				}
+			}catch(Exception e) {
+				
 			}
 			return true;
 		}
