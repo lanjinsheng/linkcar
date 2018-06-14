@@ -10,7 +10,7 @@
 	</select>
 	
 	<select id="listAuctionGoodsRecord" resultMap="BaseResultMap">
-		SELECT * FROM auctionLogs where auctionGoodsId=#{auctionGoodsId} order by auctionTime desc limit 5
+		SELECT * FROM auctionLogs where auctionGoodsId=#{auctionGoodsId} order by auctionLogsId desc limit 5
 	</select>
 	
 	<select id="listAllAuctionUsers" resultMap="BaseResultMap" parameterType="java.lang.Long">
