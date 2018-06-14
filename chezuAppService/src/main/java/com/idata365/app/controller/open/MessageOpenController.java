@@ -50,6 +50,31 @@ public class MessageOpenController {
         messageService.pushMessageTrans(msg,MessageEnum.SHOP);
     	return true;
     }
+    
+    /**
+     * 
+        * @Title: verifyIDCardMsg
+        * @Description: TODO(身份证审核成功通知)
+        * @param @param userId
+        * @param @param goodsName
+        * @param @param sign
+        * @param @return    参数
+        * @return boolean    返回类型
+        * @throws
+        * @author lcc
+     */
+    @RequestMapping("/app/msg/verifyIDCardMsg")
+    public boolean verifyIDCardMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
+    		@RequestParam (value = "cardNumber") String cardNumber,@RequestParam (value = "sign") String sign){
+    	LOG.info("param:"+userId+"=="+userName+"=="+cardNumber+"==sign="+sign);
+    	Message msg=messageService.buildIDCardMessage(userId, userName, cardNumber);
+    	//插入消息
+ 		messageService.insertMessage(msg, MessageEnum.IDCARD);
+ 		//用定时器推送
+        messageService.pushMessageTrans(msg,MessageEnum.IDCARD);
+    	return true;
+    }
+    
 	/**
 	 * 
 	    * @Title: sendGoodsSendMsg

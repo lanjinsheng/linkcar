@@ -6,6 +6,7 @@ public class MessageTypeConstant {
 	public static final int SystemType_Reg=1;
 	public static final int SystemType_Exchange=2;
 	public static final int SystemType_Exchange_Ok=3;
+	public static final int SystemType_VerifyIDCard_Ok=4;
 	
 	//个人消息
 	public static final int PersonType=2;
