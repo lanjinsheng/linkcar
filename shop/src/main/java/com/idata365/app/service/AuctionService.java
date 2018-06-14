@@ -188,7 +188,7 @@ public class AuctionService {
 
 	public void writeChangeInfo(Map<String, Object> data) {
 		// 修改商品状态
-		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()));
+		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()),1);
 		orderMapper.updateOrder(data);
 	}
 }

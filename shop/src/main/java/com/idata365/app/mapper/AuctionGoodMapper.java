@@ -16,7 +16,7 @@ public interface AuctionGoodMapper {
 
 	int updateAuctionGoods(AuctionGoods auctionGoods);
 
-	int updateGoodsStatus(@Param("auctionGoodsId") long auctionGoodsId);
+	int updateGoodsStatus(@Param("auctionGoodsId") long auctionGoodsId,@Param("auctionStatus") int auctionStatus);
 	void lockAuctionTask(AuctionGoods auctionGoods);
 	
 	List<AuctionGoods> getAuctionTask(AuctionGoods auctionGoods);

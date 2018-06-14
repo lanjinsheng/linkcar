@@ -11,9 +11,13 @@ public interface OrderMapper {
 
 	int insert(Order record);
 
-	List<Order> selectByExample(Long userId);
-
+	List<Order> selectByExample(@Param("userId")Long userId);
+	
+	Order getOrderByOrderId(@Param("orderId")Long orderId);
+	
 	List<Order> orderList();
+	
+	List<Order> orderListVirtual();
 
 	int sendReward(@Param("convertId") Long convertId, @Param("operatingUser") String operatingUser);
 

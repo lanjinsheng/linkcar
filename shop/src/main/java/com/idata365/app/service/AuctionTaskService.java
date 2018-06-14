@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.OrderTypeConstant;
 import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
+import com.idata365.app.entity.Order;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
+import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.SignUtils;
  
@@ -25,6 +28,8 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 	AuctionLogsMapper auctionLogsMapper;
 	@Autowired
     ChezuAssetService chezuAssetService;
+	@Autowired
+	private OrderMapper orderMapper;
 	 
  //任务执行
 	@Transactional
@@ -74,6 +79,21 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			auctionGoods.setWinnerId(max.getAuctionUserId());
 			auctionGoods.setDoneDiamond(max.getAuctionDiamond());
 			auctionGoodMapper.updateGoodsByTask(auctionGoods);
+			
+			//保存订单
+			Order order = new Order();
+			order.setUserId(max.getAuctionUserId());
+			order.setDiamondNum(max.getAuctionDiamond());
+			order.setOrderType("0");//付款类型
+			order.setOrderNum(1);
+			order.setOrderStatus("1");
+			order.setOrderTime(max.getAuctionTime());
+			order.setPrizeId(max.getAuctionGoodsId());
+			order.setBusinessType(OrderTypeConstant.AUCTION);
+			orderMapper.insert(order);
+			//修改商品状态
+			auctionGoodMapper.updateGoodsStatus(max.getAuctionGoodsId(),2);
+
 			//远程处理资产信息
 			String sign=SignUtils.encryptHMAC(max.getAuctionUserId()+"");
 			boolean bl=chezuAssetService.unfreezeDiamondAsset(max.getAuctionUserId(), auctionGoods.getOfUserId(), max.getAuctionDiamond().doubleValue(), sign);

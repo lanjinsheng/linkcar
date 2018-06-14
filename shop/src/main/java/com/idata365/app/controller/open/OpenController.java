@@ -40,7 +40,7 @@ public class OpenController extends BaseController {
 	/**
 	 * 
 	 * @Title: getOrderList
-	 * @Description: TODO(订单list)
+	 * @Description: TODO(实物订单list)
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param
@@ -59,19 +59,57 @@ public class OpenController extends BaseController {
 		map.putAll(requestParameterToMap(request));
 		return orderService.orderList(map);
 	}
+	
+	/**
+	 * 
+	 * @Title: getVirtualOrderList
+	 * @Description: TODO(虚拟物品订单list)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 * @param @throws
+	 *            Exception 参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
+	@RequestMapping(value = "/ment/getVirtualOrderPageList", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String getVirtualOrderPageList(HttpServletRequest request) {
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
+		return orderService.orderListVirtual(map);
+	}
 
-	// 发货
+	// 实物发货
 	@RequestMapping(value = "/ment/sendReward", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageSendReward(HttpServletRequest request) {
 		Map<String, Object> map = this.getPagerMap(request);
 		map.putAll(requestParameterToMap(request));
-		Long convertId = Long.valueOf(request.getParameter("convertId").toString());
+		Long orderId = Long.valueOf(request.getParameter("convertId").toString());
 		String operatingUser = request.getParameter("operatingUser").toString();
-		int status = orderService.sendReward(convertId, operatingUser);
+		int status = orderService.sendReward(orderId, operatingUser);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
+	
+	// 虚物发货
+		@RequestMapping(value = "/ment/sendVirtualReward", method = { RequestMethod.POST,
+				RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+		public @ResponseBody String getPageSendVirtualReward(HttpServletRequest request) {
+			Map<String, Object> map = this.getPagerMap(request);
+			map.putAll(requestParameterToMap(request));
+			Long orderId = Long.valueOf(request.getParameter("convertId").toString());
+			String operatingUser = request.getParameter("operatingUser").toString();
+			int status = orderService.sendVirtualReward(orderId, operatingUser);
+			StringBuffer sb = new StringBuffer("");
+			sb.append(ServerUtil.toJson(status));
+			ServerUtil.putSuccess(map);
+			return sb.toString();
+		}
 }
