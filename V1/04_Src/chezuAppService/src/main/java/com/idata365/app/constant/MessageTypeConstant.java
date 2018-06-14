@@ -7,6 +7,10 @@ public class MessageTypeConstant {
 	public static final int SystemType_Exchange=2;
 	public static final int SystemType_Exchange_Ok=3;
 	public static final int SystemType_VerifyIDCard_Ok=4;
+	//======競拍
+	public static final int SystemType_Auction_Fail=5;
+	public static final int SystemType_Auction_Succ=6;
+	public static final int SystemType_Auction_Exchange=7;
 	
 	//个人消息
 	public static final int PersonType=2;
