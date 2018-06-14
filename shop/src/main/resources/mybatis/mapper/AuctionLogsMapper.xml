@@ -13,6 +13,11 @@
 		SELECT * FROM auctionLogs where auctionGoodsId=#{auctionGoodsId} order by auctionTime desc limit 5
 	</select>
 	
+	<select id="listAllAuctionUsers" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT * FROM auctionLogs where auctionGoodsId=#{auctionGoodsId} group by auctionUserId
+	</select>
+	
+	
 	<select id="joinPersons" resultType="java.lang.Integer" parameterType="java.lang.Long">
        select count(distinct(auctionUserId))
        FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId}
