@@ -70,6 +70,10 @@ String shopUrl = CommentUtil.shopUrl;
 					}},
 					{title:'操作',field:'opearting',width:100,align:'center',formatter:function(value,rowData,rowIndex){
 					    var convertId=rowData.convertId;
+					    if(rowData.phone==null||rowData.phone==""){
+					    	return ;
+					    }
+					    
 	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 发货</span>";
 					}}
 				]],
