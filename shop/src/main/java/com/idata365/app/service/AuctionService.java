@@ -84,7 +84,7 @@ public class AuctionService {
 			map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 			if (auctionGood.getWinnerId() == userId
 					&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
-				map.put("convertStatus", "1");
+				map.put("convertStatus", map.put("convertStatus", auctionGood.getAuctionStatus().toString()));
 			}else {
 				map.put("convertStatus","0");
 			}
@@ -123,7 +123,7 @@ public class AuctionService {
 				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 				if (auctionGood.getWinnerId() == userId
 						&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
-					map.put("convertStatus", "1");
+					map.put("convertStatus", auctionGood.getAuctionStatus().toString());
 				}else {
 					map.put("convertStatus","0");
 				}
