@@ -112,7 +112,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 						auctionGoods.getPrizeName(), sign);
 				List<AuctionLogs> users=auctionLogsMapper.listAllAuctionUsers(auctionGoods.getAuctionGoodsId());
 				for(AuctionLogs user:users) {
-					if(user.getAuctionUserId().longValue()!=max.getAuctionGoodsId().longValue()) {
+					if(user.getAuctionUserId().longValue()!=max.getAuctionUserId().longValue()) {
 						usersStr.append(user.getAuctionUserId());
 						usersStr.append(",");
 					}
