@@ -61,6 +61,7 @@ public class UserInfoController extends BaseController {
 	public Map<String, Object> getUserInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		String imgBase = getImgBasePath();
+		LOG.info("userId=================" + this.getUserId());
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String> rtIDCardInfo = new HashMap<String, String>();
 		List<Map<String, String>> rtVehicleTravel = new ArrayList<>();
@@ -154,9 +155,15 @@ public class UserInfoController extends BaseController {
 		}
 
 		rtMap.put("headImg", imgBase + userInfo.getImgUrl());
-		if (idCard != null && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
+		if (idCard != null&&idCard.getStatus()==1 && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
 			// 证件上传即认证
-			rtMap.put("isAuthenticated", "1");
+			for (LicenseVehicleTravel l : licenseVehicleTravels) {
+				if(l.getStatus()==1) {
+					rtMap.put("isAuthenticated", "1");
+					break;
+				}
+			}
+			
 		} else {
 			rtMap.put("isAuthenticated", "0");
 		}

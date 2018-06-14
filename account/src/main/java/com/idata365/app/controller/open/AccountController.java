@@ -15,6 +15,7 @@ import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.service.AccountService;
 import com.idata365.app.service.LoginRegService;
+import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.SignUtils;
 
 @RestController
@@ -23,6 +24,8 @@ public class AccountController extends BaseController{
 	LoginRegService loginRegService;
 	@Autowired
 	AccountService accountService;
+	@Autowired
+	UserInfoService userInfoService;
 	@RequestMapping(value = "/account/validToken",method = RequestMethod.POST)
 	public UsersAccount  validToken(@RequestParam(value="token") String token)
 	{
@@ -185,5 +188,26 @@ public class AccountController extends BaseController{
 		LOG.info("valid sign="+SignUtils.encryptHMAC(String.valueOf(userId)));
 		accountService.updateUserLoginTime(userId);
 		return true;
+	}
+	
+	/**
+	 * 
+	    * @Title: isAuthenticated
+	    * @Description: TODO(获取用户证件认证信息)
+	    * @param @param userId
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return Map<String,Object>    返回类型
+	    * Map.put("IdCardIsOK":"1")
+	    * Map.put("VehicleTravelIsOK":"0")
+	    * @throws
+	    * @author lcc
+	 */
+	@RequestMapping(value = "/account/isAuthenticated",method = RequestMethod.POST)
+	public Map<String,String>  isAuthenticated(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
+	{
+		
+		LOG.info("userIds="+userId+"===sign="+sign);
+		return userInfoService.isAuthenticated(userId);
 	}
 }
