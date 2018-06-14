@@ -266,7 +266,10 @@ public class AssetService extends BaseService<AssetService> {
 	}
 
 	@Transactional
-	public boolean freezeDiamondAsset(long userId, double diamondsNum, long preUserId, long auctionGoodsId) {
+	public Map<String,String> freezeDiamondAsset(long userId, double diamondsNum, long preUserId, long auctionGoodsId) {
+		Map<String,String> rtMap=new HashMap<String,String>();
+		rtMap.put("flag", "1");
+		rtMap.put("msg", "");
 		int addUpdate = 0;
 		BigDecimal preUserDiamondsNum = null;
 
@@ -307,11 +310,13 @@ public class AssetService extends BaseService<AssetService> {
 				logs.setCreateTime(new Date());
 				auctionUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
 			}
-			return true;
+			 
 		} else {
 			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
-			return false;
+			rtMap.put("flag", "0");
+			rtMap.put("msg", "钻石数量不够支付");
 		}
+		return rtMap;
 	}
 
 	public boolean unfreezeDiamondAsset(long buyer, long sellerId, long auctionGoodsId, double diamondsNum) {
