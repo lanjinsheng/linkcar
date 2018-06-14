@@ -34,10 +34,11 @@ public class Global {
 	static {
 		messageTypeMap.put(globalIm, 1);
 		messageTypeMap.put(auctionList, 2);
-		messageTypeMap.put(auctionDoing, 2);
+		messageTypeMap.put(auctionDoing, 3);
 	}
 	
 	public static void addMoudle(String notifyMoudle,Channel channel,String userId,String keyId) {
+		log.info("addMoudle===notifyMoudle:"+notifyMoudle+"==keyId:"+keyId+"==userId:"+userId);
 		SocketBean socketBean=null;
 		if(socketBeanMap.get(userId)==null) {
 			  socketBean=new SocketBean(channel);
@@ -48,11 +49,12 @@ public class Global {
 		Message msg=new Message();
 		msg.setMessageType(messageTypeMap.get(notifyMoudle));
 		msg.setDatas(keyId);
-		if(notifyMoudle.equalsIgnoreCase(globalIm)){
+		if(notifyMoudle.equals(globalIm)){
 			socketBean.setImMsg(msg);
-		}else if(notifyMoudle.equalsIgnoreCase(auctionList)) {
+		}else if(notifyMoudle.equals(auctionList)) {
 			socketBean.setAuctionListMsg(msg);
-		}else if(notifyMoudle.equalsIgnoreCase(auctionDoing)) {
+		}else if(notifyMoudle.equals(auctionDoing)) {
+			log.info("key="+userId+"==setAuctionDoingMsg");
 			socketBean.setAuctionDoingMsg(msg);
 		}
 	}
@@ -93,6 +95,7 @@ public class Global {
 	
 	static String auctionDetailMsg="{\"msgType\": \"40\",\"notifyMoudle\": \"auctionDoing\",\"data\": %s}";
 	public static void sendAuctionMsg(String goodsJson,String detailJson,String datas) {
+		log.info("sendAuctionMsg=="+datas+"socketBeanMap.size()="+socketBeanMap.size());
 		if(socketBeanMap.size()==0) return;
 		Collection c=socketBeanMap.values();
 		Iterator it=c.iterator();
@@ -102,7 +105,8 @@ public class Global {
 				s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionMsg, goodsJson)));
 			}
 			if(s.getAuctionDoingMsg()!=null) {
-				if(s.getAuctionDoingMsg().getDatas().equals(datas)) {
+				log.info("sendAuctionMsg==s.getAuctionDoingMsg()=="+s.getAuctionDoingMsg().getDatas()+"=="+(datas));
+				if(s.getAuctionDoingMsg().getDatas().toString().equals(datas)) {
 					s.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(auctionDetailMsg, detailJson)));
 				}
 			}

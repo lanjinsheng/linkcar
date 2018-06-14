@@ -95,6 +95,7 @@ public class MyWebSocketServerHandler extends
 			if(!request.contains("msgType")) {
 				return;
 			}
+		
 			Map<String,Object> map=GsonUtils.fromJson(request);
 			if(map.get("msgType").equals("10")) {//注册通知模块
 				String userId=String.valueOf(map.get("userId"));
