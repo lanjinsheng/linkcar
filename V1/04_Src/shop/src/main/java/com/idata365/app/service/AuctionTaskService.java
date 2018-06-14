@@ -94,7 +94,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			order.setBusinessType(OrderTypeConstant.AUCTION);
 			orderMapper.insert(order);
 			//修改商品状态
-			auctionGoodMapper.updateGoodsStatus(max.getAuctionGoodsId(),2);
+//			auctionGoodMapper.updateGoodsStatus(max.getAuctionGoodsId(),2);
 
 			//远程处理资产信息
 			String sign=SignUtils.encryptHMAC(max.getAuctionUserId()+"");
