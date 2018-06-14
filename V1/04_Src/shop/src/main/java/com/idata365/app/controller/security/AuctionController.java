@@ -341,7 +341,7 @@ public class AuctionController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ResultUtils.rtFail(null);
+			return ResultUtils.rtFail(null,e.getMessage(),"100");
 		}
 	}
 }

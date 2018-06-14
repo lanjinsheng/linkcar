@@ -29,12 +29,21 @@ public class AuctionGoods implements Serializable {
 	private BigDecimal stepPrice;
 	private Integer auctionStatus;
 	private String remark;
+	private Integer isMustVerify;
 
 	private Integer taskStatus;
 	private Integer failTimes;
 	private String taskFlag;
 	
 	
+	public Integer getIsMustVerify() {
+		return isMustVerify;
+	}
+
+	public void setIsMustVerify(Integer isMustVerify) {
+		this.isMustVerify = isMustVerify;
+	}
+
 	public Integer getTaskStatus() {
 		return taskStatus;
 	}

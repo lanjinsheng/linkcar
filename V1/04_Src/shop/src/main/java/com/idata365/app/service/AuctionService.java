@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.controller.security.AuctionController;
 import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
 import com.idata365.app.entity.bean.AuctionBean;
@@ -22,6 +25,7 @@ import com.idata365.app.util.SignUtils;
 @Service
 @Transactional
 public class AuctionService {
+	protected static final Logger LOG = LoggerFactory.getLogger(AuctionService.class);
 	@Autowired
 	private AuctionGoodMapper auctionMapper;
 	@Autowired
@@ -51,6 +55,7 @@ public class AuctionService {
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
 				map.put("difference", auctionGood.getStepPrice().toString());
+//				map.put("isMustVerify", auctionGood);
 				list.add(map);
 			}
 		}
@@ -146,19 +151,26 @@ public class AuctionService {
 			throws Exception {
 		int a = auctionMapper.updateAuctionGoods(auctionGoods);
 		if (a <= 0) {
-			throw new RuntimeException("修改商品失败");
+			LOG.error("修改商品失败"+auctionGoods.getAuctionGoodsId()+"=="+userId+"=="+preUserId);
+			throw new RuntimeException("系统异常交易失败");
 		}
 		int b = auctionLogsMapper.insertAuctionLogs(auctionLogs);
 		if (b <= 0) {
-			throw new RuntimeException("插入日志失败");
+			LOG.error("插入日志失败"+auctionGoods.getAuctionGoodsId()+"=="+userId+"=="+preUserId);
+			throw new RuntimeException("系统异常交易失败");
 		}
 		// 资产操作
 		String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
 		String sign = SignUtils.encryptDataAes(paramSign);
-		boolean flag = chezuAssetService.freezeDiamondAsset(userId, auctionLogs.getAuctionDiamond().doubleValue(), sign,
+		Map<String,String> remoteMap = chezuAssetService.freezeDiamondAsset(userId, auctionLogs.getAuctionDiamond().doubleValue(), sign,
 				preUserId,auctionGoods.getAuctionGoodsId());
-		if (!flag) {
-			throw new RuntimeException("交易失败");
+		if (remoteMap==null) {
+			throw new RuntimeException("系统异常交易失败");
+		}else {
+			if(remoteMap.get("flag").equals("0")) {
+				throw new RuntimeException(remoteMap.get("msg"));
+			}
+			
 		}
 	}
 

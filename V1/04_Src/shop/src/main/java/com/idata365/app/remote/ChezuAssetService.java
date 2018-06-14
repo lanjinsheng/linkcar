@@ -67,8 +67,8 @@ public interface ChezuAssetService {
 	 *             LanYeYe
 	 */
 	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
-	boolean freezeDiamondAsset(@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "preUserId") long preUserId,@RequestParam(value = "ofUserId")long auctionGoodsId);
+	Map<String,String> freezeDiamondAsset(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "preUserId") long preUserId,@RequestParam(value = "auctionGoodsId")long auctionGoodsId);
  
 	@RequestMapping(value = "/asset/unfreezeDiamondAsset", method = RequestMethod.POST)
 	boolean unfreezeDiamondAsset(@RequestParam(value = "buyerId") long buyerId,@RequestParam(value = "sellerId") long sellerId,
