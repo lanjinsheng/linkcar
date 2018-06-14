@@ -76,7 +76,9 @@ public class Global {
 	public static void inActiveChannel(String channelId) {
 		String userId=channelIdUserMap.get(channelId);
 		channelIdUserMap.remove(channelId);
-		socketBeanMap.remove(userId);
+		if(userId!=null) {
+			socketBeanMap.remove(userId);
+		}
 	}
 	
 	static String globalImMsg="{\"msgType\": \"20\",\"notifyMoudle\": \"globalIm\",\"data\": {\"msgs\": [%s]} }";
@@ -105,5 +107,8 @@ public class Global {
 				}
 			}
 		}
+	}
+	public static void main(String []args) {
+		socketBeanMap.remove(null);
 	}
 } 
