@@ -113,6 +113,7 @@ public class AuctionService {
 				map.put("auctionName", auctionGood.getPrizeName());
 				map.put("auctionDesc", auctionGood.getPrizeDesc());
 				map.put("auctionImg", auctionGood.getPrizePic());
+				map.put("joinPersons", String.valueOf(auctionLogsMapper.joinPersons(auctionGood.getAuctionGoodsId())));
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
