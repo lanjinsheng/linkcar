@@ -44,8 +44,8 @@
 		orderId=#{convertId}
 	</update>
 	
-	<update id="updateOrderPhone" >
-		update `order` set phone=#{phone},orderStatus=1
+	<update id="updateOrder"  parameterType="java.util.HashMap">
+		update `order` set phone=#{phone},orderStatus=1,userName=#{name},address=#{address},provinceCode=#{provinceCode},cityCode=#{cityCode},areaCode=#{areaCode}
 		where prizeId=#{auctionGoodsId} and userId=#{userId}
 	</update>
 </mapper>

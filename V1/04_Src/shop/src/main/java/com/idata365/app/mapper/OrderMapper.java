@@ -1,6 +1,7 @@
 package com.idata365.app.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -16,5 +17,5 @@ public interface OrderMapper {
 
 	int sendReward(@Param("convertId") Long convertId, @Param("operatingUser") String operatingUser);
 
-	int updateOrderPhone(@Param("userId") Long userId, @Param("auctionGoodsId") Long auctionGoodsId,@Param("phone") String phone);
+	int updateOrder(Map<String,Object> data);
 }
