@@ -22,5 +22,5 @@ public interface AuctionLogsMapper {
 	
 	AuctionLogs getMaxAuctionDiamond(@Param("auctionGoodsId")long auctionGoodsId);
 	
-	
+	List<AuctionLogs> listAllAuctionUsers(@Param("auctionGoodsId") Long auctionGoodsId);
 }
