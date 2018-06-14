@@ -72,7 +72,7 @@ public class AuctionService {
 			map.put("auctionName", auctionGood.getPrizeName());
 			map.put("auctionDesc", auctionGood.getPrizeDesc());
 			map.put("auctionImg", auctionGood.getPrizePic());
-			map.put("auctionValue", auctionGood.getDoneDiamond().toString());
+			map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
 			map.put("joinPersons", String.valueOf(auctionLogsMapper.joinPersons(auctionGood.getAuctionGoodsId())));
 			map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 			map.put("myJoinTimes", String.valueOf(auctionLogsMapper.myJoinTimes(auctionGoodsId, userId)));
@@ -188,7 +188,7 @@ public class AuctionService {
 
 	public void writeChangeInfo(Map<String, Object> data) {
 		// 修改商品状态
-		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()),1);
+		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()),2);
 		orderMapper.updateOrder(data);
 	}
 }

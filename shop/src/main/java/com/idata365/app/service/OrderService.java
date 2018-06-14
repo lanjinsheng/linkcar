@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.Order;
 import com.idata365.app.entity.Prize;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ServerUtil;
@@ -37,6 +39,8 @@ public class OrderService {
 	private PrizeMapper prizeMapper;
 	@Autowired
 	private ChezuAssetService chezuAssetService;
+	@Autowired
+	private ChezuAppService chezuAppService;
 	@Autowired
 	private AuctionGoodMapper auctionGoodMapper;
 
@@ -186,8 +190,10 @@ public class OrderService {
 	public int sendVirtualReward(Long orderId, String operatingUser) {
 		Order order = orderMapper.getOrderByOrderId(orderId);
 		Long goodsId = order.getPrizeId();
+		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
 		int a = auctionGoodMapper.updateGoodsStatus(goodsId,3);
 		int b = orderMapper.sendReward(orderId, operatingUser);
+		chezuAppService.sendAuctionMsg(goods.getAuctionGoodsId(), goods.getAuctionGoodsType(), 2, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
 		return a + b;
 	}
 
