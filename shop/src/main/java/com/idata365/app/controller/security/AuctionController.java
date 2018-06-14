@@ -30,6 +30,7 @@ import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.service.AuctionService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -190,7 +191,7 @@ public class AuctionController extends BaseController {
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
 		AuctionGoods goods = auctionService.findOneAuctionGoodById(auctionGoodsId);
 		Map<String, Object> data = new HashMap<>();
-		data.put("name", this.getUserInfo().getNickName());
+		data.put("name", this.getUserInfo().getNickName()==null?PhoneUtils.hidePhone(this.getUserInfo().getPhone()):this.getUserInfo().getNickName());
 		if (goods.getAuctionGoodsType() == 1) {
 			String phone = requestBodyParams.get("phone").toString();
 			data.put("phone", phone);
@@ -354,7 +355,7 @@ public class AuctionController extends BaseController {
 		auctionLogs.setAuctionDiamond(auctionDiamond);
 		auctionLogs.setAuctionGoodsId(auctionGoodsId);
 		auctionLogs.setAuctionUserId(userId);
-		auctionLogs.setAuctionUserNick(userName);
+		auctionLogs.setAuctionUserNick(userName==null?PhoneUtils.hidePhone(this.getUserInfo().getPhone()):userName);
 
 		// 修改商品信息
 		auctionGoods.setWinnerId(userId);
