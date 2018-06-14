@@ -694,7 +694,7 @@ public class MessageService extends BaseService<MessageService>{
 		rtMap1.put("desc", "系统想对你说的话......");
 	
 		Map<String,String>  rtMap2=new HashMap<String,String>();
-		rtMap2.put("desc", "道具，成就等个人消息，快来看吧!");
+		rtMap2.put("desc", "个人消息，快来看吧!");
 	 
 		Map<String,String>  rtMap3=new HashMap<String,String>();
 		rtMap3.put("desc", "家族审核/挑战/奖励消息，来看看吧!");
