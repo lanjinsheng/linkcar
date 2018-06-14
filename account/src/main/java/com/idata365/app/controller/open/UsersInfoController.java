@@ -10,19 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.IDCard;
 import com.idata365.app.entity.LicenseVehicleTravel;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.service.UserInfoService;
-import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ServerUtil;
+import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.StaticDatas;
 import com.idata365.app.util.ValidTools;
 
@@ -31,7 +30,8 @@ public class UsersInfoController extends BaseController {
 	private final static Logger LOG = LoggerFactory.getLogger(UsersInfoController.class);
 	@Autowired
 	private UserInfoService userInfoService;
-
+	@Autowired
+	private ChezuAppService chezuAppService;
 	@Autowired
 	SystemProperties systemProperties;
 
@@ -112,11 +112,15 @@ public class UsersInfoController extends BaseController {
 		int status = userInfoService.modifyIDCard(map);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
+		boolean verifyIDCardMsg = chezuAppService.verifyIDCardMsg(Long.valueOf(String.valueOf(map.get("userId"))),
+				String.valueOf(map.get("userName")), String.valueOf(map.get("cardNumber")),
+				SignUtils.encryptHMAC(map.get("userName") + "" + map.get("cardNumber")));
+		LOG.info("审核结果=================" + verifyIDCardMsg);
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
-	
-	//后台行驶证
+
+	// 后台行驶证
 	@RequestMapping(value = "/ment/getPageUserLicenseVehicleTravels", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String getPageUserLicenseVehicleTravels(HttpServletRequest request) {
@@ -173,7 +177,6 @@ public class UsersInfoController extends BaseController {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
-
 
 	// 审核行驶证
 	@RequestMapping(value = "/ment/verifyLicenseVehicleTravel", method = { RequestMethod.POST,
