@@ -384,8 +384,15 @@ public class AuctionController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			HashMap<String, Object> datas = new HashMap<String, Object>();
-			datas.put("code", "0");
-			datas.put("msg", e.getMessage());
+			
+			
+			if("钻石数量不够支付".equals(e.getMessage())) {
+				datas.put("code", "0");
+				datas.put("msg", "钻石数量不够支付");
+			}else {
+				datas.put("code", "2");
+				datas.put("msg", "系统维护中，请稍后再试...");
+			}
 			return ResultUtils.rtSuccess(datas);
 		}
 	}
