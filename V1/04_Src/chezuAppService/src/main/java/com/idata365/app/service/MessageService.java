@@ -67,7 +67,7 @@ public class MessageService extends BaseService<MessageService>{
 	
 	
 	
-	//身份证审核通过
+	//证件审核通过
 	public static final String IDCardMessage="恭喜您名为【%s】的证件【%s】审核成功，感谢您的支持";
 	//道具赠送
 	public static final String LotterySendMessage="一个惊喜!【%s】赠送给你一个【%s】,快去领取吧!";
@@ -308,6 +308,37 @@ public class MessageService extends BaseService<MessageService>{
 	    * @author lcc
 	 */
 	public Message buildIDCardMessage(Long userId, String userName, String cardNumber) {
+		Message message=new Message();
+		message.setFromUserId(0L);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_VerifyIDCard_Ok);
+		message.setContent(getIDCardMessageDesc(userName,cardNumber));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("");
+		message.setToUserId(userId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl(CardNotes);
+		return message;
+	}
+	
+	
+	/**
+	 * 
+	    * @Title: buildVehicleTravelMessage
+	    * @Description: TODO(身份证消息)
+	    * @param @param 
+	    * @param @param 
+	    * @param @param 
+	    * @param @return    参数
+	    * @return Message    返回类型
+	    * @throws
+	    * @author lcc
+	 */
+	public Message buildVehicleTravelMessage(Long userId, String userName, String cardNumber) {
 		Message message=new Message();
 		message.setFromUserId(0L);
 		message.setBottomText("");
