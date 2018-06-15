@@ -37,7 +37,7 @@ public class ShareSecuController  extends BaseController {
     	}
     	try {
     		Long familyId=Long.valueOf(family.get("id").toString());
-    		String inviteCode=family.get("inviteCode").toString();
+    		String inviteCode=this.getUserId().toString();
     		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 			String key=SignUtils.encryptDataAes(String.valueOf(datas));
 			String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
