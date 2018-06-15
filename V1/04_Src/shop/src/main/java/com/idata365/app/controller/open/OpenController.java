@@ -1,7 +1,10 @@
 package com.idata365.app.controller.open;
 
+import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.AuctionGoods;
+import com.idata365.app.enums.UserImgsEnum;
+import com.idata365.app.partnerApi.QQSSOTools;
+import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.OrderService;
@@ -43,6 +51,8 @@ public class OpenController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private ChezuAppService chezuAppService;
+	@Autowired
+	SystemProperties systemProperties;
 
 	/**
 	 * 
@@ -120,6 +130,54 @@ public class OpenController extends BaseController {
 		return sb.toString();
 	}
 	
+	@RequestMapping(value = "/ment/openUploadAuctionImg", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public Map<String, Object> openUploadAuctionImgPage(@RequestParam CommonsMultipartFile file,
+			@RequestParam Map<String, Object> map) {
+		Long userId = 1L;
+		if (file == null) {
+			return ResultUtils.rtFailParam(null, "附件为空");
+		}
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		rtMap.put("userId", userId);
+		rtMap.put("imgUrl", "");
+		try {
+			String key = "";
+			if (systemProperties.getSsoQQ().equals("1")) {// 走qq
+				key = QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.AUCTION);
+				File dealFile = new File(systemProperties.getFileTmpDir() + "/" + key);
+				File fileParent = dealFile.getParentFile();
+				if (!fileParent.exists()) {
+					fileParent.mkdirs();
+				}
+				file.transferTo(dealFile);
+				QQSSOTools.saveOSS(dealFile, key);
+			} else {// 走阿里
+					// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+				key = SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.AUCTION);
+				// 处理图片
+				File dealFile = new File(systemProperties.getFileTmpDir() + "/" + key);
+				File fileParent = dealFile.getParentFile();
+				if (!fileParent.exists()) {
+					fileParent.mkdirs();
+				}
+				InputStream is = file.getInputStream();
+				SSOTools.saveOSS(is, key);
+				is.close();
+				file.transferTo(dealFile);
+			}
+			rtMap.put("imgUrl", getImgBasePath() + key);
+			rtMap.put("key", key);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResultUtils.rtFail(null);
+		}
+		rtMap.remove("key");
+		rtMap.remove("userId");
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
 	/**
 	 * 
 	 * @Title: publishAuctionPage
@@ -141,11 +199,8 @@ public class OpenController extends BaseController {
 		
 		Map<String, Object> map = this.getPagerMap(request);
 		map.putAll(requestParameterToMap(request));
-		Long orderId = Long.valueOf(request.getParameter("convertId").toString());
-		String operatingUser = request.getParameter("operatingUser").toString();
-		int status = orderService.sendVirtualReward(orderId, operatingUser);
 		StringBuffer sb = new StringBuffer("");
-		sb.append(ServerUtil.toJson(status));
+//		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 		
