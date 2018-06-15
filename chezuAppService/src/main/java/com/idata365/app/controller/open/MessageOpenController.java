@@ -75,6 +75,18 @@ public class MessageOpenController {
     	return true;
     }
     
+    @RequestMapping("/app/msg/verifyVehicleTravelMsg")
+    public boolean verifyVehicleTravelMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
+    		@RequestParam (value = "cardNumber") String cardNumber,@RequestParam (value = "sign") String sign){
+    	LOG.info("param:"+userId+"=="+userName+"=="+cardNumber+"==sign="+sign);
+    	Message msg=messageService.buildVehicleTravelMessage(userId, userName, cardNumber);
+    	//插入消息
+ 		messageService.insertMessage(msg, MessageEnum.VehicleTravel);
+ 		//用定时器推送
+        messageService.pushMessageTrans(msg,MessageEnum.VehicleTravel);
+    	return true;
+    }
+    
 	/**
 	 * 
 	    * @Title: sendGoodsSendMsg

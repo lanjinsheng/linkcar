@@ -17,10 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.controller.security.MessageController;
 import com.idata365.app.entity.LicenseDriver;
 import com.idata365.app.entity.LicenseVehicleTravel;
+import com.idata365.app.entity.Message;
+import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.service.MessageService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.ServerUtil;
+import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.StaticDatas;
 import com.idata365.app.util.ValidTools;
 
@@ -29,7 +34,8 @@ public class UsersInfoController extends BaseController {
 	private final static Logger LOG = LoggerFactory.getLogger(UsersInfoController.class);
 	@Autowired
 	private UserInfoService userInfoService;
-
+	@Autowired
+	MessageService messageService;
 	@Autowired
 	SystemProperties systemProperties;
 
