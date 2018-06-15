@@ -187,6 +187,10 @@ public class UsersInfoController extends BaseController {
 		int status = userInfoService.verifyLicenseVehicleTravel(map);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
+		boolean verifyVehicleTravelMsg = chezuAppService.verifyVehicleTravelMsg(Long.valueOf(String.valueOf(map.get("userId"))),
+				String.valueOf(map.get("ownerName")), String.valueOf(map.get("plateNo")),
+				SignUtils.encryptHMAC(map.get("ownerName") + "" + map.get("plateNo")));
+		LOG.info("审核结果=================" + verifyVehicleTravelMsg);
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}

@@ -29,6 +29,9 @@ public class ChezuAppHystric implements ChezuAppService {
 		LOG.error("userId="+userId+"userName="+userName+"身份证号"+cardNumber+" sign="+sign+"消息发送失败");
 		return false;
 	}
- 
- 
+	@Override
+	public boolean verifyVehicleTravelMsg(Long userId, String userName, String cardNumber, String sign) {
+		LOG.error("userId="+userId+"userName="+userName+"行驶证："+cardNumber+" sign="+sign+"消息发送失败");
+		return false;
+	}
 }

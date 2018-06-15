@@ -46,6 +46,11 @@ public interface ChezuAppService {
     @RequestMapping("/app/msg/verifyIDCardMsg")
     public boolean verifyIDCardMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
     		@RequestParam (value = "cardNumber") String cardNumber,@RequestParam (value = "sign") String sign);
+    
+    @RequestMapping("/app/msg/verifyVehicleTravelMsg")
+    public boolean verifyVehicleTravelMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
+    		@RequestParam (value = "cardNumber") String cardNumber,@RequestParam (value = "sign") String sign);
+    
     /**
 	 * 
 	    * @Title: sendGoodsSendMsg
