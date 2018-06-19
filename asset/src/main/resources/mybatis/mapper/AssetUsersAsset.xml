@@ -41,7 +41,7 @@
  	</select>
  	
  	<select id="getAllAppDiamonds" resultType="java.math.BigDecimal">
- 		select 374.68123+sum(diamondsNum) from assetUsersAsset
+ 		select sum(freezeDiamondsNum)+sum(diamondsNum) from assetUsersAsset
  	</select>
      
       <update id="updateDiamondsConsume"   parameterType="java.util.HashMap">
