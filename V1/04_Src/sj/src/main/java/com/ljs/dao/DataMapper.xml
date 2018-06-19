@@ -5,4 +5,20 @@
 		SELECT DATE_FORMAT(create_time,'%Y-%m-%d %T') as ctime,a.* from router_logs a order by id desc
 	</select>
 	
+	<select id="listPageUrl"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT DATE_FORMAT(createTime,'%Y-%m-%d %T') as ctime,a.* from hdUrl a order by id desc
+	</select>
+    <insert id="insertUrl" parameterType="java.util.HashMap">
+		 INSERT   INTO 
+            hdUrl
+            (fromUrl,toUrl,createTime) 
+        VALUES
+            (#{fromUrl}, #{toUrl},now())  
+             
+    </insert> 
+	  <update id="updateUrl" parameterType="java.util.HashMap">
+		 update
+            hdUrl
+             set fromUrl=#{fromUrl},createTime=now(),toUrl=#{toUrl} where id=#{id}
+    </update> 
 </mapper>

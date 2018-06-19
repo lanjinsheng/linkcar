@@ -34,5 +34,18 @@ public class DataService {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
+	public String listPageUrl(Map<String,Object> map){
+		List<Map<String, Object>> list= this.dataMapper.listPageUrl(map);
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(list));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
+	}
 	
+	public int insertUrl(Map<String,Object> map){
+		return dataMapper.insertUrl(map);
+	}
+	public int updateUrl(Map<String,Object> map){
+		return dataMapper.updateUrl(map);
+	}
 }

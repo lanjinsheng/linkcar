@@ -129,7 +129,7 @@ String colHost = Constant.colHost;
 			window.open(pUrl);
 		}
 		 function viewEvent(userId,habitId){
-			var pUrl="<%=colHost%>/v1/getDriveResultByUH?userId="+userId+"&habitId="+habitId;
+			var pUrl="<%=colHost%>/v1/getDriveResultByUH?userId="+userId+"&habitId="+habitId+"&dev=1";
 			window.open(pUrl);
 		}
 		
