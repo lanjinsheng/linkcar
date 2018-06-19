@@ -21,6 +21,7 @@ import com.idata365.col.service.YingyanService;
 import com.idata365.col.util.GsonUtils;
 import com.idata365.col.util.OverspeedUtil;
 import com.idata365.col.util.PhoneGpsUtil;
+import com.idata365.col.util.PhoneGpsUtil2;
 import com.idata365.col.util.ResultUtils;
 
 
@@ -73,7 +74,14 @@ public class MngCoreController extends BaseController<MngCoreController> {
 			         }
 			 }
 	    	  if(list.size()>0) {
-	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
+	    		  Map<String, Object> datasMap=null;
+	    		  if(map.get("dev")!=null) {
+	    			   datasMap= PhoneGpsUtil2.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
+	  	    		
+	    		  }else {
+	    			   datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
+	 	    		 
+	    		  }
 	    		  List<Map<String,Object>> alarmList=OverspeedUtil.dealOverSpeed(jkList);
 	    		  datasMap.put("alarmListChao", alarmList);
 	    		  return ResultUtils.rtSuccess(datasMap);
