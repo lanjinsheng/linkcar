@@ -15,7 +15,7 @@ public interface AssetUsersAssetMapper {
 	AssetUsersAsset getUserAssetByUserId(@Param("userId") Long userId);
 
 	int updateDiamondsConsume(Map<String, Object> datas);
-
+	int updateDiamondsUnfreeze(Map<String, Object> earn);
 	int updateDiamondsEarn(Map<String, Object> earn);
 	
 	int updatePowerAdd(AssetUsersPowerLogs assetUsersPowerLogs);
