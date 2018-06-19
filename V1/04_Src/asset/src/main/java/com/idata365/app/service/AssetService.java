@@ -286,7 +286,7 @@ public class AssetService extends BaseService<AssetService> {
 		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("userId", userId);
 		datas.put("diamondsNum", diamondsNum);
-		int hadUpdate = assetUsersAssetMapper.updateDiamondsConsume(datas);// -
+		int hadUpdate = assetUsersAssetMapper.updateDiamondsFreeze(datas);// -
 
 		if (hadUpdate != 0) {
 			// 钻石数量够买，则进行日志增加
@@ -345,6 +345,12 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
 
 		// 竞拍解冻
+		
+		Map<String, Object> freeze = new HashMap<String, Object>();
+		freeze.put("userId", sellerId);
+		freeze.put("diamondsNum", diamondsNum);
+		 assetUsersAssetMapper.updateEndUnfreeze(freeze);// -
+		 
 		AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
 		auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		auctionLog.setEffectId(auctionGoodsId);
