@@ -5,6 +5,15 @@
 <title>RouterServer</title>
 </head>
 <body>
-RouterServer start
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+if(path.equals("") && request.getServerName().equalsIgnoreCase("mngtomcat")){
+	response.sendRedirect("http://mng.idata365.com/Server");
+}else if(request.getServerName().equalsIgnoreCase("hdtomcat")){
+	response.sendRedirect("http://www.baidu.com");
+}
+%>
+<%=basePath%>
 </body>
 </html>
