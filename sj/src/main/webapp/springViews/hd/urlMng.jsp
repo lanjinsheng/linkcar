@@ -56,7 +56,13 @@ String colHost = Constant.colHost;
 					    var id=rowData.id;
 					    var fromUrl=rowData.fromUrl;
 					    var toUrl=rowData.toUrl;
-	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:editRouter('"+id+"','"+fromUrl+"','"+toUrl+"');\"> 编辑</span>";
+	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:editRouter('"+id+"','"+fromUrl+"','"+toUrl+"');\"> 点击编辑</span>";
+					}},
+					{title:'源地址二维码',field:'ydzewm',width:100,align:'center',formatter:function(value,rowData,rowIndex){
+					    var id=rowData.id;
+					    var fromUrl=rowData.fromUrl;
+					    var toUrl=rowData.toUrl;
+	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:editRouter('"+id+"','"+fromUrl+"','"+toUrl+"');\"> 点击生成二维码</span>";
 					}}
 					 
 				]],
