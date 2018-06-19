@@ -48,9 +48,25 @@
         update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}),updateTime=now() where
            <![CDATA[ diamondsNum>=${diamondsNum} and userId=#{userId}]]>
      </update>
-     <update id="updateDiamondsUnfreeze"   parameterType="java.util.HashMap">
-        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),updateTime=now() where userId=#{userId}
+     
+     <update id="updateDiamondsFreeze"   parameterType="java.util.HashMap">
+        update assetUsersAsset set diamondsNum=(diamondsNum-${diamondsNum}),
+        freezeDiamondsNum=(freezeDiamondsNum+${diamondsNum}),updateTime=now() where
+           <![CDATA[ diamondsNum>=${diamondsNum} and userId=#{userId}]]>
      </update>
+     
+     <update id="updateDiamondsUnfreeze"   parameterType="java.util.HashMap">
+        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),
+        freezeDiamondsNum=(freezeDiamondsNum-${diamondsNum}),
+        updateTime=now() where userId=#{userId}
+     </update>
+     
+      <update id="updateEndUnfreeze"   parameterType="java.util.HashMap">
+        update assetUsersAsset set freezeDiamondsNum=(freezeDiamondsNum-${diamondsNum}),
+        updateTime=now() where userId=#{userId}
+     </update>    
+     
+     
      <update id="updateDiamondsEarn"   parameterType="java.util.HashMap">
         update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}),updateTime=now() where userId=#{userId}
      </update>
