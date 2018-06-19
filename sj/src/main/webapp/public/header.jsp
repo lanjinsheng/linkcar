@@ -18,10 +18,11 @@ function openDialogResize(URL,width,height)
   <link rel="stylesheet" type="text/css" href="<%=contextPath %>/public/easyui1.4/themes/icon.css" />
   <link rel="stylesheet" type="text/css" href="<%=contextPath %>/public/easyui1.4/themes/color.css" />
   <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/jquery.form.js"></script>
+  <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/jquery.form.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/locale/easyui-lang-zh_CN.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/datagrid-detailview.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/easyui1.4/jquery.easyui.patch.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/js/json2.js"></script>
-   <script type="text/javascript" src="<%=contextPath %>/public/js/core.js"></script>
+  <script type="text/javascript" src="<%=contextPath %>/public/js/core.js"></script>
+  <script type="text/javascript" src="<%=contextPath %>/public/js/qrious.min.js"></script>

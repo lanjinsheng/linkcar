@@ -11,7 +11,6 @@ String colHost = Constant.colHost;
 </head>
 <script type="text/javascript">
 		$(function(){
-		 
 			$("#table").datagrid({
 			 loader : function(param, success, error) {  
                    var opts = $(this).datagrid("options");  
@@ -59,10 +58,8 @@ String colHost = Constant.colHost;
 	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:editRouter('"+id+"','"+fromUrl+"','"+toUrl+"');\"> 点击编辑</span>";
 					}},
 					{title:'源地址二维码',field:'ydzewm',width:100,align:'center',formatter:function(value,rowData,rowIndex){
-					    var id=rowData.id;
-					    var fromUrl=rowData.fromUrl;
-					    var toUrl=rowData.toUrl;
-	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:editRouter('"+id+"','"+fromUrl+"','"+toUrl+"');\"> 点击生成二维码</span>";
+					    var url="http://hd.idata365.com"+rowData.fromUrl;
+	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:createQrCode('"+url+"');\"> 点击生成二维码</span>";
 					}}
 					 
 				]],
@@ -96,11 +93,44 @@ String colHost = Constant.colHost;
 		   toUrl=encodeURIComponent(toUrl);
 			openDialogResize("<%=contextPath%>/springViews/hd/addUrl.jsp?id="+id+"&fromUrl="+fromUrl+"&toUrl="+toUrl,700, 600);
 	   }
+	   
+	    function createQrCode(url) {
+            showMyWindow("二维码",url,400,420);
+        }
+        
+	    function showMyWindow(title,url, width, height) {  
+	        $('#myWindow').window(  
+                {  
+                    title : title,  
+                    width : width,  
+                    height : height,  
+                    modal : true,
+                    minimizable : true,  
+                    maximizable : true,  
+                    shadow : false,  
+                    cache : false,  
+                    closed : false,
+                    closable : true,
+                    draggable :true,
+                    collapsible : true,  
+                    resizable : true,  
+                    left: 300,
+					top:50,
+                    loadingMessage : '正在加载数据，请稍等片刻......'  
+                });
+	        var qr = new QRious({
+			element:document.getElementById('qrious'),
+			size:370, level:'M', value:url
+			});
+	    }
 		
 </script>
 <body style="height: 97%">
 	<div id="table" data-options="fit:true"></div>
-		  
+	
+	<div id="myWindow" class="easyui-dialog" closed="true">
+			<img id="qrious">	  
+	</div>
 	<div id="tb" style="padding:3px;height:auto">
 		<div align="right">
 		</div>
