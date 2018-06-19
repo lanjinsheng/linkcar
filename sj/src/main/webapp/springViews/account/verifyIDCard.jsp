@@ -32,6 +32,14 @@ String accountUrl = CommentUtil.accountUrl;
 				    {title:'主键',field:'id',hidden:true}
 				]],
 				columns:[[
+					{title:'用户昵称',field:'nikeName',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var nikeName=rowData.nikeName;
+				      	return  nikeName;
+					}},
+					{title:'电话号码',field:'phone',width:50,align:'center',formatter:function(value,rowData,rowIndex){
+					    var phone=rowData.phone;
+				      	return  phone;
+					}},
 					{title:'身份证正面',field:'frontDrivingImg',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var frontDrivingImg=rowData.frontDrivingImg;
 					    if(frontDrivingImg==""){
@@ -65,18 +73,16 @@ String accountUrl = CommentUtil.accountUrl;
 		});
 
 		function doSearch(){
-			var userId = $("#userId").val();
-			userId = $.trim(userId);
-			var startTime = $("#startTime").datebox("getValue");
-			startTime = $.trim(startTime);
-			var endTime = $("#endTime").datebox("getValue");
-			endTime = $.trim(endTime);
+			var nikeName = $("#nikeName").val();
+			nikeName = $.trim(nikeName);
+			var phone = $("#phone").val();
+			phone = $.trim(phone);
 			$("#table").datagrid('load',{
-				userId:userId,				
-				startTime:startTime,				
-				endTime:endTime				
+				nikeName:nikeName,				
+				phone:phone				
 			});
 		}
+		
 		function verifySuccess(userId){
 			var person = "<%=person %>";
         	var param="userId="+userId+"&operatingUser="+person;
@@ -170,6 +176,13 @@ String accountUrl = CommentUtil.accountUrl;
 				</form>
 				<button onclick="myFunction()">提交</button>
 			</div>
+		</div>
+	</div>
+	<div id="tb" style="padding:3px;height:auto">
+		<div align="right">
+			用户昵称：<input  id="nikeName" name="nikeName" >&nbsp;&nbsp; 
+			用户电话：<input  id="phone" name="phone" >&nbsp;&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="doSearch();"></a>
 		</div>
 	</div>
 </body>
