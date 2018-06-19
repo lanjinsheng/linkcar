@@ -91,7 +91,7 @@ String colHost = Constant.colHost;
 	   function editRouter(id,fromUrl,toUrl){
 		   fromUrl=encodeURIComponent(fromUrl);
 		   toUrl=encodeURIComponent(toUrl);
-			openDialogResize("<%=contextPath%>/springViews/hd/addUrl.jsp?id="+id+"&fromUrl="+fromUrl+"&toUrl="+toUrl,700, 600);
+		   openDialogResize("<%=contextPath%>/springViews/hd/addUrl.jsp?id="+id+"&fromUrl="+fromUrl+"&toUrl="+toUrl,700, 600);
 	   }
 	   
 	    function createQrCode(url) {
