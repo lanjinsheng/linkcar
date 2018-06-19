@@ -51,7 +51,7 @@ String colHost = Constant.colHost;
 	                    return "http://hd.idata365.com";
 					}},
 					{title:'来源相对地址',field:'fromUrl',width:100,align:'center'},
-					{title:'跳转地址',field:'toUrl',width:100,align:'center'},
+					{title:'跳转地址',field:'toUrl',width:300,align:'center'},
 					{title:'编辑',field:'logPath6',width:100,align:'center',formatter:function(value,rowData,rowIndex){
 					    var id=rowData.id;
 					    var fromUrl=rowData.fromUrl;
