@@ -280,7 +280,7 @@ public class AssetService extends BaseService<AssetService> {
 			Map<String, Object> earn = new HashMap<String, Object>();
 			earn.put("userId", preUserId);
 			earn.put("diamondsNum", preUserDiamondsNum);
-			addUpdate = assetUsersAssetMapper.updateDiamondsEarn(earn);// +
+			addUpdate = assetUsersAssetMapper.updateDiamondsUnfreeze(earn);// +
 		}
 
 		Map<String, Object> datas = new HashMap<String, Object>();
@@ -328,7 +328,7 @@ public class AssetService extends BaseService<AssetService> {
 		// 插入商品消费与赚取流水记录
 		AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 		assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-		assetUsersDiamondsLogs.setEffectId(0L);
+		assetUsersDiamondsLogs.setEffectId(auctionGoodsId);
 		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Auction_Buy);
 		assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 		assetUsersDiamondsLogs.setRemark("竞拍消费" + auctionGoodsId);
@@ -337,7 +337,7 @@ public class AssetService extends BaseService<AssetService> {
 
 		AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
 		logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
-		logs.setEffectId(0L);
+		logs.setEffectId(auctionGoodsId);
 		logs.setEventType(AssetConstant.EventType_Auction_Earn);
 		logs.setRecordType(AssetConstant.RecordType_1);
 		logs.setRemark("竞拍收入" + auctionGoodsId);
