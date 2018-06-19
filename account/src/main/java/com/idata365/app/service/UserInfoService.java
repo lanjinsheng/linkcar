@@ -69,7 +69,7 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		return licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
 	}
 
-	public List<LicenseVehicleTravel> findLicenseVehicleTravels() {
+	public List<LicenseVehicleTravel> findLicenseVehicleTravels(Map<String, Object> map) {
 		return licenseVehicleTravelMapper.findLicenseVehicleTravels();
 	}
 	

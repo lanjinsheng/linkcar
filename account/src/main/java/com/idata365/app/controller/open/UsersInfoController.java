@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.entity.IDCard;
 import com.idata365.app.entity.LicenseVehicleTravel;
+import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.service.UserInfoService;
+import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ServerUtil;
 import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.StaticDatas;
@@ -59,7 +61,8 @@ public class UsersInfoController extends BaseController {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (IDCard iDCard : iDCards) {
 			Map<String, String> rtMap = new HashMap<String, String>();
-			if (iDCard != null) {// 驾驶证
+			UsersAccount usersAccount = new UsersAccount();
+			if (iDCard != null) {// 身份证
 				rtMap.put("userName", iDCard.getUserName());
 				rtMap.put("gender", iDCard.getGender());
 				rtMap.put("nation", iDCard.getNation());
@@ -70,7 +73,10 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("cardNumber", iDCard.getCardNumber());
 				rtMap.put("office", iDCard.getOffice());
 				rtMap.put("userId", iDCard.getUserId().toString());
-				rtMap.put("status", iDCard.getUserId().toString());
+				rtMap.put("status", String.valueOf(iDCard.getStatus()));
+				usersAccount = userInfoService.getUsersAccount(iDCard.getUserId());
+				rtMap.put("nikeName", usersAccount.getNickName()==null?PhoneUtils.hidePhone(usersAccount.getPhone()):usersAccount.getNickName());
+				rtMap.put("phone", PhoneUtils.hidePhone(usersAccount.getPhone()));
 				if (ValidTools.isBlank(iDCard.getFrontImgUrl())) {
 					rtMap.put("frontDrivingImg", "");
 				} else {
@@ -81,18 +87,12 @@ public class UsersInfoController extends BaseController {
 				} else {
 					rtMap.put("backDrivingImg", imgBase + iDCard.getBackImgUrl());
 				}
-			} else {
-				rtMap.put("userName", "");
-				rtMap.put("gender", "");
-				rtMap.put("nation", "");
-				rtMap.put("address", "");
-				rtMap.put("birthday", "");
-				rtMap.put("firstDay", "");
-				rtMap.put("lastDay", "");
-				rtMap.put("cardNumber", "");
-				rtMap.put("office", "");
-				rtMap.put("userId", "");
-				rtMap.put("status", "");
+			}
+			if(map.get("nikeName")!=null&&map.get("nikeName")!=""&&!map.get("nikeName").equals(rtMap.get("nikeName"))) {
+				continue;
+			}
+			if(map.get("phone")!=null&&map.get("phone")!=""&&!map.get("phone").equals(usersAccount.getPhone().toString())) {
+				continue;
 			}
 			result.add(rtMap);
 		}
@@ -128,25 +128,26 @@ public class UsersInfoController extends BaseController {
 		map.putAll(requestParameterToMap(request));
 		String imgBase = getImgBasePath();
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-		List<LicenseVehicleTravel> licenseVehicleTravels = userInfoService.findLicenseVehicleTravels();
+		List<LicenseVehicleTravel> licenseVehicleTravels = userInfoService.findLicenseVehicleTravels(map);
 		for (LicenseVehicleTravel licenseVehicleTravel : licenseVehicleTravels) {
 			Map<String, String> rtMap = new HashMap<String, String>();
-
+			UsersAccount usersAccount = new UsersAccount();
 			if (licenseVehicleTravel != null) {// 行驶证
-				licenseVehicleTravel.getUserId();
-
 				rtMap.put("plateNo", licenseVehicleTravel.getPlateNo());
 				rtMap.put("cardTypeDesc", StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
 				rtMap.put("userTypeDesc", StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
 				rtMap.put("modelTypeDesc", licenseVehicleTravel.getModelType());
 				rtMap.put("vin", licenseVehicleTravel.getVin());
 				rtMap.put("engineNo", licenseVehicleTravel.getEngineNo());
+				
 				if (ValidTools.isBlank(licenseVehicleTravel.getFrontImgUrl())) {
 					rtMap.put("frontTravelImg", "");
 				} else {
 					rtMap.put("frontTravelImg", imgBase + licenseVehicleTravel.getFrontImgUrl());
 				}
-
+				usersAccount = userInfoService.getUsersAccount(licenseVehicleTravel.getUserId());
+				rtMap.put("nikeName", usersAccount.getNickName()==null?PhoneUtils.hidePhone(usersAccount.getPhone()):usersAccount.getNickName());
+				rtMap.put("phone", PhoneUtils.hidePhone(usersAccount.getPhone()));
 				if (ValidTools.isBlank(licenseVehicleTravel.getBackImgUrl())) {
 					rtMap.put("backTravelImg", "");
 				} else {
@@ -156,19 +157,12 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("regDate", licenseVehicleTravel.getRegDate());
 				rtMap.put("isTravelEdit", String.valueOf(licenseVehicleTravel.getIsTravelEdit()));
 				rtMap.put("userId", licenseVehicleTravel.getUserId().toString());
-			} else {
-				rtMap.put("plateNo", "");
-				rtMap.put("cardTypeDesc", "");
-				rtMap.put("userTypeDesc", "");
-				rtMap.put("modelTypeDesc", "");
-				rtMap.put("vin", "");
-				rtMap.put("engineNo", "");
-				rtMap.put("frontTravelImg", "");
-				rtMap.put("backTravelImg", "");
-				rtMap.put("issueDate", "");
-				rtMap.put("regDate", "");
-				rtMap.put("isTravelEdit", "1");
-				rtMap.put("userId", "");
+			}
+			if(map.get("nikeName")!=null&&map.get("nikeName")!=""&&!map.get("nikeName").equals(rtMap.get("nikeName"))) {
+				continue;
+			}
+			if(map.get("phone")!=null&&map.get("phone")!=""&&!map.get("phone").equals(usersAccount.getPhone().toString())) {
+				continue;
 			}
 			result.add(rtMap);
 		}
