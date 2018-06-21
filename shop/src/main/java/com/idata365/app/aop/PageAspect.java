@@ -26,6 +26,7 @@ public class PageAspect
     @Around("execution (* com.idata365.app.controller..*.*Page*(..))")
     public String afterPageAspect(ProceedingJoinPoint  jp) 
     {
+    	
     	 RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
      	  HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
     	int page=request.getParameter("page")==null?1:Integer.parseInt(request.getParameter("page"));
@@ -33,8 +34,8 @@ public class PageAspect
     	Object[] args = jp.getArgs();  
     	if(args.length>1) {
     		Map<String,Object> m=(Map<String,Object>)args[1];
-    		page=Integer.valueOf(m.get("page").toString());
-    		pageSize=Integer.valueOf(m.get("rows").toString());
+    		page=Integer.valueOf((m.get("page")==null?1:m.get("page")).toString());
+    		pageSize=Integer.valueOf((m.get("rows")==null?10:m.get("rows")).toString());
     	}
     	Map<String,Object> map = new HashMap<String,Object>();
     	PageParameter p=new PageParameter();
