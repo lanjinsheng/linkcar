@@ -111,7 +111,7 @@ public class PhoneGpsUtil2 {
 		}
 	}
 	public static Map<String,Object> getGpsValues(List<Map<String,String>> list,String uhIDs){
-		   StringBuffer out=new StringBuffer();
+//		   StringBuffer out=new StringBuffer();
 		//清理gps點
 		dealValidGps(list);
 		Map<String,Object> rtMap=new HashMap<String,Object>();
@@ -174,7 +174,6 @@ public class PhoneGpsUtil2 {
 				   continue;
 			   }
 			 if((preT.substring(0, 19)).equals((gps.get("t").substring(0, 19)))) {
-				 System.out.println(preT.substring(0, 19));
 				 continue;
 			 }
 			 preT=gps.get("t");
@@ -185,7 +184,7 @@ public class PhoneGpsUtil2 {
 			Gps Gps2=PositionUtil.Gps84(lat2, lng2);
 		    Double d=PositionUtil.distance(Gps1.getLng(),Gps1.getLat(),Gps2.getLng(),Gps2.getLat());
 			   distance+=d;
-			   out.append(gps.get("t")+"==="+d+"\r\n");
+//			   out.append(gps.get("t")+"==="+d+"\r\n");
 			   Gps1=Gps2;
 			   
 			   if(Integer.valueOf(gps.get("h"))<100) {//h值小于100的才进行计算
@@ -221,13 +220,6 @@ public class PhoneGpsUtil2 {
 		rtMap.put("speed140To149Times", speedBean.getSpeed140To149Times());
 		rtMap.put("speed150To159Times", speedBean.getSpeed150To159Times());
 		rtMap.put("speed160UpTimes", speedBean.getSpeed160UpTimes());
-		try {
-			writeTxt(out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(distance);
 		return rtMap;
 	}
 	
