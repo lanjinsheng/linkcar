@@ -25,6 +25,7 @@ import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.service.AuctionService;
 import com.idata365.app.service.OrderService;
 import com.idata365.app.service.PrizeService;
 import com.idata365.app.util.DateTools;
@@ -53,6 +54,8 @@ public class OpenController extends BaseController {
 	private ChezuAppService chezuAppService;
 	@Autowired
 	SystemProperties systemProperties;
+	@Autowired
+	private AuctionService auctionService;
 
 	/**
 	 * 
@@ -132,11 +135,11 @@ public class OpenController extends BaseController {
 	
 	@RequestMapping(value = "/ment/openUploadAuctionImg", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
-	public Map<String, Object> openUploadAuctionImgPage(@RequestParam CommonsMultipartFile file,
+	public @ResponseBody String openUploadAuctionImgPage(@RequestParam CommonsMultipartFile file,
 			@RequestParam Map<String, Object> map) {
 		Long userId = 1L;
 		if (file == null) {
-			return ResultUtils.rtFailParam(null, "附件为空");
+			return null;
 		}
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("userId", userId);
@@ -151,7 +154,7 @@ public class OpenController extends BaseController {
 					fileParent.mkdirs();
 				}
 				file.transferTo(dealFile);
-				QQSSOTools.saveOSS(dealFile, key);
+//				QQSSOTools.saveOSS(dealFile, key);
 			} else {// 走阿里
 					// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
 				key = SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.AUCTION);
@@ -171,11 +174,12 @@ public class OpenController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ResultUtils.rtFail(null);
+			return null;
 		}
 		rtMap.remove("key");
 		rtMap.remove("userId");
-		return ResultUtils.rtSuccess(rtMap);
+		StringBuffer sb = new StringBuffer("\""+rtMap.get("imgUrl").toString()+"\"}");
+		return sb.toString();
 	}
 	
 	/**
@@ -196,43 +200,40 @@ public class OpenController extends BaseController {
 	@RequestMapping(value = "/ment/publishAuctionPage", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public @ResponseBody String publishAuctionPage(HttpServletRequest request) {
-		
+		long userId = 0;
 		Map<String, Object> map = this.getPagerMap(request);
 		map.putAll(requestParameterToMap(request));
+		
+		String prizeName = map.get("title").toString();
+		String prizeDesc = map.get("desc").toString();
+		String prizePic = map.get("imgs").toString();
+		int type = Integer.valueOf(map.get("type").toString());
+		BigDecimal startDiamond = BigDecimal
+				.valueOf(Double.valueOf(String.valueOf(map.get("startValue"))));
+		BigDecimal stepPrice = BigDecimal.valueOf(Double.valueOf(String.valueOf(map.get("difference"))));
+		Date auctionStartTime = DateTools.getDateTimeOfStr(map.get("startTime").toString(),
+				"yyyy-MM-dd HH:mm:ss");
+		Date auctionEndTime = DateTools.getDateTimeOfStr(map.get("endTime").toString(),
+				"yyyy-MM-dd HH:mm:ss");
+		if("管理员".equals(map.get("operatingUser"))) {
+			userId = 1;
+		}
+		AuctionGoods auctionGoods = new AuctionGoods();
+		auctionGoods.setPrizeName(prizeName);
+		auctionGoods.setPrizeDesc(prizeDesc);
+		auctionGoods.setPrizePic(prizePic);
+		auctionGoods.setStartDiamond(startDiamond);
+		auctionGoods.setStepPrice(stepPrice);
+		auctionGoods.setAuctionStartTime(auctionStartTime);
+		auctionGoods.setAuctionEndTime(auctionEndTime);
+		auctionGoods.setAuctionRealEndTime(auctionEndTime);
+		auctionGoods.setOfUserId(userId);
+		auctionGoods.setAuctionGoodsType(type);
+		int status = auctionService.insertAuctionGoods(auctionGoods);
 		StringBuffer sb = new StringBuffer("");
-//		sb.append(ServerUtil.toJson(status));
+		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 		
-		
-//		String prizeName = requestBodyParams.get("title").toString();
-//		String prizeDesc = requestBodyParams.get("desc").toString();
-//		String prizePic = requestBodyParams.get("imgs").toString();
-//		int type = Integer.valueOf(requestBodyParams.get("type").toString());
-//		BigDecimal startDiamond = BigDecimal
-//				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("startValue"))));
-//		BigDecimal stepPrice = BigDecimal.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("difference"))));
-//		Date auctionStartTime = DateTools.getDateTimeOfStr(requestBodyParams.get("startTime").toString(),
-//				"yyyy-MM-dd HH:mm");
-//		Date auctionEndTime = DateTools.getDateTimeOfStr(requestBodyParams.get("endTime").toString(),
-//				"yyyy-MM-dd HH:mm");
-//
-//		AuctionGoods auctionGoods = new AuctionGoods();
-//		auctionGoods.setPrizeName(prizeName);
-//		auctionGoods.setPrizeDesc(prizeDesc);
-//		auctionGoods.setPrizePic(prizePic);
-//		auctionGoods.setStartDiamond(startDiamond);
-//		auctionGoods.setStepPrice(stepPrice);
-//		auctionGoods.setAuctionStartTime(auctionStartTime);
-//		auctionGoods.setAuctionEndTime(auctionEndTime);
-//		auctionGoods.setAuctionRealEndTime(auctionEndTime);
-//		auctionGoods.setOfUserId(userId);
-//		auctionGoods.setAuctionGoodsType(type);
-//		int f = auctionService.insertAuctionGoods(auctionGoods);
-//		if (f == 0) {
-//			return ResultUtils.rtFail(null);
-//		} else {
-//			return ResultUtils.rtSuccess(null);
-//		}
 	}
 }
