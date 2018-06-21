@@ -21,22 +21,25 @@ String shopUrl = CommentUtil.shopUrl;
 	    	var param = $("#ff").serialize();
 	    	var person = "<%=person %>";
         	param=param+"&operatingUser="+person;
-//			var formData = new FormData($("#ff")[0]);
-        	
-//      	$.ajax({
-//				type:'POST',
-//				url:'<%=shopUrl%>/ment/openUploadAuctionImg',
-//				type: 'POST', 
-//			     data: formData, 
-//			     async: false, 
-//			     cache: false, 
-//			     contentType: false, 
-//			     processData: false, 
-//			     success: function(data) {
-//			     }, 
-//			     error: function(data) {   
-//			     } 
-//			});
+			var formData = new FormData($("#ff")[0]);
+        	var imgs = "";
+      		$.ajax({
+				 type:'POST',
+				url:'<%=shopUrl%>/ment/openUploadAuctionImg',
+				type: 'POST', 
+			    data: formData, 
+			    dataType:'json',
+			    async: false, 
+			    cache: false, 
+			    contentType: false, 
+			    processData: false, 
+			    success: function(data) {
+			     	param=param+"&imgs="+data.rows;
+			    }, 
+			    error: function(data) {
+			     	$.messager.alert("提示","上传失败");
+			    } 
+			});
         	
         	
         	$.ajax({
@@ -52,7 +55,7 @@ String shopUrl = CommentUtil.shopUrl;
 		                }, 1000);
 					}
 					else{
-						$.messager.alert("提示",rtJson.errorMsg);
+						$.messager.alert("提示","操作失败");
 						//window.close();
 					}
 				}
@@ -61,7 +64,7 @@ String shopUrl = CommentUtil.shopUrl;
 		}
 </script>
 <body style="height: 97%">
-		<form id="ff" method="post">
+		<form id="ff" method="post" enctype="multipart/form-data">
 		<div style="width:90%;padding-left:50px;margin-top:50px">
 			<table  style="border-collapse: collapse;" width="100%" border="1px" bordercolor="#0eb83a">
 				
@@ -86,7 +89,7 @@ String shopUrl = CommentUtil.shopUrl;
 						商品图片：
 					</td>
 					<td  class="td2" nowrap>
-						<input type="file" id="imgs" name="imgs"  data-options="required:true">
+						<input type="file" id="file" name="file"  data-options="required:true">
 					</td>
 				</tr>
 				<tr>
@@ -125,7 +128,7 @@ String shopUrl = CommentUtil.shopUrl;
 						开始时间：
 					</td>
 					<td class="td2" colspan="3">
-						<input id="startTime" name="startTime" class="easyui-datebox" data-options="required:true">
+						<input id="startTime" type="text" name="startTime" placeholder="yyyy-MM-dd HH:mm:ss" class="easyui-validatebox" data-options="required:true">
 					</td>
 				</tr>
 				<tr>
@@ -133,7 +136,7 @@ String shopUrl = CommentUtil.shopUrl;
 						结束时间：
 					</td>
 					<td class="td2" colspan="3">
-						<input id="endTime" name="endTime" class="easyui-datebox" data-options="required:true">
+						<input id="endTime" type="text" name="endTime" placeholder="yyyy-MM-dd HH:mm:ss" class="easyui-validatebox" data-options="required:true">
 					</td>
 				</tr>
 				
