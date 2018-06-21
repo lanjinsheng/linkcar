@@ -144,6 +144,7 @@ public class PhoneGpsUtil {
 		double maxSpeed=Double.valueOf(first.get("s"));
 		setSpeedBean(speedBean,maxSpeed);
 		Gps Gps1=PositionUtil.Gps84(Double.valueOf(lat1), Double.valueOf(lng1));
+		String preT=st;
 		i++;
 		for(;i<size;i++){
 			Map<String,String> gps=list.get(i);
@@ -157,6 +158,10 @@ public class PhoneGpsUtil {
 				   log.error("时间为空====错误行程号："+uhIDs);
 				   continue;
 			   }
+			if((preT.substring(0, 19)).equals((gps.get("t").substring(0, 19)))) {
+				 System.out.println(preT.substring(0, 19));
+				 continue;
+			}
 			double lat2=Double.valueOf(gps.get("x"));
 			double lng2=Double.valueOf(gps.get("y"));
 			double s=Double.valueOf(gps.get("s"));
@@ -640,14 +645,14 @@ public class PhoneGpsUtil {
 	/**
 	 * 下面做個測試函數
 	 */
-	public static Map<String,Object> getGpsValuesTest(List<Map<String,String>> list,String uhIDs){
-		dealValidGps(list);
-		for(Map<String,String> gps:list) {
-			if(gps.get("invalid")!=null) {
-				System.out.println("搗亂數據:"+gps.get("s")+"==="+gps.get("invalid"));
-			}
-		}
-		return null;
-	}
+//	public static Map<String,Object> getGpsValuesTest(List<Map<String,String>> list,String uhIDs){
+//		dealValidGps(list);
+//		for(Map<String,String> gps:list) {
+//			if(gps.get("invalid")!=null) {
+//				System.out.println("搗亂數據:"+gps.get("s")+"==="+gps.get("invalid"));
+//			}
+//		}
+//		return null;
+//	}
 		
 }
