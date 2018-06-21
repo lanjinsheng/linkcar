@@ -1,10 +1,11 @@
 package com.idata365.col.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -19,14 +20,19 @@ import org.apache.log4j.Logger;
 import com.idata365.col.entity.bean.SpeedBean;
 import com.idata365.col.schedule.DatasDealTask;
 
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-
 
 public class PhoneGpsUtil2 {
-	private static Logger log = Logger.getLogger(PhoneGpsUtil2.class);
- 
+	private static Logger log = Logger.getLogger(PhoneGpsUtil.class);
+	public static void main(String []args){
+		  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+		String str=txt2String("D:/drive1");
+		   Map<String,Object> jMap=GsonUtils.fromJson(str);
+	         if(jMap.get("gpsInfos")!=null) {
+	        	 list.addAll((List)jMap.get("gpsInfos"));
+	         }
+	         PhoneGpsUtil2.getGpsValues(list,"82");
+
+	}
 	final static double speed120=33.33;
 	final static double speed130=36.11;
 	final static double speed140=38.89;
@@ -105,6 +111,7 @@ public class PhoneGpsUtil2 {
 		}
 	}
 	public static Map<String,Object> getGpsValues(List<Map<String,String>> list,String uhIDs){
+		   StringBuffer out=new StringBuffer();
 		//清理gps點
 		dealValidGps(list);
 		Map<String,Object> rtMap=new HashMap<String,Object>();
@@ -134,31 +141,29 @@ public class PhoneGpsUtil2 {
 		rtMap.put("driveTimes", 0);
 		int i=0;
 		String st=first.get("t");
-		int ha=Integer.valueOf(first.get("h").toString());
 		StringBuffer et=new StringBuffer(first.get("t"));
-		while((st.equals("") && first.get("invalid")==null) || ha>10) {
+		while(st.equals("") && first.get("invalid")==null) {
 			  i++;
 			  first=list.get(i);
 			  st=first.get("t");
-			  ha=Integer.valueOf(first.get("ha"));
 			  et=new StringBuffer(first.get("t"));
 			  log.error("时间为空====错误行程号："+uhIDs);
 		} 
-		addJia(first,i,size,list,alarmListJia);
-		addJian(first, i, size, list,  alarmListJian,alarmListZhuan);
+		if(Integer.valueOf(first.get("h"))<100) {//h值小于100的才进行计算
+			addJia(first,i,size,list,alarmListJia);
+			addJian(first, i, size, list,  alarmListJian,alarmListZhuan);
+		}
 		double lat1=Double.valueOf(first.get("x"));
 		double lng1=Double.valueOf(first.get("y"));
 		double maxSpeed=Double.valueOf(first.get("s"));
 		setSpeedBean(speedBean,maxSpeed);
 		Gps Gps1=PositionUtil.Gps84(Double.valueOf(lat1), Double.valueOf(lng1));
 		i++;
+		String preT=st;
+		
 		for(;i<size;i++){
 			Map<String,String> gps=list.get(i);
 			if(gps.get("invalid")!=null) {
-				continue;
-			}
-			if(Integer.valueOf(gps.get("h"))>10) {
-				log.error("不稳定点："+uhIDs);
 				continue;
 			}
 			 if(!gps.get("t").equals("")) {
@@ -168,6 +173,11 @@ public class PhoneGpsUtil2 {
 				   log.error("时间为空====错误行程号："+uhIDs);
 				   continue;
 			   }
+			 if((preT.substring(0, 19)).equals((gps.get("t").substring(0, 19)))) {
+				 System.out.println(preT.substring(0, 19));
+				 continue;
+			 }
+			 preT=gps.get("t");
 			double lat2=Double.valueOf(gps.get("x"));
 			double lng2=Double.valueOf(gps.get("y"));
 			double s=Double.valueOf(gps.get("s"));
@@ -175,13 +185,16 @@ public class PhoneGpsUtil2 {
 			Gps Gps2=PositionUtil.Gps84(lat2, lng2);
 		    Double d=PositionUtil.distance(Gps1.getLng(),Gps1.getLat(),Gps2.getLng(),Gps2.getLat());
 			   distance+=d;
+			   out.append(gps.get("t")+"==="+d+"\r\n");
 			   Gps1=Gps2;
-			   addJia(gps,i,size,list,alarmListJia);
-			   boolean isTurn=addZhuan(gps, i, size, list, alarmListZhuan);
-			   if(!isTurn){
-				   addJian(gps, i, size, list, alarmListJian,alarmListZhuan);
+			   
+			   if(Integer.valueOf(gps.get("h"))<100) {//h值小于100的才进行计算
+				   addJia(gps,i,size,list,alarmListJia);
+				   boolean isTurn=addZhuan(gps, i, size, list, alarmListZhuan);
+				   if(!isTurn){
+					   addJian(gps, i, size, list, alarmListJian,alarmListZhuan);
+				   }
 			   }
-			  
 			   if(maxSpeed<Double.valueOf(gps.get("s"))){
 				   maxSpeed=Double.valueOf(gps.get("s"));
 			   }
@@ -208,7 +221,13 @@ public class PhoneGpsUtil2 {
 		rtMap.put("speed140To149Times", speedBean.getSpeed140To149Times());
 		rtMap.put("speed150To159Times", speedBean.getSpeed150To159Times());
 		rtMap.put("speed160UpTimes", speedBean.getSpeed160UpTimes());
-		
+		try {
+			writeTxt(out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(distance);
 		return rtMap;
 	}
 	
@@ -649,89 +668,38 @@ public class PhoneGpsUtil2 {
 	/**
 	 * 下面做個測試函數
 	 */
-	public static Map<String,Object> getGpsValuesTest(List<Map<String,String>> list,String uhIDs){
-		dealValidGps(list);
-		for(Map<String,String> gps:list) {
-			if(gps.get("invalid")!=null) {
-				System.out.println("搗亂數據:"+gps.get("s")+"==="+gps.get("invalid"));
-			}
-		}
-		return null;
-	}
-	public static void main(String []args) {
-	        // 此处为我创建Excel路径：E:/zhanhj/studysrc/jxl下
-		int a=0;int b=0;
-	        File file = new File("C:\\Users\\jinsheng\\Desktop\\Gps-85-66.xls");
-	        List excelList = readExcel(file);
-	        System.out.println("list中的数据打印出来");
-	        for (int i = 1; i < 306; i++) {
-	            List list = (List) excelList.get(i);
-	            List list1 = (List) excelList.get(i+1);
-	            Gps Gps2=PositionUtil.Gps84(Double.valueOf(list.get(0).toString()), Double.valueOf(list.get(1).toString()));
-	            Gps Gps1=PositionUtil.Gps84(Double.valueOf(list1.get(0).toString()), Double.valueOf(list1.get(1).toString()));
-	            String s1=String.valueOf(list1.get(3));
-	            Double d=PositionUtil.distance(Gps1.getLng(),Gps1.getLat(),Gps2.getLng(),Gps2.getLat());
-	            
-	            Gps BGps2=PositionUtil.Gps84(Double.valueOf(list.get(5).toString()), Double.valueOf(list.get(6).toString()));
-	            Gps BGps1=PositionUtil.Gps84(Double.valueOf(list1.get(5).toString()), Double.valueOf(list1.get(6).toString()));
-	            String s2=String.valueOf(list1.get(8));
-	            Double d2=PositionUtil.distance(BGps1.getLng(),Gps1.getLat(),BGps2.getLng(),Gps2.getLat());
-		          
-	           System.out.println("A=="+s1+"=="+d+"   B=="+s2+"=="+d2);
-	           if(Math.abs(Double.valueOf(s1)-d)>=4) {
-	        	   a++;
-	        	   System.out.print(list1.get(2)+"A==False");
-	        	   System.out.println();
-	           }
-	           if(Math.abs(Double.valueOf(s2)-d2)>=4) {
-	        	   b++;
-	        	   System.out.print(list1.get(7)+"B==False");
-	        	   System.out.println();
-	           }
-	           
-	        }
-//		Gps Gps2=PositionUtil.Gps84(121.372121, 31.225967);
-//		Gps Gps1=PositionUtil.Gps84(121.372123, 31.226002);
-//		Double d=PositionUtil.distance(Gps1.getLng(),Gps1.getLat(),Gps2.getLng(),Gps2.getLat());
-		System.out.println(a+"==="+b);
-	}
-	// 去读Excel的方法readExcel，该方法的入口参数为一个File对象
-    public static List readExcel(File file) {
-        try {
-            // 创建输入流，读取Excel
-            InputStream is = new FileInputStream(file.getAbsolutePath());
-            // jxl提供的Workbook类
-            Workbook wb = Workbook.getWorkbook(is);
-            // Excel的页签数量
-            int sheet_size = wb.getNumberOfSheets();
-            for (int index = 0; index < sheet_size; index++) {
-                List<List> outerList=new ArrayList<List>();
-                // 每个页签创建一个Sheet对象
-                Sheet sheet = wb.getSheet(index);
-                // sheet.getRows()返回该页的总行数
-                for (int i = 0; i < sheet.getRows(); i++) {
-                    List innerList=new ArrayList();
-                    // sheet.getColumns()返回该页的总列数
-                    for (int j = 0; j < sheet.getColumns(); j++) {
-                        String cellinfo = sheet.getCell(j, i).getContents();
-                        if(cellinfo.isEmpty()){
-                            continue;
-                        }
-                        innerList.add(cellinfo);
-//                        System.out.print(cellinfo);
-                    }
-                    outerList.add(i, innerList);
-//                    System.out.println();
-                }
-                return outerList;
+//	public static Map<String,Object> getGpsValuesTest(List<Map<String,String>> list,String uhIDs){
+//		dealValidGps(list);
+//		for(Map<String,String> gps:list) {
+//			if(gps.get("invalid")!=null) {
+//				System.out.println("搗亂數據:"+gps.get("s")+"==="+gps.get("invalid"));
+//			}
+//		}
+//		return null;
+//	}
+	public static String txt2String(String path){
+		 File file = new File(path);
+        StringBuilder result = new StringBuilder();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            String s = null;
+            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
+                result.append(System.lineSeparator()+s);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            br.close();    
+        }catch(Exception e){
             e.printStackTrace();
         }
-        return null;
-    }
+        return result.toString();
+    }	
+	public static void writeTxt(StringBuffer sb) throws IOException {
+    /* 写入Txt文件 */  
+    File writename = new File("d:\\output.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件  
+    writename.createNewFile(); // 创建新文件  
+    BufferedWriter out = new BufferedWriter(new FileWriter(writename));  
+    out.write(sb.toString()); // \r\n即为换行  
+    out.flush(); // 把缓存区内容压入文件  
+    out.close(); // 最后记得关闭文件  
+	}
+ 
 }
