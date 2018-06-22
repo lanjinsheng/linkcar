@@ -273,22 +273,21 @@ public class AssetService extends BaseService<AssetService> {
 		int addUpdate = 0;
 		BigDecimal preUserDiamondsNum = null;
 
-		if (0 != preUserId) {
-			AuctionUsersDiamondsLogs logsById = auctionUsersDiamondsLogsMapper
-					.getAuctionUsersDiamondsLogsById(preUserId, auctionGoodsId);
-			preUserDiamondsNum = logsById.getDiamondsNum();
-			Map<String, Object> earn = new HashMap<String, Object>();
-			earn.put("userId", preUserId);
-			earn.put("diamondsNum", preUserDiamondsNum);
-			addUpdate = assetUsersAssetMapper.updateDiamondsUnfreeze(earn);// +
-		}
-
 		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("userId", userId);
 		datas.put("diamondsNum", diamondsNum);
 		int hadUpdate = assetUsersAssetMapper.updateDiamondsFreeze(datas);// -
 
 		if (hadUpdate != 0) {
+			if (0 != preUserId) {
+				AuctionUsersDiamondsLogs logsById = auctionUsersDiamondsLogsMapper
+						.getAuctionUsersDiamondsLogsById(preUserId, auctionGoodsId);
+				preUserDiamondsNum = logsById.getDiamondsNum();
+				Map<String, Object> earn = new HashMap<String, Object>();
+				earn.put("userId", preUserId);
+				earn.put("diamondsNum", preUserDiamondsNum);
+				addUpdate = assetUsersAssetMapper.updateDiamondsUnfreeze(earn);// +
+			}
 			// 钻石数量够买，则进行日志增加
 			AuctionUsersDiamondsLogs auctionUsersDiamondsLogs = new AuctionUsersDiamondsLogs();
 			auctionUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
