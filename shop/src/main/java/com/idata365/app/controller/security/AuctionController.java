@@ -333,8 +333,10 @@ public class AuctionController extends BaseController {
 		LOG.info("userId=================" + userId);
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
 		LOG.info("auctionGoodsId=================" + auctionGoodsId);
+		
 		BigDecimal auctionDiamond = BigDecimal
 				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("auctionDiamond"))));
+		LOG.info("auctionDiamond=================" + auctionDiamond);
 		AuctionGoods auctionGoods = auctionService.findOneAuctionGoodById(auctionGoodsId);
 		if (auctionGoods.getIsMustVerify() == 1) {// 需要身份验证
 			Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
