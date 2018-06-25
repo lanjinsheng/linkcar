@@ -12,7 +12,7 @@
      </select>
       <select id="getOpponentFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT *
-       FROM  familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId})
+       FROM  familyRelation where (selfFamilyId=#{familyId}) or (competitorFamilyId=#{familyId} and relationType=2)
        and daystamp=#{daystamp}
      </select> 
      
