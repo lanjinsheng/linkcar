@@ -29,10 +29,10 @@ public class FightService extends BaseService<FightService> {
       * @param selfFamilyId
       * @return
       */
-	public Long getOpponentIdBySelfId(Long selfFamilyId) {
+	public Long getOpponentIdBySelfId(Long selfFamilyId,String daystamp) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("familyId", selfFamilyId);
-		map.put("daystamp", DateTools.getTomorrowDateStr());
+		map.put("daystamp", daystamp);
 		FamilyRelation relation=familyRelationMapper.getFightRelation(map);
 		if(relation==null)
 		return null;

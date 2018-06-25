@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.service.FightService;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 @RestController
 public class FightController extends BaseController {
@@ -32,7 +33,8 @@ public class FightController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		LOG.info("famiyId=================" + requestBodyParams.get("famiyId"));
 		Long familyId=Long.valueOf(requestBodyParams.get("famiyId").toString());
-		Long opponentId=fightService.getOpponentIdBySelfId(familyId);
+		String tomorrow=DateTools.getTomorrowDateStr();
+		Long opponentId=fightService.getOpponentIdBySelfId(familyId,tomorrow);
 		Map<String,String> rtMap=new HashMap<String,String>();
 		if(opponentId==null){
 			rtMap.put("challengeFlag", "0");
