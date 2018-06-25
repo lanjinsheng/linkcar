@@ -20,11 +20,17 @@
         INSERT IGNORE INTO  taskGeneric
 		 (genericKey,jsonValue,taskType,priority,createTime)
 		 select CONCAT(#{genericKey},'_do',id),
-		 CONCAT('{"id":',id,',"orderNo":',orderNo,',"familyId":',familyId,',"familyPersonTotal":',${familyPersonTotal},'}'),
+		 CONCAT('{"id":',id,',"memberNum":',memberNum,',"familyType":',familyType,',"orderNo":',orderNo,',"familyId":',familyId,',"familyPersonTotal":',${familyPersonTotal},'}'),
 		 #{taskType},
 		 #{priority},now() from familyGameAsset where
 		 seasonName=#{season} order by id
     </insert>
+    
+    <update id="updateUserPowerDayTable"  parameterType="java.util.HashMap">
+        update ${tableName} set pkPower=#{pkPower} where 
+		   userId=#{userId}
+    </update>
+    
     
     <insert id="initDoFamilySeasonReward"  parameterType="java.util.HashMap">
         INSERT IGNORE INTO  taskGeneric
@@ -42,6 +48,10 @@
 		SELECT sum(memberNum)  from familyGameAsset where seasonName=#{season}
 	 </select>
 	 
+	 <select id="getGameAssetNoDo"  resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(1)  from familyGameAsset where seasonName=#{season} and  rewardsNum=0
+	 </select>
+	 
 	 <select id="getFamilyTotalByST"   resultType="java.util.HashMap"  parameterType="java.util.HashMap">
        select sum(memberNum) as totalMembers from familySeasonAsset where seasonName=#{season} <![CDATA[and familyType>=${familyTypeStart}
        and familyType<=${familyTypeEnd}]]>
@@ -55,7 +65,7 @@
 	 </select>
 	 
 	 <select id="getPowerDayTotal"  resultType="java.lang.Long" parameterType="java.util.HashMap">
-		SELECT sum(powerNum)  from ${tableName} 
+		SELECT sum(powerNum+pkPower)  from ${tableName} 
 	 </select>
 	
 	 <select id="getPersonPower"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
@@ -85,6 +95,9 @@
         taskStatus=1,taskDealTime=${taskDealTime}
         where  id=#{id}
      </update>
+     
+     
+     
      <!-- 失败的taskStatus分2种情况 2是彻底失败[达到失败上线]，0是还有重试的机会,taskStatus=2为失败-->
     <update id="updateFailTask" parameterType="com.idata365.app.entity.TaskGeneric" >
        UPDATE 

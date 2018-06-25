@@ -7,12 +7,21 @@
 	</resultMap>
 
 	<update id="updatePowerAdd"
-		parameterType="com.idata365.app.entity.AssetFamiliesAsset">
+		parameterType="com.idata365.app.entity.AssetFamiliesPowerLogs">
 		update assetFamiliesAsset set
 		powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum})
 		where
 		familyId=#{familyId}
 	</update>
+	
+	<update id="updatePowerReduce"
+		parameterType="com.idata365.app.entity.AssetFamiliesPowerLogs">
+		update assetFamiliesAsset set
+		powerNum=(powerNum-${powerNum})
+		where
+		familyId=#{familyId}
+	</update>
+	
 	<update id="updateFamilyPowerAdd">
 		update assetFamiliesAsset set
 		powerNum=(powerNum+#{powerNum,jdbcType=BIGINT}),hadPowerNum=(hadPowerNum+#{powerNum,jdbcType=BIGINT})
