@@ -270,9 +270,9 @@ public class LoginRegService extends BaseService<LoginRegService>
 		achieveCommService.addAchieve(userId, 0d, AchieveEnum.AddGayTimes);
 	}
     @Transactional
-	public String regUser(String phone, String pwd, String nickName,Map<String, Object> rtMap)
+	public String regUser(String phone, String pwd, String nickName,Map<String, Object> rtMap,UsersAccount account)
 	{
-		UsersAccount account = new UsersAccount();
+//		UsersAccount account = new UsersAccount();
 		account.setPhone(phone);
 		account.setPwd(pwd);
 		account.setNickName(nickName);
