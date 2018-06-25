@@ -50,6 +50,9 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String ChallengeMessage="下战书！您的家族被【%s】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
 	//获奖
 	public static final String RewardMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族共获得【%s】钻石，按照贡献比例分配给您【%s】钻石，已发放至您的账户，点此查看昨日对战详情。";
+	public static final String RewardPowerMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族共获得【%s】动力，按照贡献比例分配给您【%s】动力，已发放至您的账户，点此查看昨日对战详情。";
+	
+	
 	//获奖
 	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族共获得【%s】钻石，分配给您【%s】钻石，已发放至您的账户.";
 	
@@ -521,6 +524,25 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUrl(String.format(FamilyFightHistoryDetailUrl, familyId,DateTools.getCurDateAddDay(-1)));
 		return message;
 	}
+	
+	public Message buildFamilyPowerMessage(Long fromUserId,Long toUserId,String familyId,String season,String powers, String personPowerNum,String orderNum,String familyName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_Reward);
+		message.setContent(String.format(RewardPowerMessage,familyName,season,powers,personPowerNum));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("奖励通知");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(FamilyFightHistoryDetailUrl, familyId,DateTools.getCurDateAddDay(-1)));
+		return message;
+	}
+	
 	public Message buildSeasonFamilyDiamondsMessage(Long fromUserId,Long toUserId,String familyId,String season,String diamonds, String personDiamondNum,Integer familyType,String familyName) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
