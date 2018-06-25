@@ -66,8 +66,9 @@ public class FightController extends BaseController {
 	public Map<String, Object> challengeFamily(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		LOG.info("famiyId=================" + requestBodyParams.get("famiyId"));
-		Long familyId=Long.valueOf(requestBodyParams.get("famiyId").toString());
-		Map<String,Object> randFamily=fightService.getRandFightFamily(familyId);
+		Long selfFamilyId=Long.valueOf(requestBodyParams.get("selfFamilyId").toString());
+		Long competitorFamilyId=Long.valueOf(requestBodyParams.get("competitorFamilyId").toString());
+		Map<String,Object> randFamily=fightService.getRandFightFamily(selfFamilyId,competitorFamilyId);
 		Map<String,String> rtMap=new HashMap<String,String>();
 		if(randFamily==null){
 			rtMap.put("familyId", "");

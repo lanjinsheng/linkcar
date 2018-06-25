@@ -99,12 +99,23 @@ public class FightService extends BaseService<FightService> {
      * @param selfFamilyid
      * @return
      */
-    public Map<String,Object> getRandFightFamily(Long selfFamilyid){
+    public Map<String,Object> getRandFightFamily(Long selfFamilyid,Long competitorFamilyId){
     	
     	Map<String,Object> family=usersAccountMapper.getFamilyByFamilyId(selfFamilyid);
     	Integer familyType=Integer.valueOf(family.get("familyType").toString())-10;
     	family.put("familyType", familyType);
     	Map<String,Object> pkFamily=familyRelationMapper.getMatchFamily(family);
+    	if(competitorFamilyId.longValue()==0){
+    		//首次匹配，不进行扣能量
+    	}else{
+    		if(competitorFamilyId.longValue()==Long.valueOf(pkFamily.get("id").toString())){
+    			//匹配重叠了，不扣能量
+    		}else{
+    			//扣除动力
+    			
+    			
+    		}
+    	}
 //    	while(pkFamily!=null && Long.valueOf(pkFamily.get("id").toString())==selfFamilyid.longValue()){
 //    		pkFamily=familyRelationMapper.getMatchFamily(family);
 //    	}
