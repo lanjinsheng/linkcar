@@ -13,7 +13,7 @@
       <!-- 通过家族id获取已确立对战关系的对战记录 -->
      <select id="getFightRelation" resultMap="BaseResultMap" parameterType="java.util.HashMap">
        SELECT *
-       FROM  familyRelation where (selfFamilyId=#{familyId} and relationType=1)
+       FROM  familyRelation where (selfFamilyId=#{familyId})
        or  (competitorFamilyId=#{familyId} and relationType=2) and daystamp=#{daystamp}
      </select>
      <!--判断是否有被挑战记录，如果有，则进行更新匹配升级relationType为2-->
@@ -27,6 +27,16 @@
       update
             familyRelation
              set relationType=2 where id=#{id}
+    </update>
+    <delete id="deleteRelation" parameterType="java.lang.Long">
+      delete from 
+            familyRelation
+              where id=#{id}
+    </delete>
+   <update id="reduceRelationType"  parameterType="com.idata365.app.entity.FamilyRelation" >
+      update
+            familyRelation
+             set relationType=1,selfFamilyId=#{selfFamilyId},competitorFamilyId=#{competitorFamilyId} where id=#{id}
     </update>
  
     <select id="getMatchFamily" resultType="java.util.HashMap" parameterType="java.util.HashMap">
