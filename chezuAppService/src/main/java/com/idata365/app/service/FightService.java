@@ -36,7 +36,7 @@ public class FightService extends BaseService<FightService> {
 		FamilyRelation relation=familyRelationMapper.getFightRelation(map);
 		if(relation==null)
 		return null;
-		if(relation.getRelationType()==1){
+		if(selfFamilyId==relation.getSelfFamilyId()){
 			return relation.getCompetitorFamilyId();
 		}else{
 			return relation.getSelfFamilyId();
@@ -56,13 +56,33 @@ public class FightService extends BaseService<FightService> {
  */
     @Transactional
 	public boolean insertFightRelation(Long selfFamilyId,Long competitorFamilyId){
+    	//删除老匹配
+    	String tomorrow=DateTools.getTomorrowDateStr();
+    	Map<String,Object> map=new HashMap<String,Object>();
+		map.put("familyId", selfFamilyId);
+		map.put("daystamp", tomorrow);
+		FamilyRelation relationMatch=familyRelationMapper.getFightRelation(map);
+		if(relationMatch!=null){
+			if(relationMatch.getRelationType()==1){
+//				单方匹配的，直接删除记录
+				familyRelationMapper.deleteRelation(relationMatch.getId());
+			}else{
+				//双方匹配的，进行判断并进行降级为单方匹配
+				if(relationMatch.getSelfFamilyId()==selfFamilyId){
+					relationMatch.setSelfFamilyId(relationMatch.getCompetitorFamilyId().longValue());
+					relationMatch.setCompetitorFamilyId(selfFamilyId.longValue());
+				}
+				familyRelationMapper.reduceRelationType(relationMatch);
+			}
+		}
+    	
+    	
 		FamilyRelation relation=new FamilyRelation();
 		relation.setSelfFamilyId(selfFamilyId);
 		relation.setCompetitorFamilyId(competitorFamilyId);
 		relation.setRelationType(1);
 		long key1=Math.abs(selfFamilyId-competitorFamilyId);
 		long key2=selfFamilyId+competitorFamilyId;
-		String tomorrow=DateTools.getTomorrowDateStr();
 		relation.setDaystamp(tomorrow);
 		relation.setUniKey1(key1+"-"+key2+"-"+tomorrow);
 		
