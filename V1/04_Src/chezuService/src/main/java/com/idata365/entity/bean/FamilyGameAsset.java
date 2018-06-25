@@ -23,11 +23,17 @@ public class FamilyGameAsset implements Serializable {
 	private String startDay;
 	private String endDay;
 	private Long orderNo;
-	private BigDecimal diamondsNum;
+	private BigDecimal rewardsNum;
 	private String seasonName;
 	private Integer memberNum;
+	private Integer familyType;
 	
-	
+	public Integer getFamilyType() {
+		return familyType;
+	}
+	public void setFamilyType(Integer familyType) {
+		this.familyType = familyType;
+	}
 	public Integer getMemberNum() {
 		return memberNum;
 	}
@@ -64,11 +70,12 @@ public class FamilyGameAsset implements Serializable {
 	public void setOrderNo(Long orderNo) {
 		this.orderNo = orderNo;
 	}
-	public BigDecimal getDiamondsNum() {
-		return diamondsNum;
+
+	public BigDecimal getRewardsNum() {
+		return rewardsNum;
 	}
-	public void setDiamondsNum(BigDecimal diamondsNum) {
-		this.diamondsNum = diamondsNum;
+	public void setRewardsNum(BigDecimal rewardsNum) {
+		this.rewardsNum = rewardsNum;
 	}
 	public String getSeasonName() {
 		return seasonName;

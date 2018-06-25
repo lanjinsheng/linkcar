@@ -191,14 +191,11 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 			Long t1=DateTools.getDateTimeOfLong(task.getDaystamp()+" 23:59:59");
 			Long t2=System.currentTimeMillis();
 			if(t2>t1 && (t2-t1)<82800000) {//時間到了,未超過一天，立馬促發
-//				String taskDay=task.getDaystamp();
-//				String nowDay=getDateStr(0);
-//				task.setDaystamp(nowDay);
-				taskFamilyPkRelationMapper.initTaskFamilyPkRelation(task);
+				//注释pk关系任务，在V1.6版本里取消自动匹配
+//				taskFamilyPkRelationMapper.initTaskFamilyPkRelation(task);
 				//还原匹配标识
-				taskFamilyPkRelationMapper.updateFamilyInfoMatchKey();
+//				taskFamilyPkRelationMapper.updateFamilyInfoMatchKey();
 				task.setInitPkRelation(1);
-//				task.setDaystamp(taskDay);
 				taskSystemScoreFlagMapper.updatePkRelationInit(task);
 			
 			}else {
