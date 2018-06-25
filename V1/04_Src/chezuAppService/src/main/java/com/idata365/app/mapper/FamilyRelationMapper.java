@@ -15,11 +15,18 @@ public interface FamilyRelationMapper {
 	
 	int insertFamilyRelation(FamilyRelation familyRelation);
 	
-	int updateRelationType(@Param("familyId")long id);
+	int updateRelationType(@Param("id")long id);
+	
+	int reduceRelationType(FamilyRelation familyRelation);
 	
 	FamilyRelation hadMatch(FamilyRelation familyRelation);
 	
 	Map<String,Object> getMatchFamily(Map<String,Object> map);
 	
 	Double getFamilyAvgScore(@Param("familyId")long familyId); 
+	
+	int deleteRelation(@Param("id")long id);
+	
+	
+	
 }
