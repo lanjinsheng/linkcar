@@ -196,6 +196,27 @@ public class MessageOpenController {
         messageService.pushMessageTrans(msg,MessageEnum.DiamondDistr);
     	return true;
     }  
+    
+    
+    @RequestMapping("/app/msg/sendFamilyPowerMsg")
+    public boolean sendFamilyPowerMsg(@RequestParam (value = "season") String season,
+    		@RequestParam (value = "familyId") String familyId,
+    		@RequestParam (value = "orderNum") String orderNum,
+    		@RequestParam (value = "toUserId") Long toUserId,
+    		@RequestParam (value = "PowerNum") String powerNum,
+    		@RequestParam (value = "personPowerNum") String personPowerNum,
+    		@RequestParam (value = "sign") String sign){
+    	    	LOG.info("param:"+season+"=="+orderNum+"=="+powerNum+"==sign="+sign);
+    	    	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
+    	    	Map<String, Object> familyInfo=familyService.findFamilyByFamilyId(Long.valueOf(familyId));
+    	    	Message msg=messageService.buildFamilyPowerMessage(null, toUserId, familyId, season, powerNum,personPowerNum, orderNum,String.valueOf(familyInfo.get("familyName")));
+    	    	//插入消息
+    	 		messageService.insertMessage(msg, MessageEnum.PowerDistr);
+    	 		//用定时器推送
+    	        messageService.pushMessageTrans(msg,MessageEnum.PowerDistr);
+    	    	return true;
+    	    }  
+    
     @RequestMapping("/app/msg/sendFamilyDiamondsSeasonMsg")
     public boolean sendFamilyDiamondsSeasonMsg(@RequestParam (value = "season") String season,
     		@RequestParam (value = "familyId") String familyId,

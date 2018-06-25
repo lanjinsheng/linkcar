@@ -2,6 +2,6 @@ package com.idata365.app.enums;
 
 
 public enum MessageEnum {
-	SYSTEM,SYSTEM_REG,SHOP,SHOP_GOODS_SEND,LotterySend,LotteryRec,Kick_Member,Challege,DiamondDistr,DiamondSeasonDistr,
+	SYSTEM,SYSTEM_REG,SHOP,SHOP_GOODS_SEND,LotterySend,LotteryRec,Kick_Member,Challege,DiamondDistr,PowerDistr,DiamondSeasonDistr,
 	INVITE_FAMILY,PASS_FAMILY,FAIL_FAMILY,INFORM_PENALTY,ACHIEVE,IDCARD,AuctionFail,AuctionSucc,AuctionExchange,VehicleTravel
 }
