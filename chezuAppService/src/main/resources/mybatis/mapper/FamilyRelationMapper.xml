@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.FamilyRelationMapper">
+    <resultMap id="BaseResultMap" type="com.idata365.app.entity.FamilyRelation" >
+    </resultMap>
+    <insert id="insertFamilyRelation" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.FamilyRelation" >
+       INSERT  INTO 
+            familyRelation
+            (selfFamilyId,competitorFamilyId,daystamp,relationType,uniKey1) 
+        VALUES
+            (#{selfFamilyId},#{competitorFamilyId},#{daystamp},#{relationType},#{uniKey1})
+    </insert>
+      <!-- 通过家族id获取已确立对战关系的对战记录 -->
+     <select id="getFightRelation" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+       SELECT *
+       FROM  familyRelation where (selfFamilyId=#{familyId} and relationType=1)
+       or  (competitorFamilyId=#{familyId} and relationType=2) and daystamp=#{daystamp}
+     </select>
+     <!--判断是否有被挑战记录，如果有，则进行更新匹配升级relationType为2-->
+     <select id="hadMatch" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.FamilyRelation">
+       SELECT *
+       FROM  familyRelation where  selfFamilyId=#{selfFamilyId}
+       and competitorFamilyId=#{competitorFamilyId} and relationType=1 and daystamp=#{daystamp}
+     </select>
+     
+    <update id="updateRelationType" parameterType="java.lang.Long">
+      update
+            familyRelation
+             set relationType=2 where id=#{id}
+    </update>
+ 
+    <select id="getMatchFamily" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT *
+		FROM familyInfo AS t1 JOIN (SELECT ROUND(RAND() * (
+		(SELECT MAX(id) FROM familyInfo where familyType>=${familyType})-(SELECT MIN(id) FROM familyInfo where familyType>=${familyType})
+		)+(SELECT MIN(id) FROM familyInfo where familyType>=${familyType})) AS id) AS t2
+		WHERE t1.id >= t2.id and t1.id!=${id}
+		ORDER BY t1.id LIMIT 1;
+    </select>
+     
+ <select id="getFamilyAvgScore" resultType="java.lang.Double" parameterType="java.lang.Long">
+ select ROUND(AVG(score),2) from (select * from familyDriveDayStat where 
+ familyId=#{familyId} order by id desc limit 3) a
+ </select>
+ 
+</mapper>
