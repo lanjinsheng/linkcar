@@ -89,7 +89,7 @@
             (#{userId},now())
      </insert>
      <insert id="userPowersSnapShot"   parameterType="java.lang.String">
-             create table ${tableName} select * from assetUsersAsset
+             create table ${tableName} select *,0 as pkPower from assetUsersAsset
      </insert>
      <update id="clearPowers"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
         update assetUsersAsset set powerNum=0
