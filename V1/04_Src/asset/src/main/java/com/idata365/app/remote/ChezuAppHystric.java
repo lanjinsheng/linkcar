@@ -38,4 +38,13 @@ public class ChezuAppHystric implements ChezuAppService {
 		return false;
 	}
 
+
+	@Override
+	public boolean sendFamilyPowerMsg(String season, String familyId, String orderNum, Long toUserId, String powerNum,
+			String personPowerNum, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" sendFamilyPowerMsg 挂了  service-app-chezu");
+		return false;
+	}
+
 }

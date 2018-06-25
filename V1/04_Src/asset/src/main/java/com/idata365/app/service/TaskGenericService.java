@@ -20,18 +20,23 @@ import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.entity.AssetFamiliesAsset;
 import com.idata365.app.entity.AssetFamiliesDiamondsLogs;
+import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersDiamondsLogs;
+import com.idata365.app.entity.AssetUsersPowerLogs;
 import com.idata365.app.entity.FamilyGameAsset;
 import com.idata365.app.entity.TaskGeneric;
 import com.idata365.app.enums.TaskGenericEnum;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
 import com.idata365.app.mapper.AssetFamiliesDiamondsLogsMapper;
+import com.idata365.app.mapper.AssetFamiliesPowerLogsMapper;
 import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
+import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
 import com.idata365.app.mapper.FamilyGameAssetMapper;
 import com.idata365.app.mapper.TaskGenericMapper;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAppService;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -42,7 +47,13 @@ public class TaskGenericService {
 	@Autowired
 	AssetUsersDiamondsLogsMapper assetUsersDiamondsLogsMapper;
 	@Autowired
+	AssetUsersPowerLogsMapper assetUsersPowerLogsMapper;
+	@Autowired
 	AssetFamiliesDiamondsLogsMapper  assetFamiliesDiamondsLogsMapper;
+	
+	@Autowired
+	AssetFamiliesPowerLogsMapper  assetFamiliesPowerLogsMapper;
+	
 	@Autowired
    TaskGenericMapper taskGenericMapper;
 	@Autowired
@@ -72,6 +83,12 @@ public class TaskGenericService {
 	 */
 	@Transactional
 	public void initUserDayRewardTask(TaskGeneric task) {
+		
+		//这边需要判断家族pk是否已经完全完成了
+		Integer pkEnd=taskGenericMapper.getGameAssetNoDo(DateTools.getCurDateYYYY_MM_DD());
+		if(pkEnd>0) {//还未完成，继续
+			return;
+		}
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("genericKey", task.getGenericKey());
 		map.put("taskType", TaskGenericEnum.DoUserDayReward);
@@ -290,7 +307,34 @@ public class TaskGenericService {
 		}
 		return true;
 	}
+	
+	
+	@Transactional
+	public boolean doUserDayRewardV1_6(TaskGeneric task) {
+		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
+		long total=Long.valueOf(m.get("powerTotal").toString());
+		Map<String,Object> personPower=taskGenericMapper.getPersonPower(m);
+		Long power=Long.valueOf(personPower.get("powerNum").toString());
+		Long pkPower=Long.valueOf(personPower.get("pkPower").toString());
+		power=power.longValue()+pkPower.longValue();
+		Long userId=Long.valueOf(personPower.get("userId").toString());
+		if(power>0) {
+		BigDecimal dayDiamond=BigDecimal.valueOf(power).multiply(BigDecimal.valueOf(AssetConstant.DAY_DAIMONDS_FOR_POWER_ALLNET)).divide(BigDecimal.valueOf(total), 5,RoundingMode.HALF_EVEN);
+		 //进行分配
+		AssetUsersDiamondsLogs assetUsersDiamondsLogs=new AssetUsersDiamondsLogs();
+		assetUsersDiamondsLogs.setDiamondsNum(dayDiamond);
+		assetUsersDiamondsLogs.setEffectId(task.getId());
+		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_DayPower_User);
+		assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_1);
+		assetUsersDiamondsLogs.setUserId(userId);
+		assetUsersDiamondsLogs.setRemark(task.getGenericKey()+" 每日分配");
+		assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
+		assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
+		}
+		return true;
+	}
 	public final static String jsonValue1="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"diamonds\":%s,\"assetFamilyGameId\":%s}";
+	public final static String jsonValue2="{\"powerTableName\":\"userPower%s\",\"orderNo\":%s,\"familyId\":%d,\"powers\":%s,\"assetFamilyGameId\":%s}";
 	
 	/**
 	 * 
@@ -323,7 +367,7 @@ public class TaskGenericService {
 		assetFamiliesAssetMapper.updateDiamondsAdd(assetFamiliesDiamondsLogs);
 		//assetfamilyGame
 		FamilyGameAsset familyGameAsset=new FamilyGameAsset();
-		familyGameAsset.setDiamondsNum(gameDiamond);
+		familyGameAsset.setRewardsNum(gameDiamond);
 		familyGameAsset.setId(assetFamilyGameId);
 		familyGameAssetMapper.updateDiamonds(familyGameAsset);
 		//增加跃迁下一个任务(成员内部分配)
@@ -337,16 +381,41 @@ public class TaskGenericService {
 		taskGenericMapper.insertTask(tg);
 		return true;
 	}
-	/**
-	 * 
-	    * @Title: doUserSeasonReward
-	    * @Description: TODO(分配赛季家族钻石)
-	    * @param @param task
-	    * @param @return    参数
-	    * @return boolean    返回类型
-	    * @throws
-	    * @author LanYeYe
-	 */
+	@Transactional
+	public boolean doFamilyDayRewardV1_6(TaskGeneric task) {
+		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
+//		long total=Long.valueOf(m.get("familyPersonTotal").toString());
+		long orderNo=Long.valueOf(m.get("orderNo").toString());
+		long familyId=Long.valueOf(m.get("familyId").toString());
+		long assetFamilyGameId=Long.valueOf(m.get("id").toString());
+		int familyType=Integer.valueOf(m.get("familyType").toString());
+		BigDecimal gamePower=BigDecimal.valueOf(DicFamilyTypeConstant.getPowerByFamilyType(familyType));
+		int memberNum=Integer.valueOf(m.get("memberNum").toString());
+		gamePower=gamePower.multiply(BigDecimal.valueOf(memberNum));
+		//进行分配
+		AssetFamiliesPowerLogs assetFamiliesPowerLogs=new AssetFamiliesPowerLogs();
+		assetFamiliesPowerLogs.setPowerNum(gamePower.longValue());
+		assetFamiliesPowerLogs.setEffectId(task.getId());
+		assetFamiliesPowerLogs.setEventType(AssetConstant.EventType_Power_GameEnd_Family);
+		assetFamiliesPowerLogs.setRecordType(AssetConstant.RecordType_1);
+		assetFamiliesPowerLogs.setFamilyId(familyId);
+		assetFamiliesPowerLogs.setRemark(task.getGenericKey()+" 比赛分配动力");
+		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
+		assetFamiliesAssetMapper.updatePowerAdd(assetFamiliesPowerLogs);
+		
+
+		//增加跃迁下一个任务(成员内部分配)
+		TaskGeneric tg=new TaskGeneric();
+		String preKey=task.getGenericKey().split("_")[0];
+		String taskKey=preKey+"_"+TaskGenericEnum.DoUserFamilyDayReward+"_"+familyId;
+		tg.setGenericKey(taskKey);
+		tg.setTaskType(TaskGenericEnum.DoUserFamilyDayReward);
+		tg.setPriority(10);
+		tg.setJsonValue(String.format(jsonValue2,preKey,orderNo,familyId,String.valueOf(gamePower.longValue()),assetFamilyGameId));
+		taskGenericMapper.insertTask(tg);
+		return true;
+	}
+	 
 	/**
 	 * 
 	    * @Title: doUserFamilyDayReward
@@ -423,6 +492,87 @@ public class TaskGenericService {
 		assetFamiliesDiamondsLogs.setRemark(task.getId()+"--"+task.getGenericKey()+" PK比赛分配给成员");
 		assetFamiliesDiamondsLogsMapper.insertFamiliesDiamondsDay(assetFamiliesDiamondsLogs);
 		assetFamiliesAssetMapper.updateDiamondsReduce(assetFamiliesDiamondsLogs);
+		return true;
+	}
+	
+	@Transactional
+	public boolean doUserFamilyDayRewardV1_6(TaskGeneric task) {
+		Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
+//		String powerTableName=m.get("powerTableName").toString();
+		String powers= m.get("powers").toString();
+		String orderNum= String.valueOf(m.get("orderNum"));
+		String assetFamilyGameId=String.valueOf(m.get("assetFamilyGameId"));
+		
+		long familyId=Long.valueOf(m.get("familyId").toString());
+		String daystamp=task.getGenericKey().split("_")[0];
+		String sign=SignUtils.encryptHMAC(String.valueOf(familyId));
+	    //通过familyId获取用户ids。
+		String yyyy=daystamp.substring(0,4);
+		String mm=daystamp.substring(4,6);
+		String dd=daystamp.substring(6,8);
+		daystamp=yyyy+"-"+mm+"-"+dd;
+//		String users2=chezuAccountService.getUsersByFamilyId(familyId, daystamp, sign);
+//		String []userArray=users.split(",");
+		List<Map<String,Object>> users=chezuAccountService.getUsersScoreByFamilyId(familyId, daystamp, sign);
+		
+		BigDecimal total=BigDecimal.valueOf(0D);
+//		int personNum=0;
+		List<Double> powerList=new ArrayList<Double>();
+		List<AssetUsersPowerLogs> userList=new ArrayList<AssetUsersPowerLogs>();
+//		personNum=users.size();
+		BigDecimal familyPowers=BigDecimal.valueOf(Double.valueOf(powers));
+		for(Map<String,Object> user:users) {
+			AssetUsersPowerLogs  assetUsersPowerLogs=new AssetUsersPowerLogs();
+//			m.put("userId", user.get("userId"));
+//			m.put("tableName", powerTableName);
+//			Map<String,Object> power=taskGenericMapper.getUserPowerByUserId(m);
+ 			Double score=Double.valueOf(user.get("avgScore").toString());
+			powerList.add(score);
+			total=total.add(BigDecimal.valueOf(score));
+			assetUsersPowerLogs.setUserId(Long.valueOf(user.get("userId").toString()));
+			assetUsersPowerLogs.setRecordType(AssetConstant.RecordType_1);
+			assetUsersPowerLogs.setEffectId(Long.valueOf(assetFamilyGameId));
+			assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_GameEnd_User);
+			assetUsersPowerLogs.setRemark(task.getId()+"按得分"+score+"PK结束分配动力");
+			userList.add(assetUsersPowerLogs);
+		}
+		//通过用户ids获取用户的能量值。
+		int j=0;
+		String createTimeStr=DateTools.getCurDateAddDay(-1);
+		for(AssetUsersPowerLogs assetUsersPowerLogs:userList) {
+			Double score=powerList.get(j);
+			BigDecimal d=BigDecimal.valueOf(score).multiply(familyPowers)
+					.divide(total,5,RoundingMode.HALF_DOWN);
+			assetUsersPowerLogs.setPowerNum(d.longValue());
+			j++;
+			assetUsersPowerLogs.setCreateTimeStr(createTimeStr+" 23:59:59");
+			assetUsersPowerLogsMapper.insertUsersPowerLogsByTime(assetUsersPowerLogs);
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("tableName", "userPower"+createTimeStr.replaceAll("-", ""));
+			map.put("pkPower", d.intValue());
+			map.put("userId", assetUsersPowerLogs.getUserId());
+			taskGenericMapper.updateUserPowerDayTable(map);
+			//远程消息调用,发送的diamonds是家族获取的
+			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
+			chezuAppService.sendFamilyPowerMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersPowerLogs.getUserId(), String.valueOf(familyPowers.longValue()), String.valueOf(d.doubleValue()), sign);
+			}
+		}
+		//family动力减少
+		AssetFamiliesPowerLogs assetFamiliesPowerLogs=new AssetFamiliesPowerLogs();
+		assetFamiliesPowerLogs.setPowerNum(familyPowers.longValue());
+		assetFamiliesPowerLogs.setEffectId(Long.valueOf(assetFamilyGameId));
+		assetFamiliesPowerLogs.setEventType(AssetConstant.EventType_Power_Distr_Family);
+		assetFamiliesPowerLogs.setRecordType(AssetConstant.RecordType_2);
+		assetFamiliesPowerLogs.setFamilyId(familyId);
+		assetFamiliesPowerLogs.setRemark(task.getId()+"--"+task.getGenericKey()+" PK比赛分配给成员");
+		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
+		assetFamiliesAssetMapper.updatePowerReduce(assetFamiliesPowerLogs);
+		
+		//assetfamilyGame
+		FamilyGameAsset familyGameAsset=new FamilyGameAsset();
+		familyGameAsset.setRewardsNum(familyPowers);
+		familyGameAsset.setId(Long.valueOf(assetFamilyGameId));
+		familyGameAssetMapper.updateDiamonds(familyGameAsset);
 		return true;
 	}
 	

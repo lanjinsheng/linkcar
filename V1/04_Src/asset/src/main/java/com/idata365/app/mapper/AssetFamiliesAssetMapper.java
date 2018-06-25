@@ -8,8 +8,9 @@ import com.idata365.app.entity.AssetFamiliesPowerLogs;
 
 public interface AssetFamiliesAssetMapper {
 
-	int updatePowerAdd(AssetFamiliesPowerLogs AssetFamiliesAsset);
-
+	int updatePowerAdd(AssetFamiliesPowerLogs assetFamiliesPowerLogs);
+	int updatePowerReduce(AssetFamiliesPowerLogs assetFamiliesPowerLogs);
+	
 	int updateFamilyPowerAdd(@Param("familyId") long familyId, @Param("powerNum") long powerNum);
 
 	int updateFamilyPowerMinus(@Param("familyId") long familyId, @Param("powerNum") long powerNum);

@@ -1,5 +1,8 @@
 package com.idata365.app.constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DicFamilyTypeConstant {
 	
 	
@@ -35,4 +38,41 @@ public class DicFamilyTypeConstant {
     public  final static Integer GuanJun_4=123;
     public  final static Integer GuanJun_5=124;
     public  final static Integer GuanJun_1000=12400000;
+    public static Map<Integer,Integer> FamilyLeverPower=new HashMap<Integer,Integer>();
+    
+    static {
+    	FamilyLeverPower.put(QingTong_5, 100);
+    	FamilyLeverPower.put(QingTong_4, 100);
+    	FamilyLeverPower.put(QingTong_3, 100);
+    	FamilyLeverPower.put(QingTong_2, 100);
+    	FamilyLeverPower.put(QingTong_1, 100);
+    	
+    	FamilyLeverPower.put(BaiYing_5, 150);	
+    	FamilyLeverPower.put(BaiYing_4, 150);
+    	FamilyLeverPower.put(BaiYing_3, 150);
+    	FamilyLeverPower.put(BaiYing_2, 150);
+    	FamilyLeverPower.put(BaiYing_1, 150);
+    	
+    	FamilyLeverPower.put(HuangJin_5, 200);
+    	FamilyLeverPower.put(HuangJin_4, 200);
+    	FamilyLeverPower.put(HuangJin_3, 200);
+    	FamilyLeverPower.put(HuangJin_2, 200);
+    	FamilyLeverPower.put(HuangJin_1, 200);
+    	
+       	FamilyLeverPower.put(ZuanShi_4, 250);
+    	FamilyLeverPower.put(ZuanShi_3, 250);
+    	FamilyLeverPower.put(ZuanShi_2, 250);
+    	FamilyLeverPower.put(ZuanShi_1, 250);
+    	
+    	
+       	FamilyLeverPower.put(GuanJun_1, 300);
+     	FamilyLeverPower.put(GuanJun_2, 300);
+     	FamilyLeverPower.put(GuanJun_3, 300);
+     	FamilyLeverPower.put(GuanJun_4, 300);
+     	FamilyLeverPower.put(GuanJun_5, 300);
+    }
+    
+    public static int getPowerByFamilyType(Integer familyType) {
+    	return FamilyLeverPower.get(familyType);
+    }
 }
