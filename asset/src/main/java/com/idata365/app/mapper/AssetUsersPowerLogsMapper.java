@@ -10,7 +10,8 @@ import com.idata365.app.entity.AssetUsersPowerLogs;
 public interface AssetUsersPowerLogsMapper {
 
 	int insertUsersPowerLogs(AssetUsersPowerLogs assetUsersPowerLogs);
-
+	int insertUsersPowerLogsByTime(AssetUsersPowerLogs assetUsersPowerLogs);
+	
 	List<AssetUsersPowerLogs> getIndexPowers(@Param("userId") long userId, @Param("id") long id);
 
 	List<AssetUsersPowerLogs> getIndexPowersFirst(@Param("userId") long userId);

@@ -123,7 +123,7 @@ public class FamilyGameAssetService extends BaseService<FamilyGameAssetService> 
 				m.put("familySeasonID", String.valueOf(fga.getId()));
 				m.put("seasonTimes", fga.getEndDay());
 				m.put("seasonRank", String.valueOf(fga.getOrderNo()));
-				m.put("seasonReward", fga.getDiamondsNum());
+				m.put("seasonReward", fga.getRewardsNum());
 				rtList.add(m);
 			}
 		}

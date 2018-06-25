@@ -43,6 +43,16 @@ public interface ChezuAppService {
     		@RequestParam (value = "diamondNum") String diamondNum,
     		@RequestParam (value = "personDiamondNum") String personDiamondNum,
     		@RequestParam (value = "sign") String sign);
+   
+    @RequestMapping("/app/msg/sendFamilyPowerMsg")
+    public boolean sendFamilyPowerMsg(@RequestParam (value = "season") String season,
+    		@RequestParam (value = "familyId") String familyId,
+    		@RequestParam (value = "orderNum") String orderNum,
+    		@RequestParam (value = "toUserId") Long toUserId,
+    		@RequestParam (value = "PowerNum") String powerNum,
+    		@RequestParam (value = "personPowerNum") String personPowerNum,
+    		@RequestParam (value = "sign") String sign);
+    
     
     @RequestMapping("/app/msg/sendFamilyDiamondsSeasonMsg")
     public boolean sendFamilyDiamondsSeasonMsg(@RequestParam (value = "season") String season,

@@ -67,7 +67,7 @@ public class TaskAutoAddService {
 		String dayStr=getDay("yyyy-MM-dd");
 		long curDay=DateTools.getDateTimeOfLong(dayStr+" 00:00:00");
 //		int i=300*1000;
-		long i=3600*1*10000;
+		long i=3600*1*1000;
 		if((now-curDay)>0 && (now-curDay)<i) {
 			String dayStr2=getDateStr2(-1);
 			String taskKey=dayStr2+"_"+TaskGenericEnum.UserDayPowerSnapshot;

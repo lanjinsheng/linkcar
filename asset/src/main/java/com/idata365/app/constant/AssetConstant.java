@@ -9,6 +9,7 @@ public class AssetConstant {
 	public final static int DAY_DAIMONDS_FOR_PK=480;
 	public final static int DAY_DAIMONDS_FOR_SEASON=20;
 	
+	public final static int DAY_DAIMONDS_FOR_POWER_ALLNET=980;
 	
 	public static Map<Integer,String> UserDiamondsEventMap=new HashMap<Integer,String>();
 	public static Map<Integer,String> UserPowerEventMap=new HashMap<Integer,String>();
@@ -19,6 +20,7 @@ public class AssetConstant {
 	public final static int EventType_Power_Trip = 4;// 行程
 	public final static int EventType_Power_SignIn = 1;// 签到
 	public final static int EventType_Power_Steal = 3;// 偷取
+	public final static int EventType_Power_GameEnd_User=6; //家族挑战获胜分配
 	
 	public final static int EventType_Daimond_DayPower_User = 1;// 每日分配
 	public final static int EventType_Daimond_GameEnd_User = 2;// PK结束家族分配
@@ -39,6 +41,11 @@ public class AssetConstant {
 	public final static int EventType_Daimond_SeasonEnd = 3;// 赛季获取
 	public final static int EventType_Daimond_SeasonEnd_Distr = 4;// 赛季分配消耗
 
+	public final static int EventType_Power_Trip_Family = 1;// 行程贡献
+	public final static int EventType_Power_GameEnd_Family = 2;// 比赛获取
+	public final static int EventType_Power_Distr_Family = 3;// 比赛分配消耗
+	
+	
 	public final static int RecordType_2 = 2;// 减少
 	public final static int RecordType_1 = 1;// 增加
 	static {

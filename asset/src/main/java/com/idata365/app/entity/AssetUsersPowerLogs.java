@@ -28,6 +28,14 @@ public class AssetUsersPowerLogs implements Serializable {
 	private Long effectId;
 	private String remark;
 	private Date createTime;
+	private String createTimeStr;
+	
+	public String getCreateTimeStr() {
+		return createTimeStr;
+	}
+	public void setCreateTimeStr(String createTimeStr) {
+		this.createTimeStr = createTimeStr;
+	}
 	public Long getId() {
 		return id;
 	}

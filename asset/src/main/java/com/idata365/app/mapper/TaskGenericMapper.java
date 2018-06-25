@@ -10,6 +10,10 @@ import com.idata365.app.entity.TaskGeneric;
 public interface TaskGenericMapper {
 	int insertTask(TaskGeneric task);
 
+	int insertUserPower();
+	
+	int updateUserPowerDayTable(Map<String,Object> map);
+	
 	TaskGeneric getByGenericKey(@Param("genericKey") String genericKey);
 
 	void initUserDayRewardTask(Map<String, Object> map);
@@ -21,6 +25,7 @@ public interface TaskGenericMapper {
 	Map<String, Object> getUserPowerByUserId(Map<String, Object> map);
 
 	Long getByFamilyTotal(@Param("season") String season);
+	Integer getGameAssetNoDo(@Param("season") String season);
 	
 	Map<String,Object> getFamilyTotalByST(Map<String, Object> map);
 	

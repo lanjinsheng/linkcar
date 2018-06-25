@@ -35,7 +35,7 @@ public class TaskGenericThread implements Runnable{
 						break;
 					}
 					case DoUserDayReward:{
-						taskGenericService.doUserDayReward(task);
+						taskGenericService.doUserDayRewardV1_6(task);
 						break;
 					}
 					case InitFamilyDayReward:{
@@ -43,11 +43,11 @@ public class TaskGenericThread implements Runnable{
 						break;
 					}
 					case DoFamilyDayReward:{
-						taskGenericService.doFamilyDayReward(task);
+						taskGenericService.doFamilyDayRewardV1_6(task);
 						break;
 					}
 					case DoUserFamilyDayReward:{
-						taskGenericService.doUserFamilyDayReward(task);
+						taskGenericService.doUserFamilyDayRewardV1_6(task);
 						break;
 					}
 					case InitFamilySeasonReward:{
