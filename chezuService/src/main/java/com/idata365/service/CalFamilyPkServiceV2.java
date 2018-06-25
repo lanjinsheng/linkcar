@@ -53,7 +53,7 @@ public class CalFamilyPkServiceV2 {
 			   //更新familyInfo
 			   taskFamilyPkMapper.updateFamilyInfo(fd);
 			   log.info("新家族发送pk接口:"+fd.getFamilyId());
-			   boolean r=addFamilyGameOrder(startDay, endDay, fd.getFamilyId(), fd.getDaystamp(),fd.getMemberNum());
+			   boolean r=addFamilyGameOrder(startDay, endDay, fd.getFamilyId(), fd.getDaystamp(),fd.getMemberNum(),80);
 			   log.info("新家族发送pk接口结束:"+fd.getFamilyId()+r);
 			   if(!r) {
 		        	throw new RemoteException();  
@@ -61,7 +61,8 @@ public class CalFamilyPkServiceV2 {
 		   }
 		   return true;
 	}
-	private boolean addFamilyGameOrder(String startDay,String endDay,Long winFamily,String daystamp,Integer memberNum) {
+	private boolean addFamilyGameOrder(String startDay,String endDay,Long winFamily,String daystamp,Integer memberNum,
+			int winFamilyType) {
 		if(memberNum<1) {
 			return true;
 		}
@@ -73,6 +74,7 @@ public class CalFamilyPkServiceV2 {
 		fg.setMemberNum(memberNum);
 		fg.setSeasonName(daystamp);
 		fg.setStartDay(startDay);
+		fg.setFamilyType(winFamilyType);
 		String sign=SignUtils.encryptHMAC(String.valueOf(winFamily));
 		boolean r=chezuAssetService.addFamilyGameOrder(sign, fg);
 		return r;
@@ -96,6 +98,7 @@ public class CalFamilyPkServiceV2 {
 		DicFamilyType d1=DicFamilyTypeConstant.getDicFamilyType(level1);
 		DicFamilyType d2=DicFamilyTypeConstant.getDicFamilyType(level2);
 		Long winFamily=selfFamilyId;
+		int winFamilyType=level1;
 		Integer winMemberNum=0;
 		if(fdds1.getScore()>fdds2.getScore()) {
 			trophy1=d1.getWin();
@@ -108,6 +111,7 @@ public class CalFamilyPkServiceV2 {
 		}else if(fdds1.getScore()<fdds2.getScore()) {
 			winFamily=competitorFamilyId;
 			winMemberNum=fdds2.getMemberNum();
+			winFamilyType=level2;
 			trophy2=d2.getWin();
 			if(fdds1.getScore()==0) {
 				trophy1=d1.getLoss2();
@@ -138,7 +142,8 @@ public class CalFamilyPkServiceV2 {
         taskFamilyPkMapper.updateFamilyInfo(fdds1);
         taskFamilyPkMapper.updateFamilyInfo(fdds2);
 
-	    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum);
+	    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum,
+	    		winFamilyType);
         
         if(!r) {
         	throw new RemoteException();  
