@@ -2,8 +2,10 @@ package com.idata365.app.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -19,6 +21,13 @@ public class DateTools
 	public static String getYYYYMMDD() {
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
+	}
+	public static String getTomorrowDateStr()
+	{
+		Date curDate = Calendar.getInstance().getTime();
+		Date tomorrowDate = DateUtils.addDays(curDate, 1);
+		String tomorrowDateStr = DateFormatUtils.format(tomorrowDate, "yyyy-MM-dd");
+		return tomorrowDateStr;
 	}
 	
 	public static String getYYYY_MM_DD() {

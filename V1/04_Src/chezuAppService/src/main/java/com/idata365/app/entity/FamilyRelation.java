@@ -20,6 +20,9 @@ public class FamilyRelation  implements Serializable{
 	private Long selfFamilyId;
 	private Long competitorFamilyId;
 	private String daystamp;
+	private Integer relationType;
+	private String uniKey1;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -27,6 +30,18 @@ public class FamilyRelation  implements Serializable{
 		this.id = id;
 	}
  
+	public String getUniKey1() {
+		return uniKey1;
+	}
+	public void setUniKey1(String uniKey1) {
+		this.uniKey1 = uniKey1;
+	}
+	public Integer getRelationType() {
+		return relationType;
+	}
+	public void setRelationType(Integer relationType) {
+		this.relationType = relationType;
+	}
 	public Long getSelfFamilyId() {
 		return selfFamilyId;
 	}
