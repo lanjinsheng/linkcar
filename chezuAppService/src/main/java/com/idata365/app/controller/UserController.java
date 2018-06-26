@@ -248,6 +248,18 @@ public class UserController extends BaseController {
 				rtMap.put("status", "OK");
 			} else {
 				rtMap.put("status", "PWD_NO");
+				String nickName = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
+				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
+				UsersAccount account1 = new UsersAccount();
+				account1.setImgUrl(headImg);
+				String token = loginRegService.regUser(phone, "", nickName, rtMap,account1);
+				if (token == null) {
+					return ResultUtils.rtFailRequest(null);
+				}
+				rtMap.put("token", token);
+				rtMap.put("nickName", nickName);
+				rtMap.put("headImg", headImg);
+				rtMap.put("isAuthenticated", "0");
 			}
 			return ResultUtils.rtSuccess(rtMap);
 		} else {
@@ -287,11 +299,11 @@ public class UserController extends BaseController {
 		
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
-		String nickname = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
+		String nickName = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
 		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 		UsersAccount account = new UsersAccount();
 		account.setImgUrl(headImg);
-		String token = loginRegService.regUser(phone, password, nickname, rtMap,account);
+		String token = loginRegService.regUser(phone, password, nickName, rtMap,account);
 		if (token == null) {
 			return ResultUtils.rtFailRequest(null);
 		}
@@ -300,7 +312,7 @@ public class UserController extends BaseController {
 		thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 		
 		rtMap.put("token", token);
-		rtMap.put("nickName", nickname);
+		rtMap.put("nickName", nickName);
 		rtMap.put("headImg", headImg);
 		rtMap.put("isAuthenticated", "0");
 		
