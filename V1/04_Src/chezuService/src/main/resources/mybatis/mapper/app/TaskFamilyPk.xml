@@ -7,9 +7,9 @@
     </resultMap>
    <insert id="initTaskFamilyPk" parameterType="com.idata365.entity.TaskSystemScoreFlag">
       		 INSERT IGNORE INTO  taskFamilyPk
-		 (selfFamilyLevel,competitorFamilyLevel,selfFamilyId,competitorFamilyId,daystamp)
+		 (selfFamilyLevel,competitorFamilyLevel,selfFamilyId,competitorFamilyId,daystamp,relationType)
         select b.familyType as selfFamilyLevel,c.familyType competitorFamilyLevel,a.* from 
-         (select selfFamilyId,competitorFamilyId,#{daystamp} as daystamp from familyRelation where daystamp=#{daystamp})
+         (select selfFamilyId,competitorFamilyId,#{daystamp} as daystamp,relationType from familyRelation where daystamp=#{daystamp})
            a left join familyInfo b 
               on a.selfFamilyId=b.id left join familyInfo c on a.competitorFamilyId=c.id
 	</insert>
