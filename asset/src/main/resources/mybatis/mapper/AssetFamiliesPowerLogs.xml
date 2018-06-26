@@ -8,9 +8,9 @@
 	<update id="insertFamiliesPowerLogs"
 		parameterType="com.idata365.app.entity.AssetFamiliesPowerLogs">
 		insert into assetFamiliesPowerLogs
-		(familyId,powerNum,recordType,eventType,effectId,remark,createTime,realNum,count)
+		(familyId,powerNum,recordType,eventType,effectId,remark,createTime,realNum,count,relation)
 		values(#{familyId},#{powerNum},#{recordType},#{eventType},
-		#{effectId},#{remark},now(),#{realNum},#{count})
+		#{effectId},#{remark},now(),#{realNum},#{count},#{relation})
 	</update>
 	
 	<update id="updateFamiliesPowerLogs">
