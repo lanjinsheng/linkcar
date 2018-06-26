@@ -141,8 +141,8 @@ public class UserController extends BaseController {
 			return ResultUtils.rtFailParam(null);
 		int loginType = Integer.valueOf(String.valueOf(requestBodyParams.get("loginType")));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
-		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> entity = new HashMap<String, Object>();
+		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		entity.put("openId", openId);
 		entity.put("loginType", loginType);
 		entity.put("remark", requestBodyParams.get("remark").toString());
@@ -151,7 +151,7 @@ public class UserController extends BaseController {
 		}
 		if (map == null||map.get("userId")==null||map.get("userId").equals("")) {
 			// 未绑定手机号
-			rtMap.put("status", "PHONE_ERR");
+			rtMap.put("status", "PHONE_NO");
 			return ResultUtils.rtSuccess(rtMap);// 跳到绑定手机号页面
 		}
 
@@ -161,14 +161,16 @@ public class UserController extends BaseController {
 		String token = "";
 		token = UUID.randomUUID().toString().replaceAll("-", "");
 		loginRegService.insertToken(account.getId(), token);
+		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
+		
 		rtMap.put("userId", account.getId());
-		rtMap.put("nickname",
-				account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()) : account.getNickName());
-		if(account.getImgUrl()!=null&&account.getImgUrl().startsWith("http")) {
-			rtMap.put("headImg",account.getImgUrl());
-		}else {
-			rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
-		}
+		rtMap.put("nikeName",
+				(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+						: account.getNickName()) == null ? bean.get("nikeName").toString()
+								: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+										: account.getNickName()));
+		rtMap.put("headImg",
+				account.getImgUrl() == null ?bean.get("headImg").toString(): this.getImgBasePath() + account.getImgUrl());
 		rtMap.put("userName", account.getPhone());
 		
 		Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
@@ -209,6 +211,8 @@ public class UserController extends BaseController {
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
+		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
+		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		String status = LoginRegService.VC_ERR;
 		if (verifyCode.equals(systemProperties.getNbcode())) {// 测试使用万能验证码
 			status = LoginRegService.OK;
@@ -221,15 +225,21 @@ public class UserController extends BaseController {
 				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 				rtMap.put("status", "OK");
 			} else {
-				rtMap.put("status", "PWD");
+				rtMap.put("status", "PWD_NO");
 			}
 			String token = "";
 			token = UUID.randomUUID().toString().replaceAll("-", "");
 			loginRegService.insertToken(account.getId(), token);
 			rtMap.put("userId", account.getId());
-			rtMap.put("nickname",
-					account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()) : account.getNickName());
-			rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
+			rtMap.put("nikeName",
+					(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+							: account.getNickName()) == null ? bean.get("nikeName").toString()
+									: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+											: account.getNickName()));
+			rtMap.put("headImg",
+					account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
+			
+			rtMap.put("userName", account.getPhone());
 
 			Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
 					SignUtils.encryptHMAC(String.valueOf(account.getId())));
@@ -273,9 +283,8 @@ public class UserController extends BaseController {
 				|| ValidTools.isBlank(requestBodyParams.get("password")))
 			return ResultUtils.rtFailParam(null);
 		String openId = String.valueOf(requestBodyParams.get("openId"));
-		String remark = String.valueOf(requestBodyParams.get("remark"));
-		Gson gson = new Gson();
-		Map<String, Object> bean = gson.fromJson(remark, new TypeToken<Map<String, Object>>(){}.getType());
+		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
+		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
