@@ -20,6 +20,15 @@ public class FamilyRelation  implements Serializable{
 	private Long selfFamilyId;
 	private Long competitorFamilyId;
 	private String daystamp;
+	private Integer relationType;
+	
+	
+	public Integer getRelationType() {
+		return relationType;
+	}
+	public void setRelationType(Integer relationType) {
+		this.relationType = relationType;
+	}
 	public Integer getId() {
 		return id;
 	}

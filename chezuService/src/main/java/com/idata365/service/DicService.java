@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.entity.DicFamilyType;
+import com.idata365.entity.FamilyRelation;
 import com.idata365.mapper.app.DicFamilyTypeMapper;
+import com.idata365.mapper.app.FamilyRelationMapper;
+import com.idata365.util.DateTools;
 
 
 @Service
@@ -19,11 +22,17 @@ public class DicService extends BaseService<DicService>
 	
 	@Autowired
 	private DicFamilyTypeMapper dicFamilyTypeMapper;
+	@Autowired
+	FamilyRelationMapper familyRelationMapper;
 	
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType()
 	{
 		return dicFamilyTypeMapper.getDicFamilyType(null);
 	}
- 
+	@Transactional
+	public List<FamilyRelation> getFamilyRelation()
+	{
+		return familyRelationMapper.getFamilyRelation(DateTools.getYYYY_MM_DD());
+	}
 }

@@ -25,7 +25,15 @@ public class AssetFamiliesPowerLogs implements Serializable {
 	private Integer eventType;
 	private Long effectId;
 	private String remark;
+	private String relation;
 	private Date createTime;
+	
+	public String getRelation() {
+		return relation;
+	}
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 	public Long getId() {
 		return id;
 	}
