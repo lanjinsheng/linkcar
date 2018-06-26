@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,7 @@ import com.idata365.app.util.ValidTools;
 
 @RestController
 public class UserController extends BaseController {
-
+	protected static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private LoginRegService loginRegService;
 	@Autowired
@@ -140,13 +142,16 @@ public class UserController extends BaseController {
 			return ResultUtils.rtFailParam(null);
 		int loginType = Integer.valueOf(String.valueOf(requestBodyParams.get("loginType")));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
+		LOG.info("openId================================"+openId);
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
+		Map<String, Object> entity = new HashMap<String, Object>();
+		entity.put("openId", openId);
+		entity.put("loginType", loginType);
+		entity.put("remark", requestBodyParams.get("remark").toString());
 		if(map == null) {
-			Map<String, Object> entity = new HashMap<String, Object>();
-			entity.put("openId", openId);
-			entity.put("loginType", loginType);
-			entity.put("remark", requestBodyParams.get("remark").toString());
 			thirdPartyLoginService.insertLogs(entity);
+		}else {
+			thirdPartyLoginService.updateLogs(entity);
 		}
 		if (map == null||map.get("userId")==null) {
 			// 未绑定手机号
@@ -210,7 +215,8 @@ public class UserController extends BaseController {
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
-		
+		LOG.info("openId================================"+openId);
+		LOG.info("phone================================"+phone);
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		String status = LoginRegService.VC_ERR;
@@ -252,10 +258,10 @@ public class UserController extends BaseController {
 				rtMap.put("status", "PWD_NO");
 				String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
-				UsersAccount account1 = new UsersAccount();
-				account1.setImgUrl(headImg);
-				String token = loginRegService.regUser(phone, "", nickName, rtMap,account1);
-				thirdPartyLoginService.updateByOpenId(account1.getId(),openId);
+				UsersAccount accountBean = new UsersAccount();
+				accountBean.setImgUrl(headImg);
+				String token = loginRegService.regUser(phone, "", nickName, rtMap,accountBean);
+				thirdPartyLoginService.updateByOpenId(accountBean.getId(),openId);
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
 				}
@@ -297,11 +303,13 @@ public class UserController extends BaseController {
 				|| ValidTools.isBlank(requestBodyParams.get("password")))
 			return ResultUtils.rtFailParam(null);
 		String openId = String.valueOf(requestBodyParams.get("openId"));
+		String phone = String.valueOf(requestBodyParams.get("phone"));
+		String password = String.valueOf(requestBodyParams.get("password"));
+		LOG.info("openId================================"+openId);
+		LOG.info("phone================================"+phone);
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		
-		String phone = String.valueOf(requestBodyParams.get("phone"));
-		String password = String.valueOf(requestBodyParams.get("password"));
 		String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 		String token = loginRegService.updateUserPwd(phone, password, rtMap);
