@@ -241,7 +241,15 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		usersAccountMapper.updatePhone(account);
 
 	}
-
+/**
+ * 
+ * @param userId
+ * @return
+ */
+	public List<Map<String,Object>> getFamiliesByUserId(Long userId){
+		return usersAccountMapper.findUserFamilies(userId);
+	}
+	
 	public boolean validPwd(String pwd, Long userId) {
 		UsersAccount account = new UsersAccount();
 		account.setPwd(pwd);
