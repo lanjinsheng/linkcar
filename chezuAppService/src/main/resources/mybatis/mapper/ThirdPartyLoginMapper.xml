@@ -21,6 +21,10 @@
     <update id="updateByOpenId" >
        UPDATE thirdPartyLogin SET userId = #{userId} WHERE openId = #{openId}
     </update>
+    
+    <update id="updateLogs" parameterType="java.util.HashMap">
+       UPDATE thirdPartyLogin SET loginType=#{loginType},remark=#{remark},updateTime=now() WHERE openId=#{openId}
+    </update>
 
 	
 </mapper>
