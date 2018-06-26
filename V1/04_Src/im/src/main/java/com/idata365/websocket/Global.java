@@ -21,7 +21,7 @@ public class Global {
 	private static Logger log = Logger.getLogger(Global.class);
 
 	public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-	
+	//key=userId
 	public static ConcurrentHashMap <String,SocketBean> socketBeanMap=new ConcurrentHashMap<String,SocketBean>();
 	
 	public static ConcurrentHashMap <String,String> channelIdUserMap=new ConcurrentHashMap<String,String>();
@@ -88,6 +88,14 @@ public class Global {
 	public static void sendImGlobal(String json) {
 		// 群发
 		Global.group.writeAndFlush(new TextWebSocketFrame(String.format(globalImMsg, json)));
+	}
+	
+	public static void sendImUser(String json,String userId) {
+		if(socketBeanMap.get(userId)==null) {
+			return;
+		}
+		SocketBean sb=socketBeanMap.get(userId);
+		sb.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(globalImMsg, json)));
 	}
 	
 	static String auctionMsg="{	\"msgType\": \"30\",\"notifyMoudle\": \"auctionList\",\"data\": {\"goods\": [%s" + 

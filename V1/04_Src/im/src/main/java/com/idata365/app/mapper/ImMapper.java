@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface ImMapper {
 
-    List<Map<String,String>> getMsg();
+    List<Map<String,String>> getMsg(Map<String,Object> map);
     void insert(Map<String,Object> msg);
  
 
