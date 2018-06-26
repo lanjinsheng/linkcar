@@ -82,12 +82,12 @@ public class TaskGenericService {
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public void initUserDayRewardTask(TaskGeneric task) {
+	public boolean initUserDayRewardTask(TaskGeneric task) {
 		
 		//这边需要判断家族pk是否已经完全完成了
 		Integer pkEnd=taskGenericMapper.getGameAssetNoDo(DateTools.getCurDateYYYY_MM_DD());
-		if(pkEnd>0) {//还未完成，继续
-			return;
+		if(pkEnd.intValue()>0) {//还未完成，继续
+			return false;
 		}
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("genericKey", task.getGenericKey());
@@ -99,6 +99,7 @@ public class TaskGenericService {
 		long powerTotal=taskGenericMapper.getPowerDayTotal(map);
 		map.put("powerTotal", powerTotal);
 		taskGenericMapper.initUserDayRewardTask(map);
+		return true;
 	}
 	/**
 	 * 
@@ -110,7 +111,7 @@ public class TaskGenericService {
 	    * @author LanYeYe
 	 */
 	@Transactional
-	public void initFamilyDayReward(TaskGeneric task) {
+	public boolean initFamilyDayReward(TaskGeneric task) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("genericKey", task.getGenericKey());
 		map.put("taskType", TaskGenericEnum.DoFamilyDayReward);
@@ -126,6 +127,7 @@ public class TaskGenericService {
 //		map.put("limit", limit);
 		map.put("familyPersonTotal", familyPersonTotal);
 		taskGenericMapper.initDoFamilyDayReward(map);
+		return true;
 	}
 	@Transactional
 	public void test() {
@@ -369,7 +371,7 @@ public class TaskGenericService {
 		FamilyGameAsset familyGameAsset=new FamilyGameAsset();
 		familyGameAsset.setRewardsNum(gameDiamond);
 		familyGameAsset.setId(assetFamilyGameId);
-		familyGameAssetMapper.updateDiamonds(familyGameAsset);
+		familyGameAssetMapper.updateRewards(familyGameAsset);
 		//增加跃迁下一个任务(成员内部分配)
 		TaskGeneric tg=new TaskGeneric();
 		String preKey=task.getGenericKey().split("_")[0];
@@ -545,16 +547,18 @@ public class TaskGenericService {
 					.divide(total,5,RoundingMode.HALF_DOWN);
 			assetUsersPowerLogs.setPowerNum(d.longValue());
 			j++;
-			assetUsersPowerLogs.setCreateTimeStr(createTimeStr+" 23:59:59");
-			assetUsersPowerLogsMapper.insertUsersPowerLogsByTime(assetUsersPowerLogs);
-			Map<String,Object> map=new HashMap<String,Object>();
-			map.put("tableName", "userPower"+createTimeStr.replaceAll("-", ""));
-			map.put("pkPower", d.intValue());
-			map.put("userId", assetUsersPowerLogs.getUserId());
-			taskGenericMapper.updateUserPowerDayTable(map);
-			//远程消息调用,发送的diamonds是家族获取的
-			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-			chezuAppService.sendFamilyPowerMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersPowerLogs.getUserId(), String.valueOf(familyPowers.longValue()), String.valueOf(d.doubleValue()), sign);
+			if(d.longValue()>0) {
+				assetUsersPowerLogs.setCreateTimeStr(createTimeStr+" 23:59:59");
+				assetUsersPowerLogsMapper.insertUsersPowerLogsByTime(assetUsersPowerLogs);
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("tableName", "userPower"+createTimeStr.replaceAll("-", ""));
+				map.put("pkPower", d.intValue());
+				map.put("userId", assetUsersPowerLogs.getUserId());
+				taskGenericMapper.updateUserPowerDayTable(map);
+				//远程消息调用,发送的diamonds是家族获取的
+				if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
+				chezuAppService.sendFamilyPowerMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersPowerLogs.getUserId(), String.valueOf(familyPowers.longValue()), String.valueOf(d.doubleValue()), sign);
+				}
 			}
 		}
 		//family动力减少
@@ -572,7 +576,7 @@ public class TaskGenericService {
 		FamilyGameAsset familyGameAsset=new FamilyGameAsset();
 		familyGameAsset.setRewardsNum(familyPowers);
 		familyGameAsset.setId(Long.valueOf(assetFamilyGameId));
-		familyGameAssetMapper.updateDiamonds(familyGameAsset);
+		familyGameAssetMapper.updateRewards(familyGameAsset);
 		return true;
 	}
 	

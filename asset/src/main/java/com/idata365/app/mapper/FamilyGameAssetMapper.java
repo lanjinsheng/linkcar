@@ -9,7 +9,7 @@ import com.idata365.app.entity.FamilyGameAsset;
 public interface FamilyGameAssetMapper {
 
 	int insertFamilyGameAsset(FamilyGameAsset familyGameAsset);
-    int  updateDiamonds(FamilyGameAsset familyGameAsset);
+    int  updateRewards(FamilyGameAsset familyGameAsset);
     
     FamilyGameAsset  getFamilyGameAssetsByDayFId(FamilyGameAsset familyGameAsset);
 

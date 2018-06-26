@@ -22,32 +22,33 @@ public class TaskGenericThread implements Runnable{
 		AssetService assetService=SpringContextUtil.getBean("assetService", AssetService.class);
 		List<TaskGeneric> list=taskGenericService.getTaskByTaskFlag(taskFlag);
 		for(TaskGeneric task:list) {
+			boolean result=false;
 			try {
 				switch(task.getTaskType()) {
 					case UserDayPowerSnapshot:{
 						Map<String,Object> m=GsonUtils.fromJson(task.getJsonValue());
-						assetService.userPowersSnapShot(String.valueOf(m.get("tableName")));
-						assetService.powerClear();
+						result=assetService.userPowersSnapShot(String.valueOf(m.get("tableName")));
+						result=assetService.powerClear();
 						break;
 					}
 					case InitUserDayReward:{
-						taskGenericService.initUserDayRewardTask(task);
+						result=taskGenericService.initUserDayRewardTask(task);
 						break;
 					}
 					case DoUserDayReward:{
-						taskGenericService.doUserDayRewardV1_6(task);
+						result=taskGenericService.doUserDayRewardV1_6(task);
 						break;
 					}
 					case InitFamilyDayReward:{
-						taskGenericService.initFamilyDayReward(task);
+						result=taskGenericService.initFamilyDayReward(task);
 						break;
 					}
 					case DoFamilyDayReward:{
-						taskGenericService.doFamilyDayRewardV1_6(task);
+						result=taskGenericService.doFamilyDayRewardV1_6(task);
 						break;
 					}
 					case DoUserFamilyDayReward:{
-						taskGenericService.doUserFamilyDayRewardV1_6(task);
+						result=taskGenericService.doUserFamilyDayRewardV1_6(task);
 						break;
 					}
 					case InitFamilySeasonReward:{
@@ -72,7 +73,9 @@ public class TaskGenericThread implements Runnable{
 				taskGenericService.updateFailTask(task);
 				continue;
 			}
-			taskGenericService.updateSuccTask(task);
+			if(result) {
+				taskGenericService.updateSuccTask(task);
+			}
 		}
 	}
 
