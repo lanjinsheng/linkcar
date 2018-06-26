@@ -20,7 +20,11 @@ public class DateTools
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
 	}
-	
+	public static String getYYYY_MM_DD() {
+		  String 	customDate = yyyy_MM_dd.format(new Date());
+		  return customDate;
+		}
+			
     public static long getDiffTimeS(String dateTime1,String dateTime2) throws ParseException {
 	       
         Date d1 = DateUtils.parseDate(dateTime1,yyMMddHHmmssSSS.getPattern());

@@ -99,6 +99,7 @@ public class PowerService extends BaseService<PowerService>
 		 		familyPower.setPowerNum(Long.valueOf(String.valueOf(map.get("toFamilyValue"))));
 		 		familyPower.setRecordType(RecordType_1);//增加1，减少2
 		 		familyPower.setFamilyId(Long.valueOf(String.valueOf(map.get("familyId"))));
+		 		familyPower.setRelation(String.valueOf(map.get("relation")));
 		 		familyPower.setRemark("行程贡献获取power");
 		 		rt=chezuAssetService.addPowerFamilyTask(jsonValue, sign, familyPower);
 //		 		rt=chezuAssetService.addPowerFamilyTask(jsonValue, sign);

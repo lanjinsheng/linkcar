@@ -16,7 +16,9 @@ import com.idata365.entity.TaskAchieveAddValue;
 import com.idata365.entity.TaskPowerLogs;
 import com.idata365.enums.AchieveEnum;
 import com.idata365.enums.PowerEnum;
+import com.idata365.constant.FamilyRelationConstant;
 import com.idata365.entity.DriveScore;
+import com.idata365.entity.FamilyRelation;
 import com.idata365.entity.ParkStation;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserRoleLog;
@@ -92,14 +94,14 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	    * @throws
 	    * @author LanYeYe
 	 */
-	private boolean addFamilyTripPowerLogs(long userId,long habitId,long familyId,int power,long effectId) {
+	private boolean addFamilyTripPowerLogs(long userId,long habitId,long familyId,int power,long effectId,String relation) {
 		 
-		    String jsonValue="{\"userId\":%d,\"habitId\":%d,\"familyId\":%d,\"toFamilyValue\":%s,\"effectId\":%d}";
+		    String jsonValue="{\"userId\":%d,\"habitId\":%d,\"familyId\":%d,\"toFamilyValue\":%s,\"relation\":\"%s\",\"effectId\":%d}";
 	    	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
 	    	taskPowerLogs.setUserId(userId);
 	    	taskPowerLogs.setTaskType(PowerEnum.TripToFamily);
 	    	int familyPower=BigDecimal.valueOf(power).divide(BigDecimal.valueOf(2),0,RoundingMode.HALF_EVEN).intValue();
-	    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,familyId,familyPower,effectId));
+	    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,familyId,familyPower,relation,effectId));
 	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 	    	if(hadAdd>0) {
 	    		return true;
@@ -240,8 +242,20 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 					m.put("familyId", familyId);
 	//				familyInfoMapper.updateFamilyDriveFlag(familyId);
 	//				familyInfoMapper.updateFamilyActiveLevel(familyId);
-					//插入行程得分任务
-					addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId());
+					//获取挑战记录
+					
+					List<FamilyRelation> relations=FamilyRelationConstant.getFamilyRelation(familyId);
+					if(relations!=null) {
+						for(FamilyRelation relation:relations) {
+							String postRelation=relation.getSelfFamilyId()+"-"+relation.getCompetitorFamilyId()+"-"+relation.getRelationType();
+							addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId(),postRelation);
+						}
+					}else {
+						//插入行程得分任务
+						addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId(),"0");
+					}
+					
+				
 				    userScoreDayStat.setFamilyId(familyId);
 					userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
 					//更新userFamilyRelation
