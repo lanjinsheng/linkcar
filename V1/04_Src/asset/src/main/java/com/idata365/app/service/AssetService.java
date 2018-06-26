@@ -751,14 +751,16 @@ public class AssetService extends BaseService<AssetService> {
 	}
 
 	@Transactional
-	public void userPowersSnapShot(String tableName) {
+	public boolean userPowersSnapShot(String tableName) {
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
+		return true;
 	}
 
 	@Transactional
-	public void powerClear() {
+	public boolean powerClear() {
 		assetUsersAssetMapper.clearPowers(null);
 		assetFamiliesAssetMapper.clearPower(null);
+		return true;
 	}
 
 	/**

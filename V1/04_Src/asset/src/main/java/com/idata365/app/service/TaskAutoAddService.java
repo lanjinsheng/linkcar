@@ -88,7 +88,7 @@ public class TaskAutoAddService {
 		String dayStr=getDay("yyyy-MM-dd");
 		long curDay=DateTools.getDateTimeOfLong(dayStr+" 00:00:00");
 //		int i=1800*1000;
-		long i=3600*1*10000;
+		long i=3600*10*10000;
 		if((now-curDay)>0 && (now-curDay)<i) {
 			String dayStr2=getDateStr2(-1);
 			String snapKey=dayStr2+"_"+TaskGenericEnum.UserDayPowerSnapshot;
@@ -110,6 +110,23 @@ public class TaskAutoAddService {
 		}
 		
 	}
+	
+	public static void main(String []args) {
+		long now=System.currentTimeMillis();
+		
+	 
+			Date curDate = Calendar.getInstance().getTime();
+			String dayStr = DateFormatUtils.format(curDate, "yyyy-MM-dd");
+	 
+		long curDay=DateTools.getDateTimeOfLong(dayStr+" 00:00:00");
+//		int i=1800*1000;
+		long i=3600*10*10000;
+		if((now-curDay)>0 && (now-curDay)<i)
+		{
+			System.out.println("ok");
+		}
+	}
+	
 	/**
 	 * 
 	    * @Title: syncFamilyGameEndAdd
