@@ -87,7 +87,7 @@ public class AccountController extends BaseController{
 	@RequestMapping(value = "/account/getFamiliesInfoByfamilyId",method = RequestMethod.POST)
 	public Map<String,Object>  getFamiliesInfoByfamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="sign") String sign)
 	{
-		LOG.info("userId="+familyId+"===sign="+sign);
+		LOG.info("familyId="+familyId+"===sign="+sign);
 		Map<String,Object> rt=new HashMap<String,Object>();
 		rt.put("familyId", 0);
 		rt.put("familyUserCount", 0);
