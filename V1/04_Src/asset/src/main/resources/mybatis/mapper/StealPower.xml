@@ -10,7 +10,7 @@
 	<select id="getStealPowerList" resultMap="BaseStealPowerMap"
 		parameterType="java.lang.Long">
 		SELECT *
-		FROM stealPower where #{familyId} in(familyId,fightFamilyId) and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
+		FROM stealPower where ((familyId=#{familyId} and fightFamilyId=#{fightFamilyId}) or (familyId=#{fightFamilyId} and fightFamilyId=#{familyId})) and <![CDATA[createTime>=date(now()) and createTime<DATE_ADD(date(now()),INTERVAL 1 DAY) order by createTime desc]]>
 	</select>
 	
 	<select id="getReceiveNum" resultType="java.lang.Long"
