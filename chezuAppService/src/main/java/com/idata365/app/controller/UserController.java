@@ -252,9 +252,11 @@ public class UserController extends BaseController {
 				UsersAccount account1 = new UsersAccount();
 				account1.setImgUrl(headImg);
 				String token = loginRegService.regUser(phone, "", nickName, rtMap,account1);
+				thirdPartyLoginService.updateByOpenId(account1.getId(),openId);
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
 				}
+				loginRegService.insertToken(account1.getId(), token);
 				rtMap.put("token", token);
 				rtMap.put("nickName", nickName);
 				rtMap.put("headImg", headImg);
