@@ -170,7 +170,7 @@ public class UserController extends BaseController {
 										: account.getNickName()));
 		rtMap.put("headImg",
 				account.getImgUrl() == null ?bean.get("headImg").toString(): this.getImgBasePath() + account.getImgUrl());
-		rtMap.put("userName", account.getPhone());
+		rtMap.put("userPhone", account.getPhone());
 		
 		Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
 				SignUtils.encryptHMAC(String.valueOf(account.getId())));
@@ -236,7 +236,7 @@ public class UserController extends BaseController {
 				rtMap.put("headImg",
 						account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
 				
-				rtMap.put("userName", account.getPhone());
+				rtMap.put("userPhone", account.getPhone());
 
 				Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
 						SignUtils.encryptHMAC(String.valueOf(account.getId())));
@@ -312,6 +312,7 @@ public class UserController extends BaseController {
 		rtMap.put("token", token);
 		rtMap.put("nickName", nickName);
 		rtMap.put("headImg", headImg);
+		rtMap.put("userPhone", phone);
 		rtMap.put("isAuthenticated", "0");
 		
 		return ResultUtils.rtSuccess(rtMap);
