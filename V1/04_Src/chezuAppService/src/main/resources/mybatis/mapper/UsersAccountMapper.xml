@@ -25,6 +25,10 @@
        FROM  userFamilyRelation where familyId=#{familyId}
      </select>
      
+     <select id="findUserFamilies" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userFamilyRelation where userId=#{userId}
+     </select>
      
      <select id="findAccountByPhone" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
        SELECT *
