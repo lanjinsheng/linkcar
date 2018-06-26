@@ -223,33 +223,32 @@ public class UserController extends BaseController {
 			UsersAccount account = loginRegService.getUserByPhone(phone);
 			if (account!=null) {
 				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
+				String token = "";
+				token = UUID.randomUUID().toString().replaceAll("-", "");
+				loginRegService.insertToken(account.getId(), token);
+				rtMap.put("userId", account.getId());
+				rtMap.put("nikeName",
+						(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+								: account.getNickName()) == null ? bean.get("nikeName").toString()
+										: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+												: account.getNickName()));
+				rtMap.put("headImg",
+						account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
+				
+				rtMap.put("userName", account.getPhone());
+
+				Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
+						SignUtils.encryptHMAC(String.valueOf(account.getId())));
+				if ("1".equals(authenticated.get("IdCardIsOK")) && "1".equals(authenticated.get("VehicleTravelIsOK"))) {
+					rtMap.put("isAuthenticated", "1");
+				} else {
+					rtMap.put("isAuthenticated", "0");
+				}
+				rtMap.put("token", token);
 				rtMap.put("status", "OK");
 			} else {
 				rtMap.put("status", "PWD_NO");
 			}
-			String token = "";
-			token = UUID.randomUUID().toString().replaceAll("-", "");
-			loginRegService.insertToken(account.getId(), token);
-			rtMap.put("userId", account.getId());
-			rtMap.put("nikeName",
-					(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-							: account.getNickName()) == null ? bean.get("nikeName").toString()
-									: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-											: account.getNickName()));
-			rtMap.put("headImg",
-					account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
-			
-			rtMap.put("userName", account.getPhone());
-
-			Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
-					SignUtils.encryptHMAC(String.valueOf(account.getId())));
-			if ("1".equals(authenticated.get("IdCardIsOK")) && "1".equals(authenticated.get("VehicleTravelIsOK"))) {
-				rtMap.put("isAuthenticated", "1");
-			} else {
-				rtMap.put("isAuthenticated", "0");
-			}
-			
-			rtMap.put("token", token);
 			return ResultUtils.rtSuccess(rtMap);
 		} else {
 			if (status.equals(LoginRegService.VC_ERR))
