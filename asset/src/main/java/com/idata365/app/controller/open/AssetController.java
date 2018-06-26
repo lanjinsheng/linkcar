@@ -353,15 +353,16 @@ public class AssetController extends BaseController {
 		return familySeasonId;
 	}
 	
-	@RequestMapping(value = "/asset/queryHavaNewPower", method = RequestMethod.POST)
-	String queryHavaNewPower(@RequestParam(value = "userId") long userId,
+	//查询是否有新的动力球
+	@RequestMapping(value = "/asset/queryHaveNewPower", method = RequestMethod.POST)
+	String queryHaveNewPower(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "familyId") long familyId, @RequestParam(value = "sign") String sign) {
 		LOG.info("userId:" + userId +"   familyId:" + familyId + "===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:");
-		LOG.info("queryHavaNewPower·~~~controller");
+		LOG.info("queryHaveNewPower·~~~controller");
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
-		String havaNewPower = assetService.queryHavaNewPower(userId, familiesInfo);
-		return havaNewPower;
+		String haveNewPower = assetService.queryHaveNewPower(userId, familiesInfo);
+		return haveNewPower;
 	}
 
 	public static void main(String[] args) {

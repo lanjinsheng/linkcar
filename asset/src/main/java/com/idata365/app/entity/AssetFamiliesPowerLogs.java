@@ -28,6 +28,16 @@ public class AssetFamiliesPowerLogs implements Serializable {
 	private String remark;
 	private Date createTime;
 	private Integer count;
+	private String relation;
+
+
+	public String getRelation() {
+		return relation;
+	}
+
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 
 	public Integer getCount() {
 		return count;

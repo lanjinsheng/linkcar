@@ -266,8 +266,9 @@ public class AssetService extends BaseService<AssetService> {
 	}
 
 	@Transactional
-	public Map<String,String> freezeDiamondAsset(long userId, double diamondsNum, long preUserId, long auctionGoodsId) {
-		Map<String,String> rtMap=new HashMap<String,String>();
+	public Map<String, String> freezeDiamondAsset(long userId, double diamondsNum, long preUserId,
+			long auctionGoodsId) {
+		Map<String, String> rtMap = new HashMap<String, String>();
 		rtMap.put("flag", "1");
 		rtMap.put("msg", "");
 		int addUpdate = 0;
@@ -309,7 +310,7 @@ public class AssetService extends BaseService<AssetService> {
 				logs.setCreateTime(new Date());
 				auctionUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
 			}
-			 
+
 		} else {
 			LOG.info("userId=" + userId + "钻石数量不够支付:" + diamondsNum);
 			rtMap.put("flag", "0");
@@ -344,12 +345,12 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
 
 		// 竞拍解冻
-		
+
 		Map<String, Object> freeze = new HashMap<String, Object>();
 		freeze.put("userId", sellerId);
 		freeze.put("diamondsNum", diamondsNum);
-		 assetUsersAssetMapper.updateEndUnfreeze(freeze);// -
-		 
+		assetUsersAssetMapper.updateEndUnfreeze(freeze);// -
+
 		AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
 		auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		auctionLog.setEffectId(auctionGoodsId);
@@ -416,7 +417,7 @@ public class AssetService extends BaseService<AssetService> {
 	 *            参数
 	 * @return boolean 返回类型
 	 * @throws @author
-	 *             LiXing
+	 *             LiXING
 	 */
 
 	public Map<String, Object> getFamilyPowers(long userId, Map<String, Object> familiesInfo,
@@ -424,13 +425,7 @@ public class AssetService extends BaseService<AssetService> {
 		Map<String, Object> data = new HashMap<>();
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
 		long familyUserCount = Long.valueOf(familiesInfo.get("familyUserCount").toString());
-		long fightFamilyId = 0;
-		long fightFamilyUserCount = 0;
-		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
-			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
-			fightFamilyUserCount = Long.valueOf(familiesInfo.get("fightFamilyUserCount").toString());
-			data.put("fightFamilyId", String.valueOf(fightFamilyId));
-		}
+		long fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
 
 		long todayContribution = 0L;
 		long todayReceive = 0L;
@@ -439,6 +434,7 @@ public class AssetService extends BaseService<AssetService> {
 		long myFamilyReceive = 0L;
 		long fightFamilyReceive = 0L;
 		List<AssetUsersPowerLogs> powers = assetUsersPowerLogsMapper.getAllPowersByOne(userId);
+		// 个人贡献、领取
 		for (AssetUsersPowerLogs assetUsersPowerLogs : powers) {
 			if (assetUsersPowerLogs.getEventType() == 3) {
 				Long effectId = assetUsersPowerLogs.getEffectId();
@@ -451,18 +447,36 @@ public class AssetService extends BaseService<AssetService> {
 			}
 		}
 		todayContribution = todayContribution / 2;
-		List<AssetFamiliesPowerLogs> powerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId, fightFamilyId);
+
+		List<AssetFamiliesPowerLogs> rtPowerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
+				fightFamilyId);
+		List<AssetFamiliesPowerLogs> powerList = new ArrayList<>();
 		List<Map<String, Object>> powerBalls = new ArrayList<>();
-		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : powerList) {
+		// 过滤
+		for (AssetFamiliesPowerLogs logs : rtPowerList) {
+			if (logs.getRelation().equals("0") && logs.getFamilyId() == familyId) {
+				powerList.add(logs);
+			} else {
+				String[] str = logs.getRelation().split(",");
+				long selfFamilyId = Long.valueOf(String.valueOf(str[0]));
+				long competitorFamilyId = Long.valueOf(String.valueOf(str[1]));
+				long relationType = Long.valueOf(String.valueOf(str[2]));
+				if (familyId == selfFamilyId || (familyId == competitorFamilyId && relationType == 2)
+						|| (fightFamilyId == competitorFamilyId && relationType == 2)) {
+					powerList.add(logs);
+				}
+			}
+		}
+		for (AssetFamiliesPowerLogs logs : powerList) {
 			Map<String, Object> powerBall = new HashMap<>();
-			String ballId = String.valueOf(assetFamiliesPowerLogs.getId());
+			String ballId = String.valueOf(logs.getId());
 			powerBall.put("ballId", ballId);
-			powerBall.put("totalScore", String.valueOf(assetFamiliesPowerLogs.getRealNum()));
+			powerBall.put("totalScore", String.valueOf(logs.getRealNum()));
 
 			// 计算本次可领能量
-			long count = (familyUserCount + fightFamilyUserCount) / 2 + 1;// 总共可领取次数
-			Integer realCount = assetFamiliesPowerLogs.getCount();
-			Long realNum = assetFamiliesPowerLogs.getRealNum();// 当前实际总量
+			long count = familyUserCount;// 总共可领取次数
+			Integer realCount = logs.getCount();
+			Long realNum = logs.getRealNum();// 当前实际总量
 			Long thisScore = 0L;
 			if (realCount != count - 1) {
 				if (realNum >= 2) {
@@ -474,7 +488,7 @@ public class AssetService extends BaseService<AssetService> {
 				thisScore = realNum;
 			}
 			powerBall.put("thisScore", String.valueOf(thisScore));
-			// 球的Id即是UserPowerLogs里的effectId，且用户eventtype=3
+			// 球的Id即是UserPowerLogs里的effectId，且用户eventType=3
 			List<Long> ids = assetUsersPowerLogsMapper.getPowersByEffectId(Long.valueOf(ballId));
 			String[] userIdsArray = {};
 			if (ValidTools.isNotBlank(ids)) {
@@ -484,32 +498,42 @@ public class AssetService extends BaseService<AssetService> {
 				}
 			}
 			powerBall.put("receivelist", userIdsArray);
-			String createFamilyId = String.valueOf(assetFamiliesPowerLogs.getFamilyId());
+			String createFamilyId = String.valueOf(logs.getFamilyId());
 			powerBall.put("createFamilyId", createFamilyId);
 			if (createFamilyId.equals(String.valueOf(familyId))) {
 				powerBall.put("isMyFamily", "1");
 			} else {
 				powerBall.put("isMyFamily", "0");
 			}
-			powerBall.put("createTime",
-					String.valueOf(DateTools.formatDateYMD(assetFamiliesPowerLogs.getCreateTime())));
+			powerBall.put("createTime", String.valueOf(DateTools.formatDateYMD(logs.getCreateTime())));
 			powerBalls.add(powerBall);
+
+			// 家族贡献
+			if (logs.getFamilyId() == familyId) {
+				myFamilyContribution += logs.getPowerNum();
+			} else {
+				fightFamilyContribution += logs.getPowerNum();
+			}
 		}
 
-		myFamilyContribution = assetFamiliesPowerLogsMapper.getContributionNum(familyId);
-		fightFamilyContribution = assetFamiliesPowerLogsMapper.getContributionNum(fightFamilyId);
+		// myFamilyContribution =
+		// assetFamiliesPowerLogsMapper.getContributionNum(familyId);
+		// fightFamilyContribution =
+		// assetFamiliesPowerLogsMapper.getContributionNum(fightFamilyId);
 		myFamilyReceive = stealPowerMapper.getReceiveNum(familyId);
 		fightFamilyReceive = stealPowerMapper.getReceiveNum(fightFamilyId);
 
 		data.put("todayContribution", String.valueOf(todayContribution));
 		data.put("todayReceive", String.valueOf(todayReceive));
 		data.put("myFamilyId", String.valueOf(familyId));
-		data.put("todayReceive", String.valueOf(todayReceive));
 		data.put("myFamilyContribution", String.valueOf(myFamilyContribution));
-		data.put("fightFamilyContribution", String.valueOf(fightFamilyContribution));
 		data.put("myFamilyReceive", String.valueOf(myFamilyReceive));
-		data.put("fightFamilyReceive", String.valueOf(fightFamilyReceive));
 		data.put("powerBalls", powerBalls);
+		if(fightFamilyId!=0) {
+			data.put("fightFamilyId", String.valueOf(fightFamilyId));
+			data.put("fightFamilyContribution", String.valueOf(fightFamilyContribution));
+			data.put("fightFamilyReceive", String.valueOf(fightFamilyReceive));
+		}
 		return data;
 	}
 
@@ -531,10 +555,7 @@ public class AssetService extends BaseService<AssetService> {
 	public void stoleFamilyFightPowers(long userId, Map<String, Object> familiesInfo, long ballId, long powerNum)
 			throws Exception {
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
-		long fightFamilyId = 0;
-		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
-			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
-		}
+		long fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
 
 		// 修改个人相关数据
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
@@ -564,9 +585,7 @@ public class AssetService extends BaseService<AssetService> {
 		steal.setBallId(ballId);
 		steal.setDaystamp(DateTools.formatDateD(new Date()));
 		steal.setFamilyId(familyId);
-		if (fightFamilyId != 0) {
-			steal.setFightFamilyId(fightFamilyId);
-		}
+		steal.setFightFamilyId(fightFamilyId);
 		steal.setPowerNum((int) powerNum);
 		steal.setUserId(userId);
 		steal.setRemark("");
@@ -575,6 +594,7 @@ public class AssetService extends BaseService<AssetService> {
 
 	/**
 	 * 
+	 * @param fightFamilyId 
 	 * @Title: getStoleFamilyFightPowers
 	 * @Description: TODO(家族动力偷取记录)
 	 * @param @param
@@ -587,11 +607,9 @@ public class AssetService extends BaseService<AssetService> {
 	 */
 
 	@Transactional
-	public List<Map<String, String>> getStoleRecord(long familyId) {
+	public List<Map<String, String>> getStoleRecord(long familyId, long fightFamilyId) {
 		List<Map<String, String>> result = new ArrayList<>();
-		LOG.info("familyId===============" + familyId);
-		List<StealPower> recordList = stealPowerMapper.getStealPowerList(familyId);
-		LOG.info("recordList.size()===============" + recordList.size());
+		List<StealPower> recordList = stealPowerMapper.getStealPowerList(familyId,fightFamilyId);
 		for (StealPower record : recordList) {
 			Map<String, String> data = new HashMap<>();
 			data.put("userId", record.getUserId().toString());
@@ -889,23 +907,36 @@ public class AssetService extends BaseService<AssetService> {
 	}
 
 	// 查询是否有新动力可领
-	public String queryHavaNewPower(long userId, Map<String, Object> familiesInfo) {
+	public String queryHaveNewPower(long userId, Map<String, Object> familiesInfo) {
 		String s = "0";
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
-		long fightFamilyId = 0;
-		if (ValidTools.isNotBlank(familiesInfo.get("fightFamilyId"))) {
-			fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
-		}
+		long fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
 		// 双方家族产生的所有动力球
-		List<AssetFamiliesPowerLogs> allPowerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
-				fightFamilyId);
+		List<AssetFamiliesPowerLogs> rtPowerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,fightFamilyId);
+		List<AssetFamiliesPowerLogs> powerList = new ArrayList<>();
+		// 过滤
+		for (AssetFamiliesPowerLogs logs : rtPowerList) {
+			if (logs.getRelation().equals("0") && logs.getFamilyId() == familyId) {
+				powerList.add(logs);
+			} else {
+				String[] str = logs.getRelation().split(",");
+				long selfFamilyId = Long.valueOf(String.valueOf(str[0]));
+				long competitorFamilyId = Long.valueOf(String.valueOf(str[1]));
+				long relationType = Long.valueOf(String.valueOf(str[2]));
+				if (familyId == selfFamilyId || (familyId == competitorFamilyId && relationType == 2)
+						|| (fightFamilyId == competitorFamilyId && relationType == 2)) {
+					powerList.add(logs);
+				}
+			}
+		}
+		
 		// 当前个人已经领取过的动力球
 		List<StealPower> listOfCurUser = stealPowerMapper.getStealPowerListByUserId(userId);
 		List<Long> flagList = new ArrayList<>();
 		for (StealPower stealPower : listOfCurUser) {
 			flagList.add(stealPower.getBallId());
 		}
-		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : allPowerList) {
+		for (AssetFamiliesPowerLogs assetFamiliesPowerLogs : powerList) {
 			if (!flagList.contains(assetFamiliesPowerLogs.getId())) {
 				s = "1";
 				break;

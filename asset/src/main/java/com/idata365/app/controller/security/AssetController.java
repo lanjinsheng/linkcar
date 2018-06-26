@@ -26,11 +26,9 @@ public class AssetController extends BaseController {
 	AssetService assetService;
 	@Autowired
 	ChezuAccountService chezuAccountService;
-     
 	@Autowired
 	ChezuAppService chezuAppService;
-     
-	
+
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -45,11 +43,11 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getTotalNums(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
+		LOG.info("userId=================" + userId);
 		Map<String, String> data = assetService.getTotalNums(userId);
 		return ResultUtils.rtSuccess(data);
 	}
-	
+
 	/**
 	 * 
 	 * @Title: getIndexDiamonds
@@ -64,14 +62,14 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexDiamonds(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
+		LOG.info("userId=================" + userId);
 		List<Map<String, String>> list = assetService.getIndexDiamonds(userId, requestBodyParams);
 		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		result.put("orderInfo", myorder);
-//		result.put("diamondsInfo", assetService.diamondsInfo(userId));
-		
+		// result.put("diamondsInfo", assetService.diamondsInfo(userId));
+
 		return ResultUtils.rtSuccess(result);
 	}
 
@@ -89,13 +87,13 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getIndexPowers(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
+		LOG.info("userId=================" + userId);
 		List<Map<String, String>> list = assetService.getIndexPowers(userId, requestBodyParams);
 		Map<String, String> myorder = assetService.getCurOrderAndNum(userId);
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		result.put("orderInfo", myorder);
-//		result.put("powersInfo", assetService.powersInfo(userId));
+		// result.put("powersInfo", assetService.powersInfo(userId));
 		return ResultUtils.rtSuccess(result);
 	}
 
@@ -118,11 +116,14 @@ public class AssetController extends BaseController {
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
-		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
+		LOG.info("userId=================" + userId);
+		LOG.info("familyId=================" + familyId);
+		String sign = SignUtils.encryptHMAC(String.valueOf(familyId));
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
-		return ResultUtils.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
+//		Map<String, Object> relationInfo = chezuAppService.getFightRelationAsset(familyId, sign);
+		return ResultUtils
+				.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
 	}
 
 	/**
@@ -144,11 +145,14 @@ public class AssetController extends BaseController {
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		long ballId = Long.valueOf(String.valueOf(requestBodyParams.get("ballId")));
 		long powerNum = Long.valueOf(String.valueOf(requestBodyParams.get("power")));
-		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
+		LOG.info("userId=================" + userId);
+		LOG.info("familyId=================" + familyId);
+		LOG.info("ballId=================" + ballId);
+		LOG.info("powerNum=================" + powerNum);
+		String sign = SignUtils.encryptHMAC(String.valueOf(familyId));
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
 		Map<String, String> datas = new HashMap<>();
 		try {
@@ -181,16 +185,19 @@ public class AssetController extends BaseController {
 	public Map<String, Object> getStoleRecord(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
-		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+		LOG.info("userId=================" + userId);
+		LOG.info("familyId=================" + familyId);
+		String sign = SignUtils.encryptHMAC(String.valueOf(familyId));
 		StringBuilder sb = new StringBuilder();
-		List<Map<String, String>> result = assetService.getStoleRecord(familyId);
+		long fightFamilyId = Long
+				.valueOf(chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign).get("fightFamilyId").toString());
+		List<Map<String, String>> result = assetService.getStoleRecord(familyId, fightFamilyId);
 		for (Map<String, String> map : result) {
 			sb.append(map.get("userId") + ",");
 		}
 		String Ids = sb.toString().substring(0, sb.length());
-		Map<String, Object> map = chezuAccountService.getUsersInfoByIds(Ids,familyId, sign);
+		Map<String, Object> map = chezuAccountService.getUsersInfoByIds(Ids, familyId, sign);
 
 		if (ValidTools.isNotBlank(map) && ValidTools.isNotBlank(map.get("nickNames"))) {
 			String nikeNames = map.get("nickNames").toString();
@@ -227,33 +234,35 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 
 		long userId = this.getUserId();
-		LOG.info("userId================="+userId);
+		LOG.info("userId=================" + userId);
 		//
 		assetService.getDaySignInLog(userId);
-		String sign=SignUtils.encryptHMAC(String.valueOf(userId));
+		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		chezuAppService.updateLoginBss(userId, sign);
 		return ResultUtils.rtSuccess(null);
 	}
+
 	@RequestMapping("/getYestodayHarvest")
 	public Map<String, Object> getYestodayHarvest(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Map<String,Object> rtMap=new HashMap<String,Object>();
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		long userId = this.getUserId();
-		Object familyId=requestBodyParams.get("familyId");
-		
-        if(familyId==null) {
-        	//通过userId获取全family分配值
-        	return ResultUtils.rtFailParam(null);
-        } 
-        	//通过familyId获取family分配值
-       Map<String,Object> familyHarvest=assetService.getFamilyHarvestYestoday(userId,Long.valueOf(familyId.toString()));
-      //通过userId获取昨日动力值
-      Map<String,Object> personHarvest=assetService.getPersonHarvestYestoday(userId);
-      Map<String,Object> global=assetService.getGlobalYestoday();
-      
-      rtMap.put("globalHarvest", global);
-      rtMap.put("familyHarvest", familyHarvest);
-      rtMap.put("personHarvest", personHarvest);
+		Object familyId = requestBodyParams.get("familyId");
+
+		if (familyId == null) {
+			// 通过userId获取全family分配值
+			return ResultUtils.rtFailParam(null);
+		}
+		// 通过familyId获取family分配值
+		Map<String, Object> familyHarvest = assetService.getFamilyHarvestYestoday(userId,
+				Long.valueOf(familyId.toString()));
+		// 通过userId获取昨日动力值
+		Map<String, Object> personHarvest = assetService.getPersonHarvestYestoday(userId);
+		Map<String, Object> global = assetService.getGlobalYestoday();
+
+		rtMap.put("globalHarvest", global);
+		rtMap.put("familyHarvest", familyHarvest);
+		rtMap.put("personHarvest", personHarvest);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 }
