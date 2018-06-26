@@ -17,7 +17,7 @@
        or  (competitorFamilyId=#{familyId} and relationType=2)) and daystamp=#{daystamp}
      </select>
      <!-- 通过家族id获取已确立对战关系的对战记录Asset工程 -->
-     <select id="getFightRelationAsset" resultMap="java.util.HashMap" parameterType="java.util.HashMap">
+     <select id="getFightRelationAsset" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT *
        FROM  familyRelation where ((selfFamilyId=#{familyId})
        or  (competitorFamilyId=#{familyId} and relationType=2)) and daystamp=#{daystamp}
