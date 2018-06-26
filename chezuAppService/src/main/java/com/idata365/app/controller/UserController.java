@@ -18,7 +18,6 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.constant.NameConstant;
-import com.idata365.app.constant.SystemConstant;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.LoginRegService;
@@ -164,9 +163,9 @@ public class UserController extends BaseController {
 		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		
 		rtMap.put("userId", account.getId());
-		rtMap.put("nikeName",
+		rtMap.put("nickName",
 				(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-						: account.getNickName()) == null ? bean.get("nikeName").toString()
+						: account.getNickName()) == null ? bean.get("nickName").toString()
 								: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
 										: account.getNickName()));
 		rtMap.put("headImg",
@@ -227,9 +226,9 @@ public class UserController extends BaseController {
 				token = UUID.randomUUID().toString().replaceAll("-", "");
 				loginRegService.insertToken(account.getId(), token);
 				rtMap.put("userId", account.getId());
-				rtMap.put("nikeName",
+				rtMap.put("nickName",
 						(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-								: account.getNickName()) == null ? bean.get("nikeName").toString()
+								: account.getNickName()) == null ? bean.get("nickName").toString()
 										: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
 												: account.getNickName()));
 				rtMap.put("headImg",
@@ -248,7 +247,7 @@ public class UserController extends BaseController {
 				rtMap.put("status", "OK");
 			} else {
 				rtMap.put("status", "PWD_NO");
-				String nickName = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
+				String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 				UsersAccount account1 = new UsersAccount();
 				account1.setImgUrl(headImg);
@@ -299,7 +298,7 @@ public class UserController extends BaseController {
 		
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
-		String nickName = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
+		String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 		UsersAccount account = new UsersAccount();
 		account.setImgUrl(headImg);
