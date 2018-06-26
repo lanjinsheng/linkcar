@@ -47,9 +47,9 @@
       <insert id="insertUser"   useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UsersAccount" >
        INSERT ignore  INTO 
             usersAccount
-            (phone,pwd,nickName,lastLoginTime,createTime) 
+            (phone,pwd,nickName,lastLoginTime,createTime,imgUrl) 
         VALUES
-            (#{phone},#{pwd},#{nickName},now(),now())
+            (#{phone},#{pwd},#{nickName},now(),now(),#{imgUrl})
     </insert>
     
     <update id="updateUserPwd"   parameterType="com.idata365.app.entity.UsersAccount" >
