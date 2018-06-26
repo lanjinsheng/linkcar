@@ -87,6 +87,7 @@ public class Global {
 	
 	public static void sendImGlobal(String json) {
 		// 群发
+		log.info("sendImGlobal==json="+json);
 		Global.group.writeAndFlush(new TextWebSocketFrame(String.format(globalImMsg, json)));
 	}
 	
@@ -94,6 +95,7 @@ public class Global {
 		if(socketBeanMap.get(userId)==null) {
 			return;
 		}
+		log.info("sendImUser==json="+json);
 		SocketBean sb=socketBeanMap.get(userId);
 		sb.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(globalImMsg, json)));
 	}
