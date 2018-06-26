@@ -21,7 +21,7 @@
 		insert into assetUsersPowerLogs
 		(userId,powerNum,recordType,eventType,effectId,remark,createTime)
 		values(#{userId},#{powerNum},#{recordType},#{eventType},
-		#{effectId},#{remark},#{createTime})
+		#{effectId},#{remark},#{createTimeStr})
 	</insert>
 	
 	
