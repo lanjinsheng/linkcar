@@ -11,7 +11,8 @@ public interface ThirdPartyLoginMapper {
 	public Map<String, Object> queryThirdPartyLoginByUserId(@Param("userId") Long userId);
 
 	public int insertLogs(Map<String, Object> entity);
-
+	
 	public int updateByOpenId(@Param("userId")Long userId, @Param("openId")String openId);
 
+	public int updateLogs(Map<String, Object> entity);
 }
