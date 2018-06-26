@@ -30,6 +30,9 @@ public class ImController extends BaseController{
 		requestBodyParams.put("nick", this.getUserInfo().getNickName());
 		requestBodyParams.put("time", DateTools.getCurDate2());
 		requestBodyParams.put("imgUrl", this.getUserInfo().getImgUrl());
+		if(requestBodyParams.get("familyId").equals("")) {
+			requestBodyParams.put("familyId", 0L);
+		}
 		imService.insertMsg(requestBodyParams);
 		if(requestBodyParams.get("type").equals("0")) {
 			imService.sendGloadIm(requestBodyParams);
