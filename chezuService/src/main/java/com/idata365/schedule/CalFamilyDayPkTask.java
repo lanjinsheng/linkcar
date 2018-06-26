@@ -75,7 +75,7 @@ public class CalFamilyDayPkTask extends TimerTask {
 			List<TaskFamilyPk> list=calFamilyPkService.getFamilyPkTask(task);
 			if(list.size()==0) {//无任务
 				//对新用户进行扫尾工作（进行更新新用户奖杯）(新用户按赢家发送到资产)
-				calFamilyPkService.giveNewFamilyTrophy(timestamp, tf.getStartDay(), tf.getEndDay());
+//				calFamilyPkService.giveNewFamilyTrophy(timestamp, tf.getStartDay(), tf.getEndDay());
 				//扫尾工作，
 				String sign=SignUtils.encryptHMAC(tf.getDaystamp());
 				boolean r=chezuAssetService.addFamilyGameOrderEnd( tf.getDaystamp(),sign);

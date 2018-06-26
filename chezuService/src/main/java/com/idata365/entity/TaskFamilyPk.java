@@ -16,10 +16,17 @@ public class TaskFamilyPk implements Serializable {
 	private Long selfFamilyId;
 	private Long competitorFamilyId;
 	private String daystamp;
-	
+	private Integer relationType;
 	private String taskFlag;
     private Integer taskStatus;
 	private Integer failTimes;
+	
+	public Integer getRelationType() {
+		return relationType;
+	}
+	public void setRelationType(Integer relationType) {
+		this.relationType = relationType;
+	}
 	public Long getId() {
 		return id;
 	}
