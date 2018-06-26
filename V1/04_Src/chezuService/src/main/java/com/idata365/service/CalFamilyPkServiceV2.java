@@ -100,6 +100,7 @@ public class CalFamilyPkServiceV2 {
 		Long winFamily=selfFamilyId;
 		int winFamilyType=level1;
 		Integer winMemberNum=0;
+		boolean hadSendAsset=false;
 		if(fdds1.getScore()>fdds2.getScore()) {
 			trophy1=d1.getWin();
 			if(fdds2.getScore()==0) {
@@ -108,7 +109,11 @@ public class CalFamilyPkServiceV2 {
 				trophy2=d2.getLoss();
 			}
 			winMemberNum=fdds1.getMemberNum();
+			hadSendAsset=true;
 		}else if(fdds1.getScore()<fdds2.getScore()) {
+			if(taskFamilyPk.getRelationType()==2) {
+				hadSendAsset=true;
+			}
 			winFamily=competitorFamilyId;
 			winMemberNum=fdds2.getMemberNum();
 			winFamilyType=level2;
@@ -118,15 +123,14 @@ public class CalFamilyPkServiceV2 {
 			}else {
 				trophy1=d1.getLoss();
 			}
+		 
 		}else {
 			trophy1=d1.getDogfall();
 			trophy2=d2.getDogfall();
 		}
 		fdds1.setTrophy(trophy1);
 		fdds2.setTrophy(trophy2);
-	    //更新日pk结果
-        taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
-        taskFamilyPkMapper.updateFamilyDayScoreById(fdds2);
+
         String month=taskFamilyPk.getDaystamp().replaceAll("-", "").substring(0,6);
         fdds1.setMonth(month);
         fdds1.setStartDay(startDay);
@@ -134,21 +138,38 @@ public class CalFamilyPkServiceV2 {
         fdds2.setMonth(month);
         fdds2.setStartDay(startDay);
         fdds2.setEndDay(endDay);
-        //更新赛季结果
-        taskFamilyPkMapper.updateFamilyScore(fdds1);
-        taskFamilyPkMapper.updateFamilyScore(fdds2);
         
-        //更新family结果
-        taskFamilyPkMapper.updateFamilyInfo(fdds1);
-        taskFamilyPkMapper.updateFamilyInfo(fdds2);
-
-	    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum,
-	    		winFamilyType);
-        
-        if(!r) {
-        	throw new RemoteException();  
+        if(taskFamilyPk.getRelationType()==2) {//双边更新
+		    //更新日pk结果,更新奖杯
+	        taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
+	        taskFamilyPkMapper.updateFamilyDayScoreById(fdds2);
+	        
+	        //更新赛季结果,更新奖杯
+	        taskFamilyPkMapper.updateFamilyScore(fdds1);
+	        taskFamilyPkMapper.updateFamilyScore(fdds2);
+	        
+	        //更新family结果,更新奖杯
+	        taskFamilyPkMapper.updateFamilyInfo(fdds1);
+	        taskFamilyPkMapper.updateFamilyInfo(fdds2);
+        }else if(taskFamilyPk.getRelationType()==1) {//单边更新
+        	 //更新日pk结果,更新奖杯
+	        taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
+	        //更新赛季结果,更新奖杯
+	        taskFamilyPkMapper.updateFamilyScore(fdds1);
+	        //更新family结果,更新奖杯
+	        taskFamilyPkMapper.updateFamilyInfo(fdds1);
         }
-		return r;
+        if(hadSendAsset) {
+		    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum,
+		    		winFamilyType);
+	        
+	        if(!r) {
+	        	throw new RemoteException();  
+	        }
+	       
+			return r;
+        }
+        return true;
 	}
 	
 	
