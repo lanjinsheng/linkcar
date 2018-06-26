@@ -140,15 +140,15 @@ public class UserController extends BaseController {
 			return ResultUtils.rtFailParam(null);
 		int loginType = Integer.valueOf(String.valueOf(requestBodyParams.get("loginType")));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
-		Map<String, Object> entity = new HashMap<String, Object>();
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
-		entity.put("openId", openId);
-		entity.put("loginType", loginType);
-		entity.put("remark", requestBodyParams.get("remark").toString());
 		if(map == null) {
+			Map<String, Object> entity = new HashMap<String, Object>();
+			entity.put("openId", openId);
+			entity.put("loginType", loginType);
+			entity.put("remark", requestBodyParams.get("remark").toString());
 			thirdPartyLoginService.insertLogs(entity);
 		}
-		if (map == null||map.get("userId")==null||map.get("userId").equals("")) {
+		if (map == null||map.get("userId")==null) {
 			// 未绑定手机号
 			rtMap.put("status", "PHONE_NO");
 			return ResultUtils.rtSuccess(rtMap);// 跳到绑定手机号页面
@@ -205,11 +205,12 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("verifyCode")))
+				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("openId")))
 			return ResultUtils.rtFailParam(null);
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
+		
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		String status = LoginRegService.VC_ERR;
@@ -221,6 +222,7 @@ public class UserController extends BaseController {
 		if (status.equals(LoginRegService.OK)) {// 校验码通过
 			UsersAccount account = loginRegService.getUserByPhone(phone);
 			if (account!=null) {
+				//号码已经注册，直接登录
 				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 				String token = "";
 				token = UUID.randomUUID().toString().replaceAll("-", "");
@@ -246,6 +248,7 @@ public class UserController extends BaseController {
 				rtMap.put("token", token);
 				rtMap.put("status", "OK");
 			} else {
+				//号码没有注册过，注册，并去设置密码
 				rtMap.put("status", "PWD_NO");
 				String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
@@ -256,7 +259,6 @@ public class UserController extends BaseController {
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
 				}
-				loginRegService.insertToken(account1.getId(), token);
 				rtMap.put("token", token);
 				rtMap.put("nickName", nickName);
 				rtMap.put("headImg", headImg);
@@ -302,15 +304,10 @@ public class UserController extends BaseController {
 		String password = String.valueOf(requestBodyParams.get("password"));
 		String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
-		UsersAccount account = new UsersAccount();
-		account.setImgUrl(headImg);
-		String token = loginRegService.regUser(phone, password, nickName, rtMap,account);
+		String token = loginRegService.updateUserPwd(phone, password, rtMap);
 		if (token == null) {
 			return ResultUtils.rtFailRequest(null);
 		}
-		
-		//绑定三方表
-		thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 		
 		rtMap.put("token", token);
 		rtMap.put("nickName", nickName);
