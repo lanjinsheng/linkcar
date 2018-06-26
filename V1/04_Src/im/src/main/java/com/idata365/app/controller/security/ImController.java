@@ -34,9 +34,10 @@ public class ImController extends BaseController{
 			requestBodyParams.put("familyId", 0L);
 		}
 		imService.insertMsg(requestBodyParams);
-		if(requestBodyParams.get("type").equals("0")) {
+		requestBodyParams.put("imgUrl", this.getImgBasePath()+ this.getUserInfo().getImgUrl());
+		if(Integer.valueOf(requestBodyParams.get("type").toString())==0) {
 			imService.sendGloadIm(requestBodyParams);
-		}else if(requestBodyParams.get("type").equals("1") || requestBodyParams.get("type").equals("2")) {
+		}else if(Integer.valueOf(requestBodyParams.get("type").toString())==1 || Integer.valueOf(requestBodyParams.get("type").toString())==2) {
 			imService.sendUserFamilyIm(requestBodyParams,String.valueOf(userId));
 		}
 		return ResultUtils.rtSuccess(null);
@@ -45,7 +46,6 @@ public class ImController extends BaseController{
 	@RequestMapping("/getGlobalMessage")
 	public  Map<String, Object> getGlobalMessage(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<String, Object> requestBodyParams) {
-		Map<String,Object> rtMap=new HashMap<String,Object>();
 		Long myFamily=0L;
 		Long partakeFamily=0L;
 		String sign=SignUtils.encryptHMAC(String.valueOf(this.getUserId()));
@@ -57,8 +57,7 @@ public class ImController extends BaseController{
 				partakeFamily=Long.valueOf(ids[1]);
 			}
 		}
-		List<Map<String, String>> list=imService.getMsgs(this.getImgBasePath(),myFamily,partakeFamily);
-		rtMap.put("msgs", list);
+		Map<String,List<Map<String,String>>> rtMap=imService.getMsgs(this.getImgBasePath(),myFamily,partakeFamily);
 		return ResultUtils.rtSuccess(rtMap);
 	} 
 	
