@@ -1,5 +1,6 @@
 package com.idata365.app.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,9 @@ public class ImService extends BaseService<ImService>
 	public void sendGloadIm(Map<String,Object> msg) {
 		Global.sendImGlobal(GsonUtils.toJson(msg, false));
 	}
+	public void sendUserFamilyIm(Map<String,Object> msg,String userId) {
+		Global.sendImUser(GsonUtils.toJson(msg, false),userId);
+	}
 	/**
 	 * 
 	    * @Title: sendAuctionMsg
@@ -74,9 +78,29 @@ public class ImService extends BaseService<ImService>
 		Global.sendAuctionMsg(GsonUtils.toJson(goods, false), GsonUtils.toJson(goodDetail, false),keyId);
 	}
 	
-	public List<Map<String,String>>  getMsgs()
+	public List<Map<String,String>>  getMsgs(String baseUrl,Long familyId,Long partakeFamilyId)
 	{
-		return imMapper.getMsg();
+		List<Map<String,String>> rtList=new ArrayList<Map<String,String>>();
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("msgType", 0);
+		map.put("familyId", 0);
+		map.put("id", 9999999999999999L);
+		map.put("imgPath", baseUrl);
+		List<Map<String,String>> list1=imMapper.getMsg(map);
+		rtList.addAll(list1);
+		if(familyId>0) {
+			map.put("familyId", familyId);
+			List<Map<String,String>> list2=imMapper.getMsg(map);
+			rtList.addAll(list2);
+		}
+		if(partakeFamilyId>0) {
+			map.put("familyId", partakeFamilyId);
+			List<Map<String,String>> list3=imMapper.getMsg(map);
+			rtList.addAll(list3);
+		}
+		
+		
+		return rtList;
 	} 
 	
 	
