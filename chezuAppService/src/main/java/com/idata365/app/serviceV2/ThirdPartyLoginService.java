@@ -27,9 +27,13 @@ public class ThirdPartyLoginService extends BaseService<ThirdPartyLoginService>
 		LOGGER.info("userId===================="+userId);
 		return thirdPartyLoginMapper.queryThirdPartyLoginByUserId(userId);
 	}
-
+	
 	public int insertLogs(Map<String, Object> entity) {
 		return thirdPartyLoginMapper.insertLogs(entity);
+	}
+	
+	public int updateLogs(Map<String, Object> entity) {
+		return thirdPartyLoginMapper.updateLogs(entity);
 	}
 
 	public int updateByOpenId(Long userId, String openId) {
