@@ -78,29 +78,35 @@ public class ImService extends BaseService<ImService>
 		Global.sendAuctionMsg(GsonUtils.toJson(goods, false), GsonUtils.toJson(goodDetail, false),keyId);
 	}
 	
-	public List<Map<String,String>>  getMsgs(String baseUrl,Long familyId,Long partakeFamilyId)
+	public  Map<String,List<Map<String,String>>>   getMsgs(String baseUrl,Long familyId,Long partakeFamilyId)
 	{
-		List<Map<String,String>> rtList=new ArrayList<Map<String,String>>();
+		Map<String,List<Map<String,String>>> rtMap=new HashMap<String,List<Map<String,String>>>();
+	
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("msgType", 0);
 		map.put("familyId", 0);
 		map.put("id", 9999999999999999L);
 		map.put("imgPath", baseUrl);
 		List<Map<String,String>> list1=imMapper.getMsg(map);
-		rtList.addAll(list1);
+		if(list1==null) {	list1=new ArrayList<Map<String,String>>();}
+		rtMap.put("0", list1);
+		List<Map<String,String>> list2=null;
+		List<Map<String,String>> list3=null;
 		if(familyId>0) {
 			map.put("familyId", familyId);
-			List<Map<String,String>> list2=imMapper.getMsg(map);
-			rtList.addAll(list2);
+			list2=imMapper.getMsg(map);
+			
 		}
 		if(partakeFamilyId>0) {
 			map.put("familyId", partakeFamilyId);
-			List<Map<String,String>> list3=imMapper.getMsg(map);
-			rtList.addAll(list3);
+			list3=imMapper.getMsg(map);
+			 
 		}
-		
-		
-		return rtList;
+		if(list2==null) {list2=new ArrayList<Map<String,String>>();}
+		rtMap.put("1", list2);
+		if(list3==null) {list3=new ArrayList<Map<String,String>>();}
+		rtMap.put("2", list3);
+		return rtMap;
 	} 
 	
 	
