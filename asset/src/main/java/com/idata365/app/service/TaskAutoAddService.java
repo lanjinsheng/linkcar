@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,7 @@ import com.idata365.app.util.DateTools;
 
 @Service
 public class TaskAutoAddService {
-
+	private final static Logger LOG = LoggerFactory.getLogger(TaskAutoAddService.class);
 	@Autowired
    TaskGenericMapper taskGenericMapper;
 	
@@ -90,8 +92,10 @@ public class TaskAutoAddService {
 		if((now-curDay)>0 && (now-curDay)<i) {
 			String dayStr2=getDateStr2(-1);
 			String snapKey=dayStr2+"_"+TaskGenericEnum.UserDayPowerSnapshot;
+			String snapKey2=dayStr2+"_"+TaskGenericEnum.InitFamilyDayReward;
 			TaskGeneric task=taskGenericMapper.getByGenericKey(snapKey);
-			if(task!=null) {
+			TaskGeneric task2=taskGenericMapper.getByGenericKey(snapKey2);
+			if(task!=null && task2!=null) {
 			//快照任务已经完成,可以进行power任务下发
 				String powerKey=dayStr2+"_"+TaskGenericEnum.InitUserDayReward;
 				TaskGeneric taskPower=new TaskGeneric();
@@ -100,6 +104,8 @@ public class TaskAutoAddService {
 				taskPower.setPriority(10);
 				taskPower.setJsonValue(String.format(jsonValue1,dayStr2));
 				taskGenericMapper.insertTask(taskPower);
+			}else {
+				LOG.info("task==null?"+(task==null)+"task2==null?"+(task2==null));
 			}
 		}
 		
