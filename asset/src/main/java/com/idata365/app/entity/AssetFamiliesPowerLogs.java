@@ -28,7 +28,7 @@ public class AssetFamiliesPowerLogs implements Serializable {
 	private String remark;
 	private Date createTime;
 	private Integer count;
-	private String relation;
+	private String relation="0";
 
 
 	public String getRelation() {
