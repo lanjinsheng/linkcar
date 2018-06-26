@@ -125,7 +125,7 @@ public interface ChezuAssetService {
 	long getFamilySeasonID(@RequestParam(value = "daystamp") String daystamp,
 			@RequestParam(value = "myFamilyId") long myFamilyId, @RequestParam(value = "sign") String sign);
 
-	@RequestMapping(value = "/asset/queryHavaNewPower", method = RequestMethod.POST)
-	String queryHavaNewPower(@RequestParam(value = "userId") long userId,
+	@RequestMapping(value = "/asset/queryHaveNewPower", method = RequestMethod.POST)
+	String queryHaveNewPower(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "familyId") long familyId, @RequestParam(value = "sign") String sign);
 }

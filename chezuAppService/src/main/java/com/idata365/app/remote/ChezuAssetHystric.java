@@ -55,8 +55,8 @@ public class ChezuAssetHystric implements ChezuAssetService {
 	}
 
 	@Override
-	public String queryHavaNewPower(long userId, long familyId, String sign) {
-		LOG.error("queryHavaNewPower 挂了");
+	public String queryHaveNewPower(long userId, long familyId, String sign) {
+		LOG.error("queryHaveNewPower 挂了");
 		return null;
 	}
 	 

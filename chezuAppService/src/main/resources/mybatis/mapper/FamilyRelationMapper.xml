@@ -16,6 +16,12 @@
        FROM  familyRelation where ((selfFamilyId=#{familyId})
        or  (competitorFamilyId=#{familyId} and relationType=2)) and daystamp=#{daystamp}
      </select>
+     <!-- 通过家族id获取已确立对战关系的对战记录Asset工程 -->
+     <select id="getFightRelationAsset" resultMap="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT *
+       FROM  familyRelation where ((selfFamilyId=#{familyId})
+       or  (competitorFamilyId=#{familyId} and relationType=2)) and daystamp=#{daystamp}
+     </select>
      <!--判断是否有被挑战记录，如果有，则进行更新匹配升级relationType为2-->
      <select id="hadMatch" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.FamilyRelation">
        SELECT *
