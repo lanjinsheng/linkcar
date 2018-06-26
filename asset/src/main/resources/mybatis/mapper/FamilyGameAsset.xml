@@ -5,11 +5,11 @@
     </resultMap>
      <select id="getFamilyGameAssets" resultMap="BaseFamilyGameAssetMap" parameterType="com.idata365.app.entity.FamilyGameAsset">
        SELECT *
-       FROM  familyGameAsset where familyId=#{familyId} and diamondsNum<![CDATA[>]]>0 order by id desc limit 10
+       FROM  familyGameAsset where familyId=#{familyId} and rewardsNum<![CDATA[>]]>0 order by id desc limit 10
      </select>
      <select id="getFamilyGameAssetsPre" resultMap="BaseFamilyGameAssetMap" parameterType="com.idata365.app.entity.FamilyGameAsset">
        SELECT *
-       FROM  familyGameAsset where familyId=#{familyId} and id<![CDATA[<]]>#{id} and diamondsNum<![CDATA[>]]>0 order by id desc limit 10
+       FROM  familyGameAsset where familyId=#{familyId} and id<![CDATA[<]]>#{id} and rewardsNum<![CDATA[>]]>0 order by id desc limit 10
      </select> 
      <insert id="insertFamilyGameAsset"   parameterType="com.idata365.app.entity.FamilyGameAsset">
             INSERT IGNORE  INTO 
@@ -39,7 +39,7 @@
        seasonName=#{seasonName}
         order by id desc limit 1
      </select> 
-    <update id="updateDiamonds"   parameterType="com.idata365.app.entity.FamilyGameAsset">
-           update familyGameAsset set diamondsNum=#{diamondsNum} where id=#{id}
+    <update id="updateRewards"   parameterType="com.idata365.app.entity.FamilyGameAsset">
+           update familyGameAsset set rewardsNum=#{rewardsNum} where id=#{id}
      </update>
 </mapper>

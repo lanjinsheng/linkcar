@@ -27,7 +27,7 @@
     </insert>
     
     <update id="updateUserPowerDayTable"  parameterType="java.util.HashMap">
-        update ${tableName} set pkPower=#{pkPower} where 
+        update ${tableName} set pkPower=(pkPower+${pkPower}) where 
 		   userId=#{userId}
     </update>
     
