@@ -17,15 +17,18 @@
 	</select>
 
 	<select id="queryFamilyIdByCompetitorId" resultType="com.idata365.app.entity.FamilyRelationBean" parameterType="com.idata365.app.entity.FamilyRelationBean">
-		 select selfFamilyId as familyId1, competitorFamilyId as familyId2 from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and daystamp=#{daystamp}
+		 select selfFamilyId as familyId1, competitorFamilyId as familyId2 from familyRelation where ((selfFamilyId=#{familyId})
+       or  (competitorFamilyId=#{familyId} and relationType=2)) and daystamp=#{daystamp}
 	</select>
 	
 	<select id="queryFightRecordByFamilyId" resultType="com.idata365.app.entity.FamilyRelation">
-		 select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and <![CDATA[str_to_date(daystamp, '%Y-%m-%d') <= DATE_ADD(date(now()),INTERVAL -1 DAY)]]> and <![CDATA[ id<#{recordId}]]> order by daystamp desc limit 10
+		 select * from familyRelation where ((selfFamilyId=#{familyId})
+       or  (competitorFamilyId=#{familyId} and relationType=2)) and <![CDATA[str_to_date(daystamp, '%Y-%m-%d') <= DATE_ADD(date(now()),INTERVAL -1 DAY)]]> and <![CDATA[ id<#{recordId}]]> order by daystamp desc limit 10
 	</select>
 	
 	<select id="queryFightRecordByFamilyIdFirst" resultType="com.idata365.app.entity.FamilyRelation">
-		 select * from familyRelation where (selfFamilyId=#{familyId} or competitorFamilyId=#{familyId}) and <![CDATA[str_to_date(daystamp, '%Y-%m-%d') <= DATE_ADD(date(now()),INTERVAL -1 DAY)]]> order by daystamp desc limit 10
+		 select * from familyRelation where ((selfFamilyId=#{familyId})
+       or  (competitorFamilyId=#{familyId} and relationType=2)) and <![CDATA[str_to_date(daystamp, '%Y-%m-%d') <= DATE_ADD(date(now()),INTERVAL -1 DAY)]]> order by daystamp desc limit 10
 	</select>
 
 	<select id="queryFamilyRelationIds" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyRelationBean">

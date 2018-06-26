@@ -43,6 +43,18 @@ public class FightService extends BaseService<FightService> {
 		}
 	}
 	
+	 /**
+     * 获取对手家族，无对战记录返回null---Asset
+     * @param selfFamilyId
+     * @return
+     */
+	public Map<String,Object> getFightRelationAsset(Long selfFamilyId,String daystamp) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("familyId", selfFamilyId);
+		map.put("daystamp", daystamp);
+		return familyRelationMapper.getFightRelationAsset(map);
+	}
+	
 	public Map<String,Object> getOpponentInfo(Long familyId) {
 		Map<String,Object> family=usersAccountMapper.getFamilyByFamilyId(familyId);
 		return family;

@@ -13,6 +13,8 @@ public interface FamilyRelationMapper {
 
 	FamilyRelation getFightRelation(Map<String,Object> map);
 	
+	Map<String,Object> getFightRelationAsset(Map<String,Object> map);
+	
 	int insertFamilyRelation(FamilyRelation familyRelation);
 	
 	int updateRelationType(@Param("id")long id);

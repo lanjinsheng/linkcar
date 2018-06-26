@@ -71,21 +71,21 @@ public class UserController extends BaseController {
 			return ResultUtils.rtFailParam(null);
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
-		String status = LoginRegService.VC_ERR;
+		String status = LoginRegService.OK;
 		// 送审时，去掉验证码。正常场景下，开启验证码（当开关为0时候，关闭验证码。开关为1时，开启验证码）
-		if (SystemConstant.LOGINCODE_SWITCH == 0) {
-			status = LoginRegService.OK;
-		} else {
-			if (ValidTools.isBlank(requestBodyParams.get("verifyCode"))) {
-				return ResultUtils.rtFailParam(null);
-			}
-			String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
-			if (verifyCode.equals(systemProperties.getNbcode())) {
-				status = LoginRegService.OK;
-			} else {
-				status = loginRegService.validVerifyCode(phone, 2, verifyCode);
-			}
-		}
+//		if (SystemConstant.LOGINCODE_SWITCH == 0) {
+//			status = LoginRegService.OK;
+//		} else {
+//			if (ValidTools.isBlank(requestBodyParams.get("verifyCode"))) {
+//				return ResultUtils.rtFailParam(null);
+//			}
+//			String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
+//			if (verifyCode.equals(systemProperties.getNbcode())) {
+//				status = LoginRegService.OK;
+//			} else {
+//				status = loginRegService.validVerifyCode(phone, 2, verifyCode);
+//			}
+//		}
 		String token = "";
 		if (status.equals(LoginRegService.OK)) {// 校验码通过
 			UsersAccount account = new UsersAccount();
@@ -151,8 +151,8 @@ public class UserController extends BaseController {
 		}
 		if (map == null||map.get("userId")==null||map.get("userId").equals("")) {
 			// 未绑定手机号
-//			return ResultUtils.rtFailParam(null, "请先绑定手机号");// 跳到绑定手机号页面
-			return ResultUtils.rtSuccess("请先绑定手机号");// 跳到绑定手机号页面
+			rtMap.put("status", "PHONE_ERR");
+			return ResultUtils.rtSuccess(rtMap);// 跳到绑定手机号页面
 		}
 
 		// 有记录
@@ -162,13 +162,14 @@ public class UserController extends BaseController {
 		token = UUID.randomUUID().toString().replaceAll("-", "");
 		loginRegService.insertToken(account.getId(), token);
 		rtMap.put("userId", account.getId());
-		rtMap.put("nickName",
+		rtMap.put("nickname",
 				account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()) : account.getNickName());
 		if(account.getImgUrl()!=null&&account.getImgUrl().startsWith("http")) {
 			rtMap.put("headImg",account.getImgUrl());
 		}else {
 			rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
 		}
+		rtMap.put("userName", account.getPhone());
 		
 		Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
 				SignUtils.encryptHMAC(String.valueOf(account.getId())));
@@ -201,6 +202,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/account/bindPhone1")
 	public Map<String, Object> bindPhone1(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
 				|| ValidTools.isBlank(requestBodyParams.get("verifyCode")))
 			return ResultUtils.rtFailParam(null);
@@ -216,31 +218,29 @@ public class UserController extends BaseController {
 		if (status.equals(LoginRegService.OK)) {// 校验码通过
 			UsersAccount account = loginRegService.getUserByPhone(phone);
 			if (account!=null) {
-				Map<String, Object> rtMap = new HashMap<String, Object>();
 				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
-				String token = "";
-				token = UUID.randomUUID().toString().replaceAll("-", "");
-				loginRegService.insertToken(account.getId(), token);
-				rtMap.put("userId", account.getId());
-				rtMap.put("nickName",
-						account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()) : account.getNickName());
-				rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
-
-				Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
-						SignUtils.encryptHMAC(String.valueOf(account.getId())));
-				if ("1".equals(authenticated.get("IdCardIsOK")) && "1".equals(authenticated.get("VehicleTravelIsOK"))) {
-					rtMap.put("isAuthenticated", "1");
-				} else {
-					rtMap.put("isAuthenticated", "0");
-				}
 				rtMap.put("status", "OK");
-				rtMap.put("token", token);
-				return ResultUtils.rtSuccess(rtMap);
 			} else {
-				Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
-				
-				return ResultUtils.rtFailParam(null, "请去设置密码");
+				rtMap.put("status", "PWD");
 			}
+			String token = "";
+			token = UUID.randomUUID().toString().replaceAll("-", "");
+			loginRegService.insertToken(account.getId(), token);
+			rtMap.put("userId", account.getId());
+			rtMap.put("nickname",
+					account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()) : account.getNickName());
+			rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
+
+			Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
+					SignUtils.encryptHMAC(String.valueOf(account.getId())));
+			if ("1".equals(authenticated.get("IdCardIsOK")) && "1".equals(authenticated.get("VehicleTravelIsOK"))) {
+				rtMap.put("isAuthenticated", "1");
+			} else {
+				rtMap.put("isAuthenticated", "0");
+			}
+			
+			rtMap.put("token", token);
+			return ResultUtils.rtSuccess(rtMap);
 		} else {
 			if (status.equals(LoginRegService.VC_ERR))
 				return ResultUtils.rtFailParam(null, "校验码无效");
@@ -279,11 +279,11 @@ public class UserController extends BaseController {
 		
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
-		String nickName = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
+		String nickname = bean.get("nikeName").toString()==null?NameConstant.getNickName():bean.get("nikeName").toString();
 		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 		UsersAccount account = new UsersAccount();
 		account.setImgUrl(headImg);
-		String token = loginRegService.regUser(phone, password, nickName, rtMap,account);
+		String token = loginRegService.regUser(phone, password, nickname, rtMap,account);
 		if (token == null) {
 			return ResultUtils.rtFailRequest(null);
 		}
@@ -292,7 +292,7 @@ public class UserController extends BaseController {
 		thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 		
 		rtMap.put("token", token);
-		rtMap.put("nickName", nickName);
+		rtMap.put("nickName", nickname);
 		rtMap.put("headImg", headImg);
 		rtMap.put("isAuthenticated", "0");
 		
@@ -317,11 +317,13 @@ public class UserController extends BaseController {
 	@RequestMapping("/account/registerStep1")
 	public Map<String, Object> registerStep1(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("verifyCode")))
+				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("password")))
 			return ResultUtils.rtFailParam(null);
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
+		String password = String.valueOf(requestBodyParams.get("password"));
 		String status = LoginRegService.VC_ERR;
 		if (verifyCode.equals(systemProperties.getNbcode())) {// 测试使用万能验证码
 			status = LoginRegService.OK;
@@ -333,7 +335,17 @@ public class UserController extends BaseController {
 			if (isAccountExist) {
 				return ResultUtils.rtFailParam(null, "账号已注册");
 			} else {
-				return ResultUtils.rtSuccess(null);
+				String nickName = NameConstant.getNickName();
+				UsersAccount account = new UsersAccount();
+				String token = loginRegService.regUser(phone, password, nickName, rtMap,account);
+				if (token == null) {
+					return ResultUtils.rtFailRequest(null);
+				}
+				rtMap.put("token", token);
+				rtMap.put("nickName", nickName);
+				rtMap.put("headImg", "");
+				rtMap.put("isAuthenticated", "0");
+				return ResultUtils.rtSuccess(rtMap);
 			}
 		} else {
 			if (status.equals(LoginRegService.VC_ERR))
@@ -347,7 +359,7 @@ public class UserController extends BaseController {
 	/**
 	 * 
 	 * @Title: registerStep2
-	 * @Description: TODO(注册提交2)
+	 * @Description: TODO(注册提交2---废弃---lcc)
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param
@@ -405,11 +417,13 @@ public class UserController extends BaseController {
 	@RequestMapping("/account/findPasswordStep1")
 	public Map<String, Object> findPasswordStep1(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("verifyCode")))
+				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("password")))
 			return ResultUtils.rtFailParam(null);
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
+		String password = String.valueOf(requestBodyParams.get("password"));
 		String status = LoginRegService.VC_ERR;
 		if (verifyCode.equals(systemProperties.getNbcode())) {// 测试万能验证码
 			status = LoginRegService.OK;
@@ -419,7 +433,12 @@ public class UserController extends BaseController {
 		if (status.equals(LoginRegService.OK)) {// 校验码通过
 			boolean isAccountExist = loginRegService.isPhoneExist(phone);
 			if (isAccountExist) {
-				return ResultUtils.rtSuccess(null);
+				String token = loginRegService.updateUserPwd(phone, password, rtMap);
+				if (token == null) {
+					return ResultUtils.rtFailRequest(null);
+				}
+				rtMap.put("token", token);
+				return ResultUtils.rtSuccess(rtMap);
 			} else {
 				return ResultUtils.rtFailParam(null, "账号不存在");
 			}
