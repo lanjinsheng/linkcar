@@ -130,7 +130,10 @@ public interface ChezuAssetService {
 	String queryHaveNewPower(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "familyId") long familyId, @RequestParam(value = "sign") String sign);
 	
-	
+	//任务奖励
+	@RequestMapping(value = "/asset/getMissionPrize", method = RequestMethod.POST)
+	boolean getMissionPrize(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerPrize") int powerPrize,@RequestParam(value = "missionId") int missionId, @RequestParam(value = "sign") String sign);
 	
 	@RequestMapping(value = "/asset/reducePowersByChallege", method = RequestMethod.POST)
 	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,

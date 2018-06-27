@@ -62,13 +62,17 @@ public class ChezuAssetHystric implements ChezuAssetService {
 	}
 
 	@Override
+	public boolean getMissionPrize(long userId, int powerPrize, int missionId, String sign) {
+		LOG.error("getMissionPrize 挂了");
+		return false;
+	}
+
+	@Override
 	public Map<String, String> reducePowersByChallege(long userId,
 			  String sign) {
 		// TODO Auto-generated method stub
 		LOG.error("addAssetUsersPowerLogs 挂了");
 		return null;
 	}
-	 
-	
  
 }
