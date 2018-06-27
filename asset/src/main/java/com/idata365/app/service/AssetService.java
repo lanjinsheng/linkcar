@@ -243,8 +243,8 @@ public class AssetService extends BaseService<AssetService> {
 			AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 			assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 			assetUsersDiamondsLogs.setEffectId(0L);
-			assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Buy);
-			assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
+			assetUsersDiamondsLogs.setEventType(AssetConstant.EVENTTYPE_BUY);
+			assetUsersDiamondsLogs.setRecordType(AssetConstant.RECORDTYPE_2);
 			assetUsersDiamondsLogs.setRemark("购买消费");
 			assetUsersDiamondsLogs.setUserId(userId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
@@ -252,8 +252,8 @@ public class AssetService extends BaseService<AssetService> {
 			AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
 			logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 			logs.setEffectId(0L);
-			logs.setEventType(AssetConstant.EventType_Earn);
-			logs.setRecordType(AssetConstant.RecordType_1);
+			logs.setEventType(AssetConstant.EVENTTYPE_EARN);
+			logs.setRecordType(AssetConstant.RECORDTYPE_1);
 			logs.setRemark("交易收入");
 			logs.setUserId(ofUserId);
 			assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
@@ -293,8 +293,8 @@ public class AssetService extends BaseService<AssetService> {
 			AuctionUsersDiamondsLogs auctionUsersDiamondsLogs = new AuctionUsersDiamondsLogs();
 			auctionUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 			auctionUsersDiamondsLogs.setEffectId(auctionGoodsId);
-			auctionUsersDiamondsLogs.setEventType(AssetConstant.EventType_Freeze);
-			auctionUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
+			auctionUsersDiamondsLogs.setEventType(AssetConstant.EVENTTYPE_FREEZE);
+			auctionUsersDiamondsLogs.setRecordType(AssetConstant.RECORDTYPE_2);
 			auctionUsersDiamondsLogs.setRemark("竞拍冻结");
 			auctionUsersDiamondsLogs.setUserId(userId);
 			auctionUsersDiamondsLogs.setCreateTime(new Date());
@@ -303,8 +303,8 @@ public class AssetService extends BaseService<AssetService> {
 				AuctionUsersDiamondsLogs logs = new AuctionUsersDiamondsLogs();
 				logs.setDiamondsNum(preUserDiamondsNum);
 				logs.setEffectId(auctionGoodsId);
-				logs.setEventType(AssetConstant.EventType_Thaw);
-				logs.setRecordType(AssetConstant.RecordType_1);
+				logs.setEventType(AssetConstant.EVENTTYPE_THAW);
+				logs.setRecordType(AssetConstant.RECORDTYPE_1);
 				logs.setRemark("竞拍解冻");
 				logs.setUserId(preUserId);
 				logs.setCreateTime(new Date());
@@ -329,8 +329,8 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 		assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		assetUsersDiamondsLogs.setEffectId(auctionGoodsId);
-		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_Auction_Buy);
-		assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
+		assetUsersDiamondsLogs.setEventType(AssetConstant.EVENTTYPE_DAIMOND_AUCTION_BUY);
+		assetUsersDiamondsLogs.setRecordType(AssetConstant.RECORDTYPE_2);
 		assetUsersDiamondsLogs.setRemark("竞拍消费" + auctionGoodsId);
 		assetUsersDiamondsLogs.setUserId(buyer);
 		assetUsersDiamondsLogsMapper.insertDiamondsConsume(assetUsersDiamondsLogs);
@@ -338,8 +338,8 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
 		logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		logs.setEffectId(auctionGoodsId);
-		logs.setEventType(AssetConstant.EventType_Daimond_Auction_Earn);
-		logs.setRecordType(AssetConstant.RecordType_1);
+		logs.setEventType(AssetConstant.EVENTTYPE_DAIMOND_AUCTION_EARN);
+		logs.setRecordType(AssetConstant.RECORDTYPE_1);
 		logs.setRemark("竞拍收入" + auctionGoodsId);
 		logs.setUserId(sellerId);
 		assetUsersDiamondsLogsMapper.insertDiamondsConsume(logs);
@@ -354,8 +354,8 @@ public class AssetService extends BaseService<AssetService> {
 		AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
 		auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		auctionLog.setEffectId(auctionGoodsId);
-		auctionLog.setEventType(AssetConstant.EventType_Thaw);
-		auctionLog.setRecordType(AssetConstant.RecordType_1);
+		auctionLog.setEventType(AssetConstant.EVENTTYPE_THAW);
+		auctionLog.setRecordType(AssetConstant.RECORDTYPE_1);
 		auctionLog.setRemark("竞拍成功,解冻");
 		auctionLog.setUserId(buyer);
 		logs.setCreateTime(new Date());
@@ -654,7 +654,7 @@ public class AssetService extends BaseService<AssetService> {
 	public String getUserPowerByEffectId(long effectId) {
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 		assetUsersPowerLogs.setEffectId(effectId);
-		assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_Trip);
+		assetUsersPowerLogs.setEventType(AssetConstant.EVENTTYPE_POWER_TRIP);
 		AssetUsersPowerLogs apl = assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(assetUsersPowerLogs);
 		if (apl == null)
 			return "0";
@@ -818,9 +818,9 @@ public class AssetService extends BaseService<AssetService> {
 		} else {
 			AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 			assetUsersPowerLogs.setEffectId(0l);
-			assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_SignIn);
+			assetUsersPowerLogs.setEventType(AssetConstant.EVENTTYPE_POWER_SIGNIN);
 			assetUsersPowerLogs.setPowerNum(5l);
-			assetUsersPowerLogs.setRecordType(AssetConstant.RecordType_1);
+			assetUsersPowerLogs.setRecordType(AssetConstant.RECORDTYPE_1);
 			assetUsersPowerLogs.setRemark(userId + "签到获取");
 			assetUsersPowerLogs.setUserId(userId);
 			assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);

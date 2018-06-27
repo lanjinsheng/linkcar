@@ -127,10 +127,10 @@ public class TempPowerRewardService extends BaseService<TempPowerRewardService> 
 			//
 			TempPowerReward r=tempPowerRewardMapper.getTempPowerReward(uuid);
 			AssetUsersPowerLogs assetUsersPowerLogs=new AssetUsersPowerLogs();
-			assetUsersPowerLogs.setEventType(AssetConstant.EventType_Power_Index_Get);
+			assetUsersPowerLogs.setEventType(AssetConstant.EVENTTYPE_POWER_INDEX_GET);
 			assetUsersPowerLogs.setEffectId(r.getId());
 			assetUsersPowerLogs.setPowerNum(r.getPowerNum());
-			assetUsersPowerLogs.setRecordType(AssetConstant.RecordType_1);
+			assetUsersPowerLogs.setRecordType(AssetConstant.RECORDTYPE_1);
 			assetUsersPowerLogs.setRemark("首页拾取增加动力");
 			assetUsersPowerLogs.setUserId(r.getUserId());
 			addUserPowers(assetUsersPowerLogs);
