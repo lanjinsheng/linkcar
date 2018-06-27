@@ -1,6 +1,5 @@
 package com.idata365.app.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.AssetConstant;
-import com.idata365.app.entity.AssetFamiliesPowerLogs;
-import com.idata365.app.entity.AssetUsersAsset;
-import com.idata365.app.entity.AssetUsersDiamondsLogs;
 import com.idata365.app.entity.AssetUsersPowerLogs;
 import com.idata365.app.entity.TempPowerReward;
 import com.idata365.app.mapper.AssetFamiliesAssetMapper;
@@ -28,6 +24,7 @@ import com.idata365.app.mapper.AssetUsersAssetMapper;
 import com.idata365.app.mapper.AssetUsersDiamondsLogsMapper;
 import com.idata365.app.mapper.AssetUsersPowerLogsMapper;
 import com.idata365.app.mapper.TempPowerRewardMapper;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.util.RandUtils;
 
 /**
@@ -54,6 +51,10 @@ public class TempPowerRewardService extends BaseService<TempPowerRewardService> 
 	AssetFamiliesPowerLogsMapper assetFamiliesPowerLogsMapper;
 	@Autowired
 	AssetFamiliesAssetMapper assetFamiliesAssetMapper;
+	@Autowired
+	ChezuAppService chezuAppService;
+	
+	
 	public TempPowerRewardService() {
 
 	}

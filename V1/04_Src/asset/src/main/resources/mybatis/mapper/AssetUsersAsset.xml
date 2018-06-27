@@ -72,12 +72,12 @@
      </update>
      
       <update id="updateDiamondsAdd"   parameterType="com.idata365.app.entity.AssetUsersDiamondsLogs">
-        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}) 
+        update assetUsersAsset set diamondsNum=(diamondsNum+${diamondsNum}),hadDiamondsNum=(hadDiamondsNum+${diamondsNum}),updateTime=now() 
         where
            userId=#{userId} 
      </update>
      <update id="updatePowerAdd"   parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
-        update assetUsersAsset set powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum}) where
+        update assetUsersAsset set powerNum=(powerNum+${powerNum}),hadPowerNum=(hadPowerNum+${powerNum}),updateTime=now() where
            userId=#{userId} 
      </update>
      

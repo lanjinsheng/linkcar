@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.idata365.app.entity.UsersAccount;
-import com.idata365.app.util.DateTools;
-
 /**
  * 
  * @ClassName: ChezuService
@@ -71,17 +68,9 @@ public interface ChezuAppService {
 	 * 
 	 * @Title: getFightRelationAsset
 	 * @Description: TODO(用于从app获取对战家族ID和人数，临时使用)
-	 * @param @param
-	 *            familyId
-	 * @param @param
-	 *            sign
-	 * @param @return
-	 *            参数
-	 * @return Map<String,Object> 返回类型
-	 * @throws @author
-	 *             LiXing
 	 */
 	@RequestMapping("/app/getFightRelationAsset")
-	public Map<String, Object> getFightRelationAsset(@RequestParam(value = "familyId") Long familyId,
+	public Map<String, Object> getFightRelationAsset(@RequestParam(value = "familyId") long familyId,
 			@RequestParam(value = "sign") String sign);
+
 }
