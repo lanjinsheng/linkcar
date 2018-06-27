@@ -5,10 +5,16 @@
        SELECT id,cast(familyId as  CHAR(32)) familyId,cast(msgType as  CHAR(32)) as type,
        cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time
        FROM  imGlobal 
-       where msgType=#{msgType} and familyId=#{familyId} and id<![CDATA[<]]>${id}
+       where familyId=#{familyId} and id<![CDATA[<]]>${id}
        order by id desc limit 30
     </select>
-    
+    <select id="getMsgGlobal" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT id,cast(familyId as  CHAR(32)) familyId,cast(msgType as  CHAR(32)) as type,
+       cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time
+       FROM  imGlobal 
+       where msgType=#{msgType} and familyId=#{familyId} and id<![CDATA[<]]>${id}
+       order by id desc limit 30
+    </select>  
     <insert id="insert"   useGeneratedKeys="true" keyProperty="id"  parameterType="java.util.HashMap" >
        INSERT    INTO 
             imGlobal
