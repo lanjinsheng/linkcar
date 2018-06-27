@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.constant.AssetConstant;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
 import com.idata365.app.entity.AssetUsersAsset;
 import com.idata365.app.entity.AssetUsersPowerLogs;
@@ -363,6 +364,28 @@ public class AssetController extends BaseController {
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
 		String haveNewPower = assetService.queryHaveNewPower(userId, familiesInfo);
 		return haveNewPower;
+	}
+	
+	/**
+	 * 
+	 * @Title: getMissionPrize
+	 * @Description: TODO(任务奖励动力增加)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/getMissionPrize", method = RequestMethod.POST)
+	boolean getMissionPrize(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerPrize") int powerPrize, @RequestParam(value = "missionId") int missionId,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"   powerPrize:" + powerPrize +"   missionId:" + missionId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("getMissionPrize·~~~controller");
+		AssetUsersPowerLogs logs = new AssetUsersPowerLogs();
+		logs.setUserId(userId);
+		logs.setPowerNum(Long.valueOf(powerPrize));
+		logs.setEffectId(Long.valueOf(missionId));
+		logs.setEventType(AssetConstant.EventType_Power_MissionPrize);//7任务奖励
+		logs.setRecordType(AssetConstant.RecordType_1);
+		return assetService.addUserPowers(logs);
 	}
 
 	public static void main(String[] args) {
