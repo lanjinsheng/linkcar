@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.entity.ImMsg;
 import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.service.FamilyService;
@@ -235,5 +236,23 @@ public class MessageOpenController {
         messageService.pushMessageTrans(msg,MessageEnum.DiamondSeasonDistr);
     	return true;
     }
-    
+    @RequestMapping("/app/msg/sendImMsg")
+    public boolean sendImMsg(
+    		@RequestParam (value = "familyId") Long familyId,
+    		@RequestParam (value = "familyType") Integer familyType,
+    		@RequestParam (value = "fromUserId") Long fromUserId,
+    		@RequestParam (value = "toUserId") Long toUserId,
+    		@RequestParam (value = "msg") String msg,
+    		@RequestParam (value = "sign") String sign){
+    	LOG.info("param:"+familyId+"=="+familyType+"=="+toUserId+"=="+msg+"==sign="+sign);
+    	LOG.info("reSign:"+SignUtils.encryptHMAC(toUserId+""));
+    	ImMsg imMsg=new ImMsg();
+		imMsg.setToUserId(toUserId);
+		imMsg.setFromUserId(fromUserId);
+		imMsg.setMsg(msg);
+		imMsg.setIsRead(0);
+		imMsg.setFamilyId(familyId);
+        messageService.pushImMessageByTask(imMsg, String.valueOf(toUserId));
+    	return true;
+    }
 }
