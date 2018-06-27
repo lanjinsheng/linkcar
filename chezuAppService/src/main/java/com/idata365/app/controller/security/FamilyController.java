@@ -33,6 +33,7 @@ import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.service.BusinessDatasService;
 import com.idata365.app.service.FamilyService;
+import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -48,12 +49,17 @@ public class FamilyController extends BaseController {
 	ChezuAssetService chezuAssetService;
 	@Autowired
 	ChezuImService chezuImService;
+	@Autowired
+	UserInfoService userInfoService;
+	
 	@RequestMapping("/family/removeMember")
 	public Map<String, Object> removeMember(@RequestBody FamilyParamBean reqBean) {
 		LOG.info("param==={}", JSON.toJSONString(reqBean));
+		
+		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
 		this.familyService.removeMember(reqBean, this.getUserInfo());
 		String sign=SignUtils.encryptHMAC(String.valueOf(reqBean.getUserId()));
-		chezuImService.notifyFamilyChange(reqBean.getUserId(), sign);
+		chezuImService.notifyFamilyChange(list1, sign);
 		return ResultUtils.rtSuccess(null);
 	}
 
@@ -91,7 +97,8 @@ public class FamilyController extends BaseController {
 		List<Map<String, String>> resultList = new ArrayList<>();
 		resultList.add(resultMap);
 		String sign=SignUtils.encryptHMAC(String.valueOf(reqBean.getUserId()));
-		chezuImService.notifyFamilyChange(reqBean.getUserId(), sign);
+		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
+		chezuImService.notifyFamilyChange(list1, sign);
 		return ResultUtils.rtSuccess(resultList);
 	}
 
@@ -110,7 +117,9 @@ public class FamilyController extends BaseController {
 
 	@RequestMapping("/family/quitFromFamily")
 	public Map<String, Object> quitFromFamily(@RequestBody FamilyParamBean reqBean) {
+		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
 		this.familyService.quitFromFamily(reqBean);
+		chezuImService.notifyFamilyChange(list1, "");
 		return ResultUtils.rtSuccess(null);
 	}
 

@@ -1,8 +1,10 @@
 package com.idata365.app.remote;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,5 +23,5 @@ public interface ChezuImService {
 
  
 	@RequestMapping(value = "/im/notifyFamilyChange",method = RequestMethod.POST)
-	public boolean notifyFamilyChange(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign);
+	public boolean notifyFamilyChange(@RequestBody List<Map<String,Object>> list,@RequestParam(value="sign") String sign);
 }

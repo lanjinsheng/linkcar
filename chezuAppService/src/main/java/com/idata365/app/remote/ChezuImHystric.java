@@ -15,7 +15,7 @@ public class ChezuImHystric implements ChezuImService {
 	private final static Logger LOG = LoggerFactory.getLogger(ChezuImHystric.class);
 
 	@Override
-	public boolean notifyFamilyChange(long userId, String sign) {
+	public boolean notifyFamilyChange(List<Map<String,Object>> list, String sign) {
 		// TODO Auto-generated method stub
 		LOG.error("notifyFamilyChange 挂了");
 		return false;
