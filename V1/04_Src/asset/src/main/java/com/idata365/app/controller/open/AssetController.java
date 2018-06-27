@@ -181,8 +181,8 @@ public class AssetController extends BaseController {
 		power.setUserId(userId);
 		power.setEffectId(0L);
 		power.setPowerNum(2L);
-		power.setRecordType(AssetConstant.RecordType_2);
-		power.setEventType(AssetConstant.EventType_Power_Challge_Reduce);
+		power.setRecordType(AssetConstant.RECORDTYPE_2);
+		power.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
 		power.setRemark("挑战家族选择消耗");
 		assetService.reduceUserPowers(power);
 		return null;
@@ -395,8 +395,8 @@ public class AssetController extends BaseController {
 		logs.setUserId(userId);
 		logs.setPowerNum(Long.valueOf(powerPrize));
 		logs.setEffectId(Long.valueOf(missionId));
-		logs.setEventType(AssetConstant.EventType_Power_MissionPrize);//7任务奖励
-		logs.setRecordType(AssetConstant.RecordType_1);
+		logs.setEventType(missionId + 100);
+		logs.setRecordType(AssetConstant.RECORDTYPE_1);
 		return assetService.addUserPowers(logs);
 	}
 
