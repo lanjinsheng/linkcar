@@ -383,7 +383,25 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
 		return true;
 	}
+	/**
+	 * 
+	 * @Title: reduceUserPowers
+	 * @Description: TODO(用户动力值減少)
+	 * @param @param
+	 *            assetUsersPowerLogs
+	 * @param @return
+	 *            参数
+	 * @return boolean 返回类型
+	 * @throws @author
+	 *             LanYeYe
+	 */
 
+	@Transactional
+	public boolean reduceUserPowers(AssetUsersPowerLogs assetUsersPowerLogs) {
+		assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
+		assetUsersAssetMapper.updatePowerReduce(assetUsersPowerLogs);
+		return true;
+	}
 	/**
 	 * 
 	 * @Title: addFamiliesPowers

@@ -22,6 +22,7 @@ public interface AssetUsersAssetMapper {
 	int updateEndUnfreeze(Map<String, Object> map);
 	
 	int updatePowerAdd(AssetUsersPowerLogs assetUsersPowerLogs);
+	int updatePowerReduce(AssetUsersPowerLogs assetUsersPowerLogs);
 
 	int updateDiamondsAdd(AssetUsersDiamondsLogs assetUsersDiamondsLogs);
 

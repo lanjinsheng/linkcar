@@ -174,7 +174,19 @@ public class AssetController extends BaseController {
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
 		return assetService.addUserPowers(assetUsersPowerLogs);
 	}
-
+	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "sign") String sign){
+		LOG.info("PARAM:userId:" + userId + "===sign:" + sign);
+		AssetUsersPowerLogs power=new AssetUsersPowerLogs();
+		power.setUserId(userId);
+		power.setEffectId(0L);
+		power.setPowerNum(2L);
+		power.setRecordType(AssetConstant.RecordType_2);
+		power.setEventType(AssetConstant.EventType_Power_Challge_Reduce);
+		power.setRemark("挑战家族选择消耗");
+		assetService.reduceUserPowers(power);
+		return null;
+	}
 	/**
 	 * 
 	 * @Title: addPowerFamilyTask
