@@ -45,7 +45,7 @@ public class UserFamilyController extends BaseController {
 	}
 
 	@RequestMapping("/app/getFamilyUsers")
-	public Map<String, Object> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign) {
+	public Map<String, List<Map<String,Object>>> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign) {
 		List<Map<String,Object>> list=userInfoService.getFamiliesByUserId(userId);
 		Map<String, List<Map<String,Object>>> rtMap=new HashMap<String, List<Map<String,Object>>>();
 		if(list!=null){
@@ -67,6 +67,6 @@ public class UserFamilyController extends BaseController {
 				}
 			}
 		} 
-		return ResultUtils.rtSuccess(rtMap);
+		return rtMap;
 	}
 }
