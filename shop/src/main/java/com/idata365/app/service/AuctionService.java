@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.controller.security.AuctionController;
 import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
 import com.idata365.app.entity.bean.AuctionBean;
@@ -180,7 +179,7 @@ public class AuctionService {
 		}
 		// 资产操作
 		String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
-		String sign = SignUtils.encryptDataAes(paramSign);
+		String sign = SignUtils.encryptHMAC(paramSign);
 		Map<String, String> remoteMap = chezuAssetService.freezeDiamondAsset(userId,
 				auctionLogs.getAuctionDiamond().doubleValue(), sign, preUserId, auctionGoods.getAuctionGoodsId());
 		if (remoteMap == null) {
