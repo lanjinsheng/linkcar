@@ -33,7 +33,7 @@
      <select id="findFamlilyUsers" resultType="java.util.HashMap" parameterType="java.util.HashMap">
      select b.id as userId,
      IF(b.imgUrl IS NULL,'',CONCAT(#{imgUrl},b.imgUrl))
-      as imgUrl,b.nickName as nick from  (SELECT userId
+      as imgUrl,b.nickName as nick,a.isLeader  from  (SELECT userId,isLeader
        FROM  userFamilyRelation  where familyId=#{familyId}) a left join usersAccount b on a.userId=b.id
      </select>
      
