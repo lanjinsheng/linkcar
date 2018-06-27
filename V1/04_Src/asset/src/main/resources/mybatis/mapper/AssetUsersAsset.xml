@@ -81,6 +81,11 @@
            userId=#{userId} 
      </update>
      
+     <update id="updatePowerReduce"   parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
+        update assetUsersAsset set powerNum=(powerNum-${powerNum}) where
+           userId=#{userId} 
+     </update>
+     
        <insert id="initUser"   parameterType="com.idata365.app.entity.AssetUsersAsset">
             INSERT IGNORE  INTO 
             assetUsersAsset
