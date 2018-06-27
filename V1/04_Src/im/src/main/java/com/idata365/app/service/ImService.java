@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.mapper.ImMapper;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.util.GsonUtils;
+import com.idata365.app.util.SignUtils;
 import com.idata365.websocket.Global;
  
 
@@ -33,7 +35,8 @@ public class ImService extends BaseService<ImService>
 	private final static Logger LOG = LoggerFactory.getLogger(ImService.class);
 	@Autowired
 	ImMapper imMapper;
-
+	@Autowired
+	ChezuAppService chezuAppService;
 	 /**
 	  * 
 	     * @Title: insertMsg
@@ -61,8 +64,28 @@ public class ImService extends BaseService<ImService>
 	public void sendGloadIm(Map<String,Object> msg) {
 		Global.sendImGlobal(GsonUtils.toJson(msg, false));
 	}
-	public void sendUserFamilyIm(Map<String,Object> msg,String userId) {
-		Global.sendImUser(GsonUtils.toJson(msg, false),userId);
+	public void sendUserFamilyIm(Map<String,Object> msg,String userId,int type) {
+		String sign=SignUtils.encryptHMAC(userId);
+		Map<String, List<Map<String,Object>>> rtMap=chezuAppService.familyUsers(Long.valueOf(userId), sign);
+		msg.put("type", "1");
+		String msg1=GsonUtils.toJson(msg, false);
+		msg.put("type", "2");
+		String msg2=GsonUtils.toJson(msg, false);
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		if(type==1) {
+		  list=(List<Map<String,Object>>)rtMap.get("createFamily");
+			
+		}else if(type==2) {
+			list=(List<Map<String,Object>>)rtMap.get("partakeFamily");
+		}
+		for(Map<String,Object> m:list) {
+			String id=String.valueOf(m.get("userId"));
+			if(m.get("isLeader").equals(1)) {
+				Global.sendImUser(msg1,id);
+			}else {
+				Global.sendImUser(msg2,id);
+			}
+		}
 	}
 	
 	public void changeFamiliesUsersIm(Map<String, List<Map<String,Object>>> msg,String userId) {
@@ -117,13 +140,13 @@ public class ImService extends BaseService<ImService>
 		List<Map<String,String>> list3=null;
 		if(familyId>0) {
 			map.put("familyId", familyId);
-//			map.put("msgType", 1);
+			map.put("msgType", 1);
 			list2=imMapper.getMsg(map);
 			
 		}
 		if(partakeFamilyId>0) {
 			map.put("familyId", partakeFamilyId);
-//			map.put("msgType", 2);
+			map.put("msgType", 2);
 			list3=imMapper.getMsg(map);
 			 
 		}
