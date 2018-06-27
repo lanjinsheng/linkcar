@@ -71,6 +71,8 @@ public class ImService extends BaseService<ImService>
 		String msg1=GsonUtils.toJson(msg, false);
 		msg.put("type", "2");
 		String msg2=GsonUtils.toJson(msg, false);
+		String atUsers=msg.get("atUsers")==null?null:String.valueOf(msg.get("atUsers"))+",";
+		
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
 		if(type==1) {
 		  list=(List<Map<String,Object>>)rtMap.get("createFamily");
@@ -82,8 +84,18 @@ public class ImService extends BaseService<ImService>
 			String id=String.valueOf(m.get("userId"));
 			if(m.get("isLeader").equals(1)) {
 				Global.sendImUser(msg1,id);
+				if(atUsers!=null && atUsers.contains(id+",")) {
+					String notifySign=SignUtils.encryptHMAC(id);
+					chezuAppService.sendImMsg(Long.valueOf(msg.get("familyId").toString()), 1, Long.valueOf(userId), Long.valueOf(id),
+							String.valueOf(msg.get("msg")), notifySign);
+				}
 			}else {
 				Global.sendImUser(msg2,id);
+				if(atUsers!=null && atUsers.contains(id+",")) {
+					String notifySign=SignUtils.encryptHMAC(id);
+					chezuAppService.sendImMsg(Long.valueOf(msg.get("familyId").toString()), 2, Long.valueOf(userId), Long.valueOf(id),
+							String.valueOf(msg.get("msg")), notifySign);
+				}
 			}
 		}
 	}

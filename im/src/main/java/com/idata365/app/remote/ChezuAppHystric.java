@@ -16,15 +16,23 @@ public class ChezuAppHystric implements ChezuAppService {
 	@Override
 	public String getFamiliesByUserId(Long userId, String sign) {
 		// TODO Auto-generated method stub
-		LOG.error(" getFamiliesByUserId 挂了  service-account-chezu");
+		LOG.error(" getFamiliesByUserId 挂了  service-app-chezu");
 		return null;
 	}
 
 	@Override
 	public Map<String, List<Map<String,Object>>> familyUsers(Long userId, String sign) {
 		// TODO Auto-generated method stub
-		LOG.error(" familyUsers 挂了  service-account-chezu");
+		LOG.error(" familyUsers 挂了  service-app-chezu");
 		return null;
+	}
+
+	@Override
+	public boolean sendImMsg(Long familyId, Integer familyType, Long fromUserId, Long toUserId, String msg,
+			String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" sendImMsg 挂了  service-app-chezu");
+		return false;
 	}
 
 	 
