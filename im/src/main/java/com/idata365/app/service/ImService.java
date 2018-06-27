@@ -94,11 +94,13 @@ public class ImService extends BaseService<ImService>
 		List<Map<String,String>> list3=null;
 		if(familyId>0) {
 			map.put("familyId", familyId);
+			map.put("msgType", 1);
 			list2=imMapper.getMsg(map);
 			
 		}
 		if(partakeFamilyId>0) {
 			map.put("familyId", partakeFamilyId);
+			map.put("msgType", 2);
 			list3=imMapper.getMsg(map);
 			 
 		}
