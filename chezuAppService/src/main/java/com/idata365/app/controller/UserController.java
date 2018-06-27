@@ -368,6 +368,11 @@ public class UserController extends BaseController {
 				return ResultUtils.rtFailParam(null, "账号已注册");
 			} else {
 				String nickName = NameConstant.getNickName();
+				if(requestBodyParams.get("nickName")!=null){
+					nickName=String.valueOf(requestBodyParams.get("nickName"));
+				}else{
+					
+				}
 				
 				//nick唯一性处理
 				
