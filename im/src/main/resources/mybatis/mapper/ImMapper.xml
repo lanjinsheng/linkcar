@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.ImMapper">
     <select id="getMsg" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-       SELECT id,cast(familyId as  CHAR(32)) familyId,cast(msgType as  CHAR(32)) as type,
+       SELECT id,cast(familyId as  CHAR(32)) familyId,#{msgType} as type,
        cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time
        FROM  imGlobal 
        where familyId=#{familyId} and id<![CDATA[<]]>${id}
