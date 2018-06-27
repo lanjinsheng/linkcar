@@ -84,6 +84,7 @@ public class Global {
 	}
 	
 	static String globalImMsg="{\"msgType\": \"20\",\"notifyMoudle\": \"globalIm\",\"data\": {\"msgs\": [%s]} }";
+	static String globalImMsgChangeMembers="{\"msgType\": \"21\",\"notifyMoudle\": \"globalIm\",\"data\": {\"msgs\": [%s]} }";
 	
 	public static void sendImGlobal(String json) {
 		// 群发
@@ -99,7 +100,14 @@ public class Global {
 		SocketBean sb=socketBeanMap.get(userId);
 		sb.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(globalImMsg, json)));
 	}
-	
+	public static void sendImUserChangeFamiliesMember(String json,String userId) {
+		if(socketBeanMap.get(userId)==null) {
+			return;
+		}
+		log.info("sendImUser==json="+json);
+		SocketBean sb=socketBeanMap.get(userId);
+		sb.getChannel().writeAndFlush(new TextWebSocketFrame(String.format(globalImMsgChangeMembers, json)));
+	}
 	static String auctionMsg="{	\"msgType\": \"30\",\"notifyMoudle\": \"auctionList\",\"data\": {\"goods\": [%s" + 
 			"] } }";
 	

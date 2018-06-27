@@ -60,4 +60,12 @@ public class ImController extends BaseController{
 		return ResultUtils.rtSuccess(rtMap);
 	} 
 	
+	
+	@RequestMapping("/getFamiliesUsers")
+	public  Map<String, Object> getFamiliesUsers(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<String, Object> requestBodyParams) {
+		String sign=SignUtils.encryptHMAC(String.valueOf(this.getUserId()));
+		 Map<String,Object> rtMap=chezuAppService.familyUsers(this.getUserId(), sign);
+		return ResultUtils.rtSuccess(rtMap);
+	} 
 }
