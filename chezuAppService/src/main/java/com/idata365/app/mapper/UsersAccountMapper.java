@@ -40,4 +40,6 @@ public interface UsersAccountMapper {
 	List<Map<String, Object>> findFamilyRelation(@Param("familyId") Long familyId);
 	List<Map<String, Object>> findUserFamilies(@Param("userId") Long userId);
 	
+	List<Map<String, Object>> findFamlilyUsers(Map<String, Object> map);
+	
 }
