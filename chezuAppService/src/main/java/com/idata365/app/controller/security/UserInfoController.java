@@ -64,6 +64,9 @@ public class UserInfoController extends BaseController{
 	  public Map<String,Object> updateNickName(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		  Long userId=this.getUserId();
 		  String nickName=String.valueOf(requestBodyParams.get("nickName"));
+		  if(userInfoService.hadAccountByNick(nickName)){
+			  return ResultUtils.rtFailParam(null, "昵称已被占用"); 
+			}
 		  userInfoService.updateNickName(userId, nickName);
 		  return ResultUtils.rtSuccess(null);
 	  }
