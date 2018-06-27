@@ -30,7 +30,7 @@ public class UserFamilyController extends BaseController {
 		List<Map<String,Object>> list=userInfoService.getFamiliesByUserId(userId);
 		if(list!=null){
 			for(Map<String,Object> map:list){
-				if(map.get("isLeader").equals("1")){
+				if(map.get("isLeader").toString().equals("1")){
 					myFamily=String.valueOf(map.get("familyId"));
 				}else{
 					partakeFamily=String.valueOf(map.get("familyId"));
