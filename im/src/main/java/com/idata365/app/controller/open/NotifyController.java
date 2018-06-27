@@ -12,19 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.entity.AuctionLogs;
 import com.idata365.app.entity.bean.AuctionBean;
+import com.idata365.app.remote.ChezuAppService;
 import com.idata365.app.service.ImService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.SignUtils;
 
 @RestController
 public class NotifyController extends BaseController{
 	protected static final Logger LOG = LoggerFactory.getLogger(NotifyController.class);
 	@Autowired
 	ImService imService;
-	 
+	@Autowired
+	ChezuAppService chezuAppService;
 	/**
 	 * 
 	    * @Title: notifyAuction
@@ -73,5 +77,24 @@ public class NotifyController extends BaseController{
 	    LOG.info(auctionBean.getAuctionGoods().getPrizeName());
 		return null;
 	}
-	 
+	 /**
+	  * 
+	     * @Title: notifyFamilyChange
+	     * @Description: TODO(这里用一句话描述这个方法的作用)
+	     * @param @param userId
+	     * @param @return    参数
+	     * @return boolean    返回类型
+	     * @throws
+	     * @author LanYeYe
+	  */
+	@RequestMapping(value = "/im/notifyFamilyChange",method = RequestMethod.POST)
+	public boolean notifyFamilyChange(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
+	{
+		LOG.info("userId"+"=="+userId+"=="+sign+"=="+sign);
+		String sign2=SignUtils.encryptHMAC(String.valueOf(this.getUserId()));
+		 Map<String,Object> rtMap=chezuAppService.familyUsers(this.getUserId(), sign2);
+		 imService.changeFamiliesUsersIm(rtMap,String.valueOf(userId));
+		return true;
+	}
+
 }

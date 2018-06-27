@@ -64,6 +64,30 @@ public class ImService extends BaseService<ImService>
 	public void sendUserFamilyIm(Map<String,Object> msg,String userId) {
 		Global.sendImUser(GsonUtils.toJson(msg, false),userId);
 	}
+	
+	public void changeFamiliesUsersIm(Map<String,Object> msg,String userId) {
+//		String json=GsonUtils.toJson(msg, false);
+		Global.sendImUserChangeFamiliesMember("",userId);
+		Map<String,String> users=new HashMap<String,String>();
+		users.put(userId, userId);
+		List<Map<String,Object>> list1=(List<Map<String,Object>>)msg.get("createFamily");
+		for(Map<String,Object> m:list1) {
+			String id=String.valueOf(m.get("userId"));
+			if(users.get(id)==null) {
+				users.put(id, id);
+				Global.sendImUserChangeFamiliesMember("",id);
+			}
+		}
+		List<Map<String,Object>> list2=(List<Map<String,Object>>)msg.get("partakeFamily");
+		for(Map<String,Object> m:list2) {
+			String id=String.valueOf(m.get("userId"));
+			if(users.get(id)==null) {
+				users.put(id, id);
+				Global.sendImUserChangeFamiliesMember("",id);
+			}
+		}
+	}
+	
 	/**
 	 * 
 	    * @Title: sendAuctionMsg
@@ -81,7 +105,6 @@ public class ImService extends BaseService<ImService>
 	public  Map<String,List<Map<String,String>>>   getMsgs(String baseUrl,Long familyId,Long partakeFamilyId)
 	{
 		Map<String,List<Map<String,String>>> rtMap=new HashMap<String,List<Map<String,String>>>();
-	
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("msgType", 0);
 		map.put("familyId", 0);
@@ -111,5 +134,14 @@ public class ImService extends BaseService<ImService>
 		return rtMap;
 	} 
 	
-	
+public static void main(String []args) {
+	Map<String,Object> map=new HashMap<String,Object>();
+	Integer a=1;
+	map.put("aaa", a);
+	if(a.equals(1)) {
+		System.out.println("if:"+map.get("aaa"));
+	}else {
+		System.out.println("else:"+map.get("aaa"));
+	}
+}
 }
