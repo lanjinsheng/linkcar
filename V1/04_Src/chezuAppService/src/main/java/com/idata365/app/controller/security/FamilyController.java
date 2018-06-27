@@ -30,6 +30,7 @@ import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.service.BusinessDatasService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.util.ResultUtils;
@@ -45,11 +46,14 @@ public class FamilyController extends BaseController {
 	SystemProperties systemProperties;
 	@Autowired
 	ChezuAssetService chezuAssetService;
-
+	@Autowired
+	ChezuImService chezuImService;
 	@RequestMapping("/family/removeMember")
 	public Map<String, Object> removeMember(@RequestBody FamilyParamBean reqBean) {
 		LOG.info("param==={}", JSON.toJSONString(reqBean));
 		this.familyService.removeMember(reqBean, this.getUserInfo());
+		String sign=SignUtils.encryptHMAC(String.valueOf(reqBean.getUserId()));
+		chezuImService.notifyFamilyChange(reqBean.getUserId(), sign);
 		return ResultUtils.rtSuccess(null);
 	}
 
@@ -86,6 +90,8 @@ public class FamilyController extends BaseController {
 		resultMap.put("msgType", String.valueOf(msgType));
 		List<Map<String, String>> resultList = new ArrayList<>();
 		resultList.add(resultMap);
+		String sign=SignUtils.encryptHMAC(String.valueOf(reqBean.getUserId()));
+		chezuImService.notifyFamilyChange(reqBean.getUserId(), sign);
 		return ResultUtils.rtSuccess(resultList);
 	}
 

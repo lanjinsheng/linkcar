@@ -322,7 +322,12 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	public UsersAccount getUsersAccount(Long userId) {
 		return usersAccountMapper.findAccountById(userId);
 	}
-	
+	public List<Map<String,Object>> getFamilyUsers(Long familyId,String baseImgUrl) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("familyId", familyId);
+		map.put("imgUrl", baseImgUrl);
+		return usersAccountMapper.findFamlilyUsers(map);
+	}
 	public int verifyLicenseDriver(Long userId, String operatingUser) {
 		return licenseDriverMapper.verifyLicenseDriver(userId,operatingUser);
 	}
