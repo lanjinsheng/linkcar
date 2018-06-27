@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Component
@@ -57,6 +58,14 @@ public class ChezuAssetHystric implements ChezuAssetService {
 	@Override
 	public String queryHaveNewPower(long userId, long familyId, String sign) {
 		LOG.error("queryHaveNewPower 挂了");
+		return null;
+	}
+
+	@Override
+	public Map<String, String> reducePowersByChallege(long userId,
+			  String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("addAssetUsersPowerLogs 挂了");
 		return null;
 	}
 	 

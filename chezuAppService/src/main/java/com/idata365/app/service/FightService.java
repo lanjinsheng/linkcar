@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.entity.FamilyRelation;
 import com.idata365.app.mapper.FamilyRelationMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.DateTools;
 
 @Service
@@ -24,6 +25,8 @@ public class FightService extends BaseService<FightService> {
 	private FamilyRelationMapper familyRelationMapper;
 	 
 	private UsersAccountMapper usersAccountMapper;
+	@Autowired
+	ChezuAssetService chezuAssetService;
      /**
       * 获取对手家族id，无对战记录返回null
       * @param selfFamilyId
@@ -124,7 +127,11 @@ public class FightService extends BaseService<FightService> {
     			//匹配重叠了，不扣能量
     		}else{
     			//扣除动力
-    			
+//    			Map<String,Object> powerLog=new HashMap<String,Object>();
+//    			powerLog.put("userId", family.get("createUserId"));//族长id
+//    			powerLog.put("effectId",pkFamily.get("id"));
+//    			powerLog.put("powerNum",pkFamily.get("id"));
+//    			chezuAssetService.addAssetUsersPowerLogs(powerLog, sign)
     			
     		}
     	}
