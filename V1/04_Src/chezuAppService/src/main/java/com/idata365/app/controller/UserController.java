@@ -239,8 +239,7 @@ public class UserController extends BaseController {
 				loginRegService.insertToken(account.getId(), token);
 				//返回信息
 				rtMap.put("userId", account.getId());
-				rtMap.put("nickName",(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()): account.getNickName()) == null ? 
-						bean.get("nickName").toString(): (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()): account.getNickName()));
+				rtMap.put("nickName",account.getNickName());
 				rtMap.put("headImg",account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
 				rtMap.put("userPhone", account.getPhone());
 
@@ -259,6 +258,7 @@ public class UserController extends BaseController {
 				//号码没有注册过，注册，并去设置密码
 				rtMap.put("status", "PWD_NO");
 				String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
+				
 				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 				UsersAccount accountBean = new UsersAccount();
 				accountBean.setImgUrl(headImg);
@@ -270,7 +270,7 @@ public class UserController extends BaseController {
 					return ResultUtils.rtFailRequest(null);
 				}
 				rtMap.put("token", token);
-				rtMap.put("nickName", nickName);
+				rtMap.put("nickName", accountBean.getNickName());
 				rtMap.put("headImg", headImg);
 				rtMap.put("isAuthenticated", "0");
 			}
@@ -368,13 +368,16 @@ public class UserController extends BaseController {
 				return ResultUtils.rtFailParam(null, "账号已注册");
 			} else {
 				String nickName = NameConstant.getNickName();
+				
+				//nick唯一性处理
+				
 				UsersAccount account = new UsersAccount();
 				String token = loginRegService.regUser(phone, password, nickName, rtMap,account);
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
 				}
 				rtMap.put("token", token);
-				rtMap.put("nickName", nickName);
+				rtMap.put("nickName", account.getNickName());
 				rtMap.put("headImg", "");
 				rtMap.put("isAuthenticated", "0");
 				return ResultUtils.rtSuccess(rtMap);

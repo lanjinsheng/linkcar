@@ -318,7 +318,9 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		}
 		return uc;
 	}
-
+    public boolean hadAccountByNick(String nickName){
+    	return (usersAccountMapper.hadAccountByNick(nickName)>0);
+    }
 	public UsersAccount getUsersAccount(Long userId) {
 		return usersAccountMapper.findAccountById(userId);
 	}

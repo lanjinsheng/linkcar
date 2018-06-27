@@ -10,8 +10,9 @@ import com.idata365.app.entity.UsersAccount;
 public interface UsersAccountMapper {
 
 	UsersAccount findAccountByPhone(UsersAccount account);
-
-	void insertUser(UsersAccount account);
+	int hadAccountByNick(@Param("nickName") String nickName);
+	
+	int insertUser(UsersAccount account);
 
 	void updateUserPwd(UsersAccount account);
 
@@ -21,7 +22,7 @@ public interface UsersAccountMapper {
 
 	UsersAccount findAccountByIdAndPwd(UsersAccount account);
 
-	void updateNickName(UsersAccount account);
+	int updateNickName(UsersAccount account);
 
 	void updateEnableStranger(UsersAccount account);
 
