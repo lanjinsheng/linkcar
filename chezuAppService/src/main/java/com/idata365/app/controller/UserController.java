@@ -144,6 +144,7 @@ public class UserController extends BaseController {
 		String openId = String.valueOf(requestBodyParams.get("openId"));
 		LOG.info("openId================================"+openId);
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
+		//封装并插入记录
 		Map<String, Object> entity = new HashMap<String, Object>();
 		entity.put("openId", openId);
 		entity.put("loginType", loginType);
@@ -153,20 +154,22 @@ public class UserController extends BaseController {
 		}else {
 			thirdPartyLoginService.updateLogs(entity);
 		}
+		
+		// 未绑定手机号
 		if (map == null||map.get("userId")==null) {
-			// 未绑定手机号
 			rtMap.put("status", "PHONE_NO");
 			return ResultUtils.rtSuccess(rtMap);// 跳到绑定手机号页面
 		}
 
-		// 有记录
+		// 有绑定手机号
 		long userId = Long.valueOf(String.valueOf(map.get("userId")));
 		UsersAccount account = userInfoService.getUsersAccount(userId);
 		String token = "";
 		token = UUID.randomUUID().toString().replaceAll("-", "");
+		//重新登录，更新token
 		loginRegService.insertToken(account.getId(), token);
 		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
-		
+		//返回信息
 		rtMap.put("userId", account.getId());
 		rtMap.put("nickName",
 				(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
@@ -220,28 +223,25 @@ public class UserController extends BaseController {
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		String status = LoginRegService.VC_ERR;
-		if (verifyCode.equals(systemProperties.getNbcode())) {// 测试使用万能验证码
+		if (verifyCode.equals(systemProperties.getNbcode())) {
+			// 测试使用万能验证码
 			status = LoginRegService.OK;
 		} else {
 			status = loginRegService.validVerifyCode(phone, 1, verifyCode);
 		}
-		if (status.equals(LoginRegService.OK)) {// 校验码通过
+		if (status.equals(LoginRegService.OK)) {
+			// 校验码通过
 			UsersAccount account = loginRegService.getUserByPhone(phone);
 			if (account!=null) {
-				//号码已经注册，直接登录
-				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
+				//号码已经注册，直接登录，刷新token
 				String token = "";
 				token = UUID.randomUUID().toString().replaceAll("-", "");
 				loginRegService.insertToken(account.getId(), token);
+				//返回信息
 				rtMap.put("userId", account.getId());
-				rtMap.put("nickName",
-						(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-								: account.getNickName()) == null ? bean.get("nickName").toString()
-										: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-												: account.getNickName()));
-				rtMap.put("headImg",
-						account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
-				
+				rtMap.put("nickName",(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()): account.getNickName()) == null ? 
+						bean.get("nickName").toString(): (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone()): account.getNickName()));
+				rtMap.put("headImg",account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
 				rtMap.put("userPhone", account.getPhone());
 
 				Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
@@ -253,6 +253,8 @@ public class UserController extends BaseController {
 				}
 				rtMap.put("token", token);
 				rtMap.put("status", "OK");
+				//绑定三方表
+				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 			} else {
 				//号码没有注册过，注册，并去设置密码
 				rtMap.put("status", "PWD_NO");
@@ -260,7 +262,9 @@ public class UserController extends BaseController {
 				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 				UsersAccount accountBean = new UsersAccount();
 				accountBean.setImgUrl(headImg);
+				//注册
 				String token = loginRegService.regUser(phone, "", nickName, rtMap,accountBean);
+				//绑定三方表
 				thirdPartyLoginService.updateByOpenId(accountBean.getId(),openId);
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
@@ -310,13 +314,14 @@ public class UserController extends BaseController {
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		
+		//更新密码
 		String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
 		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
 		String token = loginRegService.updateUserPwd(phone, password, rtMap);
 		if (token == null) {
 			return ResultUtils.rtFailRequest(null);
 		}
-		
+		//返回信息
 		rtMap.put("token", token);
 		rtMap.put("nickName", nickName);
 		rtMap.put("headImg", headImg);
