@@ -43,6 +43,10 @@
        FROM  usersAccount where phone=#{phone}
      </select>
      
+     <select id="hadAccountByNick" resultType="java.lang.Integer" parameterType="java.lang.String">
+       SELECT count(1)
+       FROM  usersAccount where nickName=#{nickName}
+     </select>
      <select id="findAccountById" resultMap="BaseResultMap" parameterType="java.lang.Long">
        SELECT *
        FROM  usersAccount where id=#{id}
