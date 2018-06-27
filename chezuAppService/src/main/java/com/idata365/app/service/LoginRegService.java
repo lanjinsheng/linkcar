@@ -276,7 +276,12 @@ public class LoginRegService extends BaseService<LoginRegService>
 		account.setPhone(phone);
 		account.setPwd(pwd);
 		account.setNickName(nickName);
-		usersAccountMapper.insertUser(account);
+		int hadInsert=usersAccountMapper.insertUser(account);
+		while(hadInsert==0){
+			nickName=nickName+System.currentTimeMillis();
+			account.setNickName(nickName);
+			hadInsert=usersAccountMapper.insertUser(account);
+		}
 		if (account != null && account.getId() != null && account.getId() > 0)
 		{
 			// 增加token信息并登入
