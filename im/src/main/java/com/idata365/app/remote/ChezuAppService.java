@@ -14,7 +14,7 @@ public interface ChezuAppService {
 	@RequestMapping(value = "/app/getFamiliesByUserId",method = RequestMethod.POST)
 	public String  getFamiliesByUserId(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
 	@RequestMapping("/app/getFamilyUsers")
-	public Map<String, List<Map<String,Object>>> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
+	public Map<String, Object> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
     @RequestMapping("/app/msg/sendImMsg")
     public boolean sendImMsg(
     		@RequestParam (value = "familyId") Long familyId,

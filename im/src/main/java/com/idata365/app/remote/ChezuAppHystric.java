@@ -21,7 +21,7 @@ public class ChezuAppHystric implements ChezuAppService {
 	}
 
 	@Override
-	public Map<String, List<Map<String,Object>>> familyUsers(Long userId, String sign) {
+	public Map<String, Object> familyUsers(Long userId, String sign) {
 		// TODO Auto-generated method stub
 		LOG.error(" familyUsers 挂了  service-app-chezu");
 		return null;

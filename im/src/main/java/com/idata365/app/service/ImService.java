@@ -66,7 +66,7 @@ public class ImService extends BaseService<ImService>
 	}
 	public void sendUserFamilyIm(Map<String,Object> msg,String userId,int type) {
 		String sign=SignUtils.encryptHMAC(userId);
-		Map<String, List<Map<String,Object>>> rtMap=chezuAppService.familyUsers(Long.valueOf(userId), sign);
+		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(userId), sign);
 		msg.put("type", "1");
 		String msg1=GsonUtils.toJson(msg, false);
 		msg.put("type", "2");
