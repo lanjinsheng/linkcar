@@ -48,26 +48,30 @@ public class UserFamilyController extends BaseController {
 	public Map<String, Object> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign) {
 		List<Map<String,Object>> list=userInfoService.getFamiliesByUserId(userId);
 		Map<String, Object> rtMap=new HashMap<String, Object>();
+		 rtMap.put("createFamilyId", "");
+		 rtMap.put("createFamilyName","");
+		 rtMap.put("createFamily", new ArrayList<Map<String,Object>>());
+		 rtMap.put("partakeFamilyId", "");
+		 rtMap.put("partakeFamilyName", "");
+		 rtMap.put("partakeFamily", new ArrayList<Map<String,Object>>());
 		if(list!=null){
 			for(Map<String,Object> map:list){
 				if(map.get("isLeader").toString().equals("1")){
 				 String	myFamily=String.valueOf(map.get("familyId"));
 				 List<Map<String,Object>> list1=userInfoService.getFamilyUsers(Long.valueOf(myFamily),this.getImgBasePath());
-				 if(list1==null){
-					 list1=new ArrayList<Map<String,Object>>();
+				 if(list1!=null){
+					 rtMap.put("createFamily", list1);
 				 }
 				 rtMap.put("createFamilyId", myFamily);
 				 rtMap.put("createFamilyName", map.get("familyName"));
-				 rtMap.put("createFamily", list1);
 				}else{
 				 String	partakeFamily=String.valueOf(map.get("familyId"));
 				 List<Map<String,Object>> list2=userInfoService.getFamilyUsers(Long.valueOf(partakeFamily),this.getImgBasePath());
-				 if(list2==null){
-					 list2=new ArrayList<Map<String,Object>>();
+				 if(list2!=null){
+					 rtMap.put("partakeFamily", list2);
 				 }
 				 rtMap.put("partakeFamilyId", partakeFamily);
 				 rtMap.put("partakeFamilyName", map.get("familyName"));
-				 rtMap.put("partakeFamily", list2);
 				}
 			}
 		} 
