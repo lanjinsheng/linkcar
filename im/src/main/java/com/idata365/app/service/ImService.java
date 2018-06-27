@@ -75,7 +75,7 @@ public class ImService extends BaseService<ImService>
 		
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
 		if(type==1) {
-		  list=(List<Map<String,Object>>)rtMap.get("createFamily");
+		    list=(List<Map<String,Object>>)rtMap.get("createFamily");
 			
 		}else if(type==2) {
 			list=(List<Map<String,Object>>)rtMap.get("partakeFamily");
