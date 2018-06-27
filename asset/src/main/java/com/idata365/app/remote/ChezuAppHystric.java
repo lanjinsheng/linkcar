@@ -39,7 +39,7 @@ public class ChezuAppHystric implements ChezuAppService {
 
 
 	@Override
-	public Map<String, Object> getFightRelationAsset(Long famiyId, String sign) {
+	public Map<String, Object> getFightRelationAsset(long famiyId, String sign) {
 		LOG.error(" getFightRelationAsset 挂了  service-app-chezu");
 		return null;
 	}
