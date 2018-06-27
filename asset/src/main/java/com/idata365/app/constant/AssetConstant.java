@@ -67,6 +67,9 @@ public class AssetConstant {
 		UserPowerEventMap.put(EventType_Power_Steal, "停车场偷取");
 		UserPowerEventMap.put(EventType_Power_Trip, "行程中获取");
 		UserPowerEventMap.put(EventType_Power_GameEnd_User, "家族挑战获胜");
+		UserPowerEventMap.put(EventType_Power_Challge_Reduce, "挑选对战家族");
+		
+		
 		
 	}
 }
