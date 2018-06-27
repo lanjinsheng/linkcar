@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserMissionLogsMapper">
+    <resultMap id="BaseUserMissionLogsMap" type="com.idata365.app.entity.UserMissionLogs" >
+    </resultMap>
+    
+    <select id="getLogsByUserId" resultMap="BaseUserMissionLogsMap" parameterType="java.lang.String">
+  	  select * from userMissionLogs where userId=#{userId} and valid=1
+    </select>
+    
+    <insert id ="initLogsToUser" >
+ 7            insert into userMissionLogs
+ 8            (userId, missionId, daystamp, createTime,updateTime,targetCount)
+ 9            values
+10             <foreach collection ="missionsList" item="missions" index= "index" separator =",">
+11                 (
+					#{userId},#{missions.missionId}, DATE_FORMAT(now(), '%Y-%m-%d'),now(),now(),#{missions.targetCount}
+16                 )
+17             </foreach >
+18  </insert >
+
+	<select id="getLogsByUserIdAndType" resultType="java.util.HashMap" parameterType="java.lang.String">
+  	  select 
+  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,a.finishCount,a.targetCount,a.status,a.daystamp
+		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and b.missionType=#{missionType} and a.valid=1 order by a.updateTime desc
+    </select>
+    
+     <update id="updateLogsStatus" >
+       update userMissionLogs set status=3 where userId=#{userId} and missionId=#{missionId} and valid=1
+    </update>  
+    
+</mapper>

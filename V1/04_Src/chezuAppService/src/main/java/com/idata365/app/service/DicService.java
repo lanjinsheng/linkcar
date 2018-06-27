@@ -17,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.DicGameDay;
+import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.mapper.DicFamilyTypeMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.DicNotifyMapper;
+import com.idata365.app.mapper.DicUserMissionMapper;
 
 @Service
 public class DicService extends BaseService<DicService> {
@@ -31,10 +33,18 @@ public class DicService extends BaseService<DicService> {
 	DicGameDayMapper dicGameDayMapper;
 	@Autowired
 	DicNotifyMapper dicNotifyMapper;
-
+	@Autowired
+	DicUserMissionMapper dicUserMissionMapper;
+	
+	
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType() {
 		return dicFamilyTypeMapper.getDicFamilyType(null);
+	}
+	
+	@Transactional
+	public List<DicUserMission> getDicUserMission() {
+		return dicUserMissionMapper.getAllDicUserMission();
 	}
 
 	@Transactional

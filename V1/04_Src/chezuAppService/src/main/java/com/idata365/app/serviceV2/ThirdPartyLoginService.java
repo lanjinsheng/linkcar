@@ -19,12 +19,10 @@ public class ThirdPartyLoginService extends BaseService<ThirdPartyLoginService>
 	private ThirdPartyLoginMapper thirdPartyLoginMapper;
 	
 	public Map<String, Object> queryThirdPartyLoginById(String openId){
-		LOGGER.info("openId===================="+openId);
 		return thirdPartyLoginMapper.queryThirdPartyLoginById(openId);
 	}
 	
 	public Map<String, Object> queryThirdPartyLoginByUserId(Long userId){
-		LOGGER.info("userId===================="+userId);
 		return thirdPartyLoginMapper.queryThirdPartyLoginByUserId(userId);
 	}
 	
