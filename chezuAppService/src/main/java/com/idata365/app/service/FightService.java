@@ -16,6 +16,7 @@ import com.idata365.app.mapper.FamilyRelationMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.SignUtils;
 
 @Service
 public class FightService extends BaseService<FightService> {
@@ -131,7 +132,8 @@ public class FightService extends BaseService<FightService> {
 //    			powerLog.put("userId", family.get("createUserId"));//族长id
 //    			powerLog.put("effectId",pkFamily.get("id"));
 //    			powerLog.put("powerNum",pkFamily.get("id"));
-//    			chezuAssetService.addAssetUsersPowerLogs(powerLog, sign)
+    			String sign=SignUtils.encryptHMAC(family.get("createUserId").toString());
+    			chezuAssetService.reducePowersByChallege(Long.valueOf(family.get("createUserId").toString()), sign);
     			
     		}
     	}
