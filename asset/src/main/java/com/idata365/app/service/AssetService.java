@@ -329,7 +329,7 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersDiamondsLogs assetUsersDiamondsLogs = new AssetUsersDiamondsLogs();
 		assetUsersDiamondsLogs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		assetUsersDiamondsLogs.setEffectId(auctionGoodsId);
-		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Auction_Buy);
+		assetUsersDiamondsLogs.setEventType(AssetConstant.EventType_Daimond_Auction_Buy);
 		assetUsersDiamondsLogs.setRecordType(AssetConstant.RecordType_2);
 		assetUsersDiamondsLogs.setRemark("竞拍消费" + auctionGoodsId);
 		assetUsersDiamondsLogs.setUserId(buyer);
@@ -338,7 +338,7 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersDiamondsLogs logs = new AssetUsersDiamondsLogs();
 		logs.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
 		logs.setEffectId(auctionGoodsId);
-		logs.setEventType(AssetConstant.EventType_Auction_Earn);
+		logs.setEventType(AssetConstant.EventType_Daimond_Auction_Earn);
 		logs.setRecordType(AssetConstant.RecordType_1);
 		logs.setRemark("竞拍收入" + auctionGoodsId);
 		logs.setUserId(sellerId);
