@@ -110,20 +110,20 @@ public class ImService extends BaseService<ImService>
 		map.put("familyId", 0);
 		map.put("id", 9999999999999999L);
 		map.put("imgPath", baseUrl);
-		List<Map<String,String>> list1=imMapper.getMsg(map);
+		List<Map<String,String>> list1=imMapper.getMsgGlobal(map);
 		if(list1==null) {	list1=new ArrayList<Map<String,String>>();}
 		rtMap.put("0", list1);
 		List<Map<String,String>> list2=null;
 		List<Map<String,String>> list3=null;
 		if(familyId>0) {
 			map.put("familyId", familyId);
-			map.put("msgType", 1);
+//			map.put("msgType", 1);
 			list2=imMapper.getMsg(map);
 			
 		}
 		if(partakeFamilyId>0) {
 			map.put("familyId", partakeFamilyId);
-			map.put("msgType", 2);
+//			map.put("msgType", 2);
 			list3=imMapper.getMsg(map);
 			 
 		}
