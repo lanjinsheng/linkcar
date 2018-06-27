@@ -23,7 +23,7 @@ public class AssetConstant {
 	public final static int EventType_Power_Airdrop=5; //家族挑战获胜分配
 	public final static int EventType_Power_GameEnd_User=6; //家族挑战获胜分配
 	public final static int EventType_Power_MissionPrize=7; //任务奖励
-	
+	public final static int EventType_Power_Challge_Reduce=8; //挑战家族选择消耗
 	//个人钻石表
 	public final static int EventType_Daimond_DayPower_User = 1;// 每日分配
 	public final static int EventType_Daimond_GameEnd_User = 2;// PK结束家族分配
