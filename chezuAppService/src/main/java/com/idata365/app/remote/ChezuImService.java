@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date 2018年6月14日
  *
  */
-@FeignClient(value = "service-im-chezu", fallback = ChezuAccountHystric.class)
+@FeignClient(value = "service-im-chezu", fallback = ChezuImHystric.class)
 public interface ChezuImService {
 
  
