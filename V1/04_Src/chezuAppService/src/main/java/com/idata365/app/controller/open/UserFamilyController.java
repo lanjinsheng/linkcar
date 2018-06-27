@@ -45,9 +45,9 @@ public class UserFamilyController extends BaseController {
 	}
 
 	@RequestMapping("/app/getFamilyUsers")
-	public Map<String, List<Map<String,Object>>> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign) {
+	public Map<String, Object> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign) {
 		List<Map<String,Object>> list=userInfoService.getFamiliesByUserId(userId);
-		Map<String, List<Map<String,Object>>> rtMap=new HashMap<String, List<Map<String,Object>>>();
+		Map<String, Object> rtMap=new HashMap<String, Object>();
 		if(list!=null){
 			for(Map<String,Object> map:list){
 				if(map.get("isLeader").toString().equals("1")){
@@ -56,6 +56,8 @@ public class UserFamilyController extends BaseController {
 				 if(list1==null){
 					 list1=new ArrayList<Map<String,Object>>();
 				 }
+				 rtMap.put("createFamilyId", myFamily);
+				 rtMap.put("createFamilyName", map.get("familyName"));
 				 rtMap.put("createFamily", list1);
 				}else{
 				 String	partakeFamily=String.valueOf(map.get("familyId"));
@@ -63,6 +65,8 @@ public class UserFamilyController extends BaseController {
 				 if(list2==null){
 					 list2=new ArrayList<Map<String,Object>>();
 				 }
+				 rtMap.put("partakeFamilyId", partakeFamily);
+				 rtMap.put("partakeFamilyName", map.get("familyName"));
 				 rtMap.put("partakeFamily", list2);
 				}
 			}
