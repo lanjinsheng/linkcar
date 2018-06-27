@@ -37,7 +37,7 @@ public class ImController extends BaseController{
 		if(Integer.valueOf(requestBodyParams.get("type").toString())==0) {
 			imService.sendGloadIm(requestBodyParams);
 		}else if(Integer.valueOf(requestBodyParams.get("type").toString())==1 || Integer.valueOf(requestBodyParams.get("type").toString())==2) {
-			imService.sendUserFamilyIm(requestBodyParams,String.valueOf(userId));
+			imService.sendUserFamilyIm(requestBodyParams,String.valueOf(userId),Integer.valueOf(requestBodyParams.get("type").toString()));
 		}
 		return ResultUtils.rtSuccess(null);
 	} 
