@@ -1,6 +1,7 @@
 package com.idata365.app.remote;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class ChezuAppHystric implements ChezuAppService {
 	}
 
 	@Override
-	public Map<String, Object> familyUsers(Long userId, String sign) {
+	public Map<String, List<Map<String,Object>>> familyUsers(Long userId, String sign) {
 		// TODO Auto-generated method stub
 		LOG.error(" familyUsers 挂了  service-account-chezu");
 		return null;

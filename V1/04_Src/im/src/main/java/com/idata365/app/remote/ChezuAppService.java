@@ -1,5 +1,6 @@
 package com.idata365.app.remote;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -13,6 +14,6 @@ public interface ChezuAppService {
 	@RequestMapping(value = "/app/getFamiliesByUserId",method = RequestMethod.POST)
 	public String  getFamiliesByUserId(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
 	@RequestMapping("/app/getFamilyUsers")
-	public Map<String, Object> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
+	public Map<String, List<Map<String,Object>>> familyUsers(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
 
 }

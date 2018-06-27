@@ -65,7 +65,7 @@ public class ImService extends BaseService<ImService>
 		Global.sendImUser(GsonUtils.toJson(msg, false),userId);
 	}
 	
-	public void changeFamiliesUsersIm(Map<String,Object> msg,String userId) {
+	public void changeFamiliesUsersIm(Map<String, List<Map<String,Object>>> msg,String userId) {
 //		String json=GsonUtils.toJson(msg, false);
 		Global.sendImUserChangeFamiliesMember("",userId);
 		Map<String,String> users=new HashMap<String,String>();

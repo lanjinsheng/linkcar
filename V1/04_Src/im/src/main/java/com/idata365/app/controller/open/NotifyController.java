@@ -92,7 +92,7 @@ public class NotifyController extends BaseController{
 	{
 		LOG.info("userId"+"=="+userId+"=="+sign+"=="+sign);
 		String sign2=SignUtils.encryptHMAC(String.valueOf(this.getUserId()));
-		 Map<String,Object> rtMap=chezuAppService.familyUsers(this.getUserId(), sign2);
+		Map<String, List<Map<String,Object>>> rtMap=chezuAppService.familyUsers(this.getUserId(), sign2);
 		 imService.changeFamiliesUsersIm(rtMap,String.valueOf(userId));
 		return true;
 	}
