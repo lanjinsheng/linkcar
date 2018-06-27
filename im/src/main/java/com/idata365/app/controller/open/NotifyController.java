@@ -88,12 +88,10 @@ public class NotifyController extends BaseController{
 	     * @author LanYeYe
 	  */
 	@RequestMapping(value = "/im/notifyFamilyChange",method = RequestMethod.POST)
-	public boolean notifyFamilyChange(@RequestParam(value="userId") long userId,@RequestParam(value="sign") String sign)
+	public boolean notifyFamilyChange(@RequestBody List<Map<String,Object>> list,@RequestParam(value="sign") String sign)
 	{
-		LOG.info("userId"+"=="+userId+"=="+sign+"=="+sign);
-		String sign2=SignUtils.encryptHMAC(String.valueOf(this.getUserId()));
-		Map<String, List<Map<String,Object>>> rtMap=chezuAppService.familyUsers(this.getUserId(), sign2);
-		 imService.changeFamiliesUsersIm(rtMap,String.valueOf(userId));
+		LOG.info("list"+"=="+list.size()+"=="+sign+"=="+sign);
+		 imService.changeFamiliesUsersIm(list);
 		return true;
 	}
 

@@ -84,7 +84,7 @@ public class Global {
 	}
 	
 	static String globalImMsg="{\"msgType\": \"20\",\"notifyMoudle\": \"globalIm\",\"data\": {\"msgs\": [%s]} }";
-	static String globalImMsgChangeMembers="{\"msgType\": \"21\",\"notifyMoudle\": \"globalIm\",\"data\": {\"msgs\": [%s]} }";
+	static String globalImMsgChangeMembers="{\"msgType\": \"21\",\"notifyMoudle\": \"globalIm\",\"data\": {\"action\":\"1\",\"msgs\": [%s]} }";
 	
 	public static void sendImGlobal(String json) {
 		// 群发
