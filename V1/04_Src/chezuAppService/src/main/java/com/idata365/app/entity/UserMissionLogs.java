@@ -18,7 +18,6 @@ public class UserMissionLogs implements Serializable {
 	private Integer finishCount;
 	private Integer targetCount;
 	private Integer valid;
-	private Integer isFinished;
 	private Integer status;
 
 	public Integer getStatus() {
@@ -99,14 +98,6 @@ public class UserMissionLogs implements Serializable {
 
 	public void setValid(Integer valid) {
 		this.valid = valid;
-	}
-
-	public Integer getIsFinished() {
-		return isFinished;
-	}
-
-	public void setIsFinished(Integer isFinished) {
-		this.isFinished = isFinished;
 	}
 
 }

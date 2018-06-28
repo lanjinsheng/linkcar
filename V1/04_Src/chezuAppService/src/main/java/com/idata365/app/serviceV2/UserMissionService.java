@@ -3,6 +3,7 @@ package com.idata365.app.serviceV2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,6 +180,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			int finishCount = Integer.valueOf(map.get("finishCount").toString());
 			int targetCount = Integer.valueOf(map.get("targetCount").toString());
 			int status = Integer.valueOf(map.get("status").toString());
+			String actionLink = String.valueOf(map.get("actionLink"));
 			String missionProgress = "";
 			String missionReward = "";
 			if (missionId == 5) {
@@ -196,9 +198,11 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			if (status == 1) {
 				// 领取
 				missionActionDesc = "领取";
+				actionLink = "0";
 			} else if (status == 3) {
 				// 已完成
-				missionActionDesc = "已完成";
+				missionActionDesc = "已领取";
+				actionStatus = "0";
 			} else {
 				if (missionId == 1) {
 					missionActionDesc = "去偷取";
@@ -227,7 +231,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			rtMap.put("missionReward", missionReward);
 			rtMap.put("missionActionDesc", missionActionDesc);
 			rtMap.put("missionActionStatus", actionStatus);
-			rtMap.put("missionActionLink", String.valueOf(map.get("actionLink")));
+			rtMap.put("missionActionLink", actionLink);
 			rtMap.put("missionEndTime", String.valueOf(map.get("endTime")));
 			rtMap.put("flag", String.valueOf(map.get("status")));
 
@@ -271,6 +275,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		}
 	}
 
+	//查询每个Type任务完成数量
 	public Map<String, String> queryMissionStatus(long userId) {
 		Map<String, String> rtMap = new HashMap<>();
 		int a = userMissionLogsMapper.queryCountByType(userId, 1);
@@ -282,12 +287,38 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		return rtMap;
 	}
 
+	//预更新每日登录的任务
 	public int updateCountOfId5(Long userId) {
 		// TODO Auto-generated method stub
 		return userMissionLogsMapper.updateCountOfId5(userId);
 	}
 
+	//查询表里面是否有记录
 	public int queryHadRecord(long userId) {
 		return userMissionLogsMapper.queryHadRecord(userId);
+	}
+
+	// 更新每日任务
+	public boolean updateDayMission(long userId) {
+		UserMissionLogs logs = userMissionLogsMapper.queryMissionId1(userId);
+		Date daystamp = DateTools.getDateTimeOfStr(logs.getDaystamp(), "yyyy-MM-dd");
+		Date now = DateTools.getDateTimeOfStr(DateTools.getYYYY_MM_DD(), "yyyy-MM-dd");
+		if (daystamp.getTime() < now.getTime()) {
+			// 重置missionId为1、2、3、4的logs
+			userMissionLogsMapper.updateValid(userId);
+			UserMissionLogs log = new UserMissionLogs();
+			int [] logId = {1,2,3,4};
+			int [] tgtCount = {5,3,1,1};
+			for (int i = 0; i < 4; i++) {
+				log.setMissionId(logId[i]);
+				logs.setFinishCount(0);
+				log.setTargetCount(tgtCount[i]);
+				log.setUserId(userId);
+				userMissionLogsMapper.insertOneLogs(log);
+			}
+			return true;
+		}
+
+		return false;
 	}
 }

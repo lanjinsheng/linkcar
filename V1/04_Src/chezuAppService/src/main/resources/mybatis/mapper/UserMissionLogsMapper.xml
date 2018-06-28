@@ -36,7 +36,7 @@
     </update>  
     
      <update id="updateLogs" >
-       update userMissionLogs set status=#{status},finishCount=#{finishCount} where userId=#{userId} and missionId=#{missionId} and valid=1
+       update userMissionLogs set status=#{status},finishCount=#{finishCount},updateTime=now(),daystamp=DATE_FORMAT(now(), '%Y-%m-%d') where userId=#{userId} and missionId=#{missionId} and valid=1
     </update>
     
      <update id="updateLogsFinishCount" >
@@ -66,5 +66,13 @@
     <select id="queryHadRecord" resultType="java.lang.Integer" >
   	  select count(1) from userMissionLogs where userId=#{userId}
     </select>
+    
+    <select id="queryMissionId1" resultType="com.idata365.app.entity.UserMissionLogs" >
+  	  select * from userMissionLogs where userId=#{userId} and missionId=1 and valid=1
+    </select>
+    
+    <update id="updateValid" >
+       update userMissionLogs set valid=0 where userId=#{userId} and missionId in (1,2,3,4) and valid=1
+    </update>
     
 </mapper>
