@@ -31,7 +31,7 @@ public class FightController extends BaseController {
 	@RequestMapping("/v2/game/judgeChallengeFlag")
 	public Map<String, Object> judgeChallengeFlag(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		LOG.info("famiyId=================" + requestBodyParams.get("famiyId"));
+		LOG.info("familyId=================" + requestBodyParams.get("familyId"));
 		Long familyId=Long.valueOf(requestBodyParams.get("famiyId").toString());
 		String tomorrow=DateTools.getTomorrowDateStr();
 		Long opponentId=fightService.getOpponentIdBySelfId(familyId,tomorrow);
@@ -67,7 +67,7 @@ public class FightController extends BaseController {
 	@RequestMapping("/v2/game/challengeFamily")
 	public Map<String, Object> challengeFamily(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		LOG.info("famiyId=================" + requestBodyParams.get("famiyId"));
+		LOG.info("familyId=================" + requestBodyParams.get("familyId"));
 		Long selfFamilyId=Long.valueOf(requestBodyParams.get("selfFamilyId").toString());
 		Long competitorFamilyId=Long.valueOf(requestBodyParams.get("competitorFamilyId").toString());
 		Map<String,Object> randFamily=fightService.getRandFightFamily(selfFamilyId,competitorFamilyId);
@@ -103,7 +103,7 @@ public class FightController extends BaseController {
 	@RequestMapping("/v2/game/submitChallengeFamily")
 	public Map<String, Object> submitChallengeFamily(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		LOG.info("famiyId=================" + requestBodyParams.get("famiyId"));
+		LOG.info("famiyId=================" + requestBodyParams.get("familyId"));
 		Long selfFamilyId=Long.valueOf(requestBodyParams.get("selfFamilyId").toString());
 		Long competitorFamilyId=Long.valueOf(requestBodyParams.get("competitorFamilyId").toString());
 		fightService.insertFightRelation(selfFamilyId, competitorFamilyId);
