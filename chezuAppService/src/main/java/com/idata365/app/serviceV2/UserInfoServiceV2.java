@@ -25,6 +25,7 @@ import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.LicenseDriverMapper;
 import com.idata365.app.mapper.LicenseVehicleTravelMapper;
 import com.idata365.app.mapper.UserConfigMapper;
+import com.idata365.app.mapper.UserShareLogsMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.common.AchieveCommService;
@@ -40,6 +41,8 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	LicenseVehicleTravelMapper licenseVehicleTravelMapper;
 	@Autowired
 	LicenseDriverMapper licenseDriverMapper;
+	@Autowired
+	UserShareLogsMapper userShareLogsMapper;
 	@Autowired
 	AchieveCommService achieveCommService;
 
@@ -306,5 +309,39 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 
 		}
 		return uc;
+	}
+	
+	/**
+	 * 
+	 * @Title: insertShareLogs
+	 * @Description: TODO(插入分享记录)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return int 返回类型
+	 * @throws @author
+	 *             lcc
+	 */
+	
+	public int insertShareLogs(long userId) {
+		LOG.info("userId==========================="+userId);
+		return userShareLogsMapper.insertShareLogs(userId);
+	}
+	/**
+	 * 
+	 * @Title: queryUserShareCountToday
+	 * @Description: TODO(获取当日分享次数)
+	 * @param @param
+	 *            userId
+	 * @param @return
+	 *            参数
+	 * @return int 返回类型
+	 * @throws @author
+	 *             lcc
+	 */
+	public int queryUserShareCountToday(long userId) {
+		LOG.info("userId==========================="+userId);
+		return userShareLogsMapper.queryUserShareCountToday(userId);
 	}
 }

@@ -16,4 +16,12 @@ public interface TripMapper {
 	public String getTripEndTimeOfUser(@Param("userId") Long userId);
 	
 	public void getHiddenTrip(@Param("travelId") Long travelId);
+
+	public int getTodayCountTrip(@Param("userId") Long userId);
+	
+	public int getTripCountOnce100Score(@Param("userId") Long userId);
+	
+	public String getTripCountQuintic100Score(@Param("userId") Long userId);
+
+	public double getTotalMileage(@Param("userId") Long userId);
 }

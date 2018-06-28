@@ -68,6 +68,7 @@ public interface FamilyMapper {
 	public int countByCode(FamilyParamBean bean);
 
 	public List<Long> queryFamilyIdByUserId(FamilyParamBean bean);
+	
 	public List<Long> queryJoinFamilyIdByUserId(FamilyParamBean bean);
 
 	public int countUsersByFamilyId(FamilyParamBean bean);
@@ -172,7 +173,11 @@ public interface FamilyMapper {
 
 	// 初始化家族日分
 	int insertFamilyDriveDayStat(FamilyDriveDayStat familyDriveDayStat);
+	
+	int queryCountJoinFamily(@Param("userId") Long userId);
+	
+	int queryCountCreateFamily(@Param("userId") Long userId);
 
-
+	Integer queryFamilyTypeOfCreateFamily(@Param("userId") Long userId);
 
 }

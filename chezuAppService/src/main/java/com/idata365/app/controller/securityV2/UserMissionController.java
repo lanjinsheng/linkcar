@@ -40,8 +40,17 @@ public class UserMissionController extends BaseController {
 		int missionType = Integer.valueOf(requestBodyParams.get("missionType").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("missionType=================" + missionType);
-		List<Map<String, Object>> rtList = userMissionService.userMissionList(userId, missionType);
-		return ResultUtils.rtSuccess(rtList);
+		// 预查询
+		userMissionService.insertOrUpdateLogs(userId, missionType);
+		// 查询所有类型任务完成情况
+		Map<String, String> rtMap = userMissionService.queryMissionStatus(userId);
+		// 返回任务列表
+		List<Map<String, String>> rtList = userMissionService.userMissionList(userId, missionType);
+
+		Map<String, Object> rtDate = new HashMap<>();
+		rtDate.put("rtMap", rtMap);
+		rtDate.put("rtList", rtList);
+		return ResultUtils.rtSuccess(rtDate);
 	}
 	
 	/**
@@ -61,12 +70,10 @@ public class UserMissionController extends BaseController {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		long userId = this.getUserId();
 		int missionId = Integer.valueOf(requestBodyParams.get("missionId").toString());
-		int powerPrize = Integer.valueOf(requestBodyParams.get("powerPrize").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("missionId=================" + missionId);
-		LOG.info("powerPrize=================" + powerPrize);
 		try {
-			userMissionService.getMissionPrize(userId, missionId,powerPrize);
+			userMissionService.getMissionPrize(userId, missionId);
 			rtMap.put("receveStatus", "1");
 		} catch (Exception e) {
 			rtMap.put("receveStatus", "0");

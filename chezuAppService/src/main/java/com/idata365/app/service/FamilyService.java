@@ -884,4 +884,53 @@ public class FamilyService extends BaseService<FamilyService> {
 		// 标记新手指导标记位
 		this.familyMapper.updateTaskFlag(bean);
 	}
+	
+	//任务--是否加入俱乐部？
+	public int queryCountJoinFamily(long userId) {
+		return familyMapper.queryCountJoinFamily(userId);
+	}
+	//任务--是否创建俱乐部？
+	public int queryCountCreateFamily(long userId) {
+		return familyMapper.queryCountJoinFamily(userId);
+	}
+
+	// 任务--创建俱乐部是否达到白银
+	public int queryCreateFamilyIsSilver(long userId) {
+		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
+		if (i != null && i >= 90) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	// 任务--创建俱乐部是否达到黄金
+	public int queryCreateFamilyIsGold(long userId) {
+		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
+		if (i != null && i >= 100) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	// 任务--创建俱乐部是否达到钻石
+	public int queryCreateFamilyIsDiamond(long userId) {
+		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
+		if (i != null && i >= 110) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	// 任务--创建俱乐部是否达到冠军
+	public int queryCreateFamilyIsChampion(long userId) {
+		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
+		if (i != null && i >= 120) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }

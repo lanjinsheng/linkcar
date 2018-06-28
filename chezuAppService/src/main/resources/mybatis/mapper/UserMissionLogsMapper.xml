@@ -4,29 +4,63 @@
     <resultMap id="BaseUserMissionLogsMap" type="com.idata365.app.entity.UserMissionLogs" >
     </resultMap>
     
-    <select id="getLogsByUserId" resultMap="BaseUserMissionLogsMap" parameterType="java.lang.String">
+    <select id="getLogsByUserId" resultMap="BaseUserMissionLogsMap" >
   	  select * from userMissionLogs where userId=#{userId} and valid=1
     </select>
     
-    <insert id ="initLogsToUser" >
- 7            insert into userMissionLogs
- 8            (userId, missionId, daystamp, createTime,updateTime,targetCount)
- 9            values
-10             <foreach collection ="missionsList" item="missions" index= "index" separator =",">
-11                 (
-					#{userId},#{missions.missionId}, DATE_FORMAT(now(), '%Y-%m-%d'),now(),now(),#{missions.targetCount}
-16                 )
-17             </foreach >
-18  </insert >
-
-	<select id="getLogsByUserIdAndType" resultType="java.util.HashMap" parameterType="java.lang.String">
+    <select id="getOneLogsByUserIdAndMissionId" resultType="java.util.HashMap" >
   	  select 
-  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,a.finishCount,a.targetCount,a.status,a.daystamp
+  	  	a.missionId,b.powerPrize,a.finishCount,a.targetCount
+		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and a.missionId=#{missionId} and a.valid=1
+    </select>
+    
+    <insert id ="initLogsToUser" >
+             insert into userMissionLogs
+             (userId, missionId, daystamp, createTime,updateTime,targetCount)
+              values
+             <foreach collection ="missionsList" item="missions" index= "index" separator =",">
+                 (
+					#{userId},#{missions.missionId}, DATE_FORMAT(now(), '%Y-%m-%d'),now(),now(),#{missions.targetCount}
+                 )
+             </foreach >
+  </insert >
+
+	<select id="getLogsByUserIdAndType" resultType="java.util.HashMap" >
+  	  select 
+  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,a.finishCount,a.targetCount,a.status,a.daystamp,b.actionStatus,b.actionLink,b.endTime
 		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and b.missionType=#{missionType} and a.valid=1 order by a.updateTime desc
     </select>
     
      <update id="updateLogsStatus" >
-       update userMissionLogs set status=3 where userId=#{userId} and missionId=#{missionId} and valid=1
+       update userMissionLogs set status=#{status} where userId=#{userId} and missionId=#{missionId} and valid=1
     </update>  
+    
+     <update id="updateLogs" >
+       update userMissionLogs set status=#{status},finishCount=#{finishCount} where userId=#{userId} and missionId=#{missionId} and valid=1
+    </update>
+    
+     <update id="updateLogsFinishCount" >
+       update userMissionLogs set status=1,finishCount=(finishCount+1),updateTime=now(),daystamp=DATE_FORMAT(now(),'%Y-%m-%d') where userId=#{userId} and missionId=#{missionId} and valid=1
+    </update>
+    
+    <update id="updateLogsValid" >
+       update userMissionLogs set valid=0 where userId=#{userId} and missionId=#{missionId} and valid=1
+    </update>
+    
+    <insert id ="insertOneLogs" parameterType="com.idata365.app.entity.UserMissionLogs">
+          insert into userMissionLogs
+          (userId, missionId, daystamp, createTime,updateTime,finishCount,targetCount)
+          values
+		  (#{userId},#{missionId}, DATE_FORMAT(now(), '%Y-%m-%d'),now(),now(),#{finishCount},#{targetCount})
+   </insert >
+    
+    <select id="queryCountByType" resultType="java.lang.Integer" >
+  	  select count(1)
+		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and a.valid=1 and a.status=1 and b.missionType=#{missionType}
+    </select>
+    
+    <update id="updateCountOfId5" >
+       update userMissionLogs set finishCount=1 where userId=#{userId} and missionId=5 and status=1 and valid=1
+    </update>
     
 </mapper>

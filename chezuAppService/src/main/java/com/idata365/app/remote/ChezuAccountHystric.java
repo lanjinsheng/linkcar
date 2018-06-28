@@ -1,13 +1,10 @@
 package com.idata365.app.remote;
 
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import com.idata365.app.entity.UsersAccount;
 
 @Component
 public class ChezuAccountHystric implements ChezuAccountService {
@@ -17,6 +14,18 @@ public class ChezuAccountHystric implements ChezuAccountService {
 	public Map<String, String> isAuthenticated(long userId, String sign) {
 		LOG.error("isAuthenticated挂了account");
 		return null;
+	}
+
+	@Override
+	public int queryCountOfIdcard(long userId, String sign) {
+		LOG.error("queryCountOfIdcard挂了account");
+		return 0;
+	}
+
+	@Override
+	public int queryCountOfLicense(long userId, String sign) {
+		LOG.error("queryCountOfLicense挂了account");
+		return 0;
 	}
 
 
