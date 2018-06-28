@@ -286,4 +286,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		// TODO Auto-generated method stub
 		return userMissionLogsMapper.updateCountOfId5(userId);
 	}
+
+	public int queryHadRecord(long userId) {
+		return userMissionLogsMapper.queryHadRecord(userId);
+	}
 }

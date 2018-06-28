@@ -63,4 +63,8 @@
        update userMissionLogs set finishCount=1 where userId=#{userId} and missionId=5 and status=1 and valid=1
     </update>
     
+    <select id="queryHadRecord" resultType="java.lang.Integer" >
+  	  select count(1) from userMissionLogs where userId=#{userId}
+    </select>
+    
 </mapper>

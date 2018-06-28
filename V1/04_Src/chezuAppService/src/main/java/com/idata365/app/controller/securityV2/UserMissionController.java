@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.ResultUtils;
 
@@ -40,6 +41,15 @@ public class UserMissionController extends BaseController {
 		int missionType = Integer.valueOf(requestBodyParams.get("missionType").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("missionType=================" + missionType);
+		// 初始化
+		int count = userMissionService.queryHadRecord(userId);
+		if(count == 0) {
+			LOG.info("初始化任务log============userId=================" + userId);
+			List<DicUserMission> missions = userMissionService.getAllDicUserMission();
+			userMissionService.initLogsToUser(missions,userId);
+			userMissionService.updateCountOfId5(userId);
+		}
+		
 		// 预查询
 		userMissionService.insertOrUpdateLogs(userId, missionType);
 		// 查询所有类型任务完成情况

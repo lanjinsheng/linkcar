@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.RoleConstant;
-import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.Message;
@@ -334,10 +333,6 @@ public class LoginRegService extends BaseService<LoginRegService>
 				e.printStackTrace();
 			}
 			
-			//初始用户mission
-			List<DicUserMission> missions = userMissionService.getAllDicUserMission();
-			userMissionService.initLogsToUser(missions,account.getId());
-			userMissionService.updateCountOfId5(account.getId());
 			return token;
 		}
 		return null;
