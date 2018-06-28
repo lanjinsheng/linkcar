@@ -48,9 +48,11 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		Map<String, String> rtMap = new HashMap<String, String>();
 		IDCard idCard = iDCardMapper.findIDCardByUserId(userId);
 		List<LicenseVehicleTravel> licenseVehicleTravels = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
-		if (idCard != null&&idCard.getStatus()==1 && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
+		if (idCard != null && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
 			// 证件上传即认证
-			rtMap.put("IdCardIsOK", "1");
+			if(idCard.getStatus()==1) {
+				rtMap.put("IdCardIsOK", "1");
+			}
 			for (LicenseVehicleTravel l : licenseVehicleTravels) {
 				if(l.getStatus()==1) {
 					rtMap.put("VehicleTravelIsOK", "1");
