@@ -733,7 +733,59 @@ public class AssetService extends BaseService<AssetService> {
 		}
 		return rtMap;
 	}
-
+	@Transactional
+	public List<Map<String, Object>> getYestodayHarvestV2(long userId, long familyId) {
+		List<Map<String, Object>> rtList=new ArrayList<Map<String, Object>>();
+		Map<String, Object> rtMap1 = new HashMap<String, Object>();
+		Map<String, Object> rtMap2 = new HashMap<String, Object>();
+		Map<String, Object> rtMap3 = new HashMap<String, Object>();
+		Map<String, Object> parmMap = new HashMap<String, Object>();
+		parmMap.put("userId", userId);
+		parmMap.put("daystamp", DateTools.getCurDateYYYY_MM_DD());
+		String powerTable = "userPower" + DateTools.getCurDateAddDay(-1).replaceAll("-", "");
+		parmMap.put("powerTable", powerTable);
+		AssetUsersAsset yestodayPower = assetUsersAssetMapper.getYestodayPower(parmMap);
+		rtMap1.put("assetName", "个人获得动力");
+		rtMap1.put("assetType", "1");
+		rtMap2.put("assetName", "家族奖励动力");
+		rtMap2.put("assetType", "1");
+		rtMap3.put("assetName", "动力产出钻石");
+		rtMap3.put("assetType", "2");
+		if (yestodayPower == null) {
+			rtMap1.put("assetNum", "0");
+			
+		} else {
+			rtMap1.put("assetNum", String.valueOf(yestodayPower.getPowerNum()));
+			rtMap2.put("assetNum", String.valueOf(yestodayPower.getPkPower()));
+		}
+		FamilyGameAsset gameAsset = familyGameAssetMapper.getFamilyGameAssetByDay(familyId,
+				DateTools.getCurDateAddDay(-1));
+		if(gameAsset==null) {
+			rtMap2.put("assetNum", "0");
+		}else {
+			AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+			log.setEffectId(gameAsset.getId());
+			log.setEventType(AssetConstant.EVENTTYPE_POWER_GAMEEND_USER);
+			AssetUsersPowerLogs rtLog=assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(log);
+			if(rtLog==null) {
+				rtMap2.put("assetNum", "0");
+			}else {
+				rtMap2.put("assetNum", String.valueOf(rtLog.getPowerNum()));
+			}
+		}
+		
+		AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodayPersonPowerDiamonds(userId);
+		if (diamonds == null) {
+			rtMap3.put("assetNum", "0");
+		} else {
+			rtMap3.put("assetNum", String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
+		}
+		rtList.add(rtMap1);
+		rtList.add(rtMap2);
+		rtList.add(rtMap3);
+		return rtList;
+	}
+	
 	@Transactional
 	public Map<String, Object> getGlobalYestoday() {
 		Map<String, Object> rtMap = new HashMap<String, Object>();

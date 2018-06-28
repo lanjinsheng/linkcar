@@ -25,6 +25,14 @@ public class AssetUsersAsset implements Serializable {
 	private BigDecimal diamondsNum;
 	private BigDecimal hadDiamondsNum;
 	private Date updateTime;
+	private Integer pkPower;
+	
+	public Integer getPkPower() {
+		return pkPower;
+	}
+	public void setPkPower(Integer pkPower) {
+		this.pkPower = pkPower;
+	}
 	public Long getId() {
 		return id;
 	}
