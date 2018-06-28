@@ -26,8 +26,8 @@
      </select>
      
      <select id="findUserFamilies" resultType="java.util.HashMap" parameterType="java.lang.Long">
-       SELECT *
-       FROM  userFamilyRelation where userId=#{userId}
+       SELECT a.*,b.familyName
+       FROM  userFamilyRelation a left join familyInfo b on a.familyId=b.id where a.userId=#{userId}
      </select>
      
      <select id="findFamlilyUsers" resultType="java.util.HashMap" parameterType="java.util.HashMap">

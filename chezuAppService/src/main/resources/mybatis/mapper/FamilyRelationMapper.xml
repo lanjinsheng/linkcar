@@ -46,12 +46,8 @@
     </update>
  
     <select id="getMatchFamily" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-		SELECT *
-		FROM familyInfo AS t1 JOIN (SELECT ROUND(RAND() * (
-		(SELECT MAX(id) FROM familyInfo where familyType>=${familyType})-(SELECT MIN(id) FROM familyInfo where familyType>=${familyType})
-		)+(SELECT MIN(id) FROM familyInfo where familyType>=${familyType})) AS id) AS t2
-		WHERE t1.id >= t2.id and t1.id!=${id}
-		ORDER BY t1.id LIMIT 1;
+		SELECT *,rand() b
+		FROM familyInfo where familyType<![CDATA[>=]]>94 and id!=${id}  order by b limit 1
     </select>
      
  <select id="getFamilyAvgScore" resultType="java.lang.Double" parameterType="java.lang.Long">
