@@ -24,7 +24,7 @@ public class FightService extends BaseService<FightService> {
 
 	@Autowired
 	private FamilyRelationMapper familyRelationMapper;
-	 
+	@Autowired
 	private UsersAccountMapper usersAccountMapper;
 	@Autowired
 	ChezuAssetService chezuAssetService;
