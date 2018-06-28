@@ -174,6 +174,7 @@ public class AssetController extends BaseController {
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
 		return assetService.addUserPowers(assetUsersPowerLogs);
 	}
+	@RequestMapping(value = "/asset/reducePowersByChallege", method = RequestMethod.POST)
 	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "sign") String sign){
 		LOG.info("PARAM:userId:" + userId + "===sign:" + sign);
