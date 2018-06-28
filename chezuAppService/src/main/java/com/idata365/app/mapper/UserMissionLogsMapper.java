@@ -36,4 +36,6 @@ public interface UserMissionLogsMapper {
 
 	public int updateCountOfId5(@Param("userId") long userId);
 
+	public int queryHadRecord(@Param("userId") long userId);
+
 }
