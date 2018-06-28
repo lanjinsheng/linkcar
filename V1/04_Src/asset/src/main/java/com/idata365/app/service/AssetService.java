@@ -1014,4 +1014,9 @@ public class AssetService extends BaseService<AssetService> {
 		}
 		return s;
 	}
+
+	public int queryCountOfSteal(long userId) {
+		// TODO Auto-generated method stub
+		return assetUsersPowerLogsMapper.queryCountOfSteal(userId);
+	}
 }

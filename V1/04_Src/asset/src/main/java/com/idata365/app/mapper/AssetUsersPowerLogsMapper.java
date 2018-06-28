@@ -26,6 +26,6 @@ public interface AssetUsersPowerLogsMapper {
 
 	List<AssetUsersPowerLogs> getRecordByEffectId(@Param("effectId") long effectId);
 	
-	
+	int queryCountOfSteal(@Param("userId") long userId);
 	
 }

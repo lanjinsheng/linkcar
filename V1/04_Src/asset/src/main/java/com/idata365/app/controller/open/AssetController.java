@@ -397,7 +397,23 @@ public class AssetController extends BaseController {
 		logs.setEffectId(Long.valueOf(missionId));
 		logs.setEventType(missionId + 100);
 		logs.setRecordType(AssetConstant.RECORDTYPE_1);
+		logs.setRemark(AssetConstant.UserPowerEventMap.get(missionId + 100));
 		return assetService.addUserPowers(logs);
+	}
+	
+	/**
+	 * 
+	 * @Title: getMissionPrize
+	 * @Description: TODO(查询用户首页拾取添加动力次数)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/queryCountOfSteal", method = RequestMethod.POST)
+	int queryCountOfSteal(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryCountOfSteal·~~~controller");
+		int count = assetService.queryCountOfSteal(userId);
+		return count;
 	}
 
 	public static void main(String[] args) {
