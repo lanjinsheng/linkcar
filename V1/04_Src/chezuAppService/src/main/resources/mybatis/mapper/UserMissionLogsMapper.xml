@@ -60,7 +60,7 @@
     </select>
     
     <update id="updateCountOfId5" >
-       update userMissionLogs set finishCount=1 where userId=#{userId} and missionId=5 and status=1 and valid=1
+       update userMissionLogs set finishCount=1,status=1 where userId=#{userId} and missionId=5 and status=2 and valid=1
     </update>
     
     <select id="queryHadRecord" resultType="java.lang.Integer" >
