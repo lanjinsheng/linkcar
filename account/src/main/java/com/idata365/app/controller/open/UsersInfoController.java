@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -188,4 +189,43 @@ public class UsersInfoController extends BaseController {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
+	
+	/**
+	 * 
+	 * @Title: queryCountOfIdcard
+	 * @Description: TODO(查询用户是否身份认证)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/account/queryCountOfIdcard", method = RequestMethod.POST)
+	int queryCountOfIdcard(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryCountOfIdcard·~~~controller");
+		Map<String, String> authenticated = userInfoService.isAuthenticated(userId);
+		if(authenticated.get("IdCardIsOK").equals("1")) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * 
+	 * @Title: queryCountOfLicense
+	 * @Description: TODO(查询用户是否行驶证认证)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/account/queryCountOfLicense", method = RequestMethod.POST)
+	int queryCountOfLicense(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryCountOfLicense·~~~controller");
+		Map<String, String> authenticated = userInfoService.isAuthenticated(userId);
+		if(authenticated.get("VehicleTravelIsOK").equals("1")) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
+	
 }
