@@ -66,7 +66,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		for (Map<String, Object> map : logs) {
 			int missionId = Integer.valueOf(map.get("missionId").toString());
 			int status = Integer.valueOf(map.get("status").toString());
-			int targetCount = Integer.valueOf(map.get("status").toString());
+			int targetCount = Integer.valueOf(map.get("targetCount").toString());
 			if(status==2) {
 				//重新查询
 				int count = 0;
