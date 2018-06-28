@@ -27,4 +27,21 @@
        FROM  userTravelHistory where addDayStatFlag=1 and flag=1 and userId=#{userId} and id<![CDATA[<]]>${id} order by id desc limit ${recordNum}
      </select>
      
+     <select id="getTodayCountTrip" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT IFNULL(count(1),0) FROM userTravelHistory where userId=#{userId} and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
+	</select>
+	
+	 <select id="getTripCountOnce100Score" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT IFNULL(count(1),0) FROM userTravelHistory where userId=#{userId} and score=100
+	</select>
+	
+	 <select id="getTotalMileage" resultType="java.lang.Double" parameterType="java.lang.Long">
+		SELECT IFNULL(sum(mileage),0) FROM userTravelHistory where userId=#{userId}
+	</select>
+	
+	<select id="getTripCountQuintic100Score" resultType="java.lang.String" parameterType="java.lang.Long">
+		select GROUP_CONCAT(IF(score=100,1,0)) score from userTravelHistory where userId=#{userId}
+	</select>
+	
+     
 </mapper>

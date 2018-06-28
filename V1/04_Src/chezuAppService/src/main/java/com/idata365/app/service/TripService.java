@@ -33,5 +33,27 @@ public class TripService extends BaseService<TripService>
 	public void getHiddenTrip(long travelId) {
 		tripMapper.getHiddenTrip(travelId);
 	}
-	
+	public int getTodayCountTrip(long userId) {
+		return tripMapper.getTodayCountTrip(userId);
+	}
+	public int getTripCountOnce100Score(long userId) {
+		return tripMapper.getTripCountOnce100Score(userId);
+	}
+	public int getTripCountTotalMileageMoreThan500(long userId) {
+		double m = tripMapper.getTotalMileage(userId);
+		if(m>=500000) {
+			return 1;
+		}else {
+			return 0;
+		}
+		
+	} 
+	public int getTripCountQuintic100Score(long userId) {
+		String m = tripMapper.getTripCountQuintic100Score(userId);
+		if(m != null && m.contains("1,1,1,1,1")) {
+			return 1;
+		}else {
+			return 0;
+		}
+	} 
 }

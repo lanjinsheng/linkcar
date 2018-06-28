@@ -7,7 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Component
@@ -73,6 +72,12 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		// TODO Auto-generated method stub
 		LOG.error("addAssetUsersPowerLogs 挂了");
 		return null;
+	}
+
+	@Override
+	public int queryCountOfSteal(long userId, String sign) {
+		LOG.error("queryCountOfSteal 挂了");
+		return 0;
 	}
  
 }

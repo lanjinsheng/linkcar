@@ -31,6 +31,7 @@ import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.MessageService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.service.common.AchieveCommService;
+import com.idata365.app.serviceV2.UserInfoServiceV2;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -53,6 +54,8 @@ public class ShareCommController extends BaseController
 	private AchieveCommService acchieveCommService;
 	@Autowired
 	private UserInfoService userInfoService;
+	@Autowired
+	private UserInfoServiceV2 userInfoServiceV2;
 
 	public ShareCommController()
 	{
@@ -356,16 +359,18 @@ public class ShareCommController extends BaseController
 	@RequestMapping("/share/successShare")
 	@ResponseBody
 	public Map<String, Object> successShare(@RequestParam(required = false) Map<String, String> allRequestParams,
-			@RequestBody(required = false) Map<Object, Object> requestBodyParams)
-	{
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Long userId = Long.valueOf(requestBodyParams.get("userId").toString());
 		Long shareType = Long.valueOf(requestBodyParams.get("shareType").toString());
-		if (shareType == 1)
-		{
+		if (shareType == 1) {
 			// 分享邀请码
 			acchieveCommService.addAchieve(userId, 0d, AchieveEnum.AddShareTimes);
 		}
 		Map<String, Object> rtMap = new HashMap<String, Object>();
+		
+		//插入分享日志
+		userInfoServiceV2.insertShareLogs(userId);
+		
 		return ResultUtils.rtSuccess(rtMap);
 
 	}
