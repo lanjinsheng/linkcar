@@ -54,18 +54,17 @@ public class UserHomeController extends BaseController {
 	public Map<String, Object> queryUserHome(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
-		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("userId"))
-				|| ValidTools.isBlank(requestBodyParams.get("familyId")))
+		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("userId")))
 			return ResultUtils.rtFailParam(null);
 		long ownerId = this.getUserId();
 		long userId = Long.valueOf(requestBodyParams.get("userId").toString());
-		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+//		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		LOG.info("ownerId========================="+ownerId);
 		LOG.info("userId========================="+userId);
-		LOG.info("familyId========================="+familyId);
+//		LOG.info("familyId========================="+familyId);
 		UsersAccount account = userInfoService.getUsersAccount(userId);
 
-		double score = scoreService.getAvgScore(String.valueOf(userId), familyId);
+		double score = scoreService.getHighScore(String.valueOf(userId));
 		String powerNum = chezuAssetService.getUsersAssetMap(String.valueOf(userId), "").get(userId);
 		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
 		rtMap.put("nickName", account.getNickName());

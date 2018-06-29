@@ -84,6 +84,8 @@ public interface ScoreMapper {
 
 	public Double getAvgScore(@Param("memberId") String memberId, @Param("familyId") long myFamilyId,
 			@Param("daystamp") String daystamp);
+	
+	public Double getHighScore(@Param("memberId") String memberId,@Param("daystamp") String daystamp);
 
 	public List<Map<String, Object>> getMemberInfoByTime(@Param("familyId") long familyId,
 			@Param("daystamp") String daystamp);
