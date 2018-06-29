@@ -370,12 +370,12 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					userRankList.get(i).put("rank", map.get(i+1));
 					userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
 				}
-				userRankList.get(i).put("isMyFamilyisMyFamilyFlag", "0");
+				userRankList.get(i).put("isMyFamilyFlag", "0");
 				
 			}
 			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
 				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-					return Double.valueOf(o1.get("isMyFamilyisMyFamilyFlag").toString()).compareTo(Double.valueOf(o2.get("isMyFamilyisMyFamilyFlag").toString()));
+					return Double.valueOf(o1.get("isMyFamilyFlag").toString()).compareTo(Double.valueOf(o2.get("isMyFamilyFlag").toString()));
 				}
 			});
 		}
