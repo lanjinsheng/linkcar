@@ -151,8 +151,10 @@ public class FightService extends BaseService<FightService> {
 //    			powerLog.put("effectId",pkFamily.get("id"));
 //    			powerLog.put("powerNum",pkFamily.get("id"));
     			String sign=SignUtils.encryptHMAC(family.get("createUserId").toString());
-    			chezuAssetService.reducePowersByChallege(Long.valueOf(family.get("createUserId").toString()),(challegeTimesToday-1), sign);
-    			
+    			Map<String, String> map = chezuAssetService.reducePowersByChallege(Long.valueOf(family.get("createUserId").toString()),(challegeTimesToday-1), sign);
+				if (map == null || map.get("flag").equals("0")) {
+					return null;
+				}
     		}
     	}
     	familyRelationMapper.updateFamilyChaTime(family);
