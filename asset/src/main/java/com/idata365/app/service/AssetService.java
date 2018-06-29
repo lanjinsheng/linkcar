@@ -398,11 +398,12 @@ public class AssetService extends BaseService<AssetService> {
 
 	@Transactional
 	public boolean reduceUserPowers(AssetUsersPowerLogs assetUsersPowerLogs) {
-		int i = assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
 		int j = assetUsersAssetMapper.updatePowerReduce(assetUsersPowerLogs);
-		if(i == 0||j == 0) {
+		if(j == 0) {
 			return false;
 		}
+		int i = assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
+
 		return true;
 	}
 	/**
