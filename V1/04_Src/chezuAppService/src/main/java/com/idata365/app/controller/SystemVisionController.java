@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idata365.app.config.SystemProperties;
 import com.idata365.app.constant.SystemConstant;
 import com.idata365.app.service.SystemVisionService;
 import com.idata365.app.util.ResultUtils;
@@ -22,6 +23,10 @@ public class SystemVisionController extends BaseController
 
 	@Autowired
 	private SystemVisionService systemVisionService;
+	@Autowired
+	private SystemProperties systemProperties;
+	
+	
 
 	/**
 	 * 校验系统版本号
@@ -53,7 +58,6 @@ public class SystemVisionController extends BaseController
 			@RequestBody(required = false) Map<String, String> requestBodyParams)
 	{
 		Map<String, Object> map = new HashMap<String,Object>();
-		String sysVersion="1.5.0";
 		if (requestBodyParams == null)
 		{
 			return ResultUtils.rtFailParam(null, "无效版本参数");
@@ -66,19 +70,21 @@ public class SystemVisionController extends BaseController
 		{
 			return ResultUtils.rtFailParam(null, "无效参数");
 		}
+		Integer versionInt=Integer.valueOf(version.replace(".", ""));
+		Integer sysVersionInt=Integer.valueOf(systemProperties.getSysVersion().replace(".", ""));
 		// 业务处理
-		if(version.equals("1.6.0") && sysVersion.equals("1.5.0")){
-			//测试环境1
-			map.put("appBaseUrl", "http://115.159.216.58:8769");
-			map.put("colBaseUrl", "http://115.159.216.58:9081/v1");
-			map.put("imgBaseUrl", "http://115.159.216.58:8769/zuul");
-			map.put("imBaseUrl", "ws://115.159.216.58:7397/websocket");
-		}else{
+		if(versionInt<=sysVersionInt){
 			//正式环境1
 			map.put("appBaseUrl", "https://product-app.idata365.com");
 			map.put("colBaseUrl", "https://product-col.idata365.com/v1");
 			map.put("imgBaseUrl", "http://product-app.idata365.com/zuul");
 			map.put("imBaseUrl", "ws://47.100.208.65:7397/websocket");
+		}else{
+			//测试环境1
+			map.put("appBaseUrl", "http://115.159.216.58:8769");
+			map.put("colBaseUrl", "http://115.159.216.58:9081/v1");
+			map.put("imgBaseUrl", "http://115.159.216.58:8769/zuul");
+			map.put("imBaseUrl", "ws://115.159.216.58:7397/websocket");
 		}
 		return ResultUtils.rtSuccess(map);
 	}
