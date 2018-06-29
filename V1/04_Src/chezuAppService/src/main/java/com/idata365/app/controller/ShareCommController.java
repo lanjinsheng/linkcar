@@ -361,15 +361,15 @@ public class ShareCommController extends BaseController
 	public Map<String, Object> successShare(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Long userId = Long.valueOf(requestBodyParams.get("userId").toString());
-		Long shareType = Long.valueOf(requestBodyParams.get("shareType").toString());
-		if (shareType == 1) {
-			// 分享邀请码
-			acchieveCommService.addAchieve(userId, 0d, AchieveEnum.AddShareTimes);
-		}
+		Integer shareType = Integer.valueOf(requestBodyParams.get("shareType").toString());
+//		if (shareType == 1) {
+//			// 分享邀请码
+//			acchieveCommService.addAchieve(userId, 0d, AchieveEnum.AddShareTimes);
+//		}
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		
 		//插入分享日志
-		userInfoServiceV2.insertShareLogs(userId);
+		userInfoServiceV2.insertShareLogs(userId,shareType);
 		
 		return ResultUtils.rtSuccess(rtMap);
 

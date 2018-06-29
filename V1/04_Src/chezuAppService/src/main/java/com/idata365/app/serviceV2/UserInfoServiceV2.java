@@ -324,9 +324,12 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	 *             lcc
 	 */
 	
-	public int insertShareLogs(long userId) {
+	public int insertShareLogs(long userId,int shareType) {
 		LOG.info("userId==========================="+userId);
-		return userShareLogsMapper.insertShareLogs(userId);
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("userId", userId);
+		map.put("shareType", shareType);
+		return userShareLogsMapper.insertShareLogs(map);
 	}
 	/**
 	 * 

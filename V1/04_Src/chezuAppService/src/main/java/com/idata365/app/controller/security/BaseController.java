@@ -46,9 +46,13 @@ public abstract  class BaseController {
 
 	  }
 	protected String getFamilyInviteBasePath(String host) {
-	   	     return host+"share/invite.html?key=";
+	   	     return host+"share/invite1.html?key=";
 
-	  }
+	}
+	protected String getFamilyShareBasePath(String host) {
+  	     return host+"share/invite2.html?key=";
+
+    }
 	protected void dealListObect2String(List<Map<String,Object>> list) {
 		for(Map<String,Object> m: list) {
 			Set<String> keySet=m.keySet();
