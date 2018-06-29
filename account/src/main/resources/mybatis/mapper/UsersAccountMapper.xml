@@ -48,8 +48,7 @@
      </select>
      <select id="getCurrentUsersByFamilyId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT userId
-       FROM  userFamilyRelation where familyId=#{familyId} and  where
-        date(joinTime)<![CDATA[<=]]>#{daystamp}
+       FROM  userFamilyRelation where familyId=#{familyId} and date(joinTime)<![CDATA[<=]]>#{daystamp}
      </select>
      
      <select id="findAccountByPhone" resultMap="BaseResultMap" parameterType="com.idata365.app.entity.UsersAccount">
