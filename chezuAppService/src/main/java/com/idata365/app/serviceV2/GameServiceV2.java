@@ -3,6 +3,8 @@ package com.idata365.app.serviceV2;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +31,8 @@ import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
-import com.idata365.app.mapper.LotteryMapper;
-import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ValidTools;
@@ -42,18 +43,14 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 
 	@Autowired
 	private GameMapper gameMapper;
-
 	@Autowired
 	private FamilyMapper familyMapper;
-
-	@Autowired
-	private LotteryMapper lotteryMapper;
-
-	@Autowired
-	private ScoreMapper scoreMapper;
-
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
+	@Autowired
+	private ChezuAccountService chezuAccountService;
+	
+	
 
 	/**
 	 * 实时榜单
@@ -91,7 +88,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
 			bill.put("id", (list.get(i).get("familyId").toString()));
 			bill.put("familyId", (list.get(i).get("familyId").toString()));
-			bill.put("rank",(list.get(i).get("yesterdayOrderNo").toString()));
+			bill.put("rank", (list.get(i).get("yesterdayOrderNo").toString()));
 			bill.put("name", list.get(i).get("familyName").toString());
 			bill.put("captainOrGroupName",
 					usersAccount.getNickName() == null ? PhoneUtils.hidePhone(usersAccount.getPhone())
@@ -121,10 +118,9 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				.getDicFamilyType(Integer.valueOf(map.get("familyType").toString()));
 
 		bill.put("rank", map.get("yesterdayOrderNo").toString());
-
-		// bill.put("rank",String.valueOf(familyMapper.queryFamilyOrderByFId(familyId)));
 		bill.put("name", familyInfo.getFamilyName());
 		bill.put("gradeOrNum", familyType.getFamilyTypeValue());
+		bill.put("familyType", map.get("familyType").toString());
 		bill.put("trophyNum", map.get("trophy").toString());
 		return bill;
 	}
@@ -240,18 +236,152 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	public FamilyDriveDayStat queryFamilyScore(long familyId, String daystamp) {
 		return gameMapper.queryFamilyScore(familyId, daystamp);
 	}
-	
-	//获取家族实时排名
-	
 
+	// 获取家族实时排名
 	public String queryFamilyOrderByFId(long familyId) {
 		return String.valueOf(familyMapper.queryFamilyOrderByFId(familyId)).toString();
 	}
-	
+
 	private String getCurrentDayStr() {
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, DateConstant.DAY_PATTERN_DELIMIT);
 		return dayStr;
+	}
+
+	public List<Map<String, Object>> newMemberRankList(int familyType, int status,
+			List<Map<String, Object>> userRankList, long myFamilyId, Long fightFamilyId, String daystamp, long score1, long score2) {
+		LOGGER.info("familyType=="+familyType+"==status=="+status+"==userRankList.size()=="+userRankList.size()+"==myFamilyId=="+myFamilyId+"==fightFamilyId=="+fightFamilyId+"==score1=="+score1);
+		long cardinalNum = 0;
+		//段位动力基数
+		if (familyType >= 120) {
+			cardinalNum = 300;
+		} else if (familyType >= 110) {
+			cardinalNum = 250;
+		}else if (familyType == 100) {
+			cardinalNum = 200;
+		}else if (familyType == 90) {
+			cardinalNum = 150;
+		}else {
+			cardinalNum = 100;
+		}
+		
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "1st");
+		map.put(2, "2nd");
+		map.put(3, "3rd");
+		map.put(4, "4th");
+		map.put(5, "5th");
+		map.put(6, "6th");
+		map.put(7, "7th");
+		map.put(8, "8th");
+		
+		//根据时间获取我家族的人数
+		String sign = "";
+		String ids = chezuAccountService.getCurrentUsersByFamilyId(myFamilyId, daystamp, sign);
+		String [] count = ids.split(",");
+		int userCount = count.length;
+		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
+		
+		if (status == 0) {
+			// 平局
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					userRankList.get(i).put("flag", "1");
+					userRankList.get(i).put("desc", "无奖励");
+				} else {
+					userRankList.get(i).put("flag", "2");
+					userRankList.get(i).put("desc", "被挑战俱乐部成员");
+				}
+				userRankList.get(i).put("rank", "平局");
+				userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
+			}
+			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+					return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+				}
+			});
+		} else if (status == 1) {
+			// 胜利
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					userRankList.get(i).put("flag", "1");
+					userRankList.get(i).put("rank", map.get(i+1));
+					long powerNum = (totalprizeNum * Double.valueOf(userRankList.get(i).get("score").toString()).longValue() / score1);
+					userRankList.get(i).put("desc", "+" + powerNum);
+				} else {
+					userRankList.get(i).put("flag", "2");
+					userRankList.get(i).put("rank", "失败");
+					userRankList.get(i).put("desc", "被挑战俱乐部成员");
+				}
+				userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
+			}
+			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+					return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+				}
+			});
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					userRankList.get(i).put("rank", map.get(i+1));
+				} else {
+					userRankList.get(i).put("rank", "失败");
+				}
+			}
+		} else if (status == 2){
+			// 失败
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					userRankList.get(i).put("flag", "2");
+					userRankList.get(i).put("rank", "失败");
+					userRankList.get(i).put("desc", "无奖励");
+				} else {
+					userRankList.get(i).put("flag", "1");
+					userRankList.get(i).put("rank", map.get(i+1));
+					userRankList.get(i).put("desc", "被挑战俱乐部成员");
+				}
+				userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
+			}
+			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+					return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+				}
+			});
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					userRankList.get(i).put("rank", "失败");
+				} else {
+					userRankList.get(i).put("rank", map.get(i+1));
+				}
+			}
+		}else if (status == 3){
+			// 正在对战
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					long d = Double.valueOf(userRankList.get(i).get("score").toString()).longValue();
+					long powerNum =(totalprizeNum * d) / score1;
+					userRankList.get(i).put("desc", "挑战获胜后可获得+" + powerNum);
+				} else {
+					userRankList.get(i).put("desc", "被挑战俱乐部成员");
+				}
+				if(i>=9) {
+					userRankList.get(i).put("rank", "观战");
+					userRankList.get(i).put("isSpectators", "1");// 1 true 2 false
+				}else {
+					userRankList.get(i).put("rank", map.get(i+1));
+					userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
+				}
+				userRankList.get(i).put("flag", "0");
+				
+			}
+			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+					return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+				}
+			});
+		}
+		
+
+		return userRankList;
 	}
 
 }

@@ -28,5 +28,11 @@ public class ChezuAccountHystric implements ChezuAccountService {
 		return 0;
 	}
 
+	@Override
+	public String getCurrentUsersByFamilyId(long familyId, String daystamp, String sign) {
+		LOG.error("getCurrentUsersByFamilyId挂了account");
+		return null;
+	}
+
 
 }

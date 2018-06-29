@@ -18,6 +18,10 @@ public class DateTools
 	private static FastDateFormat yyyyMMdd = FastDateFormat.getInstance("yyyyMMdd");
 	private static FastDateFormat yyyy_MM_dd= FastDateFormat.getInstance("yyyy-MM-dd");
 	
+	public static String getYYYYMMDDMMSS() {
+		  String 	customDate = yyMMddHHmmss.format(new Date());
+		  return customDate;
+	}
 	public static String getYYYYMMDD() {
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
