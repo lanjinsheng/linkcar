@@ -158,7 +158,7 @@ public class FightService extends BaseService<FightService> {
 //    	while(pkFamily!=null && Long.valueOf(pkFamily.get("id").toString())==selfFamilyid.longValue()){
 //    		pkFamily=familyRelationMapper.getMatchFamily(family);
 //    	}
-    	pkFamily.put("reducePower", Math.pow(2, challegeTimesToday));
+    	pkFamily.put("reducePower",Double.valueOf(Math.pow(2, challegeTimesToday)).longValue());
     	return pkFamily;
     }
     
