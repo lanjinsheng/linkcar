@@ -88,6 +88,10 @@ right join familyInfo t2 on (t1.familyId=t2.id) where t2.id=#{familyId}
 	<select id="getAvgScore" resultType="java.lang.Double">
 		select avgScore from userScoreDayStat where userId=#{memberId} and familyId=#{familyId} and daystamp=#{daystamp}
 	</select>
+	
+	<select id="getHighScore" resultType="java.lang.Double">
+		select avgScore from userScoreDayStat where userId=#{memberId} and daystamp=#{daystamp} order by avgScore desc limit 1
+	</select>
 
 	<select id="queryHistoryRole" resultType="java.lang.Integer" parameterType="com.idata365.app.entity.ScoreUserHistoryParamBean">
 		select role from userFamilyRoleLog where userId=#{userId} and familyId=#{familyId} and daystamp=#{day}

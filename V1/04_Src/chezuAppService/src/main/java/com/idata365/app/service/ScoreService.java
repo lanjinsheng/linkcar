@@ -1293,17 +1293,27 @@ public class ScoreService extends BaseService<ScoreService>
 	}
 	
 	// 获取家族成员实时分数
-		public double getAvgScore(String memberId, long myFamilyId) {
-			// TODO Auto-generated method stub
-			String daystamp = getCurrentDayStr();
-			if(scoreMapper.getAvgScore(memberId, myFamilyId, daystamp)==null) {
-				return 0;
-			}
-			return scoreMapper.getAvgScore(memberId, myFamilyId, daystamp);
+	public double getAvgScore(String memberId, long myFamilyId) {
+		// TODO Auto-generated method stub
+		String daystamp = getCurrentDayStr();
+		if (scoreMapper.getAvgScore(memberId, myFamilyId, daystamp) == null) {
+			return 0;
 		}
+		return scoreMapper.getAvgScore(memberId, myFamilyId, daystamp);
+	}
 
-		public List<Map<String, Object>> getMemberInfoByTime(long familyId, String daystamp) {
-			// TODO Auto-generated method stub
-			return scoreMapper.getMemberInfoByTime(familyId, daystamp);
+	// 获取个人当日最高分
+	public double getHighScore(String memberId) {
+		// TODO Auto-generated method stub
+		String daystamp = getCurrentDayStr();
+		if (scoreMapper.getHighScore(memberId,daystamp) == null) {
+			return 0;
 		}
+		return scoreMapper.getHighScore(memberId, daystamp);
+	}
+
+	public List<Map<String, Object>> getMemberInfoByTime(long familyId, String daystamp) {
+		// TODO Auto-generated method stub
+		return scoreMapper.getMemberInfoByTime(familyId, daystamp);
+	}
 }
