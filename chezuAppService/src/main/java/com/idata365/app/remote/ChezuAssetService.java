@@ -135,7 +135,7 @@ public interface ChezuAssetService {
 			@RequestParam(value = "powerPrize") int powerPrize,@RequestParam(value = "missionId") int missionId, @RequestParam(value = "sign") String sign);
 	
 	@RequestMapping(value = "/asset/reducePowersByChallege", method = RequestMethod.POST)
-	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
+	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,@RequestParam(value = "challegeTimesToday") int challegeTimesToday,
 			@RequestParam(value = "sign") String sign);
 
 	//查询用户点小车动力次数

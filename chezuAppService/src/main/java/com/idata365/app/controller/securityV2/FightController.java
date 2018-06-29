@@ -80,6 +80,7 @@ public class FightController extends BaseController {
 			rtMap.put("trophy", "");
 			rtMap.put("imgUrl", "");
 			rtMap.put("avgScore", "0");
+			rtMap.put("reducePower", "0");
 		}else{
 			rtMap.put("familyId", String.valueOf(randFamily.get("id")));
 			rtMap.put("familyName", String.valueOf(randFamily.get("familyName")));
@@ -90,6 +91,7 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", this.getImgBasePath()+randFamily.get("imgUrl"));
 			Double d=fightService.getAvgThreeDayScore(Long.valueOf(randFamily.get("id").toString()));
 			rtMap.put("avgScore", String.valueOf(d.doubleValue()));
+			rtMap.put("reducePower",String.valueOf(randFamily.get("reducePower")));
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
