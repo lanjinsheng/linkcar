@@ -46,6 +46,8 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	
 	public Map<String, String> isAuthenticated(long userId){
 		Map<String, String> rtMap = new HashMap<String, String>();
+		rtMap.put("IdCardIsOK", "0");
+		rtMap.put("VehicleTravelIsOK", "0");
 		IDCard idCard = iDCardMapper.findIDCardByUserId(userId);
 		List<LicenseVehicleTravel> licenseVehicleTravels = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
 		if (idCard != null && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
@@ -59,10 +61,6 @@ public class UserInfoService extends BaseService<UserInfoService> {
 					break;
 				}
 			}
-			
-		} else {
-			rtMap.put("IdCardIsOK", "0");
-			rtMap.put("VehicleTravelIsOK", "0");
 		}
 		return rtMap;
 	}
