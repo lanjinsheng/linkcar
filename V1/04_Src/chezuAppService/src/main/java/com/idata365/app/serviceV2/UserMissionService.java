@@ -300,6 +300,9 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	// 更新每日任务
 	public boolean updateDayMission(long userId) {
 		UserMissionLogs logs = userMissionLogsMapper.queryMissionId1(userId);
+		if(logs == null) {
+			return false;
+		}
 		Date daystamp = DateTools.getDateTimeOfStr(logs.getDaystamp(), "yyyy-MM-dd");
 		Date now = DateTools.getDateTimeOfStr(DateTools.getYYYY_MM_DD(), "yyyy-MM-dd");
 		if (daystamp.getTime() < now.getTime()) {
