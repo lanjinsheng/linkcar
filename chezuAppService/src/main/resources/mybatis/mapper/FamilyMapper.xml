@@ -376,5 +376,13 @@
  	<select id="queryFamilyTypeOfCreateFamily" resultType="java.lang.Integer">
  		select b.familyType from userFamilyRelation a left join familyInfo b on a.familyId=b.id where a.userId=#{userId} and a.isLeader=1
  	</select>
+ 	
+ 	<select id="queryCreateFamilyId" resultType="long">
+ 		 select familyId from userFamilyRelation where userId=#{userId} and isLeader=1 order by joinTime desc limit 1
+ 	</select>
+ 	
+ 	<select id="queryJoinFamilyId" resultType="long">
+ 		 select familyId from userFamilyRelation where userId=#{userId} and isLeader=0 order by joinTime desc limit 1
+ 	</select>
     
   </mapper>
