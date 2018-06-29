@@ -44,5 +44,8 @@ public interface ChezuAccountService {
 	// 查询用户是否行驶证认证
 	@RequestMapping(value = "/account/queryCountOfLicense", method = RequestMethod.POST)
 	int queryCountOfLicense(@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign);
+	
+	@RequestMapping(value = "/account/getCurrentUsersByFamilyId",method = RequestMethod.POST)
+	public String  getCurrentUsersByFamilyId(@RequestParam(value="familyId") long familyId,@RequestParam(value="daystamp") String daystamp,@RequestParam(value="sign") String sign);
 
 }
