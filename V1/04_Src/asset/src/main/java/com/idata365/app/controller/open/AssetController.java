@@ -176,12 +176,12 @@ public class AssetController extends BaseController {
 	}
 	@RequestMapping(value = "/asset/reducePowersByChallege", method = RequestMethod.POST)
 	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
-			@RequestParam(value = "sign") String sign){
+			@RequestParam(value = "challegeTimesToday") int challegeTimesToday,@RequestParam(value = "sign") String sign){
 		LOG.info("PARAM:userId:" + userId + "===sign:" + sign);
 		AssetUsersPowerLogs power=new AssetUsersPowerLogs();
 		power.setUserId(userId);
 		power.setEffectId(0L);
-		power.setPowerNum(2L);
+		power.setPowerNum(Double.valueOf(Math.pow(2, challegeTimesToday)).longValue());
 		power.setRecordType(AssetConstant.RECORDTYPE_2);
 		power.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
 		power.setRemark("挑战家族选择消耗");
