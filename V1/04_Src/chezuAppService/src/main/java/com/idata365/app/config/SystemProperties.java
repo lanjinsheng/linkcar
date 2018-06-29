@@ -22,8 +22,17 @@ public class SystemProperties {
 	private String h5Host;
 	private String appHost;
 	private String nbcode;
+	private String sysVersion;
 	
 	
+	public String getSysVersion() {
+		return sysVersion;
+	}
+
+	public void setSysVersion(String sysVersion) {
+		this.sysVersion = sysVersion;
+	}
+
 	public String getAppHost() {
 		return appHost;
 	}
