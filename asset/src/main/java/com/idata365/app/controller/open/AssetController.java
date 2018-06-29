@@ -178,6 +178,7 @@ public class AssetController extends BaseController {
 	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "challegeTimesToday") int challegeTimesToday,@RequestParam(value = "sign") String sign){
 		LOG.info("PARAM:userId:" + userId + "===sign:" + sign);
+		Map<String, String> map = new HashMap<>();
 		AssetUsersPowerLogs power=new AssetUsersPowerLogs();
 		power.setUserId(userId);
 		power.setEffectId(0L);
@@ -185,8 +186,13 @@ public class AssetController extends BaseController {
 		power.setRecordType(AssetConstant.RECORDTYPE_2);
 		power.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
 		power.setRemark("挑战家族选择消耗");
-		assetService.reduceUserPowers(power);
-		return null;
+		boolean b = assetService.reduceUserPowers(power);
+		if(b) {
+			map.put("flag", "1");
+		}else {
+			map.put("flag", "0");
+		}
+		return map;
 	}
 	/**
 	 * 
