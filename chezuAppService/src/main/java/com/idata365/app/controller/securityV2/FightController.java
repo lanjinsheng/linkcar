@@ -81,6 +81,7 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", "");
 			rtMap.put("avgScore", "0");
 			rtMap.put("reducePower", "0");
+			return ResultUtils.rtFailParam(rtMap, "动力不足,无法匹配到对战家族!");
 		}else{
 			rtMap.put("familyId", String.valueOf(randFamily.get("id")));
 			rtMap.put("familyName", String.valueOf(randFamily.get("familyName")));
