@@ -48,7 +48,40 @@ public class SystemVisionController extends BaseController
 		Map<String, Object> map = systemVisionService.verifyVision(phoneType, vision);
 		return ResultUtils.rtSuccess(map);
 	}
-
+	@RequestMapping("/system/initConfig")
+	public Map<String, Object> initConfig(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<String, String> requestBodyParams)
+	{
+		Map<String, Object> map = new HashMap<String,Object>();
+		String sysVersion="1.5.0";
+		if (requestBodyParams == null)
+		{
+			return ResultUtils.rtFailParam(null, "无效版本参数");
+		}
+		String phoneType = requestBodyParams.get("phoneType");
+		String userId = requestBodyParams.get("userId");
+		String version = requestBodyParams.get("version");
+		LOG.info("phoneType="+phoneType+"===version="+version+"==userId="+userId);
+		if (version == null)
+		{
+			return ResultUtils.rtFailParam(null, "无效参数");
+		}
+		// 业务处理
+		if(version.equals("1.6.0") && sysVersion.equals("1.5.0")){
+			//测试环境1
+			map.put("appBaseUrl", "http://115.159.216.58:8769");
+			map.put("colBaseUrl", "http://115.159.216.58:9081/v1");
+			map.put("imgBaseUrl", "http://115.159.216.58:8769/zuul");
+			map.put("imBaseUrl", "ws://115.159.216.58:7397/websocket");
+		}else{
+			//正式环境1
+			map.put("appBaseUrl", "https://product-app.idata365.com");
+			map.put("colBaseUrl", "https://product-col.idata365.com/v1");
+			map.put("imgBaseUrl", "http://product-app.idata365.com/zuul");
+			map.put("imBaseUrl", "ws://47.100.208.65:7397/websocket");
+		}
+		return ResultUtils.rtSuccess(map);
+	}
 	/**
 	 * 查询邀请码开关
 	 * @Description:
