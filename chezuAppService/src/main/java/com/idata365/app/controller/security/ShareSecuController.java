@@ -32,31 +32,49 @@ public class ShareSecuController  extends BaseController {
  
     @RequestMapping("/share/createInvite")
     public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
-    	LOG.info("Param:shareType="+requestBodyParams.get("shareType"));
+    	String shareType=String.valueOf(requestBodyParams.get("shareType"));
+    	LOG.info("Param:shareType="+shareType);//1家族邀请，2应用分享
     	Map<String,Object> rtMap=new HashMap<String,Object>();
-    	Map<String,Object>  family=familyService.findFamilyIdByUserId(this.getUserId());
-    	if(family==null) {
-    		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建\"");
-    	}
+    	
     	try {
-    		Long familyId=Long.valueOf(family.get("id").toString());
-    		String inviteCode=this.getUserId().toString();
-    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
-			String key=SignUtils.encryptDataAes(String.valueOf(datas));
-			String shareType=String.valueOf(requestBodyParams.get("shareType"));
-			String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
-			rtMap.put("shareUrl", shareUrl);
-			rtMap.put("title", String.format("邀请您参与【%s】玩赚链车", family.get("familyName").toString()));
-			rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
-			List<String> imgs = new ArrayList<String>();
-			imgs.add("http://apph5.idata365.com/appImgs/logo.png");
-			rtMap.put("imgs", imgs);
-			return ResultUtils.rtSuccess(rtMap);
-    		
+    		if(shareType.equals("1")){
+	    		Map<String,Object>  family=familyService.findFamilyIdByUserId(this.getUserId());
+	        	if(family==null) {
+	        		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建\"");
+	        	}
+	    		Long familyId=Long.valueOf(family.get("id").toString());
+	    		String inviteCode=this.getUserId().toString();
+	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
+				String key=SignUtils.encryptDataAes(String.valueOf(datas));
+				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key+"&shareType="+shareType;
+				shareUrl=shareUrl+"&userName="+this.getUserInfo().getNickName();
+				shareUrl=shareUrl+"&familyName="+family.get("familyName").toString();
+				rtMap.put("shareUrl", shareUrl);
+				rtMap.put("title", String.format("邀请您参与【%s】玩赚链车", family.get("familyName").toString()));
+				rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
+				List<String> imgs = new ArrayList<String>();
+				imgs.add("http://apph5.idata365.com/appImgs/logo.png");
+				rtMap.put("imgs", imgs);
+				return ResultUtils.rtSuccess(rtMap);
+    		}else if(shareType.equals("2")){
+    			String inviteCode=this.getUserId().toString();
+	    		String datas=inviteCode+":"+System.currentTimeMillis();
+				String key=SignUtils.encryptDataAes(String.valueOf(datas));
+				String shareUrl=this.getFamilyShareBasePath(systemProperties.getH5Host())+key+"&shareType="+shareType;
+				shareUrl=shareUrl+"&userName="+this.getUserInfo().getNickName();
+				rtMap.put("shareUrl", shareUrl);
+				rtMap.put("title", "开车挖矿买豪宅，好玩就在链车");
+				rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
+				List<String> imgs = new ArrayList<String>();
+				imgs.add("http://apph5.idata365.com/appImgs/logo.png");
+				rtMap.put("imgs", imgs);
+				return ResultUtils.rtSuccess(rtMap);
+    		}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			return ResultUtils.rtFail(null);
 		}
+    	return ResultUtils.rtFailParam(null,"无效请求");
     }
      
 }
