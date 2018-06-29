@@ -155,6 +155,7 @@ public class FightService extends BaseService<FightService> {
     			
     		}
     	}
+    	familyRelationMapper.updateFamilyChaTime(family);
 //    	while(pkFamily!=null && Long.valueOf(pkFamily.get("id").toString())==selfFamilyid.longValue()){
 //    		pkFamily=familyRelationMapper.getMatchFamily(family);
 //    	}

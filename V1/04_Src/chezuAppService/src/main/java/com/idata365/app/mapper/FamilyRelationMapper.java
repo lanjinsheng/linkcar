@@ -18,7 +18,7 @@ public interface FamilyRelationMapper {
 	int insertFamilyRelation(FamilyRelation familyRelation);
 	
 	int updateRelationType(@Param("id")long id);
-	
+	int updateFamilyChaTime(Map<String,Object> map);
 	int reduceRelationType(FamilyRelation familyRelation);
 	
 	FamilyRelation hadMatch(FamilyRelation familyRelation);
