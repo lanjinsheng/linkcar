@@ -374,11 +374,6 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				}
 				
 			}
-			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
-				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-					return Double.valueOf(o1.get("isMyFamilyFlag").toString()).compareTo(Double.valueOf(o2.get("isMyFamilyFlag").toString()));
-				}
-			});
 		}
 		
 
