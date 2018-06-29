@@ -7,7 +7,7 @@
 	</insert>
 	
 	<select id="queryUserShareCountToday" resultType="java.lang.Integer" parameterType="java.lang.Long">
-		SELECT IFNULL(count(1),0) FROM userShareLogs where userId=#{userId} and DATE_FORMAT(daystamp,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
+		SELECT IFNULL(count(1),0) FROM userShareLogs where userId=#{userId} and DATE_FORMAT(daystamp,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y') and shareType=2
 	</select>
     
 </mapper>
