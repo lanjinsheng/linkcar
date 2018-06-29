@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ import com.idata365.app.util.SignUtils;
 
 @RestController
 public class ShareSecuController  extends BaseController {
-
+	protected static final Logger LOG = LoggerFactory.getLogger(ShareSecuController.class);
 	@Autowired
 	private FamilyService familyService;
 	@Autowired
@@ -30,6 +32,7 @@ public class ShareSecuController  extends BaseController {
  
     @RequestMapping("/share/createInvite")
     public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+    	LOG.info("Param:shareType="+requestBodyParams.get("shareType"));
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	Map<String,Object>  family=familyService.findFamilyIdByUserId(this.getUserId());
     	if(family==null) {
@@ -40,9 +43,10 @@ public class ShareSecuController  extends BaseController {
     		String inviteCode=this.getUserId().toString();
     		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 			String key=SignUtils.encryptDataAes(String.valueOf(datas));
+			String shareType=String.valueOf(requestBodyParams.get("shareType"));
 			String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key;
 			rtMap.put("shareUrl", shareUrl);
-			rtMap.put("title", String.format("邀请您参与【%s】游戏", family.get("familyName").toString()));
+			rtMap.put("title", String.format("邀请您参与【%s】玩赚链车", family.get("familyName").toString()));
 			rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
 			List<String> imgs = new ArrayList<String>();
 			imgs.add("http://apph5.idata365.com/appImgs/logo.png");
