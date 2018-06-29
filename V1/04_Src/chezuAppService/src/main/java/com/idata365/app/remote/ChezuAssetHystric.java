@@ -70,7 +70,7 @@ public class ChezuAssetHystric implements ChezuAssetService {
 	public Map<String, String> reducePowersByChallege(long userId,
 			  String sign) {
 		// TODO Auto-generated method stub
-		LOG.error("addAssetUsersPowerLogs 挂了");
+		LOG.error("reducePowersByChallege 挂了");
 		return null;
 	}
 
