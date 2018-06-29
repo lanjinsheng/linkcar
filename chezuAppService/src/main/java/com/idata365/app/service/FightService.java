@@ -133,7 +133,7 @@ public class FightService extends BaseService<FightService> {
     		
     	}
     	challegeTimesToday=challegeTimesToday+1;
-    	family.put("challegeTime", today+(challegeTimesToday));
+    	family.put("challegeTime", today+","+(challegeTimesToday));
     	
     	
     	Integer familyType=Integer.valueOf(family.get("familyType").toString())-10;
