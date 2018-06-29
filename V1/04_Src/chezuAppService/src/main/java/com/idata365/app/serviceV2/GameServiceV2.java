@@ -360,8 +360,10 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					long d = Double.valueOf(userRankList.get(i).get("score").toString()).longValue();
 					long powerNum =(totalprizeNum * d) / score1;
 					userRankList.get(i).put("desc", "挑战获胜后可获得+" + powerNum);
+					userRankList.get(i).put("isMyFamilyFlag", "1");
 				} else {
 					userRankList.get(i).put("desc", "被挑战俱乐部成员");
+					userRankList.get(i).put("isMyFamilyFlag", "0");
 				}
 				if(i>=9) {
 					userRankList.get(i).put("rank", "观战");
@@ -370,7 +372,6 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					userRankList.get(i).put("rank", map.get(i+1));
 					userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
 				}
-				userRankList.get(i).put("isMyFamilyFlag", "0");
 				
 			}
 			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
