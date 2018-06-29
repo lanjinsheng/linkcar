@@ -2,9 +2,6 @@ package com.idata365.app.controller.securityV2;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,25 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.idata365.app.config.SystemProperties;
-import com.idata365.app.constant.NameConstant;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.entity.UsersAccount;
-import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.FamilyService;
-import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.UserInfoService;
-import com.idata365.app.serviceV2.ThirdPartyLoginService;
-import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
-import com.idata365.app.util.SignUtils;
 import com.idata365.app.util.ValidTools;
 
 @RestController
@@ -74,6 +60,9 @@ public class UserHomeController extends BaseController {
 		long ownerId = this.getUserId();
 		long userId = Long.valueOf(requestBodyParams.get("userId").toString());
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+		LOG.info("ownerId========================="+ownerId);
+		LOG.info("userId========================="+userId);
+		LOG.info("familyId========================="+familyId);
 		UsersAccount account = userInfoService.getUsersAccount(userId);
 
 		double score = scoreService.getAvgScore(String.valueOf(userId), familyId);
@@ -81,8 +70,10 @@ public class UserHomeController extends BaseController {
 		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
 		rtMap.put("nickName", account.getNickName());
 		rtMap.put("score", String.valueOf(score));
+		rtMap.put("imgUrl",this.getImgBasePath() + account.getImgUrl());
 		rtMap.put("powerNum", powerNum);
-		rtMap.put("familyInfo", familyInfo);
+		rtMap.put("createFamilyInfo", familyInfo.get("createFamilyInfo"));
+		rtMap.put("joinFamilyInfo", familyInfo.get("joinFamilyInfo"));
 		if (ownerId == userId) {
 			rtMap.put("title", "我的车库");
 		} else {
