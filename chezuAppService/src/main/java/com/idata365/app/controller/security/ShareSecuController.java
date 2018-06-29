@@ -63,8 +63,8 @@ public class ShareSecuController  extends BaseController {
 				String shareUrl=this.getFamilyShareBasePath(systemProperties.getH5Host())+key+"&shareType="+shareType;
 				shareUrl=shareUrl+"&userName="+this.getUserInfo().getNickName();
 				rtMap.put("shareUrl", shareUrl);
-				rtMap.put("title", "开车挖矿买豪宅，好玩就在链车");
-				rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
+				rtMap.put("title", "开车挖矿拍豪宅，好玩就在链车!");
+				rtMap.put("content", "区块链时代的车联网新玩法，驾驶行为就能挖矿，丰厚好礼换不停！");
 				List<String> imgs = new ArrayList<String>();
 				imgs.add("http://apph5.idata365.com/appImgs/logo.png");
 				rtMap.put("imgs", imgs);
