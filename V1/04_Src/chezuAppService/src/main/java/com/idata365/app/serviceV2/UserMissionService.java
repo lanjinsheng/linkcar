@@ -68,7 +68,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			int missionId = Integer.valueOf(map.get("missionId").toString());
 			int status = Integer.valueOf(map.get("status").toString());
 			int targetCount = Integer.valueOf(map.get("targetCount").toString());
-			if(status==2) {
+			if ((status == 2) || (missionId == 5)) {
 				//重新查询
 				int count = 0;
 				String sign = SignUtils.encryptHMAC(String.valueOf(userId));
@@ -96,7 +96,6 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					String recordNext = DateTools.getAddMinuteDateTime(daystamp,60*24,format);
 					String now = DateTools.getCurDate(format);
 					if(daystamp.equals(now)) {
-						count = 0;
 						break;
 					}
 					if(recordNext.equals(now)) {
