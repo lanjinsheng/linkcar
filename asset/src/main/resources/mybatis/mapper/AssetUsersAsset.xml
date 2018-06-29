@@ -83,7 +83,7 @@
      
      <update id="updatePowerReduce"   parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
         update assetUsersAsset set powerNum=(powerNum-${powerNum}) where
-           userId=#{userId} 
+           userId=#{userId} and powerNum>=${powerNum}
      </update>
      
        <insert id="initUser"   parameterType="com.idata365.app.entity.AssetUsersAsset">
