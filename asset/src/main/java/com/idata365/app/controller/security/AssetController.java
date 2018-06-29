@@ -125,7 +125,7 @@ public class AssetController extends BaseController {
 		return ResultUtils
 				.rtSuccess(assetService.getFamilyPowers(userId, familiesInfo, requestBodyParams));
 	}
-
+	
 	/**
 	 * 
 	 * @Title: stoleFamilyFightPowers
