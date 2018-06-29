@@ -66,18 +66,19 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		return false;
 	}
 
-	@Override
-	public Map<String, String> reducePowersByChallege(long userId,
-			  String sign) {
-		// TODO Auto-generated method stub
-		LOG.error("reducePowersByChallege 挂了");
-		return null;
-	}
 
 	@Override
 	public int queryCountOfSteal(long userId, String sign) {
 		LOG.error("queryCountOfSteal 挂了");
 		return 0;
+	}
+
+	@Override
+	public Map<String, String> reducePowersByChallege(long userId,
+			int challegeTimesToday, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("reducePowersByChallege 挂了");
+		return null;
 	}
  
 }

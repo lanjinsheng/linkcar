@@ -118,10 +118,28 @@ public class FightService extends BaseService<FightService> {
     public Map<String,Object> getRandFightFamily(Long selfFamilyid,Long competitorFamilyId){
     	
     	Map<String,Object> family=usersAccountMapper.getFamilyByFamilyId(selfFamilyid);
+    	String today=DateTools.getYYYYMMDD();
+    	int challegeTimesToday=0;
+    	if(family.get("challegeTime")==null){
+    		challegeTimesToday=0;
+    	}else{
+    		String challegeTime=family.get("challegeTime").toString();
+    		String []dayTimes=challegeTime.split(",");
+    		if(dayTimes[0].equals(today)){//今天同步
+    			challegeTimesToday=Integer.valueOf(dayTimes[1]);
+    		}else{//今天首次
+    			challegeTimesToday=0;
+    		}
+    		
+    	}
+    	challegeTimesToday=challegeTimesToday+1;
+    	family.put("challegeTime", today+(challegeTimesToday));
+    	
+    	
     	Integer familyType=Integer.valueOf(family.get("familyType").toString())-10;
     	family.put("familyType", familyType);
     	Map<String,Object> pkFamily=familyRelationMapper.getMatchFamily(family);
-    	if(competitorFamilyId.longValue()==0){
+    	if(challegeTimesToday<2){
     		//首次匹配，不进行扣能量
     	}else{
     		if(competitorFamilyId.longValue()==Long.valueOf(pkFamily.get("id").toString())){
@@ -133,13 +151,14 @@ public class FightService extends BaseService<FightService> {
 //    			powerLog.put("effectId",pkFamily.get("id"));
 //    			powerLog.put("powerNum",pkFamily.get("id"));
     			String sign=SignUtils.encryptHMAC(family.get("createUserId").toString());
-    			chezuAssetService.reducePowersByChallege(Long.valueOf(family.get("createUserId").toString()), sign);
+    			chezuAssetService.reducePowersByChallege(Long.valueOf(family.get("createUserId").toString()),(challegeTimesToday-1), sign);
     			
     		}
     	}
 //    	while(pkFamily!=null && Long.valueOf(pkFamily.get("id").toString())==selfFamilyid.longValue()){
 //    		pkFamily=familyRelationMapper.getMatchFamily(family);
 //    	}
+    	pkFamily.put("reducePower", Math.pow(2, challegeTimesToday));
     	return pkFamily;
     }
     
