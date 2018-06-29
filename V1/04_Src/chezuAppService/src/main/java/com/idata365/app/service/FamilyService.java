@@ -3,6 +3,7 @@ package com.idata365.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
+import com.idata365.app.entity.FamilyInfoBean;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreBean;
 import com.idata365.app.entity.FamilyInfoScoreResultBean;
@@ -932,5 +934,27 @@ public class FamilyService extends BaseService<FamilyService> {
 		} else {
 			return 0;
 		}
+	}
+
+	//根据userId查询创建家族和加入家族的相关信息
+	public Map<String, String> queryFamilyByUserId(long userId) {
+		Map<String, String> rtMap = new HashMap<>();//    
+		rtMap.put("createFamilyInfo", null);
+		rtMap.put("joinFamilyInfo", null);
+		Long createFamilyId = familyMapper.queryCreateFamilyId(userId);
+		Long joinFamilyId = familyMapper.queryJoinFamilyId(userId);
+		if (createFamilyId != null && createFamilyId != 0) {
+			FamilyParamBean bean = new FamilyParamBean();
+			bean.setFamilyId(createFamilyId);
+			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
+			rtMap.put("createFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.familyTypeMap.get(info.getFamilyType()).getFamilyTypeValue() + "(族长)");
+		}
+		if (joinFamilyId != null && createFamilyId != 0) {
+			FamilyParamBean bean = new FamilyParamBean();
+			bean.setFamilyId(joinFamilyId);
+			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
+			rtMap.put("joinFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.familyTypeMap.get(info.getFamilyType()).getFamilyTypeValue());
+		}
+		return rtMap;
 	}
 }
