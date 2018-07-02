@@ -347,7 +347,7 @@ public class AssetService extends BaseService<AssetService> {
 		// 竞拍解冻
 
 		Map<String, Object> freeze = new HashMap<String, Object>();
-		freeze.put("userId", sellerId);
+		freeze.put("userId", buyer);
 		freeze.put("diamondsNum", diamondsNum);
 		assetUsersAssetMapper.updateEndUnfreeze(freeze);// -
 
