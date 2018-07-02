@@ -49,9 +49,9 @@
     
     <insert id ="insertOneLogs" parameterType="com.idata365.app.entity.UserMissionLogs">
           insert into userMissionLogs
-          (userId, missionId, daystamp, createTime,updateTime,finishCount,targetCount)
+          (userId, missionId, daystamp, createTime,updateTime,finishCount,targetCount,status)
           values
-		  (#{userId},#{missionId}, DATE_FORMAT(now(), '%Y-%m-%d'),now(),now(),#{finishCount},#{targetCount})
+		  (#{userId},#{missionId}, DATE_FORMAT(now(), '%Y-%m-%d'),now(),now(),#{finishCount},#{targetCount},#{status})
    </insert >
     
     <select id="queryCountByType" resultType="java.lang.Integer" >

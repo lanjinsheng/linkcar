@@ -109,6 +109,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 						userMissionLogs.setMissionId(5);
 						userMissionLogs.setFinishCount(1);
 						userMissionLogs.setTargetCount(9999);
+						userMissionLogs.setStatus(1);
 						userMissionLogsMapper.insertOneLogs(userMissionLogs);
 					}
 					break;
