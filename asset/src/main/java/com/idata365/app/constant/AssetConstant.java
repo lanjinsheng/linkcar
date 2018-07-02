@@ -23,6 +23,12 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_AIRDROP=5; //???
 	public final static int EVENTTYPE_POWER_GAMEEND_USER=6; //家族挑战获胜分配
 	public final static int EVENTTYPE_POWER_CHALLGE_REDUCE=8; //挑战家族选择消耗
+	public final static int EVENTTYPE_POWER_PAY_TICKET = 9;// 缴罚单扣除
+	public final static int EVENTTYPE_POWER_HELPPAY_TICKET = 10;// 帮别人缴罚单扣除
+	public final static int EVENTTYPE_POWER_TRIPBE_STOLE = 11;// 行程动力被偷取
+	public final static int EVENTTYPE_POWER_FREE_RIDE = 12;// 搭乘顺风车获取
+	public final static int EVENTTYPE_POWER_GET_TICKET = 13;// 收取贴条罚金
+	
 	public final static int EVENTTYPE_POWER_MISSION_STEAL_ID = 101;// 主页偷取小车动力5次
 	public final static int EVENTTYPE_POWER_MISSION_LIKE_ID = 102;// 在其他玩家车库点赞3次
 	public final static int EVENTTYPE_POWER_MISSION_TRIP_ID = 103;// 今日出行1次
@@ -69,7 +75,7 @@ public class AssetConstant {
 	static {
 		
 		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_DAYPOWER_USER, "每日动力兑换");
-		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_GAMEEND_USER, "家族每日PK获取");
+		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_GAMEEND_USER, "俱乐部每日PK获取");
 		UserDiamondsEventMap.put(EVENTTYPE_BUY, "购买消耗");
 		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_SEASONEND_USER, "赛季获胜获取");
 		UserDiamondsEventMap.put(EVENTTYPE_EARN, "交易收入");
@@ -81,8 +87,14 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_INDEX_GET, "首页小车拾取");
 		UserPowerEventMap.put(EVENTTYPE_POWER_STEAL, "停车场偷取");
 		UserPowerEventMap.put(EVENTTYPE_POWER_TRIP, "行程中获取");
-		UserPowerEventMap.put(EVENTTYPE_POWER_GAMEEND_USER, "家族挑战获胜");
+		UserPowerEventMap.put(EVENTTYPE_POWER_GAMEEND_USER, "俱乐部挑战获胜");
 		UserPowerEventMap.put(EVENTTYPE_POWER_CHALLGE_REDUCE, "挑选对战家族");
+		UserPowerEventMap.put(EVENTTYPE_POWER_PAY_TICKET, "缴罚单扣除");
+		UserPowerEventMap.put(EVENTTYPE_POWER_HELPPAY_TICKET, "帮别人缴罚单扣除");
+		UserPowerEventMap.put(EVENTTYPE_POWER_TRIPBE_STOLE, "行程动力被偷取");
+		UserPowerEventMap.put(EVENTTYPE_POWER_FREE_RIDE, "搭乘顺风车获取");
+		UserPowerEventMap.put(EVENTTYPE_POWER_GET_TICKET, "收取贴条罚金");
+		
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_STEAL_ID, "完成任务-君子爱财");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_LIKE_ID, "完成任务-赞不绝口");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_TRIP_ID, "完成任务-出行打卡");
