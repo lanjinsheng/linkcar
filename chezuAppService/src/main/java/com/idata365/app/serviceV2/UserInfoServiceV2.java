@@ -282,7 +282,8 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	 */
 	public boolean updateUserConfig(String gpsHidden, long userId) {
 		UserConfig userConfig = new UserConfig();
-		userConfig.setIsHidden(Integer.valueOf(gpsHidden));
+		userConfig.setUserConfigValue(Integer.valueOf(gpsHidden));
+		userConfig.setType(1);
 		userConfig.setUserId(userId);
 		userConfigMapper.updateUserConfig(userConfig);
 		return true;
@@ -304,7 +305,7 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 		UserConfig uc = userConfigMapper.getUserConfigById(userId);
 		if (uc == null) {
 			uc = new UserConfig();
-			uc.setIsHidden(1);
+			uc.setUserConfigValue(1);
 		} else {
 
 		}

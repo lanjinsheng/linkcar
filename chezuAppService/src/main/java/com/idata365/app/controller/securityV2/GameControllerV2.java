@@ -109,6 +109,15 @@ public class GameControllerV2 extends BaseController {
 		Map<String, String> map = new HashMap<>();
 		Long familyId = Long.valueOf(String.valueOf(scoreFamilyInfoBean.getFamilyId()));
 
+		//明日对战家族ID
+		Long flag = fightService.getOpponentIdBySelfId(familyId, DateTools.getTomorrowDateStr());
+		if (flag == null || flag == 0) {
+			map.put("isChallengeFamilyToday", "0");
+		}else {
+			map.put("isChallengeFamilyToday", "1");
+		}
+		
+		//当前对战家族ID
 		Long opponentId = fightService.getOpponentIdBySelfId(familyId, DateTools.getYYYY_MM_DD());
 		map.put("familyId", String.valueOf(familyId));
 		map.put("familyName", scoreFamilyInfoBean.getName());
@@ -120,8 +129,8 @@ public class GameControllerV2 extends BaseController {
 				SignUtils.encryptHMAC(String.valueOf(userId)));
 		map.put("haveNewPower", haveNewPower);
 		if (opponentId == null || opponentId == 0) {
-			map.put("fightFamilyName", "链车教官");
-			map.put("fightFamilyScore", String.valueOf(b.intValue() * 0.8));
+			map.put("fightFamilyName", "");
+			map.put("fightFamilyScore", "");
 			infoList.add(map);
 			return;
 		}

@@ -208,8 +208,6 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					missionActionDesc = "去偷取";
 				} else if (missionId == 2) {
 					missionActionDesc = "去点赞";
-				} else if (missionId == 4) {
-					missionActionDesc = "去分享";
 				} else if (missionId == 6) {
 					missionActionDesc = "去认证";
 				} else if (missionId == 7) {
