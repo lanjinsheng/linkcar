@@ -516,7 +516,41 @@ public class UserInfoController extends BaseController{
 	  @RequestMapping("/user/gpsHidden")
 	  public  Map<String,Object>  gpsHidden(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
 		  String gpsHidden=String.valueOf(requestBodyParams.get("gpsHidden"));
-		  userInfoService.updateUserConfig(gpsHidden, this.getUserId());
+		  userInfoService.updateUserConfig(gpsHidden, this.getUserId(),1);
+		  return ResultUtils.rtSuccess(null);
+	  }
+	  /**
+	   * 
+	      * @Title: joinMyClub
+	      * @Description: TODO(加入我俱乐部设置)
+	      * @param @param allRequestParams
+	      * @param @param requestBodyParams
+	      * @param @return    参数
+	      * @return Map<String,Object>    返回类型
+	      * @throws
+	      * @author lcc
+	   */
+	  @RequestMapping("/user/joinMyClub")
+	  public  Map<String,Object>  joinMyClub(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
+		  String joinMyClub=String.valueOf(requestBodyParams.get("joinMyClub"));
+		  userInfoService.updateUserConfig(joinMyClub, this.getUserId(),3);
+		  return ResultUtils.rtSuccess(null);
+	  }
+	  /**
+	   * 
+	      * @Title: inviteMe
+	      * @Description: TODO(玩家招募我设置)
+	      * @param @param allRequestParams
+	      * @param @param requestBodyParams
+	      * @param @return    参数
+	      * @return Map<String,Object>    返回类型
+	      * @throws
+	      * @author lcc
+	   */
+	  @RequestMapping("/user/inviteMe")
+	  public  Map<String,Object>  inviteMe(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
+		  String inviteMe=String.valueOf(requestBodyParams.get("inviteMe"));
+		  userInfoService.updateUserConfig(inviteMe, this.getUserId(),2);
 		  return ResultUtils.rtSuccess(null);
 	  }
 	  /**
@@ -537,7 +571,7 @@ public class UserInfoController extends BaseController{
 		  if(userConfig==null) {
 			  gpsHidden="1";
 		  }else {
-			  gpsHidden=String.valueOf(userConfig.getIsHidden());
+			  gpsHidden=String.valueOf(userConfig.getUserConfigValue());
 		  }
 		  Map<String,Object> rtMap=new HashMap<String,Object>();
 		  rtMap.put("gpsHidden", gpsHidden);

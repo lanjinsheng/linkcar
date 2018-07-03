@@ -286,11 +286,12 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	 *            参数
 	 * @return boolean 返回类型
 	 * @throws @author
-	 *             LanYeYe
+	 *             lcc
 	 */
-	public boolean updateUserConfig(String gpsHidden, long userId) {
+	public boolean updateUserConfig(String userConfigValue, long userId ,int type) {
 		UserConfig userConfig = new UserConfig();
-		userConfig.setIsHidden(Integer.valueOf(gpsHidden));
+		userConfig.setUserConfigValue(Integer.valueOf(userConfigValue));
+		userConfig.setType(type);
 		userConfig.setUserId(userId);
 		userConfigMapper.updateUserConfig(userConfig);
 		return true;
@@ -312,7 +313,7 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		UserConfig uc = userConfigMapper.getUserConfigById(userId);
 		if (uc == null) {
 			uc = new UserConfig();
-			uc.setIsHidden(1);
+			uc.setUserConfigValue(1);
 		} else {
 
 		}
