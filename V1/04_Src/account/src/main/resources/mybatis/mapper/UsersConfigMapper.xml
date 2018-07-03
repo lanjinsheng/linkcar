@@ -6,13 +6,24 @@
  
      <select id="getUserConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
        SELECT *
-       FROM  userConfig where userId=#{userId} order by id desc limit 1
+       FROM  userConfig where userId=#{userId} and type=1 order by id desc limit 1
      </select>
      
-    <insert id="updateUserConfig"  parameterType="com.idata365.app.entity.UserConfig" >
+     <select id="queryIsGPSHidden" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT userConfigValue FROM  userConfig where userId=#{userId} and type=1 order by id desc limit 1
+     </select>
+     <select id="queryIsCanInvite" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT userConfigValue FROM  userConfig where userId=#{userId} and type=2 order by id desc limit 1
+     </select>
+     <select id="queryIsCanJoinMe" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT userConfigValue FROM  userConfig where userId=#{userId} and type=3 order by id desc limit 1
+     </select>
+     
+     
+     <insert id="updateUserConfig"  parameterType="com.idata365.app.entity.UserConfig" >
        insert   IGNORE INTO
-            userConfig (userId,isHidden,updateTime) values (#{userId},#{isHidden},now())
-            ON DUPLICATE KEY UPDATE isHidden=#{isHidden},updateTime=now()
+            userConfig (userId,userConfigValue,updateTime,type) values (#{userId},#{userConfigValue},now(),#{type})
+            ON DUPLICATE KEY UPDATE userConfigValue=#{userConfigValue},updateTime=now()
     </insert>  
     
 </mapper>
