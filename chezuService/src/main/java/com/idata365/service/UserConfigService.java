@@ -28,7 +28,7 @@ public class UserConfigService extends BaseService<UserConfigService> {
 	public boolean getUserConfig() {
 		List<UserConfig> list=userConfigMapper.getUserConfig();
 		for(UserConfig uc:list) {
-			map.put(uc.getUserId(), uc.getIsHidden());
+			map.put(uc.getUserId(), uc.getUserConfigValue());
 		}
 		 return true;
 	}
