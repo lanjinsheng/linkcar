@@ -6,11 +6,11 @@
  
      <select id="getUserConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
        SELECT *
-       FROM  userConfig where createUserId=#{userId} order by id desc limit 1
+       FROM  userConfig where userId=#{userId} order by id desc limit 1
      </select>
        <select id="getUserConfig" resultMap="BaseUserConfigResultMap">
        SELECT *
-           FROM  userConfig
+           FROM  userConfig where type=1
      </select>
     
 </mapper>
