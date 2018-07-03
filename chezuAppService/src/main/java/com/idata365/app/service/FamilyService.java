@@ -195,7 +195,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		messageService.insertMessage(msg, MessageEnum.Kick_Member);
 		messageService.pushMessageNotrans(msg, MessageEnum.Kick_Member);
 	}
-
+ 
 	/**
 	 * 
 	 * @param bean
@@ -340,6 +340,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		bean.setEndTime(ts);
 		bean.setDaystamp(daystamp);
 		this.familyMapper.updateFamilyRoleLog(bean);
+		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
 	}
 
 	private String getCurrentDayStrWithUnDelimiter() {
