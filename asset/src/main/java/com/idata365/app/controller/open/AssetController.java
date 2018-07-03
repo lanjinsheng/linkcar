@@ -382,7 +382,7 @@ public class AssetController extends BaseController {
 		LOG.info("queryHaveNewPower·~~~controller");
 		Map<String, Object> familiesInfo = chezuAccountService.getFamiliesInfoByfamilyId(familyId, sign);
 		String haveNewPower = assetService.queryHaveNewPower(userId, familiesInfo);
-		return haveNewPower;
+		return haveNewPower == null ? "0" : haveNewPower;
 	}
 	
 	/**
