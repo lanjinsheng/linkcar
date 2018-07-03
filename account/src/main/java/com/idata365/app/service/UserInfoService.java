@@ -239,7 +239,8 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	 */
 	public boolean updateUserConfig(String gpsHidden, long userId) {
 		UserConfig userConfig = new UserConfig();
-		userConfig.setIsHidden(Integer.valueOf(gpsHidden));
+		userConfig.setUserConfigValue(Integer.valueOf(gpsHidden));
+		userConfig.setType(1);
 		userConfig.setUserId(userId);
 		userConfigMapper.updateUserConfig(userConfig);
 		return true;
@@ -255,17 +256,30 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	 *            参数
 	 * @return UserConfig 返回类型
 	 * @throws @author
-	 *             LanYeYe
+	 *             lcc
 	 */
-	public UserConfig getUserConfig(long userId) {
-		UserConfig uc = userConfigMapper.getUserConfigById(userId);
-		if (uc == null) {
-			uc = new UserConfig();
-			uc.setIsHidden(1);
-		} else {
-
+	public int queryIsGPSHidden(long userId) {
+		int i = 1;
+		if(userConfigMapper.queryIsGPSHidden(userId)!=null) {
+			i = userConfigMapper.queryIsGPSHidden(userId);
 		}
-		return uc;
+		return i;
+	}
+	
+	public int queryIsCanInvite(long userId) {
+		int i = 1;
+		if(userConfigMapper.queryIsCanInvite(userId)!=null) {
+			i = userConfigMapper.queryIsCanInvite(userId);
+		}
+		return i;
+	}
+	
+	public int queryIsCanJoinMe(long userId) {
+		int i = 1;
+		if(userConfigMapper.queryIsCanJoinMe(userId)!=null) {
+			i = userConfigMapper.queryIsCanJoinMe(userId);
+		}
+		return i;
 	}
 
 	public UsersAccount getUsersAccount(Long userId) {

@@ -155,6 +155,7 @@ public class UserInfoController extends BaseController {
 		}
 
 		rtMap.put("headImg", imgBase + userInfo.getImgUrl());
+		rtMap.put("isAuthenticated", "0");
 		if (idCard != null&&idCard.getStatus()==1 && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
 			// 证件上传即认证
 			for (LicenseVehicleTravel l : licenseVehicleTravels) {
@@ -163,12 +164,10 @@ public class UserInfoController extends BaseController {
 					break;
 				}
 			}
-			
-		} else {
-			rtMap.put("isAuthenticated", "0");
 		}
-		UserConfig uc = userInfoService.getUserConfig(this.getUserId());
-		rtMap.put("isGPSHidden", String.valueOf(uc.getIsHidden()));
+		rtMap.put("isGPSHidden", String.valueOf(userInfoService.queryIsGPSHidden(this.getUserId())));
+		rtMap.put("isCanInvite", String.valueOf(userInfoService.queryIsCanInvite(this.getUserId())));
+		rtMap.put("isCanJoinMe", String.valueOf(userInfoService.queryIsCanJoinMe(this.getUserId())));
 		return ResultUtils.rtSuccess(rtMap);
 	}
 
