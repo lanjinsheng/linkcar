@@ -6,9 +6,9 @@
     <insert id="insertNotify"   parameterType="com.idata365.app.entity.Message" >
        INSERT INTO 
             imNotify
-            (leaderName,familyId,leaderId,leaderPic,notifyMsg,createTime,inUse) 
+            (leaderName,familyId,leaderId,leaderPic,notifyMsg,createTime,inUse,familyName) 
         VALUES
-            (#{leaderName},#{familyId}, #{leaderId},#{leaderPic},#{notifyMsg},now(),#{inUse})
+            (#{leaderName},#{familyId}, #{leaderId},#{leaderPic},#{notifyMsg},now(),#{inUse},#{familyName})
     </insert>
  
     <select id="getNotify" resultMap="BaseResultMap" parameterType="java.lang.Long">

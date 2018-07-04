@@ -66,7 +66,7 @@ public class ImController extends BaseController {
 	@RequestMapping("/im/submitNotify")
     public Map<String,Object> submitNotify(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		Object family =requestBodyParams.get("familyId");
-		Object msg=requestBodyParams.get("msg");
+		Object msg=requestBodyParams.get("notifyMsg");
 	  	if(ValidTools.isBlank(family) || ValidTools.isBlank(msg)) {
     		return ResultUtils.rtFailParam(null);
 	  	}

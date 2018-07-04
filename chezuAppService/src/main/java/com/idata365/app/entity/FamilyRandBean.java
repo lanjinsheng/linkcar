@@ -19,6 +19,26 @@ public class FamilyRandBean implements Serializable
 	
 	private long userId;
 	
+	private int familyType;
+	
+	private String notifyMsg;
+	
+	public int getFamilyType() {
+		return familyType;
+	}
+
+	public void setFamilyType(int familyType) {
+		this.familyType = familyType;
+	}
+
+	public String getNotifyMsg() {
+		return notifyMsg;
+	}
+
+	public void setNotifyMsg(String notifyMsg) {
+		this.notifyMsg = notifyMsg;
+	}
+
 	//是否已经申请标记
 	private String isAlreadyRecommend;
 	

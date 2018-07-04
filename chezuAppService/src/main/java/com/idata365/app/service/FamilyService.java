@@ -39,6 +39,7 @@ import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.FamilyScoreBean;
+import com.idata365.app.entity.ImNotify;
 import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.Message;
@@ -48,7 +49,7 @@ import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserRoleLog;
 import com.idata365.app.entity.UserScoreDayParamBean;
-import com.idata365.app.entity.UsersAccountParamBean;
+import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.DicGameDayMapper;
@@ -67,22 +68,22 @@ public class FamilyService extends BaseService<FamilyService> {
 
 	@Autowired
 	private FamilyMapper familyMapper;
-
 	@Autowired
 	private ScoreMapper scoreMapper;
-
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
-
 	@Autowired
 	private MessageService messageService;
-
 	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
 	UserRoleLogMapper userRoleLogMapper;
 	@Autowired
 	DicGameDayMapper dicGameDayMapper;
+	@Autowired
+	private UserInfoService userInfoService;
+	@Autowired
+	private ImService imService;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -355,6 +356,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	 * @return
 	 */
 	public List<FamilyRandResultBean> listRecruFamily(long userId) {
+		LOG.info("userId============================="+userId);
 		FamilyParamBean familyParamBean = new FamilyParamBean();
 		familyParamBean.setUserId(userId);
 		int countStranger = this.familyMapper.countStranger(familyParamBean);
@@ -363,7 +365,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			return resultList;
 		}
 		int startPos = RandUtils.generateRand(0, countStranger - 1);
-
+		startPos = startPos - 10 > 0 ? startPos - 10 : 0;
 		FamilyParamBean bean = new FamilyParamBean();
 		bean.setStartPos(startPos);
 		bean.setUserId(userId);
@@ -375,10 +377,12 @@ public class FamilyService extends BaseService<FamilyService> {
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
 
+			tempResultBean.setFamilyTypeValue(DicFamilyTypeConstant.getDicFamilyType(tempBean.getFamilyType()).getFamilyTypeValue());
+			
 			FamilyParamBean countParamBean = new FamilyParamBean();
 			countParamBean.setFamilyId(tempBean.getFamilyId());
 			int tempMemNum = this.familyMapper.countUsersByFamilyId(countParamBean);
-			tempResultBean.setNum(String.valueOf(tempMemNum));
+			tempResultBean.setNum(String.valueOf(tempBean.getNum() + "/8"));
 
 			FamilyParamBean fParamBean = new FamilyParamBean();
 			fParamBean.setUserId(userId);
@@ -440,6 +444,9 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		if (null != tempRandBeans && tempRandBeans.size() != 0) {
 			for (FamilyRandBean tempRandBean : tempRandBeans) {
+				if(tempRandBean.getUserId() == userId) {
+					continue;
+				}
 				FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 				AdBeanUtils.copyOtherPropToStr(tempResultBean, tempRandBean);
 
@@ -453,6 +460,7 @@ public class FamilyService extends BaseService<FamilyService> {
 				} else {
 					tempResultBean.setIsAlreadyRecommend("0");
 				}
+				tempResultBean.setFamilyTypeValue(DicFamilyTypeConstant.getDicFamilyType(tempRandBean.getFamilyType()).getFamilyTypeValue());
 				list.add(tempResultBean);
 			}
 		} else {
@@ -606,17 +614,30 @@ public class FamilyService extends BaseService<FamilyService> {
 			scoreMapper.insertFamilyScore(familyScoreBean);
 		}
 		// 更新是否通过邀请码加入状态
-		boolean inviteCodeFlag = bean.isInviteCodeFlag();
-		UsersAccountParamBean usersAccountParamBean = new UsersAccountParamBean();
-		usersAccountParamBean.setUserId(bean.getUserId());
-		if (inviteCodeFlag) {
-			// 仅通过邀请码加入
-			usersAccountParamBean.setEnableStranger(0);
-		} else {
-			// 可以通过首页推荐加入
-			usersAccountParamBean.setEnableStranger(1);
-		}
-		this.familyMapper.updateUserStraner(usersAccountParamBean);
+//		boolean inviteCodeFlag = bean.isInviteCodeFlag();
+//		UsersAccountParamBean usersAccountParamBean = new UsersAccountParamBean();
+//		usersAccountParamBean.setUserId(bean.getUserId());
+//		if (inviteCodeFlag) {
+//			// 仅通过邀请码加入
+//			usersAccountParamBean.setEnableStranger(0);
+//		} else {
+//			// 可以通过首页推荐加入
+//			usersAccountParamBean.setEnableStranger(1);
+//		}
+//		this.familyMapper.updateUserStraner(usersAccountParamBean);
+		
+		//保存公告信息
+		UsersAccount account = userInfoService.getUsersAccount(bean.getUserId());
+		ImNotify notify=new ImNotify();
+		notify.setFamilyId(familyId);
+		notify.setFamilyName(bean.getFamilyName());
+		notify.setLeaderName(account.getNickName());
+		notify.setLeaderId(account.getId());
+		notify.setLeaderPic(account.getImgUrl());
+		notify.setInUse(1);
+		notify.setFamilyId(familyId);
+		notify.setNotifyMsg(bean.getNotifyMsg());
+		imService.insertNotify(notify);
 
 		return familyId;
 	}
