@@ -16,7 +16,9 @@ public class FamilyParamBean implements Serializable
 	private long userId;
 	
 	private int familyType;
+	
 	private int isLeader=0;
+	
 	private String provinceId;
 	
 	private String cityId;
@@ -55,8 +57,16 @@ public class FamilyParamBean implements Serializable
 	
 	private int hadGet;
 	
+	private String notifyMsg;
 	
-	
+	public String getNotifyMsg() {
+		return notifyMsg;
+	}
+
+	public void setNotifyMsg(String notifyMsg) {
+		this.notifyMsg = notifyMsg;
+	}
+
 	public int getIsLeader() {
 		return isLeader;
 	}
