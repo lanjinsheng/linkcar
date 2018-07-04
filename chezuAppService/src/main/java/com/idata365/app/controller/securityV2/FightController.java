@@ -44,7 +44,8 @@ public class FightController extends BaseController {
 			rtMap.put("familyTypeValue", "");
 			rtMap.put("trophy", "");
 			rtMap.put("imgUrl", "");
-			
+			rtMap.put("avgScore", "0");
+			rtMap.put("reducePower", "0");
 		}else{
 			Map<String,Object> family=fightService.getOpponentInfo(opponentId);
 			rtMap.put("challengeFlag", "1");
@@ -55,6 +56,12 @@ public class FightController extends BaseController {
 			rtMap.put("familyTypeValue",DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
 			rtMap.put("trophy", String.valueOf(family.get("trophy")));
 			rtMap.put("imgUrl", this.getImgBasePath()+family.get("imgUrl"));
+			Double d=fightService.getAvgThreeDayScore(Long.valueOf(family.get("id").toString()));
+			rtMap.put("avgScore", String.valueOf(d.doubleValue()));
+			String challegeTime=family.get("challegeTime").toString();
+    		String []dayTimes=challegeTime.split(",");
+    		int reducePower=Integer.valueOf(dayTimes[1])*2;
+			rtMap.put("reducePower", String.valueOf(reducePower));
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
