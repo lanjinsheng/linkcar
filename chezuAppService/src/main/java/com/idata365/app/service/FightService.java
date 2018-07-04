@@ -40,7 +40,7 @@ public class FightService extends BaseService<FightService> {
 		FamilyRelation relation=familyRelationMapper.getFightRelation(map);
 		if(relation==null)
 		return null;
-		if(selfFamilyId==relation.getSelfFamilyId()){
+		if(selfFamilyId.longValue()==relation.getSelfFamilyId().longValue()){
 			return relation.getCompetitorFamilyId();
 		}else{
 			return relation.getSelfFamilyId();
