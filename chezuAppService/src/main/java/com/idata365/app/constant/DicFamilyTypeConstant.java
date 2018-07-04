@@ -41,6 +41,21 @@ public class DicFamilyTypeConstant {
     public  final static Integer GuanJun_3=122;
     public  final static Integer GuanJun_4=123;
     public  final static Integer GuanJun_5=124;
+    public  final static Integer GuanJun_6=125;
+    public  final static Integer GuanJun_7=126;
+    public  final static Integer GuanJun_8=127;
+    public  final static Integer GuanJun_9=128;
+    public  final static Integer GuanJun_10=129;
+    public  final static Integer GuanJun_11=130;
+    public  final static Integer GuanJun_12=131;
+    public  final static Integer GuanJun_13=132;
+    public  final static Integer GuanJun_14=133;
+    public  final static Integer GuanJun_15=134;
+    public  final static Integer GuanJun_16=135;
+    public  final static Integer GuanJun_17=136;
+    public  final static Integer GuanJun_18=137;
+    public  final static Integer GuanJun_19=138;
+    public  final static Integer GuanJun_20=139;
     
     /**
      * 
