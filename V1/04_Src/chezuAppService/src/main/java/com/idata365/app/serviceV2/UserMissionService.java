@@ -236,6 +236,11 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			rtList.add(rtMap);
 		}
 		
+		Collections.sort(rtList, new Comparator<Map<String, String>>() {
+			public int compare(Map<String, String> o1, Map<String, String> o2) {
+				return Double.valueOf(o1.get("missionId").toString()).compareTo(Double.valueOf(o2.get("missionId").toString()));
+			}
+		});
 		//排序--- flag 1-->2-->3
 		Collections.sort(rtList, new Comparator<Map<String, String>>() {
 			public int compare(Map<String, String> o1, Map<String, String> o2) {
@@ -312,9 +317,10 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			int [] tgtCount = {5,3,1,1};
 			for (int i = 0; i < 4; i++) {
 				log.setMissionId(logId[i]);
-				logs.setFinishCount(0);
+				log.setFinishCount(0);
 				log.setTargetCount(tgtCount[i]);
 				log.setUserId(userId);
+				log.setStatus(2);
 				userMissionLogsMapper.insertOneLogs(log);
 			}
 			return true;

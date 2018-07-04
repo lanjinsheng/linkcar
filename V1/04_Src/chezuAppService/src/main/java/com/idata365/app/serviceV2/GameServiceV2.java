@@ -355,7 +355,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			}
 		}else if (status == 3){
 			// 正在对战
-			for (int i = 0; i < userRankList.size(); i++) {
+			/*for (int i = 0; i < userRankList.size(); i++) {
 				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
 					long d = Double.valueOf(userRankList.get(i).get("score").toString()).longValue();
 					long powerNum =(totalprizeNum * d) / score1;
@@ -365,14 +365,49 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					userRankList.get(i).put("desc", "被挑战俱乐部成员");
 					userRankList.get(i).put("isMyFamilyFlag", "0");
 				}
-				if(i>=9) {
+				if (i >= 8) {
 					userRankList.get(i).put("rank", "观战");
 					userRankList.get(i).put("isSpectators", "1");// 1 true 2 false
-				}else {
-					userRankList.get(i).put("rank", map.get(i+1));
+				} else {
+					userRankList.get(i).put("rank", map.get(i + 1));
 					userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
 				}
 				
+			}*/
+			int a = 0;
+			int b = 0;
+			for (int i = 0; i < userRankList.size(); i++) {
+				userRankList.get(i).put("isSpectators", "0");// 1 true 2 false
+				if (Long.valueOf(userRankList.get(i).get("familyId").toString()) == myFamilyId) {
+					long d = Double.valueOf(userRankList.get(i).get("score").toString()).longValue();
+					long powerNum = (totalprizeNum * d) / score1;
+					userRankList.get(i).put("desc", "挑战获胜后可获得+" + powerNum);
+					userRankList.get(i).put("isMyFamilyFlag", "1");
+					a++;
+					if ( a > 4) {
+						userRankList.get(i).put("isSpectators", "1");// 1 true 2 false
+					}
+				} else {
+					userRankList.get(i).put("desc", "被挑战俱乐部成员");
+					userRankList.get(i).put("isMyFamilyFlag", "0");
+					b++;
+					if ( b > 4) {
+						userRankList.get(i).put("isSpectators", "1");// 1 true 2 false
+					}
+				}
+			}
+			Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
+				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+					return Double.valueOf(o1.get("isSpectators").toString())
+							.compareTo(Double.valueOf(o2.get("isSpectators").toString()));
+				}
+			});
+			for (int i = 0; i < userRankList.size(); i++) {
+				if (userRankList.get(i).get("isSpectators").equals("0")) {
+					userRankList.get(i).put("rank", map.get(i + 1));
+				} else {
+					userRankList.get(i).put("rank", "观战");
+				}
 			}
 		}
 		
