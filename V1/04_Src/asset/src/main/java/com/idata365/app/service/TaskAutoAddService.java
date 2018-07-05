@@ -95,6 +95,7 @@ public class TaskAutoAddService {
 			String snapKey2=dayStr2+"_"+TaskGenericEnum.InitFamilyDayReward;
 			TaskGeneric task=taskGenericMapper.getByGenericKey(snapKey);
 			TaskGeneric task2=taskGenericMapper.getByGenericKey(snapKey2);
+			//确保快照生成，并且pk数据已经同步完成。
 			if(task!=null && task2!=null) {
 			//快照任务已经完成,可以进行power任务下发
 				String powerKey=dayStr2+"_"+TaskGenericEnum.InitUserDayReward;
