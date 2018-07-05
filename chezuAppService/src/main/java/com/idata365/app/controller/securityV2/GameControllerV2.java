@@ -1,6 +1,7 @@
 package com.idata365.app.controller.securityV2;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -211,8 +212,7 @@ public class GameControllerV2 extends BaseController {
 			method(result, data, myFamilyId, myFamilyId,userRankList,m);
 			result.put("myFamilyInfo", data.get(0));
 			Map<String, String> mm = new HashMap<>();
-			mm.put("familyScore", String.valueOf(
-					BigDecimal.valueOf(Double.valueOf(data.get(0).get("familyScore").toString())).intValue() * 0.8));
+			mm.put("familyScore", BigDecimal.valueOf(Double.valueOf(data.get(0).get("familyScore").toString())*0.8).setScale(1, RoundingMode.HALF_EVEN).toString());
 			mm.put("familyName","链车教官");
 			mm.put("grade","青铜V级" );
 			mm.put("trophyNum","0" );
