@@ -42,6 +42,6 @@
      </update>
      
      <select id="isCanStealPower" resultType="java.lang.Integer">
-      	select count(1) from interactTempCar where userId=#{userId} and type=1 and lockStatus=1
+      	select count(1) from interactTempCar where userId=#{userId} and type=1 and lockStatus=1 and DATE_FORMAT(now(),'%Y%m%d')=daystamp
      </select>
 </mapper>
