@@ -1,6 +1,7 @@
 package com.idata365.app.controller.securityV2;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -69,8 +70,15 @@ public class InteractController extends BaseController {
 	Map<String, Object> getPeccancyList(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=Long.valueOf(requestBodyParams.get("userId").toString());
-	 
-		return ResultUtils.rtSuccess(null);
+		Map<String,Object> rtMap=new HashMap<String,Object>();
+		List<Map<String,Object>> list=null;
+		if(this.getUserId().longValue()==userId.longValue()){
+			list=this.tempCarService.getPeccancyList(userId, 0);
+		}else{
+			list=this.tempCarService.getPeccancyList(userId, 1);
+		}
+		rtMap.put("peccancyList", list);
+		return ResultUtils.rtSuccess(rtMap);
 	}
 	 
 	 public static void main(String []args) {
