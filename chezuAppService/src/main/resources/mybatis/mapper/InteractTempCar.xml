@@ -5,20 +5,30 @@
     </resultMap>
  
       <update id="lockCar"  parameterType="com.idata365.app.entity.InteractTempCar">
-       update  interactAirdrop a,(   
+       update  interactTempCar a,(   
        select id,rand() r from interactTempCar
-       where daystamp=#{daystamp} and lockStatus=1 and type>0 order by r limit 5) b
+       where daystamp=#{daystamp} and lockStatus=1 and type<![CDATA[>]]>0 order by r limit 5) b
 	   set  a.lockBatchId=#{lockBatchId},a.stealerId=#{stealerId},a.lockStatus=-1,
        a.lockTime=#{lockTime}  where a.id=b.id
      </update>
+     <update id="lockCarById"  parameterType="com.idata365.app.entity.InteractTempCar">
+       update  interactTempCar 
+	   set   lockBatchId=#{lockBatchId}, stealerId=#{stealerId},a.lockStatus=-1,
+      lockTime=#{lockTime}  where  id=id
+     </update>
+    
     
      <select id="getTempCar" resultMap="BaseTempCarMap" parameterType="java.lang.String">
       select a.*,b.nickName as driver from ( SELECT  *
        		FROM  interactTempCar  where lockBatchId=#{uuid}) a left join 
        		usersAccount b on a.userId=b.id
      </select>
-     
-      <insert id="batchInsertCar" parameterType="java.util.HashMap">
+     <select id="getTempCarByUserId" resultMap="BaseTempCarMap" parameterType="com.idata365.app.entity.InteractTempCar">
+      select *
+       		FROM  interactTempCar  where  userId=${userId} and daystamp=#{daystamp}
+       		and lockStatus=1 and type=1
+     </select>
+     <insert id="batchInsertCar" parameterType="java.util.HashMap">
       INSERT INTO  interactTempCar
 		 (userId,carId,powerNum,carType,type,travelId,daystamp,createTime,uuid,lockStatus)
 		  VALUES
@@ -26,7 +36,7 @@
     		(#{item.userId},#{item.carId},#{item.power},#{item.carType},#{item.type},
     		'0',#{item.daystamp},now(),#{item.uuid},-1) 
     	</foreach>
-    	</insert>
+     </insert>
 
       <update id="updateTempCar"  parameterType="java.util.HashMap">
        update  interactTempCar set hadGet=1,lockStatus=2,
