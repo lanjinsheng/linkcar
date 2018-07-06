@@ -229,6 +229,28 @@ public class InteractService extends BaseService<InteractService> {
 			return false;
 		}
 	}
+	
+	/**
+	 * 查询用户是否能被偷取能量次数
+	 * @param userId
+	 * @param peccancyId
+	 * @return
+	 */
+	@Transactional
+	public int isCanStealPower(Long userId){
+		return this.interactTempCarMapper.isCanStealPower(userId);
+	}
+	
+	/**
+	 * 查询用户是否能被帮缴罚单次数
+	 * @param userId
+	 * @param peccancyId
+	 * @return
+	 */
+	@Transactional
+	public int isCanPayTicket(Long userId){
+		return this.interactPeccancyMapper.isCanPayTicket(userId);
+	}
 	public static void main(String []args) {
 		System.out.println(2+UUID.randomUUID().toString().replaceAll("-", ""));
 	}
