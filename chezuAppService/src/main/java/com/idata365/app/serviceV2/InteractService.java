@@ -120,6 +120,48 @@ public class InteractService extends BaseService<InteractService> {
 		 }
 		 return list;
 	}
+	
+	
+	@Transactional
+	public Map<String,Object> stealFromGarage(Long userId,Long  carUserId){
+		Map<String,Object> map=new HashMap<String,Object>();
+         InteractTempCar interactTempCar=new InteractTempCar();
+         interactTempCar.setUserId(carUserId);
+         interactTempCar.setDaystamp(DateTools.getYYYYMMDD());
+		 List<InteractTempCar> list=interactTempCarMapper.getTempCarByUserId(interactTempCar);
+		 String uuid=userId+UUID.randomUUID().toString().replace("-", "");
+		 InteractTempCar stealCar=null;
+		 for(InteractTempCar car:list){
+			 if(car.getBlackIds()!=null && car.getBlackIds().contains(String.valueOf(userId)+",")){
+				 continue;
+			 }else{
+				 car.setLockBatchId(uuid);
+				 car.setLockTime(System.currentTimeMillis());
+				 car.setStealerId(userId);
+				 int i=interactTempCarMapper.lockCarById(car);
+				 if(i==1){
+					 stealCar=car;
+					break; 
+				 }
+			 }
+		 }
+		 if(stealCar==null){
+			 map.put("powerNum", "0");
+			 return map;
+		 }
+		//动力的处理
+			TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
+	    	taskPowerLogs.setUserId(carUserId);
+	    	taskPowerLogs.setTaskType(PowerEnum.Steal);
+	    	int power=stealCar.getPowerNum().intValue();
+	    	//type =1  行程动力
+	    	taskPowerLogs.setJsonValue(String.format(jsonValue, carUserId,userId,1,power,stealCar.getId()));
+	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
+	    	if(hadAdd>0) {
+	    		map.put("powerNum", String.valueOf(power));
+	    	}
+		 return map;
+	}
 	private  Map<String,Object>  randReward(long userId,int type,String daystamp){
  
 		Map<String,Object> m=new HashMap<String,Object>();
@@ -176,7 +218,7 @@ public class InteractService extends BaseService<InteractService> {
 		
 		List<InteractTempCar> cars=interactTempCarMapper.getTempCar(uuid);
 		for(InteractTempCar car:cars){
-			if(car.getBlackIds().contains(String.valueOf(userId)+",")){
+			if(car.getBlackIds()!=null && car.getBlackIds().contains(String.valueOf(userId)+",")){
 				
 			}else{
 				Map<String,Object> m=new HashMap<String,Object>();

@@ -80,7 +80,15 @@ public class InteractController extends BaseController {
 		rtMap.put("peccancyList", list);
 		return ResultUtils.rtSuccess(rtMap);
 	}
-	 
+	
+	@RequestMapping(value = "/stealFromGarage")
+	Map<String, Object> stealFromGarage(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+		Long carUserId=Long.valueOf(requestBodyParams.get("carUserId").toString());
+		Map<String,Object> rtMap=tempCarService.stealFromGarage(this.getUserId(), carUserId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
 	 public static void main(String []args) {
 		 System.out.println(System.currentTimeMillis());
 	 }
