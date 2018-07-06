@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.config.SystemProperties;
+import com.idata365.app.controller.securityV2.GameControllerV2;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreResultBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
@@ -25,6 +28,8 @@ import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
+import com.idata365.app.entity.ScoreFamilyInfoAllBean;
+import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
@@ -36,9 +41,11 @@ import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
+import com.idata365.app.util.ValidTools;
 
 @RestController
 public class FamilyController extends BaseController {
+	protected static final Logger LOG = LoggerFactory.getLogger(FamilyController.class);
 	@Autowired
 	private FamilyService familyService;
 	@Autowired
@@ -72,17 +79,29 @@ public class FamilyController extends BaseController {
 	@RequestMapping("/family/getApplyInfo")
 	public Map<String, Object> getApplyInfo(@RequestBody FamilyInviteParamBean bean) {
 		LOG.info("param==={}", JSON.toJSONString(bean));
-		List<FamilyInviteResultBean> resutList = this.familyService.getApplyInfo(bean);
+		FamilyInviteResultBean result = this.familyService.getApplyInfo(bean);
 		String imgBasePath = super.getImgBasePath();
-		for (FamilyInviteResultBean tempBean : resutList) {
-			String imgUrl = tempBean.getImgUrl();
-			tempBean.setImgUrl(imgBasePath + imgUrl);
-		}
-		return ResultUtils.rtSuccess(resutList);
+		result.setImgUrl(imgBasePath + result.getImgUrl());
+		return ResultUtils.rtSuccess(result);
+	}
+	
+	/**
+	 * 查看家族邀请
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	@RequestMapping("/family/getInviteInfo")
+	public Map<String, Object> getInviteInfo(@RequestBody FamilyInviteParamBean bean) {
+		LOG.info("param==={}", JSON.toJSONString(bean));
+		FamilyInviteResultBean result = this.familyService.getInviteInfo(bean);
+		String imgBasePath = super.getImgBasePath();
+		result.setImgUrl(imgBasePath + result.getImgUrl());
+		return ResultUtils.rtSuccess(result);
 	}
 
 	/**
-	 * 审核成员通过
+	 * 审核成员通过OR通过家族邀请
 	 * 
 	 * @param reqBean
 	 * @return
@@ -91,19 +110,20 @@ public class FamilyController extends BaseController {
 	public Map<String, Object> permitApply(@RequestBody FamilyParamBean reqBean) {
 		LOG.info("param==permitApply====={}", JSON.toJSONString(reqBean));
 		UserInfo userInfo = super.getUserInfo();
-		int msgType = this.familyService.permitApply(reqBean, userInfo);
+		String path = this.getImgBasePath();
+		int msgType = this.familyService.permitApply(reqBean, userInfo, path);
 		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("msgType", String.valueOf(msgType));
 		List<Map<String, String>> resultList = new ArrayList<>();
 		resultList.add(resultMap);
 		String sign=SignUtils.encryptHMAC(String.valueOf(reqBean.getUserId()));
-		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
+		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),path);
 		chezuImService.notifyFamilyChange(list1, sign);
 		return ResultUtils.rtSuccess(resultList);
 	}
 
 	/**
-	 * 拒绝用户加入
+	 * 拒绝用户加入OR拒绝家族邀请
 	 * 
 	 * @param reqBean
 	 * @return
@@ -114,7 +134,7 @@ public class FamilyController extends BaseController {
 		this.familyService.rejectApply(reqBean, userInfo);
 		return ResultUtils.rtSuccess(null);
 	}
-
+	
 	@RequestMapping("/family/quitFromFamily")
 	public Map<String, Object> quitFromFamily(@RequestBody FamilyParamBean reqBean) {
 		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
@@ -123,6 +143,7 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 
+	//可加入家族列表
 	@RequestMapping("/family/listRecruFamily")
 	public Map<String, Object> listRecruFamily() {
 		Long userId = super.getUserId();
@@ -169,6 +190,16 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(resultMap);
 	}
 
+	/**
+	 * 
+	 * @Title: applyByFamily
+	 * @Description: TODO(申请加入指定家族OR家族邀请指定用户)
+	 * @param @return
+	 *            参数
+	 * @return <Map<String,Object>> 返回类型
+	 * @throws @author
+	 *             LiXing
+	 */
 	@RequestMapping("/family/applyByFamily")
 	public Map<String, Object> applyByFamily(@RequestBody FamilyInviteParamBean bean) {
 		UserInfo userInfo = super.getUserInfo();
@@ -351,5 +382,25 @@ public class FamilyController extends BaseController {
 	public Map<String, Object> updateTaskFlag(@RequestBody FamilyParamBean reqBean) {
 		this.familyService.updateTaskFlag(reqBean);
 		return ResultUtils.rtSuccess(null);
+	}
+	
+	/**
+	 * 可招募成员列表
+	 * 
+	 * @param reqBean
+	 * @return
+	 */
+	@RequestMapping("/family/canRecruitList")
+	public Map<String, Object> getIndexFightInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
+		String nickName =String.valueOf(requestBodyParams.get("nickname"));
+		LOG.info("userId=================" + userId);
+		LOG.info("familyId=================" + familyId);
+		LOG.info("nickName=================" + nickName);
+		List<Map<String, String>> rtList = this.familyService.canRecruitList(userId,familyId,nickName);
+
+		return ResultUtils.rtSuccess(rtList);
 	}
 }

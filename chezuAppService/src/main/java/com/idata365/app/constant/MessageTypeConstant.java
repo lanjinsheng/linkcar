@@ -19,6 +19,9 @@ public class MessageTypeConstant {
 	public static final int PersonType_Prop_Give=2;
 	public static final int PersonType_Prop_Rev=3;
 	public static final int PersonType_Invitation_Ok=4;
+	public static final int PersonType_Intive_Fail=5;
+	public static final int PersonType_Reveice_Fail=6;
+	public static final int PersonType_REVEICE_INVITE=7;
 	
 	//家族消息
 	public static final int FamilyType=3;

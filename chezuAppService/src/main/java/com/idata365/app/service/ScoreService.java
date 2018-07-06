@@ -71,8 +71,8 @@ import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.UserScoreDayStatMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.util.AdBeanUtils;
-import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.SignUtils;
 
@@ -83,10 +83,8 @@ public class ScoreService extends BaseService<ScoreService>
 	
 	@Autowired
 	private GameMapper gameMapper;
-	
 	@Autowired
 	private ScoreMapper scoreMapper;
-	
 	@Autowired
 	private FamilyMapper familyMapper;
 	@Autowired
@@ -97,6 +95,8 @@ public class ScoreService extends BaseService<ScoreService>
 	UserRoleLogService  userRoleLogService;
 	@Autowired
 	ChezuAssetService chezuAssetService;
+	@Autowired
+	private InteractService interactService;
 	
 	/**
 	 * 
@@ -315,6 +315,8 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		AdBeanUtils.copyOtherPropToStr(resultBean, tempBean);
 		resultBean.setFamilys(recordsList);
+		resultBean.setNotifyMsg(this.scoreMapper.queryFamilyNotifyMsg(bean.getFamilyId()));
+		
 		return resultBean;
 	}
 	
@@ -432,6 +434,18 @@ public class ScoreService extends BaseService<ScoreService>
 				tempResultBean.setJoinTime(formatJoinTime);
 			}
 			tempResultBean.setRole(String.valueOf(todayRole.getRole()));
+			
+			// 偷动力、帮缴罚单
+			if (userId == bean.getUserId()) {
+				tempResultBean.setIsCanStealPower("0");
+				tempResultBean.setIsCanPayTicket("0");
+			} else {
+				int canStealPower = interactService.isCanStealPower(userId);
+				int canPayTicket = interactService.isCanPayTicket(userId);
+				tempResultBean.setIsCanStealPower(canStealPower == 0 ? "0" : "1");
+				tempResultBean.setIsCanPayTicket(canPayTicket == 0 ? "0" : "1");
+			}
+			
 			resultList.add(tempResultBean);
 		}
 		

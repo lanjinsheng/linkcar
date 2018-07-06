@@ -90,18 +90,22 @@
       -->
  
  	<insert id="saveFamilyInvite" parameterType="com.idata365.app.entity.FamilyInviteParamBean" useGeneratedKeys="true" keyProperty="id" >
- 		insert into familyInvite(familyId, memberUserId, sendInviteMsg, createTime, leaveWord) values(#{familyId}, #{userId}, #{sendInviteMsg}, #{createTime}, #{msgStr})
+ 		insert into familyInvite(familyId, memberUserId, inviteType, createTime, leaveWord,status) values(#{familyId}, #{userId}, #{inviteType}, #{createTime}, #{msgStr},1)
  	</insert>
  	
     <select id="queryApplyInfo" resultType="com.idata365.app.entity.FamilyInviteBean" parameterType="com.idata365.app.entity.FamilyInviteParamBean">
-    	select t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, t2.phone as phone, sendInviteMsg as userSource, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, leaveWord as msgStr, t1.status as status from familyInvite t1 
+    	select t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, t2.phone as phone,t2.lastLoginTime as lastActiveTime, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, leaveWord as msgStr, t1.status as status from familyInvite t1 
 			join usersAccount t2 on (t1.memberUserId = t2.id) where t1.id=#{msgId}
     </select>
- 	
+    
  	<update id="updateInviteStatus" parameterType="com.idata365.app.entity.FamilyParamBean">
  		update familyInvite set status=#{status} where id=#{msgId}
  	</update>
  
+	<select id="queryInviteType" resultType="int">
+    	select inviteType from familyInvite where id=#{id}
+    </select>
+    
     <select id="countByName" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
     	select count(1) from familyInfo where familyName=#{name}
     </select>
@@ -126,7 +130,11 @@
  	</select>
  	
  	<select id="countInviteByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=0
+ 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=1 and inviteType=1
+ 	</select>
+ 	
+ 	<select id="countRecruitByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
+ 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=1 and inviteType=2
  	</select>
  	
  	<delete id="delInviteByUserId" parameterType="com.idata365.app.entity.FamilyParamBean">
@@ -178,7 +186,7 @@
  	
  	
  	<select id="queryFamilyByFId" resultType="java.util.HashMap">
- 		select id,familyType,trophy,familyName,createUserId from familyInfo where id=#{familyId}
+ 		select id,familyType,trophy,familyName,createUserId,memberNum from familyInfo where id=#{familyId}
  	</select>
  	  
  	<!-- <select id="queryFamilyOrderByFId" resultType="java.lang.Integer">
@@ -383,6 +391,38 @@
  	
  	<select id="queryJoinFamilyId" resultType="long">
  		 select familyId from userFamilyRelation where userId=#{userId} and isLeader=0 order by joinTime desc limit 1
+ 	</select>
+
+	<select id="countAllCanRecruit" resultType="int">
+		SELECT COUNT(1) FROM usersAccount a LEFT JOIN ( SELECT * FROM userConfig WHERE type = 2 ) b ON a.id = b.userId 
+		WHERE a.lastLoginTime > TIMESTAMP ( now(), '-168:00:00' )
+			AND ( b.userConfigValue = 1 OR ( b.userConfigValue IS NULL ) ) 
+			AND a.id NOT IN ( SELECT userId FROM userFamilyRelation WHERE familyId = #{familyId} ) 
+			AND a.id != #{userId}
+    </select>
+
+	<select id="allCanRecruitList" resultType="java.util.HashMap">
+		select c.*,d.familyId as joinFamilyId from(SELECT a.id AS userId,a.imgUrl AS imgUrl,a.nickName AS nickName,a.lastLoginTime AS lastLoginTime FROM usersAccount a
+			LEFT JOIN ( SELECT * FROM userConfig WHERE type = 2 ) b ON a.id = b.userId 
+		WHERE a.lastLoginTime > TIMESTAMP ( now(), '-168:00:00' )
+			AND ( b.userConfigValue = 1 OR ( b.userConfigValue IS NULL ) ) 
+			AND a.id NOT IN ( SELECT userId FROM userFamilyRelation WHERE familyId = #{familyId} ) 
+			AND a.id != #{userId}
+		ORDER BY a.lastLoginTime DESC limit #{startPos}, 10) c left join
+		(select * from userFamilyRelation where familyId!=#{familyId} and isLeader=0) d on c.userId=d.userId
+ 	</select>
+ 	
+ 	<select id="canRecruitListByName" resultType="java.util.HashMap">
+ 		select c.*,d.familyId as joinFamilyId from(SELECT a.id AS userId,a.imgUrl AS imgUrl,a.nickName AS nickName,a.lastLoginTime AS lastLoginTime 
+		FROM usersAccount a LEFT JOIN ( SELECT * FROM userConfig WHERE type = 2 ) b ON a.id = b.userId 
+		WHERE a.lastLoginTime > TIMESTAMP ( now(), '-168:00:00' )
+			AND ( b.userConfigValue = 1 OR ( b.userConfigValue IS NULL ) ) 
+			AND a.id NOT IN ( SELECT userId FROM userFamilyRelation WHERE familyId = #{familyId} ) 
+			AND a.id != #{userId}
+			AND a.nickName LIKE #{nickName}
+		ORDER BY
+			a.lastLoginTime DESC) c left join
+		(select * from userFamilyRelation where familyId!=#{familyId} and isLeader=0) d on c.userId=d.userId 
  	</select>
     
   </mapper>

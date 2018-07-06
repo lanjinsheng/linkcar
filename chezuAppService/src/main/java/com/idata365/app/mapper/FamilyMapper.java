@@ -57,9 +57,11 @@ public interface FamilyMapper {
 
 	public void saveUserFamily(FamilyParamBean bean);
 
-	public List<FamilyInviteBean> queryApplyInfo(FamilyInviteParamBean bean);
+	public FamilyInviteBean queryApplyInfo(FamilyInviteParamBean bean);
 
 	public void updateInviteStatus(FamilyParamBean bean);
+	
+	public int queryInviteType(@Param("id")long id);
 
 	public int countByName(FamilyParamBean bean);
 
@@ -72,8 +74,10 @@ public interface FamilyMapper {
 	public List<Long> queryJoinFamilyIdByUserId(FamilyParamBean bean);
 
 	public int countUsersByFamilyId(FamilyParamBean bean);
-
+	
 	public int countInviteByUserId(FamilyParamBean bean);
+	
+	public int countRecruitByUserId(FamilyParamBean bean);
 
 	public void delInviteByUserId(FamilyParamBean bean);
 
@@ -183,5 +187,11 @@ public interface FamilyMapper {
 	Long queryCreateFamilyId(@Param("userId") long userId);
 
 	Long queryJoinFamilyId(@Param("userId") long userId);
+	
+	int countAllCanRecruit(@Param("userId")long userId,@Param("familyId")long familyId);
+	
+	List<Map<String, Object>> allCanRecruitList(@Param("userId")long userId,@Param("familyId")long familyId,@Param("startPos")int startPos);
+	
+	List<Map<String, Object>> canRecruitListByName(@Param("userId")long userId,@Param("familyId")long familyId,@Param("nickName")String nickName);
 
 }

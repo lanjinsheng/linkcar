@@ -17,16 +17,34 @@ public class FamilyInviteResultBean implements Serializable
 	
 	private String name;
 	
-	private String userSource;
+	private String activeTime;
 	
 	private String applyDate;
 	
 	private String msgStr;
 	
-	private String seqNo;
-
 	private String status;
 	
+	private String num;
+	
+	private String typeValue;
+	
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
+	}
+
+	public String getTypeValue() {
+		return typeValue;
+	}
+
+	public void setTypeValue(String typeValue) {
+		this.typeValue = typeValue;
+	}
+
 	public String getUserId()
 	{
 		return userId;
@@ -67,14 +85,12 @@ public class FamilyInviteResultBean implements Serializable
 		this.name = name;
 	}
 
-	public String getUserSource()
-	{
-		return userSource;
+	public String getActiveTime() {
+		return activeTime;
 	}
 
-	public void setUserSource(String userSource)
-	{
-		this.userSource = userSource;
+	public void setActiveTime(String activeTime) {
+		this.activeTime = activeTime;
 	}
 
 	public String getApplyDate()
@@ -95,16 +111,6 @@ public class FamilyInviteResultBean implements Serializable
 	public void setMsgStr(String msgStr)
 	{
 		this.msgStr = msgStr;
-	}
-
-	public String getSeqNo()
-	{
-		return seqNo;
-	}
-
-	public void setSeqNo(String seqNo)
-	{
-		this.seqNo = seqNo;
 	}
 
 	public String getStatus()
