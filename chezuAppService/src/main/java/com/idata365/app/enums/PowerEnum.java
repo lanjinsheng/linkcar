@@ -2,5 +2,6 @@ package com.idata365.app.enums;
 
 
 public enum PowerEnum {
-	SignIn,Trip,Share,IndexGame,Steal,ToFamily
+	//Steal 首页偷取，车库偷取
+	SignIn,TripToUser,TripToFamily,Share,IndexGame,Steal
 }

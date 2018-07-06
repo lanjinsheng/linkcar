@@ -80,5 +80,13 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("reducePowersByChallege 挂了");
 		return null;
 	}
+
+	@Override
+	public Map<String, String> reducePowersByPeccancy(long userId,
+			long payerId, int type, int power, long effectId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("reducePowersByPeccancy 挂了");
+		return null;
+	}
  
 }

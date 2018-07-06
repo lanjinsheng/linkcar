@@ -174,4 +174,9 @@ public class FightService extends BaseService<FightService> {
     		return d;
     	}
     }
+    public static void main(String []args){
+    	Long a=Long.valueOf(5);
+    	Long b=Long.valueOf(5);
+    	System.out.println(a==b);
+    }
 }
