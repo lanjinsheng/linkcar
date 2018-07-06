@@ -1,5 +1,6 @@
 package com.idata365.app.controller.securityV2;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -34,8 +35,9 @@ public class InteractController extends BaseController {
 	@RequestMapping(value = "/sendPower")
 	Map<String, Object> sendPower(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
-		
-		return ResultUtils.rtSuccess(tempCarService.getTempPowerReward(this.getUserId()));
+		    Map<String,Object> rtMap=new HashMap<String,Object>();
+		    rtMap.put("carsList", tempCarService.getTempPowerReward(this.getUserId()));
+		return ResultUtils.rtSuccess(rtMap);
 	}
 	@RequestMapping(value = "/recPower")
 	Map<String, Object> recPower(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
@@ -61,6 +63,13 @@ public class InteractController extends BaseController {
 			e.printStackTrace();
 			return ResultUtils.rtFailParam(null, "罚单缴纳失败:动力不足。");
 		}
+		return ResultUtils.rtSuccess(null);
+	}
+	@RequestMapping(value = "/getPeccancyList")
+	Map<String, Object> getPeccancyList(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+		Long userId=Long.valueOf(requestBodyParams.get("userId").toString());
+	 
 		return ResultUtils.rtSuccess(null);
 	}
 	 
