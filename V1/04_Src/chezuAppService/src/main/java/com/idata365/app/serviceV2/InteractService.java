@@ -94,6 +94,32 @@ public class InteractService extends BaseService<InteractService> {
 		return true;
 	}
 	
+	
+	/**
+	 * 罚单查询
+	 */
+	  final String remark1="玩家【%s】给您的爱车贴了一张条";
+	  final String remark2="他的爱车被贴了一张条，您是否要帮他缴纳罚金";
+	@Transactional
+	public List<Map<String,Object>> getPeccancyList(Long userId,int  type){
+		 Map<String,Object> pamMap=new HashMap<String,Object>();
+		 pamMap.put("lawBreakerId", userId);
+		 pamMap.put("endLong", System.currentTimeMillis());
+		 List<Map<String,Object>> list=interactPeccancyMapper.getPeccancyList(pamMap);
+		 if(list==null || list.size()==0){
+			 return new ArrayList<Map<String,Object>>();
+		 }
+		 if(type==0){//自己的条子
+			 for(Map<String,Object> m:list){
+				 m.put("remark",String.format(remark1, m.get("nickName")));
+			 }
+		 }else{//别人的条子
+			 for(Map<String,Object> m:list){
+				 m.put("remark",remark2);
+			 }
+		 }
+		 return list;
+	}
 	private  Map<String,Object>  randReward(long userId,int type,String daystamp){
  
 		Map<String,Object> m=new HashMap<String,Object>();
