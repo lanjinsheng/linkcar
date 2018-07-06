@@ -85,7 +85,10 @@ public class TaskGenericService {
 	public boolean initUserDayRewardTask(TaskGeneric task) {
 		
 		//这边需要判断家族pk是否已经完全完成了
-		Integer pkEnd=taskGenericMapper.getGameAssetNoDo(DateTools.getCurDateYYYY_MM_DD());
+		String key=task.getGenericKey();
+		String day=key.split("_")[0];
+		day=day.substring(0, 4)+"-"+day.substring(4,6)+"-"+day.substring(6, 8);
+		Integer pkEnd=taskGenericMapper.getGameAssetNoDo(day);
 		if(pkEnd.intValue()>0) {//还未完成，继续
 			return false;
 		}
@@ -612,7 +615,7 @@ public class TaskGenericService {
 	}
 	@Transactional
 	public void updateFailTask(TaskGeneric task) {
-		if(task.getFailTimes()>100) {
+		if(task.getFailTimes()>200) {
 			//状态置为2，代表计算次数已经极限
 			task.setTaskStatus(2);
 		}else {
@@ -628,11 +631,10 @@ public class TaskGenericService {
 	}
 	
 	public static void main(String []args) {
-		String daystamp="20180506";
-		String yyyy=daystamp.substring(0,4);
-		String mm=daystamp.substring(4,6);
-		String dd=daystamp.substring(6,8);
-		System.out.println(yyyy+mm+dd);
+		String key="20180704_InitUserDayReward";
+		String day=key.split("_")[0];
+		day=day.substring(0, 4)+"-"+day.substring(4,6)+"-"+day.substring(6, 8);
+		System.out.println(day);
 	}
 	
 }

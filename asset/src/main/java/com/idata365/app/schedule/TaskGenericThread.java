@@ -67,15 +67,17 @@ public class TaskGenericThread implements Runnable{
 					default:
 						break;
 				}
+				if(result) {
+					taskGenericService.updateSuccTask(task);
+				}else {
+					taskGenericService.updateFailTask(task);
+				}
 		
 			}catch(Exception e) {
 				e.printStackTrace();
 				taskGenericService.updateFailTask(task);
-				continue;
 			}
-			if(result) {
-				taskGenericService.updateSuccTask(task);
-			}
+			 
 		}
 	}
 

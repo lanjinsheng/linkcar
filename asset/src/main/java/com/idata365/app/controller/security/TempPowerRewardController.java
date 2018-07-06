@@ -30,7 +30,9 @@ public class TempPowerRewardController extends BaseController {
 	     * @author LanYeYe
 	  */
 	@RequestMapping(value = "/sendPower")
-	Map<String, Object> sendPower(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+	Map<String, Object> sendPower(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+		
 		return ResultUtils.rtSuccess(tempPowerRewardService.getTempPowerReward(this.getUserId()));
 	}
 	@RequestMapping(value = "/recPower")
@@ -43,5 +45,7 @@ public class TempPowerRewardController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 	 
-	 
+	 public static void main(String []args) {
+		 System.out.println(System.currentTimeMillis());
+	 }
 }

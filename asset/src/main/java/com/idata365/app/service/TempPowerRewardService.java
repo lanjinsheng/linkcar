@@ -97,6 +97,8 @@ public class TempPowerRewardService extends BaseService<TempPowerRewardService> 
 	 */
 	@Transactional
 	public List<Map<String,Object>> getTempPowerReward(long userId) {
+//		name :车主
+//		type :  -1不可操作车 0:系统车 1:动力车 2:贴条车
 		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
 		List<TempPowerReward> rewards=randReward(userId);
 		tempPowerRewardMapper.batchInsertTempPowerReward(rewards);

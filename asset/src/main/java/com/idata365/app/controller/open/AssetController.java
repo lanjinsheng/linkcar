@@ -25,6 +25,7 @@ import com.idata365.app.service.AssetService;
 import com.idata365.app.service.FamilyGameAssetService;
 import com.idata365.app.service.FamilySeasonAssetService;
 import com.idata365.app.service.TaskAutoAddService;
+import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.SignUtils;
 
 @RestController
@@ -174,6 +175,83 @@ public class AssetController extends BaseController {
 		LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
 		return assetService.addUserPowers(assetUsersPowerLogs);
 	}
+	
+	  @RequestMapping(value = "/asset/addPowerInteractTask",method = RequestMethod.POST)
+	  boolean addPowerInteractTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign){
+		  LOG.info("PARAM:" + jsonValue + "===sign:" + sign); 
+			LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
+//			 String jsonValue="{\"userId\":%d,\"stealerId\":%d,\"type\":%d,\"powerNum\":%d,\"effectId\":%d}";
+			Map<String,Object> map=GsonUtils.fromJson(jsonValue);
+			
+			if(Integer.valueOf(map.get("type").toString())==0) {//0系统动力车
+				AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+				log.setEffectId(Long.valueOf(map.get("effectId").toString()));
+				log.setEventType(AssetConstant.EVENTTYPE_POWER_INDEX_GET);
+				log.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
+				log.setRecordType(AssetConstant.RECORDTYPE_1);
+				log.setRemark("首页获取动力球");
+				log.setUserId(Long.valueOf(map.get("userId").toString()));
+				return assetService.addUserPowers(log);
+			}else if(Integer.valueOf(map.get("type").toString())==1){//行程动力车
+				AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+				log.setEffectId(Long.valueOf(map.get("effectId").toString()));
+				log.setEventType(AssetConstant.EVENTTYPE_POWER_TRIPBE_STOLE1);
+				log.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
+				log.setRecordType(AssetConstant.RECORDTYPE_1);
+				log.setRemark("偷取行程获取动力球");
+				log.setUserId(Long.valueOf(map.get("userId").toString()));
+				assetService.addUserPowers(log);
+				 
+				AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
+				log2.setEffectId(Long.valueOf(map.get("effectId").toString()));
+				log2.setEventType(AssetConstant.EVENTTYPE_POWER_TRIPBE_STOLE2);
+				log2.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
+				log2.setRecordType(AssetConstant.RECORDTYPE_2);
+				log2.setRemark("行程动力被偷取");
+				log2.setUserId(Long.valueOf(map.get("stealerId").toString()));
+				return assetService.reduceUserPowers(log2);
+				 
+			}
+		return false;
+	  }
+	
+	  @RequestMapping(value = "/asset/addPowerPeccancyTask",method = RequestMethod.POST)
+	  boolean addPowerPeccancyTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign){
+		  LOG.info("PARAM:" + jsonValue + "===sign:" + sign); 
+			LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
+//			 String jsonValue="{\"userId\":%d,\"payerId\":%d,\"type\":%d,\"powerNum\":%d,\"effectId\":%d}";
+			Map<String,Object> map=GsonUtils.fromJson(jsonValue);
+			AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+			log.setEffectId(Long.valueOf(map.get("effectId").toString()));
+			log.setEventType(AssetConstant.EVENTTYPE_POWER_GET_TICKET);
+			log.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
+			log.setRecordType(AssetConstant.RECORDTYPE_1);
+			log.setRemark("收取贴条罚金");
+			log.setUserId(Long.valueOf(map.get("userId").toString()));
+			  assetService.addUserPowers(log);
+			if(Integer.valueOf(map.get("type").toString())==0) {//0 自己缴纳罚单
+				AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
+				log2.setEffectId(Long.valueOf(map.get("effectId").toString()));
+				log2.setEventType(AssetConstant.EVENTTYPE_POWER_PAY_TICKET);
+				log2.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
+				log2.setRecordType(AssetConstant.RECORDTYPE_2);
+				log2.setRemark("缴纳罚单");
+				log2.setUserId(Long.valueOf(map.get("payerId").toString()));
+				return assetService.reduceUserPowers(log2);
+			}else if(Integer.valueOf(map.get("type").toString())==1){//代付缴纳罚单
+				AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
+				log2.setEffectId(Long.valueOf(map.get("effectId").toString()));
+				log2.setEventType(AssetConstant.EVENTTYPE_POWER_HELPPAY_TICKET);
+				log2.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
+				log2.setRecordType(AssetConstant.RECORDTYPE_2);
+				log2.setRemark("代缴罚单");
+				log2.setUserId(Long.valueOf(map.get("payerId").toString()));
+				return assetService.reduceUserPowers(log2);
+			}
+		return false;
+	  }
+	
+	
 	@RequestMapping(value = "/asset/reducePowersByChallege", method = RequestMethod.POST)
 	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "challegeTimesToday") int challegeTimesToday,@RequestParam(value = "sign") String sign){
