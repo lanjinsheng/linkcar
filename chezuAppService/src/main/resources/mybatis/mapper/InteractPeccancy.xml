@@ -19,8 +19,12 @@
 	</update>
    <select id="getPeccancy" resultMap="BasePeccancyMap" parameterType="java.lang.Long">
       select *
-       		FROM  interactPeccancy  where id=${id}) 
+       		FROM  interactPeccancy  where id=${id}
    </select>
-    
+    <select id="getPeccancyList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+      select *
+       		FROM  interactPeccancy  where lawBreakerId=${lawBreakerId} and 
+       		payStatus=0 and endLong<![CDATA[>]]>${endLong}
+   </select>   
       
 </mapper>
