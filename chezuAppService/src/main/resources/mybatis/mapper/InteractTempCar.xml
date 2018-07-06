@@ -40,4 +40,8 @@
        update  interactTempCar set blackIds=CONCAT(blackIds,#{blackIds})
          where travelId=#{uuid}
      </update>
+     
+     <select id="isCanStealPower" >
+      	select count(1) from interactTempCar where userId=#{userId} and type=1 and lockStatus=1
+     </select>
 </mapper>
