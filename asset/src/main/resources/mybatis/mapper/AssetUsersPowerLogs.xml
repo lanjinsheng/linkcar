@@ -66,5 +66,9 @@
        SELECT *
        FROM  assetUsersPowerLogs where effectId=#{effectId} and eventType=#{eventType}
      </select>
+    <select id="getUsersPowerLogsByUserEffectId" resultMap="BaseAssetUsersPowerLogsMap" parameterType="com.idata365.app.entity.AssetUsersPowerLogs">
+       SELECT *
+       FROM  assetUsersPowerLogs where effectId=#{effectId} and eventType=#{eventType} and userId=#{userId}
+     </select>
      
 </mapper>
