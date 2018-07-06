@@ -97,11 +97,11 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_CHALLGE_REDUCE, "挑选对战家族");
 
 		UserPowerEventMap.put(EVENTTYPE_POWER_TRIPBE_STOLE1, "行程动力偷取");
-		UserPowerEventMap.put(EVENTTYPE_POWER_TRIPBE_STOLE2, "行程动力偷取");
+		UserPowerEventMap.put(EVENTTYPE_POWER_TRIPBE_STOLE2, "行程动力被偷取");
 		UserPowerEventMap.put(EVENTTYPE_POWER_FREE_RIDE, "搭乘顺风车获取");
 		UserPowerEventMap.put(EVENTTYPE_POWER_GET_TICKET, "收取贴条罚金");
-		UserPowerEventMap.put(EVENTTYPE_POWER_PAY_TICKET, "缴罚单扣除");
-		UserPowerEventMap.put(EVENTTYPE_POWER_HELPPAY_TICKET, "帮别人缴罚单扣除");
+		UserPowerEventMap.put(EVENTTYPE_POWER_PAY_TICKET, "缴纳罚单");
+		UserPowerEventMap.put(EVENTTYPE_POWER_HELPPAY_TICKET, "代缴罚单");
 		
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_STEAL_ID, "完成任务-君子爱财");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_LIKE_ID, "完成任务-赞不绝口");

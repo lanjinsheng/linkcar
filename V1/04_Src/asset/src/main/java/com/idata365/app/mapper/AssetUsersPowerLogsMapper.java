@@ -19,7 +19,8 @@ public interface AssetUsersPowerLogsMapper {
 	List<AssetUsersPowerLogs> getAllPowersByOne(@Param("userId") long userId);
 
 	AssetUsersPowerLogs getUsersPowerLogsByEffectId(AssetUsersPowerLogs assetUsersPowerLogs);
-
+	AssetUsersPowerLogs getUsersPowerLogsByUserEffectId(AssetUsersPowerLogs assetUsersPowerLogs);
+	
 	int getSignInLogByUserId(@Param("userId") long userId);
 
 	List<Long> getPowersByEffectId(@Param("ballId") long ballId);

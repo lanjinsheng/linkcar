@@ -769,8 +769,9 @@ public class AssetService extends BaseService<AssetService> {
 		}else {
 			AssetUsersPowerLogs log=new AssetUsersPowerLogs();
 			log.setEffectId(gameAsset.getId());
+			log.setUserId(userId);
 			log.setEventType(AssetConstant.EVENTTYPE_POWER_GAMEEND_USER);
-			AssetUsersPowerLogs rtLog=assetUsersPowerLogsMapper.getUsersPowerLogsByEffectId(log);
+			AssetUsersPowerLogs rtLog=assetUsersPowerLogsMapper.getUsersPowerLogsByUserEffectId(log);
 			if(rtLog==null) {
 				rtMap2.put("assetNum", "0");
 			}else {
