@@ -1020,13 +1020,13 @@ public class FamilyService extends BaseService<FamilyService> {
 		rtMap.put("joinFamilyInfo", null);
 		Long createFamilyId = familyMapper.queryCreateFamilyId(userId);
 		Long joinFamilyId = familyMapper.queryJoinFamilyId(userId);
-		if (createFamilyId != null && createFamilyId != 0) {
+		if ((createFamilyId != null) && (createFamilyId.longValue() != 0L)) {
 			FamilyParamBean bean = new FamilyParamBean();
 			bean.setFamilyId(createFamilyId);
 			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
 			rtMap.put("createFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType()).getFamilyTypeValue() + "(族长)");
 		}
-		if (joinFamilyId != null && createFamilyId != 0) {
+		if ((joinFamilyId != null) && (joinFamilyId.longValue() != 0L)) {
 			FamilyParamBean bean = new FamilyParamBean();
 			bean.setFamilyId(joinFamilyId);
 			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
