@@ -19,7 +19,7 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_INDEX_GET = 2;// 首页拾取
 	public final static int EVENTTYPE_POWER_TRIP = 4;// 行程
 	public final static int EVENTTYPE_POWER_SIGNIN = 1;// 签到
-	public final static int EVENTTYPE_POWER_STEAL = 3;// 偷取
+	public final static int EVENTTYPE_POWER_STEAL = 3;// 对战场家族拾取
 	public final static int EVENTTYPE_POWER_AIRDROP=5; //???
 	public final static int EVENTTYPE_POWER_GAMEEND_USER=6; //家族挑战获胜分配
 	public final static int EVENTTYPE_POWER_CHALLGE_REDUCE=8; //挑战家族选择消耗
