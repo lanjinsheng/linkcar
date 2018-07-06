@@ -44,7 +44,10 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String  H5Host="http://apph5.idata365.com/";
 	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
 	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
+	public static final String  PassFamilyMessage2="玩家【%s】同意了进入您创建的家族，快去看看吧！";
 	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
+	public static final String  FailFamilyMessage2="抱歉，玩家【%s】很拒绝加入您创建的家族！";
+	public static final String  ReveiceInvite="收到橄榄枝！族长【%s】邀请你加入他的家族:【%s】，一起战斗吧！";
 	//踢人
 	public static final String KickMemberMessage="族长【%s】将您移出了【%s】家族，此处不留爷自有留爷处，咱们江湖再见！";
 	public static final String ChallengeMessage="下战书！您的家族被【%s】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
@@ -191,18 +194,49 @@ public class MessageService extends BaseService<MessageService>{
 			message.setUrlType(0);
 			message.setToUrl(getPassMessageUrl(f.getMyFamilyId()));
 			break;}
-		case FAIL_FAMILY:
-			FamilyResultBean ff=familyService.findFamily(fromUserId); 
+		case PASS_FAMILY2:{
+			FamilyResultBean f=familyService.findFamily(fromUserId); 
 			message.setFromUserId(fromUserId==null?0:fromUserId);
 			message.setBottomText("");
-			message.setChildType(MessageTypeConstant.FamilyType_Fail);
-			message.setContent(getFailMessageDesc(ff.getMyFamilyName()));
+			message.setChildType(MessageTypeConstant.FamilyType_Pass);
+			message.setContent(getPassMessageDesc2(fromUserNick));
 			message.setCreateTime(new Date());
 			message.setIcon("");
 			message.setIsPush(1);
 			message.setParentType(MessageTypeConstant.FamilyType);
 			message.setPicture("");
-			message.setTitle("族长审核");
+			message.setTitle("用户受邀");
+			message.setToUserId(toUserId);
+			message.setUrlType(0);
+			message.setToUrl(getPassMessageUrl(f.getMyFamilyId()));
+			break;}
+		case FAIL_FAMILY:
+			FamilyResultBean ff=familyService.findFamily(fromUserId);
+			message.setFromUserId(fromUserId==null?0:fromUserId);
+			message.setBottomText("");
+			message.setChildType(MessageTypeConstant.PersonType_Intive_Fail);
+			message.setContent(getFailMessageDesc(ff.getMyFamilyName()));
+			message.setCreateTime(new Date());
+			message.setIcon("");
+			message.setIsPush(1);
+			message.setParentType(MessageTypeConstant.PersonType);
+			message.setPicture("");
+			message.setTitle("加入被拒");
+			message.setToUserId(toUserId);
+			message.setUrlType(2);
+			message.setToUrl("");
+			break;
+		case FAIL_FAMILY2:
+			message.setFromUserId(fromUserId==null?0:fromUserId);
+			message.setBottomText("");
+			message.setChildType(MessageTypeConstant.PersonType_Reveice_Fail);
+			message.setContent(getFailMessageDesc2(fromUserNick));
+			message.setCreateTime(new Date());
+			message.setIcon("");
+			message.setIsPush(1);
+			message.setParentType(MessageTypeConstant.PersonType);
+			message.setPicture("");
+			message.setTitle("邀请被拒");
 			message.setToUserId(toUserId);
 			message.setUrlType(2);
 			message.setToUrl("");
@@ -647,6 +681,25 @@ public class MessageService extends BaseService<MessageService>{
 		        return message;
 	}
 	
+	public Message buildReveiceInviteMessage(Long fromUserId, String fromUserPhone, String fromUserNick,
+			String familyName, long toUserId, long familyInviteId, MessageEnum reveiceInvite) {
+		Message message = new Message();
+		message.setFromUserId(fromUserId == null ? 0 : fromUserId);
+		message.setBottomText("收到邀请");
+		message.setChildType(MessageTypeConstant.PersonType_REVEICE_INVITE);
+		message.setContent(getReveiceInviteMessageDesc(fromUserPhone, fromUserNick, familyName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.PersonType);
+		message.setPicture("");
+		message.setTitle("家族邀请");
+		message.setToUserId(toUserId);
+		message.setUrlType(0);
+		message.setToUrl(getInviteMessageUrl(familyInviteId));
+		return message;
+	}
+	
 	/**
 	 * 
 	    * @Title: insertMessage
@@ -915,6 +968,7 @@ public class MessageService extends BaseService<MessageService>{
 			return String.format(InviteMessage, PhoneUtils.hidePhone(fromUserPhone));
 		}
 	}
+	
 	private String getPassMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
 		if(ValidTools.isNotBlank(fromUserNick)) {
 			return String.format(PassFamilyMessage, fromUserNick,familyName);
@@ -923,8 +977,20 @@ public class MessageService extends BaseService<MessageService>{
 		}
 	}
 	
+	private String getReveiceInviteMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
+			return String.format(ReveiceInvite, fromUserNick,familyName);
+	}
+	
+	private String getPassMessageDesc2(String fromUserNick) {
+			return String.format(PassFamilyMessage2, fromUserNick);
+	}
+	
 	private String getFailMessageDesc(String familyName) {
 		return String.format(FailFamilyMessage, familyName);
+    }
+	
+	private String getFailMessageDesc2(String name) {
+		return String.format(FailFamilyMessage2, name);
     }
 	private String getTieTiao(String familyName) {
 		return String.format(TietiaoMessage, familyName);

@@ -161,9 +161,9 @@ public class ScoreController extends BaseController {
 	 */
 	@RequestMapping("/score/listFamilyMember")
 	public Map<String, Object> listFamilyMember(@RequestBody ScoreFamilyInfoParamBean bean) {
+		bean.setUserId(this.getUserId());
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		List<ScoreMemberInfoResultBean> resultList = this.scoreService.listFamilyMember(bean);
-
 		String imgBasePath = super.getImgBasePath();
 		for (ScoreMemberInfoResultBean tempBean : resultList) {
 			String imgUrl = tempBean.getImgUrl();
@@ -184,7 +184,7 @@ public class ScoreController extends BaseController {
 		BigDecimal b = new BigDecimal(sc);
 		fightInfo.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 		if (null == resultBean) {
-			fightInfo.put("fightFamilyName", "好车族教官");
+			fightInfo.put("fightFamilyName", "链车教官");
 			double score = sc*0.8;
 			fightInfo.put("fightFamilyScore", BigDecimal.valueOf(score).setScale(1, BigDecimal.ROUND_HALF_UP).toString());
 		}else {

@@ -13,7 +13,9 @@ public class ScoreMemberInfoResultBean implements Serializable {
 	private String name;
 
 	private String userId;
+	
 	private String todayScore;
+	
 	private String todayPower;
 
 	private String role;
@@ -26,9 +28,26 @@ public class ScoreMemberInfoResultBean implements Serializable {
 
 	private String recOnlineTime;
 
+	private String isCanStealPower;
 	
+	private String isCanPayTicket;
 	
-	
+	public String getIsCanStealPower() {
+		return isCanStealPower;
+	}
+
+	public void setIsCanStealPower(String isCanStealPower) {
+		this.isCanStealPower = isCanStealPower;
+	}
+
+	public String getIsCanPayTicket() {
+		return isCanPayTicket;
+	}
+
+	public void setIsCanPayTicket(String isCanPayTicket) {
+		this.isCanPayTicket = isCanPayTicket;
+	}
+
 	public String getTodayScore() {
 		return todayScore;
 	}

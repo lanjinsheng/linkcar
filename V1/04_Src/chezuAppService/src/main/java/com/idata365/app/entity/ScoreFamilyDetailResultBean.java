@@ -21,6 +21,16 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	private String trophyNum;
 	
 	private String grade;
+	
+	private String notifyMsg;
+
+	public String getNotifyMsg() {
+		return notifyMsg;
+	}
+
+	public void setNotifyMsg(String notifyMsg) {
+		this.notifyMsg = notifyMsg;
+	}
 
 	public String getImgUrl()
 	{

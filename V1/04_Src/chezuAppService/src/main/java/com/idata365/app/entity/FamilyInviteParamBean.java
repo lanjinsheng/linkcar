@@ -21,7 +21,7 @@ public class FamilyInviteParamBean implements Serializable
 	
 	private String createTime;
 	
-	private int sendInviteMsg;	//1：通过邀请码加入；2：通过首页推荐加入
+	private int inviteType;	//1:用户主动申请   2:家族邀请
 
 	public long getMsgId()
 	{
@@ -83,14 +83,13 @@ public class FamilyInviteParamBean implements Serializable
 		this.createTime = createTime;
 	}
 
-	public int getSendInviteMsg()
-	{
-		return sendInviteMsg;
+	public int getInviteType() {
+		return inviteType;
 	}
 
-	public void setSendInviteMsg(int sendInviteMsg)
-	{
-		this.sendInviteMsg = sendInviteMsg;
+	public void setInviteType(int inviteType) {
+		this.inviteType = inviteType;
 	}
+
 	
 }

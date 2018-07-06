@@ -1,6 +1,7 @@
 package com.idata365.app.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class FamilyInviteBean implements Serializable
 {
@@ -9,42 +10,58 @@ public class FamilyInviteBean implements Serializable
 	 */
 	private static final long serialVersionUID = -5145177637477574166L;
 
-	private long userId;
+	private String userId;
 	
-	private long familyId;
+	private String familyId;
 	
 	private String imgUrl;
 	
 	private String name;
 	
-	private String phone;
-	
-	private String userSource;
+	private Date lastActiveTime;
 	
 	private String applyDate;
 	
 	private String msgStr;
 	
-	private long seqNo;
+	private String status;
 	
-	private int status;
+	private int num;
+	
+	private int typeValue;
+	
+	public int getNum() {
+		return num;
+	}
 
-	public long getUserId()
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public int getTypeValue() {
+		return typeValue;
+	}
+
+	public void setTypeValue(int typeValue) {
+		this.typeValue = typeValue;
+	}
+
+	public String getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(long userId)
+	public void setUserId(String userId)
 	{
 		this.userId = userId;
 	}
 
-	public long getFamilyId()
+	public String getFamilyId()
 	{
 		return familyId;
 	}
 
-	public void setFamilyId(long familyId)
+	public void setFamilyId(String familyId)
 	{
 		this.familyId = familyId;
 	}
@@ -69,24 +86,12 @@ public class FamilyInviteBean implements Serializable
 		this.name = name;
 	}
 
-	public String getPhone()
-	{
-		return phone;
+	public Date getLastActiveTime() {
+		return lastActiveTime;
 	}
 
-	public void setPhone(String phone)
-	{
-		this.phone = phone;
-	}
-
-	public String getUserSource()
-	{
-		return userSource;
-	}
-
-	public void setUserSource(String userSource)
-	{
-		this.userSource = userSource;
+	public void setLastActiveTime(Date lastActiveTime) {
+		this.lastActiveTime = lastActiveTime;
 	}
 
 	public String getApplyDate()
@@ -109,22 +114,12 @@ public class FamilyInviteBean implements Serializable
 		this.msgStr = msgStr;
 	}
 
-	public long getSeqNo()
-	{
-		return seqNo;
-	}
-
-	public void setSeqNo(long seqNo)
-	{
-		this.seqNo = seqNo;
-	}
-
-	public int getStatus()
+	public String getStatus()
 	{
 		return status;
 	}
 
-	public void setStatus(int status)
+	public void setStatus(String status)
 	{
 		this.status = status;
 	}

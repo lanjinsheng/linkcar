@@ -58,8 +58,9 @@ import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
 import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.util.AdBeanUtils;
-import com.idata365.app.util.PhoneUtils;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
 
 @Service
@@ -84,6 +85,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	private UserInfoService userInfoService;
 	@Autowired
 	private ImService imService;
+	@Autowired
+	ChezuImService chezuImService;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -198,47 +201,72 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
  
 	/**
-	 * 
+	 * 查看用户申请
 	 * @param bean
 	 * @return
 	 */
-	public List<FamilyInviteResultBean> getApplyInfo(FamilyInviteParamBean bean) {
-		List<FamilyInviteBean> inviteList = this.familyMapper.queryApplyInfo(bean);
+	public FamilyInviteResultBean getApplyInfo(FamilyInviteParamBean bean) {
+		FamilyInviteBean familyInviteBean = this.familyMapper.queryApplyInfo(bean);
 
-		List<FamilyInviteResultBean> resultList = new ArrayList<>();
-		for (FamilyInviteBean tempBean : inviteList) {
-			FamilyInviteResultBean tempResultBean = new FamilyInviteResultBean();
-			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
-			String name = tempBean.getName();
-			if (StringUtils.isBlank(name)) {
-				String tempName = PhoneUtils.hidePhone(tempBean.getPhone());
-				tempResultBean.setName(tempName);
-			}
-
-			long userId = tempBean.getUserId();
-			long familyId = tempBean.getFamilyId();
-			FamilyParamBean familyParamBean = new FamilyParamBean();
-			familyParamBean.setUserId(userId);
-			familyParamBean.setFamilyId(familyId);
-
-			resultList.add(tempResultBean);
+		FamilyInviteResultBean tempResultBean = new FamilyInviteResultBean();
+		AdBeanUtils.copyOtherPropToStr(tempResultBean, familyInviteBean);
+		Date lastLoginTime = this.userInfoService.getUsersAccount(Long.valueOf(familyInviteBean.getUserId())).getLastLoginTime();
+//		Date lastLoginTime = familyInviteBean.getLastActiveTime();
+		long s = (new Date().getTime() - lastLoginTime.getTime())/(60*1000);
+		String recOnlineTime;
+		if(s>=60*24*7) {
+			recOnlineTime = "7天前活跃";
+		}else if(s>=(60*24)&&s<60*24*7){
+			recOnlineTime =s/60/24+ "天前活跃";
+		}else if(s>=60&&s<60*24) {
+			recOnlineTime = s/60+"小时前活跃";
+		}else {
+			recOnlineTime = (s==0?"1":s)+"分钟前活跃";
 		}
-		return resultList;
+		tempResultBean.setActiveTime(recOnlineTime);
+		return tempResultBean;
+	}
+	
+	/**
+	 * 查看家族邀请
+	 * @param bean
+	 * @return
+	 */
+	public FamilyInviteResultBean getInviteInfo(FamilyInviteParamBean bean) {
+		FamilyInviteBean familyInviteBean = this.familyMapper.queryApplyInfo(bean);
+		Map<String, Object> familyInfo = this.familyMapper.queryFamilyByFId(Long.valueOf(familyInviteBean.getFamilyId()));
+		int familyType = Integer.valueOf(familyInfo.get("familyType").toString());
+		FamilyInviteResultBean tempResultBean = new FamilyInviteResultBean();
+		AdBeanUtils.copyOtherPropToStr(tempResultBean, familyInviteBean);
+		//等级
+		tempResultBean.setTypeValue(DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
+		//人数
+		tempResultBean.setNum(familyInfo.get("memberNum").toString()+"/8");
+		tempResultBean.setName(familyInfo.get("familyName").toString());
+		return tempResultBean;
 	}
 
 	/**
-	 * 审核成员通过 1：玩家已加入其他家族；2：房间已满；3：审核通过，同意加入；
+	 * 审核成员通过OR通过家族邀请  2：房间已满；3：审核通过，同意加入；
 	 * 
 	 * @param bean
+	 * @param path 
 	 * @return
 	 */
 	@Transactional
-	public int permitApply(FamilyParamBean bean, UserInfo userInfo) {
+	public int permitApply(FamilyParamBean bean, UserInfo userInfo, String path) {
 		List<Long> familyIdList = this.familyMapper.queryJoinFamilyIdByUserId(bean);
 
 		if (CollectionUtils.isNotEmpty(familyIdList) && familyIdList.size() >= 1) {
-			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
-			return 1;
+//			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
+//			return 1;
+			//业务修改为退出之前的家族
+			FamilyParamBean reqBean = new FamilyParamBean();
+			reqBean.setUserId(bean.getUserId());
+			reqBean.setFamilyId(familyIdList.get(0));
+			List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),path);
+			this.quitFromFamily(reqBean);
+			chezuImService.notifyFamilyChange(list1, "");
 		}
 
 		int tempCount = this.familyMapper.countUsersByFamilyId(bean);
@@ -297,10 +325,18 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
 		familyParamStatusBean.setMsgId(bean.getMsgId());
-		familyParamStatusBean.setStatus(1);
+		familyParamStatusBean.setStatus(3);//状态  1:待确认  2:被拒绝  3:通过
 		this.familyMapper.updateInviteStatus(familyParamStatusBean);
-
-		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
+		
+		int inviteType = this.familyMapper.queryInviteType(bean.getMsgId());
+		if(inviteType == 1) {
+			//审核成员通过
+			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
+		}else {
+			//通过家族邀请
+			dealtMsg(userInfo, null, familyMapper.queryCreateUserId(bean), MessageEnum.PASS_FAMILY2);
+		}
+		
 		// 增加用户热度
 		familyMapper.addFamilyMemberNum(bean.getFamilyId());
 		// familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
@@ -309,7 +345,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 拒绝用户加入
+	 * 
 	 * 
 	 * @param bean
 	 * @param userInfo
@@ -320,10 +356,17 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
 		familyParamStatusBean.setMsgId(bean.getMsgId());
-		familyParamStatusBean.setStatus(-1);
+		familyParamStatusBean.setStatus(2);//状态  1:待确认  2:被拒绝  3:通过
 		this.familyMapper.updateInviteStatus(familyParamStatusBean);
-
-		dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
+		
+		int inviteType = this.familyMapper.queryInviteType(bean.getMsgId());
+		if(inviteType == 1) {
+			//拒绝用户的加入
+			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
+		}else {
+			//拒绝家族的邀请
+			dealtMsg(userInfo, null, familyMapper.queryCreateUserId(bean), MessageEnum.FAIL_FAMILY2);
+		}
 	}
 
 	/**
@@ -381,7 +424,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			
 			FamilyParamBean countParamBean = new FamilyParamBean();
 			countParamBean.setFamilyId(tempBean.getFamilyId());
-			int tempMemNum = this.familyMapper.countUsersByFamilyId(countParamBean);
+			this.familyMapper.countUsersByFamilyId(countParamBean);
 			tempResultBean.setNum(String.valueOf(tempBean.getNum() + "/8"));
 
 			FamilyParamBean fParamBean = new FamilyParamBean();
@@ -470,7 +513,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 申请加入指定家族
+	 * 申请加入指定家族OR家族邀请指定用户
 	 * 
 	 * @param bean
 	 */
@@ -485,8 +528,20 @@ public class FamilyService extends BaseService<FamilyService> {
 		FamilyParamBean fParamBean = new FamilyParamBean();
 		fParamBean.setFamilyId(bean.getFamilyId());
 		long toUserId = this.familyMapper.queryCreateUserId(fParamBean);
-
-		dealtMsg(userInfo, inviteId, toUserId, MessageEnum.INVITE_FAMILY);
+		String familyName = familyMapper.queryFamilyByFId(bean.getFamilyId()).get("familyName").toString();
+		if(bean.getInviteType()==1) {
+			dealtMsg(userInfo, inviteId, toUserId, MessageEnum.INVITE_FAMILY);
+		}else {
+			UsersAccount usersAccount = userInfoService.getUsersAccount(toUserId);
+			UserInfo info = new UserInfo();
+			info.setUserAccount(usersAccount);
+			Message message = messageService.buildReveiceInviteMessage(info.getId(), info.getPhone(), info.getNickName(),familyName,
+					toUserId, inviteId,  MessageEnum.REVEICE_INVITE);
+			// 插入消息
+			messageService.insertMessage(message,  MessageEnum.REVEICE_INVITE);
+			// 推送消息
+			messageService.pushMessageNotrans(message,  MessageEnum.REVEICE_INVITE);
+		}
 	}
 
 	private void dealtMsg(UserInfo userInfo, Long inviteId, Long toUserId, MessageEnum messageEnum) {
@@ -978,5 +1033,60 @@ public class FamilyService extends BaseService<FamilyService> {
 			rtMap.put("joinFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.familyTypeMap.get(info.getFamilyType()).getFamilyTypeValue());
 		}
 		return rtMap;
+	}
+
+	public List<Map<String, String>> canRecruitList(long userId, long familyId, String nickName) {
+		List<Map<String, String>> resultList = new ArrayList<>();
+		List<Map<String, Object>> allCanRecruitList = new ArrayList<>();
+		if (nickName == null || nickName.equals("")) {
+			// 随机查询
+			int startPos = this.familyMapper.countAllCanRecruit(userId, familyId);
+			if (0 == startPos) {
+				return resultList;
+			}
+			startPos = RandUtils.generateRand(0, startPos - 1);
+			startPos = startPos - 10 > 0 ? startPos - 10 : 0;
+			allCanRecruitList = this.familyMapper.allCanRecruitList(userId, familyId, startPos);
+		} else {
+			// 根据名字查询
+			allCanRecruitList = this.familyMapper.canRecruitListByName(userId, familyId, "%" + nickName + "%");
+		}
+		for (Map<String, Object> map : allCanRecruitList) {
+			Map<String, String> rtMap = new HashMap<>();
+			rtMap.put("userId", map.get("userId").toString());
+			rtMap.put("imgUrl", map.get("imgUrl")==null?"":map.get("imgUrl").toString());
+			rtMap.put("nickname", map.get("nickName").toString());
+			if (map.get("joinFamilyId") == null) {
+				rtMap.put("joinFamilyId", "");
+				rtMap.put("joinFamilyName", "");
+			} else {
+				rtMap.put("joinFamilyId", map.get("joinFamilyId").toString());
+				rtMap.put("joinFamilyName",this.familyMapper.queryFamilyByFId(Long.valueOf(map.get("joinFamilyId").toString())).get("familyName").toString());
+			}
+			Date lastLoginTime = DateTools.getDateTimeOfStr(map.get("lastLoginTime").toString());
+			long s = (new Date().getTime() - lastLoginTime.getTime()) / (60 * 1000);
+			String recOnlineTime;
+			if (s >= 60 * 24 * 7) {
+				recOnlineTime = "7天前活跃";
+			} else if (s >= (60 * 24) && s < 60 * 24 * 7) {
+				recOnlineTime = s / 60 / 24 + "天前活跃";
+			} else if (s >= 60 && s < 60 * 24) {
+				recOnlineTime = s / 60 + "小时前活跃";
+			} else {
+				recOnlineTime = (s == 0 ? "1" : s) + "分钟前活跃";
+			}
+			rtMap.put("recOnlineTime", recOnlineTime);
+			FamilyParamBean fParamBean = new FamilyParamBean();
+			fParamBean.setUserId(Long.valueOf(map.get("userId").toString()));
+			fParamBean.setFamilyId(familyId);
+			int inviteCount = this.familyMapper.countRecruitByUserId(fParamBean);
+			if (inviteCount > 0) {
+				rtMap.put("isRecruited", "1");
+			} else {
+				rtMap.put("isRecruited", "0");
+			}
+			resultList.add(rtMap);
+		}
+		return resultList;
 	}
 }
