@@ -1024,13 +1024,13 @@ public class FamilyService extends BaseService<FamilyService> {
 			FamilyParamBean bean = new FamilyParamBean();
 			bean.setFamilyId(createFamilyId);
 			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
-			rtMap.put("createFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.familyTypeMap.get(info.getFamilyType()).getFamilyTypeValue() + "(族长)");
+			rtMap.put("createFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType()).getFamilyTypeValue() + "(族长)");
 		}
 		if (joinFamilyId != null && createFamilyId != 0) {
 			FamilyParamBean bean = new FamilyParamBean();
 			bean.setFamilyId(joinFamilyId);
 			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
-			rtMap.put("joinFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.familyTypeMap.get(info.getFamilyType()).getFamilyTypeValue());
+			rtMap.put("joinFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType()).getFamilyTypeValue());
 		}
 		return rtMap;
 	}
