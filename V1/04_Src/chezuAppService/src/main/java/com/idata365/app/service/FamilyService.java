@@ -1016,8 +1016,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	//根据userId查询创建家族和加入家族的相关信息
 	public Map<String, String> queryFamilyByUserId(long userId) {
 		Map<String, String> rtMap = new HashMap<>();//    
-		rtMap.put("createFamilyInfo", null);
-		rtMap.put("joinFamilyInfo", null);
+		rtMap.put("createFamilyInfo", "");
+		rtMap.put("joinFamilyInfo", "");
 		Long createFamilyId = familyMapper.queryCreateFamilyId(userId);
 		Long joinFamilyId = familyMapper.queryJoinFamilyId(userId);
 		if ((createFamilyId != null) && (createFamilyId.longValue() != 0L)) {
