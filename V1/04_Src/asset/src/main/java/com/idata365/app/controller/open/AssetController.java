@@ -215,42 +215,7 @@ public class AssetController extends BaseController {
 		return false;
 	  }
 	
-	  @RequestMapping(value = "/asset/addPowerPeccancyTask",method = RequestMethod.POST)
-	  boolean addPowerPeccancyTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign){
-		  LOG.info("PARAM:" + jsonValue + "===sign:" + sign); 
-			LOG.info("校验逻辑待处理·~~~sign:" + SignUtils.encryptHMAC(jsonValue));
-//			 String jsonValue="{\"userId\":%d,\"payerId\":%d,\"type\":%d,\"powerNum\":%d,\"effectId\":%d}";
-			Map<String,Object> map=GsonUtils.fromJson(jsonValue);
-			AssetUsersPowerLogs log=new AssetUsersPowerLogs();
-			log.setEffectId(Long.valueOf(map.get("effectId").toString()));
-			log.setEventType(AssetConstant.EVENTTYPE_POWER_GET_TICKET);
-			log.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
-			log.setRecordType(AssetConstant.RECORDTYPE_1);
-			log.setRemark("收取贴条罚金");
-			log.setUserId(Long.valueOf(map.get("userId").toString()));
-			  assetService.addUserPowers(log);
-			if(Integer.valueOf(map.get("type").toString())==0) {//0 自己缴纳罚单
-				AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
-				log2.setEffectId(Long.valueOf(map.get("effectId").toString()));
-				log2.setEventType(AssetConstant.EVENTTYPE_POWER_PAY_TICKET);
-				log2.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
-				log2.setRecordType(AssetConstant.RECORDTYPE_2);
-				log2.setRemark("缴纳罚单");
-				log2.setUserId(Long.valueOf(map.get("payerId").toString()));
-				return assetService.reduceUserPowers(log2);
-			}else if(Integer.valueOf(map.get("type").toString())==1){//代付缴纳罚单
-				AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
-				log2.setEffectId(Long.valueOf(map.get("effectId").toString()));
-				log2.setEventType(AssetConstant.EVENTTYPE_POWER_HELPPAY_TICKET);
-				log2.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
-				log2.setRecordType(AssetConstant.RECORDTYPE_2);
-				log2.setRemark("代缴罚单");
-				log2.setUserId(Long.valueOf(map.get("payerId").toString()));
-				return assetService.reduceUserPowers(log2);
-			}
-		return false;
-	  }
-	
+ 
 	
 	@RequestMapping(value = "/asset/reducePowersByChallege", method = RequestMethod.POST)
 	public Map<String, String> reducePowersByChallege(@RequestParam(value = "userId") long userId,
@@ -265,6 +230,54 @@ public class AssetController extends BaseController {
 		power.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
 		power.setRemark("挑战家族选择消耗");
 		boolean b = assetService.reduceUserPowers(power);
+		if(b) {
+			map.put("flag", "1");
+		}else {
+			map.put("flag", "0");
+		}
+		return map;
+	}
+	@RequestMapping(value = "/asset/reducePowersByPeccancy", method = RequestMethod.POST)
+	public Map<String, String> reducePowersByPeccancy(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "payerId") long payerId,
+			@RequestParam(value = "type") int type,
+			@RequestParam(value = "power") int power,
+			@RequestParam(value = "effectId") long effectId,
+			@RequestParam(value = "sign") String sign){
+		LOG.info("PARAM:userId:" + userId + "===sign:" + sign);
+		Map<String, String> map = new HashMap<>();
+		  
+		  boolean b=false;
+		if(type==0) {//0 自己缴纳罚单
+			AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
+			log2.setUserId(payerId);
+			log2.setEffectId(effectId);
+			log2.setPowerNum(Long.valueOf(power));
+			log2.setRecordType(AssetConstant.RECORDTYPE_2);
+			log2.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
+			log2.setRemark("缴纳罚单");
+			log2.setUserId(Long.valueOf(map.get("payerId").toString()));
+			b = assetService.reduceUserPowers(log2);
+		}else if(Integer.valueOf(map.get("type").toString())==1){//代付缴纳罚单
+			AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
+			log2.setUserId(payerId);
+			log2.setEffectId(effectId);
+			log2.setPowerNum(Long.valueOf(power));
+			log2.setRecordType(AssetConstant.RECORDTYPE_2);
+			log2.setEventType(AssetConstant.EVENTTYPE_POWER_HELPPAY_TICKET);
+			log2.setRemark("代缴罚单");
+			b = assetService.reduceUserPowers(log2);
+		}
+		if(b) {
+			AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+			log.setEffectId(effectId);
+			log.setEventType(AssetConstant.EVENTTYPE_POWER_GET_TICKET);
+			log.setPowerNum(Long.valueOf(power));
+			log.setRecordType(AssetConstant.RECORDTYPE_1);
+			log.setRemark("收取贴条罚金");
+			log.setUserId(userId);
+			b=assetService.addUserPowers(log);
+		}
 		if(b) {
 			map.put("flag", "1");
 		}else {
