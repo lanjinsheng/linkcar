@@ -6,23 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * 
  */
@@ -550,6 +533,12 @@ public class InteractService extends BaseService<InteractService> {
 	public int isCanPayTicket(Long userId){
 		return this.interactPeccancyMapper.isCanPayTicket(userId);
 	}
+	
+	@Transactional
+	public int queryLikeCount(Long userId){
+		return this.interactLogsMapper.queryLikeCount(userId);
+	}
+	
 	public static void main(String []args) {
 		System.out.println(2+UUID.randomUUID().toString().replaceAll("-", ""));
 	}

@@ -31,5 +31,9 @@
        		FROM  interactLogs  where date(createTime)=#{daystamp} and userIdA=#{userIdA}
        		 and userIdB=#{userIdB}
    </select>
+   
+   <select id="queryLikeCount" resultType="java.lang.Integer">
+      select count(1) from interactLogs where userIdB=#{userIdB} and eventType=1
+   </select>
     
 </mapper>

@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +21,16 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.app.config.SystemProperties;
-import com.idata365.app.entity.LicenseDriver;
-import com.idata365.app.entity.LicenseVehicleTravel;
 import com.idata365.app.entity.UserConfig;
-import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.UserInfoService;
+import com.idata365.app.serviceV2.ThirdPartyLoginService;
 import com.idata365.app.util.ImageUtils;
-import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
-import com.idata365.app.util.StaticDatas;
 import com.idata365.app.util.ValidTools;
 @RestController
 public class UserInfoController extends BaseController{
@@ -45,6 +39,8 @@ public class UserInfoController extends BaseController{
 	private UserInfoService userInfoService;
 	@Autowired
 	private LoginRegService loginRegService;
+	@Autowired
+	private ThirdPartyLoginService thirdPartyLoginService;
 	
 	
     @Autowired
@@ -577,4 +573,59 @@ public class UserInfoController extends BaseController{
 		  rtMap.put("gpsHidden", gpsHidden);
 		  return ResultUtils.rtSuccess(rtMap);
 	  }
+	  
+	/**
+	 * 
+	 * @Title: showTirdPartyLoginStatus
+	 * @Description: TODO(三方登录状态展示)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             Lcc
+	 */
+	@RequestMapping("/user/showTirdPartyLoginStatus")
+	public Map<String, Object> showTirdPartyLoginStatus(
+			@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		long userId = this.getUserId();
+		int queryWXIsBind = thirdPartyLoginService.queryWXIsBind(userId);
+		int queryQQIsBind = thirdPartyLoginService.queryQQIsBind(userId);
+		rtMap.put("queryWXIsBind", String.valueOf(queryWXIsBind));
+		rtMap.put("queryQQIsBind", String.valueOf(queryQQIsBind));
+		return ResultUtils.rtSuccess(rtMap);
+
+	}
+
+	/**
+	 * 
+	 * @Title: unBindTirdPartyLogin
+	 * @Description: TODO(三方登录解绑)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             Lcc
+	 */
+	@RequestMapping("/user/unBindTirdPartyLogin")
+	public Map<String, Object> unBindTirdPartyLogin(
+			@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("partyType")))
+			return ResultUtils.rtFailParam(null);
+		int partyType = Integer.valueOf(String.valueOf(requestBodyParams.get("partyType")));
+		thirdPartyLoginService.unBind(userId,partyType);
+		return ResultUtils.rtSuccess(null);
+
+	}
 }

@@ -17,6 +17,7 @@ import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.UserInfoService;
+import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
 
@@ -31,6 +32,8 @@ public class UserHomeController extends BaseController {
 	private ChezuAssetService chezuAssetService;
 	@Autowired
 	private FamilyService familyService;
+	@Autowired
+	private InteractService interactService;
 
 	public UserHomeController() {
 		System.out.println("UserHomeController");
@@ -62,22 +65,31 @@ public class UserHomeController extends BaseController {
 		LOG.info("ownerId========================="+ownerId);
 		LOG.info("userId========================="+userId);
 //		LOG.info("familyId========================="+familyId);
+		
 		UsersAccount account = userInfoService.getUsersAccount(userId);
-
+		//用户当前动力及分数
 		double score = scoreService.getHighScore(String.valueOf(userId));
 		String powerNum = chezuAssetService.getUsersAssetMap(String.valueOf(userId), "").get(userId);
-		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
 		rtMap.put("nickName", account.getNickName());
 		rtMap.put("score", String.valueOf(score));
 		rtMap.put("imgUrl",this.getImgBasePath() + account.getImgUrl());
 		rtMap.put("powerNum", powerNum);
+		//家族信息
+		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
 		rtMap.put("createFamilyInfo", familyInfo.get("createFamilyInfo"));
 		rtMap.put("joinFamilyInfo", familyInfo.get("joinFamilyInfo"));
+		//车库名
 		if (ownerId == userId) {
 			rtMap.put("title", "我的车库");
 		} else {
 			rtMap.put("title", account.getNickName()+"的车库");
 		}
+		//车名
+		rtMap.put("carName", "道奇老爷车");
+		//点赞次数
+		rtMap.put("likeCount", String.valueOf(interactService.queryLikeCount(userId)));
+		//车图片
+		rtMap.put("carImgUrl", "");
 
 		return ResultUtils.rtSuccess(rtMap);
 	}
