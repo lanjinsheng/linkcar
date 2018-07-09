@@ -628,4 +628,37 @@ public class UserInfoController extends BaseController{
 		return ResultUtils.rtSuccess(null);
 
 	}
+	
+	/**
+	 * 
+	 * @Title: bindTirdPartyLogin
+	 * @Description: TODO(三方登录绑定)
+	 * @param @param
+	 *            allRequestParams
+	 * @param @param
+	 *            requestBodyParams
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             Lcc
+	 */
+	@RequestMapping("/user/bindTirdPartyLogin")
+	public Map<String, Object> bindTirdPartyLogin(
+			@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("loginType"))
+				|| ValidTools.isBlank(requestBodyParams.get("openId"))|| ValidTools.isBlank(requestBodyParams.get("remark")))
+			return ResultUtils.rtFailParam(null);
+		long userId = this.getUserId();
+		String openId = String.valueOf(requestBodyParams.get("openId"));
+		int loginType = Integer.valueOf(String.valueOf(requestBodyParams.get("loginType")));
+		Map<String, Object> entity = new HashMap<String, Object>();
+		entity.put("userId", userId);
+		entity.put("openId", openId);
+		entity.put("loginType", loginType);
+		entity.put("remark", requestBodyParams.get("remark").toString());
+		thirdPartyLoginService.insertLogs(entity);
+		return ResultUtils.rtSuccess(null);
+	}
 }
