@@ -18,7 +18,14 @@ public class InteractLogs implements Serializable{
 	private int eventType;
 	private int someValue;
 	private Date createTime;
+	private String  createTimeStr;
 	
+	public String getCreateTimeStr() {
+		return createTimeStr;
+	}
+	public void setCreateTimeStr(String createTimeStr) {
+		this.createTimeStr = createTimeStr;
+	}
 	public Long getId() {
 		return id;
 	}
