@@ -58,7 +58,9 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", this.getImgBasePath()+family.get("imgUrl"));
 			Double d=fightService.getAvgThreeDayScore(Long.valueOf(family.get("id").toString()));
 			rtMap.put("avgScore", String.valueOf(d.doubleValue()));
-			String challegeTime=family.get("challegeTime").toString();
+			
+			Map<String,Object> selfFamily=fightService.getOpponentInfo(familyId);
+			String challegeTime=selfFamily.get("challegeTime").toString();
     		String []dayTimes=challegeTime.split(",");
     		int reducePower=Integer.valueOf(dayTimes[1])*2;
 			rtMap.put("reducePower", String.valueOf(reducePower));
