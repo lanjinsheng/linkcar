@@ -117,7 +117,7 @@ public class UserController extends BaseController {
 		rtMap.put("token", token);
 		return ResultUtils.rtSuccess(rtMap);
 	}
-
+	
 	/**
 	 * 
 	 * @Title: thirdPartyLogin

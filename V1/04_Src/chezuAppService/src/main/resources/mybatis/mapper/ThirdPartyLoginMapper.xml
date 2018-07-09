@@ -10,6 +10,14 @@
 		select * from thirdPartyLogin where userId=#{userId} order by createTime desc limit 1
 	</select>
 	
+	<select id="queryWXIsBind" resultType="java.lang.Integer">
+		select count(1) from thirdPartyLogin where userId=#{userId} and loginType=1
+	</select>
+	
+	<select id="queryQQIsBind" resultType="java.lang.Integer">
+		select count(1) from thirdPartyLogin where userId=#{userId} and loginType=2
+	</select>
+	
 	<insert id="insertLogs"   parameterType="java.util.HashMap" >
        INSERT INTO 
             thirdPartyLogin
@@ -20,6 +28,10 @@
     
     <update id="updateByOpenId" >
        UPDATE thirdPartyLogin SET userId = #{userId} WHERE openId = #{openId}
+    </update>
+    
+    <update id="unBind" >
+       UPDATE thirdPartyLogin SET userId = null WHERE userId = #{userId} and loginType=#{loginType}
     </update>
     
     <update id="updateLogs" parameterType="java.util.HashMap">

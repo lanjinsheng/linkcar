@@ -38,4 +38,15 @@ public class ThirdPartyLoginService extends BaseService<ThirdPartyLoginService>
 		return thirdPartyLoginMapper.updateByOpenId(userId,openId);
 	}
  
+	public int queryWXIsBind(Long userId) {
+		return thirdPartyLoginMapper.queryWXIsBind(userId);
+	}
+	
+	public int queryQQIsBind(Long userId) {
+		return thirdPartyLoginMapper.queryQQIsBind(userId);
+	}
+	
+	public int unBind(Long userId, int type) {
+		return thirdPartyLoginMapper.unBind(userId,type);
+	}
 }
