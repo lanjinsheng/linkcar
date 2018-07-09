@@ -185,6 +185,8 @@ public interface FamilyMapper {
 	Integer queryFamilyTypeOfCreateFamily(@Param("userId") Long userId);
 
 	Long queryCreateFamilyId(@Param("userId") long userId);
+	
+	Integer queryMemberNumByFId(@Param("familyId")long familyId);
 
 	Long queryJoinFamilyId(@Param("userId") long userId);
 	

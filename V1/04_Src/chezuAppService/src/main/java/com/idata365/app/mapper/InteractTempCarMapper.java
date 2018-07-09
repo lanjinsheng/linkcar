@@ -13,8 +13,6 @@ public interface InteractTempCarMapper {
 	int lockCarById(InteractTempCar interactTempCar);
 	List<InteractTempCar> getTempCar(@Param("uuid") String uuid);
 	List<InteractTempCar> getTempCarByUserId(InteractTempCar interactTempCar);
-
-	
 	void clearLockTask(@Param("compareTimes") Long compareTimes);
 	
 	InteractTempCar getTempCarByUuid(@Param("uuid") String uuid);
@@ -26,4 +24,6 @@ public interface InteractTempCarMapper {
 	int updateBlackIds(Map<String, Object> map);
 
 	int isCanStealPower(@Param("userId") long userId);
+	
+	List<InteractTempCar> carPoolStealStatus(@Param("userId") long userId);
 }

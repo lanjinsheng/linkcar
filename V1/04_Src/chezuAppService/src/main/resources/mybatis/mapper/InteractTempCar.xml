@@ -55,6 +55,10 @@
       	select count(1) from interactTempCar where userId=#{userId} and type=1 and lockStatus=1 and DATE_FORMAT(now(),'%Y%m%d')=daystamp
      </select>
      
+     <select id="carPoolStealStatus" resultMap="BaseTempCarMap">
+      	select * from interactTempCar where userId=#{userId} and type=1 and lockStatus=1 and DATE_FORMAT(now(),'%Y%m%d')=daystamp GROUP BY travelId
+     </select>
+     
      <!-- 清除锁定的记录 -->
     <update id="clearLockTask" parameterType="java.lang.Long" >
        UPDATE 
@@ -64,7 +68,5 @@
        WHERE 
               lockStatus=-1 and lockTime<![CDATA[<]]>${compareTimes} and hadGet=0
      </update>
-     
-<!-- 定时处理 结束-->		
      
 </mapper>

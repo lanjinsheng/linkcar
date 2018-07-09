@@ -389,6 +389,10 @@
  		 select familyId from userFamilyRelation where userId=#{userId} and isLeader=1 order by joinTime desc limit 1
  	</select>
  	
+ 	<select id="queryMemberNumByFId" resultType="Integer">
+ 		 select memberNum from familyInfo where id=#{familyId}
+ 	</select>
+ 	
  	<select id="queryJoinFamilyId" resultType="long">
  		 select familyId from userFamilyRelation where userId=#{userId} and isLeader=0 order by joinTime desc limit 1
  	</select>

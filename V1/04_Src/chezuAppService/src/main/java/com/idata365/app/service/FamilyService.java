@@ -1038,7 +1038,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			FamilyParamBean bean = new FamilyParamBean();
 			bean.setFamilyId(createFamilyId);
 			FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
-			rtMap.put("createFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType()).getFamilyTypeValue() + "(族长)");
+			rtMap.put("createFamilyInfo", info.getFamilyName() + "  "+ DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType()).getFamilyTypeValue());
 		}
 		if ((joinFamilyId != null) && (joinFamilyId.longValue() != 0L)) {
 			FamilyParamBean bean = new FamilyParamBean();
@@ -1102,5 +1102,34 @@ public class FamilyService extends BaseService<FamilyService> {
 			resultList.add(rtMap);
 		}
 		return resultList;
+	}
+	
+	
+	public Map<String, String> iconStatus(long myId, long userId) {
+		Map<String, String> rtMap = new HashMap<>();
+		rtMap.put("isCanInvite", "0");
+		rtMap.put("isCanRemove", "0");
+		rtMap.put("hadInteractIcon", "0");
+		if (myId == userId)
+			return rtMap;
+		Long myCFId = familyMapper.queryCreateFamilyId(myId);
+		Long myJFId = familyMapper.queryJoinFamilyId(myId);
+		Long userCFId = familyMapper.queryCreateFamilyId(userId);
+		Long userJFId = familyMapper.queryJoinFamilyId(userId);
+		if ((myCFId != null && userJFId != null && myCFId.longValue() == userJFId.longValue())
+				|| (userCFId != null && myJFId != null && userCFId.longValue() == myJFId.longValue())
+				|| (userJFId != null && myJFId != null && userJFId.longValue() == myJFId.longValue())) {
+			rtMap.put("hadInteractIcon", "1");
+		}
+
+		if (userJFId != null && myCFId != null && userJFId.longValue() == myCFId.longValue()) {
+			rtMap.put("isCanRemove", "1");
+		} else if (myCFId != null) {
+			Integer num = this.familyMapper.queryMemberNumByFId(myCFId.longValue());
+			if (num != null && num.intValue() < 8) {
+				rtMap.put("isCanInvite", "1");
+			}
+		}
+		return rtMap;
 	}
 }

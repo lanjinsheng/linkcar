@@ -17,4 +17,6 @@ public interface FamilyInviteMapper {
 	List<FamilyInvite> getFamilyInviteByPhone(@Param("phone") String phone);
 	
 	FamilyInvite getLatestInvite(FamilyInvite familyInvite);
+	
+	int queryIsApplied(@Param("userId") long userId,@Param("familyId") long familyId);
 }

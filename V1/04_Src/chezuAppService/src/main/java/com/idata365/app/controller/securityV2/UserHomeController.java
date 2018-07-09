@@ -34,6 +34,7 @@ public class UserHomeController extends BaseController {
 	private FamilyService familyService;
 	@Autowired
 	private InteractService interactService;
+	
 
 	public UserHomeController() {
 		System.out.println("UserHomeController");
@@ -60,7 +61,7 @@ public class UserHomeController extends BaseController {
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("userId")))
 			return ResultUtils.rtFailParam(null);
 		long ownerId = this.getUserId();
-		long userId = Long.valueOf(requestBodyParams.get("userId").toString());
+		long userId = Long.valueOf(requestBodyParams.get("userId").toString()).longValue();
 //		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		LOG.info("ownerId========================="+ownerId);
 		LOG.info("userId========================="+userId);
@@ -85,12 +86,22 @@ public class UserHomeController extends BaseController {
 			rtMap.put("title", account.getNickName()+"的车库");
 		}
 		//车名
-		rtMap.put("carName", "道奇老爷车");
+		rtMap.put("carName", "道奇小孩车");
 		//点赞次数
 		rtMap.put("likeCount", String.valueOf(interactService.queryLikeCount(userId)));
 		//车图片
 		rtMap.put("carImgUrl", "");
-
+		//按钮展示
+		Map<String, String> map = this.familyService.iconStatus(ownerId, userId);
+		rtMap.put("hadInvite", map.get("isCanInvite"));
+		rtMap.put("hadRemove", map.get("isCanRemove"));
+		rtMap.put("hadInteractIcon", map.get("hadInteractIcon"));
+//		int canStealPower = interactService.isCanStealPower(userId);
+		int canPayTicket = interactService.isCanPayTicket(userId);
+		int canStealPower = interactService.carPoolStealStatus(ownerId,userId);
+		rtMap.put("stoleIconStatus", String.valueOf(canStealPower));
+		rtMap.put("peccancyIconStatus", String.valueOf(canPayTicket));
+		
 		return ResultUtils.rtSuccess(rtMap);
 	}
 
