@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
 /**
  * 
  */
@@ -61,6 +62,15 @@ public class InteractService extends BaseService<InteractService> {
 	public InteractService() {
 
 	}
+	/**
+	 * 清理锁定的小车任务
+	 */
+	public	void clearLockTask() {
+		long compareTimes=System.currentTimeMillis()-(2*60*1000);
+		interactTempCarMapper.clearLockTask(compareTimes);
+	}
+	
+	
 	/**
 	 * 缴纳罚单
 	 * @param userId

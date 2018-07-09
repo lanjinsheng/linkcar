@@ -14,7 +14,9 @@ public interface InteractTempCarMapper {
 	List<InteractTempCar> getTempCar(@Param("uuid") String uuid);
 	List<InteractTempCar> getTempCarByUserId(InteractTempCar interactTempCar);
 
-
+	
+	void clearLockTask(@Param("compareTimes") Long compareTimes);
+	
 	InteractTempCar getTempCarByUuid(@Param("uuid") String uuid);
 
 	int batchInsertCar(List<Map<String, Object>> list);
