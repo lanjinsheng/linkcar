@@ -21,9 +21,9 @@
 	<insert id="insertLogs"   parameterType="java.util.HashMap" >
        INSERT INTO 
             thirdPartyLogin
-            (openId,loginType,remark,createTime) 
+            (openId,loginType,userId,remark,createTime) 
         VALUES
-            (#{openId},#{loginType},#{remark},now())
+            (#{openId},#{loginType},#{userId},#{remark},now())
     </insert>
     
     <update id="updateByOpenId" >
