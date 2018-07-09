@@ -385,6 +385,13 @@ public class FamilyService extends BaseService<FamilyService> {
 		bean.setDaystamp(daystamp);
 		this.familyMapper.updateFamilyRoleLog(bean);
 		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
+		
+		String nickName = userInfoService.getUsersAccount(bean.getUserId()).getNickName();
+		Message message = messageService.buildMessage(bean.getUserId(), null, nickName, familyMapper.queryCreateUserId(bean), null, MessageEnum.QUIT_FAMILY);
+		// 插入消息
+		messageService.insertMessage(message,  MessageEnum.QUIT_FAMILY);
+		// 推送消息
+		messageService.pushMessageNotrans(message,  MessageEnum.QUIT_FAMILY);
 	}
 
 	private String getCurrentDayStrWithUnDelimiter() {
@@ -513,7 +520,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 申请加入指定家族OR家族邀请指定用户
+	 * 申请加入指定俱乐部OR俱乐部邀请指定用户
 	 * 
 	 * @param bean
 	 */

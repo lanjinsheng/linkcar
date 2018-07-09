@@ -19,9 +19,9 @@ public class MessageTypeConstant {
 	public static final int PersonType_Prop_Give=2;
 	public static final int PersonType_Prop_Rev=3;
 	public static final int PersonType_Invitation_Ok=4;
-	public static final int PersonType_Intive_Fail=5;
-	public static final int PersonType_Reveice_Fail=6;
-	public static final int PersonType_REVEICE_INVITE=7;
+//	public static final int PersonType_Intive_Fail=5;
+//	public static final int PersonType_Reveice_Fail=6;
+//	public static final int PersonType_REVEICE_INVITE=7;
 	
 	//家族消息
 	public static final int FamilyType=3;
@@ -32,6 +32,10 @@ public class MessageTypeConstant {
 	public static final int FamilyType_Challenge=5;
 	public static final int FamilyType_Reward=6;
 	public static final int FamilyType_SeasonReward=7;
+	public static final int FamilyType_Intive_Fail=8;
+	public static final int FamilyType_Reveice_Fail=9;
+	public static final int FamilyType_REVEICE_INVITE=10;
+	public static final int FamilyType_Quit_Family=11;
 	
 	//消息不跳转
 	public static final int MessageUrl_Href_False=2;
