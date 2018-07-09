@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.InteractLogsMapper">
+   <resultMap id="BaseLogsMap" type="com.idata365.app.entity.InteractLogs" >
+    </resultMap>
+	<insert id="insertLog" useGeneratedKeys="true" keyProperty="id" 
+	parameterType="com.idata365.app.entity.InteractLogs">
+		INSERT   INTO
+		interactLogs
+		(userIdA,userIdNameA,userIdB,userIdNameB,eventType,someValue,createTime)
+		values(#{userIdA}, #{userIdNameA}, #{userIdB}, #{userIdNameB}, #{eventType}, #{someValue}, now()) 
+	</insert>
+	
+   <select id="getUserAByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
+      select *
+       		FROM  interactLogs  where id<![CDATA[<]]>${id} and userIdA=#{userId} limit 5
+   </select>
+ 
+ 
+    <select id="getUserBByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
+      select *
+       		FROM  interactLogs  where id<![CDATA[<]]>${id} and userIdB=#{userId} limit 5
+   </select>
+   
+    <select id="getHadComeOn" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+      select count(1) 
+       		FROM  interactLogs  where date(createTime)=#{daystamp} and userIdA=#{userIdA}
+       		 and userIdB=#{userIdB}
+   </select>
+    
+</mapper>
