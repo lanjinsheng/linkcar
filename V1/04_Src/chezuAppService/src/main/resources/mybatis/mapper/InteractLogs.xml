@@ -12,14 +12,18 @@
 	</insert>
 	
    <select id="getUserAByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
-      select *
-       		FROM  interactLogs  where id<![CDATA[<]]>${id} and userIdA=#{userId} limit 5
+      select a.*,DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') createTimeStr
+       		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdA=#{userId} 
+       		order by a.id desc 
+       		limit 5
    </select>
  
  
     <select id="getUserBByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
-      select *
-       		FROM  interactLogs  where id<![CDATA[<]]>${id} and userIdB=#{userId} limit 5
+        select a.*,DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') createTimeStr
+       		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdB=#{userId}
+       		order by a.id desc 
+       		 limit 5
    </select>
    
     <select id="getHadComeOn" resultType="java.lang.Integer" parameterType="java.util.HashMap">
