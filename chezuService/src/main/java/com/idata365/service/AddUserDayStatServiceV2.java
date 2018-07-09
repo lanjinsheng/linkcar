@@ -2,9 +2,11 @@ package com.idata365.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +21,22 @@ import com.idata365.enums.PowerEnum;
 import com.idata365.constant.FamilyRelationConstant;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.FamilyRelation;
+import com.idata365.entity.InteractTempCar;
 import com.idata365.entity.ParkStation;
 import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.mapper.app.FamilyInfoMapper;
+import com.idata365.mapper.app.InteractPeccancyMapper;
+import com.idata365.mapper.app.InteractTempCarMapper;
 import com.idata365.mapper.app.ParkStationMapper;
 import com.idata365.mapper.app.TaskAchieveAddValueMapper;
 import com.idata365.mapper.app.TaskPowerLogsMapper;
 import com.idata365.mapper.app.UserFamilyLogsMapper;
 import com.idata365.mapper.app.UserScoreDayStatMapper;
 import com.idata365.mapper.app.UserTravelHistoryMapper;
+import com.idata365.util.RandUtils;
 
 @Service
 public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2>{
@@ -56,6 +62,10 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	DriveScoreService driveScoreService;
 	@Autowired
 	UserRoleLogService userRoleLogService;
+	@Autowired
+	InteractPeccancyMapper interactPeccancyMapper;
+	@Autowired
+	InteractTempCarMapper interactTempCarMapper;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -162,9 +172,27 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	}
 	
 	public static void main(String []args) {
-		double d=Math.min(100000, 50000)-20000;
-		System.out.println(d);
+		int a=6;
+		int calPower=98;
+		int peccancyNum=2;
+		int power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));
+		 
+		System.out.println(power);
 	}
+	
+	private void addCar(List<InteractTempCar> batchInsert,UserTravelHistory uth,int r,int type) {
+		 InteractTempCar car=new InteractTempCar();
+		 car.setPowerNum(Long.valueOf(r));
+		 car.setType(type);
+		 car.setUserId( uth.getUserId());
+		 car.setCarId( 1L);
+		 car.setCarType("1");
+		 car.setTravelId(uth.getId());
+		 car.setDaystamp(uth.getEndTime().substring(0,10));
+		 car.setUuid(UUID.randomUUID().toString().replace("-", ""));
+		 batchInsert.add(car);
+	}
+	
 	/**
 	 * 
 	    * @Title: addUserDayStat
@@ -182,7 +210,42 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
  
 		//行程power
 //		String score="0";
-		int power=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
+		int calPower=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
+		//查看未缴纳罚单数
+		Map<String,Object> payMap=new HashMap<String,Object>();
+		payMap.put("userId", uth.getUserId());
+		payMap.put("carId", 0L);
+		payMap.put("nowLong", System.currentTimeMillis());
+		int peccancyNum=interactPeccancyMapper.getUnpayPeccancy(payMap);
+		int power=calPower;
+		List<InteractTempCar> batchInsert=new ArrayList<InteractTempCar>();
+		if(peccancyNum>0) {
+			 power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));
+			 if(power>0) {
+				 //形成被偷动力小车
+				 int stealPower=calPower-power;
+				 int r=RandUtils.generateRand(1,3);
+				 while(r<=stealPower) {
+					 addCar(batchInsert, uth,r,1) ;
+					 stealPower=stealPower-r;
+					 r=RandUtils.generateRand(1,3);
+				 }
+				 if(stealPower>0) {
+					 addCar(batchInsert, uth,stealPower,1) ;
+				 }
+			 }
+		}
+		int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
+		if(fadan>0) {//三急+超速
+			for(int j=0;j<fadan;j++) {
+				addCar(batchInsert, uth,(int)(power*0.1),2) ;
+			}
+		}
+		 //批量插入
+		if(batchInsert.size()>0) {
+			interactTempCarMapper.batchInsertTempCar(batchInsert);
+		}
+		
 		//查询当前家族，并贡献分数与动力
 		   List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
 			UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
@@ -243,18 +306,18 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	//				familyInfoMapper.updateFamilyDriveFlag(familyId);
 	//				familyInfoMapper.updateFamilyActiveLevel(familyId);
 					//获取挑战记录
-					
-					List<FamilyRelation> relations=FamilyRelationConstant.getFamilyRelation(familyId);
-					if(relations!=null) {
-						for(FamilyRelation relation:relations) {
-							String postRelation=relation.getSelfFamilyId()+"-"+relation.getCompetitorFamilyId()+"-"+relation.getRelationType();
-							addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId(),postRelation);
+					if(power>0) {
+						List<FamilyRelation> relations=FamilyRelationConstant.getFamilyRelation(familyId);
+						if(relations!=null) {
+							for(FamilyRelation relation:relations) {
+								String postRelation=relation.getSelfFamilyId()+"-"+relation.getCompetitorFamilyId()+"-"+relation.getRelationType();
+								addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId(),postRelation);
+							}
+						}else {
+							//插入行程得分任务
+							addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId(),"0");
 						}
-					}else {
-						//插入行程得分任务
-						addFamilyTripPowerLogs(uth.getUserId(), uth.getHabitId(),familyId, power,uth.getId(),"0");
 					}
-					
 				
 				    userScoreDayStat.setFamilyId(familyId);
 					userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
@@ -268,6 +331,48 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		LOG.info("UPDATE SUCCESS");
 	    return true;
    }
+	
+	@Transactional
+	   public boolean testTempCar(UserTravelHistory uth) {
+//			UserRoleLog role= userRoleLogService.getLatestUserRoleLogNoTrans(uth.getUserId());
+	 
+			//行程power
+//			String score="0";
+			int calPower=addUserTripPowerLogs(uth.getId(),uth.getUserId(),uth.getHabitId(),uth.getMileage(),Double.valueOf(uth.getScore()));
+			//查看未缴纳罚单数
+			Map<String,Object> payMap=new HashMap<String,Object>();
+			payMap.put("userId", uth.getUserId());
+			payMap.put("carId", 0L);
+			payMap.put("nowLong", System.currentTimeMillis());
+			int peccancyNum=interactPeccancyMapper.getUnpayPeccancy(payMap);
+			int power=calPower;
+			List<InteractTempCar> batchInsert=new ArrayList<InteractTempCar>();
+			if(peccancyNum>0) {
+				 power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));
+				 if(power>0) {
+					 //形成被偷动力小车
+					 int stealPower=calPower-power;
+					 int r=RandUtils.generateRand(1,3);
+					 while(r<=stealPower) {
+						 addCar(batchInsert, uth,r,1) ;
+						 stealPower=stealPower-r;
+						 r=RandUtils.generateRand(1,3);
+					 }
+					 if(stealPower>0) {
+						 addCar(batchInsert, uth,stealPower,1) ;
+					 }
+				 }
+			}
+			int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
+			if(fadan>0) {//三急+超速
+				for(int j=0;j<fadan;j++) {
+					addCar(batchInsert, uth,0,2) ;
+				}
+			}
+			 //批量插入
+			interactTempCarMapper.batchInsertTempCar(batchInsert);
+		    return true;
+	   }
 //	private boolean addAchieve(long keyId,Double value,AchieveEnum type) {
 //		TaskAchieveAddValue taskAchieveAddValue=new TaskAchieveAddValue();
 //		taskAchieveAddValue.setAchieveType(type);

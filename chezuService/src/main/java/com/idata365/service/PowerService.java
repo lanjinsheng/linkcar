@@ -120,6 +120,8 @@ public class PowerService extends BaseService<PowerService>
 		 	case Share:
 		 		break;
 		 	case Steal:
+		 		//首页的互动记录发送
+		 		rt=chezuAssetService.addPowerInteractTask(taskPowerLog.getJsonValue(), sign);
 		 		break;
 		 	default:
 		 		return false;

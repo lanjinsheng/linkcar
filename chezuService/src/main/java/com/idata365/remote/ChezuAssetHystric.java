@@ -57,5 +57,12 @@ public class ChezuAssetHystric implements ChezuAssetService{
 		LOG.error("addFamilySeasonEnd挂了:");
 		return false;
 	}
+
+	@Override
+	public boolean addPowerInteractTask(String jsonValue, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("addPowerInteractTask挂了:");
+		return false;
+	}
  
 }
