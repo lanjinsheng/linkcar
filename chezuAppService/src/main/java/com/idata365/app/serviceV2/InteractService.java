@@ -1,15 +1,13 @@
 package com.idata365.app.serviceV2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
-/**
- * 
- */
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -542,6 +540,22 @@ public class InteractService extends BaseService<InteractService> {
 	@Transactional
 	public int isCanPayTicket(Long userId){
 		return this.interactPeccancyMapper.isCanPayTicket(userId);
+	}
+	
+	@Transactional
+	public int carPoolStealStatus(Long ownerId, long userId) {
+		List<InteractTempCar> list = this.interactTempCarMapper.carPoolStealStatus(ownerId);
+		if (CollectionUtils.isEmpty(list)) {
+			return 0;
+		}
+		for (InteractTempCar car : list) {
+			String[] split = car.getBlackIds().split(",");
+			List<String> list2 = Arrays.asList(split);
+			if (!list2.contains(String.valueOf(ownerId))) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 	
 	@Transactional

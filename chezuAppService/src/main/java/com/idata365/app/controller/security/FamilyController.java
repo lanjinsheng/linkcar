@@ -18,7 +18,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.config.SystemProperties;
-import com.idata365.app.controller.securityV2.GameControllerV2;
 import com.idata365.app.entity.FamilyInfoScoreAllBean;
 import com.idata365.app.entity.FamilyInfoScoreResultBean;
 import com.idata365.app.entity.FamilyInviteParamBean;
@@ -28,8 +27,6 @@ import com.idata365.app.entity.FamilyRandResultBean;
 import com.idata365.app.entity.InviteInfoResultBean;
 import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
-import com.idata365.app.entity.ScoreFamilyInfoAllBean;
-import com.idata365.app.entity.ScoreFamilyInfoParamBean;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
@@ -41,7 +38,6 @@ import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
-import com.idata365.app.util.ValidTools;
 
 @RestController
 public class FamilyController extends BaseController {
@@ -391,7 +387,7 @@ public class FamilyController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/family/canRecruitList")
-	public Map<String, Object> getIndexFightInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> canRecruitList(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());

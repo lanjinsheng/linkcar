@@ -24,7 +24,7 @@ public class NotifyController extends BaseController {
 	@Autowired
 	DicService dicService;
 	@RequestMapping("/indexNotice")
-	public Map<String, Object> getIndexFightInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> indexNotice(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 			long now=System.currentTimeMillis();
 			if((now-lastNotifyTime)>(3600*1000)){//一个小时重新去库获取

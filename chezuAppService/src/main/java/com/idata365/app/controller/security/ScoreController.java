@@ -46,6 +46,7 @@ import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.remote.ChezuService;
+import com.idata365.app.service.FamilyInviteService;
 import com.idata365.app.service.LotteryService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.common.FamilyScoreService;
@@ -71,6 +72,9 @@ public class ScoreController extends BaseController {
 
 	@Autowired
 	private FamilyScoreService familyScoreService;
+	
+	@Autowired
+	private FamilyInviteService familyInviteService;
 	
 	
 
@@ -149,7 +153,7 @@ public class ScoreController extends BaseController {
 		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(bean.getFamilyId(), daystamp);
 		resultBean.setTrophyNum(infoFamily.get("trophyNum"));
 		resultBean.setGrade(infoFamily.get("gradeOrNum"));
-		
+		resultBean.setIsApplied(String.valueOf(familyInviteService.queryIsApplied(this.getUserId(), bean.getFamilyId())));
 		resultList.add(resultBean);
 		return ResultUtils.rtSuccess(resultList);
 	}

@@ -23,6 +23,17 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	private String grade;
 	
 	private String notifyMsg;
+	
+	private String isApplied;
+	
+
+	public String getIsApplied() {
+		return isApplied;
+	}
+
+	public void setIsApplied(String isApplied) {
+		this.isApplied = isApplied;
+	}
 
 	public String getNotifyMsg() {
 		return notifyMsg;
