@@ -18,6 +18,10 @@ import com.idata365.entity.bean.FamilySeasonAsset;
 public interface ChezuAssetService {
     @RequestMapping(value = "/asset/addPowerUsersTask",method = RequestMethod.POST)
     boolean addPowerUsersTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign, @RequestBody AssetUsersPowerLogs assetUsersPowerLogs);
+  
+    @RequestMapping(value = "/asset/addPowerInteractTask",method = RequestMethod.POST)
+    boolean addPowerInteractTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign);
+
     @RequestMapping(value = "/asset/addPowerFamilyTask",method = RequestMethod.POST)
     boolean addPowerFamilyTask(@RequestParam(value="jsonValue")  String jsonValue,@RequestParam(value="sign")   String sign, @RequestBody   AssetFamiliesPowerLogs assetFamiliesPowerLogs);
     /**
