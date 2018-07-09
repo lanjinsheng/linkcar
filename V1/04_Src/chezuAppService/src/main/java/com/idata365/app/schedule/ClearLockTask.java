@@ -11,6 +11,7 @@ import com.idata365.app.service.TaskAwardInfoPushService;
 import com.idata365.app.service.TaskGiveUserAchieveService;
 import com.idata365.app.service.TaskMessagePushService;
 import com.idata365.app.service.TaskUserLotteryService;
+import com.idata365.app.serviceV2.InteractService;
 
 
 public class ClearLockTask extends TimerTask { 
@@ -30,6 +31,8 @@ public class ClearLockTask extends TimerTask {
     TaskAwardInfoPushService taskAwardInfoPushService;
     @Autowired
     TaskUserLotteryService taskUserLotteryService;
+    @Autowired
+    InteractService interactService;
     
 	public void setThreadPool(ThreadPoolTaskExecutor threadPool){  
 //		System.out.println(new Date().getTime());
@@ -54,6 +57,7 @@ public class ClearLockTask extends TimerTask {
 				taskMessagePushService.clearLockTask();
 				taskAwardInfoPushService.clearLockTask();
 				taskUserLotteryService.clearLockTask();
+				interactService.clearLockTask();
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.error(e);
