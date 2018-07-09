@@ -18,6 +18,11 @@ import java.util.UUID;
 
 
 
+
+
+
+
+
 /**
  * 
  */
@@ -27,13 +32,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.InteractConstant;
+import com.idata365.app.entity.InteractLogs;
 import com.idata365.app.entity.InteractPeccancy;
 import com.idata365.app.entity.InteractTempCar;
 import com.idata365.app.entity.TaskPowerLogs;
+import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.enums.PowerEnum;
+import com.idata365.app.mapper.InteractLogsMapper;
 import com.idata365.app.mapper.InteractPeccancyMapper;
 import com.idata365.app.mapper.InteractTempCarMapper;
 import com.idata365.app.mapper.TaskPowerLogsMapper;
+import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.util.DateTools;
@@ -55,8 +65,14 @@ public class InteractService extends BaseService<InteractService> {
  InteractTempCarMapper interactTempCarMapper;
  @Autowired 
  TaskPowerLogsMapper taskPowerLogsMapper;
+ @Autowired
+ UsersAccountMapper usersAccountMapper;
+ 
  @Autowired 
  InteractPeccancyMapper interactPeccancyMapper;
+ @Autowired 
+ InteractLogsMapper interactLogsMapper;
+ 
  @Autowired 
  ChezuAssetService chezuAssetService;
 	public InteractService() {
@@ -69,7 +85,7 @@ public class InteractService extends BaseService<InteractService> {
 	 * @return
 	 */
 	@Transactional
-	public boolean payPeccancy(Long userId,Long peccancyId){
+	public boolean payPeccancy(Long userId,Long peccancyId,String nickName){
 		InteractPeccancy peccancy=new InteractPeccancy();
 		peccancy.setId(peccancyId);
 		peccancy.setPayerId(userId);
@@ -83,8 +99,41 @@ public class InteractService extends BaseService<InteractService> {
 		int type=1;
 		if(dbPeccancy.getLawBreakerId().longValue()==userId.longValue()){//自己付
 			type=0;
+			InteractLogs log=new InteractLogs();
+			log.setEventType(InteractConstant.PAY_PECCANCY_SELF);
+			log.setSomeValue(dbPeccancy.getPowerNum());
+			log.setUserIdA(userId);
+			log.setUserIdB(dbPeccancy.getLawManId());
+			log.setUserNameA(nickName);
+			UsersAccount account=usersAccountMapper.findAccountById(dbPeccancy.getLawManId());
+			log.setUserNameB(account.getNickName());
+	    	interactLogsMapper.insertLog(log);
 		}else{
 			type=1;
+			InteractLogs log=new InteractLogs();
+			log.setEventType(InteractConstant.PAY_PECCANCY_OTHER);
+			log.setSomeValue(dbPeccancy.getPowerNum());
+			log.setUserIdA(userId);
+			log.setUserIdB(dbPeccancy.getLawManId());
+			log.setUserNameA(nickName);
+			UsersAccount account=usersAccountMapper.findAccountById(dbPeccancy.getLawManId());
+			log.setUserNameB(account.getNickName());
+	    	interactLogsMapper.insertLog(log);
+	    	
+	    	
+			InteractLogs log2=new InteractLogs();
+			log2.setEventType(InteractConstant.PAY_PECCANCY_OTHER_HELP);
+			log2.setSomeValue(dbPeccancy.getPowerNum());
+			log2.setUserIdA(userId);
+			log2.setUserIdB(dbPeccancy.getLawBreakerId());
+			log2.setUserNameA(nickName);
+			UsersAccount account2=usersAccountMapper.findAccountById(dbPeccancy.getLawBreakerId());
+			log.setUserNameB(account2.getNickName());
+	    	interactLogsMapper.insertLog(log2);
+	    	
+	    	
+	    	
+	    	
 		}
 		Map<String, String> map=chezuAssetService.reducePowersByPeccancy(dbPeccancy.getLawManId(), userId, type,
 				dbPeccancy.getPowerNum(), peccancyId, SignUtils.encryptHMAC(String.valueOf(dbPeccancy.getLawManId())));
@@ -123,7 +172,7 @@ public class InteractService extends BaseService<InteractService> {
 	
 	
 	@Transactional
-	public Map<String,Object> stealFromGarage(Long userId,Long  carUserId){
+	public Map<String,Object> stealFromGarage(Long userId,Long  carUserId,String nickName){
 		Map<String,Object> map=new HashMap<String,Object>();
          InteractTempCar interactTempCar=new InteractTempCar();
          interactTempCar.setUserId(carUserId);
@@ -159,6 +208,16 @@ public class InteractService extends BaseService<InteractService> {
 	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 	    	if(hadAdd>0) {
 	    		map.put("powerNum", String.valueOf(power));
+		    	InteractLogs log=new InteractLogs();
+				log.setEventType(InteractConstant.STEAL_POWER);
+				log.setSomeValue(power);
+				log.setUserIdA(userId);
+				log.setUserIdB(carUserId);
+				log.setUserNameA(nickName);
+				UsersAccount account=usersAccountMapper.findAccountById(carUserId);
+				log.setUserNameB(account.getNickName());
+		    	interactLogsMapper.insertLog(log);
+	    		
 	    	}
 		 return map;
 	}
@@ -250,14 +309,164 @@ public class InteractService extends BaseService<InteractService> {
 		}
 		return rtList;
 	}
+	@Transactional
+	public int insertInteractLogs(InteractLogs log){
+		return interactLogsMapper.insertLog(log);
+	}
 	
+	public int hadComeOn(Map<String,Object> map){
+		return interactLogsMapper.getHadComeOn(map);
+	}
 	
+	@Transactional
+	public List<Map<String,Object>> getInteractLogs(int tabType,Long userId,long maxId){
+		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("userId", userId);
+		map.put("id", maxId);
+		
+		if(tabType==1){//自己被互动的记录
+			List<InteractLogs> logs=interactLogsMapper.getUserBByUserId(map);
+			for(InteractLogs log:logs){
+				Map<String,Object> m=new HashMap<String,Object>();
+				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
+				long rtTime=time/60000;
+				if(rtTime<60){
+					m.put("time", rtTime+"分钟前");
+				}
+				else if(rtTime>59 && rtTime<1440){
+					rtTime=rtTime/60;
+					m.put("time", rtTime+"小时前");
+				}else{
+					rtTime=rtTime/(60*24);
+					m.put("time", rtTime+"天前");
+				}
+				m.put("createTime", log.getCreateTime());
+				
+//				1、其他玩家偷取我的动力：
+//				最后的晚餐 偷取您的动力 3点
+//				2、其他玩家对我贴条：
+//				最后的晚餐 给您的车贴了条
+//				3、其他玩家帮我缴罚金：
+//				最后的晚餐 帮您缴了罚金 20点动力
+//				4、其他玩家对我点赞：
+//				最后的晚餐给您点了赞
+//				5、我贴条的用户向我缴纳罚金：
+//				最后的晚餐 给您缴了罚金 20点动力
+				int type=log.getEventType();
+				if(type==InteractConstant.STEAL_POWER){
+					m.put("log", log.getUserNameA()+" 偷取您的动力"+log.getSomeValue()+"点");
+				}else if(type==InteractConstant.CLICK_COMEON){
+					m.put("log", log.getUserNameA()+" 给您点了赞");
+				}else if(type==InteractConstant.STICK_PECCANCY){
+					m.put("log", log.getUserNameA()+" 给您的车贴了条");
+				}else if(type==InteractConstant.PAY_PECCANCY_SELF || type==InteractConstant.PAY_PECCANCY_OTHER){
+					m.put("log", log.getUserNameA()+" 给您缴了罚金"+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
+					m.put("log", log.getUserNameA()+" 帮您交了罚金"+log.getSomeValue()+"点动力");
+				}
+				rtList.add(m);
+			}
+		}else if(tabType==2){//自己搞别人的记录
+			List<InteractLogs> logs=interactLogsMapper.getUserAByUserId(map);
+			for(InteractLogs log:logs){
+				Map<String,Object> m=new HashMap<String,Object>();
+				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
+				long rtTime=time/60000;
+				if(rtTime<60){
+					m.put("time", rtTime+"分钟前");
+				}
+				else if(rtTime>59 && rtTime<1440){
+					rtTime=rtTime/60;
+					m.put("time", rtTime+"小时前");
+				}else{
+					rtTime=rtTime/(60*24);
+					m.put("time", rtTime+"天前");
+				}
+				m.put("createTime", log.getCreateTime());
+				
+//				1、我偷取别人的动力:
+//					偷取了 最后的晚餐 20点动力
+//					2、我给其他玩家贴了条
+//					给 最后的晚餐 贴了罚单
+//					3、我帮其他玩家缴罚单
+//					帮 最后的晚餐 缴了罚金 20点动力
+//					4、我给其他玩家点赞
+//					我给 最后的晚餐 点了赞
+//					5、我给自己缴罚单
+//					我向 最后的晚餐缴了罚金 20点动力
+				int type=log.getEventType();
+				if(type==InteractConstant.STEAL_POWER){
+					m.put("log", "偷取了 "+log.getUserNameB()+" "+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.CLICK_COMEON){
+					m.put("log","给 "+log.getUserNameB()+" 点了赞");
+				}else if(type==InteractConstant.STICK_PECCANCY){
+					m.put("log", "给 "+log.getUserIdB()+" 贴了罚单");
+				}else if(type==InteractConstant.PAY_PECCANCY_SELF || type==InteractConstant.PAY_PECCANCY_OTHER){
+					m.put("log", "向 "+log.getUserNameB()+"缴了罚金"+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
+					//有问题
+					m.put("log", "帮 "+log.getUserNameB()+"缴了罚金"+log.getSomeValue()+"点动力");
+				}
+				rtList.add(m);
+			}
+			
+		}else if(tabType==3){//偷窥他人被搞记录
+			List<InteractLogs> logs=interactLogsMapper.getUserBByUserId(map);
+			for(InteractLogs log:logs){
+				Map<String,Object> m=new HashMap<String,Object>();
+				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
+				long rtTime=time/60000;
+				if(rtTime<60){
+					m.put("time", rtTime+"分钟前");
+				}
+				else if(rtTime>59 && rtTime<1440){
+					rtTime=rtTime/60;
+					m.put("time", rtTime+"小时前");
+				}else{
+					rtTime=rtTime/(60*24);
+					m.put("time", rtTime+"天前");
+				}
+				m.put("createTime", log.getCreateTime());
+				
+//				1、其他玩家偷取我的动力：
+//				最后的晚餐 偷取TA的动力 3点
+//				2、其他玩家对我贴条：
+//				最后的晚餐 给TA的车贴了罚单
+//				3、其他玩家帮我缴罚单：
+//				最后的晚餐 帮TA缴了罚金 20点动力
+//				4、其他玩家对我点赞：
+//				最后的晚餐给TA点了赞
+//				5、我贴条的用户向我缴纳罚金：
+//				最后的晚餐 给TA缴了罚金 20点动力
+				int type=log.getEventType();
+				if(type==InteractConstant.STEAL_POWER){
+					m.put("log", log.getUserNameA() +" 偷取TA的动力 "+log.getSomeValue()+"点");
+				}else if(type==InteractConstant.CLICK_COMEON){
+					m.put("log",log.getUserNameA() +" 给TA点了赞");
+				}else if(type==InteractConstant.STICK_PECCANCY){
+					m.put("log", log.getUserNameA() +" 给TA的车贴了罚单");
+				}else if(type==InteractConstant.PAY_PECCANCY_SELF || type==InteractConstant.PAY_PECCANCY_OTHER){
+					m.put("log", log.getUserNameA()+"向TA缴了罚金"+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
+					//有问题
+					m.put("log", log.getUserNameA()+"帮TA缴了罚金"+log.getSomeValue()+"点动力");
+				}
+				rtList.add(m);
+			}
+			
+			
+		}
+		
+		return rtList;
+	}
 
     String jsonValue="{\"userId\":%d,\"stealerId\":%d,\"type\":%d,\"powerNum\":%d,\"effectId\":%d}";
 	@Transactional
-	public boolean hadGet(String uuid,long userId) {
+	public boolean hadGet(String uuid,long userId,String nickName) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("uuid", uuid);
+		//偷取者信息
 		map.put("stealerId", userId);
 		map.put("blackIds", userId+",");
 		int hadGet=interactTempCarMapper.updateTempCar(map);
@@ -267,7 +476,7 @@ public class InteractService extends BaseService<InteractService> {
 			if(r.getType()>0){
 				interactTempCarMapper.updateBlackIds(map);
 			}
-			if(r.getType()==2){//罚单的处理
+			if(r.getType()==2){//贴罚单的处理
 				InteractPeccancy interactPeccancy=new InteractPeccancy();
 				long endLong=System.currentTimeMillis()+(10*3600*1000);
 				interactPeccancy.setEndLong(endLong);
@@ -277,16 +486,37 @@ public class InteractService extends BaseService<InteractService> {
 				interactPeccancy.setCreateTimeStr(createTime);
 				interactPeccancy.setCarId(r.getCarId());
 				interactPeccancy.setPowerNum(r.getPowerNum().intValue());
-				interactPeccancy.setLawBreakerId(r.getUserId());
+				interactPeccancy.setLawBreakerId(r.getUserId());//车主
 				interactPeccancy.setLawManId(userId);
 				interactPeccancyMapper.insertPeccancy(interactPeccancy);
+				
+		    	InteractLogs log=new InteractLogs();
+				log.setEventType(InteractConstant.STICK_PECCANCY);
+				log.setSomeValue(1);
+				log.setUserIdA(userId);
+				log.setUserIdB(r.getUserId());
+				log.setUserNameA(nickName);
+				UsersAccount account=usersAccountMapper.findAccountById(r.getUserId());
+				log.setUserNameB(account.getNickName());
+		    	interactLogsMapper.insertLog(log);
+				
 			}else{
 				//动力的处理
 				TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
 		    	taskPowerLogs.setUserId(userId);
 		    	taskPowerLogs.setTaskType(PowerEnum.Steal);
 		    	int power=r.getPowerNum().intValue();
-		    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,r.getStealerId(),r.getType(),power,r.getId()));
+		    	taskPowerLogs.setJsonValue(String.format(jsonValue, r.getUserId(),userId,r.getType(),power,r.getId()));
+		    	InteractLogs log=new InteractLogs();
+				log.setEventType(InteractConstant.STEAL_POWER);
+				log.setSomeValue(power);
+				log.setUserIdA(userId);
+				log.setUserIdB(r.getUserId());
+				log.setUserNameA(nickName);
+				UsersAccount account=usersAccountMapper.findAccountById(r.getUserId());
+				log.setUserNameB(account.getNickName());
+		    	interactLogsMapper.insertLog(log);
+		    	
 		    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 		    	if(hadAdd>0) {
 		    		return true;
