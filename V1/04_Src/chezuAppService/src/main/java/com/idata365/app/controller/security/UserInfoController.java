@@ -576,7 +576,7 @@ public class UserInfoController extends BaseController{
 	  
 	/**
 	 * 
-	 * @Title: showTirdPartyLoginStatus
+	 * @Title: queryTirdPartyLoginStatus
 	 * @Description: TODO(三方登录状态展示)
 	 * @param @param
 	 *            allRequestParams
@@ -588,8 +588,8 @@ public class UserInfoController extends BaseController{
 	 * @throws @author
 	 *             Lcc
 	 */
-	@RequestMapping("/user/showTirdPartyLoginStatus")
-	public Map<String, Object> showTirdPartyLoginStatus(
+	@RequestMapping("/user/queryTirdPartyLoginStatus")
+	public Map<String, Object> queryTirdPartyLoginStatus(
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
