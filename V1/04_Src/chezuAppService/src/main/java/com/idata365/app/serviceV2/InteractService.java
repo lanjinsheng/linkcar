@@ -328,7 +328,9 @@ public class InteractService extends BaseService<InteractService> {
 		if(tabType==1){//自己被互动的记录
 			List<InteractLogs> logs=interactLogsMapper.getUserBByUserId(map);
 			for(InteractLogs log:logs){
+			
 				Map<String,Object> m=new HashMap<String,Object>();
+				m.put("id", log.getId());
 				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
 				long rtTime=time/60000;
 				if(rtTime<60){
@@ -341,7 +343,7 @@ public class InteractService extends BaseService<InteractService> {
 					rtTime=rtTime/(60*24);
 					m.put("time", rtTime+"天前");
 				}
-				m.put("createTime", log.getCreateTime());
+				m.put("createTime", log.getCreateTimeStr());
 				
 //				1、其他玩家偷取我的动力：
 //				最后的晚餐 偷取您的动力 3点
@@ -371,6 +373,7 @@ public class InteractService extends BaseService<InteractService> {
 			List<InteractLogs> logs=interactLogsMapper.getUserAByUserId(map);
 			for(InteractLogs log:logs){
 				Map<String,Object> m=new HashMap<String,Object>();
+				m.put("id", log.getId());
 				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
 				long rtTime=time/60000;
 				if(rtTime<60){
@@ -383,7 +386,7 @@ public class InteractService extends BaseService<InteractService> {
 					rtTime=rtTime/(60*24);
 					m.put("time", rtTime+"天前");
 				}
-				m.put("createTime", log.getCreateTime());
+				m.put("createTime", log.getCreateTimeStr());
 				
 //				1、我偷取别人的动力:
 //					偷取了 最后的晚餐 20点动力
@@ -415,6 +418,7 @@ public class InteractService extends BaseService<InteractService> {
 			List<InteractLogs> logs=interactLogsMapper.getUserBByUserId(map);
 			for(InteractLogs log:logs){
 				Map<String,Object> m=new HashMap<String,Object>();
+				m.put("id", log.getId());
 				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
 				long rtTime=time/60000;
 				if(rtTime<60){
@@ -427,7 +431,7 @@ public class InteractService extends BaseService<InteractService> {
 					rtTime=rtTime/(60*24);
 					m.put("time", rtTime+"天前");
 				}
-				m.put("createTime", log.getCreateTime());
+				m.put("createTime", log.getCreateTimeStr());
 				
 //				1、其他玩家偷取我的动力：
 //				最后的晚餐 偷取TA的动力 3点
@@ -454,10 +458,7 @@ public class InteractService extends BaseService<InteractService> {
 				}
 				rtList.add(m);
 			}
-			
-			
 		}
-		
 		return rtList;
 	}
 
