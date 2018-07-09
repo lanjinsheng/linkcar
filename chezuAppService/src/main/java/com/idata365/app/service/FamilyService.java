@@ -54,6 +54,7 @@ import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.ImNotifyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
 import com.idata365.app.mapper.UserRoleLogMapper;
@@ -78,15 +79,17 @@ public class FamilyService extends BaseService<FamilyService> {
 	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
-	UserRoleLogMapper userRoleLogMapper;
+	private UserRoleLogMapper userRoleLogMapper;
 	@Autowired
-	DicGameDayMapper dicGameDayMapper;
+	private DicGameDayMapper dicGameDayMapper;
 	@Autowired
 	private UserInfoService userInfoService;
 	@Autowired
 	private ImService imService;
 	@Autowired
-	ChezuImService chezuImService;
+	private ChezuImService chezuImService;
+	@Autowired
+	private ImNotifyMapper imNotifyMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -242,7 +245,11 @@ public class FamilyService extends BaseService<FamilyService> {
 		tempResultBean.setTypeValue(DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
 		//人数
 		tempResultBean.setNum(familyInfo.get("memberNum").toString()+"/8");
+		//家族名
 		tempResultBean.setName(familyInfo.get("familyName").toString());
+		//公告
+		ImNotify notify = imNotifyMapper.getNotify(bean.getFamilyId());
+		tempResultBean.setMsgStr(notify.getNotifyMsg());
 		return tempResultBean;
 	}
 
