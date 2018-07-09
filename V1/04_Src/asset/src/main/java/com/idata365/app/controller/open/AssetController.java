@@ -190,7 +190,7 @@ public class AssetController extends BaseController {
 				log.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
 				log.setRecordType(AssetConstant.RECORDTYPE_1);
 				log.setRemark("首页获取动力球");
-				log.setUserId(Long.valueOf(map.get("userId").toString()));
+				log.setUserId(Long.valueOf(map.get("stealerId").toString()));
 				return assetService.addUserPowers(log);
 			}else if(Integer.valueOf(map.get("type").toString())==1){//行程动力车
 				AssetUsersPowerLogs log=new AssetUsersPowerLogs();
@@ -199,7 +199,7 @@ public class AssetController extends BaseController {
 				log.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
 				log.setRecordType(AssetConstant.RECORDTYPE_1);
 				log.setRemark("偷取行程获取动力球");
-				log.setUserId(Long.valueOf(map.get("userId").toString()));
+				log.setUserId(Long.valueOf(map.get("stealerId").toString()));
 				assetService.addUserPowers(log);
 				 
 				AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
@@ -208,7 +208,7 @@ public class AssetController extends BaseController {
 				log2.setPowerNum(Long.valueOf(map.get("powerNum").toString()));
 				log2.setRecordType(AssetConstant.RECORDTYPE_2);
 				log2.setRemark("行程动力被偷取");
-				log2.setUserId(Long.valueOf(map.get("stealerId").toString()));
+				log2.setUserId(Long.valueOf(map.get("userId").toString()));
 				return assetService.reduceUserPowers(log2);
 				 
 			}
