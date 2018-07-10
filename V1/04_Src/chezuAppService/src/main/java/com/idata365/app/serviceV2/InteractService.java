@@ -309,6 +309,14 @@ public class InteractService extends BaseService<InteractService> {
 		return interactLogsMapper.getHadComeOn(map);
 	}
 	
+	public int userLikeMissionCount(long userId){
+		int i = interactLogsMapper.userLikeMissionCount(userId);
+		if(i>=3) {
+			return 1;
+		}
+		return 0;
+	}
+	
 	@Transactional
 	public List<Map<String,Object>> getInteractLogs(int tabType,Long userId,long maxId){
 		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();

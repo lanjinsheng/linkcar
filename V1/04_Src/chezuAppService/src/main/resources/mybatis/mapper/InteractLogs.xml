@@ -29,7 +29,12 @@
     <select id="getHadComeOn" resultType="java.lang.Integer" parameterType="java.util.HashMap">
       select count(1) 
        		FROM  interactLogs  where date(createTime)=#{daystamp} and userIdA=#{userIdA}
-       		 and userIdB=#{userIdB}
+       		 and userIdB=#{userIdB} and eventType=1
+   </select>
+   
+   <select id="userLikeMissionCount" resultType="java.lang.Integer">
+      select count(1) 
+       		FROM  interactLogs  where userIdA=#{userIdA} and eventType=1
    </select>
    
    <select id="queryLikeCount" resultType="java.lang.Integer">

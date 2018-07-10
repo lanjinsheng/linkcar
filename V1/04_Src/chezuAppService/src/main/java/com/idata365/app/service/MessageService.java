@@ -516,7 +516,7 @@ public class MessageService extends BaseService<MessageService>{
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.FamilyType_Kickout);
-		message.setContent(String.format(KickMemberMessage,leaderName,familyName));
+		message.setContent(String.format(KickMemberMessage,familyName,leaderName));
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
@@ -995,7 +995,7 @@ public class MessageService extends BaseService<MessageService>{
 	}
 	
 	private String getReveiceInviteMessageDesc(String fromUserPhone,String fromUserNick,String familyName) {
-			return String.format(ReveiceInvite, fromUserNick,familyName);
+			return String.format(ReveiceInvite,familyName, fromUserNick);
 	}
 	
 	private String getPassMessageDesc2(String fromUserNick) {
