@@ -203,7 +203,10 @@ public class FamilyController extends BaseController {
 	public Map<String, Object> applyByFamily(@RequestBody FamilyInviteParamBean bean) {
 		UserInfo userInfo = super.getUserInfo();
 
-		this.familyService.applyByFamily(bean, userInfo);
+		int i = this.familyService.applyByFamily(bean, userInfo);
+		if(i==0) {
+			return ResultUtils.rtFail(null, "该用户已在该家族中", "100");
+		}
 		return ResultUtils.rtSuccess(null);
 	}
 

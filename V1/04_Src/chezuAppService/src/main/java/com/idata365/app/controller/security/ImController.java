@@ -76,11 +76,7 @@ public class ImController extends BaseController {
 		Map<String,Object> familyInfo=familyService.findFamilyByFamilyId(notify.getFamilyId());
 		notify.setFamilyName(String.valueOf(familyInfo.get("familyName")));
 		
-		if(user.getNickName()==null) {
-			notify.setLeaderName(StringTools.getPhoneHidden(user.getPhone()));
-		}else {
-			notify.setLeaderName(user.getNickName());
-		}
+		notify.setLeaderName(user.getNickName());
 		notify.setLeaderId(user.getId());
 		notify.setLeaderPic(user.getImgUrl());
 		notify.setInUse(1);
