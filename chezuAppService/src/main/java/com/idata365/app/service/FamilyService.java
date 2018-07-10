@@ -428,8 +428,13 @@ public class FamilyService extends BaseService<FamilyService> {
 		bean.setStartPos(startPos);
 		bean.setUserId(userId);
 		List<FamilyRandBean> familys = this.familyMapper.queryFamilys(bean);
+		
+		Long joinFamilyId = this.familyMapper.queryJoinFamilyId(userId);
 		for (FamilyRandBean tempBean : familys) {
 			if (tempBean.getFamilyId() == FamilyConstant.ROBOT_FAMILY_ID) {
+				continue;
+			}
+			if (joinFamilyId != null && joinFamilyId.longValue() == tempBean.getFamilyId()) {
 				continue;
 			}
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
@@ -533,7 +538,11 @@ public class FamilyService extends BaseService<FamilyService> {
 	 * @param bean
 	 */
 	@Transactional
-	public void applyByFamily(FamilyInviteParamBean bean, UserInfo userInfo) {
+	public int applyByFamily(FamilyInviteParamBean bean, UserInfo userInfo) {
+		int i = this.familyMapper.isInFamily(bean.getUserId(), bean.getFamilyId());
+		if (i > 0) {
+			return 0;
+		}
 		Calendar cal = Calendar.getInstance();
 		String dayStr = DateFormatUtils.format(cal, "yyyy-MM-dd HH:mm:ss");
 		bean.setCreateTime(dayStr);
@@ -557,6 +566,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			// 推送消息
 			messageService.pushMessageNotrans(message,  MessageEnum.REVEICE_INVITE);
 		}
+		return 1;
 	}
 
 	private void dealtMsg(UserInfo userInfo, Long inviteId, Long toUserId, MessageEnum messageEnum) {
