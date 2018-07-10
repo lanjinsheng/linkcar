@@ -83,6 +83,7 @@ public class MessageService extends BaseService<MessageService>{
 	//帮助页面跳转
 	public static final String  HelpUrl="com.idata365.haochezu://GuideHelps.push";
 	public static final String  InviteMessageUrl="com.idata365.haochezu://check.push?msgId=%s";
+	public static final String  RecruitMessageUrl="com.idata365.haochezu://familyInvite.push?msgId=%s";
 	public static final String  InvitePassMessageUrl="com.idata365.haochezu://family.push?isFamilyMine=1&isHomeEnter=0&familyId=%s";
 	
 	public static final String  TietiaoMessageUrl="com.idata365.haochezu://pasteNote.push?familyId=%s";
@@ -712,7 +713,7 @@ public class MessageService extends BaseService<MessageService>{
 		message.setTitle("俱乐部邀请");
 		message.setToUserId(toUserId);
 		message.setUrlType(0);
-		message.setToUrl(getInviteMessageUrl(familyInviteId));
+		message.setToUrl(getRecruitMessageUrl(familyInviteId));
 		return message;
 	}
 	
@@ -1020,6 +1021,10 @@ public class MessageService extends BaseService<MessageService>{
 	
 	private String getInviteMessageUrl(Long familyInviteId) {
 			return String.format(InviteMessageUrl, String.valueOf(familyInviteId));
+	}
+	
+	private String getRecruitMessageUrl(Long familyInviteId) {
+		return String.format(RecruitMessageUrl, String.valueOf(familyInviteId));
 	}
 	
 	
