@@ -549,10 +549,12 @@ public class InteractService extends BaseService<InteractService> {
 			return 0;
 		}
 		for (InteractTempCar car : list) {
-			String[] split = car.getBlackIds().split(",");
-			List<String> list2 = Arrays.asList(split);
-			if (!list2.contains(String.valueOf(ownerId))) {
-				return 1;
+			if (car.getBlackIds() != null && !car.getBlackIds().equals("")) {
+				String[] split = car.getBlackIds().split(",");
+				List<String> list2 = Arrays.asList(split);
+				if (!list2.contains(String.valueOf(ownerId))) {
+					return 1;
+				}
 			}
 		}
 		return 0;
