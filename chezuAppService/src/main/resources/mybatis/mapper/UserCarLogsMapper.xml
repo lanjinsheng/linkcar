@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.UserCarLogsMapper">
+    <resultMap id="BaseUserCarLogsMap" type="com.idata365.app.entity.UserCarLogs" >
+    </resultMap>
+    
+    <select id="getUserCar" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT a.*,b.carName,b.carSeat,b.carUrl from userCarLogs a left join dicCar b on a.carId=b.carId
+       where a.startTime<![CDATA[<=]]>#{nowTime} and a.endTime<![CDATA[>=]]>#{nowTime}
+       and a.userId=#{userId}
+     </select>
+         <select id="getUserCarLogById" resultMap="BaseUserCarLogsMap" parameterType="java.lang.Long">
+       SELECT * from userCarLogs  where id=#{id}
+     </select>
+     
+</mapper>

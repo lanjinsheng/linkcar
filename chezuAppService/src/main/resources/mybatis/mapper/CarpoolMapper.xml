@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.CarpoolMapper">
+    <resultMap id="BaseCarpoolMap" type="com.idata365.app.entity.Carpool" >
+    </resultMap>
+    
+     <select id="getCarPool" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT  a.passengerId userId,b.imgUrl from carpool a left join usersAccount b on a.passengerId=b.id
+        where a.userCarLogsId=#{userCarLogsId} and a.isComplete=0
+     </select>
+        <select id="getPassengersNum" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT  count(1) from carpool where userCarLogsId=#{userCarLogsId} and isComplete=0
+     </select>  
+     
+     
+     <insert id="insertCarpool"  parameterType="com.idata365.app.entity.Carpool" >
+       INSERT INTO 
+            carpool
+            (driverId,passengerId,carId,userCarLogsId,createTime) 
+        VALUES
+            (#{driverId},#{passengerId}, #{carId},#{userCarLogsId},now())
+    </insert>
+     
+     
+    <update id="offCar"  parameterType="com.idata365.app.entity.Carpool" >
+       update    
+            carpool
+           set isComplete=1,getOffTime=now() where  id=#{id}
+    </update>
+</mapper>

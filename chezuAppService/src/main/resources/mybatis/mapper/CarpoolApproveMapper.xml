@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.CarpoolApproveMapper">
+    <resultMap id="BaseCarpoolApproveMap" type="com.idata365.app.entity.CarpoolApprove" >
+    </resultMap>
+     <select id="getCarpoolApprove" resultMap="BaseCarpoolApproveMap" parameterType="java.util.HashMap">
+       SELECT * from carpoolApprove where passengerId=#{passengerId} and userCarLogsId=#{userCarLogsId}
+        and approveStatus=0
+     </select>
+     
+      <select id="getCarpoolApproveByDriver" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       SELECT a.*,b.nickName from carpoolApprove a left join usersAccount b on a.passengerId=b.id where a.driverId=#{driverId}  
+        and approveStatus=0
+     </select>
+    <insert id="submitCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
+       INSERT INTO 
+            carpoolApprove
+            (driverId,passengerId,carId,userCarLogsId,createTime) 
+        VALUES
+            (#{driverId},#{passengerId}, #{carId},#{userCarLogsId},now())
+    </insert>
+    
+     <select id="getCarpoolApproveById" resultMap="BaseCarpoolApproveMap" parameterType="java.lang.Long">
+       SELECT * from carpoolApprove where id=#{id}  
+     </select> 
+    <update id="applyCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
+       update
+            carpoolApprove
+            set approveStatus=1,approveTime=now() where id=#{id}
+    </update>
+     <update id="clearCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
+       update
+            carpoolApprove
+            set approveStatus=-1,approveTime=now() where id!=#{id} and passengerId=#{passengerId}
+    </update>
+       <update id="rejectCarpoolApprove"  parameterType="java.lang.Long" >
+       update
+            carpoolApprove
+            set approveStatus=2,approveTime=now() where id=#{id}
+    </update>  
+    
+</mapper>
