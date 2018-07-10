@@ -94,14 +94,14 @@ public class UserHomeController extends BaseController {
 		rtMap.put("carImgUrl", "");
 		//按钮展示
 		Map<String, String> map = this.familyService.iconStatus(ownerId, userId);
-		rtMap.put("hadInvite", map.get("isCanInvite"));
-		rtMap.put("hadRemove", map.get("isCanRemove"));
-		rtMap.put("hadInteractIcon", map.get("hadInteractIcon"));
+		rtMap.put("isCanInvite", map.get("isCanInvite"));
+//		rtMap.put("hadRemove", map.get("isCanRemove"));
+		rtMap.put("isCanInteract", map.get("hadInteractIcon"));
 //		int canStealPower = interactService.isCanStealPower(userId);
 		int canPayTicket = interactService.isCanPayTicket(userId);
 		int canStealPower = interactService.carPoolStealStatus(ownerId,userId);
-		rtMap.put("stoleIconStatus", String.valueOf(canStealPower));
-		rtMap.put("peccancyIconStatus", String.valueOf(canPayTicket));
+		rtMap.put("isCanStealPower", String.valueOf(canStealPower));
+		rtMap.put("isCanPayTicket", String.valueOf(canPayTicket));
 		
 		Map<String,Object> param=new HashMap<String,Object>();
 		param.put("userIdA", this.getUserId());
