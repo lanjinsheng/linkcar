@@ -277,8 +277,6 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	public int queryIsCanJoinMe(long userId) {
 		int i = 1;
 		if (userConfigMapper.queryIsCanJoinMe(userId) != null) {
-			i = -1;
-		} else {
 			i = userConfigMapper.queryIsCanJoinMe(userId);
 		}
 		return i;
