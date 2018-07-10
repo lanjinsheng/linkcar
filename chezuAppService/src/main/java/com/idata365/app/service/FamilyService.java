@@ -248,7 +248,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		//家族名
 		tempResultBean.setName(familyInfo.get("familyName").toString());
 		//公告
-		ImNotify notify = imNotifyMapper.getNotify(bean.getFamilyId());
+		ImNotify notify = imNotifyMapper.getNotify(Long.valueOf(familyInviteBean.getFamilyId()));
 		tempResultBean.setMsgStr(notify.getNotifyMsg());
 		return tempResultBean;
 	}

@@ -45,6 +45,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	private FamilyService familyService;
 	@Autowired
 	private UserInfoServiceV2 userInfoServiceV2;
+	@Autowired
+	private InteractService interactService;
 
 	// 从字典表查询所有任务
 	public List<DicUserMission> getAllDicUserMission() {
@@ -80,6 +82,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					break;
 				case 2:
 					// 在其他玩家车库点赞3次
+					count = interactService.userLikeMissionCount(userId);
 					break;
 				case 3:
 					// 今日出行1次
@@ -204,11 +207,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 				missionActionDesc = "已领取";
 				actionStatus = "0";
 			} else {
-				if (missionId == 1) {
-					missionActionDesc = "去偷取";
-				} else if (missionId == 2) {
-					missionActionDesc = "去点赞";
-				} else if (missionId == 6) {
+				if (missionId == 6) {
 					missionActionDesc = "去认证";
 				} else if (missionId == 7) {
 					missionActionDesc = "去认证";

@@ -14,5 +14,9 @@ public interface InteractLogsMapper {
 	List<InteractLogs> getUserAByUserId(Map<String,Object> map);
 	List<InteractLogs> getUserBByUserId(Map<String,Object> map);
 	int getHadComeOn(Map<String,Object> map);
+	//被点赞次数
 	int queryLikeCount(@Param("userIdB") long userIdB);
+	//用户任务--是否点别人三次
+	int userLikeMissionCount(@Param("userIdA") long userIdA);
+	
 }
