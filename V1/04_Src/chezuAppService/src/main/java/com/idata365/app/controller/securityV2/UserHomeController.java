@@ -52,7 +52,7 @@ public class UserHomeController extends BaseController {
 	 *            参数
 	 * @return Map<String,Object> 返回类型
 	 * @throws @author
-	 *             LanYeYe
+	 *             Lcc
 	 */
 	@RequestMapping("/queryUserHome")
 	public Map<String, Object> queryUserHome(@RequestParam(required = false) Map<String, String> allRequestParams,
