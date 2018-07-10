@@ -303,7 +303,9 @@
  	<select id="getFamilyUsers" resultType="java.util.HashMap" parameterType="java.lang.Long">
  		select * from userFamilyRelation where familyId=#{familyId}
  	</select>
- 	
+ 	<select id="getFamilyUsersMoreInfo" resultType="java.util.HashMap" parameterType="java.lang.Long">
+ 		select a.*,b.nickName from userFamilyRelation a left join usersAccount b on a.userId=b.id  where a.familyId=#{familyId}
+ 	</select>
  	<select id="getFamilyByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
  		select * from userFamilyRelation where userId=#{userId}
  	</select>
