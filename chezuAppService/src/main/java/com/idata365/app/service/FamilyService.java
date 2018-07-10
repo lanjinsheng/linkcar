@@ -332,7 +332,7 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
 		familyParamStatusBean.setMsgId(bean.getMsgId());
-		familyParamStatusBean.setStatus(3);//状态  1:待确认  2:被拒绝  3:通过
+		familyParamStatusBean.setStatus(1);//状态  1:通过  -1:被拒绝  0:其他
 		this.familyMapper.updateInviteStatus(familyParamStatusBean);
 		
 		int inviteType = this.familyMapper.queryInviteType(bean.getMsgId());
@@ -363,7 +363,7 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		FamilyParamBean familyParamStatusBean = new FamilyParamBean();
 		familyParamStatusBean.setMsgId(bean.getMsgId());
-		familyParamStatusBean.setStatus(2);//状态  1:待确认  2:被拒绝  3:通过
+		familyParamStatusBean.setStatus(-1);//状态  1:通过  -1:被拒绝  0:其他
 		this.familyMapper.updateInviteStatus(familyParamStatusBean);
 		
 		int inviteType = this.familyMapper.queryInviteType(bean.getMsgId());

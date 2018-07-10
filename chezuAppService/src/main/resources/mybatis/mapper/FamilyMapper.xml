@@ -90,7 +90,7 @@
       -->
  
  	<insert id="saveFamilyInvite" parameterType="com.idata365.app.entity.FamilyInviteParamBean" useGeneratedKeys="true" keyProperty="id" >
- 		insert into familyInvite(familyId, memberUserId, inviteType, createTime, leaveWord,status) values(#{familyId}, #{userId}, #{inviteType}, #{createTime}, #{msgStr},1)
+ 		insert into familyInvite(familyId, memberUserId, inviteType, createTime, leaveWord,status) values(#{familyId}, #{userId}, #{inviteType}, #{createTime}, #{msgStr},0)
  	</insert>
  	
     <select id="queryApplyInfo" resultType="com.idata365.app.entity.FamilyInviteBean" parameterType="com.idata365.app.entity.FamilyInviteParamBean">

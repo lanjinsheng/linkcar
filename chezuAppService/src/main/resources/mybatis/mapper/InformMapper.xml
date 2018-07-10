@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.InformMapper">
+
+	<select id="informTypeList" resultType="java.util.HashMap">
+		select * from dicInform order by id
+	</select>
+	
+	<insert id="submitInform" parameterType="java.util.HashMap" >
+       INSERT INTO informLogs
+            (informId,informValue,plaintiffId,defendantId,createTime,remark) 
+        VALUES
+            (#{informId},#{informValue},#{plaintiffId},#{defendantId},now(),#{remark})
+    </insert>
+    
+</mapper>
