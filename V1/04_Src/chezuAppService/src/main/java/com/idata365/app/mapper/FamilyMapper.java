@@ -142,7 +142,8 @@ public interface FamilyMapper {
 	public int countUnReadChats(FamilyParamBean bean);
 
 	public List<Map<String, Object>> getFamilyUsers(@Param("familyId") Long familyId);
-
+	public List<Map<String, Object>> getFamilyUsersMoreInfo(@Param("familyId") Long familyId);
+	
 	public List<Map<String, Object>> getFamilyByUserId(@Param("userId") Long userId);
 
 	public int queryTaskFlag(FamilyParamBean bean);
