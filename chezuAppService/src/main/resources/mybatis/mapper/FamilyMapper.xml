@@ -130,11 +130,11 @@
  	</select>
  	
  	<select id="countInviteByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=1 and inviteType=1
+ 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=0 and inviteType=1
  	</select>
  	
  	<select id="countRecruitByUserId" resultType="int" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=1 and inviteType=2
+ 		select count(id) from familyInvite where memberUserId=#{userId} and familyId=#{familyId} and status=0 and inviteType=2
  	</select>
  	
  	<delete id="delInviteByUserId" parameterType="com.idata365.app.entity.FamilyParamBean">

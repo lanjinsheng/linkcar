@@ -82,7 +82,7 @@ public class FamilyController extends BaseController {
 	}
 	
 	/**
-	 * 查看家族邀请
+	 * 查看家族邀请(招募)
 	 * 
 	 * @param bean
 	 * @return
@@ -131,6 +131,7 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 	
+	//退出家族
 	@RequestMapping("/family/quitFromFamily")
 	public Map<String, Object> quitFromFamily(@RequestBody FamilyParamBean reqBean) {
 		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
@@ -152,6 +153,7 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(resultList);
 	}
 
+	//通过邀请码查询家族
 	@RequestMapping("/family/findFamilyByCode")
 	public Map<String, Object> findFamilyByCode(@RequestBody FamilyParamBean reqBean) {
 		Long userId = super.getUserId();
@@ -166,6 +168,7 @@ public class FamilyController extends BaseController {
 		}
 	}
 
+	//通过名字查询家族
 	@RequestMapping("/family/queryFamilyByName")
 	public Map<String, Object> queryFamilyByName(@RequestBody FamilyParamBean reqBean) {
 		List<FamilyRandResultBean> result = new ArrayList<>();
