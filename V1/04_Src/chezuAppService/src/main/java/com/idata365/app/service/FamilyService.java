@@ -546,11 +546,11 @@ public class FamilyService extends BaseService<FamilyService> {
 		if(bean.getInviteType()==1) {
 			dealtMsg(userInfo, inviteId, toUserId, MessageEnum.INVITE_FAMILY);
 		}else {
-			UsersAccount usersAccount = userInfoService.getUsersAccount(toUserId);
-			UserInfo info = new UserInfo();
-			info.setUserAccount(usersAccount);
-			Message message = messageService.buildReveiceInviteMessage(info.getId(), info.getPhone(), info.getNickName(),familyName,
-					toUserId, inviteId,  MessageEnum.REVEICE_INVITE);
+//			UsersAccount usersAccount = userInfoService.getUsersAccount(toUserId);
+//			UserInfo info = new UserInfo();
+//			info.setUserAccount(usersAccount);
+			Message message = messageService.buildReveiceInviteMessage(userInfo.getId(), userInfo.getPhone(), userInfo.getNickName(),familyName,
+					bean.getUserId(), inviteId,  MessageEnum.REVEICE_INVITE);
 			// 插入消息
 			messageService.insertMessage(message,  MessageEnum.REVEICE_INVITE);
 			// 推送消息

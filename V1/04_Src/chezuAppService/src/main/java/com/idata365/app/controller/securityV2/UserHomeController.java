@@ -18,6 +18,7 @@ import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.serviceV2.InteractService;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
 
@@ -101,6 +102,16 @@ public class UserHomeController extends BaseController {
 		int canStealPower = interactService.carPoolStealStatus(ownerId,userId);
 		rtMap.put("stoleIconStatus", String.valueOf(canStealPower));
 		rtMap.put("peccancyIconStatus", String.valueOf(canPayTicket));
+		
+		Map<String,Object> param=new HashMap<String,Object>();
+		param.put("userIdA", this.getUserId());
+		param.put("userIdB", userId);
+		param.put("daystamp", DateTools.getYYYY_MM_DD());
+		if(interactService.hadComeOn(param)>0){
+			rtMap.put("isLiked", "1");
+		}else {
+			rtMap.put("isLiked", "0");
+		}
 		
 		return ResultUtils.rtSuccess(rtMap);
 	}
