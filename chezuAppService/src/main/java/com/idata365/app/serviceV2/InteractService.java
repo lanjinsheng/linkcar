@@ -356,15 +356,15 @@ public class InteractService extends BaseService<InteractService> {
 //				最后的晚餐 给您缴了罚金 20点动力
 				int type=log.getEventType();
 				if(type==InteractConstant.STEAL_POWER){
-					m.put("log", log.getUserNameA()+" 偷取您的动力"+log.getSomeValue()+"点");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 偷取您的动力"+log.getSomeValue()+"点");
 				}else if(type==InteractConstant.CLICK_COMEON){
-					m.put("log", log.getUserNameA()+" 给您点了赞");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 给您点了赞");
 				}else if(type==InteractConstant.STICK_PECCANCY){
-					m.put("log", log.getUserNameA()+" 给您的车贴了条");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 给您的车贴了条");
 				}else if(type==InteractConstant.PAY_PECCANCY_SELF || type==InteractConstant.PAY_PECCANCY_OTHER){
-					m.put("log", log.getUserNameA()+" 给您缴了罚金"+log.getSomeValue()+"点动力");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 给您缴了罚金"+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
-					m.put("log", log.getUserNameA()+" 帮您交了罚金"+log.getSomeValue()+"点动力");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您交了罚金"+log.getSomeValue()+"点动力");
 				}
 				rtList.add(m);
 			}
@@ -399,16 +399,16 @@ public class InteractService extends BaseService<InteractService> {
 //					我向 最后的晚餐缴了罚金 20点动力
 				int type=log.getEventType();
 				if(type==InteractConstant.STEAL_POWER){
-					m.put("log", "偷取了 "+log.getUserNameB()+" "+log.getSomeValue()+"点动力");
+					m.put("log", "偷取了 "+String.format("【%s】",log.getUserNameB())+" "+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.CLICK_COMEON){
-					m.put("log","给 "+log.getUserNameB()+" 点了赞");
+					m.put("log","给 "+String.format("【%s】",log.getUserNameB())+" 点了赞");
 				}else if(type==InteractConstant.STICK_PECCANCY){
-					m.put("log", "给 "+log.getUserIdB()+" 贴了罚单");
+					m.put("log", "给 "+String.format("【%s】",log.getUserNameB())+" 贴了罚单");
 				}else if(type==InteractConstant.PAY_PECCANCY_SELF || type==InteractConstant.PAY_PECCANCY_OTHER){
-					m.put("log", "向 "+log.getUserNameB()+"缴了罚金"+log.getSomeValue()+"点动力");
+					m.put("log", "向 "+String.format("【%s】",log.getUserNameB())+"缴了罚金"+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					//有问题
-					m.put("log", "帮 "+log.getUserNameB()+"缴了罚金"+log.getSomeValue()+"点动力");
+					m.put("log", "帮 "+String.format("【%s】",log.getUserNameB())+"缴了罚金"+log.getSomeValue()+"点动力");
 				}
 				rtList.add(m);
 			}
@@ -444,16 +444,16 @@ public class InteractService extends BaseService<InteractService> {
 //				最后的晚餐 给TA缴了罚金 20点动力
 				int type=log.getEventType();
 				if(type==InteractConstant.STEAL_POWER){
-					m.put("log", log.getUserNameA() +" 偷取TA的动力 "+log.getSomeValue()+"点");
+					m.put("log",String.format("【%s】",log.getUserNameA())  +" 偷取TA的动力 "+log.getSomeValue()+"点");
 				}else if(type==InteractConstant.CLICK_COMEON){
-					m.put("log",log.getUserNameA() +" 给TA点了赞");
+					m.put("log",String.format("【%s】",log.getUserNameA()) +" 给TA点了赞");
 				}else if(type==InteractConstant.STICK_PECCANCY){
-					m.put("log", log.getUserNameA() +" 给TA的车贴了罚单");
+					m.put("log", String.format("【%s】",log.getUserNameA()) +" 给TA的车贴了罚单");
 				}else if(type==InteractConstant.PAY_PECCANCY_SELF || type==InteractConstant.PAY_PECCANCY_OTHER){
-					m.put("log", log.getUserNameA()+"向TA缴了罚金"+log.getSomeValue()+"点动力");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 向TA缴了罚金"+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					//有问题
-					m.put("log", log.getUserNameA()+"帮TA缴了罚金"+log.getSomeValue()+"点动力");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮TA缴了罚金"+log.getSomeValue()+"点动力");
 				}
 				rtList.add(m);
 			}
