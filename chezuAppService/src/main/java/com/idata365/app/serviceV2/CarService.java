@@ -164,6 +164,7 @@ public class CarService extends BaseService<CarService> {
 					rtMap.put("nick", approve.get("nickName"));
 					rtMap.put("imgUrl", baseUrl+approve.get("imgUrl"));
 					rtMap.put("approveId", approve.get("id"));
+					rtMap.put("userId", approve.get("passengerId"));
 					rtList.add(rtMap);
 		}
 		return rtList;
