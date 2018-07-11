@@ -57,6 +57,7 @@ import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ImNotifyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
+import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuImService;
@@ -90,6 +91,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	private ChezuImService chezuImService;
 	@Autowired
 	private ImNotifyMapper imNotifyMapper;
+	@Autowired
+	private UserMissionLogsMapper userMissionLogsMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -975,7 +978,15 @@ public class FamilyService extends BaseService<FamilyService> {
 		} else {
 			resultBean.setReadFlag(0);
 		}
-
+		
+		// 任务已完成未领取
+		int i = userMissionLogsMapper.queryFinishedCount(bean.getUserId());
+		if (i > 0) {
+			resultBean.setMissionHave(1);
+		} else {
+			resultBean.setMissionHave(0);
+		}
+		
 		return resultBean;
 	}
 
