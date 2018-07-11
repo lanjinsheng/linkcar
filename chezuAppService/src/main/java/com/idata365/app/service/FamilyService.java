@@ -52,6 +52,7 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ImNotifyMapper;
@@ -61,6 +62,7 @@ import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuImService;
+import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
@@ -93,6 +95,10 @@ public class FamilyService extends BaseService<FamilyService> {
 	private ImNotifyMapper imNotifyMapper;
 	@Autowired
 	private UserMissionLogsMapper userMissionLogsMapper;
+	@Autowired
+	private InteractService interactService;
+	@Autowired
+	private CarpoolMapper carpoolMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -987,6 +993,12 @@ public class FamilyService extends BaseService<FamilyService> {
 			resultBean.setMissionHave(0);
 		}
 		
+		//罚单数量
+		resultBean.setPastesNum(interactService.getUserPeccancyCount(bean.getUserId()));
+		//是否搭车
+		resultBean.setWaitHave(carpoolMapper.waitHave(bean.getUserId()));
+		//乘客数量
+		resultBean.setSitsNum(carpoolMapper.querySitsNum(bean.getUserId()));
 		return resultBean;
 	}
 

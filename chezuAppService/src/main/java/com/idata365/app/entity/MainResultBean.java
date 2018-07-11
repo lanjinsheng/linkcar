@@ -13,6 +13,15 @@ public class MainResultBean
 	//任务未领取
 	private int missionHave;
 	
+	//罚单数量
+	private int pastesNum;
+	
+	//用户是否搭车
+	private int waitHave;
+	
+	//乘客数量
+	private int sitsNum;
+	
 	//1表弹出新手引导；0表不需要弹出
 	private int readFlag;
 
@@ -63,6 +72,29 @@ public class MainResultBean
 	public void setMissionHave(int missionHave) {
 		this.missionHave = missionHave;
 	}
-	
+
+	public int getPastesNum() {
+		return pastesNum;
+	}
+
+	public void setPastesNum(int pastesNum) {
+		this.pastesNum = pastesNum;
+	}
+
+	public int getWaitHave() {
+		return waitHave;
+	}
+
+	public void setWaitHave(int waitHave) {
+		this.waitHave = waitHave;
+	}
+
+	public int getSitsNum() {
+		return sitsNum;
+	}
+
+	public void setSitsNum(int sitsNum) {
+		this.sitsNum = sitsNum;
+	}
 	
 }

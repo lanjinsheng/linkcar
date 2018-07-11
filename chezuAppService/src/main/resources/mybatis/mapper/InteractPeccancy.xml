@@ -28,6 +28,13 @@
        		payStatus=0 and endLong<![CDATA[>]]>${endLong}) a left join usersAccount b
        		on a.lawManId=b.id
    </select>   
+   
+   <select id="getUserPeccancyCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+     select count(1)
+       		FROM  interactPeccancy  where lawBreakerId=${lawBreakerId} and 
+       		payStatus=0 and endLong<![CDATA[>]]>${endLong}
+   </select> 
+   
    <select id="isCanPayTicket" resultType="java.lang.Integer" >
       	select count(1) from interactPeccancy where lawBreakerId=#{userId} and now()>endTime and payStatus=0
    </select>
