@@ -9,7 +9,8 @@
      </select>
      
       <select id="getCarpoolApproveByDriver" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-       SELECT a.*,b.nickName from carpoolApprove a left join usersAccount b on a.passengerId=b.id where a.driverId=#{driverId}  
+       SELECT a.*,b.nickName,b.imgUrl  from carpoolApprove a left join usersAccount b on a.passengerId=b.id 
+       where a.driverId=#{driverId}  
         and approveStatus=0
      </select>
     <insert id="submitCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
