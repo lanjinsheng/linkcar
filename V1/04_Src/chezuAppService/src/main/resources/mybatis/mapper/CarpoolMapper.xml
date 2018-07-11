@@ -33,6 +33,6 @@
        update    
             carpool
            set isComplete=1,getOffTime=now() where  userCarLogsId=#{userCarLogsId}
-           and passengerId=#{passengerId}
+           and passengerId=#{passengerId} and isComplete=0
     </update>
 </mapper>
