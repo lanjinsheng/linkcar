@@ -154,7 +154,7 @@ public class CarService extends BaseService<CarService> {
 		return rtList;
 	}
 	
-	public List<Map<String,Object>>  getCarpoolApprove(Long userId){
+	public List<Map<String,Object>>  getCarpoolApprove(Long userId,String baseUrl){
 		List<Map<String,Object>> rtList=new ArrayList<>();
 		Map<String,Object> m=new HashMap<>();
 		m.put("driverId", userId);
@@ -162,6 +162,7 @@ public class CarService extends BaseService<CarService> {
 		for(Map<String,Object> approve:approveList){
 			Map<String,Object> rtMap=new HashMap<>();
 					rtMap.put("nick", approve.get("nickName"));
+					rtMap.put("imgUrl", baseUrl+approve.get("imgUrl"));
 					rtMap.put("approveId", approve.get("id"));
 					rtList.add(rtMap);
 		}
