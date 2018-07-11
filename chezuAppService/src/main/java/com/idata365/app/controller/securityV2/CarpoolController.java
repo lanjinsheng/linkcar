@@ -52,7 +52,7 @@ public class CarpoolController extends BaseController {
 	Map<String, Object> getCarpoolApprove(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
-		List<Map<String,Object>> rtList=carService.getCarpoolApprove(userId);
+		List<Map<String,Object>> rtList=carService.getCarpoolApprove(userId,this.getImgBasePath());
 		Map<String,Object> rtMap=new HashMap<>();
 		rtMap.put("approveList", rtList);
 		return ResultUtils.rtSuccess(rtMap);
