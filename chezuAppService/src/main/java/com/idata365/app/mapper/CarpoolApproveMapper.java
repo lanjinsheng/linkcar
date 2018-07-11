@@ -17,6 +17,8 @@ public interface CarpoolApproveMapper {
 	
 	int submitCarpoolApprove(CarpoolApprove carpoolApprove);
 	
+	int getCarpoolApproveNum(@Param("driverId") Long driverId);
+	
 	int applyCarpoolApprove(CarpoolApprove carpoolApprove);
 	int rejectCarpoolApprove(@Param("id") Long id);
 	

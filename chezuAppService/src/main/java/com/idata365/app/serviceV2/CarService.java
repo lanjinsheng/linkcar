@@ -52,10 +52,17 @@ public class CarService extends BaseService<CarService> {
 	 * 获取家族成员车辆顺风乘坐情况
 	 * @param userId
 	 */
-	public List<Map<String,Object>> getFamilyMemberCarSeats(Long userId,String imgBase){
+	public  Map<String,Object>  getFamilyMemberCarSeats(Long userId,String imgBase){
+		 Map<String,Object> dataMap=new HashMap<>();
 		List<Map<String,Object>> rtList=new ArrayList<>();
 		List<Map<String, Object>> list=familyMapper.getFamilyByUserId(userId);
 		String nowTime=DateTools.getYYYYMMDDMMSS();
+		int sharingMyPoint=0;
+		int i=carpoolApproveMapper.getCarpoolApproveNum(userId);
+		if(i>0){
+			sharingMyPoint=1;
+		}
+		dataMap.put("sharingMyPoint", sharingMyPoint);
 		for(Map<String,Object> map:list){//家族循环
 			Long familyId =Long.valueOf(map.get("familyId").toString());
 			List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
@@ -63,7 +70,8 @@ public class CarService extends BaseService<CarService> {
 				Map<String,Object> rtMap=new HashMap<>();
 				Long memberId=Long.valueOf(user.get("userId").toString());
 				if(memberId.longValue()==userId.longValue()){
-					//自己就算了
+					//自己就算了，查看下自己的是否有客人申请未处理
+                    //sharingMyPoint 
 					continue;
 				}
 				//查询车辆信息
@@ -101,7 +109,8 @@ public class CarService extends BaseService<CarService> {
 					rtList.clear();
 					rtMap.put("tabType", 2);
 					rtList.add(rtMap);
-					return rtList;
+					dataMap.put("carsList", rtList);
+					return dataMap;
 				}else{
 					//查看是否申请在审核中
 					Map<String,Object> m=new HashMap<>();
@@ -117,7 +126,8 @@ public class CarService extends BaseService<CarService> {
 				}
 			}
 		}
-		return rtList;
+		dataMap.put("carsList", rtList);
+		return dataMap;
 		
 	}
 	/**
@@ -171,17 +181,23 @@ public class CarService extends BaseService<CarService> {
 		return rtList;
 	}
 	@Transactional
-	public boolean submitCarpoolApprove(Long userId,Long sharingId){
+	public int  submitCarpoolApprove(Long userId,Long sharingId){
 		UserCarLogs car=userCarLogsMapper.getUserCarLogById(sharingId);
 		CarpoolApprove approve=new CarpoolApprove();
 		if(car==null)
-			return false;
+			return 2;//无车
+		
+		//判断自己是否已经是顺风车司机了
+		int isDriver=carpoolMapper.isDriver(car.getId());
+		if(isDriver>0){
+			return 3;
+		}
 		approve.setCarId(car.getCarId());
 		approve.setDriverId(car.getUserId());
 		approve.setPassengerId(userId);
 		approve.setUserCarLogsId(car.getId());
 		carpoolApproveMapper.submitCarpoolApprove(approve);
-		return true;
+		return 1;
 	}
 	@Transactional
 	public boolean applyCarpoolApprove(Long userId,Long approveId){
