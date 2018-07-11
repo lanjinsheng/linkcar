@@ -221,7 +221,8 @@ public class CarService extends BaseService<CarService> {
 	@Transactional
 	public boolean offCar(Long userId,Long sharingId){
 		Carpool carpool=new Carpool();
-		carpool.setId(sharingId);
+		carpool.setUserCarLogsId(sharingId);
+		carpool.setPassengerId(userId);
 		int i=carpoolMapper.offCar(carpool);
 		return i==1;
 	}
