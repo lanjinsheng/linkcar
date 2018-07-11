@@ -329,7 +329,7 @@ public class InteractService extends BaseService<InteractService> {
 			for(InteractLogs log:logs){
 			
 				Map<String,Object> m=new HashMap<String,Object>();
-				m.put("id", log.getId());
+				m.put("logId", log.getId());
 				long time=System.currentTimeMillis()-log.getCreateTime().getTime();
 				long rtTime=time/60000;
 				if(rtTime<60){
