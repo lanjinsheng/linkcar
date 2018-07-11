@@ -161,6 +161,15 @@ public class InteractService extends BaseService<InteractService> {
 		 return list;
 	}
 	
+	@Transactional
+	public int getUserPeccancyCount(Long userId){
+		 Map<String,Object> pamMap=new HashMap<String,Object>();
+		 pamMap.put("lawBreakerId", userId);
+		 pamMap.put("endLong", System.currentTimeMillis());
+		 int i = interactPeccancyMapper.getUserPeccancyCount(pamMap);
+		 
+		 return i;
+	}
 	
 	@Transactional
 	public Map<String,Object> stealFromGarage(Long userId,Long  carUserId,String nickName){
