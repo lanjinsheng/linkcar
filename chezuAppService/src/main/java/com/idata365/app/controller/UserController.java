@@ -1,11 +1,21 @@
 package com.idata365.app.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +25,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.idata365.app.config.SystemProperties;
 import com.idata365.app.constant.NameConstant;
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.enums.UserImgsEnum;
+import com.idata365.app.partnerApi.QQSSOTools;
+import com.idata365.app.partnerApi.SSOTools;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.UserInfoService;
@@ -169,10 +183,25 @@ public class UserController extends BaseController {
 		//重新登录，更新token
 		loginRegService.insertToken(account.getId(), token);
 		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
-		//返回信息
+		String headImg = bean.get("headImg").toString();
+		String nickName = bean.get("nickName").toString();
+		
+		//处理头像
+		try {
+			doUpdateImg(headImg,account.getId());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//处理昵称
+		account.setNickName(nickName);
+		loginRegService.updateUserNickName(account);
+		
+		// 返回信息
 		rtMap.put("userId", account.getId());
-		rtMap.put("nickName", bean.get("nickName").toString());
-		rtMap.put("headImg", bean.get("headImg").toString());
+		rtMap.put("nickName", account.getNickName());
+		rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
 		rtMap.put("userPhone", account.getPhone());
 		
 		Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
@@ -207,6 +236,7 @@ public class UserController extends BaseController {
 	public Map<String, Object> bindPhone1(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
+		rtMap.put("isAuthenticated", "0");
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
 				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("openId")))
 			return ResultUtils.rtFailParam(null);
@@ -217,6 +247,8 @@ public class UserController extends BaseController {
 		LOG.info("phone================================"+phone);
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
+		String headImg = bean.get("headImg").toString();
+		String nickName = bean.get("nickName").toString();
 		String status = LoginRegService.VC_ERR;
 		if (verifyCode.equals(systemProperties.getNbcode())) {
 			// 测试使用万能验证码
@@ -228,46 +260,46 @@ public class UserController extends BaseController {
 			// 校验码通过
 			UsersAccount account = loginRegService.getUserByPhone(phone);
 			if (account!=null) {
+				rtMap.put("status", "OK");
 				//号码已经注册，直接登录，刷新token
 				String token = "";
 				token = UUID.randomUUID().toString().replaceAll("-", "");
 				loginRegService.insertToken(account.getId(), token);
-				//返回信息
-				rtMap.put("userId", account.getId());
-				rtMap.put("nickName",bean.get("nickName").toString());
-				rtMap.put("headImg",bean.get("headImg").toString());
-				rtMap.put("userPhone", account.getPhone());
-
+				//处理昵称
+				account.setNickName(nickName);
+				loginRegService.updateUserNickName(account);
+				
 				Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
 						SignUtils.encryptHMAC(String.valueOf(account.getId())));
 				if ("1".equals(authenticated.get("IdCardIsOK")) && "1".equals(authenticated.get("VehicleTravelIsOK"))) {
 					rtMap.put("isAuthenticated", "1");
-				} else {
-					rtMap.put("isAuthenticated", "0");
 				}
 				rtMap.put("token", token);
-				rtMap.put("status", "OK");
-				//绑定三方表
-				thirdPartyLoginService.updateByOpenId(account.getId(),openId);
 			} else {
 				//号码没有注册过，注册，并去设置密码
 				rtMap.put("status", "PWD_NO");
-				String nickName = bean.get("nickName").toString();
-				String headImg = bean.get("headImg").toString();
-				UsersAccount accountBean = new UsersAccount();
-				accountBean.setImgUrl(headImg);
+				account = new UsersAccount();
+				account.setImgUrl(headImg);
 				//注册
-				String token = loginRegService.regUser(phone, "", nickName, rtMap,accountBean);
-				//绑定三方表
-				thirdPartyLoginService.updateByOpenId(accountBean.getId(),openId);
+				String token = loginRegService.regUser(phone, "", nickName, rtMap,account);
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
 				}
-				rtMap.put("token", token);
-				rtMap.put("nickName", accountBean.getNickName());
-				rtMap.put("headImg", headImg);
-				rtMap.put("isAuthenticated", "0");
 			}
+			//处理头像
+			try {
+				doUpdateImg(headImg,account.getId());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// 绑定三方表
+			thirdPartyLoginService.updateByOpenId(account.getId(), openId);
+			// 返回信息
+			rtMap.put("userId", account.getId());
+			rtMap.put("nickName", account.getNickName());
+			rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
+			rtMap.put("userPhone", account.getPhone());
 			return ResultUtils.rtSuccess(rtMap);
 		} else {
 			if (status.equals(LoginRegService.VC_ERR))
@@ -309,16 +341,17 @@ public class UserController extends BaseController {
 		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		
 		//更新密码
-		String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
-		String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
+		
 		String token = loginRegService.updateUserPwd(phone, password, rtMap);
 		if (token == null) {
 			return ResultUtils.rtFailRequest(null);
 		}
-		//返回信息
+		
+		UsersAccount account = loginRegService.getUserByPhone(phone);
+		// 返回信息
 		rtMap.put("token", token);
-		rtMap.put("nickName", nickName);
-		rtMap.put("headImg", headImg);
+		rtMap.put("nickName", account.getNickName());
+		rtMap.put("headImg", this.getImgBasePath() + account.getImgUrl());
 		rtMap.put("userPhone", phone);
 		rtMap.put("isAuthenticated", "0");
 		
@@ -594,6 +627,55 @@ public class UserController extends BaseController {
 			rtMap.put("toUrl", "");
 		}
 		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	private void doUpdateImg(String path, long userId) throws IOException {
+		URL url = new URL(path);
+	    // 打开连接
+	    URLConnection con = url.openConnection();
+	    // 输入流
+	    InputStream is = con.getInputStream();
+	    // 1K的数据缓冲
+	    byte[] bs = new byte[1024];
+	    // 读取到的数据长度
+	    int len;
+	    // 输出的文件流
+	    OutputStream os = new FileOutputStream("file");
+	    // 开始读取
+	    while ((len = is.read(bs)) != -1) {
+	      os.write(bs, 0, len);
+	    }
+	    // 完毕，关闭所有链接
+	    os.close();
+	    is.close();
+	    File file = new File("file");
+		
+		Map<String, String> rtMap = new HashMap<String, String>();
+		try {
+			String key = "";
+			if (systemProperties.getSsoQQ().equals("1")) {// 走qq
+				key = QQSSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.HEADER);
+				File dealFile = new File(systemProperties.getFileTmpDir() + "/" + key);
+				File fileParent = dealFile.getParentFile();
+				if (!fileParent.exists()) {
+					fileParent.mkdirs();
+				}
+				FileUtils.copyFile(file, dealFile);
+				QQSSOTools.saveOSS(dealFile, key);
+			} else {// 走阿里
+				// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+				key = SSOTools.createSSOUsersImgInfoKey(userId, UserImgsEnum.HEADER);
+				InputStream in = new FileInputStream(file);
+				SSOTools.saveOSS(in, key);
+				is.close();
+			}
+			rtMap.put("imgUrl", getImgBasePath() + key);
+			userInfoService.updateImgUrl(key, userId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    file.delete();
 	}
 
 }
