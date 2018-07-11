@@ -47,7 +47,7 @@ public class InformController extends BaseController {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> list = this.informService.informTypeList();
 		rtMap.put("reportList", list);
-		return ResultUtils.rtSuccess(list);
+		return ResultUtils.rtSuccess(rtMap);
 	}
 
 	/**
