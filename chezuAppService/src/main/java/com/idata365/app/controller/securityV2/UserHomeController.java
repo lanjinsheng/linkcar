@@ -17,6 +17,7 @@ import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.UserInfoService;
+import com.idata365.app.serviceV2.CarService;
 import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
@@ -35,6 +36,8 @@ public class UserHomeController extends BaseController {
 	private FamilyService familyService;
 	@Autowired
 	private InteractService interactService;
+	@Autowired
+	private CarService carService;
 	
 
 	public UserHomeController() {
@@ -86,12 +89,14 @@ public class UserHomeController extends BaseController {
 		} else {
 			rtMap.put("title", account.getNickName()+"的车库");
 		}
+		
+		Map<String, Object> car = carService.getUserCar(userId);
 		//车名
-		rtMap.put("carName", "道奇小孩车");
+		rtMap.put("carName", car.get("carName").toString());
+		//车图片
+		rtMap.put("carImgUrl", car.get("carUrl").toString());
 		//点赞次数
 		rtMap.put("likeCount", String.valueOf(interactService.queryLikeCount(userId)));
-		//车图片
-		rtMap.put("carImgUrl", "");
 		//按钮展示
 		Map<String, String> map = this.familyService.iconStatus(ownerId, userId);
 		rtMap.put("isCanInvite", map.get("isCanInvite"));
