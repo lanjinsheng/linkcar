@@ -110,6 +110,7 @@ public class CarService extends BaseService<CarService> {
 					List<CarpoolApprove> approveList=carpoolApproveMapper.getCarpoolApprove(m);
 					if(approveList!=null && approveList.size()>0){
 						applyStatus=1;
+						rtMap.put("applyStatus", applyStatus);
 					}
 					rtMap.put("tabType", 1);
 					rtList.add(rtMap);
