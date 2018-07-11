@@ -30,9 +30,8 @@ public class CarpoolController extends BaseController {
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
 		String imgBase=this.getImgBasePath();
-		List<Map<String,Object>> rtList=carService.getFamilyMemberCarSeats(userId, imgBase);
-		Map<String,Object> rtMap=new HashMap<>();
-		rtMap.put("carsList", rtList);
+//		List<Map<String,Object>> rtList=carService.getFamilyMemberCarSeats(userId, imgBase);
+		Map<String,Object> rtMap=carService.getFamilyMemberCarSeats(userId, imgBase);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 	
@@ -65,10 +64,12 @@ public class CarpoolController extends BaseController {
 		Long userId=this.getUserId();
 		//sharingId就是 userCarLogs的id
 		Long sharingId=Long.valueOf(requestBodyParams.get("sharingId").toString());
-		boolean insert=carService.submitCarpoolApprove(userId,sharingId);
-		if(!insert)
+		int subStatus=carService.submitCarpoolApprove(userId,sharingId);
+		if(subStatus==2)
 		{
-			return ResultUtils.rtFailParam(null,"提交失败");
+			return ResultUtils.rtFailParam(null,"没有可用车辆");
+		}else if(subStatus==3){
+			return ResultUtils.rtFailParam(null,"你已经是顺风车司机");
 		}
 		 
 		return ResultUtils.rtSuccess(null);

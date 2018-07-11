@@ -17,6 +17,7 @@ public interface CarpoolMapper {
 	int offCar(Carpool carpool);
 	
 	int getPassengersNum(@Param("userCarLogsId") Long userCarLogsId);
+	int isDriver(@Param("driverId") Long driverId);
 	
 	int waitHave(@Param("userId") Long userId);
 	
