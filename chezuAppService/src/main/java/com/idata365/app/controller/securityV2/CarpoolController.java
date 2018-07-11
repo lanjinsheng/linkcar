@@ -63,6 +63,7 @@ public class CarpoolController extends BaseController {
 	Map<String, Object> submitCarpoolApprove(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
+		//sharingId就是 userCarLogs的id
 		Long sharingId=Long.valueOf(requestBodyParams.get("sharingId").toString());
 		boolean insert=carService.submitCarpoolApprove(userId,sharingId);
 		if(!insert)
@@ -107,6 +108,7 @@ public class CarpoolController extends BaseController {
 	Map<String, Object> offCar(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
+		//sharingId 就是userCarLogs的id
 		Long sharingId=Long.valueOf(requestBodyParams.get("sharingId").toString());
 		boolean update=carService.offCar(userId,sharingId);
 		if(!update)
