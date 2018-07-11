@@ -44,7 +44,9 @@ public class InformController extends BaseController {
 	@RequestMapping("/queryInformTypeList")
 	public Map<String, Object> queryInformTypeList(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> list = this.informService.informTypeList();
+		rtMap.put("reportList", list);
 		return ResultUtils.rtSuccess(list);
 	}
 
