@@ -12,6 +12,10 @@
        SELECT  count(1) from carpool where userCarLogsId=#{userCarLogsId} and isComplete=0
      </select>  
      
+     <select id="isDriver" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT  count(1) from carpool where driverId=#{driverId} and isComplete=0
+     </select> 
+     
      <select id="waitHave" resultType="java.lang.Integer" parameterType="java.lang.Long">
        select count(1) from carpool where passengerId=#{userId} and now()>createTime and getOffTime>now() and isComplete=0
      </select> 
