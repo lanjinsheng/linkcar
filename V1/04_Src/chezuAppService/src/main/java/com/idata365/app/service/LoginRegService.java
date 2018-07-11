@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.NameConstant;
 import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.FamilyParamBean;
@@ -43,6 +44,7 @@ import com.idata365.app.remote.ChezuService;
 import com.idata365.app.service.common.AchieveCommService;
 import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.RandUtils;
 import com.idata365.app.util.SignUtils;
 
 @Service
@@ -279,7 +281,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 		account.setNickName(nickName);
 		int hadInsert=usersAccountMapper.insertUser(account);
 		while(hadInsert==0){
-			nickName=nickName+System.currentTimeMillis();
+			nickName=nickName+RandUtils.generateRand(1, 100);
 			account.setNickName(nickName);
 			hadInsert=usersAccountMapper.insertUser(account);
 		}
@@ -372,5 +374,15 @@ public class LoginRegService extends BaseService<LoginRegService>
 		}
 		while (strValue.length() < 6);
 		return strValue;
+	}
+	
+	@Transactional
+	public int updateUserNickName(UsersAccount account) {
+		int i = usersAccountMapper.hadAccountByNick(account.getNickName());
+		if (i > 0) {
+			account.setNickName(account.getNickName()+RandUtils.generateRand(1, 100));
+		}
+		usersAccountMapper.updateNickName(account);
+		return 0;
 	}
 }
