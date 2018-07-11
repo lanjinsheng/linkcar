@@ -171,13 +171,8 @@ public class UserController extends BaseController {
 		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		//返回信息
 		rtMap.put("userId", account.getId());
-		rtMap.put("nickName",
-				(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-						: account.getNickName()) == null ? bean.get("nickName").toString()
-								: (account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
-										: account.getNickName()));
-		rtMap.put("headImg",
-				account.getImgUrl() == null ?bean.get("headImg").toString(): this.getImgBasePath() + account.getImgUrl());
+		rtMap.put("nickName", bean.get("nickName").toString());
+		rtMap.put("headImg", bean.get("headImg").toString());
 		rtMap.put("userPhone", account.getPhone());
 		
 		Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
@@ -239,8 +234,8 @@ public class UserController extends BaseController {
 				loginRegService.insertToken(account.getId(), token);
 				//返回信息
 				rtMap.put("userId", account.getId());
-				rtMap.put("nickName",account.getNickName());
-				rtMap.put("headImg",account.getImgUrl() == null ? bean.get("headImg").toString():this.getImgBasePath() + account.getImgUrl());
+				rtMap.put("nickName",bean.get("nickName").toString());
+				rtMap.put("headImg",bean.get("headImg").toString());
 				rtMap.put("userPhone", account.getPhone());
 
 				Map<String, String> authenticated = chezuAccountService.isAuthenticated(account.getId(),
@@ -257,9 +252,8 @@ public class UserController extends BaseController {
 			} else {
 				//号码没有注册过，注册，并去设置密码
 				rtMap.put("status", "PWD_NO");
-				String nickName = bean.get("nickName").toString()==null?NameConstant.getNickName():bean.get("nickName").toString();
-				
-				String headImg = bean.get("headImg").toString()==null?"":bean.get("headImg").toString();
+				String nickName = bean.get("nickName").toString();
+				String headImg = bean.get("headImg").toString();
 				UsersAccount accountBean = new UsersAccount();
 				accountBean.setImgUrl(headImg);
 				//注册
