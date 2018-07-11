@@ -32,6 +32,7 @@
     <update id="offCar"  parameterType="com.idata365.app.entity.Carpool" >
        update    
             carpool
-           set isComplete=1,getOffTime=now() where  id=#{id}
+           set isComplete=1,getOffTime=now() where  userCarLogsId=#{userCarLogsId}
+           and passengerId=#{passengerId}
     </update>
 </mapper>
