@@ -70,8 +70,7 @@ public class CarService extends BaseService<CarService> {
 				Map<String,Object> rtMap=new HashMap<>();
 				Long memberId=Long.valueOf(user.get("userId").toString());
 				if(memberId.longValue()==userId.longValue()){
-					//自己就算了，查看下自己的是否有客人申请未处理
-                    //sharingMyPoint 
+				
 					continue;
 				}
 				//查询车辆信息
