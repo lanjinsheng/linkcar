@@ -29,7 +29,7 @@
             carpoolApprove
             set approveStatus=1,approveTime=now() where id=#{id}
     </update>
-     <update id="clearCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
+     <update id="clearOtherCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
        update
             carpoolApprove
             set approveStatus=-1,approveTime=now() where id!=#{id} and passengerId=#{passengerId}
