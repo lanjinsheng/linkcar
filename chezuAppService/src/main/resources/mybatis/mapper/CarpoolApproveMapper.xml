@@ -13,6 +13,10 @@
        where a.driverId=#{driverId}  
         and approveStatus=0
      </select>
+       <select id="getCarpoolApproveNum" resultType="java.lang.Integer" parameterType="java.lang.Long">
+       SELECT * from carpoolApprove where driverId=#{driverId}  
+     </select> 
+     
     <insert id="submitCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
        INSERT INTO 
             carpoolApprove
