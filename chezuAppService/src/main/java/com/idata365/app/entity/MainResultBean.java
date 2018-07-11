@@ -10,6 +10,9 @@ public class MainResultBean
 	//聊天未读数目
 	private int chatsNum;
 	
+	//任务未领取
+	private int missionHave;
+	
 	//1表弹出新手引导；0表不需要弹出
 	private int readFlag;
 
@@ -52,4 +55,14 @@ public class MainResultBean
 	{
 		this.readFlag = readFlag;
 	}
+
+	public int getMissionHave() {
+		return missionHave;
+	}
+
+	public void setMissionHave(int missionHave) {
+		this.missionHave = missionHave;
+	}
+	
+	
 }
