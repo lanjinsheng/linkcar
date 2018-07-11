@@ -223,6 +223,18 @@ public class CarService extends BaseService<CarService> {
 		int i=carpoolMapper.offCar(carpool);
 		return i==1;
 	}
+	
+	//查询车辆信息
+	@Transactional
+	public Map<String,Object> getUserCar(Long userId){
+		String nowTime=DateTools.getYYYYMMDDMMSS();
+		Map<String,Object> map=new HashMap<>();
+		map.put("userId", userId);
+	    map.put("nowTime", nowTime);
+		Map<String,Object> car=userCarLogsMapper.getUserCar(map);
+		return car;
+	}
+	
 	public static void main(String []args) {
 		System.out.println(2+UUID.randomUUID().toString().replaceAll("-", ""));
 	}
