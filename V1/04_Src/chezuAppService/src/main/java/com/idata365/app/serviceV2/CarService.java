@@ -67,16 +67,20 @@ public class CarService extends BaseService<CarService> {
 			sharingMyPoint=1;
 		}
 		dataMap.put("sharingMyPoint", sharingMyPoint);
+		Map<Long,Integer> usersKeys=new HashMap<>();
 		for(Map<String,Object> map:list){//家族循环
 			Long familyId =Long.valueOf(map.get("familyId").toString());
 			List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
 			for(Map<String,Object> user:users){//成员循环
 				Map<String,Object> rtMap=new HashMap<>();
 				Long memberId=Long.valueOf(user.get("userId").toString());
+				if(usersKeys.get(memberId)!=null){
+					continue;//重複了
+				}
 				if(memberId.longValue()==userId.longValue()){
-				
 					continue;
 				}
+				usersKeys.put(memberId, 1);
 				//查询车辆信息
 				user.put("nowTime", nowTime);
 				Map<String,Object> car=userCarLogsMapper.getUserCar(user);
