@@ -12,5 +12,9 @@
          <select id="getUserCarLogById" resultMap="BaseUserCarLogsMap" parameterType="java.lang.Long">
        SELECT * from userCarLogs  where id=#{id}
      </select>
-     
+     <select id="getUserCarHistory" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT a.*,b.carName,c.nickName from userCarLogs a left join dicCar b on a.carId=b.carId
+       left join usersAccount c on a.userId=c.id
+       where   a.id=#{id}
+     </select>
 </mapper>
