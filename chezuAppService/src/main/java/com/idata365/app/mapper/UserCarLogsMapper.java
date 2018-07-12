@@ -11,4 +11,6 @@ public interface UserCarLogsMapper {
  
 	public Map<String,Object> getUserCar(Map<String,Object> map);
     public UserCarLogs getUserCarLogById(@Param("id") Long id);
+    public Map<String,Object> getUserCarHistory(@Param("id") Long id);
+    
 }

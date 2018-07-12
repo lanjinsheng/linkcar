@@ -11,6 +11,8 @@ import com.idata365.app.entity.Carpool;
 public interface CarpoolMapper {
  
 	List<Map<String,Object>> getCarPool(@Param("userCarLogsId") Long userCarLogsId);
+	List<Map<String,Object>> getCarpoolRecords(Map<String,Object> map);
+
 	
 	int insertCarpool(Carpool carpool);
 	
