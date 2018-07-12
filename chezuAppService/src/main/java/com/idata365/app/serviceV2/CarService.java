@@ -274,7 +274,7 @@ public class CarService extends BaseService<CarService> {
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.CARPOOL_APPLY);
  		//用定时器推送
-        messageService.pushMessageTrans(msg,MessageEnum.CARPOOL_APPLY);
+        messageService.pushMessageNotrans(msg,MessageEnum.CARPOOL_APPLY);
 		return 1;
 	}
 	@Transactional
@@ -308,7 +308,7 @@ public class CarService extends BaseService<CarService> {
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.CARPOOL_APPLY_PASS);
  		//用定时器推送
-        messageService.pushMessageTrans(msg,MessageEnum.CARPOOL_APPLY_PASS);
+        messageService.pushMessageNotrans(msg,MessageEnum.CARPOOL_APPLY_PASS);
 		return i==1;
 	}
 	

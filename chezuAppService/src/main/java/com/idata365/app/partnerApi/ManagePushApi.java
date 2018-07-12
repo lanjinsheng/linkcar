@@ -87,7 +87,7 @@ public class ManagePushApi {
         try {
         	String appKey=systemProperties.getJgAppKey();
         	String secret=systemProperties.getJgSecret();
-        	logger.info(appKey+"---"+secret);
+//        	logger.info(appKey+"---"+secret);
             JPushClient jpushClient = new JPushClient(systemProperties.getJgSecret(), systemProperties.getJgAppKey());
             PushPayload payload = BuildMsgAlias(message, alias, platform, extraMap);
             jpushClient.sendPush(payload);
