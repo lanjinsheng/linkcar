@@ -288,6 +288,7 @@ public class UserController extends BaseController {
 				if (token == null) {
 					return ResultUtils.rtFailRequest(null);
 				}
+				rtMap.put("token", token);
 			}
 			//处理头像
 			try {
