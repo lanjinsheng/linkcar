@@ -47,6 +47,8 @@ public class CarService extends BaseService<CarService> {
     UserCarLogsMapper userCarLogsMapper;
     @Autowired
     FamilyMapper familyMapper;
+    @Autowired
+    UsersAccountMapper UsersAccountMapper;
 	public CarService() {
 
 	}
@@ -131,6 +133,63 @@ public class CarService extends BaseService<CarService> {
 		return dataMap;
 		
 	}
+	
+	
+	/**
+	 * 获取自己搭乘的顺丰车
+	 * @param userId
+	 */
+	public  Map<String,Object>  getSelfCarpoolTravelBy(Long userId,String userNick,String imgBase){
+		 Map<String,Object> dataMap=new HashMap<>();
+			List<Map<String,Object>> rtList=new ArrayList<>();
+			String nowTime=DateTools.getYYYYMMDDMMSS();
+			int sharingMyPoint=0;
+			dataMap.put("sharingMyPoint", sharingMyPoint);
+             Map<String,Object> user=new HashMap<>();
+					Map<String,Object> rtMap=new HashMap<>();
+					Map<String,Object> carpool=carpoolMapper.getSelfTravelBy(userId);
+					if(carpool==null){
+						rtList.add(rtMap);
+						dataMap.put("carsList", rtList);
+						return dataMap;
+					}
+					//查询车辆信息
+					user.put("userId", carpool.get("driverId"));
+					user.put("nowTime", nowTime);
+					Map<String,Object> car=userCarLogsMapper.getUserCar(user);
+					rtMap.put("sharingId", String.valueOf(car.get("id")));
+					rtMap.put("nick", userNick);
+					rtMap.put("carName", String.valueOf(car.get("carName")));
+					rtMap.put("carImgUrl", String.valueOf(car.get("carUrl")));
+					
+					//查询乘坐信息
+					List<Map<String,Object>> passengers=carpoolMapper.getCarPool(Long.valueOf(car.get("id").toString()));
+					int sharingStatus=0;
+					int applyStatus=0;
+					for(Map<String,Object> passenger:passengers){
+						if(userId.longValue()==Long.valueOf(passenger.get("userId").toString()).longValue()){
+							//自己已搭乘
+							sharingStatus=1;
+							applyStatus=1;
+						}else{
+							
+						}
+						passenger.put("imgUrl", imgBase+passenger.get("imgUrl"));
+					}
+					rtMap.put("sharingStatus", sharingStatus);
+					rtMap.put("applyStatus", applyStatus);
+					rtMap.put("percentReward", (passengers.size()*10)+"%");
+					rtMap.put("sharingLists", passengers);
+					rtMap.put("passengerNum", passengers.size());
+					rtMap.put("carSeats", car.get("carSeat"));
+						//重新构建视图
+						rtMap.put("tabType", 2);
+						rtList.add(rtMap);
+						dataMap.put("carsList", rtList);
+						return dataMap;
+		
+	}
+	
 	/**
 	 * 获取自身顺风车车辆情况
 	 * @param userId
