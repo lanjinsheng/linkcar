@@ -22,6 +22,9 @@ public class MainResultBean
 	//乘客数量
 	private int sitsNum;
 	
+	//俱乐部顺风车红点
+	private int clubHave;
+	
 	//1表弹出新手引导；0表不需要弹出
 	private int readFlag;
 
@@ -95,6 +98,14 @@ public class MainResultBean
 
 	public void setSitsNum(int sitsNum) {
 		this.sitsNum = sitsNum;
+	}
+
+	public int getClubHave() {
+		return clubHave;
+	}
+
+	public void setClubHave(int clubHave) {
+		this.clubHave = clubHave;
 	}
 	
 }

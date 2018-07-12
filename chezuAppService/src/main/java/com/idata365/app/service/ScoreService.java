@@ -65,6 +65,7 @@ import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
+import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.ScoreMapper;
@@ -97,6 +98,8 @@ public class ScoreService extends BaseService<ScoreService>
 	ChezuAssetService chezuAssetService;
 	@Autowired
 	private InteractService interactService;
+	@Autowired
+    CarpoolApproveMapper carpoolApproveMapper;
 	
 	/**
 	 * 
@@ -318,6 +321,13 @@ public class ScoreService extends BaseService<ScoreService>
 		String notifyMsg = this.scoreMapper.queryFamilyNotifyMsg(bean.getFamilyId());
 		resultBean.setNotifyMsg(notifyMsg == null ? "" : notifyMsg);
 		
+		//俱乐部顺风车红点
+		int sharingMyPoint=0;
+		int j=carpoolApproveMapper.getCarpoolApproveNum(bean.getUserId());
+		if(j>0){
+			sharingMyPoint=1;
+		}
+		resultBean.setClubHave(sharingMyPoint);
 		return resultBean;
 	}
 	
