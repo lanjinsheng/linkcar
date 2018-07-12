@@ -39,6 +39,7 @@ import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.LoginRegService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.serviceV2.ThirdPartyLoginService;
+import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.SignUtils;
@@ -182,7 +183,8 @@ public class UserController extends BaseController {
 		token = UUID.randomUUID().toString().replaceAll("-", "");
 		//重新登录，更新token
 		loginRegService.insertToken(account.getId(), token);
-		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
+//		Map<String, Object> bean = new Gson().fromJson(requestBodyParams.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
+		Map<String, String> bean = GsonUtils.fromJson(requestBodyParams.get("remark").toString());
 		String headImg = bean.get("headImg").toString();
 		String nickName = bean.get("nickName").toString();
 		
@@ -246,7 +248,8 @@ public class UserController extends BaseController {
 		LOG.info("openId================================"+openId);
 		LOG.info("phone================================"+phone);
 		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
-		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
+//		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
+		Map<String, String> bean = GsonUtils.fromJson(map.get("remark").toString());
 		String headImg = bean.get("headImg").toString();
 		String nickName = bean.get("nickName").toString();
 		String status = LoginRegService.VC_ERR;
@@ -337,8 +340,6 @@ public class UserController extends BaseController {
 		String password = String.valueOf(requestBodyParams.get("password"));
 		LOG.info("openId================================"+openId);
 		LOG.info("phone================================"+phone);
-		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
-		Map<String, Object> bean = new Gson().fromJson(map.get("remark").toString(), new TypeToken<Map<String, Object>>(){}.getType());
 		
 		//更新密码
 		
