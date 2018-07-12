@@ -129,7 +129,17 @@
 		  set taskFamilyLevelDayEnd=${taskFamilyLevelDayEnd} where daystamp=#{daystamp}
 	</update>
     <!--end  家族类型 -->
-    
+        <!--begin  昨日任务清理 -->
+   	<select id="getUnFinishClearYesterday" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
+	   select * from taskSystemScoreFlag where taskClearYesterday=0
+	</select>
+	<update id="finishClearYesterdayTask" parameterType="com.idata365.entity.TaskSystemScoreFlag">
+		 update taskSystemScoreFlag
+		  set taskClearYesterday=1 where id=#{id}
+	</update>
+    <!--end  昨日任务清理 -->
+ 
+	 
     <!--begin  用户违规 -->
    	<select id="getUnFinishUserBestDriveDayEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
 	   select * from taskSystemScoreFlag where userDayScoreFlag=1
