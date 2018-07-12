@@ -5,9 +5,14 @@
     </resultMap>
     
      <select id="getCarPool" resultType="java.util.HashMap" parameterType="java.lang.Long">
-       SELECT  a.passengerId userId,b.imgUrl from carpool a left join usersAccount b on a.passengerId=b.id
+       SELECT  a.passengerId userId,b.imgUrl,b.nickName nick from carpool a left join usersAccount b on a.passengerId=b.id
         where a.userCarLogsId=#{userCarLogsId} and a.isComplete=0
      </select>
+       <select id="getSelfTravelBy" resultType="java.util.HashMap" parameterType="java.lang.Long">
+       SELECT  * from carpool  
+        where  passengerId=#{passengerId} and  isComplete=0 limit 1
+     </select>   
+     
         <select id="getPassengersNum" resultType="java.lang.Integer" parameterType="java.lang.Long">
        SELECT  count(1) from carpool where userCarLogsId=#{userCarLogsId} and isComplete=0
      </select>  
