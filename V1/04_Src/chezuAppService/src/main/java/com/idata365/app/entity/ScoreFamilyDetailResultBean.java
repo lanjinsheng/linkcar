@@ -25,7 +25,17 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	private String notifyMsg;
 	
 	private String isApplied;
+	//俱乐部顺风车红点
+	private int clubHave;
 	
+
+	public int getClubHave() {
+		return clubHave;
+	}
+
+	public void setClubHave(int clubHave) {
+		this.clubHave = clubHave;
+	}
 
 	public String getIsApplied() {
 		return isApplied;

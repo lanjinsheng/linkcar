@@ -52,6 +52,7 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.FamilyMapper;
@@ -99,6 +100,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	private InteractService interactService;
 	@Autowired
 	private CarpoolMapper carpoolMapper;
+	@Autowired
+    CarpoolApproveMapper carpoolApproveMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -1006,6 +1009,14 @@ public class FamilyService extends BaseService<FamilyService> {
 		resultBean.setWaitHave(carpoolMapper.waitHave(bean.getUserId()));
 		//乘客数量
 		resultBean.setSitsNum(carpoolMapper.querySitsNum(bean.getUserId()));
+		//俱乐部顺风车红点
+		int sharingMyPoint=0;
+		int j=carpoolApproveMapper.getCarpoolApproveNum(bean.getUserId());
+		if(j>0){
+			sharingMyPoint=1;
+		}
+		resultBean.setClubHave(sharingMyPoint);
+		
 		return resultBean;
 	}
 
