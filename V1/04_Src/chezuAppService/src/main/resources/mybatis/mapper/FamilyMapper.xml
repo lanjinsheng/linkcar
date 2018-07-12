@@ -94,7 +94,7 @@
  	</insert>
  	
     <select id="queryApplyInfo" resultType="com.idata365.app.entity.FamilyInviteBean" parameterType="com.idata365.app.entity.FamilyInviteParamBean">
-    	select t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, t2.phone as phone,t2.lastLoginTime as lastActiveTime, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, t1.status as status from familyInvite t1 
+    	select t1.leaveWord as msgStr,t1.memberUserId as userId, familyId, t2.imgUrl as imgUrl, t2.nickName as name, t2.phone as phone,t2.lastLoginTime as lastActiveTime, DATE_FORMAT(t1.createTime, '%Y.%m.%d') as applyDate, t1.status as status from familyInvite t1 
 			join usersAccount t2 on (t1.memberUserId = t2.id) where t1.id=#{msgId}
     </select>
     

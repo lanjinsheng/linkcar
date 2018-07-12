@@ -207,9 +207,9 @@ public class UserMissionService extends BaseService<UserMissionService> {
 				missionActionDesc = "已领取";
 				actionStatus = "0";
 			} else {
-				if (missionId == 6) {
-					missionActionDesc = "去认证";
-				} else if (missionId == 7) {
+				if (missionId == 4) {
+					missionActionDesc = "去分享";
+				} else if (missionId == 6 || missionId == 7) {
 					missionActionDesc = "去认证";
 				} else if (missionId == 8) {
 					missionActionDesc = "去加入";
