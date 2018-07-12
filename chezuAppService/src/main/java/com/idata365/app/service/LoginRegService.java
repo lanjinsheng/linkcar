@@ -278,7 +278,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 		account.setNickName(nickName);
 		int hadInsert=usersAccountMapper.insertUser(account);
 		while(hadInsert==0){
-			nickName=nickName+RandUtils.generateRand(1, 100);
+			nickName=nickName+RandUtils.generateRand(1, 1000);
 			account.setNickName(nickName);
 			hadInsert=usersAccountMapper.insertUser(account);
 		}
@@ -377,7 +377,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 	public int updateUserNickName(UsersAccount account) {
 		int i = usersAccountMapper.hadAccountByNick(account.getNickName());
 		if (i > 0) {
-			account.setNickName(account.getNickName()+RandUtils.generateRand(1, 100));
+			account.setNickName(account.getNickName()+RandUtils.generateRand(1, 1000));
 		}
 		usersAccountMapper.updateNickName(account);
 		return 0;
