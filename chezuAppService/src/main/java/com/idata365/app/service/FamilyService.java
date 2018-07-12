@@ -525,7 +525,7 @@ public class FamilyService extends BaseService<FamilyService> {
 				}
 				FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 				AdBeanUtils.copyOtherPropToStr(tempResultBean, tempRandBean);
-
+				tempResultBean.setNum(tempResultBean.getNum() + "/8");
 				long familyId = tempRandBean.getFamilyId();
 				FamilyParamBean paramBean = new FamilyParamBean();
 				paramBean.setUserId(userId);
