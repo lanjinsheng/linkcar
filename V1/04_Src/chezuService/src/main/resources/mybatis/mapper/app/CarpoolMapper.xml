@@ -15,7 +15,7 @@
 	            where id=#{id}
 	    </update>  
 	    
-	    <update id="updateCarPool"  parameterType="java.lang.String" >
+	    <update id="clearCarPool"  parameterType="java.lang.String" >
 	       update
 	            carpool
 	            set isComplete=1,getOffTime=now()
