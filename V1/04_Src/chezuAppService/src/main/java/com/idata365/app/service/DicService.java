@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.entity.DicUserMission;
+import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.DicFamilyTypeMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.DicNotifyMapper;
@@ -35,11 +37,15 @@ public class DicService extends BaseService<DicService> {
 	DicNotifyMapper dicNotifyMapper;
 	@Autowired
 	DicUserMissionMapper dicUserMissionMapper;
-	
-	
+	@Autowired
+	DicCarMapper dicCarMapper;
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType() {
 		return dicFamilyTypeMapper.getDicFamilyType(null);
+	}
+	@Transactional
+	public List<DicCar> getDicCar() {
+		return dicCarMapper.getDicCar(null);
 	}
 	
 	@Transactional

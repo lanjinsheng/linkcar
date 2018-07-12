@@ -13,10 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.DicCarConstant;
 import com.idata365.app.entity.Carpool;
 import com.idata365.app.entity.CarpoolApprove;
+import com.idata365.app.entity.DicCar;
+import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UserCarLogs;
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.FamilyMapper;
@@ -24,6 +28,7 @@ import com.idata365.app.mapper.UserCarLogsMapper;
 import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
+import com.idata365.app.service.MessageService;
 import com.idata365.app.util.DateTools;
 
 /**
@@ -49,6 +54,9 @@ public class CarService extends BaseService<CarService> {
     FamilyMapper familyMapper;
     @Autowired
     UsersAccountMapper UsersAccountMapper;
+    @Autowired
+    MessageService messageService;
+    
 	public CarService() {
 
 	}
@@ -245,7 +253,7 @@ public class CarService extends BaseService<CarService> {
 		return rtList;
 	}
 	@Transactional
-	public int  submitCarpoolApprove(Long userId,Long sharingId){
+	public int  submitCarpoolApprove(Long userId,Long sharingId,String nickName){
 		UserCarLogs car=userCarLogsMapper.getUserCarLogById(sharingId);
 		CarpoolApprove approve=new CarpoolApprove();
 		if(car==null)
@@ -261,10 +269,16 @@ public class CarService extends BaseService<CarService> {
 		approve.setPassengerId(userId);
 		approve.setUserCarLogsId(car.getId());
 		carpoolApproveMapper.submitCarpoolApprove(approve);
+		DicCar dicCar=DicCarConstant.getDicCar(car.getCarId());
+		Message msg=messageService.buildCarpoolApplyMessage(null, car.getUserId(), nickName, dicCar.getCarName());
+    	//插入消息
+ 		messageService.insertMessage(msg, MessageEnum.CARPOOL_APPLY);
+ 		//用定时器推送
+        messageService.pushMessageTrans(msg,MessageEnum.CARPOOL_APPLY);
 		return 1;
 	}
 	@Transactional
-	public boolean applyCarpoolApprove(Long userId,Long approveId){
+	public boolean applyCarpoolApprove(Long userId,Long approveId,String nickName){
 		
 		CarpoolApprove carpoolApprove=carpoolApproveMapper.getCarpoolApproveById(approveId);
 		//查看车位还够不够
@@ -290,6 +304,11 @@ public class CarService extends BaseService<CarService> {
 		carpool.setPassengerId(carpoolApprove.getPassengerId());
 		carpool.setUserCarLogsId(carpoolApprove.getUserCarLogsId());
 		carpoolMapper.insertCarpool(carpool);
+		Message msg=messageService.buildCarpoolApplyPassMessage(null, carpoolApprove.getPassengerId(), nickName);
+    	//插入消息
+ 		messageService.insertMessage(msg, MessageEnum.CARPOOL_APPLY_PASS);
+ 		//用定时器推送
+        messageService.pushMessageTrans(msg,MessageEnum.CARPOOL_APPLY_PASS);
 		return i==1;
 	}
 	

@@ -109,6 +109,11 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String MyAuctionUrl="com.shujin.haochezu://AuctionNotes.push";           
 	public static final String MyAuctionInfoApendUrl="com.shujin.haochezu://convertAddress.push?type=%s&convertId=%s";
 	
+	//順風車推送
+	public static final String CarpoolUrl="com.shujin.haochezu://CarPool.push?tab=%s";
+	public static final String CarpoolApply="俱乐部成员【%s】申请搭乘您的【%s】，点击处理顺风车申请";
+	public static final String CarpoolApplyPass="玩家【%s】已经同意了你的搭车申请，祝你一路顺风！";
+	
 	
 	@Autowired
 	SystemProperties systemProperties;
@@ -311,6 +316,44 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUrl(MyAuctionUrl);
 		return message;
 	}
+	
+
+	public Message buildCarpoolApplyMessage(Long fromUserId,Long toUserId,String nickName,String carName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.PersonType_CarpoolApply);
+		message.setContent(String.format(CarpoolApply, nickName,carName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.PersonType);
+		message.setPicture("");
+		message.setTitle("顺风车申请");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(CarpoolUrl, 2));
+		return message;
+	}
+	
+	public Message buildCarpoolApplyPassMessage(Long fromUserId,Long toUserId,String nickName) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.PersonType_CarpoolApply_Pass);
+		message.setContent(String.format(CarpoolApplyPass, nickName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.PersonType);
+		message.setPicture("");
+		message.setTitle("顺风车已接单");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(CarpoolUrl, 1));
+		return message;
+	}
+	
 	
 	public Message buildAuctionSuccMessage(Long fromUserId,Long toUserId,String goodsName,Integer auctionGoodsType,Long auctionGoodsId) {
 		Message message=new Message();

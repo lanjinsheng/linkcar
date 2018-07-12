@@ -73,7 +73,7 @@ public class CarpoolController extends BaseController {
 		Long userId=this.getUserId();
 		//sharingId就是 userCarLogs的id
 		Long sharingId=Long.valueOf(requestBodyParams.get("sharingId").toString());
-		int subStatus=carService.submitCarpoolApprove(userId,sharingId);
+		int subStatus=carService.submitCarpoolApprove(userId,sharingId,this.getUserInfo().getNickName());
 		if(subStatus==2)
 		{
 			return ResultUtils.rtFailParam(null,"没有可用车辆");
@@ -90,7 +90,7 @@ public class CarpoolController extends BaseController {
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
 		Long approveId=Long.valueOf(requestBodyParams.get("approveId").toString());
-		boolean update=carService.applyCarpoolApprove(userId, approveId);
+		boolean update=carService.applyCarpoolApprove(userId, approveId,this.getUserInfo().getNickName());
 		if(!update)
 		{
 			return ResultUtils.rtFailParam(null,"座位已满,提交失败");
