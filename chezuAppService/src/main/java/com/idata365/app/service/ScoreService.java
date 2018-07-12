@@ -315,7 +315,8 @@ public class ScoreService extends BaseService<ScoreService>
 		
 		AdBeanUtils.copyOtherPropToStr(resultBean, tempBean);
 		resultBean.setFamilys(recordsList);
-		resultBean.setNotifyMsg(this.scoreMapper.queryFamilyNotifyMsg(bean.getFamilyId()));
+		String notifyMsg = this.scoreMapper.queryFamilyNotifyMsg(bean.getFamilyId());
+		resultBean.setNotifyMsg(notifyMsg == null ? "" : notifyMsg);
 		
 		return resultBean;
 	}
