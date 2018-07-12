@@ -168,9 +168,9 @@ public class CarService extends BaseService<CarService> {
 					//查询车辆信息
 					user.put("userId", carpool.get("driverId"));
 					user.put("nowTime", nowTime);
-					Map<String,Object> car=userCarLogsMapper.getUserCar(user);
+					Map<String,Object> car=userCarLogsMapper.getUserCarHistory(Long.valueOf(carpool.get("userCarLogsId").toString()));
 					rtMap.put("sharingId", String.valueOf(car.get("id")));
-					rtMap.put("nick", userNick);
+					rtMap.put("nick", car.get("nickName"));
 					rtMap.put("carName", String.valueOf(car.get("carName")));
 					rtMap.put("carImgUrl", String.valueOf(car.get("carUrl")));
 					
