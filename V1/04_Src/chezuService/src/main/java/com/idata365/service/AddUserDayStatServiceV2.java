@@ -124,7 +124,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	
     String CarPoolPowerLogsJsonValue="{\"userId\":%d,\"travelId\":%d,\"passengerPower\":%d,\"effectId\":%d}";
 	private boolean addUserCarPoolPowerLogs(long userId,long travelId,int passengerPower) {
-		passengerPower=Double.valueOf((passengerPower*0.8)).intValue();//打八折
+//		passengerPower=Double.valueOf((passengerPower*0.8)).intValue();//打八折
     	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
     	taskPowerLogs.setUserId(userId);
     	taskPowerLogs.setTaskType(PowerEnum.CarPool);
@@ -264,7 +264,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		List<Map<String,Object>> carpools=carpoolMapper.getCarPool(uth.getUserId());
 		for(Map<String,Object> carpool:carpools){
 			long passengerId=Long.valueOf(carpool.get("passengerId").toString());
-			if(addUserCarPoolPowerLogs(passengerId,uth.getId(),power)) {
+			if(addUserCarPoolPowerLogs(passengerId,uth.getId(),Double.valueOf((power*0.8)).intValue())) {
 				//更新用户顺风车记录
 				carpool.put("driverPower", Double.valueOf(power*0.1).intValue());
 				carpool.put("passengerPower", Double.valueOf(power*0.8).intValue());
@@ -274,7 +274,9 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 				LOG.error("插入顺风车记录失败passengerId="+passengerId+"==travelId="+uth.getId());
 			}
 		}
-		
+		if(carpools!=null && carpools.size()>0) {
+			addUserCarPoolPowerLogs(uth.getUserId(),uth.getId(),Double.valueOf(power*0.1*carpools.size()).intValue());
+		}
 		
 		//查询当前家族，并贡献分数与动力
 		   List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
