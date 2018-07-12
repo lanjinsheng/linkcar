@@ -448,6 +448,10 @@ public class FamilyService extends BaseService<FamilyService> {
 			}
 			FamilyRandResultBean tempResultBean = new FamilyRandResultBean();
 			AdBeanUtils.copyOtherPropToStr(tempResultBean, tempBean);
+			
+			if (tempBean.getNotifyMsg() == null) {
+				tempResultBean.setNotifyMsg("");
+			}
 
 			tempResultBean.setFamilyTypeValue(DicFamilyTypeConstant.getDicFamilyType(tempBean.getFamilyType()).getFamilyTypeValue());
 			
@@ -716,8 +720,11 @@ public class FamilyService extends BaseService<FamilyService> {
 //		this.familyMapper.updateUserStraner(usersAccountParamBean);
 		
 		//保存公告信息
+		if (bean.getNotifyMsg() == null || bean.getNotifyMsg().trim().equals("")) {
+			bean.setNotifyMsg("");
+		}
 		UsersAccount account = userInfoService.getUsersAccount(bean.getUserId());
-		ImNotify notify=new ImNotify();
+		ImNotify notify = new ImNotify();
 		notify.setFamilyId(familyId);
 		notify.setFamilyName(bean.getFamilyName());
 		notify.setLeaderName(account.getNickName());
@@ -727,7 +734,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		notify.setFamilyId(familyId);
 		notify.setNotifyMsg(bean.getNotifyMsg());
 		imService.insertNotify(notify);
-
+		
 		return familyId;
 	}
 
