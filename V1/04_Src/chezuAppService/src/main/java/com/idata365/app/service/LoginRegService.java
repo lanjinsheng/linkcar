@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.constant.NameConstant;
 import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.FamilyInvite;
 import com.idata365.app.entity.FamilyParamBean;
@@ -42,7 +41,6 @@ import com.idata365.app.partnerApi.PhoneMsgTools;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.remote.ChezuService;
 import com.idata365.app.service.common.AchieveCommService;
-import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
 import com.idata365.app.util.SignUtils;
@@ -73,8 +71,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 	FamilyMapper familyMapper;
 	@Autowired
 	UserRoleLogService userRoleLogService;
-	@Autowired
-	UserMissionService userMissionService;
+
 	
 
 	public LoginRegService()

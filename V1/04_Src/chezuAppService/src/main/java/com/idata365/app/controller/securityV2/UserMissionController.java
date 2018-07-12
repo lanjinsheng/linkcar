@@ -41,10 +41,10 @@ public class UserMissionController extends BaseController {
 		int missionType = Integer.valueOf(requestBodyParams.get("missionType").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("missionType=================" + missionType);
+		
 		//更新每日任务
 		boolean flag = userMissionService.updateDayMission(userId);
 		LOG.info("更新每日任务状态=================" + flag);
-		
 		// 初始化
 		int count = userMissionService.queryHadRecord(userId);
 		if(count == 0) {
@@ -53,9 +53,9 @@ public class UserMissionController extends BaseController {
 			userMissionService.initLogsToUser(missions,userId);
 			userMissionService.updateCountOfId5(userId);
 		}
-		
 		// 预查询
 		userMissionService.insertOrUpdateLogs(userId, missionType);
+		
 		// 查询所有类型任务完成情况
 		Map<String, String> rtMap = userMissionService.queryMissionStatus(userId);
 		// 返回任务列表
