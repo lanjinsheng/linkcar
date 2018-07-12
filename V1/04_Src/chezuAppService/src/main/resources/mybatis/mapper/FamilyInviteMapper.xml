@@ -34,7 +34,7 @@
      </select>
      
      <select id="queryIsApplied" resultType="java.lang.Integer">
-       SELECT count(1) FROM  familyInvite where memberUserId=#{userId} and status=1 and familyId=#{familyId}
+       SELECT count(1) FROM  familyInvite where memberUserId=#{userId} and status=0 and familyId=#{familyId}
      </select>
      
 </mapper>
