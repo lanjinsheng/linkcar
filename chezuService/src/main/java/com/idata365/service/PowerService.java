@@ -72,6 +72,7 @@ public class PowerService extends BaseService<PowerService>
 	public final static int EventType_SignIn=1;
 	public final static int EventType_MemberTrip=1;
 	public final static int EventType_UserTrip=4;
+	public final static int EVENTTYPE_POWER_FREE_RIDE = 13;// 搭乘顺风车获取
 	public final static int RecordType_2=2;//减少
 	public final static int RecordType_1=1;//增加
 	public boolean calPower(TaskPowerLogs taskPowerLog) {
@@ -118,6 +119,18 @@ public class PowerService extends BaseService<PowerService>
 //		 		rt=chezuAssetService.addPowerUsersTask2(tripPower);
 		 		break;
 		 	case Share:
+		 		break;
+		 	case CarPool:
+//		 		String CarPoolPowerLogsJsonValue="{\"userId\":%d,\"travelId\":%d,\"passengerPower\":%d,\"effectId\":%d}";
+		 		AssetUsersPowerLogs carpoolPower=new AssetUsersPowerLogs();
+		 		carpoolPower.setEffectId(Long.valueOf(String.valueOf(map.get("effectId"))));
+		 		carpoolPower.setEventType(EVENTTYPE_POWER_FREE_RIDE);//行程
+		 		carpoolPower.setPowerNum(Long.valueOf(String.valueOf(map.get("passengerPower"))));
+		 		carpoolPower.setRecordType(RecordType_1);//增加1，减少2
+		 		carpoolPower.setUserId(taskPowerLog.getUserId());
+		 		carpoolPower.setRemark("顺风车行程获取power");
+		 		rt=chezuAssetService.addPowerUsersTask(taskPowerLog.getJsonValue(), sign,carpoolPower);
+		 		
 		 		break;
 		 	case Steal:
 		 		//首页的互动记录发送
