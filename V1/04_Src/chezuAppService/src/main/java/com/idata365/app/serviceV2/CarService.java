@@ -260,7 +260,7 @@ public class CarService extends BaseService<CarService> {
 			return 2;//无车
 		
 		//判断自己是否已经是顺风车司机了
-//		int isDriver=carpoolMapper.isDriver(car.getId());
+//		int isDriver=carpoolMapper.isDriver(userId);
 //		if(isDriver>0){
 //			return 3;
 //		}
