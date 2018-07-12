@@ -25,15 +25,27 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	private String notifyMsg;
 	
 	private String isApplied;
+	
 	//俱乐部顺风车红点
-	private int isHaveRide;
-
-	public int getIsHaveRide() {
+	private String isHaveRide;
+	
+	//是否能申请加入
+	private String isCanApply;
+	
+	public String getIsHaveRide() {
 		return isHaveRide;
 	}
 
-	public void setIsHaveRide(int isHaveRide) {
+	public void setIsHaveRide(String isHaveRide) {
 		this.isHaveRide = isHaveRide;
+	}
+
+	public String getIsCanApply() {
+		return isCanApply;
+	}
+
+	public void setIsCanApply(String isCanApply) {
+		this.isCanApply = isCanApply;
 	}
 
 	public String getIsApplied() {

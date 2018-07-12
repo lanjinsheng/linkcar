@@ -4,7 +4,7 @@
     <resultMap id="BaseUserConfigResultMap" type="com.idata365.app.entity.UserConfig" >
     </resultMap>
  
-     <select id="getUserConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
+     <select id="getUserGPSConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
        SELECT *
        FROM  userConfig where userId=#{userId} and type=1 order by id desc limit 1
      </select>
@@ -14,5 +14,15 @@
             userConfig (userId,userConfigValue,updateTime,type) values (#{userId},#{userConfigValue},now(),#{type})
             ON DUPLICATE KEY UPDATE userConfigValue=#{userConfigValue},updateTime=now()
     </insert>  
+    
+    <select id="getUserInviteConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userConfig where userId=#{userId} and type=2 order by id desc limit 1
+    </select>
+    
+    <select id="getUserJoinClubConfigById" resultMap="BaseUserConfigResultMap" parameterType="java.lang.Long">
+       SELECT *
+       FROM  userConfig where userId=#{userId} and type=3 order by id desc limit 1
+    </select>
     
 </mapper>

@@ -16,13 +16,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.entity.FamilyInvite;
+import com.idata365.app.entity.FamilyParamBean;
+import com.idata365.app.entity.UserConfig;
 import com.idata365.app.mapper.FamilyInviteMapper;
+import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.UserConfigMapper;
 
 @Service
 public class FamilyInviteService extends BaseService<FamilyInviteService> {
 	private final static Logger LOG = LoggerFactory.getLogger(FamilyInviteService.class);
 	@Autowired
 	FamilyInviteMapper familyInviteMapper;
+	@Autowired
+	FamilyMapper familyMapper;
+	@Autowired
+	UserConfigMapper userConfigMapper;
 
 	public FamilyInviteService() {
 	}
@@ -57,5 +65,17 @@ public class FamilyInviteService extends BaseService<FamilyInviteService> {
 		} else {
 			return 0;
 		}
+	}
+	
+	public int queryIsCanApply(long familyId) {
+		FamilyParamBean bean = new FamilyParamBean();
+		bean.setFamilyId(familyId);
+		Long userId = this.familyMapper.queryCreateUserId(bean);
+		// 获取用户配置
+		UserConfig userConfig = userConfigMapper.getUserJoinClubConfigById(userId);
+		if (userConfig != null && userConfig.getUserConfigValue() == 0) {
+			return 0;
+		}
+		return 1;
 	}
 }
