@@ -17,11 +17,11 @@
      </select> 
      
      <select id="waitHave" resultType="java.lang.Integer" parameterType="java.lang.Long">
-       select count(1) from carpool where passengerId=#{userId} and now()>createTime and getOffTime>now() and isComplete=0
+       select count(1) from carpool where passengerId=#{userId} and now()>createTime and getOffTime is null and isComplete=0
      </select> 
      
      <select id="querySitsNum" resultType="java.lang.Integer" parameterType="java.lang.Long">
-       select count(1) from carpool where driverId=#{userId} and now()>createTime and getOffTime>now() and isComplete=0
+       select count(1) from carpool where driverId=#{userId} and now()>createTime and getOffTime is null and isComplete=0
      </select>
      
      <insert id="insertCarpool"  parameterType="com.idata365.app.entity.Carpool" >
