@@ -327,7 +327,7 @@ public class ScoreService extends BaseService<ScoreService>
 		if(j>0){
 			sharingMyPoint=1;
 		}
-		resultBean.setClubHave(sharingMyPoint);
+		resultBean.setIsCanFreeRide(sharingMyPoint);
 		return resultBean;
 	}
 	
