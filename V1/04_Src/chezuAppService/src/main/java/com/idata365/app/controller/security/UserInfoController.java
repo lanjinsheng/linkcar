@@ -653,12 +653,21 @@ public class UserInfoController extends BaseController{
 		long userId = this.getUserId();
 		String openId = String.valueOf(requestBodyParams.get("openId"));
 		int loginType = Integer.valueOf(String.valueOf(requestBodyParams.get("loginType")));
+		
+		LOG.info("openId================================"+openId);
+		Map<String, Object> map = thirdPartyLoginService.queryThirdPartyLoginById(openId);
+		
 		Map<String, Object> entity = new HashMap<String, Object>();
 		entity.put("userId", userId);
 		entity.put("openId", openId);
 		entity.put("loginType", loginType);
 		entity.put("remark", requestBodyParams.get("remark").toString());
-		thirdPartyLoginService.insertLogs(entity);
+		
+		if(map == null) {
+			thirdPartyLoginService.insertLogs(entity);
+		}else {
+			thirdPartyLoginService.updateLogs(entity);
+		}
 		return ResultUtils.rtSuccess(null);
 	}
 }
