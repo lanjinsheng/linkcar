@@ -120,6 +120,24 @@ public class CarpoolController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 	
+	
+	@RequestMapping(value = "/getCarpoolRecords")
+	Map<String, Object> getCarpoolRecords(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+		Long userId=this.getUserId();
+		Object maxId=requestBodyParams.get("maxId");
+		Long paramMaxId=0L;
+		if(maxId==null || maxId.toString().equals("-1")){
+			paramMaxId=9999999999999l;
+		}else{
+			paramMaxId=Long.valueOf(maxId.toString());
+		}
+		List<Map<String,Object>> rtList=carService.getCarpoolRecords(userId,paramMaxId);
+		Map<String,Object> rtMap=new HashMap<>();
+		rtMap.put("records", rtList);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
 	 public static void main(String []args) {
 		 System.out.println(System.currentTimeMillis());
 	 }

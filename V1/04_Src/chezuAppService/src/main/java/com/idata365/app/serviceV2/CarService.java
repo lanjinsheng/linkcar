@@ -16,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.entity.Carpool;
 import com.idata365.app.entity.CarpoolApprove;
 import com.idata365.app.entity.UserCarLogs;
+import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.UserCarLogsMapper;
 import com.idata365.app.mapper.UserCarMapper;
+import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.util.DateTools;
 
@@ -241,6 +243,50 @@ public class CarService extends BaseService<CarService> {
 		carpool.setPassengerId(userId);
 		int i=carpoolMapper.offCar(carpool);
 		return i==1;
+	}
+	
+	@Transactional
+	public List<Map<String,Object>> getCarpoolRecords(Long userId,Long maxId){
+		List<Map<String,Object>>  rtList=new ArrayList<>();
+		Map<String,Object> paramMap=new HashMap<>();
+		paramMap.put("userId", userId);
+		paramMap.put("maxId", maxId);
+		List<Map<String,Object>> list=carpoolMapper.getCarpoolRecords(paramMap);
+		for(Map<String,Object> m:list){
+			Map<String,Object> rtMap=new HashMap<>();
+			Long driverId=Long.valueOf(m.get("driverId").toString());
+			String num=String.valueOf(m.get("num"));
+			String remark="";
+			String power="0";
+			if(driverId.longValue()==userId.longValue()){
+				remark=num+"位好友搭车，动力加成+"+(Integer.valueOf(num)*10)+"%";
+				power=String.valueOf(m.get("driverPower"));
+			}else{
+				power=String.valueOf(m.get("passengerPower"));
+				String userCarLogsId=String.valueOf(m.get("userCarLogsId"));
+				Map<String,Object> car=userCarLogsMapper.getUserCarHistory(Long.valueOf(userCarLogsId));
+				remark="搭乘【"+car.get("nickName")+"】"+car.get("carName");
+			}
+		   String getOffTime=String.valueOf(m.get("getOffTime"));
+		   //计算时间
+		   long time=System.currentTimeMillis()-DateTools.getDateTimeOfLong(getOffTime);
+			long rtTime=time/60000;
+			if(rtTime<60){
+				rtMap.put("time", rtTime+"分钟前");
+			}
+			else if(rtTime>59 && rtTime<1440){
+				rtTime=rtTime/60;
+				rtMap.put("time", rtTime+"小时前");
+			}else{
+				rtTime=rtTime/(60*24);
+				rtMap.put("time", rtTime+"天前");
+			}
+			rtMap.put("remark", remark)	;
+			rtMap.put("power", power);
+			rtMap.put("recordId", m.get("id"));
+			rtList.add(rtMap);
+		}
+		return rtList;
 	}
 	
 	//查询车辆信息
