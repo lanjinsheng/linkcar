@@ -57,7 +57,11 @@ public interface TaskSystemScoreFlagMapper {
 	 //家族类型
 	 List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEndList();
 	 int  finishFamilyLevelDayEndTask(TaskSystemScoreFlag systemScoreFlag);
-
+	 
+	//清理昨日任务
+	 List<TaskSystemScoreFlag> getUnFinishClearYesterday();
+	 int  finishClearYesterdayTask(TaskSystemScoreFlag systemScoreFlag);
+	 
 	 
 	 //用户按日违规统计
 	 List<TaskSystemScoreFlag> getUnFinishUserBestDriveDayEndList();

@@ -29,7 +29,15 @@ public class TaskSystemScoreFlag implements Serializable {
 	private Integer userDayScoreInit;
 	private Integer nextSeasonInit;
 	
+	private Integer taskClearYesterday;
 	
+	
+	public Integer getTaskClearYesterday() {
+		return taskClearYesterday;
+	}
+	public void setTaskClearYesterday(Integer taskClearYesterday) {
+		this.taskClearYesterday = taskClearYesterday;
+	}
 	public Integer getUserDayScoreInit() {
 		return userDayScoreInit;
 	}

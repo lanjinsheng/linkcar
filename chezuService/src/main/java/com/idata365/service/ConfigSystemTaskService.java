@@ -284,6 +284,17 @@ public class ConfigSystemTaskService  extends BaseService<ConfigSystemTaskServic
 	public List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEnd(){
 		return taskSystemScoreFlagMapper.getUnFinishFamilyLevelDayEndList();
 	}
+	
+	@Transactional
+	public List<TaskSystemScoreFlag> getUnFinishClearYesterday(){
+		return taskSystemScoreFlagMapper.getUnFinishClearYesterday();
+	}
+	
+	@Transactional
+	public void finishClearYesterdayTask(TaskSystemScoreFlag task) {
+		task.setTaskClearYesterday(1);
+		taskSystemScoreFlagMapper.finishClearYesterdayTask(task);
+	}
 	@Transactional
 	public void finishFamilyLevelDayEndTask(TaskSystemScoreFlag task) {
 		task.setTaskFamilyLevelDayEnd(1);
