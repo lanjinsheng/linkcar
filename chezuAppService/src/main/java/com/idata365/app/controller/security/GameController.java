@@ -101,7 +101,7 @@ public class GameController extends BaseController
 	
 	
 	/**
-	 * 查询正在对战的家族系信息---由Game Controller中同名方法覆盖
+	 * 查询正在对战的家族系信息---由Game ControllerV2中同名方法覆盖
 	 * @param bean
 	 * @return
 	 */
