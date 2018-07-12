@@ -321,9 +321,9 @@ public class InteractService extends BaseService<InteractService> {
 	public int userLikeMissionCount(long userId){
 		int i = interactLogsMapper.userLikeMissionCount(userId);
 		if(i>=3) {
-			return 1;
+			return 3;
 		}
-		return 0;
+		return i;
 	}
 	
 	@Transactional
