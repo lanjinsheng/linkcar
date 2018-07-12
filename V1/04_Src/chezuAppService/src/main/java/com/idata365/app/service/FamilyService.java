@@ -45,6 +45,7 @@ import com.idata365.app.entity.MainResultBean;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.MyFamilyInfoResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
+import com.idata365.app.entity.UserConfig;
 import com.idata365.app.entity.UserFamilyRoleLogBean;
 import com.idata365.app.entity.UserFamilyRoleLogParamBean;
 import com.idata365.app.entity.UserRoleLog;
@@ -59,6 +60,7 @@ import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ImNotifyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
+import com.idata365.app.mapper.UserConfigMapper;
 import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
@@ -102,6 +104,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	private CarpoolMapper carpoolMapper;
 	@Autowired
     CarpoolApproveMapper carpoolApproveMapper;
+	@Autowired
+	UserConfigMapper userConfigMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -1174,6 +1178,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			rtMap.put("hadInteractIcon", "1");
 		}
 
+		
 		if (userJFId != null && myCFId != null && userJFId.longValue() == myCFId.longValue()) {
 			rtMap.put("isCanRemove", "1");
 		} else if (myCFId != null) {
@@ -1182,6 +1187,13 @@ public class FamilyService extends BaseService<FamilyService> {
 				rtMap.put("isCanInvite", "1");
 			}
 		}
+		
+		// 获取用户配置
+		UserConfig userConfig = userConfigMapper.getUserInviteConfigById(userId);
+		if (userConfig != null && userConfig.getUserConfigValue() == 0) {
+			rtMap.put("isCanInvite", "0");
+		}
+		
 		return rtMap;
 	}
 }

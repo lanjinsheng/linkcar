@@ -153,7 +153,10 @@ public class ScoreController extends BaseController {
 		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(bean.getFamilyId(), daystamp);
 		resultBean.setTrophyNum(infoFamily.get("trophyNum"));
 		resultBean.setGrade(infoFamily.get("gradeOrNum"));
+		//是否申请过
 		resultBean.setIsApplied(String.valueOf(familyInviteService.queryIsApplied(this.getUserId(), bean.getFamilyId())));
+		//是否能申请
+		resultBean.setIsCanApply(String.valueOf(familyInviteService.queryIsCanApply(bean.getFamilyId())));
 		resultList.add(resultBean);
 		return ResultUtils.rtSuccess(resultList);
 	}

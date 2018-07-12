@@ -310,7 +310,7 @@ public class UserInfoService extends BaseService<UserInfoService> {
 	 *             LanYeYe
 	 */
 	public UserConfig getUserConfig(long userId) {
-		UserConfig uc = userConfigMapper.getUserConfigById(userId);
+		UserConfig uc = userConfigMapper.getUserGPSConfigById(userId);
 		if (uc == null) {
 			uc = new UserConfig();
 			uc.setUserConfigValue(1);
