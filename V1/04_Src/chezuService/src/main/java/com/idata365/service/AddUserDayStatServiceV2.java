@@ -27,6 +27,7 @@ import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
+import com.idata365.mapper.app.CarpoolMapper;
 import com.idata365.mapper.app.FamilyInfoMapper;
 import com.idata365.mapper.app.InteractPeccancyMapper;
 import com.idata365.mapper.app.InteractTempCarMapper;
@@ -66,6 +67,8 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	InteractPeccancyMapper interactPeccancyMapper;
 	@Autowired
 	InteractTempCarMapper interactTempCarMapper;
+	@Autowired
+	CarpoolMapper carpoolMapper;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -118,6 +121,20 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	    	}
 		return false;
 	}
+	
+    String CarPoolPowerLogsJsonValue="{\"userId\":%d,\"travelId\":%d,\"passengerPower\":%d,\"effectId\":%d}";
+	private boolean addUserCarPoolPowerLogs(long userId,long travelId,int passengerPower) {
+		passengerPower=Double.valueOf((passengerPower*0.8)).intValue();//打八折
+    	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
+    	taskPowerLogs.setUserId(userId);
+    	taskPowerLogs.setTaskType(PowerEnum.CarPool);
+    	taskPowerLogs.setJsonValue(String.format(CarPoolPowerLogsJsonValue, userId,travelId,passengerPower,travelId));
+    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
+    	if(hadAdd>0) {
+    		return true;
+    	}
+	return false;
+}
 	/**
 	 * 
 	    * @Title: addUserTripPowerLogs
@@ -172,12 +189,9 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	}
 	
 	public static void main(String []args) {
-		int a=6;
-		int calPower=98;
-		int peccancyNum=2;
-		int power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));
+		int power=53;
 		 
-		System.out.println(power);
+		System.out.println(Double.valueOf(power*0.1).intValue());
 	}
 	
 	private void addCar(List<InteractTempCar> batchInsert,UserTravelHistory uth,int r,int type) {
@@ -245,6 +259,22 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		if(batchInsert.size()>0) {
 			interactTempCarMapper.batchInsertTempCar(batchInsert);
 		}
+		
+		//顺风车处理逻辑
+		List<Map<String,Object>> carpools=carpoolMapper.getCarPool(uth.getUserId());
+		for(Map<String,Object> carpool:carpools){
+			long passengerId=Long.valueOf(carpool.get("passengerId").toString());
+			if(addUserCarPoolPowerLogs(passengerId,uth.getId(),power)) {
+				//更新用户顺风车记录
+				carpool.put("driverPower", Double.valueOf(power*0.1).intValue());
+				carpool.put("passengerPower", Double.valueOf(power*0.8).intValue());
+				carpool.put("travelId",uth.getId());
+				carpoolMapper.updateCarPool(carpool);
+			}else {
+				LOG.error("插入顺风车记录失败passengerId="+passengerId+"==travelId="+uth.getId());
+			}
+		}
+		
 		
 		//查询当前家族，并贡献分数与动力
 		   List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
