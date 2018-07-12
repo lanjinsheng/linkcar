@@ -13,7 +13,7 @@ public interface CarpoolMapper {
 	List<Map<String,Object>> getCarPool(@Param("userCarLogsId") Long userCarLogsId);
 	List<Map<String,Object>> getCarpoolRecords(Map<String,Object> map);
 
-	
+	Map<String,Object> getSelfTravelBy(@Param("passengerId") Long passengerId);
 	int insertCarpool(Carpool carpool);
 	
 	int offCar(Carpool carpool);

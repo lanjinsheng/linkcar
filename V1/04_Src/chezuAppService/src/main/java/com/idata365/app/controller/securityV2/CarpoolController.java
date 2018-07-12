@@ -34,8 +34,17 @@ public class CarpoolController extends BaseController {
 		Map<String,Object> rtMap=carService.getFamilyMemberCarSeats(userId, imgBase);
 		return ResultUtils.rtSuccess(rtMap);
 	}
+	@RequestMapping(value = "/getSelfCarpoolTravelBy")
+	Map<String, Object> getSelfCarpoolTravelBy(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+		Long userId=this.getUserId();
+		String imgBase=this.getImgBasePath();
+//		List<Map<String,Object>> rtList=carService.getFamilyMemberCarSeats(userId, imgBase);
+		Map<String,Object> rtMap=carService.getSelfCarpoolTravelBy(userId, this.getUserInfo().getNickName(),imgBase);
+		return ResultUtils.rtSuccess(rtMap);
+	}
 	
-	 
+	
 	@RequestMapping(value = "/getSelfCarpool")
 	Map<String, Object> getSelfCarpool(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
