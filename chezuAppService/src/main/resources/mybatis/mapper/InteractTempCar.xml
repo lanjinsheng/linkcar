@@ -40,7 +40,7 @@
 
      <!--  <update id="updateTempCar"  parameterType="java.util.HashMap">
        update  interactTempCar set hadGet=1,lockStatus=2,
-       stealerId=#{stealerId} where hadGet=0,lockStatus=-1, and uuid=#{uuid}
+       stealerId=#{stealerId} where hadGet=0 and lockStatus=-1 and uuid=#{uuid}
      </update> -->
       <update id="updateTempCar"  parameterType="java.util.HashMap">
        update  interactTempCar set hadGet=1,lockStatus=2,stealerId=#{stealerId} where hadGet=0 and lockStatus=-1 and uuid=#{uuid}
@@ -51,7 +51,7 @@
      </select>
      <update id="updateBlackIds"  parameterType="java.util.HashMap">
        update  interactTempCar set blackIds=CONCAT(blackIds,#{blackIds})
-         where travelId=#{uuid}
+         where travelId=#{travelId}
      </update>
      
      <select id="isCanStealPower" resultType="java.lang.Integer">
