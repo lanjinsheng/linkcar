@@ -327,4 +327,22 @@ public class UserMissionService extends BaseService<UserMissionService> {
 
 		return false;
 	}
+
+	public void initMissionOfUserId(long userId) {
+		// 初始化任务系统
+		// 更新每日任务
+		boolean flag = this.updateDayMission(userId);
+		LOG.info("更新每日任务状态=================" + flag);
+		// 初始化
+		int count = this.queryHadRecord(userId);
+		if (count == 0) {
+			LOG.info("初始化任务log============userId=================" + userId);
+			List<DicUserMission> missions = this.getAllDicUserMission();
+			this.initLogsToUser(missions, userId);
+			this.updateCountOfId5(userId);
+		}
+		// 预查询
+		this.insertOrUpdateLogs(userId, 1);
+		this.insertOrUpdateLogs(userId, 2);
+	}
 }

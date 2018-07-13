@@ -24,6 +24,7 @@ import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.DicGameDay;
+import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -66,6 +67,7 @@ import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.serviceV2.InteractService;
+import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
@@ -100,6 +102,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	private UserMissionLogsMapper userMissionLogsMapper;
 	@Autowired
 	private InteractService interactService;
+	@Autowired
+	UserMissionService userMissionService;
 	@Autowired
 	private CarpoolMapper carpoolMapper;
 	@Autowired
@@ -998,6 +1002,9 @@ public class FamilyService extends BaseService<FamilyService> {
 		} else {
 			resultBean.setReadFlag(0);
 		}
+		
+		//初始化任务系统
+		userMissionService.initMissionOfUserId(bean.getUserId());
 		
 		// 任务已完成未领取
 		int i = userMissionLogsMapper.queryFinishedCount(bean.getUserId());
