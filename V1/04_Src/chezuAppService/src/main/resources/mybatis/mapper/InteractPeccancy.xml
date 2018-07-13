@@ -36,6 +36,6 @@
    </select> 
    
    <select id="isCanPayTicket" resultType="java.lang.Integer" >
-      	select count(1) from interactPeccancy where lawBreakerId=#{userId} and now()>endTime and payStatus=0
+      	select count(1) from interactPeccancy where lawBreakerId=#{userId} and endTime>now() and payStatus=0
    </select>
 </mapper>

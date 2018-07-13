@@ -79,8 +79,10 @@
     </select>
     
     <select id="queryFamilyByName" resultType="com.idata365.app.entity.FamilyRandBean" parameterType="com.idata365.app.entity.FamilyParamBean">
-    	select a.*,b.notifyMsg as notifyMsg from (select imgUrl, memberNum as num, familyName as name, id as familyId, createUserId as userId,familyType from familyInfo where familyName LIKE #{familyName} and memberNum!=8) a
-    		left join imNotify b on a.familyId=b.familyId
+    	select a.*,b.notifyMsg as notifyMsg from (select t1.imgUrl as imgUrl, t1.memberNum as num, t1.familyName as name, t1.id as familyId ,t1.familyType as familyType from familyInfo t1 
+			left join (select * from userConfig where type=3) t2 on (t1.createUserId=t2.userId) where (t2.userConfigValue=1 or t2.userConfigValue is null) 
+			and t1.createUserId!=#{userId} and t1.id!=999999 and t1.memberNum!=8 and t1.familyName LIKE #{familyName}
+			order by familyId asc) a left join imNotify b on a.familyId=b.familyId where b.inUse=1
     </select>
      
      <!-- 
