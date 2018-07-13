@@ -234,21 +234,23 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		int power=calPower;
 		List<InteractTempCar> batchInsert=new ArrayList<InteractTempCar>();
 		if(peccancyNum>0) {
-			 power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));
-			 if(power>0) {
-				 //形成被偷动力小车
-				 int stealPower=calPower-power;
-				 int r=RandUtils.generateRand(1,3);
-				 while(r<=stealPower) {
-					 addCar(batchInsert, uth,r,1) ;
-					 stealPower=stealPower-r;
-					 r=RandUtils.generateRand(1,3);
-				 }
-				 if(stealPower>0) {
-					 addCar(batchInsert, uth,stealPower,1) ;
-				 }
-			 }
-		}
+			 power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));//减去罚单降低的动力
+		} 
+	 if(power>0) {
+		 //形成被偷动力小车
+		 int stealPower=calPower-power;
+		 
+		 stealPower=Double.valueOf((stealPower*0.2)).intValue();
+		 int r=RandUtils.generateRand(1,3);
+		 while(r<=stealPower) {
+			 addCar(batchInsert, uth,r,1) ;
+			 stealPower=stealPower-r;
+			 r=RandUtils.generateRand(1,3);
+		 }
+		 if(stealPower>0) {
+			 addCar(batchInsert, uth,stealPower,1) ;
+		 }
+	 }
 		int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
 		if(fadan>0) {//三急+超速
 			for(int j=0;j<fadan;j++) {
