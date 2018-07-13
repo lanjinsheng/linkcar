@@ -573,6 +573,9 @@ public class InteractService extends BaseService<InteractService> {
 			return 0;
 		}
 		for (InteractTempCar car : list) {
+			if (car.getBlackIds() == null || car.getBlackIds().equals("")) {
+				return 1;
+			}
 			if (car.getBlackIds() != null && !car.getBlackIds().equals("")) {
 				String[] split = car.getBlackIds().split(",");
 				List<String> list2 = Arrays.asList(split);
