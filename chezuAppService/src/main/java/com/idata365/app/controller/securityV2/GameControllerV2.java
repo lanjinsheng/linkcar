@@ -341,6 +341,9 @@ public class GameControllerV2 extends BaseController {
 			} else {
 				fightFamilyId = recordList.get(i).getSelfFamilyId();
 			}
+			if(fightFamilyId == 0) {
+				continue;
+			}
 			bean.setFamilyId(fightFamilyId);
 			ScoreFamilyDetailResultBean detail = scoreService.queryFamilyDetail(bean);
 			String fightFamilyImg = detail.getImgUrl();

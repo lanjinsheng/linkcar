@@ -527,6 +527,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	public List<FamilyRandResultBean> queryFamilyByName(FamilyParamBean bean, long userId) {
 		List<FamilyRandResultBean> list = new ArrayList<>();
 		bean.setFamilyName("%" + bean.getFamilyName() + "%");
+		bean.setUserId(userId);
 		List<FamilyRandBean> tempRandBeans = this.familyMapper.queryFamilyByName(bean);
 
 		if (null != tempRandBeans && tempRandBeans.size() != 0) {
