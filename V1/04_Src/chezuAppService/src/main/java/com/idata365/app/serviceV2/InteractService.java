@@ -518,16 +518,17 @@ public class InteractService extends BaseService<InteractService> {
 		    	taskPowerLogs.setTaskType(PowerEnum.Steal);
 		    	int power=r.getPowerNum().intValue();
 		    	taskPowerLogs.setJsonValue(String.format(jsonValue, r.getUserId(),userId,r.getType(),power,r.getId()));
-		    	InteractLogs log=new InteractLogs();
-				log.setEventType(InteractConstant.STEAL_POWER);
-				log.setSomeValue(power);
-				log.setUserIdA(userId);
-				log.setUserIdB(r.getUserId());
-				log.setUserNameA(nickName);
-				UsersAccount account=usersAccountMapper.findAccountById(r.getUserId());
-				log.setUserNameB(account.getNickName());
-		    	interactLogsMapper.insertLog(log);
-		    	
+		    	if(r.getType()==1){
+			    	InteractLogs log=new InteractLogs();
+					log.setEventType(InteractConstant.STEAL_POWER);
+					log.setSomeValue(power);
+					log.setUserIdA(userId);
+					log.setUserIdB(r.getUserId());
+					log.setUserNameA(nickName);
+					UsersAccount account=usersAccountMapper.findAccountById(r.getUserId());
+					log.setUserNameB(account.getNickName());
+			    	interactLogsMapper.insertLog(log);
+		    	}
 		    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 		    	if(hadAdd>0) {
 		    		return true;
