@@ -61,7 +61,7 @@
     
     <select id="queryFinishedCount" resultType="java.lang.Integer" >
   	  select count(1)
-		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and a.valid=1 and status=1
+		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and a.valid=1 and a.status=1
     </select>
     
     <update id="updateCountOfId5" >
