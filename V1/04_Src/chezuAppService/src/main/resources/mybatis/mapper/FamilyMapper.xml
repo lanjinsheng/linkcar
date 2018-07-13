@@ -438,11 +438,11 @@
  	</select>
     
     <update id="updateUserOtherApplyStatus" >
- 	    update familyInvite set status=-1 where memberUserId=#{userId} and status=0 and inviteType=1
+ 	    update familyInvite set status=2 where memberUserId=#{userId} and status=0 and inviteType=1
     </update>
     
     <update id="updateOtherFamilyInviteStatus" >
- 	    update familyInvite set status=-1 where memberUserId=#{userId} and status=0 and inviteType=2
+ 	    update familyInvite set status=2 where memberUserId=#{userId} and status=0 and inviteType=2
     </update>
     
   </mapper>

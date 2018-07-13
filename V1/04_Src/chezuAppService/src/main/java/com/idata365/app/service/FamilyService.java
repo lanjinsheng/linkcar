@@ -236,6 +236,9 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		FamilyInviteResultBean tempResultBean = new FamilyInviteResultBean();
 		AdBeanUtils.copyOtherPropToStr(tempResultBean, familyInviteBean);
+		if (tempResultBean.getStatus().equals("2")) {//被搁置的申请
+			tempResultBean.setStatus("0");
+		}
 		Date lastLoginTime = this.userInfoService.getUsersAccount(Long.valueOf(familyInviteBean.getUserId())).getLastLoginTime();
 //		Date lastLoginTime = familyInviteBean.getLastActiveTime();
 		long s = (new Date().getTime() - lastLoginTime.getTime())/(60*1000);
