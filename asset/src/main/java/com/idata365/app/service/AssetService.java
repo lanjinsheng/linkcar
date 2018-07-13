@@ -994,7 +994,7 @@ public class AssetService extends BaseService<AssetService> {
 			if (logs.getRelation().equals("0") && logs.getFamilyId() == familyId) {
 				powerList.add(logs);
 			} else {
-				String[] str = logs.getRelation().split(",");
+				String[] str = logs.getRelation().split("-");
 				long selfFamilyId = Long.valueOf(String.valueOf(str[0]));
 				long competitorFamilyId = Long.valueOf(String.valueOf(str[1]));
 				long relationType = Long.valueOf(String.valueOf(str[2]));
