@@ -291,7 +291,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	public int permitApply(FamilyParamBean bean, UserInfo userInfo, String path) {
 		long msgId = bean.getMsgId();
 		int status = familyInviteMapper.queryStatus(msgId);
-		if (status == -1) {
+		if (status == 2) {
 			return 1;
 		}
 		List<Long> familyIdList = this.familyMapper.queryJoinFamilyIdByUserId(bean);
