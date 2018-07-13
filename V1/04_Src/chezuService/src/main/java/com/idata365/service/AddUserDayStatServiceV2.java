@@ -202,7 +202,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		 car.setCarId( 1L);
 		 car.setCarType("1");
 		 car.setTravelId(uth.getId());
-		 car.setDaystamp(uth.getEndTime().substring(0,10));
+		 car.setDaystamp(uth.getEndTime().substring(0,10).replace("-", ""));
 		 car.setUuid(UUID.randomUUID().toString().replace("-", ""));
 		 batchInsert.add(car);
 	}
