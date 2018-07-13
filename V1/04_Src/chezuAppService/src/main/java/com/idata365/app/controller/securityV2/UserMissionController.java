@@ -42,17 +42,9 @@ public class UserMissionController extends BaseController {
 		LOG.info("userId=================" + userId);
 		LOG.info("missionType=================" + missionType);
 		
-		//更新每日任务
-//		boolean flag = userMissionService.updateDayMission(userId);
-//		LOG.info("更新每日任务状态=================" + flag);
-//		// 初始化
-//		int count = userMissionService.queryHadRecord(userId);
-//		if(count == 0) {
-//			LOG.info("初始化任务log============userId=================" + userId);
-//			List<DicUserMission> missions = userMissionService.getAllDicUserMission();
-//			userMissionService.initLogsToUser(missions,userId);
-//			userMissionService.updateCountOfId5(userId);
-//		}
+		//初始化任务系统
+		// userMissionService.initMissionOfUserId(userId);
+		
 		// 预查询
 		userMissionService.insertOrUpdateLogs(userId, missionType);
 		
