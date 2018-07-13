@@ -43,7 +43,8 @@
        stealerId=#{stealerId} where hadGet=0 and lockStatus=-1 and uuid=#{uuid}
      </update> -->
       <update id="updateTempCar"  parameterType="java.util.HashMap">
-       update  interactTempCar set hadGet=1,lockStatus=2,stealerId=#{stealerId} where hadGet=0 and lockStatus=-1 and uuid=#{uuid}
+       update  interactTempCar set hadGet=1,lockStatus=2,stealTime=now(),
+       stealerId=#{stealerId} where hadGet=0 and lockStatus=-1 and uuid=#{uuid}
      </update>
       <select id="getTempCarByUuid" resultMap="BaseTempCarMap" parameterType="java.lang.String">
       select *
