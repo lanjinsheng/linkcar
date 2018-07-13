@@ -118,6 +118,9 @@ public class FightController extends BaseController {
 		LOG.info("famiyId=================" + requestBodyParams.get("familyId"));
 		Long selfFamilyId=Long.valueOf(requestBodyParams.get("selfFamilyId").toString());
 		Long competitorFamilyId=Long.valueOf(requestBodyParams.get("competitorFamilyId").toString());
+		if(competitorFamilyId.longValue()==0 || selfFamilyId.longValue()==0){
+			return ResultUtils.rtFailParam(null, "家族入参错误。");
+		}
 		fightService.insertFightRelation(selfFamilyId, competitorFamilyId);
 		return ResultUtils.rtSuccess(null);
 	}
