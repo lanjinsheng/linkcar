@@ -484,6 +484,7 @@ public class InteractService extends BaseService<InteractService> {
 			//
 			InteractTempCar r=interactTempCarMapper.getTempCarByUuid(uuid);
 			if(r.getType()>0){
+				map.put("travelId", r.getTravelId());
 				interactTempCarMapper.updateBlackIds(map);
 			}
 			if(r.getType()==2){//贴罚单的处理
