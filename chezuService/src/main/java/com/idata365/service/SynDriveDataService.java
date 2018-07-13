@@ -111,7 +111,7 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 			uth.setTurnTimes(drive.getTurnTimes());
 			uth.setOverspeedTimes(drive.getOverspeedTimes());
 			uth.setMaxspeed(drive.getMaxSpeed().doubleValue());
-			uth.setHiddenFlag("1");
+			uth.setHiddenFlag("0");
 			if(UserConfigService.map.get(uth.getUserId())!=null) {
 				//查找配置
 				String hidden=String.valueOf(UserConfigService.map.get(uth.getUserId()));
