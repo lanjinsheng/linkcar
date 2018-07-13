@@ -68,7 +68,6 @@ public class InteractService extends BaseService<InteractService> {
 		interactTempCarMapper.clearLockTask(compareTimes);
 	}
 	
-	
 	/**
 	 * 缴纳罚单
 	 * @param userId
@@ -269,7 +268,7 @@ public class InteractService extends BaseService<InteractService> {
 		InteractTempCar interactTempCar=new InteractTempCar();
 		interactTempCar.setLockBatchId(uuid);
 		interactTempCar.setStealerId(userId);
-		interactTempCar.setLockTime(System.currentTimeMillis());
+		interactTempCar.setLockTime(time);
 		interactTempCar.setDaystamp(DateTools.getYYYYMMDD());
 		int lock=interactTempCarMapper.lockCar(interactTempCar);
 		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
@@ -301,7 +300,9 @@ public class InteractService extends BaseService<InteractService> {
 		}
 		rtList.addAll(insertCars);
 		//插入insertCars
-		interactTempCarMapper.batchInsertCar(insertCars);
+		if(insertCars.size()>0){
+			interactTempCarMapper.batchInsertCar(insertCars);
+		}
 		//装饰车辆
 		for(int i=0;i<noRewardCar;i++){
 			Map<String,Object> car=randReward(userId,-1,daystamp);
@@ -583,6 +584,6 @@ public class InteractService extends BaseService<InteractService> {
 	}
 	
 	public static void main(String []args) {
-		System.out.println(2+UUID.randomUUID().toString().replaceAll("-", ""));
+		System.out.println(System.currentTimeMillis()-(2*60*1000));
 	}
 }
