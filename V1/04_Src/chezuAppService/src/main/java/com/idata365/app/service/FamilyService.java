@@ -57,6 +57,7 @@ import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
+import com.idata365.app.mapper.FamilyInviteMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.ImNotifyMapper;
 import com.idata365.app.mapper.ScoreMapper;
@@ -110,6 +111,8 @@ public class FamilyService extends BaseService<FamilyService> {
     CarpoolApproveMapper carpoolApproveMapper;
 	@Autowired
 	UserConfigMapper userConfigMapper;
+	@Autowired
+	FamilyInviteMapper familyInviteMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -283,6 +286,11 @@ public class FamilyService extends BaseService<FamilyService> {
 	 */
 	@Transactional
 	public int permitApply(FamilyParamBean bean, UserInfo userInfo, String path) {
+		long msgId = bean.getMsgId();
+		int status = familyInviteMapper.queryStatus(msgId);
+		if (status == -1) {
+			return 1;
+		}
 		List<Long> familyIdList = this.familyMapper.queryJoinFamilyIdByUserId(bean);
 
 		if (CollectionUtils.isNotEmpty(familyIdList) && familyIdList.size() >= 1) {
@@ -359,9 +367,17 @@ public class FamilyService extends BaseService<FamilyService> {
 		int inviteType = this.familyMapper.queryInviteType(bean.getMsgId());
 		if(inviteType == 1) {
 			//审核成员通过
+			
+			//取消该用户的其他申请
+			this.familyMapper.updateUserOtherApplyStatus(bean.getUserId());
+			
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
 		}else {
 			//通过家族邀请
+			
+			//取消其他家族对该用户的邀请
+			this.familyMapper.updateOtherFamilyInviteStatus(bean.getUserId());
+			
 			dealtMsg(userInfo, null, familyMapper.queryCreateUserId(bean), MessageEnum.PASS_FAMILY2);
 		}
 		

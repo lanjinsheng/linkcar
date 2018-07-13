@@ -559,7 +559,11 @@ public class InteractService extends BaseService<InteractService> {
 	 */
 	@Transactional
 	public int isCanPayTicket(Long userId){
-		return this.interactPeccancyMapper.isCanPayTicket(userId);
+		int i = this.interactPeccancyMapper.isCanPayTicket(userId);
+		if(i>0) {
+			i = 1;
+		}
+		return i;
 	}
 	
 	@Transactional

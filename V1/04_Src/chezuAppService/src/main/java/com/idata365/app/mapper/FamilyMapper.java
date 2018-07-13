@@ -198,5 +198,9 @@ public interface FamilyMapper {
 	List<Map<String, Object>> canRecruitListByName(@Param("userId")long userId,@Param("familyId")long familyId,@Param("nickName")String nickName);
 	
 	public int isInFamily(@Param("userId")long userId,@Param("familyId")long familyId);
+	
+	public int updateUserOtherApplyStatus(@Param("userId")long userId);
+	
+	public int updateOtherFamilyInviteStatus(@Param("userId")long userId);
 
 }
