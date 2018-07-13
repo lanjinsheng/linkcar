@@ -371,6 +371,7 @@ public class FamilyController extends BaseController {
 	 */
 	@RequestMapping("/family/queryMainNum")
 	public Map<String, Object> queryMainNum(@RequestBody FamilyParamBean reqBean) {
+		reqBean.setUserId(this.getUserId());
 		MainResultBean resultBean = this.familyService.queryMainNum(reqBean);
 		return ResultUtils.rtSuccess(resultBean);
 	}

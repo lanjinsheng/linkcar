@@ -437,4 +437,12 @@
 		(select * from userFamilyRelation where familyId!=#{familyId} and isLeader=0) d on c.userId=d.userId 
  	</select>
     
+    <update id="updateUserOtherApplyStatus" >
+ 	    update familyInvite set status=-1 where memberUserId=#{userId} and status=0 and inviteType=1
+    </update>
+    
+    <update id="updateOtherFamilyInviteStatus" >
+ 	    update familyInvite set status=-1 where memberUserId=#{userId} and status=0 and inviteType=2
+    </update>
+    
   </mapper>

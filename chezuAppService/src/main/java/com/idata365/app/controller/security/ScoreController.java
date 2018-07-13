@@ -139,6 +139,7 @@ public class ScoreController extends BaseController {
 	 */
 	@RequestMapping("/score/queryFamilyDetail")
 	public Map<String, Object> queryFamilyDetail(@RequestBody ScoreFamilyInfoParamBean bean) {
+		bean.setUserId(this.getUserId());
 		LOG.info("param==={}", JSON.toJSONString(bean));
 		ScoreFamilyDetailResultBean resultBean = this.scoreService.queryFamilyDetail(bean);
 
