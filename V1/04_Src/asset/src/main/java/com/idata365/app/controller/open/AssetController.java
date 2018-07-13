@@ -256,7 +256,6 @@ public class AssetController extends BaseController {
 			log2.setRecordType(AssetConstant.RECORDTYPE_2);
 			log2.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
 			log2.setRemark("缴纳罚单");
-			log2.setUserId(payerId);
 			b = assetService.reduceUserPowers(log2);
 		}else if(Integer.valueOf(map.get("type").toString())==1){//代付缴纳罚单
 			AssetUsersPowerLogs log2=new AssetUsersPowerLogs();
