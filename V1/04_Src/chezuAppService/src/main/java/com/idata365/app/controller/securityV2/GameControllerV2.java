@@ -128,7 +128,7 @@ public class GameControllerV2 extends BaseController {
 		long userId = this.getUserId();
 		String haveNewPower = chezuAssetService.queryHaveNewPower(userId, scoreFamilyInfoBean.getFamilyId(),
 				SignUtils.encryptHMAC(String.valueOf(userId)));
-		map.put("haveNewPower", haveNewPower);
+		map.put("haveNewPower", haveNewPower == null ? "0" : haveNewPower);
 		if (opponentId == null || opponentId == 0) {
 			map.put("fightFamilyName", "");
 			map.put("fightFamilyScore", "");
