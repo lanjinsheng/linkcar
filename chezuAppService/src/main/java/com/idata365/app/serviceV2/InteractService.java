@@ -483,11 +483,11 @@ public class InteractService extends BaseService<InteractService> {
 		if(hadGet>0) {
 			//
 			InteractTempCar r=interactTempCarMapper.getTempCarByUuid(uuid);
-			if(r.getType()>0){
+			if(r.getType().intValue()>0){
 				map.put("travelId", r.getTravelId());
 				interactTempCarMapper.updateBlackIds(map);
 			}
-			if(r.getType()==2){//贴罚单的处理
+			if(r.getType().intValue()==2){//贴罚单的处理
 				InteractPeccancy interactPeccancy=new InteractPeccancy();
 				long endLong=System.currentTimeMillis()+(10*3600*1000);
 				interactPeccancy.setEndLong(endLong);
@@ -518,7 +518,7 @@ public class InteractService extends BaseService<InteractService> {
 		    	taskPowerLogs.setTaskType(PowerEnum.Steal);
 		    	int power=r.getPowerNum().intValue();
 		    	taskPowerLogs.setJsonValue(String.format(jsonValue, r.getUserId(),userId,r.getType(),power,r.getId()));
-		    	if(r.getType()==1){
+		    	if(r.getType().intValue()==1){
 			    	InteractLogs log=new InteractLogs();
 					log.setEventType(InteractConstant.STEAL_POWER);
 					log.setSomeValue(power);
