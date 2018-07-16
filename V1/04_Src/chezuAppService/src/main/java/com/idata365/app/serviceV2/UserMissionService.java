@@ -89,7 +89,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					count = tripService.getTodayCountTrip(userId);
 					break;
 				case 4:
-					// 分享好车族给好友
+					// 分享链车给好友
 					count = userInfoServiceV2.queryUserShareCountToday(userId);
 					break;
 				case 5:

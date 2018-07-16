@@ -26,7 +26,7 @@ public class PhoneMsgTools {
 		map.put("mobile", mobile);
 		map.put("templateType", String.valueOf(templateType));
 		map.put("validateCode", validateCode);
-		map.put("smsSignName", "好车族");
+		map.put("smsSignName", "链车");
 		String sign=SignUtils.encryptHMAC(mobile+validateCode);
 		map.put("sign", sign);
 		boolean flag = phoneMsgTools.chezuSmsService.sendMessage(map);
