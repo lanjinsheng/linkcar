@@ -239,6 +239,7 @@ public class InteractService extends BaseService<InteractService> {
 		m.put("power", "0");
 		m.put("carType", "1");
 		m.put("userId", userId);
+		m.put("lockTime", System.currentTimeMillis());
 		m.put("daystamp", daystamp);
 		m.put("uuid",userId+UUID.randomUUID().toString().replaceAll("-", ""));
 		m.put("type", type);
