@@ -148,7 +148,18 @@
 		class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">
 		<property name="scheduledExecutorTasks">
 			<list>
- 
+ 				
+ 				<!-- 
+ 				                <ref bean="scanTaskExe" />
+ 								<ref bean="calTaskAchieveAddValueExe" />
+ 								<ref bean="giveUserAchieveTaskExe" />
+ 								<ref bean="userLoterryTaskExe" />
+ 								<ref bean="systemFlagTaskExe" />
+ 								<ref bean="awardInfoPushTaskExe" />
+ 				 -->
+		
+				<ref bean="messagePushTaskExe" />
+				<ref bean="clearLockTaskExe" />
 			</list>
 		</property>
 	</bean>
