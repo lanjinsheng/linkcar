@@ -5,11 +5,11 @@
     </resultMap>
       <insert id="batchInsertTempCar" parameterType="java.util.HashMap">
       INSERT INTO  interactTempCar
-		 (userId,carId,powerNum,carType,type,travelId,daystamp,createTime,uuid)
+		 (userId,carId,powerNum,carType,type,travelId,daystamp,createTime,uuid,r)
 		  VALUES
     	<foreach collection="list" item="item" index="index" separator=",">
     		(#{item.userId},#{item.carId},#{item.powerNum},#{item.carType},#{item.type},
-    		#{item.travelId},#{item.daystamp},now(),#{item.uuid}) 
+    		#{item.travelId},#{item.daystamp},now(),#{item.uuid},#{item.r}) 
     	</foreach>
     	</insert>
 </mapper>
