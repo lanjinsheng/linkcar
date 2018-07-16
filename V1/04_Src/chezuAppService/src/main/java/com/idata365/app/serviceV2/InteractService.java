@@ -288,8 +288,11 @@ public class InteractService extends BaseService<InteractService> {
 		
 		List<InteractTempCar> cars=interactTempCarMapper.getTempCar(uuid);
 		for(InteractTempCar car:cars){
+			if(car.getUserId()==car.getUserId()){
+				continue;
+			}
 			if(car.getBlackIds()!=null && car.getBlackIds().contains(String.valueOf(userId)+",")){
-				
+				continue;
 			}else{
 				Map<String,Object> m=new HashMap<String,Object>();
 				m.put("carId", String.valueOf(car.getCarId()));
