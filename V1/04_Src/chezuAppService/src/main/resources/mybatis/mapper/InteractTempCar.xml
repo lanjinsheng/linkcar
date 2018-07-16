@@ -6,7 +6,7 @@
  
       <update id="lockCar"  parameterType="com.idata365.app.entity.InteractTempCar">
        update  interactTempCar a,(   
-       select id,rand() r from interactTempCar
+       select id,r from interactTempCar
        where daystamp=#{daystamp} and lockStatus=1 and type<![CDATA[>]]>0 order by r limit 5) b
 	   set  a.lockBatchId=#{lockBatchId},a.stealerId=#{stealerId},a.lockStatus=-1,
        a.lockTime=#{lockTime}  where a.id=b.id
