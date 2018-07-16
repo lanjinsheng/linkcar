@@ -14,6 +14,7 @@ public interface InteractTempCarMapper {
 	List<InteractTempCar> getTempCar(@Param("uuid") String uuid);
 	List<InteractTempCar> getTempCarByUserId(InteractTempCar interactTempCar);
 	int clearLockTask(@Param("compareTimes") Long compareTimes);
+	int deleteRedundancy(@Param("compareTimes") Long compareTimes);
 	
 	InteractTempCar getTempCarByUuid(@Param("uuid") String uuid);
 
