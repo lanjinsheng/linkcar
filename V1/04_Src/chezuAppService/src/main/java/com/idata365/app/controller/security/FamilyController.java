@@ -239,7 +239,7 @@ public class FamilyController extends BaseController {
 		if (-1 == familyId) {
 			return ResultUtils.rtFailRequest(null);
 		} else if (-2 == familyId) {
-			return ResultUtils.rtFailVerification(null);
+			return ResultUtils.rtFailParam(null,"俱乐部昵称已存在");
 		}
 		// 初始化家族分数
 
