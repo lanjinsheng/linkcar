@@ -288,6 +288,7 @@ public class InteractService extends BaseService<InteractService> {
 		List<Map<String,Object>> insertCars=new ArrayList<Map<String,Object>>();
 		
 		List<InteractTempCar> cars=interactTempCarMapper.getTempCar(uuid);
+		Map<Long,Integer> userRedunKey=new HashMap<>();
 		for(InteractTempCar car:cars){
 			if(car.getUserId()==car.getUserId()){
 				continue;
@@ -295,6 +296,10 @@ public class InteractService extends BaseService<InteractService> {
 			if(car.getBlackIds()!=null && car.getBlackIds().contains(String.valueOf(userId)+",")){
 				continue;
 			}else{
+				if(userRedunKey.get(car.getUserId())!=null){
+					continue;
+				}
+				userRedunKey.put(car.getUserId(), 1);
 				Map<String,Object> m=new HashMap<String,Object>();
 				m.put("carId", String.valueOf(car.getCarId()));
 				m.put("power", String.valueOf(car.getPowerNum()));
@@ -303,6 +308,7 @@ public class InteractService extends BaseService<InteractService> {
 				m.put("type", car.getType());
 				m.put("name", car.getDriver());
 				m.put("userId", car.getUserId());
+				m.put("lockTime", System.currentTimeMillis());
 				m.put("daystamp", car.getDaystamp());
 				rtList.add(m);
 			}
