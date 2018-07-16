@@ -71,6 +71,16 @@ public class InteractService extends BaseService<InteractService> {
 	}
 	
 	/**
+	 * 删除无效的锁定的小车任务
+	 */
+	public	void deleteRedundancy() {
+		
+		long compareTimes=System.currentTimeMillis()-(30*60*1000);
+		int i=interactTempCarMapper.deleteRedundancy(compareTimes);
+		LOG.info("============删除无效的锁定的小车任务deleteRedundancy="+i);
+	}
+	
+	/**
 	 * 缴纳罚单
 	 * @param userId
 	 * @param peccancyId

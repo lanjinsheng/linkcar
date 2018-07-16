@@ -56,6 +56,7 @@ public class ClearLockTask extends TimerTask {
 //				taskGiveUserAchieveService.clearLockTask();
 				taskMessagePushService.clearLockTask();
 				interactService.clearLockTask();
+				interactService.deleteRedundancy();
 //				taskAwardInfoPushService.clearLockTask();
 //				taskUserLotteryService.clearLockTask();
 		
