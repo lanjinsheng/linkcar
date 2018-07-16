@@ -6,7 +6,9 @@
  
       <update id="lockCar"  parameterType="com.idata365.app.entity.InteractTempCar">
       update  interactTempCar set  lockBatchId=#{lockBatchId},stealerId=#{stealerId},lockStatus=-1,
-       lockTime=#{lockTime}  where daystamp=#{daystamp} and lockStatus=1 and type<![CDATA[>]]>0 order by r limit 5
+       lockTime=#{lockTime}  
+       where daystamp=#{daystamp} and lockStatus=1 and userId!=#{userId}
+       and type<![CDATA[>]]>0 order by r limit 5
      </update>
      <update id="lockCarById"  parameterType="com.idata365.app.entity.InteractTempCar">
        update  interactTempCar 
