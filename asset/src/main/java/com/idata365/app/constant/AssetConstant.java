@@ -38,7 +38,7 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_MISSION_STEAL_ID = 101;// 主页偷取小车动力5次
 	public final static int EVENTTYPE_POWER_MISSION_LIKE_ID = 102;// 在其他玩家车库点赞3次
 	public final static int EVENTTYPE_POWER_MISSION_TRIP_ID = 103;// 今日出行1次
-	public final static int EVENTTYPE_POWER_MISSION_SHARE_ID = 104;// 分享好车族给好友
+	public final static int EVENTTYPE_POWER_MISSION_SHARE_ID = 104;// 分享链车给好友
 	public final static int EVENTTYPE_POWER_MISSION_LOGIN_ID = 105; // 连续登录第s日（每天增加5点，上限150点）
 	public final static int EVENTTYPE_POWER_MISSION_IDCARD_ID = 106; // 完成实名认证
 	public final static int EVENTTYPE_POWER_MISSION_LICENSE_ID = 107; // 完成行驶证认证
