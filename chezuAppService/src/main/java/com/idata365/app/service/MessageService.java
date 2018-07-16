@@ -60,7 +60,7 @@ public class MessageService extends BaseService<MessageService>{
 	//获奖
 	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族共获得【%s】钻石，分配给您【%s】钻石，已发放至您的账户.";
 	
-	public static final String RegMessage="欢迎您加入【好车族】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
+	public static final String RegMessage="欢迎您加入【链车】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
 	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";

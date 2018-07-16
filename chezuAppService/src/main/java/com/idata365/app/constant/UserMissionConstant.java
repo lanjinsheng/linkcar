@@ -9,7 +9,7 @@ public class UserMissionConstant {
 	public static final int LIKE_ID = 2;
 	// 今日出行1次
 	public static final int TRIP_ID = 3;
-	// 分享好车族给好友
+	// 分享链车给好友
 	public static final int SHARE_ID = 4;
 	// 连续登录第s日（每天增加5点，上限150点）
 	public static final int LOGIN_ID = 5;
