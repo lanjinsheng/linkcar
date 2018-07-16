@@ -52,12 +52,13 @@ public class ClearLockTask extends TimerTask {
 			pd=false;
 		
 			try {
-				taskAchieveAddValueService.clearLockTask();
-				taskGiveUserAchieveService.clearLockTask();
+//				taskAchieveAddValueService.clearLockTask();
+//				taskGiveUserAchieveService.clearLockTask();
 				taskMessagePushService.clearLockTask();
-				taskAwardInfoPushService.clearLockTask();
-				taskUserLotteryService.clearLockTask();
 				interactService.clearLockTask();
+//				taskAwardInfoPushService.clearLockTask();
+//				taskUserLotteryService.clearLockTask();
+		
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.error(e);

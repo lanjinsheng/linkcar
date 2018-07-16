@@ -8,9 +8,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.util.RandUtils;
 
 public class Test1
 {
@@ -18,24 +16,7 @@ public class Test1
 	
 	public static void main(String[] args)
 	{
-//		Person person = new Person();
-//		person.setAge(5);
-//		
-//		People people = new People();
-//		AdBeanUtils.copyOtherPropToStr(people, person);
-//		System.out.println(JSON.toJSONString(people));
-		
-//		test2UUID();
-		
-//		test1();
-		
-//		BigDecimal.valueOf(100).divide(null, 0, 0)
-		
-//		calBatch(100, 3);
-		
-//		int generateRand = RandUtils.generateRand(1, 200);
-		
-		hidePhone();
+System.out.print(Boolean.valueOf(null));
 	}
 
 	public static String hidePhone()
