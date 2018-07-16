@@ -204,6 +204,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		 car.setTravelId(uth.getId());
 		 car.setDaystamp(uth.getEndTime().substring(0,10).replace("-", ""));
 		 car.setUuid(UUID.randomUUID().toString().replace("-", ""));
+		 car.setR(RandUtils.generateRand(1, 100));
 		 batchInsert.add(car);
 	}
 	
@@ -253,6 +254,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	 }
 		int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
 		if(fadan>0) {//三急+超速
+			fadan=fadan>8?8:fadan;
 			for(int j=0;j<fadan;j++) {
 				addCar(batchInsert, uth,(int)(power*0.1),2) ;
 			}
