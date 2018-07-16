@@ -92,9 +92,9 @@ public class UserHomeController extends BaseController {
 		
 		Map<String, Object> car = carService.getUserCar(userId);
 		//车名
-		rtMap.put("carName", car.get("carName").toString());
+		rtMap.put("carName", car.get("carName")==null?"链车蓝跑1代":car.get("carName").toString());
 		//车图片
-		rtMap.put("carImgUrl", car.get("carUrl").toString());
+		rtMap.put("carImgUrl",car.get("carUrl")==null?"http://product-h5.idata365.com/appImgs/paoche1.png": car.get("carUrl").toString());
 		//点赞次数
 		rtMap.put("likeCount", String.valueOf(interactService.queryLikeCount(userId)));
 		//按钮展示
