@@ -239,8 +239,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		} 
 	 if(power>0) {
 		 //形成被偷动力小车
-		 int stealPower=calPower-power;
-		 
+		 int stealPower=calPower;
 		 stealPower=Double.valueOf((stealPower*0.2)).intValue();
 		 int r=RandUtils.generateRand(1,3);
 		 while(r<=stealPower) {
