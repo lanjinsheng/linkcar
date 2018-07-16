@@ -64,8 +64,10 @@ public class InteractService extends BaseService<InteractService> {
 	 * 清理锁定的小车任务
 	 */
 	public	void clearLockTask() {
+		
 		long compareTimes=System.currentTimeMillis()-(2*60*1000);
-		interactTempCarMapper.clearLockTask(compareTimes);
+		int i=interactTempCarMapper.clearLockTask(compareTimes);
+		LOG.info("============清理锁定的小车任务clearLockTask="+i);
 	}
 	
 	/**
