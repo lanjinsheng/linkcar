@@ -36,8 +36,15 @@ public class InteractTempCar implements Serializable {
 	private String lockBatchId;
 	private String blackIds;
 	private Long travelId;
+	private Integer r=0;
 	
 	
+	public Integer getR() {
+		return r;
+	}
+	public void setR(Integer r) {
+		this.r = r;
+	}
 	public Long getTravelId() {
 		return travelId;
 	}
