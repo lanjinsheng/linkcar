@@ -27,11 +27,11 @@
      </select>
      <insert id="batchInsertCar" parameterType="java.util.HashMap">
       INSERT INTO  interactTempCar
-		 (userId,carId,powerNum,carType,type,travelId,daystamp,createTime,uuid,lockStatus)
+		 (userId,carId,powerNum,carType,type,travelId,daystamp,createTime,lockTime,uuid,lockStatus)
 		  VALUES
     	<foreach collection="list" item="item" index="index" separator=",">
     		(#{item.userId},#{item.carId},#{item.power},#{item.carType},#{item.type},
-    		'0',#{item.daystamp},now(),#{item.uuid},-1) 
+    		'0',#{item.daystamp},now(),#{item.lockTime},#{item.uuid},-1) 
     	</foreach>
      </insert>
 
