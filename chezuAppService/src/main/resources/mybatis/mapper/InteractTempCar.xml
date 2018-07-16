@@ -68,6 +68,11 @@
            lockStatus=1
        WHERE 
               lockStatus=-1 and lockTime<![CDATA[<]]>${compareTimes} and hadGet=0
-     </update>
-     
+    </update>
+    <delete id="deleteRedundancy" parameterType="java.lang.Long" >
+       delete from  
+           interactTempCar 
+       WHERE 
+         type=0 and  lockStatus=-1 and lockTime<![CDATA[<]]>${compareTimes} and hadGet=0
+    </delete>  
 </mapper>
