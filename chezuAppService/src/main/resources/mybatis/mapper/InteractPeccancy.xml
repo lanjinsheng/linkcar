@@ -35,6 +35,13 @@
        		payStatus=0 and endLong<![CDATA[>]]>${endLong}
    </select> 
    
+   <!-- 根据userId和CarID查询当前贴条数量 -->
+   <select id="getUserPeccancyCountById" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+     select count(1)
+       		FROM  interactPeccancy  where lawBreakerId=${lawBreakerId} and 
+       		payStatus=0 and endLong<![CDATA[>]]>${endLong} and carId=#{carId}
+   </select>
+   
    <select id="isCanPayTicket" resultType="java.lang.Integer" >
       	select count(1) from interactPeccancy where lawBreakerId=#{userId} and endTime>now() and payStatus=0
    </select>

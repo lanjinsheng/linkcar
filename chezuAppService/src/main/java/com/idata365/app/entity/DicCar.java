@@ -21,7 +21,43 @@ public class DicCar implements Serializable {
 	private Long powerConvert2;//20-80公里内动力转换能力：如：8
 	private Long powerConvert3;//80公里以上动力转换能力：如：5
 	private Integer clubScoreUpPercent;//俱乐部成绩加成百分比
+	private Integer isCanUnlock;//解锁是否可引导 1:true 0:false
+	private String unlockCondition;//解锁条件描述
+	private String unlockIconDesc;//解锁按钮描述
+	private String unlockActionLink;//解锁引导地址
 	
+	public Integer getIsCanUnlock() {
+		return isCanUnlock;
+	}
+
+	public void setIsCanUnlock(Integer isCanUnlock) {
+		this.isCanUnlock = isCanUnlock;
+	}
+
+	public String getUnlockCondition() {
+		return unlockCondition;
+	}
+
+	public void setUnlockCondition(String unlockCondition) {
+		this.unlockCondition = unlockCondition;
+	}
+
+	public String getUnlockIconDesc() {
+		return unlockIconDesc;
+	}
+
+	public void setUnlockIconDesc(String unlockIconDesc) {
+		this.unlockIconDesc = unlockIconDesc;
+	}
+
+	public String getUnlockActionLink() {
+		return unlockActionLink;
+	}
+
+	public void setUnlockActionLink(String unlockActionLink) {
+		this.unlockActionLink = unlockActionLink;
+	}
+
 	public Integer getClubScoreUpPercent() {
 		return clubScoreUpPercent;
 	}

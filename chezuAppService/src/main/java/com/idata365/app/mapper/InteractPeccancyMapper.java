@@ -19,4 +19,6 @@ public interface InteractPeccancyMapper {
 	List<Map<String,Object>> getPeccancyList(Map<String,Object> map);
 	
 	int getUserPeccancyCount(Map<String,Object> map);
+	
+	int getUserPeccancyCountById(Map<String,Object> map);
 }

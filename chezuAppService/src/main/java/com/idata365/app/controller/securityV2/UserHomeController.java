@@ -120,5 +120,31 @@ public class UserHomeController extends BaseController {
 		
 		return ResultUtils.rtSuccess(rtMap);
 	}
-
+	
+	/**
+	 * 
+        * @Title: queryUsersCar
+        * @Description: TODO(更换车辆页面)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	@RequestMapping("/queryUsersCar")
+	public Map<String, Object> queryUsersCar(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		LOG.info("userId========================="+userId);
+		Map<String, Object> rtMap;
+		try {
+			rtMap = this.carService.queryUsersCar(userId);
+			return ResultUtils.rtSuccess(rtMap);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResultUtils.rtSuccess(null);
+		}
+	}
 }
