@@ -119,7 +119,7 @@ public class UsersInfoController extends BaseController {
 
 			if (licenseVehicleTravel != null) {// 行驶证
 				licenseVehicleTravel.getUserId();
-
+				rtMap.put("userId", String.valueOf(licenseVehicleTravel.getUserId()));
 				rtMap.put("plateNo", licenseVehicleTravel.getPlateNo());
 				rtMap.put("cardTypeDesc", StaticDatas.VEHILCE.get(String.valueOf(licenseVehicleTravel.getCarType())));
 				rtMap.put("userTypeDesc", StaticDatas.VEHILCE_USETYPE.get(licenseVehicleTravel.getUseType()));
@@ -142,6 +142,7 @@ public class UsersInfoController extends BaseController {
 				rtMap.put("isTravelEdit", String.valueOf(licenseVehicleTravel.getIsTravelEdit()));
 				rtMap.put("userId", licenseVehicleTravel.getUserId().toString());
 			} else {
+				rtMap.put("userId", "");
 				rtMap.put("plateNo", "");
 				rtMap.put("cardTypeDesc", "");
 				rtMap.put("userTypeDesc", "");

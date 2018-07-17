@@ -382,6 +382,20 @@ public class CarService extends BaseService<CarService> {
 		return car;
 	}
 	
+	/**
+	 * 
+	        * @Title: initUserCar
+	        * @Description: TODO(初始化用户车辆信息)
+	        * @param  参数
+	        * @return void 返回类型
+	        * @throws
+	        * @author LiXing
+	 */
+	public void initUserCar(long userId) {
+		this.userCarMapper.initUserCar(userId);
+		this.userCarLogsMapper.initUserCar(userId);
+	}
+	
 	public static void main(String []args) {
 		System.out.println(2+UUID.randomUUID().toString().replaceAll("-", ""));
 	}
