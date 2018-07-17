@@ -284,4 +284,22 @@ public class AssetController extends BaseController {
 		rtMap.put("assetList", list);
 		return ResultUtils.rtSuccess(rtMap);
 	}
+	
+	/**
+	 * 
+	        * @Title: pltfDiamondsDetail
+	        * @Description: TODO(平台运营账号钻石详情)
+	        * @param @param allRequestParams
+	        * @param @param requestBodyParams
+	        * @param @return 参数
+	        * @return Map<String,Object> 返回类型
+	        * @throws
+	        * @author LiXing
+	 */
+	@RequestMapping("/pltfDiamondsDetail")
+	public Map<String, Object> pltfDiamondsDetail(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = this.assetService.pltfDiamondsDetail(requestBodyParams);
+		return ResultUtils.rtSuccess(rtMap);
+	}
 }
