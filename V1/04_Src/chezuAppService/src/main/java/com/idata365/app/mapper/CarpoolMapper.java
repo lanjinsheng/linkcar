@@ -24,4 +24,6 @@ public interface CarpoolMapper {
 	int waitHave(@Param("userId") Long userId);
 	
 	int querySitsNum(@Param("userId") Long userId);
+	
+	int querySitsNumById(@Param("userId") Long userId,@Param("carId") Integer carId);
 }

@@ -34,6 +34,10 @@
      <select id="querySitsNum" resultType="java.lang.Integer" parameterType="java.lang.Long">
        select count(1) from carpool where driverId=#{userId} and now()<![CDATA[>]]>createTime and isComplete=0
      </select>
+    <!--  根据userId和CarID查看当前时间的搭车人数 -->
+     <select id="querySitsNumById" resultType="java.lang.Integer">
+       select count(1) from carpool where driverId=#{userId} and now()<![CDATA[>]]>createTime and isComplete=0 and carId=#{carId}
+     </select>
      
      <insert id="insertCarpool"  parameterType="com.idata365.app.entity.Carpool" >
        INSERT INTO 

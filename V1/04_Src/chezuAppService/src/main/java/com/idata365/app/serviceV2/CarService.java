@@ -1,12 +1,14 @@
 package com.idata365.app.serviceV2;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +16,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DicCarConstant;
+import com.idata365.app.entity.CarListResultBean;
 import com.idata365.app.entity.Carpool;
 import com.idata365.app.entity.CarpoolApprove;
 import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.Message;
+import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UserCarLogs;
-import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
+import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.InteractPeccancyMapper;
 import com.idata365.app.mapper.UserCarLogsMapper;
 import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
@@ -56,6 +61,10 @@ public class CarService extends BaseService<CarService> {
     UsersAccountMapper UsersAccountMapper;
     @Autowired
     MessageService messageService;
+    @Autowired
+    DicCarMapper dicCarMapper;
+    @Autowired
+    InteractPeccancyMapper interactPeccancyMapper;
     
 	public CarService() {
 
@@ -384,19 +393,83 @@ public class CarService extends BaseService<CarService> {
 	
 	/**
 	 * 
-	        * @Title: initUserCar
-	        * @Description: TODO(初始化用户车辆信息)
-	        * @param  参数
-	        * @return void 返回类型
-	        * @throws
-	        * @author LiXing
+	    * @Title: initUserCar
+	    * @Description: TODO(初始化用户车辆信息)
+	    * @param  参数
+	    * @return void 返回类型
+	    * @throws
+	    * @author LiXing
 	 */
 	public void initUserCar(long userId) {
 		this.userCarMapper.initUserCar(userId);
 		this.userCarLogsMapper.initUserCar(userId);
 	}
 	
+	/**
+	 * 
+	 * @Title: queryUsersCar
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param @param userId
+	 * @param @return 参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws Exception 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws
+	 * @author LiXing
+	 */
+	public Map<String, Object> queryUsersCar(long userId) throws Exception {
+		Map<String, Object> rtMap = new HashMap<>();
+		List<CarListResultBean> CarListResultBeanList = new ArrayList<>();
+		List<DicCar> carList = this.dicCarMapper.getDicCar(null);
+		List<UserCar> userCarList = this.userCarMapper.getUserCarById(userId);
+		Map<String, Object> userCurCar = this.getUserCar(userId);
+		int index = 0;
+		for (int i = 0; i < carList.size(); i++) {
+			CarListResultBean carListResultBean = new CarListResultBean();
+			carListResultBean.setIsUnlock("0");
+			carListResultBean.setIsDriving("0");
+			carListResultBean.setPowerConvertDesc("有效里程=行程评分×实际里程数/100");
+			BeanUtils.copyProperties(carListResultBean, carList.get(i));
+			for (UserCar userCar : userCarList) {
+				Integer carId = carList.get(i).getCarId();
+				if (carList.get(i).getCarId() == userCar.getCarId()) {
+					carListResultBean.setIsUnlock("1");
+					if (carId == Integer.valueOf(userCurCar.get("carId").toString())) {
+						carListResultBean.setIsDriving("1");
+						index = i;
+					}
+					
+					// 动力加成部分
+					Map<String, String> powerUpInfo = new HashMap<>();
+					// 配件加成
+					int partsUpPercent = 0;
+					powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
+					// 搭车加成
+					int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
+					powerUpInfo.put("rideUpPercent", "搭车加成：" + sitsCount * 10 + "%");
+					// 贴条减益
+					Map<String, Object> pamMap = new HashMap<String, Object>();
+					pamMap.put("lawBreakerId", userId);
+					pamMap.put("carId", carId);
+					pamMap.put("endLong", System.currentTimeMillis());
+					int iPCount = interactPeccancyMapper.getUserPeccancyCount(pamMap);
+					powerUpInfo.put("ticketDebuffPercent", "贴条减益-：" + iPCount * 10 + "%");
+					// 动力加成
+					powerUpInfo.put("powerUpPercent", "动力加成：" + (partsUpPercent + sitsCount - iPCount) * 10 + "%");
+					
+					carListResultBean.setPowerUpInfo(powerUpInfo);
+				}
+			}
+			CarListResultBeanList.add(carListResultBean);
+		}
+		rtMap.put("carList", CarListResultBeanList);
+		rtMap.put("index", index);
+		return rtMap;
+	}
+	
 	public static void main(String []args) {
 		System.out.println(2+UUID.randomUUID().toString().replaceAll("-", ""));
 	}
+	
 }
