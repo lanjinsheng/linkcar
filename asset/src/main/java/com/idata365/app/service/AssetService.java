@@ -50,6 +50,7 @@ import com.idata365.app.util.ValidTools;
  *
  */
 @Service
+@Transactional
 public class AssetService extends BaseService<AssetService> {
 	private final static Logger LOG = LoggerFactory.getLogger(AssetService.class);
 	@Autowired
@@ -87,7 +88,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LanYeYe
 	 */
-	@Transactional
+	
 	public AssetUsersAsset getUserAssetByUserId(long userId) {
 
 		return assetUsersAssetMapper.getUserAssetByUserId(userId);
@@ -228,7 +229,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LanYeYe
 	 */
-	@Transactional
+	
 	public boolean updateDiamondsConsume(long userId, double diamondsNum, long ofUserId) {
 		Map<String, Object> datas = new HashMap<String, Object>();
 		datas.put("userId", userId);
@@ -265,7 +266,7 @@ public class AssetService extends BaseService<AssetService> {
 		}
 	}
 
-	@Transactional
+	
 	public Map<String, String> freezeDiamondAsset(long userId, double diamondsNum, long preUserId,
 			long auctionGoodsId) {
 		Map<String, String> rtMap = new HashMap<String, String>();
@@ -377,7 +378,7 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LanYeYe
 	 */
 
-	@Transactional
+	
 	public boolean addUserPowers(AssetUsersPowerLogs assetUsersPowerLogs) {
 		assetUsersPowerLogsMapper.insertUsersPowerLogs(assetUsersPowerLogs);
 		assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
@@ -396,7 +397,7 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LanYeYe
 	 */
 
-	@Transactional
+	
 	public boolean reduceUserPowers(AssetUsersPowerLogs assetUsersPowerLogs) {
 		int j = assetUsersAssetMapper.updatePowerReduce(assetUsersPowerLogs);
 		if(j == 0) {
@@ -418,7 +419,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LanYeYe
 	 */
-	@Transactional
+	
 	public boolean addFamiliesPowers(AssetFamiliesPowerLogs assetFamiliesPowerLogs) {
 		assetFamiliesPowerLogsMapper.insertFamiliesPowerLogs(assetFamiliesPowerLogs);
 		assetFamiliesAssetMapper.updatePowerAdd(assetFamiliesPowerLogs);
@@ -573,7 +574,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LiXing
 	 */
-	@Transactional
+	
 	public void stoleFamilyFightPowers(long userId, Map<String, Object> familiesInfo, long ballId, long powerNum)
 			throws Exception {
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
@@ -628,7 +629,7 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LanYeYe
 	 */
 
-	@Transactional
+	
 	public List<Map<String, String>> getStoleRecord(long familyId, long fightFamilyId) {
 		List<Map<String, String>> result = new ArrayList<>();
 		List<StealPower> recordList = stealPowerMapper.getStealPowerList(familyId,fightFamilyId);
@@ -654,7 +655,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LanYeYe
 	 */
-	@Transactional
+	
 	public String getUserPowerByEffectId(long effectId) {
 		AssetUsersPowerLogs assetUsersPowerLogs = new AssetUsersPowerLogs();
 		assetUsersPowerLogs.setEffectId(effectId);
@@ -677,7 +678,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LanYeYe
 	 */
-	@Transactional
+	
 	public Map<String, Object> getPersonHarvestYestoday(long userId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 
@@ -702,7 +703,7 @@ public class AssetService extends BaseService<AssetService> {
 		return rtMap;
 	}
 
-	@Transactional
+	
 	public Map<String, Object> getFamilyHarvestYestoday(long userId, long familyId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("familyId", familyId);
@@ -737,7 +738,7 @@ public class AssetService extends BaseService<AssetService> {
 		}
 		return rtMap;
 	}
-	@Transactional
+	
 	public List<Map<String, Object>> getYestodayHarvestV2(long userId, long familyId) {
 		List<Map<String, Object>> rtList=new ArrayList<Map<String, Object>>();
 		Map<String, Object> rtMap1 = new HashMap<String, Object>();
@@ -791,7 +792,7 @@ public class AssetService extends BaseService<AssetService> {
 		return rtList;
 	}
 	
-	@Transactional
+	
 	public Map<String, Object> getGlobalYestoday() {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		String powerTable = "userPower" + DateTools.getCurDateAddDay(-1).replaceAll("-", "");
@@ -815,7 +816,7 @@ public class AssetService extends BaseService<AssetService> {
 	 *             LanYeYe
 	 */
 
-	@Transactional
+	
 	public boolean initFamily(long familyId) {
 		AssetFamiliesAsset assetFamiliesAsset = new AssetFamiliesAsset();
 		assetFamiliesAsset.setFamilyId(familyId);
@@ -835,7 +836,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * @throws @author
 	 *             LanYeYe
 	 */
-	@Transactional
+	
 	public boolean initUser(long userId) {
 		AssetUsersAsset assetUsersAsset = new AssetUsersAsset();
 		assetUsersAsset.setUserId(userId);
@@ -843,13 +844,13 @@ public class AssetService extends BaseService<AssetService> {
 		return true;
 	}
 
-	@Transactional
+	
 	public boolean userPowersSnapShot(String tableName) {
 		assetUsersAssetMapper.userPowersSnapShot(tableName);
 		return true;
 	}
 
-	@Transactional
+	
 	public boolean powerClear() {
 		assetUsersAssetMapper.clearPowers(null);
 		assetFamiliesAssetMapper.clearPower(null);
@@ -950,9 +951,11 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("diamondDesc", IntroduceConstant.DIAMONDINTRODUCE);
 
 		map.put("allCurPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
-		// 钻石介绍
+		// 动力介绍
 		map.put("powerDesc", IntroduceConstant.POWERINTRODUCE);
 
+		// 运营账号钻石
+		map.put("pltfDiamondsNum", assetUsersAssetMapper.getUserAssetByUserId(1L).getDiamondsNum().toString());
 		return map;
 	}
 
@@ -1020,8 +1023,39 @@ public class AssetService extends BaseService<AssetService> {
 		return s;
 	}
 
+	/**
+	 * 
+	        * @Title: queryCountOfSteal
+	        * @Description: TODO(是否能被偷)
+	        * @param @param userId
+	        * @param @return 参数
+	        * @return int 返回类型
+	        * @throws
+	        * @author LiXing
+	 */
 	public int queryCountOfSteal(long userId) {
 		// TODO Auto-generated method stub
 		return assetUsersPowerLogsMapper.queryCountOfSteal(userId);
+	}
+
+	/**
+	 * 
+	        * @param requestBodyParams 
+	 * 		  @Title: pltfDiamondsDetail
+	        * @Description: TODO(平台运营账号钻石详情)
+	        * @param @return 参数
+	        * @return Map<String,Object> 返回类型
+	        * @throws
+	        * @author LiXing
+	 */
+	public Map<String, Object> pltfDiamondsDetail(Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<>();
+		// 运营账号钻石
+		rtMap.put("pltfDiamondsNum", assetUsersAssetMapper.getUserAssetByUserId(1L).getDiamondsNum().toString());
+		// list
+		List<Map<String, String>> list = this.getIndexDiamonds(1L, requestBodyParams);
+		rtMap.put("list", list);
+
+		return rtMap;
 	}
 }
