@@ -4,7 +4,9 @@
     
    	<!--  所创建家族等级达到黄金时候奖励CarID为2的车 -->
     <insert id="sendUserCarAndCarIdIs2" >
-       INSERT INTO userCar (userId,carId,createTime) VALUES (#{userId}, 2, now())
+       insert   IGNORE INTO
+            userCar (userId,carId,createTime) values (#{userId}, 2, now())
+            ON DUPLICATE KEY UPDATE createTime=now()
     </insert>
     
 </mapper>
