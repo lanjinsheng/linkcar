@@ -21,4 +21,5 @@ public interface LicenseVehicleTravelMapper {
 	List<LicenseVehicleTravel> findLicenseVehicleTravels();
 
 	int verifyLicenseVehicleTravel(@Param("plateNo") String plateNo, @Param("operatingUser") String operatingUser);
+	
 }

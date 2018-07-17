@@ -24,6 +24,7 @@ import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.enums.AchieveEnum;
 import com.idata365.app.mapper.LicenseDriverMapper;
 import com.idata365.app.mapper.LicenseVehicleTravelMapper;
+import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UserConfigMapper;
 import com.idata365.app.mapper.UserShareLogsMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
@@ -45,6 +46,8 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	UserShareLogsMapper userShareLogsMapper;
 	@Autowired
 	AchieveCommService achieveCommService;
+	@Autowired
+	UserCarMapper userCarMapper;
 
 	public UserInfoServiceV2() {
 	}
@@ -347,5 +350,29 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 	public int queryUserShareCountToday(long userId) {
 		LOG.info("userId==========================="+userId);
 		return userShareLogsMapper.queryUserShareCountToday(userId);
+	}
+
+	/**
+	 * 
+        * @Title: sengCar
+        * @Description: TODO(完成sxz认证送车)
+        * @param @param userId
+        * @param @param cardNumber 参数
+        * @return void 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	public void sengCar(Long userId, String cardNumber) {
+		LOG.info("userId==========================="+userId);
+		List<LicenseVehicleTravel> list = this.licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
+		for (LicenseVehicleTravel license : list) {
+			if(!license.getPlateNo().equals(cardNumber)&&license.getStatus()==1) {
+				return;
+			}
+		}
+		
+		//系统送车(CarId=3的跑车)
+		this.userCarMapper.sendUserCarAndCarIdIs3(userId);
+		
 	}
 }

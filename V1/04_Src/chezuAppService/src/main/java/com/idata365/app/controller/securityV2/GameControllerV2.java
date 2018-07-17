@@ -1,11 +1,8 @@
 package com.idata365.app.controller.securityV2;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,17 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.IndexSlipPage;
 import com.idata365.app.controller.security.BaseController;
-import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyRelation;
 import com.idata365.app.entity.ScoreFamilyDetailResultBean;
 import com.idata365.app.entity.ScoreFamilyInfoAllBean;
 import com.idata365.app.entity.ScoreFamilyInfoBean;
 import com.idata365.app.entity.ScoreFamilyInfoParamBean;
-import com.idata365.app.entity.ScoreMemberInfoResultBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.remote.ChezuAssetService;
-import com.idata365.app.service.DicService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.FightService;
 import com.idata365.app.service.ScoreService;
@@ -60,8 +54,6 @@ public class GameControllerV2 extends BaseController {
 	private ChezuAssetService chezuAssetService;
 	@Autowired
 	private UserInfoService userInfoService;
-	@Autowired
-	private DicService dicService;
 	@Autowired
 	private FamilyScoreService familyScoreService;
 	@Autowired
@@ -92,46 +84,43 @@ public class GameControllerV2 extends BaseController {
 		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
 		bean.setUserId(userId);
 		ScoreFamilyInfoAllBean queryFamily = scoreService.queryFamily(bean);
-
 		if (ValidTools.isBlank(queryFamily)) {
 			return ResultUtils.rtSuccess(null);
 		}
-		List<Map<String, String>> infoList = new ArrayList<>();
-		extractedList(queryFamily.getOriFamily(), infoList);
-		extractedList(queryFamily.getJoinFamily(), infoList);
+		List<Map<String, String>> rtList = new ArrayList<>();
+		extractedList(queryFamily.getOriFamily(), rtList);
+		extractedList(queryFamily.getJoinFamily(), rtList);
 
-		return ResultUtils.rtSuccess(infoList);
+		return ResultUtils.rtSuccess(rtList);
 	}
 
-	private void extractedList(ScoreFamilyInfoBean scoreFamilyInfoBean, List<Map<String, String>> infoList) {
-		if (ValidTools.isBlank(scoreFamilyInfoBean) || scoreFamilyInfoBean.getFamilyId() <= 0) {
+	private void extractedList(ScoreFamilyInfoBean bean, List<Map<String, String>> infoList) {
+		if (ValidTools.isBlank(bean) || bean.getFamilyId() <= 0) {
 			return;
 		}
 		Map<String, String> map = new HashMap<>();
-		Long familyId = Long.valueOf(String.valueOf(scoreFamilyInfoBean.getFamilyId()));
+		Long familyId = Long.valueOf(String.valueOf(bean.getFamilyId()));
 
-		//明日对战家族ID
+		// 明日对战家族ID
 		Long flag = fightService.getOpponentIdBySelfId(familyId, DateTools.getTomorrowDateStr());
 		if (flag == null || flag == 0) {
 			map.put("isChallengeFamilyToday", "0");
-		}else {
+		} else {
 			map.put("isChallengeFamilyToday", "1");
 		}
-		
-		//当前对战家族ID
+
+		// 当前对战家族ID
 		Long opponentId = fightService.getOpponentIdBySelfId(familyId, DateTools.getYYYY_MM_DD());
 		map.put("familyId", String.valueOf(familyId));
-		map.put("familyName", scoreFamilyInfoBean.getName());
+		map.put("familyName", bean.getName());
 		double sc = familyScoreService.familyScore(familyId, getCurrentDayStr());
 		BigDecimal b = new BigDecimal(sc);
 		map.put("familyScore", b.setScale(0, BigDecimal.ROUND_HALF_UP).toString());
 		long userId = this.getUserId();
-		String haveNewPower = chezuAssetService.queryHaveNewPower(userId, scoreFamilyInfoBean.getFamilyId(),
+		String haveNewPower = chezuAssetService.queryHaveNewPower(userId, bean.getFamilyId(),
 				SignUtils.encryptHMAC(String.valueOf(userId)));
 		map.put("haveNewPower", haveNewPower == null ? "0" : haveNewPower);
 		if (opponentId == null || opponentId == 0) {
-			map.put("fightFamilyName", "");
-			map.put("fightFamilyScore", "");
 			infoList.add(map);
 			return;
 		}
@@ -201,101 +190,16 @@ public class GameControllerV2 extends BaseController {
 
 		Map<String, Object> result = new HashMap<>();
 		List<Map<String, Object>> data = new ArrayList<>();
-		List<Map<String, Object>> userRankList = new ArrayList<>();
 		long userId = this.getUserId();
 		long myFamilyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("myFamilyId=================" + myFamilyId);
 		Long opponentId = fightService.getOpponentIdBySelfId(myFamilyId, DateTools.getYYYY_MM_DD());
-		Map<String, Object> m = new HashMap<>();
 		if (opponentId == null || opponentId == 0) {
-			method(result, data, myFamilyId, myFamilyId,userRankList,m);
-			result.put("myFamilyInfo", data.get(0));
-			Map<String, String> mm = new HashMap<>();
-			mm.put("familyScore", BigDecimal.valueOf(Double.valueOf(data.get(0).get("familyScore").toString())*0.8).setScale(1, RoundingMode.HALF_EVEN).toString());
-			mm.put("familyName","链车教官");
-			mm.put("grade","青铜V级" );
-			mm.put("trophyNum","0" );
-			mm.put("isPC","1");
-			result.put("fightFamilyInfo", mm);
-		}else {
-			method(result, data, myFamilyId, myFamilyId,userRankList,m);
-			method(result, data, myFamilyId, opponentId,userRankList,m);
-			result.put("myFamilyInfo", data.get(0));
-			result.put("fightFamilyInfo", data.get(1));
+			return null;
 		}
-		Double ss = Double.valueOf(m.get("score1").toString());
-		List<Map<String, Object>> rankList = gameServiceV2.newMemberRankList(Integer.valueOf(m.get("familyType").toString()), 3, userRankList,myFamilyId, opponentId, DateTools.getYYYY_MM_DD(), ss.longValue(), 0);
-		result.put("rankList", rankList);
-
+		result = this.gameServiceV2.getFightingDetail(result, data, myFamilyId, opponentId);
 		return ResultUtils.rtSuccess(result);
-	}
-	
-	//对战详情封装方法
-	private void method(Map<String, Object> result, List<Map<String, Object>> data, long myFamilyId, long familyId, List<Map<String, Object>> userRankList, Map<String, Object> m) {
-		String daystamp = null;
-		double score1 = 0L;
-		int familyType = 0;
-		Map<String, String> infoFamily = gameServiceV2.getInfoByFamilyId(familyId, daystamp);
-		Map<String, Object> familyInfo = new HashMap<>();
-		familyInfo.put("familyName", infoFamily.get("name"));
-		familyInfo.put("isPC", "0");
-		familyInfo.put("familyId", String.valueOf(familyId));
-		double sc = familyScoreService.familyScore(Long.valueOf(familyId), getCurrentDayStr());
-		BigDecimal b = new BigDecimal(sc);
-		familyInfo.put("familyScore", b.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-		familyInfo.put("trophyNum", infoFamily.get("trophyNum"));
-		familyInfo.put("grade", infoFamily.get("gradeOrNum"));
-
-		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
-		bean.setFamilyId(familyId);
-		List<ScoreMemberInfoResultBean> member = scoreService.listFamilyMember(bean);
-		for (int j = 0; j < member.size(); j++) {
-			Map<String, Object> entity = new HashMap<>();
-			String memberId = member.get(j).getUserId();
-			double score = scoreService.getAvgScore(memberId, familyId);
-			
-			UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
-			entity.put("userId", memberId);
-			entity.put("familyId", familyId);
-			entity.put("name", account.getNickName());
-			entity.put("score", score);
-			userRankList.add(entity);
-			if( myFamilyId == familyId) {
-				score1 += score;
-			}
-		}
-		Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
-			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-				return Double.valueOf(o2.get("score").toString()).compareTo(Double.valueOf(o1.get("score").toString()));
-			}
-		});
-
-		data.add(familyInfo);
-
-		if (familyId == myFamilyId) {
-			familyType = Integer.valueOf(infoFamily.get("familyType").toString());
-			String familyTypeValue = infoFamily.get("gradeOrNum");
-			String win = null;
-			String loss = null;
-			List<DicFamilyType> types = dicService.getDicFamilyType();
-			for (DicFamilyType type : types) {
-				if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-					win = "+" + type.getWin();
-					if (type.getLoss() >= 0) {
-						loss = "+" + type.getLoss();
-					} else {
-						loss = "" + type.getLoss();
-					}
-				}
-			}
-			result.put("trophyNumReward", win);
-			result.put("diamondsReward", " 大量");
-			result.put("reward", "奖杯" + win + " 大量钻石");
-			result.put("punishment", loss);
-			m.put("score1", score1);
-			m.put("familyType", familyType);
-		}
 	}
 
 	/**
@@ -341,7 +245,7 @@ public class GameControllerV2 extends BaseController {
 			} else {
 				fightFamilyId = recordList.get(i).getSelfFamilyId();
 			}
-			if(fightFamilyId == 0) {
+			if (fightFamilyId == 0) {
 				continue;
 			}
 			bean.setFamilyId(fightFamilyId);
@@ -366,7 +270,8 @@ public class GameControllerV2 extends BaseController {
 			data.put("fightingTime", daystamp);
 			data.put("status", status);
 			data.put("myFamilyScore", myFamilyScore);
-			data.put("fightFamilyId", fightFamilyScore);
+			data.put("myFamilyId", String.valueOf(familyId));
+			data.put("fightFamilyId", String.valueOf(fightFamilyId));
 			data.put("fightFamilyScore", fightFamilyScore);
 			data.put("fightFamilyName", fightFamilyName);
 			data.put("fightFamilyImg", super.getImgBasePath() + fightFamilyImg);
@@ -390,102 +295,12 @@ public class GameControllerV2 extends BaseController {
 	public Map<String, Object> fightingHistoryScore(
 			@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		List<Map<String, Object>> data = new ArrayList<>();
 		Map<String, Object> result = new HashMap<>();
-		List<Map<String, Object>> userRankList = new ArrayList<>();
-		long userId = this.getUserId();
 		long myFamilyId = Long.valueOf(requestBodyParams.get("familyId").toString());
 		String daystamp = requestBodyParams.get("fightingTime").toString();
-		LOG.info("userId=================" + userId);
 		LOG.info("myFamilyId=================" + myFamilyId);
 		LOG.info("daystamp=================" + daystamp);
-		
-		//获取对战家族
-		Long fightFamilyId = fightService.getOpponentIdBySelfId(myFamilyId, daystamp);
-		String win = "";
-		String loss = "";
-
-		long[] arr = { myFamilyId, fightFamilyId };
-		int familyType = 0;
-		long score1 = 0L;
-		long score2 = 0L;
-		for (int i = 0; i < arr.length; i++) {
-			//对应家族信息
-			Map<String, String> map = gameServiceV2.getInfoByFamilyId(arr[i], daystamp);
-			Map<String, Object> familyInfo = new HashMap<>();
-			familyInfo.put("familyName", map.get("name"));
-			String familyScore = gameServiceV2.queryFamilyScore(arr[i], daystamp).getScore().toString();
-			familyInfo.put("familyScore", familyScore);
-			familyInfo.put("trophyNum", map.get("trophyNum"));
-			familyInfo.put("grade", map.get("gradeOrNum"));
-
-			//家族成员信息
-			List<Map<String, Object>> user = scoreService.getMemberInfoByTime(arr[i], daystamp);
-			for (int j = 0; j < user.size(); j++) {
-				Map<String, Object> bean = new HashMap<>();
-				String memberId = user.get(j).get("userId").toString();
-				String score = user.get(j).get("avgScore").toString();
-				UsersAccount account = userInfoService.getUsersAccount(Long.valueOf(memberId));
-				bean.put("userId", memberId);
-				bean.put("familyId", arr[i]);
-				bean.put("name", account.getNickName());
-				bean.put("score", score);
-				userRankList.add(bean);
-				if( i == 0) {
-					score1 += Double.valueOf(score).longValue();
-				}else {
-					score2 += Double.valueOf(score).longValue();
-				}
-			}
-			familyInfo.put("familyId", String.valueOf(arr[i]));
-			data.add(familyInfo);
-
-			//输赢奖励与惩罚
-			if (i == 0) {
-				// 我的家族等级
-				familyType = Integer.valueOf(map.get("familyType").toString());
-				String familyTypeValue = map.get("gradeOrNum");
-				List<DicFamilyType> types = dicService.getDicFamilyType();
-				for (DicFamilyType type : types) {
-					if (type.getFamilyTypeValue().equals(familyTypeValue)) {
-						win = "+" + type.getWin() + "";
-						if (type.getLoss() >= 0) {
-							loss = "+" + type.getLoss();
-						} else {
-							loss = "" + type.getLoss();
-						}
-					}
-				}
-			}
-		}
-		result.put("myFamilyInfo", data.get(0));
-		result.put("fightFamilyInfo", data.get(1));
-		
-		//状态：胜利、失败、平局
-		int status = 0;
-		if (Double.valueOf(data.get(0).get("familyScore").toString()) > Double
-				.valueOf(data.get(1).get("familyScore").toString())) {
-			result.put("rewardAndPunishment", win);
-			result.put("status", "1");
-			status = 1;
-		} else if (Double.valueOf(data.get(0).get("familyScore").toString()) < Double
-				.valueOf(data.get(1).get("familyScore").toString())) {
-			result.put("rewardAndPunishment", loss);
-			result.put("status", "2");
-			status = 2;
-		} else {
-			result.put("rewardAndPunishment", "平局！");
-			result.put("status", "0");
-		}
-
-		Collections.sort(userRankList, new Comparator<Map<String, Object>>() {
-			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-				return Double.valueOf(o2.get("score").toString()).compareTo(Double.valueOf(o1.get("score").toString()));
-			}
-		});
-		List<Map<String, Object>> rankList = gameServiceV2.newMemberRankList(familyType, status, userRankList,
-				myFamilyId, fightFamilyId, daystamp, score1, score2);
-		result.put("rankList", rankList);
+		result = this.gameServiceV2.getFightingHistory(myFamilyId, daystamp, result);
 		return ResultUtils.rtSuccess(result);
 	}
 
@@ -524,7 +339,7 @@ public class GameControllerV2 extends BaseController {
 		map.put("pages", pages);
 		return ResultUtils.rtSuccess(map);
 	}
-	
+
 	/**
 	 * 
 	 * @Title: queryCompetitorFamilyInfo
@@ -553,12 +368,14 @@ public class GameControllerV2 extends BaseController {
 		myFamilyInfo.put("familyId", String.valueOf(familyId));
 		myFamilyInfo.put("familyName", String.valueOf(familyService.findFamilyByFamilyId(familyId).get("familyName")));
 		myFamilyInfo.put("familyScore", String.valueOf(familyScoreService.familyScore(familyId, getCurrentDayStr())));
-		if(opponentId == null || opponentId == 0) {
+		if (opponentId == null || opponentId == 0) {
 			fightFamilyInfo = null;
-		}else {
+		} else {
 			fightFamilyInfo.put("familyId", String.valueOf(opponentId));
-			fightFamilyInfo.put("familyName", String.valueOf(familyService.findFamilyByFamilyId(opponentId).get("familyName")));
-			fightFamilyInfo.put("familyScore", String.valueOf(familyScoreService.familyScore(opponentId, getCurrentDayStr())));
+			fightFamilyInfo.put("familyName",
+					String.valueOf(familyService.findFamilyByFamilyId(opponentId).get("familyName")));
+			fightFamilyInfo.put("familyScore",
+					String.valueOf(familyScoreService.familyScore(opponentId, getCurrentDayStr())));
 		}
 		rtMap.put("myFamilyInfo", myFamilyInfo);
 		rtMap.put("fightFamilyInfo", fightFamilyInfo);

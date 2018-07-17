@@ -14,6 +14,7 @@ import com.idata365.app.entity.Message;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.MessageService;
+import com.idata365.app.serviceV2.UserInfoServiceV2;
 import com.idata365.app.util.SignUtils;
 
 
@@ -24,7 +25,9 @@ public class MessageOpenController {
 	@Autowired
 	private MessageService messageService;
 	@Autowired
-    FamilyService familyService;
+	private FamilyService familyService;
+	@Autowired
+	private UserInfoServiceV2 userInfoServiceV2;
 	public MessageOpenController() {
 	}
     /**
@@ -55,14 +58,15 @@ public class MessageOpenController {
     /**
      * 
         * @Title: verifyIDCardMsg
-        * @Description: TODO(身份证审核成功通知)
+        * @Description: TODO(这里用一句话描述这个方法的作用)
         * @param @param userId
-        * @param @param goodsName
+        * @param @param userName
+        * @param @param cardNumber
         * @param @param sign
-        * @param @return    参数
-        * @return boolean    返回类型
+        * @param @return 参数
+        * @return boolean 返回类型
         * @throws
-        * @author lcc
+        * @author LiXing
      */
     @RequestMapping("/app/msg/verifyIDCardMsg")
     public boolean verifyIDCardMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
@@ -76,10 +80,24 @@ public class MessageOpenController {
     	return true;
     }
     
+    /**
+     * 
+        * @Title: verifyVehicleTravelMsg
+        * @Description: TODO()
+        * @param @param userId
+        * @param @param userName
+        * @param @param cardNumber
+        * @param @param sign
+        * @param @return 参数
+        * @return boolean 返回类型
+        * @throws
+        * @author LiXing
+     */
     @RequestMapping("/app/msg/verifyVehicleTravelMsg")
     public boolean verifyVehicleTravelMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
     		@RequestParam (value = "cardNumber") String cardNumber,@RequestParam (value = "sign") String sign){
     	LOG.info("param:"+userId+"=="+userName+"=="+cardNumber+"==sign="+sign);
+    	this.userInfoServiceV2.sengCar(userId,cardNumber);
     	Message msg=messageService.buildVehicleTravelMessage(userId, userName, cardNumber);
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.VehicleTravel);

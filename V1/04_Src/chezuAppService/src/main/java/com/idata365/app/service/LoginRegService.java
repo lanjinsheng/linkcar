@@ -41,6 +41,7 @@ import com.idata365.app.partnerApi.PhoneMsgTools;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.remote.ChezuService;
 import com.idata365.app.service.common.AchieveCommService;
+import com.idata365.app.serviceV2.CarService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
 import com.idata365.app.util.SignUtils;
@@ -71,7 +72,8 @@ public class LoginRegService extends BaseService<LoginRegService>
 	FamilyMapper familyMapper;
 	@Autowired
 	UserRoleLogService userRoleLogService;
-
+	@Autowired
+	CarService carService;
 	
 
 	public LoginRegService()
@@ -325,6 +327,9 @@ public class LoginRegService extends BaseService<LoginRegService>
 					FamilyInvite invite = list.get(0);
 					achieveAddNewUser(invite.getFamilyId());
 				}
+				
+				//初始化用户车辆信息
+				this.carService.initUserCar(account.getId());
 
 			}
 			catch (Exception e)

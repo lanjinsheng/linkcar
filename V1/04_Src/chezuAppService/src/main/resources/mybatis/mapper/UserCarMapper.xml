@@ -4,5 +4,15 @@
     <resultMap id="BaseUserCarMap" type="com.idata365.app.entity.UserCar" >
     </resultMap>
     
+    <insert id="initUserCar" >
+       INSERT INTO userCar (userId,carId,createTime) VALUES (#{userId}, 1, now())
+    </insert>
     
+    <insert id="sendUserCarAndCarIdIs3" >
+       INSERT INTO userCar (userId,carId,createTime) VALUES (#{userId}, 2, now())
+    </insert>
+    
+    <select id="getUserCarById" resultMap="BaseUserCarMap" parameterType="java.lang.Long">
+       SELECT * from userCar  where userId=#{userId}
+    </select>
 </mapper>
