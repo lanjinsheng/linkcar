@@ -33,6 +33,7 @@ public class AssetConstant {
 	
 	public final static int EVENTTYPE_POWER_PAY_TICKET = 15;// 缴罚单扣除
 	public final static int EVENTTYPE_POWER_HELPPAY_TICKET = 16;// 帮别人缴罚单扣除
+	public final static int EVENTTYPE_POWER_CLUB_BONUS = 17;// 俱乐部奖励动力--针对俱乐部经理
 
 	
 	public final static int EVENTTYPE_POWER_MISSION_STEAL_ID = 101;// 主页偷取小车动力5次
@@ -102,6 +103,7 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_GET_TICKET, "收取贴条罚金");
 		UserPowerEventMap.put(EVENTTYPE_POWER_PAY_TICKET, "缴纳罚单");
 		UserPowerEventMap.put(EVENTTYPE_POWER_HELPPAY_TICKET, "代缴罚单");
+		UserPowerEventMap.put(EVENTTYPE_POWER_CLUB_BONUS, "俱乐部奖励");
 		
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_STEAL_ID, "完成任务-君子爱财");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_LIKE_ID, "完成任务-赞不绝口");

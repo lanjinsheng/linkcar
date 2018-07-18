@@ -29,4 +29,6 @@ public interface AssetUsersPowerLogsMapper {
 	
 	int queryCountOfSteal(@Param("userId") long userId);
 	
+	int queryHadGetBonus(@Param("userId") long userId);
+	
 }

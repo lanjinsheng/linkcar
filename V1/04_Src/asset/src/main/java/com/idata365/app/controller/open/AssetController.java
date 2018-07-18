@@ -513,6 +513,42 @@ public class AssetController extends BaseController {
 		return count;
 	}
 
+	/**
+	 * 
+	 * @Title: queryHadGetBonus
+	 * @Description: TODO(由app调用资产工程查询用户是否已经领过俱乐部奖金)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/queryHadGetBonus", method = RequestMethod.POST)
+	int queryHadGetBonus(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryHadGetBonus·~~~controller");
+		int count = assetService.queryHadGetBonus(userId);
+		return count;
+	}
+	
+	/**
+	 * 
+	 * @Title: receiveClubBonus
+	 * @Description: TODO(领取俱乐部奖金)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/receiveClubBonus", method = RequestMethod.POST)
+	boolean receiveClubBonus(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerNum") long powerNum,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"   powerNum:" + powerNum +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("receiveClubBonus·~~~controller");
+		AssetUsersPowerLogs logs = new AssetUsersPowerLogs();
+		logs.setUserId(userId);
+		logs.setPowerNum(powerNum);
+		logs.setEventType(AssetConstant.EVENTTYPE_POWER_CLUB_BONUS);
+		logs.setRecordType(AssetConstant.RECORDTYPE_1);
+		logs.setRemark("俱乐部奖金");
+		return assetService.addUserPowers(logs);
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
 	}
