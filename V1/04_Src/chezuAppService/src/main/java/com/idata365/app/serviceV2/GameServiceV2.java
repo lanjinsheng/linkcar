@@ -515,11 +515,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		} else {
 			cardinalNum = 100;
 		}
-		// 根据时间获取我家族的人数
-		String sign = "";
-		String ids = chezuAccountService.getCurrentUsersByFamilyId(myFamilyId, daystamp, sign);
-		String[] count = ids.split(",");
-		int userCount = count.length;
+		int userCount = this.gameMapper.queryMembersNumByTime(myFamilyId, daystamp);
 		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
 		int a = 0;
 		int c = 0;
@@ -648,11 +644,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		} else {
 			cardinalNum = 100;
 		}
-		// 根据时间获取我家族的人数
-		String sign = "";
-		String ids = chezuAccountService.getCurrentUsersByFamilyId(myFamilyId, daystamp, sign);
-		String[] count = ids.split(",");
-		int userCount = count.length;
+		int userCount = this.gameMapper.queryMembersNumByTime(myFamilyId, daystamp);
 		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
 		int a = 0;
 		int c = 0;

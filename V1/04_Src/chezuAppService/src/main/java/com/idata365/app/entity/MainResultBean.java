@@ -27,6 +27,12 @@ public class MainResultBean
 	
 	//1表弹出新手引导；0表不需要弹出
 	private int readFlag;
+	
+	//创建家族页面是否有“俱乐部奖金”图标
+	private int haveClubBonusIcon;
+	
+	//“俱乐部奖金图标”是否闪烁
+	private int clubBonusIconStatus;
 
 	public int getGamerNum()
 	{
@@ -107,5 +113,22 @@ public class MainResultBean
 	public void setClubHave(int clubHave) {
 		this.clubHave = clubHave;
 	}
+
+	public int getHaveClubBonusIcon() {
+		return haveClubBonusIcon;
+	}
+
+	public void setHaveClubBonusIcon(int haveClubBonusIcon) {
+		this.haveClubBonusIcon = haveClubBonusIcon;
+	}
+
+	public int getClubBonusIconStatus() {
+		return clubBonusIconStatus;
+	}
+
+	public void setClubBonusIconStatus(int clubBonusIconStatus) {
+		this.clubBonusIconStatus = clubBonusIconStatus;
+	}
+	
 	
 }

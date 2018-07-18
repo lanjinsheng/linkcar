@@ -116,4 +116,7 @@
 		select * from review where userId=#{userId} order by createTime desc limit 1
 	</select>
 	
+	<select id="queryMembersNumByTime" resultType="Integer">
+		select memberNum from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
+	</select>
 </mapper>
