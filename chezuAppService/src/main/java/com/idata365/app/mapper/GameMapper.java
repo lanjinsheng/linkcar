@@ -83,4 +83,5 @@ public interface GameMapper
 	
 	public ReviewBean queryReview(ReviewParamBean bean);
 
+	public Integer queryMembersNumByTime(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
 }

@@ -202,7 +202,7 @@ public class MessageService extends BaseService<MessageService>{
 			message.setToUrl(getPassMessageUrl(f.getMyFamilyId()));
 			break;}
 		case PASS_FAMILY2:{
-			FamilyResultBean f=familyService.findFamily(fromUserId); 
+			FamilyResultBean f=familyService.findFamily(toUserId); 
 			message.setFromUserId(fromUserId==null?0:fromUserId);
 			message.setBottomText("");
 			message.setChildType(MessageTypeConstant.FamilyType_Pass);
@@ -212,7 +212,7 @@ public class MessageService extends BaseService<MessageService>{
 			message.setIsPush(1);
 			message.setParentType(MessageTypeConstant.FamilyType);
 			message.setPicture("");
-			message.setTitle("收到招募信息");
+			message.setTitle("招募成功通知");
 			message.setToUserId(toUserId);
 			message.setUrlType(0);
 			message.setToUrl(getPassMessageUrl(f.getMyFamilyId()));

@@ -24,7 +24,6 @@ import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
 import com.idata365.app.entity.DicGameDay;
-import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
 import com.idata365.app.entity.FamilyInfoBean;
@@ -68,6 +67,7 @@ import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.serviceV2.InteractService;
+import com.idata365.app.serviceV2.ScoreServiceV2;
 import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.DateTools;
@@ -113,6 +113,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	UserConfigMapper userConfigMapper;
 	@Autowired
 	FamilyInviteMapper familyInviteMapper;
+	@Autowired
+	ScoreServiceV2 scoreServiceV2;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -1047,6 +1049,20 @@ public class FamilyService extends BaseService<FamilyService> {
 			sharingMyPoint=1;
 		}
 		resultBean.setClubHave(sharingMyPoint);
+		
+		//创建家族页面是否有“俱乐部奖金”图标
+		resultBean.setHaveClubBonusIcon(0);
+		Long createFamilyId = this.familyMapper.queryCreateFamilyId(bean.getUserId());
+		if (createFamilyId != null && createFamilyId.longValue() != 0) {
+			resultBean.setHaveClubBonusIcon(1);
+		}
+		//“俱乐部奖金图标”是否闪烁
+		Map<String, Object> info = scoreServiceV2.queryClubBonusInfo(bean.getUserId());
+		if(info!=null&&info.get("canTake").toString().equals("1")) {
+			resultBean.setClubBonusIconStatus(1);
+		}else {
+			resultBean.setClubBonusIconStatus(0);
+		}
 		
 		return resultBean;
 	}

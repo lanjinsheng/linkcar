@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,13 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.entity.CompetitorResultBean;
 import com.idata365.app.entity.FamilyCompetitorResultBean;
+import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyDriveDayStatBean;
 import com.idata365.app.entity.FamilyInfoBean;
-import com.idata365.app.entity.FamilyMemberAllResultBean;
-import com.idata365.app.entity.FamilyMemberBean;
-import com.idata365.app.entity.FamilyMemberResultBean;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelationBean;
 import com.idata365.app.entity.FamilyResultBean;
@@ -48,13 +48,10 @@ import com.idata365.app.entity.ScoreFamilyOrderBean;
 import com.idata365.app.entity.ScoreFamilyOrderResultBean;
 import com.idata365.app.entity.ScoreMemberInfoBean;
 import com.idata365.app.entity.ScoreMemberInfoResultBean;
-import com.idata365.app.entity.ScoreUserBean;
 import com.idata365.app.entity.ScoreUserHistoryBean;
 import com.idata365.app.entity.ScoreUserHistoryParamBean;
 import com.idata365.app.entity.ScoreUserHistoryResultAllBean;
 import com.idata365.app.entity.ScoreUserHistoryResultBean;
-import com.idata365.app.entity.ScoreUserResultBean;
-import com.idata365.app.entity.SimulationScoreResultBean;
 import com.idata365.app.entity.TravelDetailResultBean;
 import com.idata365.app.entity.UserDetailResultBean;
 import com.idata365.app.entity.UserFamilyRoleLogBean;
@@ -71,14 +68,15 @@ import com.idata365.app.entity.YesterdayScoreResultBean;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
 import com.idata365.app.mapper.ScoreMapper;
-import com.idata365.app.mapper.TripMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuAccountService;
+import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
+import com.idata365.app.service.FightService;
 import com.idata365.app.service.UserRoleLogService;
 import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
-import com.idata365.app.util.RandUtils;
 
 @Service
 public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
@@ -86,20 +84,20 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 
 	@Autowired
 	private GameMapper gameMapper;
-
 	@Autowired
 	private ScoreMapper scoreMapper;
-
 	@Autowired
 	private FamilyMapper familyMapper;
-
-	@Autowired
-	private TripMapper tripMapper;
-
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
 	@Autowired
 	UserRoleLogService userRoleLogService;
+	@Autowired
+	FightService fightService;
+	@Autowired
+	ChezuAccountService chezuAccountService;
+	@Autowired
+	ChezuAssetService chezuAssetService;
 
 	/**
 	 * 
@@ -1211,5 +1209,100 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		// TODO Auto-generated method stub
 		return scoreMapper.getMemberInfoByTime(familyId, daystamp);
 	}
+	
+	/**
+	 * 
+        * @Title: queryClubBonusInfo
+        * @Description: TODO(俱乐部奖金)
+        * @param @param userId
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	public Map<String, Object> queryClubBonusInfo(long userId) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		Long familyId = this.familyMapper.queryCreateFamilyId(userId);
+		String yesterday = DateTools.getCurDateAddDay(-1);
+		// 昨日对战家族ID
+		Long opponentId = this.fightService.getOpponentIdBySelfId(familyId, yesterday);
+		FamilyDriveDayStat stat = this.gameMapper.queryFamilyScore(familyId, yesterday);
+		double score1 = 0D;
+		double score2 = 0D;
+		Integer familyType = 80;
+		Integer membersNum = 1;
+		if (stat != null) {
+			score1 = stat.getScore();
+			familyType = stat.getFamilyType();
+			membersNum = this.gameMapper.queryMembersNumByTime(familyId, yesterday);
+		}
+		if (opponentId != null && this.gameMapper.queryFamilyScore(opponentId, yesterday) != null) {
+			score2 = this.gameMapper.queryFamilyScore(opponentId, yesterday).getScore();
+		}
+		rtMap.put("clubScore", String.valueOf(score1));
+		rtMap.put("clubMemberNum", String.valueOf(membersNum) + "人");
+		rtMap.put("clubType", DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
+		// 算分三维度：人数、等级、挑战结果
+		Double x1 = 1d;
+		Double x2 = 1d;
+		Double x3 = 1d;
+		if(opponentId == null){
+			rtMap.put("challengeStatus", "无挑战");
+		}else if (score1 > score2) {
+			rtMap.put("challengeStatus", "胜利");
+			x3 = 2d;
+		} else if (score1 == score2) {
+			rtMap.put("challengeStatus", "平局");
+			x3 = 1.5d;
+		} else {
+			rtMap.put("challengeStatus", "失败");
+		}
 
+		long score = Math.round(score1 / 10);
+		x1 = (double) ((membersNum*0.1 + 1));
+		if (familyType >= DicFamilyTypeConstant.GuanJun_1) {
+			x2 = 3d;
+		} else if (familyType >= DicFamilyTypeConstant.ZuanShi_4) {
+			x2 = 2.5d;
+		} else if (familyType >= DicFamilyTypeConstant.HuangJin_5) {
+			x2 = 2d;
+		} else if (familyType >= DicFamilyTypeConstant.BaiYing_5) {
+			x2 = 1.5d;
+		} else {
+			x2 = 1d;
+		}
+
+		// 合计：
+		long totalPower = Math.round(score * (x1 + x2 + x3));
+		rtMap.put("totalPower", String.valueOf(totalPower));
+		int hadGetBonus = this.queryHadGetBonus(userId);
+		if (totalPower != 0 && hadGetBonus == 1) {
+			rtMap.put("canTake", "1");
+		} else {
+			rtMap.put("canTake", "0");
+		}
+		rtMap.put("basePower", "奖励" + String.valueOf(score));
+		rtMap.put("memberNumAddition", "倍数" + String.valueOf(x1));
+		rtMap.put("clubTypeAddition", "倍数" + String.valueOf(x2));
+		rtMap.put("challengeAddition", "倍数" + String.valueOf(x3));
+		return rtMap;
+	}
+	
+	/**
+	 * 
+        * @Title: queryHadGetBonus
+        * @Description: TODO(调用资产工程查询用户是否已经领过俱乐部奖金)
+        * @param @return 参数
+        * @return int 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	public int queryHadGetBonus(long userId) {
+		return chezuAssetService.queryHadGetBonus(userId,"sign");
+	}
+	
+	public static void main(String[] args) {
+		Double d = 278D;
+		System.out.println(Math.round(d/10));
+	}
 }

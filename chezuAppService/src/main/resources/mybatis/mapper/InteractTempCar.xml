@@ -12,7 +12,7 @@
      </update>
      <update id="lockCarById"  parameterType="com.idata365.app.entity.InteractTempCar">
        update  interactTempCar 
-	   set   lockBatchId=#{lockBatchId}, stealerId=#{stealerId},a.lockStatus=-1,
+	   set   lockBatchId=#{lockBatchId}, stealerId=#{stealerId},lockStatus=-1,
       lockTime=#{lockTime}  where  id=${id}
      </update>
     

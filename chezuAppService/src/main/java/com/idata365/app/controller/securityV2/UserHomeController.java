@@ -19,6 +19,7 @@ import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.serviceV2.CarService;
 import com.idata365.app.serviceV2.InteractService;
+import com.idata365.app.serviceV2.ScoreServiceV2;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
@@ -38,6 +39,8 @@ public class UserHomeController extends BaseController {
 	private InteractService interactService;
 	@Autowired
 	private CarService carService;
+	@Autowired
+	private ScoreServiceV2 scoreServiceV2;
 	
 
 	public UserHomeController() {
@@ -137,7 +140,7 @@ public class UserHomeController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		LOG.info("userId========================="+userId);
-		Map<String, Object> rtMap;
+		Map<String, Object> rtMap = new HashMap<>();;
 		try {
 			rtMap = this.carService.queryUsersCar(userId);
 			return ResultUtils.rtSuccess(rtMap);
@@ -146,5 +149,52 @@ public class UserHomeController extends BaseController {
 			e.printStackTrace();
 			return ResultUtils.rtSuccess(null);
 		}
+	}
+	
+	/**
+	 * 
+        * @Title: queryClubBonusInfo
+        * @Description: TODO(获取俱乐部奖金详情)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	@RequestMapping("/queryClubBonusInfo")
+	public Map<String, Object> queryClubBonusInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		LOG.info("userId=========================" + userId);
+		Map<String, Object> rtMap = this.scoreServiceV2.queryClubBonusInfo(userId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	/**
+	 * 
+        * @Title: receiveClubBonus
+        * @Description: TODO(领取俱乐部奖金)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	@RequestMapping("/receiveClubBonus")
+	public Map<String, Object> receiveClubBonus(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		Map<String, Object> rtMap = new HashMap<>();
+		LOG.info("userId=========================" + userId);
+		Map<String, Object> map = this.scoreServiceV2.queryClubBonusInfo(userId);
+		boolean b = this.chezuAssetService.receiveClubBonus(userId, Long.valueOf(map.get("totalPower").toString()), "sign");
+		if(b) {
+			rtMap.put("receiveStatus", "1");
+		}else {
+			rtMap.put("receiveStatus", "0");
+		}
+		return ResultUtils.rtSuccess(rtMap);
 	}
 }

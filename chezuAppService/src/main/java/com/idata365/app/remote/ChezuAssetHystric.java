@@ -88,5 +88,17 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("reducePowersByPeccancy 挂了");
 		return null;
 	}
+
+	@Override
+	public int queryHadGetBonus(long userId, String sign) {
+		LOG.error("queryHadGetBonus 挂了");
+		return 0;
+	}
+
+	@Override
+	public boolean receiveClubBonus(long userId, long powerNum, String sign) {
+		LOG.error("receiveClubBonus 挂了");
+		return false;
+	}
  
 }

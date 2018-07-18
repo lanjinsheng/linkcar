@@ -149,4 +149,13 @@ public interface ChezuAssetService {
 	@RequestMapping(value = "/asset/queryCountOfSteal", method = RequestMethod.POST)
 	int queryCountOfSteal(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign);
 
+	//查询用户是否已经领过俱乐部奖金
+	@RequestMapping(value = "/asset/queryHadGetBonus", method = RequestMethod.POST)
+	int queryHadGetBonus(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign);
+	
+	//领取俱乐部奖金
+	@RequestMapping(value = "/asset/receiveClubBonus", method = RequestMethod.POST)
+	boolean receiveClubBonus(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerNum") long powerNum, @RequestParam(value = "sign") String sign);
+
 }
