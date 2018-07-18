@@ -590,7 +590,7 @@ public class InteractService extends BaseService<InteractService> {
 	
 	@Transactional
 	public int carPoolStealStatus(Long ownerId, long userId) {
-		List<InteractTempCar> list = this.interactTempCarMapper.carPoolStealStatus(ownerId);
+		List<InteractTempCar> list = this.interactTempCarMapper.carPoolStealStatus(userId);
 		if (CollectionUtils.isEmpty(list)) {
 			return 0;
 		}
