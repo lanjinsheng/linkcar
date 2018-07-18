@@ -70,5 +70,7 @@
        SELECT *
        FROM  assetUsersPowerLogs where effectId=#{effectId} and eventType=#{eventType} and userId=#{userId}
      </select>
-     
+     <select id="queryHadGetBonus" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=17 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
+	</select>
 </mapper>

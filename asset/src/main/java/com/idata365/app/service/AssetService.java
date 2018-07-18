@@ -1058,4 +1058,9 @@ public class AssetService extends BaseService<AssetService> {
 
 		return rtMap;
 	}
+
+	public int queryHadGetBonus(long userId) {
+		// TODO Auto-generated method stub
+		return assetUsersPowerLogsMapper.queryHadGetBonus(userId);
+	}
 }
