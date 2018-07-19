@@ -3,6 +3,8 @@ package com.idata365.app.serviceV2;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -465,6 +467,45 @@ public class CarService extends BaseService<CarService> {
 		}
 		rtMap.put("carList", CarListResultBeanList);
 		rtMap.put("index", index);
+		return rtMap;
+	}
+	
+	/**
+	 * 
+        * @Title: changeCar
+        * @Description: TODO(换车操作)
+        * @param @param userId
+        * @param @param carId
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	public Map<String, Object> changeCar(long userId, Integer carId) {
+		Map<String, Object> rtMap = new HashMap<>();
+		Date now = Calendar.getInstance().getTime();
+		Map<String, Object> car = this.getUserCar(userId);
+		
+		
+		UserCarLogs logs1 = new UserCarLogs();
+		logs1.setId(Long.valueOf(car.get("id").toString()));
+		logs1.setEndTime(now);
+		
+		UserCarLogs logs2 = new UserCarLogs();
+		logs2.setCarId(carId);
+		logs2.setUserId(userId);
+		logs2.setStartTime(now);
+		//更新旧车
+		int i = this.userCarLogsMapper.updateEndTimeById(logs1);
+		//插入新车
+		int j = this.userCarLogsMapper.insertUserCarLogs(logs2);
+		
+		if(i == 1 && j == 1) {
+			rtMap.put("changeStatus", "1");
+		}else {
+			rtMap.put("changeStatus", "0");
+		}
+		
 		return rtMap;
 	}
 	

@@ -16,4 +16,8 @@ public interface UserCarLogsMapper {
 
 	public int initUserCar(@Param("userId") Long userId);
 
+	public int updateEndTimeById(UserCarLogs UserCarLogs);
+
+	public int insertUserCarLogs(UserCarLogs UserCarLogs);
+
 }

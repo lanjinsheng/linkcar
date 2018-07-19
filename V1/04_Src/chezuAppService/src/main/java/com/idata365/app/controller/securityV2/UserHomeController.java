@@ -135,7 +135,7 @@ public class UserHomeController extends BaseController {
         * @throws
         * @author LiXing
 	 */
-	@RequestMapping("/queryUsersCar")
+	@RequestMapping("/queryUserCarList")
 	public Map<String, Object> queryUsersCar(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
@@ -185,8 +185,8 @@ public class UserHomeController extends BaseController {
 	@RequestMapping("/receiveClubBonus")
 	public Map<String, Object> receiveClubBonus(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		long userId = this.getUserId();
 		Map<String, Object> rtMap = new HashMap<>();
+		long userId = this.getUserId();
 		LOG.info("userId=========================" + userId);
 		Map<String, Object> map = this.scoreServiceV2.queryClubBonusInfo(userId);
 		boolean b = this.chezuAssetService.receiveClubBonus(userId, Long.valueOf(map.get("totalPower").toString()), "sign");
@@ -195,6 +195,28 @@ public class UserHomeController extends BaseController {
 		}else {
 			rtMap.put("receiveStatus", "0");
 		}
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	/**
+	 * 
+        * @Title: changeCar
+        * @Description: TODO(更换车辆操作)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	@RequestMapping("/changeCar")
+	public Map<String, Object> changeCar(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		Integer carId = Integer.valueOf(requestBodyParams.get("carId").toString());
+		LOG.info("userId=========================" + userId);
+		LOG.info("carId=========================" + carId);
+		Map<String, Object> rtMap = this.carService.changeCar(userId, carId);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 }
