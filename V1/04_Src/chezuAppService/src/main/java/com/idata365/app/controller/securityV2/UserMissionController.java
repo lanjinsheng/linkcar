@@ -79,7 +79,7 @@ public class UserMissionController extends BaseController {
 		LOG.info("userId=================" + userId);
 		LOG.info("missionId=================" + missionId);
 		try {
-			userMissionService.getMissionPrize(userId, missionId);
+			rtMap = userMissionService.getMissionPrize(userId, missionId);
 			rtMap.put("receveStatus", "1");
 		} catch (Exception e) {
 			rtMap.put("receveStatus", "0");

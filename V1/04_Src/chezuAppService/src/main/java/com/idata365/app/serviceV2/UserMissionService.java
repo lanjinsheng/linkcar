@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.entity.UserMissionLogs;
 import com.idata365.app.mapper.DicUserMissionMapper;
+import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAssetService;
@@ -47,6 +48,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	private UserInfoServiceV2 userInfoServiceV2;
 	@Autowired
 	private InteractService interactService;
+	@Autowired
+	UserCarMapper userCarMapper;
 
 	// 从字典表查询所有任务
 	public List<DicUserMission> getAllDicUserMission() {
@@ -184,6 +187,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			int targetCount = Integer.valueOf(map.get("targetCount").toString());
 			int status = Integer.valueOf(map.get("status").toString());
 			String actionLink = String.valueOf(map.get("actionLink"));
+			String otherPrize = String.valueOf(map.get("otherPrize"));
 			String missionProgress = "";
 			String missionReward = "";
 			if (missionId == 5) {
@@ -228,6 +232,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			rtMap.put("missionReward", missionReward);
 			rtMap.put("missionActionDesc", missionActionDesc);
 			rtMap.put("missionActionStatus", actionStatus);
+			rtMap.put("otherPrize", otherPrize);
 			rtMap.put("missionActionLink", actionLink);
 			rtMap.put("missionEndTime", String.valueOf(map.get("endTime")));
 			rtMap.put("flag", String.valueOf(map.get("status")));
@@ -252,7 +257,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	
 	
 
-	public void getMissionPrize(long userId, int missionId) {
+	public Map<String, Object> getMissionPrize(long userId, int missionId) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		Map<String, Object> map = userMissionLogsMapper.getOneLogsByUserIdAndMissionId(userId, missionId);
 		int powerPrize = Integer.valueOf(String.valueOf(map.get("powerPrize")));
 		int finishCount = Integer.valueOf(map.get("finishCount").toString());
@@ -275,6 +281,22 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		if (b == false) {
 			throw new RuntimeException("系统异常领取失败");
 		}
+		
+		//完成行驶证认证 送 跑车一辆
+		if(missionId == 7) {
+			this.userCarMapper.sendUserCarAndCarIdIs3(userId);
+			rtMap.put("imgUrl", "http://product-h5.idata365.com/appImgs/car_3.png");
+			rtMap.put("imgDesc", "跑车");
+		}
+		
+		//创建的俱乐部达到黄金 送 豪华轿车一辆
+		if(missionId == 11) {
+			this.userCarMapper.sendUserCarAndCarIdIs2(userId);
+			rtMap.put("imgUrl", "http://product-h5.idata365.com/appImgs/car_2.png");
+			rtMap.put("imgDesc", "豪华轿车");
+		}
+		
+		return rtMap;
 	}
 
 	//查询每个Type任务完成数量

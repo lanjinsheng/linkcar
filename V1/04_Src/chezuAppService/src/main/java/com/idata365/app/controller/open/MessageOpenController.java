@@ -97,7 +97,6 @@ public class MessageOpenController {
     public boolean verifyVehicleTravelMsg(@RequestParam (value = "userId") Long userId,@RequestParam (value = "userName") String userName,
     		@RequestParam (value = "cardNumber") String cardNumber,@RequestParam (value = "sign") String sign){
     	LOG.info("param:"+userId+"=="+userName+"=="+cardNumber+"==sign="+sign);
-    	this.userInfoServiceV2.sengCar(userId,cardNumber);
     	Message msg=messageService.buildVehicleTravelMessage(userId, userName, cardNumber);
     	//插入消息
  		messageService.insertMessage(msg, MessageEnum.VehicleTravel);

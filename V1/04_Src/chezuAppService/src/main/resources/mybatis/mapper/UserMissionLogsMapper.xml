@@ -27,7 +27,7 @@
 
 	<select id="getLogsByUserIdAndType" resultType="java.util.HashMap" >
   	  select 
-  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,a.finishCount,a.targetCount,a.status,a.daystamp,b.actionStatus,b.actionLink,b.endTime
+  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,b.otherPrize,a.finishCount,a.targetCount,a.status,a.daystamp,b.actionStatus,b.actionLink,b.endTime
 		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and b.missionType=#{missionType} and a.valid=1 order by a.updateTime desc
     </select>
     
