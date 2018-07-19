@@ -27,7 +27,7 @@ public interface GameMapper
 {
 	public ViolationStatBean queryFamilyDriveDayStat(ViolationStatParamBean bean);
 	
-	public FamilyDriveDayStat queryFamilyScore(@Param("familyId")long familyId,@Param("daystamp") String daystamp);
+	public FamilyDriveDayStat queryFamilyScore(@Param("familyId")Long familyId,@Param("daystamp") String daystamp);
 
 	public void saveFamilyRelation(FamilyRelationParamBean bean);
 	
