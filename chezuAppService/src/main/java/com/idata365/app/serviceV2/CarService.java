@@ -443,22 +443,7 @@ public class CarService extends BaseService<CarService> {
 					}
 					
 					// 动力加成部分
-					Map<String, String> powerUpInfo = new HashMap<>();
-					// 配件加成
-					int partsUpPercent = 0;
-					powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
-					// 搭车加成
-					int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
-					powerUpInfo.put("rideUpPercent", "搭车加成：" + sitsCount * 10 + "%");
-					// 贴条减益
-					Map<String, Object> pamMap = new HashMap<String, Object>();
-					pamMap.put("lawBreakerId", userId);
-					pamMap.put("carId", carId);
-					pamMap.put("endLong", System.currentTimeMillis());
-					int iPCount = interactPeccancyMapper.getUserPeccancyCount(pamMap);
-					powerUpInfo.put("ticketDebuffPercent", "贴条减益-：" + iPCount * 10 + "%");
-					// 动力加成
-					powerUpInfo.put("powerUpPercent", "动力加成：" + (partsUpPercent + sitsCount - iPCount) * 10 + "%");
+					Map<String, String> powerUpInfo = this.getPowerUpInfo(userId, carId);
 					
 					carListResultBean.setPowerUpInfo(powerUpInfo);
 				}
@@ -468,6 +453,27 @@ public class CarService extends BaseService<CarService> {
 		rtMap.put("carList", CarListResultBeanList);
 		rtMap.put("index", index);
 		return rtMap;
+	}
+	
+	// 动力加成部分
+	public Map<String, String> getPowerUpInfo(long userId,int carId){
+		Map<String, String> powerUpInfo = new HashMap<>();
+		// 配件加成
+		int partsUpPercent = 0;
+		powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
+		// 搭车加成
+		int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
+		powerUpInfo.put("rideUpPercent", "搭车加成：" + sitsCount * 10 + "%");
+		// 贴条减益
+		Map<String, Object> pamMap = new HashMap<String, Object>();
+		pamMap.put("lawBreakerId", userId);
+		pamMap.put("carId", carId);
+		pamMap.put("endLong", System.currentTimeMillis());
+		int iPCount = interactPeccancyMapper.getUserPeccancyCount(pamMap);
+		powerUpInfo.put("ticketDebuffPercent", "贴条减益-：" + iPCount * 10 + "%");
+		// 动力加成
+		powerUpInfo.put("powerUpPercent", "动力加成：" + (partsUpPercent + sitsCount - iPCount) * 10 + "%");
+		return powerUpInfo;
 	}
 	
 	/**
@@ -481,15 +487,13 @@ public class CarService extends BaseService<CarService> {
         * @throws
         * @author LiXing
 	 */
-	public Map<String, Object> changeCar(long userId, Integer carId) {
-		Map<String, Object> rtMap = new HashMap<>();
+	public int changeCar(long userId, Integer carId) {
 		Map<String, Object> car = this.getUserCar(userId);
 		long carLogsId = Long.valueOf(car.get("id").toString());
 		//查询当前车辆是否有顺风车乘客
 		int passengersNum = this.carpoolMapper.getPassengersNum(carLogsId);
 		if(passengersNum > 0) {
-			rtMap.put("changeStatus", "1");
-			return rtMap;
+			return 0;
 		}
 		
 		Date now = Calendar.getInstance().getTime();
@@ -507,9 +511,7 @@ public class CarService extends BaseService<CarService> {
 		//插入新车
 		this.userCarLogsMapper.insertUserCarLogs(logs2);
 		
-		rtMap.put("changeStatus", "1");
-		
-		return rtMap;
+		return 1;
 	}
 	
 	public static void main(String []args) {
