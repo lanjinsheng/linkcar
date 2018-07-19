@@ -47,5 +47,5 @@ import com.idata365.app.util.DateTools;
 @Service
 public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	private final static Logger LOG = LoggerFactory.getLogger(BoxTreasureService.class);
-    
+//    public Dic
 }
