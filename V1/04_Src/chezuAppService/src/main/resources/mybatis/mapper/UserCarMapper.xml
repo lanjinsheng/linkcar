@@ -17,7 +17,6 @@
     </insert>
     
     <insert id="sendUserCarAndCarIdIs3" >
-       INSERT INTO userCar (userId,carId,createTime) VALUES (#{userId}, 3, now())
        insert   IGNORE INTO
             userCar (userId,carId,createTime) values (#{userId}, 2, now())
             ON DUPLICATE KEY UPDATE createTime=now()

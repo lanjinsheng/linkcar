@@ -196,7 +196,7 @@ public class GameControllerV2 extends BaseController {
 		LOG.info("myFamilyId=================" + myFamilyId);
 		Long opponentId = fightService.getOpponentIdBySelfId(myFamilyId, DateTools.getYYYY_MM_DD());
 		if (opponentId == null || opponentId == 0) {
-			return null;
+			return ResultUtils.rtSuccess(null);
 		}
 		result = this.gameServiceV2.getFightingDetail(result, data, myFamilyId, opponentId);
 		return ResultUtils.rtSuccess(result);

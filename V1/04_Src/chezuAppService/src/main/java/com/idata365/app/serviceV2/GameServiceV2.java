@@ -34,6 +34,7 @@ import com.idata365.app.entity.ScoreMemberInfoResultBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
+import com.idata365.app.mapper.UserCarLogsMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.service.BaseService;
@@ -41,6 +42,7 @@ import com.idata365.app.service.FightService;
 import com.idata365.app.service.ScoreService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.service.common.FamilyScoreService;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ValidTools;
 
@@ -64,6 +66,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	private FightService fightService;
 	@Autowired
 	private UserInfoService userInfoService;
+	@Autowired
+	private UserCarLogsMapper userCarLogsMapper;
 
 	/**
 	 * 实时榜单
@@ -471,9 +475,14 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			entity.put("name", member.get(j).getName());
 			entity.put("score", score);
 			// 用户当前车辆
-			entity.put("carImg", "");
-			// 用户当前车辆加成
-			entity.put("powerUpPercent", "");
+			String nowTime=DateTools.getYYYYMMDDMMSS();
+			Map<String,Object> map=new HashMap<>();
+			map.put("userId", memberId);
+		    map.put("nowTime", nowTime);
+			Map<String,Object> car=userCarLogsMapper.getUserCar(map);
+			
+			entity.put("carImg", car.get("carUrl").toString());
+			entity.put("powerUpPercent", "车辆加成+" + car.get("clubScoreUpPercent").toString() + "%");
 			users.add(entity);
 		}
 		// 按照分数从高到低排序
@@ -578,9 +587,16 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				bean.put("name", account.getNickName());
 				bean.put("score", score);
 				// 用户当前车辆
-				bean.put("carImg", "");
-				// 用户当前车辆加成
-				bean.put("powerUpPercent", "");
+				// 用户当前车辆
+				Date dd = DateTools.getDateTimeOfStr(daystamp,"yyyy-MM-dd");
+				Date curdate = DateTools.getAddMinuteDateTime(dd,60*24-1);
+				Map<String,Object> m=new HashMap<>();
+				m.put("userId", memberId);
+			    m.put("nowTime", curdate);
+				Map<String,Object> car=userCarLogsMapper.getUserCar(m);
+				
+				bean.put("carImg", car.get("carUrl").toString());
+				bean.put("powerUpPercent", "车辆加成+" + car.get("clubScoreUpPercent").toString() + "%");
 				if (i == 0) {
 					memberList1.add(bean);
 				} else {

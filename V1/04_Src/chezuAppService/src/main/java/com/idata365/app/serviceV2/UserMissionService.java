@@ -259,6 +259,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 
 	public Map<String, Object> getMissionPrize(long userId, int missionId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
+		rtMap.put("otherPrizeImg", "");
+		rtMap.put("ImgDesc", "");
 		Map<String, Object> map = userMissionLogsMapper.getOneLogsByUserIdAndMissionId(userId, missionId);
 		int powerPrize = Integer.valueOf(String.valueOf(map.get("powerPrize")));
 		int finishCount = Integer.valueOf(map.get("finishCount").toString());
@@ -285,15 +287,15 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		//完成行驶证认证 送 跑车一辆
 		if(missionId == 7) {
 			this.userCarMapper.sendUserCarAndCarIdIs3(userId);
-			rtMap.put("imgUrl", "http://product-h5.idata365.com/appImgs/car_3.png");
-			rtMap.put("imgDesc", "跑车");
+			rtMap.put("otherPrizeImg", "http://product-h5.idata365.com/appImgs/car_3.png");
+			rtMap.put("ImgDesc", "跑车");
 		}
 		
 		//创建的俱乐部达到黄金 送 豪华轿车一辆
 		if(missionId == 11) {
 			this.userCarMapper.sendUserCarAndCarIdIs2(userId);
-			rtMap.put("imgUrl", "http://product-h5.idata365.com/appImgs/car_2.png");
-			rtMap.put("imgDesc", "豪华轿车");
+			rtMap.put("otherPrizeImg", "http://product-h5.idata365.com/appImgs/car_2.png");
+			rtMap.put("ImgDesc", "豪华轿车");
 		}
 		
 		return rtMap;

@@ -120,6 +120,9 @@ public class UserHomeController extends BaseController {
 		}else {
 			rtMap.put("isLiked", "0");
 		}
+		//动力加成操作
+		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId, Integer.valueOf(car.get("carId").toString()));
+		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
 		
 		return ResultUtils.rtSuccess(rtMap);
 	}
@@ -216,7 +219,12 @@ public class UserHomeController extends BaseController {
 		Integer carId = Integer.valueOf(requestBodyParams.get("carId").toString());
 		LOG.info("userId=========================" + userId);
 		LOG.info("carId=========================" + carId);
-		Map<String, Object> rtMap = this.carService.changeCar(userId, carId);
-		return ResultUtils.rtSuccess(rtMap);
+		int i = this.carService.changeCar(userId, carId);
+		if (i == 1) {
+			return ResultUtils.rtSuccess(null);
+		} else {
+			return ResultUtils.rtFail(null, "顺风车载客中，更换失败", "100");
+		}
+		
 	}
 }
