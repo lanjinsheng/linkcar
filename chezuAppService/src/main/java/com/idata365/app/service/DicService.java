@@ -19,7 +19,9 @@ import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.entity.DicUserMission;
+import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.mapper.DicCarMapper;
+import com.idata365.app.mapper.DicComponentMapper;
 import com.idata365.app.mapper.DicFamilyTypeMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.DicNotifyMapper;
@@ -39,6 +41,8 @@ public class DicService extends BaseService<DicService> {
 	DicUserMissionMapper dicUserMissionMapper;
 	@Autowired
 	DicCarMapper dicCarMapper;
+	@Autowired
+	DicComponentMapper dicComponentMapper;
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType() {
 		return dicFamilyTypeMapper.getDicFamilyType(null);
@@ -51,6 +55,10 @@ public class DicService extends BaseService<DicService> {
 	@Transactional
 	public List<DicUserMission> getDicUserMission() {
 		return dicUserMissionMapper.getAllDicUserMission();
+	}
+	@Transactional
+	public List<DicComponent> getDicComponent() {
+		return dicComponentMapper.getDicComponent(null);
 	}
 
 	@Transactional
