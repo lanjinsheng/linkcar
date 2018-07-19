@@ -20,6 +20,7 @@ import com.idata365.app.service.UserInfoService;
 import com.idata365.app.serviceV2.CarService;
 import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.serviceV2.ScoreServiceV2;
+import com.idata365.app.serviceV2.UserHomeService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
@@ -41,7 +42,8 @@ public class UserHomeController extends BaseController {
 	private CarService carService;
 	@Autowired
 	private ScoreServiceV2 scoreServiceV2;
-	
+	@Autowired
+	private UserHomeService userHomeService;
 
 	public UserHomeController() {
 		System.out.println("UserHomeController");
@@ -64,66 +66,15 @@ public class UserHomeController extends BaseController {
 	@RequestMapping("/queryUserHome")
 	public Map<String, Object> queryUserHome(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("userId")))
 			return ResultUtils.rtFailParam(null);
 		long ownerId = this.getUserId();
 		long userId = Long.valueOf(requestBodyParams.get("userId").toString()).longValue();
-//		long familyId = Long.valueOf(requestBodyParams.get("familyId").toString());
-		LOG.info("ownerId========================="+ownerId);
-		LOG.info("userId========================="+userId);
-//		LOG.info("familyId========================="+familyId);
-		
-		UsersAccount account = userInfoService.getUsersAccount(userId);
-		//用户当前动力及分数
-		double score = scoreService.getHighScore(String.valueOf(userId));
-		String powerNum = chezuAssetService.getUsersAssetMap(String.valueOf(userId), "").get(userId);
-		rtMap.put("nickName", account.getNickName());
-		rtMap.put("score", String.valueOf(score));
-		rtMap.put("imgUrl",this.getImgBasePath() + account.getImgUrl());
-		rtMap.put("powerNum", powerNum);
-		//家族信息
-		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
-		rtMap.put("createFamilyInfo", familyInfo.get("createFamilyInfo"));
-		rtMap.put("joinFamilyInfo", familyInfo.get("joinFamilyInfo"));
-		//车库名
-		if (ownerId == userId) {
-			rtMap.put("title", "我的车库");
-		} else {
-			rtMap.put("title", account.getNickName()+"的车库");
-		}
-		
-		Map<String, Object> car = carService.getUserCar(userId);
-		//车名
-		rtMap.put("carName", car == null ? "链车蓝跑1代" : car.get("carName").toString());
-		// 车图片
-		rtMap.put("carImgUrl", car == null ? "http://product-h5.idata365.com/appImgs/paoche1.png" : car.get("carUrl").toString());
-		//点赞次数
-		rtMap.put("likeCount", String.valueOf(interactService.queryLikeCount(userId)));
-		//按钮展示
-		Map<String, String> map = this.familyService.iconStatus(ownerId, userId);
-		rtMap.put("isCanInvite", map.get("isCanInvite"));
-//		rtMap.put("hadRemove", map.get("isCanRemove"));
-		rtMap.put("isCanInteract", map.get("hadInteractIcon"));
-//		int canStealPower = interactService.isCanStealPower(userId);
-		int canPayTicket = interactService.isCanPayTicket(userId);
-		int canStealPower = interactService.carPoolStealStatus(ownerId,userId);
-		rtMap.put("isCanStealPower", String.valueOf(canStealPower));
-		rtMap.put("isCanPayTicket", String.valueOf(canPayTicket));
-		
-		Map<String,Object> param=new HashMap<String,Object>();
-		param.put("userIdA", this.getUserId());
-		param.put("userIdB", userId);
-		param.put("daystamp", DateTools.getYYYY_MM_DD());
-		if(interactService.hadComeOn(param)>0){
-			rtMap.put("isLiked", "1");
-		}else {
-			rtMap.put("isLiked", "0");
-		}
-		//动力加成操作
-		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId, Integer.valueOf(car.get("carId").toString()));
-		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
-		
+		LOG.info("ownerId=========================" + ownerId);
+		LOG.info("userId=========================" + userId);
+		String imgBasePath = this.getImgBasePath();
+		Map<String, Object> rtMap = userHomeService.queryUserHome(userId, ownerId, imgBasePath);
+
 		return ResultUtils.rtSuccess(rtMap);
 	}
 	
