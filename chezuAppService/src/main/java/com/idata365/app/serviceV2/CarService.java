@@ -483,12 +483,19 @@ public class CarService extends BaseService<CarService> {
 	 */
 	public Map<String, Object> changeCar(long userId, Integer carId) {
 		Map<String, Object> rtMap = new HashMap<>();
-		Date now = Calendar.getInstance().getTime();
 		Map<String, Object> car = this.getUserCar(userId);
+		long carLogsId = Long.valueOf(car.get("id").toString());
+		//查询当前车辆是否有顺风车乘客
+		int passengersNum = this.carpoolMapper.getPassengersNum(carLogsId);
+		if(passengersNum > 0) {
+			rtMap.put("changeStatus", "1");
+			return rtMap;
+		}
 		
+		Date now = Calendar.getInstance().getTime();
 		
 		UserCarLogs logs1 = new UserCarLogs();
-		logs1.setId(Long.valueOf(car.get("id").toString()));
+		logs1.setId(carLogsId);
 		logs1.setEndTime(now);
 		
 		UserCarLogs logs2 = new UserCarLogs();
@@ -496,15 +503,11 @@ public class CarService extends BaseService<CarService> {
 		logs2.setUserId(userId);
 		logs2.setStartTime(now);
 		//更新旧车
-		int i = this.userCarLogsMapper.updateEndTimeById(logs1);
+		this.userCarLogsMapper.updateEndTimeById(logs1);
 		//插入新车
-		int j = this.userCarLogsMapper.insertUserCarLogs(logs2);
+		this.userCarLogsMapper.insertUserCarLogs(logs2);
 		
-		if(i == 1 && j == 1) {
-			rtMap.put("changeStatus", "1");
-		}else {
-			rtMap.put("changeStatus", "0");
-		}
+		rtMap.put("changeStatus", "1");
 		
 		return rtMap;
 	}
