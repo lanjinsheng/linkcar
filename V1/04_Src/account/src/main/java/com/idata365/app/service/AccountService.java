@@ -57,20 +57,22 @@ public class AccountService extends BaseService<AccountService>
 		StringBuffer isPatriarchs=new StringBuffer();
 		long userId=usersAccountMapper.getCreateUserIdByFamilyId(familyId);
 		String []users=userIds.split(",");
-		for(String id:users) {
-		
-			UsersAccount account=usersAccountMapper.findAccountById(Long.valueOf(id));
-			if(account!=null) {
-				userNickNames.append(account.getNickName()==null?PhoneUtils.hidePhone(account.getPhone()):account.getNickName());
-				userNickNames.append(",");
-				userHeadUrls.append(account.getImgUrl()==null?" ":getImgBasePath+account.getImgUrl());
-				userHeadUrls.append(",");
-				if(Long.valueOf(id).longValue()==userId) {
-					isPatriarchs.append("1");
-				}else {
-					isPatriarchs.append("0");
+		for (String id : users) {
+			if (id != null && !id.equals("")) {
+				UsersAccount account = usersAccountMapper.findAccountById(Long.valueOf(id));
+				if (account != null) {
+					userNickNames.append(account.getNickName() == null ? PhoneUtils.hidePhone(account.getPhone())
+							: account.getNickName());
+					userNickNames.append(",");
+					userHeadUrls.append(account.getImgUrl() == null ? " " : getImgBasePath + account.getImgUrl());
+					userHeadUrls.append(",");
+					if (Long.valueOf(id).longValue() == userId) {
+						isPatriarchs.append("1");
+					} else {
+						isPatriarchs.append("0");
+					}
+					isPatriarchs.append(",");
 				}
-				isPatriarchs.append(",");
 			}
 		}
 		rtMap.put("nickNames", userNickNames.substring(0, userNickNames.length()-1));
