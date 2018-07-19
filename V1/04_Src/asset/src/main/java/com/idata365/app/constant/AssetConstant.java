@@ -86,8 +86,10 @@ public class AssetConstant {
 		UserDiamondsEventMap.put(EVENTTYPE_BUY, "购买消耗");
 		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_SEASONEND_USER, "赛季获胜获取");
 		UserDiamondsEventMap.put(EVENTTYPE_EARN, "交易收入");
-		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_AUCTION_BUY, "竞拍消费");
-		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_AUCTION_EARN, "竞拍收入");
+//		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_AUCTION_BUY, "竞拍消费");
+//		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_AUCTION_EARN, "竞拍收入");
+		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_AUCTION_BUY, "兑换消费");
+		UserDiamondsEventMap.put(EVENTTYPE_DAIMOND_AUCTION_EARN, "奖励兑换");
 		
 		
 		UserPowerEventMap.put(EVENTTYPE_POWER_SIGNIN, "每日签到奖励");
