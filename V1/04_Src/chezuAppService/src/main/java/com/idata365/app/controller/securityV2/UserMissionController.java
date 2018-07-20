@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.controller.security.BaseController;
-import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.ResultUtils;
 

@@ -19,8 +19,16 @@ public class DicComponent implements Serializable {
 	private Integer  currentPower; //'当前动力兑换价',
 	private Integer componentType;
 	
+	private String componentDesc;
 	
 	
+	
+	public String getComponentDesc() {
+		return componentDesc;
+	}
+	public void setComponentDesc(String componentDesc) {
+		this.componentDesc = componentDesc;
+	}
 	public Integer getComponentType() {
 		return componentType;
 	}
