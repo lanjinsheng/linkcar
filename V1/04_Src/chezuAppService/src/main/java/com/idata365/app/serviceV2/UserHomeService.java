@@ -1,6 +1,8 @@
 package com.idata365.app.serviceV2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.UsersAccount;
+import com.idata365.app.entity.v2.DicComponent;
+import com.idata365.app.mapper.DicComponentMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.FamilyService;
@@ -34,6 +38,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 	private InteractService interactService;
 	@Autowired
 	private CarService carService;
+	@Autowired
+	private DicComponentMapper dicComponentMapper;
 	
 	/**
 	 * 
@@ -101,6 +107,55 @@ public class UserHomeService extends BaseService<UserHomeService>{
 				Integer.valueOf(car.get("carId").toString()));
 		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
 
+		return rtMap;
+	}
+
+	/**
+	 * 
+        * @Title: userComponentBoxUp
+        * @Description: TODO(这里用一句话描述这个方法的作用)
+        * @param @param userId
+        * @param @param carId
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	public Map<String, Object> userComponentBoxUp(long userId, Integer carId) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		List<Map<String, String>> componentList = new ArrayList<>();
+		// 动力加成操作
+		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId);
+		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
+		List<DicComponent> list = dicComponentMapper.getCurComponentByUserIdCarId(userId, carId);
+		
+		
+		for (int i = 1; i < 6; i++) {
+			Map<String, String> map = new HashMap<>();
+			map.put("componentId", "");
+			map.put("componentName", "");
+			map.put("quality", "");
+			map.put("imgUrl", "");
+			map.put("componentDesc", "");
+			map.put("powerAddition", "");
+			map.put("travelNum", "");
+			if (list != null && list.size() != 0) {
+				for (int j = 0; j < list.size(); j++) {
+					if (list.get(j).getComponentType() == i) {
+						map.put("componentId", String.valueOf(list.get(j).getComponentId()));
+						map.put("componentName", list.get(j).getComponentValue());
+						map.put("quality", list.get(j).getQuality());
+						map.put("imgUrl", list.get(j).getComponentUrl());
+						map.put("componentDesc", list.get(j).getComponentDesc());
+						map.put("powerAddition", String.valueOf(list.get(j).getPowerAddition()));
+						map.put("travelNum", String.valueOf(list.get(j).getTravelNum()));
+					}
+				}
+			}
+			componentList.add(map);
+		}
+		
+		rtMap.put("componentList", componentList);
 		return rtMap;
 	}
 }

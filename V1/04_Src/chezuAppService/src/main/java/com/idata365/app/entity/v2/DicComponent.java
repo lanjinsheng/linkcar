@@ -18,10 +18,7 @@ public class DicComponent implements Serializable {
 	private Integer  travelNum; // '可用行程次数',
 	private Integer  currentPower; //'当前动力兑换价',
 	private Integer componentType;
-	
 	private String componentDesc;
-	
-	
 	
 	public String getComponentDesc() {
 		return componentDesc;

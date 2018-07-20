@@ -10,6 +10,8 @@ import com.idata365.app.entity.v2.DicComponent;
 public interface DicComponentMapper {
 	public List<DicComponent> getDicComponent(Map<String, Object> searchMap);
 
-	public Double getCurComponentByUserIdCarId(@Param("userId") Long userId, @Param("carId") Integer carId);
+	public Double getCountCurComponentByUserIdCarId(@Param("userId") Long userId, @Param("carId") Integer carId);
+
+	public List<DicComponent> getCurComponentByUserIdCarId(@Param("userId") Long userId, @Param("carId") Integer carId);
 
 }
