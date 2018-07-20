@@ -16,6 +16,14 @@ public class BoxTreasureUser implements Serializable{
 	private Date receiveTime;
 	private Long toUserId;
 	private Integer gainType;
+	private Long travelId;
+	
+	public Long getTravelId() {
+		return travelId;
+	}
+	public void setTravelId(Long travelId) {
+		this.travelId = travelId;
+	}
 	public Long getId() {
 		return id;
 	}

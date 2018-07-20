@@ -12,10 +12,29 @@ import com.idata365.app.service.SpringContextUtil;
 
 public class DicComponentConstant {
 	public static Map<Integer,DicComponent> dicComponentMap=new HashMap<Integer,DicComponent>();
-  
+    public final static Integer LUNTAI_B=10;
+    public final static Integer LUNTAI_A=11;
+    public final static Integer LUNTAI_S=12;
+    
+    public final static Integer HUOHUASAI_B=20;
+    public final static Integer HUOHUASAI_A=21;
+    public final static Integer HUOHUASAI_S=22;
+    
+    public final static Integer JIYOU_B=30;
+    public final static Integer JIYOU_A=31;
+    public final static Integer JIYOU_S=32;
+    
+    public final static Integer SHACHEPIAN_B=40;
+    public final static Integer SHACHEPIAN_A=41;
+    public final static Integer SHACHEPIAN_S=42;
+    
+    public final static Integer XUDIANCHI_B=50;
+    public final static Integer XUDIANCHI_A=51;
+    public final static Integer XUDIANCHI_S=52;
+    
     /**
      * 
-     * @param carId
+     * @param componentId
      * @return
      */
 	public static DicComponent getDicComponent(Integer componentId){
