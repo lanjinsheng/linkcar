@@ -12,16 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.controller.security.BaseController;
-import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.remote.ChezuAssetService;
-import com.idata365.app.service.FamilyService;
-import com.idata365.app.service.ScoreService;
-import com.idata365.app.service.UserInfoService;
 import com.idata365.app.serviceV2.CarService;
-import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.serviceV2.ScoreServiceV2;
 import com.idata365.app.serviceV2.UserHomeService;
-import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ValidTools;
 
@@ -29,15 +23,7 @@ import com.idata365.app.util.ValidTools;
 public class UserHomeController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(UserHomeController.class);
 	@Autowired
-	private UserInfoService userInfoService;
-	@Autowired
-	private ScoreService scoreService;
-	@Autowired
 	private ChezuAssetService chezuAssetService;
-	@Autowired
-	private FamilyService familyService;
-	@Autowired
-	private InteractService interactService;
 	@Autowired
 	private CarService carService;
 	@Autowired
@@ -175,5 +161,28 @@ public class UserHomeController extends BaseController {
 			return ResultUtils.rtFail(null, "顺风车载客中，更换失败", "100");
 		}
 		
+	}
+	
+	/**
+	 * 
+        * @Title: userComponentBoxUp
+        * @Description: TODO(个人车库配件箱上部分显示)
+        * @param @param allRequestParams
+        * @param @param requestBodyParams
+        * @param @return 参数
+        * @return Map<String,Object> 返回类型
+        * @throws
+        * @author LiXing
+	 */
+	@RequestMapping("/userComponentBoxUp")
+	public Map<String, Object> userComponentBoxUp(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		long userId = this.getUserId();
+		Integer carId = Integer.valueOf(requestBodyParams.get("carId").toString());
+		LOG.info("userId=========================" + userId);
+		LOG.info("carId=========================" + carId);
+		Map<String, Object> rtMap = this.userHomeService.userComponentBoxUp(userId, carId);
+		return ResultUtils.rtSuccess(rtMap);
+
 	}
 }

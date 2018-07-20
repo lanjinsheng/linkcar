@@ -462,7 +462,7 @@ public class CarService extends BaseService<CarService> {
 	public Map<String, String> getPowerUpInfo(long userId,int carId){
 		Map<String, String> powerUpInfo = new HashMap<>();
 		// 配件加成
-		long partsUpPercent = Math.round(dicComponentMapper.getCurComponentByUserIdCarId(userId, carId));
+		long partsUpPercent = Math.round(dicComponentMapper.getCountCurComponentByUserIdCarId(userId, carId));
 		powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
 		// 搭车加成
 		int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
