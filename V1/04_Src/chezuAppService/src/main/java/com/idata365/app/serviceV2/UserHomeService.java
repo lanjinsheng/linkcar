@@ -163,7 +163,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		rtMap.put("componentList", componentList);
 		DicCar car = dicCarMapper.getCarByCarId(carId);
 		rtMap.put("carUrl", car.getCarUrl());
-		rtMap.put("carName", car.getCarUrl());
+		rtMap.put("carName", car.getCarName());
 		return rtMap;
 	}
 }
