@@ -6,4 +6,22 @@
     <select id="getDicComponent" resultMap="BaseDicComponentMap" parameterType="java.util.HashMap">
   	  select  * from dicComponent
     </select>
+    
+    <select id="getCurComponentByUserIdCarId" resultType="java.lang.Double" >
+  	  SELECT
+			IFNULL( SUM( powerAddition ), 0 )  
+		FROM
+			dicComponent 
+		WHERE
+			componentId IN (
+		SELECT
+			componentId 
+		FROM
+			componentUserUseLog 
+		WHERE
+			userComponentId IN ( SELECT id FROM componentUser WHERE userId = #{userId} AND inUse = 1 AND componentStatus = 1 AND leftTravelNum > 0 ) 
+			AND eventType = 1 
+			AND carId = #{carId} 
+	)
+    </select>
 </mapper>

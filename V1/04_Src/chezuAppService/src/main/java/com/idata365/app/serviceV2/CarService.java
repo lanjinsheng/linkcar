@@ -29,6 +29,7 @@ import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.DicCarMapper;
+import com.idata365.app.mapper.DicComponentMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.InteractPeccancyMapper;
 import com.idata365.app.mapper.UserCarLogsMapper;
@@ -67,6 +68,8 @@ public class CarService extends BaseService<CarService> {
     DicCarMapper dicCarMapper;
     @Autowired
     InteractPeccancyMapper interactPeccancyMapper;
+    @Autowired
+    DicComponentMapper dicComponentMapper;
     
 	public CarService() {
 
@@ -459,7 +462,7 @@ public class CarService extends BaseService<CarService> {
 	public Map<String, String> getPowerUpInfo(long userId,int carId){
 		Map<String, String> powerUpInfo = new HashMap<>();
 		// 配件加成
-		int partsUpPercent = 0;
+		long partsUpPercent = Math.round(dicComponentMapper.getCurComponentByUserIdCarId(userId, carId));
 		powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
 		// 搭车加成
 		int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
