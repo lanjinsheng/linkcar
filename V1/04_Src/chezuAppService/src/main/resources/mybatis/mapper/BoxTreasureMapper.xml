@@ -2,4 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.BoxTreasureMapper">
     
+    <select id="getTripBoxIds" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select * from boxTreasureUser where toUserId=#{userId} and gainType=#{gainType}  and 
+		<![CDATA[ createTime>#{createTime}]]> and hadGet=0 group by boxId
+	</select>
+	
+	
+	 <select id="getChallengeBoxIds" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select * from boxTreasureFamily where toFamilyId=#{familyId} and gainType=#{gainType}  and 
+		 daystamp=#{daystamp}  and hadGet=0 group by boxId
+	</select>
+	
+	
+    <select id="getTripsByBoxId" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select * from boxTreasureUser where boxId=#{boxId}  
+	</select> 
+		
+    <select id="getFamilyTreasureByBoxId" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select * from boxTreasureFamily where boxId=#{boxId}  
+	</select> 
+	
+	
+    <update id="receiveBox" parameterType="java.lang.String">
+		update boxTreasureUser set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
+	</update> 
+	 <update id="receiveBoxFamily" parameterType="java.lang.String">
+		update boxTreasureFamily set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
+	 </update> 
+	
 </mapper>
