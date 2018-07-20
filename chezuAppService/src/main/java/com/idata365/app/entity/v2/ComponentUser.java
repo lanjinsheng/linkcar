@@ -16,6 +16,16 @@ public class ComponentUser implements Serializable{
 	private Integer componentStatus;
 	private Integer leftTravelNum;
 	private Integer gainType;
+	private Integer componentType;
+	
+	
+	
+	public Integer getComponentType() {
+		return componentType;
+	}
+	public void setComponentType(Integer componentType) {
+		this.componentType = componentType;
+	}
 	public Long getId() {
 		return id;
 	}

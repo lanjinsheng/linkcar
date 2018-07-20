@@ -15,6 +15,15 @@ public class ComponentFamily implements Serializable{
 	private Date createTime;
 	private Integer componentStatus;
 	private Integer gainType;
+	private Integer componentType;
+	
+	
+	public Integer getComponentType() {
+		return componentType;
+	}
+	public void setComponentType(Integer componentType) {
+		this.componentType = componentType;
+	}
 	public Long getId() {
 		return id;
 	}

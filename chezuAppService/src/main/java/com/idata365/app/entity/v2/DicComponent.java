@@ -17,7 +17,16 @@ public class DicComponent implements Serializable {
 	private Double   powerAddition;// '零件加成',
 	private Integer  travelNum; // '可用行程次数',
 	private Integer  currentPower; //'当前动力兑换价',
+	private Integer componentType;
 	
+	
+	
+	public Integer getComponentType() {
+		return componentType;
+	}
+	public void setComponentType(Integer componentType) {
+		this.componentType = componentType;
+	}
 	public Long getId() {
 		return id;
 	}
