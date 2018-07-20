@@ -473,7 +473,7 @@ public class CarService extends BaseService<CarService> {
 		pamMap.put("carId", carId);
 		pamMap.put("endLong", System.currentTimeMillis());
 		int iPCount = interactPeccancyMapper.getUserPeccancyCount(pamMap);
-		powerUpInfo.put("ticketDebuffPercent", "贴条减益-：" + iPCount * 10 + "%");
+		powerUpInfo.put("ticketDebuffPercent", "贴条减益：-" + iPCount * 10 + "%");
 		// 动力加成
 		powerUpInfo.put("powerUpPercent", "动力加成：" + (partsUpPercent + sitsCount - iPCount) * 10 + "%");
 		return powerUpInfo;
