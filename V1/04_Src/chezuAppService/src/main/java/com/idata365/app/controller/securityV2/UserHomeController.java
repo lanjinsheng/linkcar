@@ -139,17 +139,15 @@ public class UserHomeController extends BaseController {
 	@RequestMapping("/receiveClubBonus")
 	public Map<String, Object> receiveClubBonus(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Map<String, Object> rtMap = new HashMap<>();
 		long userId = this.getUserId();
 		LOG.info("userId=========================" + userId);
 		Map<String, Object> map = this.scoreServiceV2.queryClubBonusInfo(userId);
 		boolean b = this.chezuAssetService.receiveClubBonus(userId, Long.valueOf(map.get("totalPower").toString()), "sign");
 		if(b) {
-			rtMap.put("receiveStatus", "1");
+			return ResultUtils.rtSuccess(null);
 		}else {
-			rtMap.put("receiveStatus", "0");
+			return ResultUtils.rtFail(null, "领取失败", "100");
 		}
-		return ResultUtils.rtSuccess(rtMap);
 	}
 	
 	/**
