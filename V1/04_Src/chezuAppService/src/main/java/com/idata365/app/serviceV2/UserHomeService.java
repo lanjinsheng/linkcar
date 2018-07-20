@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.v2.DicComponent;
+import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.DicComponentMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
@@ -40,6 +41,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 	private CarService carService;
 	@Autowired
 	private DicComponentMapper dicComponentMapper;
+	@Autowired
+	private DicCarMapper dicCarMapper;
 	
 	/**
 	 * 
@@ -127,7 +130,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		List<Map<String, String>> componentList = new ArrayList<>();
 		// 动力加成操作
 		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId);
-		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
+		rtMap.put("powerUpPercent", powerUpInfo);
 		List<DicComponent> list = dicComponentMapper.getCurComponentByUserIdCarId(userId, carId);
 		
 		
@@ -157,6 +160,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		}
 		
 		rtMap.put("componentList", componentList);
+		rtMap.put("carUrl", dicCarMapper.getCarByCarId(carId).getCarUrl().toString());
 		return rtMap;
 	}
 }
