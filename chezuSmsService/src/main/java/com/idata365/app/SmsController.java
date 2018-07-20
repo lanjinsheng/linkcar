@@ -52,6 +52,8 @@ public class SmsController {
 			SendSmsResponse response = smsService.sendSms(map.get("mobile"),
 					map.get("templateType"), map.get("smsSignName"),
 					map.get("validateCode"));
+			LOG.info("mobile:" + map.get("mobile"));
+			LOG.info("type:" + map.get("templateType"));
 			LOG.info("code:" + response.getCode());
 			LOG.info("message:" + response.getMessage());
 			return true;
