@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.serviceV2.BoxTreasureService;
+import com.idata365.app.serviceV2.ComponentService;
 import com.idata365.app.util.ResultUtils;
 
 @RestController
@@ -20,6 +21,8 @@ public class BoxTreasureController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(BoxTreasureController.class);
 	@Autowired
 	BoxTreasureService boxTreasureService;
+	@Autowired
+	ComponentService componentService;
 	@Autowired
 	FamilyService familyService;
 	@RequestMapping(value = "/getTripBox")
@@ -60,4 +63,5 @@ public class BoxTreasureController extends BaseController {
 		}
 		return ResultUtils.rtSuccess(null);
 	}
+	
 }

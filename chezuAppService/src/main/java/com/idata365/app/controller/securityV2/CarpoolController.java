@@ -12,12 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.app.constant.InteractConstant;
 import com.idata365.app.controller.security.BaseController;
-import com.idata365.app.entity.InteractLogs;
 import com.idata365.app.serviceV2.CarService;
-import com.idata365.app.serviceV2.InteractService;
-import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 
 @RestController
