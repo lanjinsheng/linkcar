@@ -45,6 +45,7 @@ public class SmsController {
 		try {
 			LOG.info("mobile:" + map.get("mobile"));
 			LOG.info("type:" + map.get("templateType"));
+			LOG.info("sign:" + map.get("sign"));
 			String sign=map.get("sign");
 			boolean validSign=SignUtils.security(map.get("mobile")+map.get("validateCode"), sign);
 			if(!validSign) {
