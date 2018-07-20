@@ -13,6 +13,15 @@
 	 where userId=#{userId}
 	 and componentStatus=1 and inUse=0
 </select>   
+
+  <select id="getFreeComponentFamily" parameterType="java.util.HashMap" resultType="java.lang.Long">
+	select * from componentFamily 
+	 where userId=#{userId}
+	 and componentStatus=1
+</select>   
+
+
+
  <insert id="insertComponentUser"  parameterType="com.idata365.app.entity.v2.ComponentUser" >
      INSERT INTO 
           componentUser
