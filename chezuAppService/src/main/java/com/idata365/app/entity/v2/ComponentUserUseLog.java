@@ -16,6 +16,14 @@ public class ComponentUserUseLog implements Serializable{
 	private Integer componentStatus;
 	private Integer leftTravelNum;
 	private Integer gainType;
+	private Integer carId;
+	
+	public Integer getCarId() {
+		return carId;
+	}
+	public void setCarId(Integer carId) {
+		this.carId = carId;
+	}
 	public Long getId() {
 		return id;
 	}
