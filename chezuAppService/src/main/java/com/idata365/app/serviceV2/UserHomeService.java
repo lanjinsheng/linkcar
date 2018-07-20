@@ -75,6 +75,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		}
 
 		Map<String, Object> car = carService.getUserCar(userId);
+		rtMap.put("carId", car == null ? "1" : car.get("carId").toString());
 		// 车名
 		rtMap.put("carName", car == null ? "链车蓝跑1代" : car.get("carName").toString());
 		// 车图片
