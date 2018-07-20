@@ -175,13 +175,13 @@ public class UserHomeController extends BaseController {
         * @author LiXing
 	 */
 	@RequestMapping("/getUserCarInfo")
-	public Map<String, Object> userComponentBoxUp(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> getUserCarInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		Integer carId = Integer.valueOf(requestBodyParams.get("carId").toString());
 		LOG.info("userId=========================" + userId);
 		LOG.info("carId=========================" + carId);
-		Map<String, Object> rtMap = this.userHomeService.userComponentBoxUp(userId, carId);
+		Map<String, Object> rtMap = this.userHomeService.getUserCarInfo(userId, carId);
 		return ResultUtils.rtSuccess(rtMap);
 
 	}

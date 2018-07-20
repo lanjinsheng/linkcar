@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.mapper.DicCarMapper;
@@ -125,7 +126,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
         * @throws
         * @author LiXing
 	 */
-	public Map<String, Object> userComponentBoxUp(long userId, Integer carId) {
+	public Map<String, Object> getUserCarInfo(long userId, Integer carId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> componentList = new ArrayList<>();
 		// 动力加成操作
@@ -160,7 +161,9 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		}
 		
 		rtMap.put("componentList", componentList);
-		rtMap.put("carUrl", dicCarMapper.getCarByCarId(carId).getCarUrl().toString());
+		DicCar car = dicCarMapper.getCarByCarId(carId);
+		rtMap.put("carUrl", car.getCarUrl());
+		rtMap.put("carName", car.getCarUrl());
 		return rtMap;
 	}
 }
