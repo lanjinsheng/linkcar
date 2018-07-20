@@ -130,7 +130,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		List<Map<String, String>> componentList = new ArrayList<>();
 		// 动力加成操作
 		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId);
-		rtMap.put("powerUpPercent", powerUpInfo);
+		rtMap.put("powerUpInfo", powerUpInfo);
 		List<DicComponent> list = dicComponentMapper.getCurComponentByUserIdCarId(userId, carId);
 		
 		
