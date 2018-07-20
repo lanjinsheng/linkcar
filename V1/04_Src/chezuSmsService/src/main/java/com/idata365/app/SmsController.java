@@ -43,6 +43,8 @@ public class SmsController {
 	@RequestMapping("/sendMessage")
 	public boolean sendMessage(@RequestParam Map<String, String> map) {
 		try {
+			LOG.info("mobile:" + map.get("mobile"));
+			LOG.info("type:" + map.get("templateType"));
 			String sign=map.get("sign");
 			boolean validSign=SignUtils.security(map.get("mobile")+map.get("validateCode"), sign);
 			if(!validSign) {
@@ -52,8 +54,6 @@ public class SmsController {
 			SendSmsResponse response = smsService.sendSms(map.get("mobile"),
 					map.get("templateType"), map.get("smsSignName"),
 					map.get("validateCode"));
-			LOG.info("mobile:" + map.get("mobile"));
-			LOG.info("type:" + map.get("templateType"));
 			LOG.info("code:" + response.getCode());
 			LOG.info("message:" + response.getMessage());
 			return true;
