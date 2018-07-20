@@ -174,7 +174,7 @@ public class UserHomeController extends BaseController {
         * @throws
         * @author LiXing
 	 */
-	@RequestMapping("/userComponentBoxUp")
+	@RequestMapping("/getUserCarInfo")
 	public Map<String, Object> userComponentBoxUp(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
