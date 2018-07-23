@@ -113,7 +113,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			rtMap.put("isLiked", "0");
 		}
 		// 动力加成操作
-		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId, userCurCar.getCarId());
+		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId, userCurCar.getCarId(),userCurCar.getId());
 		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
 
 		return rtMap;
@@ -135,9 +135,9 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> componentList = new ArrayList<>();
 		// 动力加成操作
-		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId);
+		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId,userCarId);
 		rtMap.put("powerUpInfo", powerUpInfo);
-		List<DicComponent> list = dicComponentMapper.getCurComponentByUserIdCarId(userId, carId);
+		List<DicComponent> list = dicComponentMapper.getCurComponentByUserIdCarId(userId, userCarId);
 		
 		
 		for (int i = 1; i < 6; i++) {
