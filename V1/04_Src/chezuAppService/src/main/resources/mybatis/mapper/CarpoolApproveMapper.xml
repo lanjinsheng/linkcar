@@ -18,11 +18,12 @@
      </select> 
      
     <insert id="submitCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
-       INSERT INTO 
+       INSERT IGNORE INTO
             carpoolApprove
-            (driverId,passengerId,carId,userCarLogsId,createTime) 
+            (driverId,passengerId,carId,userCarLogsId,createTime,`constraint`) 
         VALUES
-            (#{driverId},#{passengerId}, #{carId},#{userCarLogsId},now())
+            (#{driverId},#{passengerId},#{carId},#{userCarLogsId},now(),#{constraint})
+            ON DUPLICATE KEY UPDATE createTime=now()
     </insert>
     
      <select id="getCarpoolApproveById" resultMap="BaseCarpoolApproveMap" parameterType="java.lang.Long">
