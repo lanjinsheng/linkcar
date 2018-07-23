@@ -24,6 +24,8 @@ import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UserCarLogs;
+import com.idata365.app.entity.v2.ComponentFamily;
+import com.idata365.app.entity.v2.ComponentGiveLog;
 import com.idata365.app.entity.v2.ComponentUser;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.enums.MessageEnum;
@@ -53,7 +55,8 @@ public class ComponentService extends BaseService<ComponentService> {
 	private final static Logger LOG = LoggerFactory.getLogger(ComponentService.class);
 	@Autowired
 	ComponentMapper componentMapper;
-	
+	@Autowired
+	FamilyMapper familyMapper;
 	
 	   public Map<String,Object> getUserComponent(long userId){
 		   Map<String,Object> rtMap=new HashMap<>();
@@ -101,17 +104,17 @@ public class ComponentService extends BaseService<ComponentService> {
 	   
 	   
 	   
-	   public Map<String,Object> getFamilyComponent(long userId){
+	   public Map<String,Object> getFamilyComponent(long familyId){
 		   Map<String,Object> rtMap=new HashMap<>();
 		   List<Map<String,Object>> componentList=new ArrayList<>();
-		   List<ComponentUser> components=componentMapper.getFreeComponentUser(userId);
+		   List<ComponentFamily> components=componentMapper.getFreeComponentFamily(familyId);
 		   
 		   if(components==null || components.size()==0){
 			  
 		   }else{
-			   for(ComponentUser component:components){
+			   for(ComponentFamily component:components){
 				   Map<String,Object> m1=new HashMap<>();
-				   m1.put("userComponentId", String.valueOf(component.getId()));
+				   m1.put("familyComponentId", String.valueOf(component.getId()));
 				   DicComponent dicComponent=DicComponentConstant.getDicComponent(component.getComponentId());
 				   m1.put("componentName", dicComponent.getComponentValue());
 				   m1.put("quality", dicComponent.getQuality());
@@ -128,4 +131,129 @@ public class ComponentService extends BaseService<ComponentService> {
 
 		   return rtMap;
 	   }
+	   public Map<String,Object> dropFamilyComponent(long familyComponentId){ 
+		   Map<String,Object> rtMap=new HashMap<>();
+		   int dropCount=componentMapper.dropFamilyComponent(familyComponentId);
+		   if(dropCount==0){
+			   return null;
+		   }
+		   return rtMap;
+	   }
+	   
+	   //家族零件分配提交
+	   @Transactional
+	   public int submitComponentDistribute(long familyComponentId, long familyId,long toUserId,long userId){
+		   ComponentFamily cf=componentMapper.getFamilyComponent(familyComponentId);
+		   ComponentGiveLog  log=new ComponentGiveLog();
+		   log.setComponentId(cf.getComponentId());
+		   log.setFromComponentId(familyComponentId);
+		   log.setFromId(cf.getFamilyId());
+		   log.setGiveStatus(1);
+		   log.setLogType(1);
+		   log.setOperationManId(userId);
+		   log.setToUserId(toUserId);
+		   log.setUniKey(log.getFromId()+"-"+log.getLogType()+"-"+log.getToUserId()+DateTools.getYYYYMMDD());
+		   componentMapper.insertComponentGiveLog(log);
+		   Map<String,Object> updateMap=new HashMap<>();
+		   updateMap.put("componentStatus", 3);
+		   updateMap.put("familyComponentId", familyComponentId);
+		   int update=componentMapper.updateFamilyComponent(updateMap);
+		   return update;
+	   }
+	   
+	   
+	  //分配列表 
+	  public Map<String,Object> getComponentDistribute(long userId,long familyId){
+		   Map<String,Object> rtMap=new HashMap<>();
+				List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
+				Map<Long,Object> keyMap=new HashMap<>();
+				List<Map<String,Object>> list=new ArrayList<>();
+				Map<String,Object> paramMap=new HashMap<>();
+				paramMap.put("familyId", familyId);
+				paramMap.put("logType", 1);
+				paramMap.put("eventTime", DateTools.getYYYYMMDD()+" 00:00:00");
+				List<ComponentGiveLog> logs=componentMapper.getComponentGiveLog(paramMap);
+				for(ComponentGiveLog log:logs){
+					keyMap.put(log.getToUserId(), log);
+				}
+				
+				for(Map<String,Object> user:users){//成员循环
+					Map<String,Object> m=new HashMap<>();
+					Long memberId=Long.valueOf(user.get("userId").toString());
+					if(userId==memberId.longValue()){
+						continue;//自己忽略
+					}
+					m.put("userId",String.valueOf(memberId));
+					m.put("nick",String.valueOf(user.get("nickName")));
+				    if(keyMap.get(memberId)==null){
+				    	m.put("numerator","0");
+						m.put("denominator","1");
+						m.put("authType","1");
+						
+				    }else{
+				    	m.put("numerator","1");
+						m.put("denominator","1");
+						m.put("authType","0");
+				    }
+				    list.add(m);
+				
+				}
+				rtMap.put("members", list);
+		   return rtMap;
+	  }
+	  
+	  
+	  //分配列表 
+	  public Map<String,Object> getComponentGiveLog(long componentGiveLogId){
+		   Map<String,Object> rtMap=new HashMap<>();
+		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
+		   if(log.getGiveStatus().intValue()==2){
+			   rtMap.put("hadRecieved",String.valueOf(1) );
+		   }else{
+			   rtMap.put("hadRecieved",String.valueOf(0) );
+		   }
+		   rtMap.put("logType",String.valueOf(log.getLogType()));
+		   DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
+		   rtMap.put("componentName",dicComponent.getComponentValue());
+		   rtMap.put("quality",dicComponent.getComponentValue());
+		   rtMap.put("imgUrl", dicComponent.getComponentUrl());
+		   rtMap.put("componentType", dicComponent.getComponentType());
+		   rtMap.put("componentDesc",dicComponent.getComponentDesc());
+		   rtMap.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
+		   rtMap.put("componentLoss", dicComponent.getTravelNum()+"次行程");
+		   return rtMap;
+	  }
+	  
+	  
+	  @Transactional
+	  public Map<String,Object> recieveGiveLog(long componentGiveLogId){
+		   Map<String,Object> rtMap=new HashMap<>();
+		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
+		   Map<String,Object> paramMap=new HashMap<>();
+		   paramMap.put("userId", log.getToUserId());
+		   int freeCount=componentMapper.countFreeCabinet(paramMap);
+		   if(freeCount<=0){
+			   return null;
+		   }
+		   ComponentUser componentUser=new ComponentUser();
+		   if(log.getLogType().intValue()==1){//家族赠送
+			   
+			   componentUser.setGainType(3);
+		   }else{//个人赠送
+			   componentUser.setGainType(2);
+		   }
+		   componentUser.setComponentId(log.getComponentId());
+		   componentUser.setComponentStatus(1);
+		   DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
+		   componentUser.setComponentType(dicComponent.getComponentType());
+		  
+		   componentUser.setInUse(0);
+		   componentUser.setLeftTravelNum(dicComponent.getTravelNum());
+		   componentUser.setUserId(log.getToUserId());
+		   //插入道具
+		   componentMapper.insertComponentUser(componentUser);
+		   //更新ComponentGiveLog
+		   componentMapper.recieveComponentGiveLog(componentGiveLogId);
+		   return rtMap;
+	  }
 }

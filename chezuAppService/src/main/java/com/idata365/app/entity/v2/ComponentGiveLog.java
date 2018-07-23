@@ -17,6 +17,22 @@ public class ComponentGiveLog implements Serializable{
 	private Date eventTime;
 	private Long toUserId;
 	private Integer giveStatus;
+	private String uniKey;
+	private Long operationManId;
+	
+	
+	public String getUniKey() {
+		return uniKey;
+	}
+	public void setUniKey(String uniKey) {
+		this.uniKey = uniKey;
+	}
+	public Long getOperationManId() {
+		return operationManId;
+	}
+	public void setOperationManId(Long operationManId) {
+		this.operationManId = operationManId;
+	}
 	public Long getId() {
 		return id;
 	}

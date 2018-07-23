@@ -16,6 +16,7 @@ public class DateTools
 	private static FastDateFormat yyMMddHHmmss = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 	private static FastDateFormat yyMMddHHmmssSSS = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
 	private static FastDateFormat yyyyMMdd = FastDateFormat.getInstance("yyyyMMdd");
+	private static FastDateFormat yyyyMMddHHmm = FastDateFormat.getInstance("yyyyMMddHHmm");
 	private static FastDateFormat yyyy_MM_dd= FastDateFormat.getInstance("yyyy-MM-dd");
 	
 	public static String getYYYYMMDDMMSS() {
@@ -26,6 +27,11 @@ public class DateTools
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;
 	}
+	
+	public static String getYYYYMMDDHHMM() {
+		  String 	customDate = yyyyMMddHHmm.format(new Date());
+		  return customDate;
+		}
 	public static String getTomorrowDateStr()
 	{
 		Date curDate = Calendar.getInstance().getTime();
