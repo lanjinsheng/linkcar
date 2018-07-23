@@ -1083,7 +1083,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 	//任务--是否创建俱乐部？
 	public int queryCountCreateFamily(long userId) {
-		return familyMapper.queryCountJoinFamily(userId);
+		return familyMapper.queryCountCreateFamily(userId);
 	}
 
 	// 任务--创建俱乐部是否达到白银
