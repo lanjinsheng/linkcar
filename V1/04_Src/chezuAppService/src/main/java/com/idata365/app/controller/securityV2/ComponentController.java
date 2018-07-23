@@ -102,8 +102,10 @@ public class ComponentController extends BaseController {
 	@RequestMapping(value = "/deployComponent")
 	Map<String, Object> deployComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
-		long componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
-		Map<String,Object> rtMap=componentService.recieveGiveLog(componentGiveLogId);
+		long userComponentId=Long.valueOf(requestBodyParams.get("userComponentId").toString());
+		long userCarId=Long.valueOf(requestBodyParams.get("userCarId").toString());
+		long destroyComponentId=0;
+		Map<String,Object> rtMap=componentService.deployComponent(userComponentId,userCarId,destroyComponentId);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 		

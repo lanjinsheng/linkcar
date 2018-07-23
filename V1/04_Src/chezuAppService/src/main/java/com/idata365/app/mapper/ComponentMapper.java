@@ -8,11 +8,13 @@ import java.util.Map;
 
 
 
+
 import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.v2.ComponentFamily;
 import com.idata365.app.entity.v2.ComponentGiveLog;
 import com.idata365.app.entity.v2.ComponentUser;
+import com.idata365.app.entity.v2.ComponentUserUseLog;
 
 
 public interface ComponentMapper {
@@ -36,10 +38,14 @@ public interface ComponentMapper {
 	public int dropFamilyComponent(@Param("familyComponentId") Long familyComponentId);
 	
 	public ComponentFamily getFamilyComponent(@Param("familyComponentId") Long familyComponentId);
+	public ComponentUser getComponentUser(@Param("userComponentId") Long userComponentId);
 	
 	public int 	updateFamilyComponent(Map<String,Object> map);
+	public int 	updateUserComponent(Map<String,Object> map);
 	
 	public int 	insertComponentGiveLog(ComponentGiveLog log);
+	
+	public int 	insertComponentUserUseLog(ComponentUserUseLog log);
 	
 	public int 	recieveComponentGiveLog(@Param("id") Long id);
 	
