@@ -39,7 +39,7 @@
 		WHERE
 			userComponentId IN ( SELECT id FROM componentUser WHERE userId = #{userId} AND inUse = 1 AND componentStatus = 1 AND leftTravelNum > 0 ) 
 			AND eventType = 1 
-			AND carId = #{carId} 
+			AND carCarId = #{carCarId}
 		)
 		order by `id`
     </select>

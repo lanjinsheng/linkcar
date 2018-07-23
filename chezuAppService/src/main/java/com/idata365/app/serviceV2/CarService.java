@@ -388,7 +388,6 @@ public class CarService extends BaseService<CarService> {
 	}
 	
 	//查询车辆信息
-	@Transactional
 	public Map<String,Object> getUserCar(Long userId){
 		String nowTime=DateTools.getYYYYMMDDMMSS();
 		Map<String,Object> map=new HashMap<>();
@@ -430,7 +429,7 @@ public class CarService extends BaseService<CarService> {
 		List<CarListResultBean> CarListResultBeanList = new ArrayList<>();
 		List<DicCar> carList = this.dicCarMapper.getDicCar(null);
 		List<UserCar> userCarList = this.userCarMapper.getUserCarById(userId);
-		Map<String, Object> userCurCar = this.getUserCar(userId);
+		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 		int index = 0;
 		for (int i = 0; i < carList.size(); i++) {
 			CarListResultBean carListResultBean = new CarListResultBean();
@@ -439,14 +438,14 @@ public class CarService extends BaseService<CarService> {
 			carListResultBean.setPowerConvertDesc("有效里程=行程评分×实际里程数/100");
 			BeanUtils.copyProperties(carListResultBean, carList.get(i));
 			for (UserCar userCar : userCarList) {
-				Integer carId = carList.get(i).getCarId();
+				Integer carId = carList.get(i).getId().intValue();
 				if (carList.get(i).getCarId() == userCar.getCarId()) {
 					carListResultBean.setIsUnlock("1");
-					if (carId == Integer.valueOf(userCurCar.get("carId").toString())) {
+					if (carId == userCurCar.getCarId()) {
 						carListResultBean.setIsDriving("1");
 						index = i;
 					}
-					
+					carListResultBean.setUserCarId(userCar.getId().toString());
 					// 动力加成部分
 					Map<String, String> powerUpInfo = this.getPowerUpInfo(userId, carId);
 					
@@ -492,9 +491,11 @@ public class CarService extends BaseService<CarService> {
         * @throws
         * @author LiXing
 	 */
-	public int changeCar(long userId, Integer carId) {
+	public int changeCar(long userId, long userCarId) {
 		Map<String, Object> car = this.getUserCar(userId);
+		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 		long carLogsId = Long.valueOf(car.get("id").toString());
+		long userCarIdOld = userCurCar.getId();
 		//查询当前车辆是否有顺风车乘客
 		int passengersNum = this.carpoolMapper.getPassengersNum(carLogsId);
 		if(passengersNum > 0) {
@@ -508,13 +509,17 @@ public class CarService extends BaseService<CarService> {
 		logs1.setEndTime(now);
 		
 		UserCarLogs logs2 = new UserCarLogs();
-		logs2.setCarId(carId);
+		logs2.setCarId(userCarMapper.getCarInfo(userCarId).getCarId());
+		logs2.setId(userCarId);
 		logs2.setUserId(userId);
 		logs2.setStartTime(now);
 		//更新旧车
 		this.userCarLogsMapper.updateEndTimeById(logs1);
 		//插入新车
 		this.userCarLogsMapper.insertUserCarLogs(logs2);
+		//userCar状态修改
+		userCarMapper.updateInUse(1, userCarId);	//1:使用中
+		userCarMapper.updateInUse(0, userCarIdOld);	//0：下架
 		
 		return 1;
 	}

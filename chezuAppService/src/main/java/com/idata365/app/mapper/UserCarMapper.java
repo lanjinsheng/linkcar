@@ -13,6 +13,12 @@ public interface UserCarMapper {
 	public int sendUserCarAndCarIdIs2(@Param("userId") Long userId);
 	
 	public int sendUserCarAndCarIdIs3(@Param("userId") Long userId);
-
+	
 	public List<UserCar> getUserCarById(@Param("userId") Long userId);
+	
+	public UserCar getCarInfo(@Param("userCarId") Long userCarId);
+	
+	public UserCar getUserCurCar(@Param("userId") Long userId);
+	
+	public void updateInUse(@Param("inUse") int inUse,@Param("userCarId") Long userCarId);
 }
