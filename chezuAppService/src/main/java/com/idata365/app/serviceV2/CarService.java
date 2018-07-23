@@ -447,7 +447,7 @@ public class CarService extends BaseService<CarService> {
 					}
 					carListResultBean.setUserCarId(userCar.getId().toString());
 					// 动力加成部分
-					Map<String, String> powerUpInfo = this.getPowerUpInfo(userId, carId);
+					Map<String, String> powerUpInfo = this.getPowerUpInfo(userId, carId,userCurCar.getId());
 					
 					carListResultBean.setPowerUpInfo(powerUpInfo);
 				}
@@ -460,10 +460,10 @@ public class CarService extends BaseService<CarService> {
 	}
 	
 	// 动力加成部分
-	public Map<String, String> getPowerUpInfo(long userId,int carId){
+	public Map<String, String> getPowerUpInfo(long userId,int carId,long carCarId){
 		Map<String, String> powerUpInfo = new HashMap<>();
 		// 配件加成
-		long partsUpPercent = Math.round(dicComponentMapper.getCountCurComponentByUserIdCarId(userId, carId));
+		long partsUpPercent = Math.round(dicComponentMapper.getCountCurComponentByUserIdCarId(userId, carCarId));
 		powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
 		// 搭车加成
 		int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
