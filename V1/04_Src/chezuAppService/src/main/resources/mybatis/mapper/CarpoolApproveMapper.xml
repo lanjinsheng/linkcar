@@ -20,9 +20,9 @@
     <insert id="submitCarpoolApprove"  parameterType="com.idata365.app.entity.CarpoolApprove" >
        INSERT IGNORE INTO
             carpoolApprove
-            (driverId,passengerId,carId,userCarLogsId,createTime,`constraint`) 
+            (driverId,passengerId,carId,userCarLogsId,createTime,uniKey) 
         VALUES
-            (#{driverId},#{passengerId},#{carId},#{userCarLogsId},now(),#{constraint})
+            (#{driverId},#{passengerId},#{carId},#{userCarLogsId},now(),#{uniKey})
             ON DUPLICATE KEY UPDATE createTime=now()
     </insert>
     
