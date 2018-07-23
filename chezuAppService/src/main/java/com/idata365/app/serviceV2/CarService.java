@@ -282,6 +282,8 @@ public class CarService extends BaseService<CarService> {
 		approve.setDriverId(car.getUserId());
 		approve.setPassengerId(userId);
 		approve.setUserCarLogsId(car.getId());
+		String constraint = userId+"-"+car.getId()+"-"+DateTools.getYYYYMMDD()+"-0";//索引
+		approve.setConstraint(constraint);
 		carpoolApproveMapper.submitCarpoolApprove(approve);
 		DicCar dicCar=DicCarConstant.getDicCar(car.getCarId());
 		Message msg=messageService.buildCarpoolApplyMessage(null, car.getUserId(), nickName, dicCar.getCarName());

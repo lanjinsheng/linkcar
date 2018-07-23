@@ -25,6 +25,7 @@ public class CarpoolApprove implements Serializable{
 	private Date createTime;
 	private Date approveTime;
 	private Integer approveStatus;
+	private String constraint;
 	public Long getId() {
 		return id;
 	}
@@ -72,6 +73,12 @@ public class CarpoolApprove implements Serializable{
 	}
 	public void setApproveStatus(Integer approveStatus) {
 		this.approveStatus = approveStatus;
+	}
+	public String getConstraint() {
+		return constraint;
+	}
+	public void setConstraint(String constraint) {
+		this.constraint = constraint;
 	}
  
  
