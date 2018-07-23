@@ -76,7 +76,7 @@ public class UserHomeController extends BaseController {
         * @author LiXing
 	 */
 	@RequestMapping("/queryUserCarList")
-	public Map<String, Object> queryUsersCar(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> queryUserCarList(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		LOG.info("userId========================="+userId);
@@ -151,7 +151,7 @@ public class UserHomeController extends BaseController {
 	public Map<String, Object> changeCar(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		Integer carId = Integer.valueOf(requestBodyParams.get("carId").toString());
+		Long carId = Long.valueOf(requestBodyParams.get("userCarId").toString());
 		LOG.info("userId=========================" + userId);
 		LOG.info("carId=========================" + carId);
 		int i = this.carService.changeCar(userId, carId);
@@ -178,10 +178,10 @@ public class UserHomeController extends BaseController {
 	public Map<String, Object> getUserCarInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
-		Integer carId = Integer.valueOf(requestBodyParams.get("carId").toString());
+		long userCarId = Long.valueOf(requestBodyParams.get("userCarId").toString());
 		LOG.info("userId=========================" + userId);
-		LOG.info("carId=========================" + carId);
-		Map<String, Object> rtMap = this.userHomeService.getUserCarInfo(userId, carId);
+		LOG.info("userCarId=========================" + userCarId);
+		Map<String, Object> rtMap = this.userHomeService.getUserCarInfo(userId, userCarId);
 		return ResultUtils.rtSuccess(rtMap);
 
 	}

@@ -25,4 +25,21 @@
     <select id="getUserCarById" resultMap="BaseUserCarMap" parameterType="java.lang.Long">
        SELECT * from userCar  where userId=#{userId}
     </select>
+    
+     <select id="getCarInfo" resultMap="BaseUserCarMap">
+       SELECT * from userCar where `id`=#{userCarId}
+     </select>
+     
+     <select id="getUserCurCar" resultMap="BaseUserCarMap">
+       SELECT * from userCar where userId=#{userId} and inUse=1
+     </select>
+     
+     <update id="updateInUse" >
+       UPDATE 
+            userCar 
+       SET 
+        inUse=#{inUse}
+       WHERE 
+            id = #{userCarId}
+    </update>
 </mapper>

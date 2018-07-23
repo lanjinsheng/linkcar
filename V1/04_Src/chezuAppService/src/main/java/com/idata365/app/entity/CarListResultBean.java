@@ -10,7 +10,7 @@ public class CarListResultBean implements Serializable {
 	 */
 	private static final long serialVersionUID = -9222315647447481118L;
 
-	private String carId;// 车辆id
+	private String userCarId;// 车辆id
 	private String carName;// 车辆名称
 	private String carSeat;// 搭载乘客数量
 	private String carUrl;// 车辆图片
@@ -48,10 +48,10 @@ public class CarListResultBean implements Serializable {
 		this.powerConvertDesc = powerConvertDesc;
 	}
 	public String getCarId() {
-		return carId;
+		return userCarId;
 	}
-	public void setCarId(String carId) {
-		this.carId = carId;
+	public void setUserCarId(String userCarId) {
+		this.userCarId = userCarId;
 	}
 	public String getCarName() {
 		return carName;

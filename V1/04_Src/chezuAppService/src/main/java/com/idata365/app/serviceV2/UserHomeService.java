@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.DicCar;
+import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.DicComponentMapper;
+import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.FamilyService;
@@ -44,6 +46,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 	private DicComponentMapper dicComponentMapper;
 	@Autowired
 	private DicCarMapper dicCarMapper;
+	@Autowired
+	private UserCarMapper userCarMapper;
 	
 	/**
 	 * 
@@ -78,13 +82,14 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			rtMap.put("title", account.getNickName() + "的车库");
 		}
 
+		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
+		DicCar dicCar = dicCarMapper.getCarByCarId(userCurCar.getCarId());
 		Map<String, Object> car = carService.getUserCar(userId);
-		rtMap.put("carId", car == null ? "1" : car.get("carId").toString());
+		rtMap.put("userCarId", userCurCar.getId().toString());
 		// 车名
-		rtMap.put("carName", car == null ? "链车蓝跑1代" : car.get("carName").toString());
+		rtMap.put("carName", dicCar.getCarName().toString());
 		// 车图片
-		rtMap.put("carImgUrl",
-				car == null ? "http://product-h5.idata365.com/appImgs/paoche1.png" : car.get("carUrl").toString());
+		rtMap.put("carImgUrl", dicCar.getCarUrl().toString());
 		// 点赞次数
 		rtMap.put("likeCount", String.valueOf(interactService.queryLikeCount(userId)));
 		// 按钮展示
@@ -108,8 +113,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			rtMap.put("isLiked", "0");
 		}
 		// 动力加成操作
-		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,
-				Integer.valueOf(car.get("carId").toString()));
+		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId, userCurCar.getCarId());
 		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
 
 		return rtMap;
@@ -126,7 +130,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
         * @throws
         * @author LiXing
 	 */
-	public Map<String, Object> getUserCarInfo(long userId, Integer carId) {
+	public Map<String, Object> getUserCarInfo(long userId, Long userCarId) {
+		Integer carId = this.userCarMapper.getCarInfo(userCarId).getCarId();
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> componentList = new ArrayList<>();
 		// 动力加成操作
