@@ -27,6 +27,7 @@ import com.idata365.app.entity.UserCarLogs;
 import com.idata365.app.entity.v2.ComponentFamily;
 import com.idata365.app.entity.v2.ComponentGiveLog;
 import com.idata365.app.entity.v2.ComponentUser;
+import com.idata365.app.entity.v2.ComponentUserUseLog;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.mapper.CarpoolApproveMapper;
@@ -256,4 +257,48 @@ public class ComponentService extends BaseService<ComponentService> {
 		   componentMapper.recieveComponentGiveLog(componentGiveLogId);
 		   return rtMap;
 	  }
+	  
+	  @Transactional
+	  public Map<String,Object> deployComponent(long userComponentId,long userCarId,long destroyComponentId){
+		  ComponentUser componentUser=componentMapper.getComponentUser(userComponentId);
+		  //插入componentUserUseLog
+		  ComponentUserUseLog log=new ComponentUserUseLog();
+		  log.setUserCarId(userCarId);
+		  log.setComponentId(componentUser.getComponentId());
+		  log.setEventType(1);
+		  log.setUserId(componentUser.getUserId());
+		  log.setUserComponentId(userComponentId);
+		  componentMapper.insertComponentUserUseLog(log);
+		  
+		  //更新零件
+		  Map<String,Object> userCompUpdate=new HashMap<>();
+		  userCompUpdate.put("inUse", 1);
+		  userCompUpdate.put("componentStatus", 1);
+		  userCompUpdate.put("userComponentId", userComponentId);
+		  componentMapper.updateUserComponent(userCompUpdate);
+		  
+		  //老的销毁
+		  if(destroyComponentId>0){
+			  ComponentUser componentUser2=componentMapper.getComponentUser(destroyComponentId);
+			  //插入componentUserUseLog
+			  ComponentUserUseLog log2=new ComponentUserUseLog();
+			  log2.setUserCarId(userCarId);
+			  log2.setComponentId(componentUser2.getComponentId());
+			  log2.setEventType(2);
+			  log2.setUserId(componentUser2.getUserId());
+			  log2.setUserComponentId(userComponentId);
+			  componentMapper.insertComponentUserUseLog(log2);
+			  
+			  //更新零件
+			  Map<String,Object> userCompUpdate2=new HashMap<>();
+			  userCompUpdate2.put("inUse", 0);
+			  userCompUpdate2.put("componentStatus", 2);
+			  userCompUpdate2.put("userComponentId", destroyComponentId);
+			  componentMapper.updateUserComponent(userCompUpdate2);
+		  }
+		  return null;
+	  }
+	  
+	  
+	  
 }
