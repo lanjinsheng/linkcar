@@ -31,6 +31,7 @@ public class AuctionGoods implements Serializable {
 	private String remark;
 	private Integer isMustVerify;
 	private Integer auctionGoodsType;
+	private String auctionTag;
 
 	private Integer taskStatus;
 	private Integer failTimes;
@@ -213,4 +214,11 @@ public class AuctionGoods implements Serializable {
 		this.remark = remark;
 	}
 
+	public String getAuctionTag() {
+		return auctionTag;
+	}
+
+	public void setAuctionTag(String auctionTag) {
+		this.auctionTag = auctionTag;
+	}
 }
