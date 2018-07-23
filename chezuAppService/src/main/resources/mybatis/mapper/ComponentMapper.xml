@@ -29,6 +29,16 @@
       VALUES
           (#{componentId},#{userId},now(),#{inUse},#{leftTravelNum},#{componentStatus},#{gainType},#{componentType})
 </insert> 
+
+<insert id="insertComponentUserUseLog"  parameterType="com.idata365.app.entity.v2.ComponentUser" >
+     INSERT INTO 
+          componentUserUseLog
+          (componentId,userId,userComponentId,eventTime,eventType,userCarId) 
+      VALUES
+          (#{componentId},#{userId},now(),#{userComponentId},now(),#{eventType},#{userCarId})
+</insert> 
+ 
+ 
  
  <select id="countFamilyFreeCabinet" parameterType="java.util.HashMap" resultType="java.lang.Long">
 	select (24-count(1)) from componentFamily 
@@ -77,11 +87,23 @@
 	select * from componentFamily 
 	 where id=#{familyComponentId}
 </select>
+
+
+ <select id="getComponentUser" resultType="com.idata365.app.entity.v2.ComponentUser" parameterType="java.lang.Long">
+	select * from componentUser 
+	 where id=#{userComponentId}
+</select>
     
 <update id="updateFamilyComponent"  parameterType="java.util.HashMap" >
      update
           componentFamily
           set componentStatus=#{componentStatus} where id=#{familyComponentId}
+</update> 
+
+<update id="updateUserComponent"  parameterType="java.util.HashMap" >
+     update
+          componentUser
+          set inUse=#{inUse},componentStatus=#{componentStatus} where id=#{userComponentId}
 </update> 
 
 <update id="recieveComponentGiveLog"   parameterType="java.lang.Long">
