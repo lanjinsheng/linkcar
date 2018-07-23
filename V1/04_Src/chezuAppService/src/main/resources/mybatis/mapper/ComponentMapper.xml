@@ -43,6 +43,51 @@
           (componentId,familyId,createTime,componentStatus,gainType,componentType) 
       VALUES
           (#{componentId},#{familyId},now(),#{componentStatus},#{gainType},#{componentType})
-</insert>    
+</insert>
+
+
+ <insert id="insertComponentGiveLog"  parameterType="com.idata365.app.entity.v2.ComponentUser" >
+     INSERT INTO 
+          componentGiveLog
+          (componentId,fromId,operationManId,fromComponentId,eventTime,logType,toUserId,giveStatus,uniKey) 
+      VALUES
+          (#{componentId},#{fromId},#{operationManId},#{fromComponentId},now(),#{logType},#{toUserId},#{giveStatus},#{uniKey})
+</insert>
+
+ 
+ <select id="getComponentGiveLog" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	select * from componentGiveLog 
+	 where fromId=#{familyId} and logType=#{logType} and eventTime<![CDATA[>]]>#{eventTime}
+</select>
+
+
+ <select id="findComponentGiveLog" parameterType="java.lang.Long" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
+	select * from componentGiveLog 
+	 where id=#{id}
+</select>
+     
+ <update id="dropFamilyComponent"  parameterType="java.lang.Long" >
+     update
+          componentFamily
+          set componentStatus=2 where id=#{familyComponentId} and componentStatus=1
+</update> 
+
+
+ <select id="getFamilyComponent" resultType="com.idata365.app.entity.v2.ComponentFamily" parameterType="java.lang.Long">
+	select * from componentFamily 
+	 where id=#{familyComponentId}
+</select>
+    
+<update id="updateFamilyComponent"  parameterType="java.util.HashMap" >
+     update
+          componentFamily
+          set componentStatus=#{componentStatus} where id=#{familyComponentId}
+</update> 
+
+<update id="recieveComponentGiveLog"   parameterType="java.lang.Long">
+     update
+          componentGiveLog
+          set giveStatus=1,recievedTime=now() where id=#{id}
+</update> 
     
 </mapper>
