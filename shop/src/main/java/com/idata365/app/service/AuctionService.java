@@ -57,6 +57,7 @@ public class AuctionService {
 				map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
 				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
+				map.put("auctionTag", auctionGood.getAuctionTag());
 				list.add(map);
 			}
 		}
@@ -81,6 +82,7 @@ public class AuctionService {
 			map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 			map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
 			map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
+			map.put("auctionTag", auctionGood.getAuctionTag());
 			if (auctionGood.getWinnerId() == userId
 					&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
 				map.put("convertStatus", map.put("convertStatus", auctionGood.getAuctionStatus().toString()));
@@ -120,6 +122,7 @@ public class AuctionService {
 				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
 				map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
+				map.put("auctionTag", auctionGood.getAuctionTag());
 				if (auctionGood.getWinnerId() == userId
 						&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
 					map.put("convertStatus", auctionGood.getAuctionStatus().toString());

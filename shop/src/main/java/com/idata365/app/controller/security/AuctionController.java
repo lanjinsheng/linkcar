@@ -99,6 +99,7 @@ public class AuctionController extends BaseController {
 		String prizeName = requestBodyParams.get("title").toString();
 		String prizeDesc = requestBodyParams.get("desc").toString();
 		String prizePic = requestBodyParams.get("imgs").toString();
+		String auctionTag = requestBodyParams.get("auctionTag").toString();
 		int type = Integer.valueOf(requestBodyParams.get("type").toString());
 		BigDecimal startDiamond = BigDecimal
 				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("startValue"))));
@@ -119,6 +120,7 @@ public class AuctionController extends BaseController {
 		auctionGoods.setAuctionRealEndTime(auctionEndTime);
 		auctionGoods.setOfUserId(userId);
 		auctionGoods.setAuctionGoodsType(type);
+		auctionGoods.setAuctionTag(auctionTag);
 		int f = auctionService.insertAuctionGoods(auctionGoods);
 		if (f == 0) {
 			return ResultUtils.rtFail(null);
