@@ -1,6 +1,7 @@
 package com.idata365.app.entity.v2;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UserLookAdLogs implements Serializable {
@@ -15,7 +16,35 @@ public class UserLookAdLogs implements Serializable {
 	private Date createTime;
 	private String daystamp;
 	private String remark;
+	private BigDecimal diamondNum;
 	private Long powerNum;
+	private int adSign;
+	private Long adPassId;
+	private int valid;
+
+	public BigDecimal getDiamondNum() {
+		return diamondNum;
+	}
+
+	public void setDiamondNum(BigDecimal diamondNum) {
+		this.diamondNum = diamondNum;
+	}
+
+	public int getAdSign() {
+		return adSign;
+	}
+
+	public void setAdSign(int adSign) {
+		this.adSign = adSign;
+	}
+
+	public Long getAdPassId() {
+		return adPassId;
+	}
+
+	public void setAdPassId(Long adPassId) {
+		this.adPassId = adPassId;
+	}
 
 	public Long getId() {
 		return id;
@@ -63,6 +92,14 @@ public class UserLookAdLogs implements Serializable {
 
 	public void setPowerNum(Long powerNum) {
 		this.powerNum = powerNum;
+	}
+
+	public int getValid() {
+		return valid;
+	}
+
+	public void setValid(int valid) {
+		this.valid = valid;
 	}
 
 }

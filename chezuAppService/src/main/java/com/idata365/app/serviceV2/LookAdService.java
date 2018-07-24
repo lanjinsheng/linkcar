@@ -50,7 +50,9 @@ public class LookAdService extends BaseService<LookAdService> {
 
 	/**
 	 * 
-        * @Title: receiveLookAdPower
+        * @param eventType 
+	 * @param adPassId 
+	 * @Title: receiveLookAdPower
         * @Description: TODO(这里用一句话描述这个方法的作用)
         * @param @param userId
         * @param @return 参数
@@ -58,10 +60,12 @@ public class LookAdService extends BaseService<LookAdService> {
         * @throws
         * @author LiXing
 	 */
-	public Map<String, Object> receiveLookAdPower(long userId) {
+	public Map<String, Object> receiveLookAdPower(long userId, int adSign, long adPassId) {
+		Long powerNum = 0L;
+		int valid = 0;
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		int count = this.countOfOddLookAd(userId);
-		if (count != 0) {
+		if (count == 0) {
 			throw new RuntimeException("次数已达到限制");
 		}
 
@@ -70,9 +74,20 @@ public class LookAdService extends BaseService<LookAdService> {
 		logs.setCreateTime(new Date());
 		logs.setDaystamp(DateTools.getYYYY_MM_DD());
 		logs.setRemark("");
-		Long powerNum = (long) RandUtils.generateRand(30, 200);
+		logs.setDiamondNum(null);
+		logs.setAdPassId(adPassId);
+		logs.setAdSign(adSign);
+		if (adSign != 0) {
+			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
+			if (info == null || (new Date().getTime() - info.getCreateTime().getTime() > 1000 * 5)) {
+				powerNum = (long) RandUtils.generateRand(30, 200);
+				valid = 1;
+			}
+		}
 		logs.setPowerNum(powerNum);
+		logs.setValid(valid);
 		int i = this.userLookAdMapper.insertLogs(logs);
+
 		if (i <= 0) {
 			LOG.error("插入Logs状态失败：==" + userId + "==" + userId);
 			throw new RuntimeException("系统异常领取失败");
@@ -84,7 +99,8 @@ public class LookAdService extends BaseService<LookAdService> {
 		if (b == false) {
 			throw new RuntimeException("系统异常领取失败");
 		}
-		rtMap.put("receivePower", powerNum.toString());
+		rtMap.put("powerPrizeNum", String.valueOf(powerNum));
+		rtMap.put("diamondPrizeNum", "0");
 		return rtMap;
 	}
 
