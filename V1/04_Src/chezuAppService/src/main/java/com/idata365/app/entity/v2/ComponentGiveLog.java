@@ -19,8 +19,15 @@ public class ComponentGiveLog implements Serializable{
 	private Integer giveStatus;
 	private String uniKey;
 	private Long operationManId;
+	private String daystamp;
 	
 	
+	public String getDaystamp() {
+		return daystamp;
+	}
+	public void setDaystamp(String daystamp) {
+		this.daystamp = daystamp;
+	}
 	public String getUniKey() {
 		return uniKey;
 	}

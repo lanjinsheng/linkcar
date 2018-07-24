@@ -41,6 +41,11 @@ public interface ComponentMapper {
 	public ComponentUser getComponentUser(@Param("userComponentId") Long userComponentId);
 	
 	public int 	updateFamilyComponent(Map<String,Object> map);
+	public int 	gotFamilyComponent(Map<String,Object> map);
+	public ComponentUser getUserComponentByType(Map<String,Object> map);
+	public int gotUserComponent(ComponentUser componentUser);
+	
+	
 	public int 	updateUserComponent(Map<String,Object> map);
 	
 	public int 	insertComponentGiveLog(ComponentGiveLog log);
@@ -54,6 +59,20 @@ public interface ComponentMapper {
 	
 	
 	public ComponentGiveLog findComponentGiveLog(@Param("id") Long id);
+	public ComponentGiveLog findComponentGiveLogByMap(Map<String,Object> map);
+	
+	public List<Map<String,Object>> getFreeComponentUserGroupType(@Param("userId") Long userId);
+	
+//	public int submitPraying(ComponentGiveLog componentGiveLog);insertComponentGiveLog
+//	public int applyPraying(ComponentGiveLog componentGiveLog);
+//	public int applyMemberRequest(ComponentGiveLog componentGiveLog);
+	public int updateComponentGiveLog(ComponentGiveLog componentGiveLog);
+	
+	public int updateComponentGiveLogApplyPraying(ComponentGiveLog componentGiveLog);
+	
+	
+	
+	public int ignoreGiveLog(ComponentGiveLog componentGiveLog);
 	
 	
 }

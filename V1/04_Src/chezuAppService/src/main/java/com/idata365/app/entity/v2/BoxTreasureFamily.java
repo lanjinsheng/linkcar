@@ -16,6 +16,20 @@ public class BoxTreasureFamily implements Serializable{
 	private Date receiveTime;
 	private Long toFamilyId;
 	private Integer gainType;
+	private Integer hadGet;
+	private String daystamp;
+	public Integer getHadGet() {
+		return hadGet;
+	}
+	public void setHadGet(Integer hadGet) {
+		this.hadGet = hadGet;
+	}
+	public String getDaystamp() {
+		return daystamp;
+	}
+	public void setDaystamp(String daystamp) {
+		this.daystamp = daystamp;
+	}
 	public Long getId() {
 		return id;
 	}

@@ -3,6 +3,8 @@ package com.idata365.app.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.idata365.app.entity.bean.ReturnMessage;
+
 public class ResultUtils {
 	public static final String RETURN_KEY = "return_key";
 	
@@ -54,6 +56,23 @@ public class ResultUtils {
 		result.put("code", CODE_OK);
 		result.put("datas", datas);
 		return result;
+	}
+	
+	public static Map<String,Object> rtJsonMap(ReturnMessage msg){
+		Map<String, Object> result = new HashMap<String, Object>();
+		if(msg.getStatus()==STATUS_FAIL){
+			result.put("status", STATUS_FAIL);
+			result.put("msg", msg.getMsg());
+			result.put("code", CODE_ERROR);
+			result.put("datas", msg.getData());
+			return result;
+		}else{
+			result.put("status", STATUS_SUCCESS);
+			result.put("msg", "ok");
+			result.put("code", CODE_OK);
+			result.put("datas",  msg.getData());
+			return result;
+		}
 	}
 	public static Map<String, Object> rtFail(Object datas) {
 		if (datas == null) {

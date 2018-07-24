@@ -176,6 +176,7 @@ public interface FamilyMapper {
 
 	List<Map<String, Object>> findUsersByFamilyId(@Param("familyId") Long familyId);
 
+	long getLeaderIdByFamilyId(@Param("familyId") Long familyId);
 	// 初始化家族日分
 	int insertFamilyDriveDayStat(FamilyDriveDayStat familyDriveDayStat);
 	
