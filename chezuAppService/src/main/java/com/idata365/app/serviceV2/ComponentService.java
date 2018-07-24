@@ -534,17 +534,17 @@ public class ComponentService extends BaseService<ComponentService> {
 		  case ApplyPraying:
 			  Message msg= messageService.buildApplyPrayingMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
 			  messageService.insertMessage(msg, MessageEnum.ApplyPraying);
-			  messageService.pushMessageByTask(msg);
+			  messageService.pushMessageNotrans(msg,MessageEnum.ApplyPraying);
 			  break;
 		  case RequestComponent:
 			  Message msg2= messageService.buildRequestComponentMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
 			  messageService.insertMessage(msg2, MessageEnum.RequestComponent);
-			  messageService.pushMessageByTask(msg2);
+			  messageService.pushMessageNotrans(msg2,MessageEnum.RequestComponent);
 			  break;
 		  case ApplyGiveLog:
 			  Message msg3= messageService.buildRequestComponentMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
 			  messageService.insertMessage(msg3, MessageEnum.ApplyGiveLog);
-			  messageService.pushMessageByTask(msg3);
+			  messageService.pushMessageNotrans(msg3,MessageEnum.ApplyGiveLog);
 			  break;
 		default:
 			break;
