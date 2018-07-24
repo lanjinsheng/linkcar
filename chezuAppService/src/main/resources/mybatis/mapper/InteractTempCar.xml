@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.InteractTempCarMapper">
     <resultMap id="BaseTempCarMap" type="com.idata365.app.entity.InteractTempCar" >
@@ -10,10 +10,10 @@
        where daystamp=#{daystamp} and lockStatus=1 and userId!=#{userId}
        and type<![CDATA[>]]>0 order by r limit 5
      </update>
-     <update id="lockCarById"  parameterType="com.idata365.app.entity.InteractTempCar">
+     <update id="updateCarById"  parameterType="com.idata365.app.entity.InteractTempCar">
        update  interactTempCar 
-	   set   lockBatchId=#{lockBatchId}, stealerId=#{stealerId},lockStatus=-1,
-      lockTime=#{lockTime}  where  id=${id}
+	   set   lockBatchId=#{lockBatchId}, stealerId=#{stealerId},lockStatus=2,stealTime=now(),
+      lockTime=#{lockTime},hadGet=1  where  id=${id} and lockStatus=1 and hadGet=0
      </update>
     
     
