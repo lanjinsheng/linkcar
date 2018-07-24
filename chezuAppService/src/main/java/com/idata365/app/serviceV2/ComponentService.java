@@ -64,6 +64,8 @@ public class ComponentService extends BaseService<ComponentService> {
 	FamilyMapper familyMapper;
 	@Autowired
 	TaskPowerLogsMapper taskPowerLogsMapper;
+	@Autowired
+	MessageService messageService;
 	
 	   public Map<String,Object> getUserComponent(long userId){
 		   Map<String,Object> rtMap=new HashMap<>();
@@ -408,7 +410,7 @@ public class ComponentService extends BaseService<ComponentService> {
           return insert;
 	  }
 	  @Transactional
-	  public ReturnMessage  requestComponent(Long familyComponentId,Long userId){
+	  public ReturnMessage  requestComponent(Long familyComponentId,Long userId,String nickName){
 		  ReturnMessage msg=new ReturnMessage();
 		   ComponentFamily cf= componentMapper.getFamilyComponent(familyComponentId);
 		   if(cf.getComponentStatus()!=1){
@@ -430,11 +432,15 @@ public class ComponentService extends BaseService<ComponentService> {
           int insert=componentMapper.insertComponentGiveLog(giveLog);
           if(insert==0){
         	  msg.setStatus(0);
-			  msg.setMsg("此零件已经申请过"); 
+			  msg.setMsg("此零件已经申请过");
+			  return msg;
           }
           //发送消息
+          DicComponent dc=DicComponentConstant.getDicComponent(cf.getComponentId());
           Long toUserId=familyMapper.getLeaderIdByFamilyId(cf.getFamilyId());
-          sendSysMsg(userId, toUserId, giveLog.getId(), MessageEnum.RequestComponent);
+          sendSysMsg(userId, toUserId, giveLog.getId(), MessageEnum.RequestComponent,
+        		nickName,  dc.getComponentValue()+"("+dc.getQuality()+")"
+        		  );
           
           return msg;
 	  }	  
@@ -466,14 +472,17 @@ public class ComponentService extends BaseService<ComponentService> {
 			  }else{
 				  msg.setStatus(0);
 				  msg.setMsg("道具已经被别人申领");
+				  return msg;
 			  }
 		  }
-		  sendSysMsg(0L,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyGiveLog);
+		  DicComponent dc=DicComponentConstant.getDicComponent(log.getComponentId());
+		  sendSysMsg(0L,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyGiveLog,
+				  null,dc.getComponentValue());
           return msg;
 	  }	
 	  //个人祈愿审批通过
 	  @Transactional
-	  public ReturnMessage  applyPraying(long componentGiveLogId, long userId){
+	  public ReturnMessage  applyPraying(long componentGiveLogId, long userId,String nickName){
 		  ReturnMessage msg=new ReturnMessage();
 		  ComponentGiveLog log= componentMapper.findComponentGiveLog(componentGiveLogId);
 		  DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
@@ -514,12 +523,32 @@ public class ComponentService extends BaseService<ComponentService> {
 		  componentMapper.updateComponentGiveLogApplyPraying(log);
 		  
 		  //发送消息
-		  sendSysMsg(userId,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyPraying);
+		  sendSysMsg(userId,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyPraying,
+				nickName,dicComponent.getComponentValue());
           return msg;
 	  }	
 	  
-	  private void sendSysMsg(Long fromUser,Long toUser,Long componentGiveLogId,MessageEnum msgType){
-		  
+	  private void sendSysMsg(Long fromUser,Long toUser,
+			  Long componentGiveLogId,MessageEnum msgType,String nickName,String componentName){
+		  switch(msgType){
+		  case ApplyPraying:
+			  Message msg= messageService.buildApplyPrayingMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
+			  messageService.insertMessage(msg, MessageEnum.ApplyPraying);
+			  messageService.pushMessageByTask(msg);
+			  break;
+		  case RequestComponent:
+			  Message msg2= messageService.buildRequestComponentMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
+			  messageService.insertMessage(msg2, MessageEnum.RequestComponent);
+			  messageService.pushMessageByTask(msg2);
+			  break;
+		  case ApplyGiveLog:
+			  Message msg3= messageService.buildRequestComponentMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
+			  messageService.insertMessage(msg3, MessageEnum.ApplyGiveLog);
+			  messageService.pushMessageByTask(msg3);
+			  break;
+		default:
+			break;
+		  }
 	  }
 	  
 }
