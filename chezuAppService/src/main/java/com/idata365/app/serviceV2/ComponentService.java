@@ -46,6 +46,7 @@ import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.MessageService;
 import com.idata365.app.util.DateTools;
+import com.idata365.app.util.RandUtils;
 
 /**
  * 
@@ -525,6 +526,14 @@ public class ComponentService extends BaseService<ComponentService> {
 		  //发送消息
 		  sendSysMsg(userId,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyPraying,
 				nickName,dicComponent.getComponentValue());
+		  //发放奖励
+		  int power=RandUtils.generateRand(10, 50);
+		  TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
+	    	taskPowerLogs.setUserId(userId);
+	    	taskPowerLogs.setTaskType(PowerEnum.ApplyPraying);
+	    	//type =1  行程动力
+	    	taskPowerLogs.setJsonValue(String.format(jsonValue,userId,power,cmpUser.getId()));
+	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
           return msg;
 	  }	
 	  
