@@ -18,9 +18,9 @@
 		select count(1) hadNum,componentType from componentUser 
 		where userId=#{userId} and inUse=0 and componentStatus=1 group by componentType
 </select> 
-  <select id="getFreeComponentFamily" parameterType="java.util.HashMap" resultType="java.lang.Long">
+  <select id="getFreeComponentFamily" resultType="com.idata365.app.entity.v2.ComponentFamily">
 	select * from componentFamily 
-	 where userId=#{userId}
+	 where familyId=#{familyId}
 	 and componentStatus=1
 </select>   
 
