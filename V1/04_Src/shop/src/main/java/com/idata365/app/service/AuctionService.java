@@ -1,11 +1,14 @@
 package com.idata365.app.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +147,23 @@ public class AuctionService {
 				map.put("nick", auctionLog.getAuctionUserNick().toString());
 				map.put("auctionTime", DateTools.formatDateYMD(auctionLog.getAuctionTime()));
 				map.put("auctionDiamond", auctionLog.getAuctionDiamond().stripTrailingZeros().toPlainString());
+				result.add(map);
+			}
+		}
+		return result;
+	}
+	
+	public List<Map<String, String>> getChartInfo(Long auctionGoodsId) {
+		List<Map<String, String>> result = new ArrayList<>();
+		// 商品标签
+		String auctionTag = this.auctionMapper.findAuctionGoodById(auctionGoodsId).getAuctionTag();
+		List<Map<String, Object>> list = this.auctionMapper.getChartInfoByTag(auctionTag);
+		if (CollectionUtils.isNotEmpty(list)) {
+			for (Map<String, Object> bean : list) {
+				Map<String, String> map = new HashMap<>();
+				map.put("abscissa", String.valueOf(bean.get("time")).substring(5,10));
+				map.put("ordinate", BigDecimal.valueOf(Double.valueOf(String.valueOf(bean.get("diamondsNum"))))
+						.setScale(1, RoundingMode.HALF_EVEN).toString());
 				result.add(map);
 			}
 		}

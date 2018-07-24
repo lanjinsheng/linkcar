@@ -32,6 +32,21 @@
 		auctionStatus=#{auctionStatus} where auctionGoodsId=#{auctionGoodsId}
 	</update>
 	
+	<select id="getChartInfoByTag" resultType="java.util.HashMap" >
+       SELECT
+			avg( doneDiamond ) AS diamondsNum,
+			DATE_FORMAT( auctionRealEndTime, '%Y-%m-%d' ) AS time 
+		FROM
+			auctionGoods 
+		WHERE
+			auctionTag = #{auctionTag} 
+			AND auctionStatus != 0 
+		GROUP BY
+			( DATE_FORMAT( auctionRealEndTime, '%Y-%m-%d' ) ) 
+		ORDER BY
+			auctionRealEndTime DESC
+     </select>
+	
 	
 		<!-- 竞拍定时任务 -->
 		<!-- 定时处理行程逻辑 -->
