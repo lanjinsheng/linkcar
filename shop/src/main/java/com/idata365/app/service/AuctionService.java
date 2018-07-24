@@ -153,15 +153,22 @@ public class AuctionService {
 		return result;
 	}
 	
-	public List<Map<String, String>> getChartInfo(Long auctionGoodsId) {
+	public List<Map<String, String>> getChartInfo(Long auctionGoodsId, int param) {
 		List<Map<String, String>> result = new ArrayList<>();
 		// 商品标签
 		String auctionTag = this.auctionMapper.findAuctionGoodById(auctionGoodsId).getAuctionTag();
-		List<Map<String, Object>> list = this.auctionMapper.getChartInfoByTag(auctionTag);
+		List<Map<String, Object>> list = new ArrayList<>();
+		if(param == 1) {
+			//全部记录
+			list = this.auctionMapper.getChartInfoByTag(auctionTag);
+		}else {
+			//近10次记录
+			list = this.auctionMapper.getChartInfoByTag10Time(auctionTag);
+		}
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (Map<String, Object> bean : list) {
 				Map<String, String> map = new HashMap<>();
-				map.put("abscissa", String.valueOf(bean.get("time")).substring(5,10));
+				map.put("abscissa", String.valueOf(bean.get("time")));
 				map.put("ordinate", BigDecimal.valueOf(Double.valueOf(String.valueOf(bean.get("diamondsNum"))))
 						.setScale(1, RoundingMode.HALF_EVEN).toString());
 				result.add(map);

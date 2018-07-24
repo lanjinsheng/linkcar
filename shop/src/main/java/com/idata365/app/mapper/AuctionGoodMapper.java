@@ -32,6 +32,8 @@ public interface AuctionGoodMapper {
 	int updateGoodsStatusByTask(AuctionGoods auctionGood);
 
 	int updateGoodsByTask(AuctionGoods auctionGood);
-
+	
 	List<Map<String, Object>> getChartInfoByTag(@Param("auctionTag") String auctionTag);
+	
+	List<Map<String, Object>> getChartInfoByTag10Time(@Param("auctionTag") String auctionTag);
 }

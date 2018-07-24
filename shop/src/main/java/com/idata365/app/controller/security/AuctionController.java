@@ -309,8 +309,29 @@ public class AuctionController extends BaseController {
 		List<Map<String, String>> auctionInfo = auctionService.listAuctionGoodsRecord(auctionGoodsId);
 		rtMap.put("auctionGoodsInfo", auctionGoodsInfo);
 		rtMap.put("auctionInfo", auctionInfo);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	/**
+	 * 
+	 * @Title: queryChartInfo
+	 * @Description: TODO(成交历史折线图)
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             lcc
+	 */
+	@RequestMapping("/queryChartInfo")
+	public Map<String, Object> queryChartInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<>();
+		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
+		int param = Integer.valueOf(requestBodyParams.get("param").toString());
+		LOG.info("auctionGoodsId=================" + auctionGoodsId);
+		LOG.info("param=================" + param);
 		// 同标签商品成交折线图
-		List<Map<String, String>> chartInfo = auctionService.getChartInfo(auctionGoodsId);
+		List<Map<String, String>> chartInfo = auctionService.getChartInfo(auctionGoodsId,param);
 		rtMap.put("chartInfo", chartInfo);
 		return ResultUtils.rtSuccess(rtMap);
 	}

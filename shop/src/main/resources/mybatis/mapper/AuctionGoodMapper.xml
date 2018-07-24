@@ -46,6 +46,18 @@
 		ORDER BY
 			auctionRealEndTime DESC
      </select>
+     
+     <select id="getChartInfoByTag10Time" resultType="java.util.HashMap" >
+       SELECT
+			avg( doneDiamond ) AS diamondsNum,
+			DATE_FORMAT( auctionRealEndTime, '%Y-%m-%d' ) AS time 
+		FROM
+			( SELECT * FROM auctionGoods WHERE auctionTag = #{auctionTag} AND auctionStatus != 0 ORDER BY auctionRealEndTime DESC LIMIT 10 ) AS t 
+		GROUP BY
+			( DATE_FORMAT( auctionRealEndTime, '%Y-%m-%d' ) ) 
+		ORDER BY
+			auctionRealEndTime DESC
+     </select>
 	
 	
 		<!-- 竞拍定时任务 -->
