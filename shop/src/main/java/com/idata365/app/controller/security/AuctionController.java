@@ -292,22 +292,26 @@ public class AuctionController extends BaseController {
 	@RequestMapping("/auctionGoodsDetail")
 	public Map<String, Object> auctionGoodsDetail(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-
+		Map<String, Object> rtMap = new HashMap<>();
 		Long userId = this.getUserId();
 		String sign = SignUtils.encryptHMAC(String.valueOf(userId));
 		Long auctionGoodsId = Long.valueOf(requestBodyParams.get("auctionGoodsId").toString());
 		LOG.info("auctionGoodsId=================" + auctionGoodsId);
 		LOG.info("userId=================" + userId);
 		LOG.info("sign=================" + sign);
-		Map<String, Object> rtMap = new HashMap<>();
 		Map<String, Object> userAsset = chezuAssetService.getUserAsset(userId, sign);
+		// 商品信息
 		Map<String, String> auctionGoodsInfo = auctionService.findAuctionGoodById(auctionGoodsId, userId);
 		auctionGoodsInfo.put("diamondHoldNum",
 				BigDecimal.valueOf(Double.valueOf(String.valueOf(userAsset.get("diamondsNum"))))
 						.setScale(2, RoundingMode.HALF_UP).toString());
+		// 该商品出价记录
 		List<Map<String, String>> auctionInfo = auctionService.listAuctionGoodsRecord(auctionGoodsId);
 		rtMap.put("auctionGoodsInfo", auctionGoodsInfo);
 		rtMap.put("auctionInfo", auctionInfo);
+		// 同标签商品成交折线图
+		List<Map<String, String>> chartInfo = auctionService.getChartInfo(auctionGoodsId);
+		rtMap.put("chartInfo", chartInfo);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 
