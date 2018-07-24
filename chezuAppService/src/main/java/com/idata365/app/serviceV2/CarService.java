@@ -282,7 +282,7 @@ public class CarService extends BaseService<CarService> {
 		approve.setDriverId(car.getUserId());
 		approve.setPassengerId(userId);
 		approve.setUserCarLogsId(car.getId());
-		String uniKey = userId+"-"+car.getId()+"-"+DateTools.getYYYYMMDD()+"-0";//索引
+		String uniKey = userId+"-"+car.getId()+"-"+DateTools.getYYYYMMDDHHMM()+"-0";//索引
 		approve.setUniKey(uniKey);
 		carpoolApproveMapper.submitCarpoolApprove(approve);
 		DicCar dicCar=DicCarConstant.getDicCar(car.getCarId());
