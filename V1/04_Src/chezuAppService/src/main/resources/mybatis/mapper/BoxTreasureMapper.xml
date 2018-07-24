@@ -12,7 +12,7 @@
 		select * from boxTreasureFamily where toFamilyId=#{familyId} and gainType=#{gainType}  and 
 		 daystamp=#{daystamp}  and hadGet=0 group by boxId
 	</select>
-	<select id="hadChallengeBoxIds" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<select id="hadChallengeBoxIds" parameterType="java.util.HashMap" resultType="java.lang.Integer">
 		select count(1) from boxTreasureFamily where toFamilyId=#{familyId} and 
 		 daystamp=#{daystamp}
 	</select>
