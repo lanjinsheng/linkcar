@@ -73,6 +73,10 @@ public class PowerService extends BaseService<PowerService>
 	public final static int EventType_MemberTrip=1;
 	public final static int EventType_UserTrip=4;
 	public final static int EVENTTYPE_POWER_FREE_RIDE = 13;// 搭乘顺风车获取
+	public final static int EVENTTYPE_POWER_SELL_COMPONENET=18;//卖道具
+	public final static int EVENTTYPE_POWER_APPLY_PRAYING=19;//祈愿赠送获得
+	
+	
 	public final static int RecordType_2=2;//减少
 	public final static int RecordType_1=1;//增加
 	public boolean calPower(TaskPowerLogs taskPowerLog) {
@@ -132,6 +136,30 @@ public class PowerService extends BaseService<PowerService>
 		 		rt=chezuAssetService.addPowerUsersTask(taskPowerLog.getJsonValue(), sign,carpoolPower);
 		 		
 		 		break;
+		 	case SellComponent:
+//		 		  final String jsonValue="{\"userId\":%d,\"power\":%d,\"effectId\":%d}";
+		 		AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+		 		log.setEffectId(Long.valueOf(String.valueOf(map.get("effectId"))));
+		 		log.setEventType(EVENTTYPE_POWER_SELL_COMPONENET);//
+		 		log.setPowerNum(Long.valueOf(String.valueOf(map.get("power"))));
+		 		log.setRecordType(RecordType_1);//增加1，减少2
+		 		log.setUserId(taskPowerLog.getUserId());
+		 		log.setRemark("配件卖出获得power");
+		 		rt=chezuAssetService.addPowerUsersTask(taskPowerLog.getJsonValue(), sign,log);
+		 		
+		 		break;
+		 	case ApplyPraying:
+//		 		  final String jsonValue="{\"userId\":%d,\"power\":%d,\"effectId\":%d}";
+		 		AssetUsersPowerLogs prayingLog=new AssetUsersPowerLogs();
+		 		prayingLog.setEffectId(Long.valueOf(String.valueOf(map.get("effectId"))));
+		 		prayingLog.setEventType(EVENTTYPE_POWER_APPLY_PRAYING);//行程
+		 		prayingLog.setPowerNum(Long.valueOf(String.valueOf(map.get("prayingLog"))));
+		 		prayingLog.setRecordType(RecordType_1);//增加1，减少2
+		 		prayingLog.setUserId(taskPowerLog.getUserId());
+		 		prayingLog.setRemark("祈愿赠送获取power");
+		 		rt=chezuAssetService.addPowerUsersTask(taskPowerLog.getJsonValue(), sign,prayingLog);
+		 		break;
+		 		
 		 	case Steal:
 		 		//首页的互动记录发送
 		 		rt=chezuAssetService.addPowerInteractTask(taskPowerLog.getJsonValue(), sign);
