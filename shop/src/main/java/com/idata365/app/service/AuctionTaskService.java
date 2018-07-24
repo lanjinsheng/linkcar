@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.OrderTypeConstant;
 import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
@@ -69,16 +70,30 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
  
 	@Transactional
    public boolean doEndAuction(AuctionGoods auctionGoods) {
-	   //查找最高竞价者
-		AuctionLogs max=auctionLogsMapper.getMaxAuctionDiamond(auctionGoods.getAuctionGoodsId());
-		if(max==null) {//无竞价者
-			//更新竞价状态
-			auctionGoods.setAuctionStatus(3);
+		LOG.info("auctionGoods=============" + JSON.toJSONString(auctionGoods));
+		// 查找最高竞价者
+		AuctionLogs max = auctionLogsMapper.getMaxAuctionDiamond(auctionGoods.getAuctionGoodsId());
+		if (max == null) {// 无竞价者
+			// 更新竞价状态
+			int type = auctionGoods.getAuctionGoodsType();
+			if (type == 3) {
+				// 现金红包
+				auctionGoods.setAuctionStatus(3);
+			} else {
+				auctionGoods.setAuctionStatus(4);
+			}
 			auctionGoodMapper.updateGoodsStatusByTask(auctionGoods);
 			return true;
-		}else {
-			//更新竞价状态
-			auctionGoods.setAuctionStatus(1);
+		} else {
+			// 更新竞价状态
+			int type = auctionGoodMapper.findAuctionGoodById(max.getAuctionGoodsId()).getAuctionGoodsType().intValue();
+			if (type == 3) {
+				// 现金红包无需填写信息 0：未拍获 1：待填写信息2：待发货3.待确认4：完成
+				auctionGoods.setAuctionStatus(2);
+			} else {
+				auctionGoods.setAuctionStatus(1);
+			}
+
 			auctionGoods.setWinnerId(max.getAuctionUserId());
 			auctionGoods.setDoneDiamond(max.getAuctionDiamond());
 			auctionGoodMapper.updateGoodsByTask(auctionGoods);

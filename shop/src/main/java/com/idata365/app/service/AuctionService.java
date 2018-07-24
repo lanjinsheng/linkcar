@@ -224,7 +224,7 @@ public class AuctionService {
 
 	public void writeChangeInfo(Map<String, Object> data) {
 		// 修改商品状态
-		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()),2);
+		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()),2);//2：待发货
 		orderMapper.updateOrder(data);
 	}
 }
