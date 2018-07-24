@@ -48,7 +48,8 @@ public class BoxTreasureController extends BaseController {
 	Map<String, Object> getChallengeBox(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
-		Map<String,Object> data=boxTreasureService.getChallengeBox(userId);
+		Long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		Map<String,Object> data=boxTreasureService.getChallengeBox(familyId);
 		return ResultUtils.rtSuccess(data);
 	}
 	

@@ -124,7 +124,12 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   paramMap.put("familyId", familyId);
 	   paramMap.put("gainType", 1);
 	   paramMap.put("daystamp", DateTools.getYYYYMMDD());
-	   
+	   int hadbox= boxTreasureMapper.hadChallengeBoxIds(paramMap);
+	   if(hadbox>0){
+		   rtMap.put("hadBox",  "1") ; 
+	   }else{
+		   rtMap.put("hadBox",  "0") ; 
+	   }
 	   List<BoxTreasureFamily> boxIds=boxTreasureMapper.getChallengeBoxIds(paramMap);
 	   List<Map<String,Object>> boxList=new ArrayList<>();
 	   if(boxIds==null || boxIds.size()==0){

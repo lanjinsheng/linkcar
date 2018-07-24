@@ -22,20 +22,24 @@ import com.idata365.app.entity.Carpool;
 import com.idata365.app.entity.CarpoolApprove;
 import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.Message;
+import com.idata365.app.entity.TaskPowerLogs;
 import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UserCarLogs;
+import com.idata365.app.entity.bean.ReturnMessage;
 import com.idata365.app.entity.v2.ComponentFamily;
 import com.idata365.app.entity.v2.ComponentGiveLog;
 import com.idata365.app.entity.v2.ComponentUser;
 import com.idata365.app.entity.v2.ComponentUserUseLog;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.enums.PowerEnum;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.ComponentMapper;
 import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.InteractPeccancyMapper;
+import com.idata365.app.mapper.TaskPowerLogsMapper;
 import com.idata365.app.mapper.UserCarLogsMapper;
 import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
@@ -58,6 +62,8 @@ public class ComponentService extends BaseService<ComponentService> {
 	ComponentMapper componentMapper;
 	@Autowired
 	FamilyMapper familyMapper;
+	@Autowired
+	TaskPowerLogsMapper taskPowerLogsMapper;
 	
 	   public Map<String,Object> getUserComponent(long userId){
 		   Map<String,Object> rtMap=new HashMap<>();
@@ -208,11 +214,7 @@ public class ComponentService extends BaseService<ComponentService> {
 	  public Map<String,Object> getComponentGiveLog(long componentGiveLogId){
 		   Map<String,Object> rtMap=new HashMap<>();
 		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
-		   if(log.getGiveStatus().intValue()==2){
-			   rtMap.put("hadRecieved",String.valueOf(1) );
-		   }else{
-			   rtMap.put("hadRecieved",String.valueOf(0) );
-		   }
+		   rtMap.put("giveStatus",String.valueOf(log.getGiveStatus()) );
 		   rtMap.put("logType",String.valueOf(log.getLogType()));
 		   DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
 		   rtMap.put("componentName",dicComponent.getComponentValue());
@@ -225,23 +227,18 @@ public class ComponentService extends BaseService<ComponentService> {
 		   return rtMap;
 	  }
 	  
-	  
+      //	  消息点击领取  (发放方已经销毁置位了，该领取只是对用户记录的增加)
 	  @Transactional
 	  public Map<String,Object> recieveGiveLog(long componentGiveLogId){
 		   Map<String,Object> rtMap=new HashMap<>();
 		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
-		   Map<String,Object> paramMap=new HashMap<>();
-		   paramMap.put("userId", log.getToUserId());
-		   int freeCount=componentMapper.countFreeCabinet(paramMap);
-		   if(freeCount<=0){
-			   return null;
-		   }
 		   ComponentUser componentUser=new ComponentUser();
 		   if(log.getLogType().intValue()==1){//家族赠送
-			   
 			   componentUser.setGainType(3);
-		   }else{//个人赠送
+		   }else if(log.getLogType().intValue()==2){//个人赠送
 			   componentUser.setGainType(2);
+		   }else if(log.getLogType().intValue()==3){//个人申请获取
+			   componentUser.setGainType(4);
 		   }
 		   componentUser.setComponentId(log.getComponentId());
 		   componentUser.setComponentStatus(1);
@@ -253,7 +250,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		   componentUser.setUserId(log.getToUserId());
 		   //插入道具
 		   componentMapper.insertComponentUser(componentUser);
-		   //更新ComponentGiveLog
+		   //更新ComponentGiveLog 为已领取
 		   componentMapper.recieveComponentGiveLog(componentGiveLogId);
 		   return rtMap;
 	  }
@@ -298,7 +295,231 @@ public class ComponentService extends BaseService<ComponentService> {
 		  }
 		  return null;
 	  }
+	  final String jsonValue="{\"userId\":%d,\"power\":%d,\"effectId\":%d}";
+	  @Transactional
+	  public Map<String,Object> sellComponent(long userComponentId,long userId){
+		  ComponentUser componentUser=componentMapper.getComponentUser(userComponentId);
+		  //插入componentUserUseLog
+		  ComponentUserUseLog log=new ComponentUserUseLog();
+		  log.setUserCarId(0L);
+		  log.setComponentId(componentUser.getComponentId());
+		  log.setEventType(4);
+		  log.setUserId(componentUser.getUserId());
+		  log.setUserComponentId(userComponentId);
+		  componentMapper.insertComponentUserUseLog(log);
+		  
+		  //更新零件
+		  Map<String,Object> userCompUpdate=new HashMap<>();
+		  userCompUpdate.put("inUse", 0);
+		  userCompUpdate.put("componentStatus", 4);
+		  userCompUpdate.put("userComponentId", userComponentId);
+		  componentMapper.updateUserComponent(userCompUpdate);
+		  //获取奖励
+		  DicComponent dicComponent=DicComponentConstant.getDicComponent(componentUser.getComponentId());
+		  TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
+	    	taskPowerLogs.setUserId(userId);
+	    	taskPowerLogs.setTaskType(PowerEnum.SellComponent);
+	    	int power=dicComponent.getPower();
+	    	//type =1  行程动力
+	    	taskPowerLogs.setJsonValue(String.format(jsonValue,userId,power,userComponentId));
+	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
+	    	if(hadAdd>0) {
+	    		return new HashMap<>();
+	    	}
+		  return null;
+	  }
+	  public Map<String,Object> listPraying(long userId,String imgBase){
+
+			Map<String,Object> rtMap=new HashMap<>();
+			List<Map<String,Object>> prayingList=new ArrayList<>();
+			List<Map<String, Object>> list=familyMapper.getFamilyByUserId(userId);
+			Map<Long,Object> usersKey=new HashMap<>();	 
+			
+			Map<String,Object> paramMap=new HashMap<>();
+			paramMap.put("daystamp", DateTools.getYYYYMMDD());
+			Map<String,Object> keyMap=new HashMap<>();
+			List<Map<String,Object>> groupNum=componentMapper.getFreeComponentUserGroupType(userId);
+			for(Map<String,Object> freeComp:groupNum){
+				keyMap.put(String.valueOf(freeComp.get("componentType")), freeComp.get("hadNum"));
+			}
+			
+			for(Map<String,Object> map:list){//家族循环
+			Long familyId =Long.valueOf(map.get("familyId").toString());
+		  //获取家族成员列表
+			List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
+			for(Map<String,Object> user:users){//成员循环
+				Long memberId=Long.valueOf(user.get("userId").toString());
+				paramMap.put("userId", memberId);
+				ComponentGiveLog componentGiveLog=componentMapper.findComponentGiveLogByMap(paramMap);
+				if(usersKey.get(memberId)!=null){
+					continue;
+				}
+				usersKey.put(memberId, "1");
+				if(componentGiveLog==null){
+					continue;
+				}else{
+					Map<String,Object> m=new HashMap<>();	
+					m.put("componentGiveLogId", String.valueOf(componentGiveLog.getId()));
+					m.put("logType", "2");
+					m.put("headImg", imgBase+user.get("imgUrl"));
+					m.put("nick", user.get("nickName"));
+				
+					DicComponent dicComponent= DicComponentConstant.getDicComponent(componentGiveLog.getComponentId());
+					m.put("imgUrl", dicComponent.getComponentUrl());
+					int hadNum=0;
+					if(keyMap.get(dicComponent.getComponentType())!=null){
+						hadNum=Integer.valueOf(keyMap.get(dicComponent.getComponentType()).toString());	
+					}
+					m.put("hadNum", hadNum);
+					
+					//查看拥有的道具类型闲置数量
+					if(memberId.longValue()==userId || hadNum==0){
+						m.put("showGiven","0");
+						
+					}else{
+						m.put("showGiven", "1");
+						
+					}
+					
+					prayingList.add(m);
+				}
+				
+			}
+			
+		}
+			rtMap.put("prayingList", prayingList);
+		  return rtMap;
+	  }
+	  @Transactional
+	  public int  submitPraying(Integer componentId,Long userId){
+		  DicComponent dicComponent=DicComponentConstant.getDicComponent(componentId);
+		  ComponentGiveLog giveLog=new ComponentGiveLog();
+		  giveLog.setComponentId(dicComponent.getComponentId());//祈愿只需要类型
+		  giveLog.setFromComponentId(0L);//还未发放
+		  giveLog.setFromId(0L);//请求发放的用户未知。
+          giveLog.setGiveStatus(0);//申请中
+          giveLog.setLogType(2);//个人祈愿
+          giveLog.setOperationManId(0L);//发配件人未知
+          giveLog.setToUserId(userId);
+          giveLog.setDaystamp(DateTools.getYYYYMMDD());
+//          logType-toUserId-daystamp-giveStatus
+          giveLog.setUniKey(giveLog.getLogType()+"-"+userId+"-"+giveLog.getDaystamp()+"-"+0);//一天只能祈愿一次
+          int insert=componentMapper.insertComponentGiveLog(giveLog);
+          return insert;
+	  }
+	  @Transactional
+	  public ReturnMessage  requestComponent(Long familyComponentId,Long userId){
+		  ReturnMessage msg=new ReturnMessage();
+		   ComponentFamily cf= componentMapper.getFamilyComponent(familyComponentId);
+		   if(cf.getComponentStatus()!=1){
+			   msg.setStatus(0);
+			   msg.setMsg("此零件已经被送出");
+			  //此零件已经被送出
+		   }
+		  ComponentGiveLog giveLog=new ComponentGiveLog();
+		  giveLog.setComponentId(cf.getComponentId());//
+		  giveLog.setFromComponentId(cf.getId());//
+		  giveLog.setFromId(cf.getFamilyId());//请求发放的用户未知。
+          giveLog.setGiveStatus(0);//申请中
+          giveLog.setLogType(3);//个人申请家族零件库
+          giveLog.setOperationManId(0L);//发配件人未知
+          giveLog.setToUserId(userId);
+          giveLog.setDaystamp(DateTools.getYYYYMMDD());
+//          logType-toUserId-daystamp-giveStatus[familyComponentId]
+          giveLog.setUniKey(giveLog.getLogType()+"-"+userId+"-"+giveLog.getDaystamp()+"-"+familyComponentId);//一天只能祈愿一次
+          int insert=componentMapper.insertComponentGiveLog(giveLog);
+          if(insert==0){
+        	  msg.setStatus(0);
+			  msg.setMsg("此零件已经申请过"); 
+          }
+          //发送消息
+          Long toUserId=familyMapper.getLeaderIdByFamilyId(cf.getFamilyId());
+          sendSysMsg(userId, toUserId, giveLog.getId(), MessageEnum.RequestComponent);
+          
+          return msg;
+	  }	  
+	  //个人申请零件库的审批
+	  @Transactional
+	  public ReturnMessage  applyGiveLog(long componentGiveLogId, int clickEvent,long userId){
+		  ReturnMessage msg=new ReturnMessage();
+		  ComponentGiveLog log= componentMapper.findComponentGiveLog(componentGiveLogId);
+		  if(clickEvent==1){//忽略
+			  log.setGiveStatus(-1);
+			  log.setOperationManId(userId);
+			  componentMapper.updateComponentGiveLog(log);
+		  }else{
+			  //到componentFamily 查询零件是否存在
+			  Map<String,Object> paramMap=new HashMap<>();
+			  paramMap.put("componentStatus", 4);
+			  paramMap.put("familyComponentId", log.getFromComponentId());
+			  int updateCompFamily=componentMapper.gotFamilyComponent(paramMap);
+			  if(updateCompFamily>0){
+				  log.setGiveStatus(1);
+				  log.setOperationManId(userId);  
+				  componentMapper.updateComponentGiveLog(log);
+				  
+				  //将该道具的其他的消息置位为忽略
+				  log.setGiveStatus(-1);
+				  log.setFromComponentId(log.getFromComponentId());
+				  componentMapper.ignoreGiveLog(log);
+				  
+			  }else{
+				  msg.setStatus(0);
+				  msg.setMsg("道具已经被别人申领");
+			  }
+		  }
+		  sendSysMsg(0L,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyGiveLog);
+          return msg;
+	  }	
+	  //个人祈愿审批通过
+	  @Transactional
+	  public ReturnMessage  applyPraying(long componentGiveLogId, long userId){
+		  ReturnMessage msg=new ReturnMessage();
+		  ComponentGiveLog log= componentMapper.findComponentGiveLog(componentGiveLogId);
+		  DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
+		  //通过类型来给予用户锁定发放
+		  Map<String,Object> map=new HashMap<>();
+		  map.put("componentType", dicComponent.getComponentType());
+		  map.put("userId",userId);
+		  ComponentUser cmpUser=componentMapper.getUserComponentByType(map);
+		  if(cmpUser==null){
+			  msg.setStatus(0);
+			  msg.setMsg("无闲置的零件");
+			  return msg;
+		  }
+		  //更新销毁零件
+		  int hadGot=componentMapper.gotUserComponent(cmpUser);
+		  if(hadGot==0){
+			  msg.setStatus(0);
+			  msg.setMsg("无闲置的零件");
+			  return msg;
+		  }
+		   //插入销毁日志
+		  ComponentUserUseLog useLog=new ComponentUserUseLog();
+		  useLog.setUserCarId(0L);
+		  useLog.setComponentId(cmpUser.getComponentId());
+		  useLog.setEventType(5);
+		  useLog.setUserId(cmpUser.getUserId());
+		  useLog.setUserComponentId(cmpUser.getId());
+		  componentMapper.insertComponentUserUseLog(useLog);
+		  
+		  //更新giveLog，并发送消息
+		  log.setGiveStatus(1);
+		  log.setOperationManId(userId);  
+		  log.setComponentId(cmpUser.getComponentId());
+		  log.setFromComponentId(cmpUser.getId());
+		  log.setFromId(cmpUser.getUserId());
+		  log.setGiveStatus(1);
+		  log.setOperationManId(cmpUser.getUserId());
+		  componentMapper.updateComponentGiveLogApplyPraying(log);
+		  
+		  //发送消息
+		  sendSysMsg(userId,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyPraying);
+          return msg;
+	  }	
 	  
-	  
+	  private void sendSysMsg(Long fromUser,Long toUser,Long componentGiveLogId,MessageEnum msgType){
+		  
+	  }
 	  
 }
