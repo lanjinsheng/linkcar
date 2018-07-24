@@ -10,7 +10,7 @@ import com.idata365.app.entity.InteractTempCar;
 public interface InteractTempCarMapper {
 
 	int lockCar(InteractTempCar interactTempCar);
-	int lockCarById(InteractTempCar interactTempCar);
+	int updateCarById(InteractTempCar interactTempCar);
 	List<InteractTempCar> getTempCar(@Param("uuid") String uuid);
 	List<InteractTempCar> getTempCarByUserId(InteractTempCar interactTempCar);
 	int clearLockTask(@Param("compareTimes") Long compareTimes);
