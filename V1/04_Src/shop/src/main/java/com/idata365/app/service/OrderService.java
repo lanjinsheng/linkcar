@@ -191,7 +191,7 @@ public class OrderService {
 		Order order = orderMapper.getOrderByOrderId(orderId);
 		Long goodsId = order.getPrizeId();
 		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
-		int a = auctionGoodMapper.updateGoodsStatus(goodsId,3);
+		int a = auctionGoodMapper.updateGoodsStatus(goodsId,4);//4.交易成功
 		int b = orderMapper.sendReward(orderId, operatingUser);
 		chezuAppService.sendAuctionMsg(goods.getAuctionGoodsId(), goods.getAuctionGoodsType(), 2, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
 		return a + b;
