@@ -14,6 +14,10 @@
 	 and componentStatus=1 and inUse=0
 </select>   
 
+  <select id="getFreeComponentUserGroupType" parameterType="java.util.HashMap" resultType="java.lang.Long">
+		select count(1) hadNum,componentType from componentUser 
+		where userId=#{userId} and inUse=0 and componentStatus=1 group by componentType
+</select> 
   <select id="getFreeComponentFamily" parameterType="java.util.HashMap" resultType="java.lang.Long">
 	select * from componentFamily 
 	 where userId=#{userId}
@@ -56,14 +60,14 @@
 </insert>
 
 
- <insert id="insertComponentGiveLog"  parameterType="com.idata365.app.entity.v2.ComponentUser" >
-     INSERT INTO 
+ <insert id="insertComponentGiveLog"  parameterType="com.idata365.app.entity.v2.ComponentGiveLog" useGeneratedKeys="true" keyProperty="id">
+     INSERT IGNORE  INTO 
           componentGiveLog
           (componentId,fromId,operationManId,fromComponentId,eventTime,logType,toUserId,giveStatus,uniKey) 
       VALUES
           (#{componentId},#{fromId},#{operationManId},#{fromComponentId},now(),#{logType},#{toUserId},#{giveStatus},#{uniKey})
 </insert>
-
+ 
  
  <select id="getComponentGiveLog" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 	select * from componentGiveLog 
@@ -75,6 +79,12 @@
 	select * from componentGiveLog 
 	 where id=#{id}
 </select>
+ 
+<select id="findComponentGiveLogByMap" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
+	select * from componentGiveLog 
+	 where daystamp=#{daystamp} and logType=2 and giveStatus=0 and toUserId=#{userId}
+</select>
+     
      
  <update id="dropFamilyComponent"  parameterType="java.lang.Long" >
      update
@@ -99,6 +109,22 @@
           componentFamily
           set componentStatus=#{componentStatus} where id=#{familyComponentId}
 </update> 
+<update id="gotFamilyComponent"  parameterType="java.util.HashMap" >
+     update
+          componentFamily
+          set componentStatus=#{componentStatus} where id=#{familyComponentId} and componentStatus=1
+</update> 
+<select id="getUserComponentByType"  parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentUser">
+     select * from 
+          componentUser where componentStatus=1 and inUse=0
+          and  componentType=#{componentType} and userId=#{userId} limit 1
+</select> 
+<update id="gotUserComponent"  parameterType="com.idata365.app.entity.v2.ComponentUser">
+      update
+          componentUser
+          set componentStatus=3 where id=#{id} and componentStatus=1
+</update> 
+
 
 <update id="updateUserComponent"  parameterType="java.util.HashMap" >
      update
@@ -110,6 +136,27 @@
      update
           componentGiveLog
           set giveStatus=1,recievedTime=now() where id=#{id}
+</update> 
+ 
+<update id="updateComponentGiveLog"   parameterType="com.idata365.app.entity.v2.ComponentGiveLog">
+     update
+          componentGiveLog
+          set giveStatus=#{giveStatus},operationManId=#{operationManId} where id=#{id}
+</update> 
+ 
+<update id="updateComponentGiveLogApplyPraying"   parameterType="com.idata365.app.entity.v2.ComponentGiveLog">
+     update
+          componentGiveLog
+          set giveStatus=#{giveStatus},operationManId=#{operationManId},
+            componentId=#{componentId},fromComponentId=#{fromComponentId},
+          fromId=#{fromId}
+           where id=#{id}
+</update> 
+<update id="ignoreGiveLog"   parameterType="com.idata365.app.entity.v2.ComponentGiveLog">
+     update
+          componentGiveLog
+          set giveStatus=#{giveStatus},operationManId=#{operationManId} where fromComponentId=#{fromComponentId}
+          and logType=3
 </update> 
     
 </mapper>

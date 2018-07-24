@@ -38,6 +38,10 @@
 	<select id="queryCreateUserId" resultType="java.lang.Long" parameterType="com.idata365.app.entity.FamilyParamBean">
 		select createUserId as userId from familyInfo where id=#{familyId}
 	</select>
+	
+	<select id="getLeaderIdByFamilyId" resultType="java.lang.Long" parameterType="java.lang.Long">
+		select createUserId as userId from familyInfo where id=#{familyId}
+	</select>
 
 	<delete id="deleteUserFamilyRelation" parameterType="com.idata365.app.entity.FamilyParamBean" >
        delete from userFamilyRelation where userId=#{userId} and familyId=#{familyId}
@@ -306,7 +310,7 @@
  		select * from userFamilyRelation where familyId=#{familyId}
  	</select>
  	<select id="getFamilyUsersMoreInfo" resultType="java.util.HashMap" parameterType="java.lang.Long">
- 		select a.*,b.nickName from userFamilyRelation a left join usersAccount b on a.userId=b.id  where a.familyId=#{familyId}
+ 		select a.*,b.nickName,b.imgUrl from userFamilyRelation a left join usersAccount b on a.userId=b.id  where a.familyId=#{familyId}
  	</select>
  	<select id="getFamilyByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
  		select * from userFamilyRelation where userId=#{userId}
