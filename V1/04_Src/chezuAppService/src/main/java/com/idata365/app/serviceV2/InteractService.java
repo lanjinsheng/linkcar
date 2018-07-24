@@ -198,16 +198,24 @@ public class InteractService extends BaseService<InteractService> {
 				 car.setLockBatchId(uuid);
 				 car.setLockTime(System.currentTimeMillis());
 				 car.setStealerId(userId);
-				 int i=interactTempCarMapper.lockCarById(car);
+				 int i=interactTempCarMapper.updateCarById(car);
 				 if(i==1){
 					 stealCar=car;
 					break; 
+				 }else{
+					 continue;
 				 }
 			 }
 		 }
 		 if(stealCar==null){
 			 map.put("powerNum", "0");
 			 return map;
+		 }else{
+			map.put("travelId",stealCar.getTravelId());
+			//偷取者信息
+			map.put("stealerId", userId);
+			map.put("blackIds", userId+",");
+			interactTempCarMapper.updateBlackIds(map);
 		 }
 		//动力的处理
 			TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
@@ -282,6 +290,7 @@ public class InteractService extends BaseService<InteractService> {
 		interactTempCar.setLockBatchId(uuid);
 		interactTempCar.setStealerId(userId);
 		interactTempCar.setLockTime(time);
+		interactTempCar.setUserId(userId);
 		interactTempCar.setDaystamp(DateTools.getYYYYMMDD());
 		int lock=interactTempCarMapper.lockCar(interactTempCar);
 		List<Map<String,Object>> rtList=new ArrayList<Map<String,Object>>();
@@ -290,9 +299,6 @@ public class InteractService extends BaseService<InteractService> {
 		List<InteractTempCar> cars=interactTempCarMapper.getTempCar(uuid);
 		Map<Long,Integer> userRedunKey=new HashMap<>();
 		for(InteractTempCar car:cars){
-			if(car.getUserId()==car.getUserId()){
-				continue;
-			}
 			if(car.getBlackIds()!=null && car.getBlackIds().contains(String.valueOf(userId)+",")){
 				continue;
 			}else{
