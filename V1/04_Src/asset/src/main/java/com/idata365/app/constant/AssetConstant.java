@@ -52,6 +52,7 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_MISSION_SCORE_ID = 114; // 单次行程10公里以上时获得100分评分
 	public final static int EVENTTYPE_POWER_MISSION_KM500_ID = 115; // 累计里程500公里
 	public final static int EVENTTYPE_POWER_MISSION_SCORETIMES5_ID = 116; // 连续5次行程获得100分
+	public final static int EVENTTYPE_POWER_MISSION_AD = 117; // 广告任务
 	//个人钻石表
 	public final static int EVENTTYPE_DAIMOND_DAYPOWER_USER = 1;// 每日分配
 	public final static int EVENTTYPE_DAIMOND_GAMEEND_USER = 2;// PK结束家族分配
@@ -123,7 +124,7 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_SCORE_ID, "完成任务-稳定驾驶");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_KM500_ID, "完成任务-一路相伴");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_SCORETIMES5_ID, "完成任务-满分司机");
-		
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_AD, "完成任务-观看广告一次");
 		
 		
 	}
