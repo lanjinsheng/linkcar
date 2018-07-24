@@ -45,8 +45,8 @@ public class LookAdController extends BaseController {
 	
 	/**
 	 * 
-	 * @Title: receiveLookAdPower
-	 * @Description: TODO(查询剩余可看广告数量)
+	 * @Title: adCallBack
+	 * @Description: TODO(广告回调接口)
 	 * @param @return
 	 *            参数
 	 * @return <Map<String,Object>> 返回类型
@@ -54,19 +54,22 @@ public class LookAdController extends BaseController {
 	 *             LiXing
 	 */
 
-	@RequestMapping("/ad/receiveLookAdPower")
-	public Map<String, Object> receiveLookAdPower(@RequestParam(required = false) Map<String, String> allRequestParams,
+	@RequestMapping("/ad/adCallBack")
+	public Map<String, Object> adCallBack(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<>();
 		long userId = this.getUserId();
+		int adSign = Integer.valueOf(requestBodyParams.get("adSign").toString()).intValue();
+		long adPassId = Long.valueOf(requestBodyParams.get("adPassId").toString());
 		LOG.info("userId=================" + userId);
+		LOG.info("adPassId=================" + adPassId);
 		try {
-			rtMap = this.lookAdService.receiveLookAdPower(userId);
-			rtMap.put("receveStatus", "1");
+			Map<String, Object> prizeInfo = this.lookAdService.receiveLookAdPower(userId, adSign, adPassId);
+			rtMap.put("prizeInfo", prizeInfo);
+			return ResultUtils.rtSuccess(rtMap);
 		} catch (Exception e) {
-			rtMap.put("receveStatus", "0");
+			return ResultUtils.rtFail(null, e.getMessage(), "100");
 		}
-		return ResultUtils.rtSuccess(rtMap);
 	}
 	
 }

@@ -3,16 +3,20 @@
 <mapper namespace="com.idata365.app.mapper.UserLookAdMapper">
 
 
-    <select id="getTodayCount">
-        SELECT count(1) FROM userLookAdLogs WHERE userId = #{userId} and daystamp=#{daystamp}
+    <select id="getTodayCount" resultType="Integer">
+        SELECT count(1) FROM userLookAdLogs WHERE userId = #{userId} and daystamp=#{daystamp} and valid=1
     </select>
 
     <insert id="insertLogs" parameterType="com.idata365.app.entity.v2.UserLookAdLogs" >
        INSERT INTO 
             userLookAdLogs
-            (userId,createTime,daystamp,remark,powerNum) 
+            (userId,createTime,daystamp,remark,powerNum,adSign,adPassId,valid) 
         VALUES
-            (#{userId}, #{createTime}, #{daystamp}, #{remark}, #{powerNum})
+            (#{userId}, #{createTime}, #{daystamp}, #{remark}, #{powerNum},#{adSign},#{adPassId},#{valid})
     </insert>
+    
+    <select id="getUserLastLookInfo" resultType="com.idata365.app.entity.v2.UserLookAdLogs" >
+        SELECT * FROM userLookAdLogs WHERE userId = #{userId} order by createTime desc limit 1
+    </select>
 
 </mapper>
