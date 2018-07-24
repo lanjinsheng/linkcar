@@ -469,7 +469,8 @@ public class AssetService extends BaseService<AssetService> {
 				todayContribution += assetUsersPowerLogs.getPowerNum();
 			}
 		}
-		todayContribution = todayContribution / 2;
+//		todayContribution = todayContribution / 2;
+		todayContribution = Math.round(todayContribution / 2D);
 
 		List<AssetFamiliesPowerLogs> rtPowerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,
 				fightFamilyId);
