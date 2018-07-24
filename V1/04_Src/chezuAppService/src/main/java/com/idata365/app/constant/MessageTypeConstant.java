@@ -39,7 +39,9 @@ public class MessageTypeConstant {
 	public static final int FamilyType_Reveice_Fail=9;
 	public static final int FamilyType_REVEICE_INVITE=10;
 	public static final int FamilyType_Quit_Family=11;
-	
+	public static final int FamilyType_ApplyPraying=12;	
+	public static final int FamilyType_RequestComponent=13;
+	public static final int FamilyType_ApplyGiveLog=14;
 	//消息不跳转
 	public static final int MessageUrl_Href_False=2;
 	public static final int MessageUrl_Href_App=0;

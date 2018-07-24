@@ -178,7 +178,7 @@ public class ComponentController extends BaseController {
 	Map<String, Object> requestComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 	Long familyComponentId=Long.valueOf(requestBodyParams.get("familyComponentId").toString());
-	ReturnMessage msg= componentService.requestComponent(familyComponentId, this.getUserId());
+	ReturnMessage msg= componentService.requestComponent(familyComponentId, this.getUserId(),this.getUserInfo().getNickName());
 	return ResultUtils.rtJsonMap(msg);
 	}
 				
@@ -196,7 +196,7 @@ public class ComponentController extends BaseController {
 	Map<String, Object> applyPraying(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 	Long componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
-	ReturnMessage msg= componentService.applyPraying(componentGiveLogId,this.getUserId());
+	ReturnMessage msg= componentService.applyPraying(componentGiveLogId,this.getUserId(),this.getUserInfo().getNickName());
 	return ResultUtils.rtJsonMap(msg);
 	}
 	

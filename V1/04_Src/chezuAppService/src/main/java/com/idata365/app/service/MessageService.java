@@ -114,6 +114,11 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String CarpoolApply="俱乐部成员【%s】申请搭乘您的【%s】，点击处理顺风车申请";
 	public static final String CarpoolApplyPass="玩家【%s】已经同意了你的搭车申请，祝你一路顺风！";
 	
+	//配件零件申请审批消息
+	public static final String componentUrl= "com.shujin.haochezu://componentHandle.push?msgId=%s";
+	public static final String RequestComponent= "俱乐部成员 %s 在零件库中申请领取一个%s，是否同意发放？";
+	public static final String ApplyGiveLog= "发福利了！俱乐部经理在零件库中给分配给您一个 %s，快去看看吧。";
+	public static final String ApplyPraying= "%s 在俱乐部祈愿中给您赠予了一个 %s。";
 	
 	@Autowired
 	SystemProperties systemProperties;
@@ -354,7 +359,60 @@ public class MessageService extends BaseService<MessageService>{
 		return message;
 	}
 	
+	public Message buildApplyPrayingMessage(Long fromUserId,Long toUserId,String nickName,String componentName,
+			Long componentGiveLogId) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_ApplyPraying);
+		message.setContent(String.format(ApplyPraying, nickName,componentName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("祈愿获赠");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(componentUrl,componentGiveLogId));
+		return message;
+	}
+	public Message buildRequestComponentMessage(Long fromUserId,Long toUserId,String nickName,String componentName,
+			Long componentGiveLogId) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_RequestComponent);
+		message.setContent(String.format(RequestComponent, nickName,componentName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("零件申请");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(componentUrl,componentGiveLogId));
+		return message;
+	}
 	
+	public Message buildApplyGiveLogMessage(Long fromUserId,Long toUserId,String componentName,Long componentGiveLogId) {
+		Message message=new Message();
+		message.setFromUserId(fromUserId==null?0:fromUserId);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.FamilyType_ApplyGiveLog);
+		message.setContent(String.format(ApplyGiveLog,componentName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.FamilyType);
+		message.setPicture("");
+		message.setTitle("ApplyGiveLog");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(String.format(componentUrl,componentGiveLogId));
+		return message;
+	}
 	public Message buildAuctionSuccMessage(Long fromUserId,Long toUserId,String goodsName,Integer auctionGoodsType,Long auctionGoodsId) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
