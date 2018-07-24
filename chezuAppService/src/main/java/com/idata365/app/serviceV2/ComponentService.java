@@ -529,7 +529,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		  //发放奖励
 		  int power=RandUtils.generateRand(10, 50);
 		  TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
-	    	taskPowerLogs.setUserId(userId);
+	    	taskPowerLogs.setUserId(log.getToUserId());
 	    	taskPowerLogs.setTaskType(PowerEnum.ApplyPraying);
 	    	//type =1  行程动力
 	    	taskPowerLogs.setJsonValue(String.format(jsonValue,userId,power,cmpUser.getId()));
