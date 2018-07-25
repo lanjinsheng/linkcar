@@ -35,7 +35,22 @@ public class UserTravelHistory implements Serializable {
 	int highSpeedTimesOffset;
 	String hiddenFlag; 
 	String score;
- 
+    Long userCarId;
+    int carId=0;
+    
+    
+	public int getCarId() {
+		return carId;
+	}
+	public void setCarId(int carId) {
+		this.carId = carId;
+	}
+	public Long getUserCarId() {
+		return userCarId;
+	}
+	public void setUserCarId(Long userCarId) {
+		this.userCarId = userCarId;
+	}
 	public double getBrakeScore() {
 		return brakeScore;
 	}

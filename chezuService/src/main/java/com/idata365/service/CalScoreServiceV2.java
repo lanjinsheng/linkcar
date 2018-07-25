@@ -15,13 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.constant.DicCarConstant;
 import com.idata365.entity.CalDriveTask;
+import com.idata365.entity.DicCar;
 import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.ReadyLotteryBean;
 import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.mapper.app.CalDriveTaskMapper;
+import com.idata365.mapper.app.CarMapper;
 import com.idata365.mapper.app.LotteryMapper;
 import com.idata365.mapper.app.UserFamilyLogsMapper;
 import com.idata365.mapper.app.UserRoleLogMapper;
@@ -51,6 +54,8 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
 	UserTravelHistoryMapper userTravelHistoryMapper;
 	@Autowired 
 	UserRoleLogMapper userRoleLogMapper;
+	@Autowired 
+	CarMapper carMapper;
 	/**
 	 * 查询装配的道具列表
 	 * @param userId
@@ -186,10 +191,28 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         }
         userTravelHistory.setTiredRate(tireRatio.doubleValue());
         int score=scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
+        
+        //查询车辆进行分数加成
+        String endTime=dm.getDriveEndTime().substring(0, 19);
+        Map<String,Object> paramMap=new HashMap<>();
+        paramMap.put("userId", userId);
+        paramMap.put("time", endTime);
+        Map<String,Object> car=carMapper.getUserCar(paramMap);
+        Long userCarId=0L;
+        if(car!=null) {
+        	userCarId=Long.valueOf(car.get("userCarId").toString());
+        	int carId=Integer.valueOf(car.get("carId").toString());
+        	DicCar dc=	DicCarConstant.getDicCar(carId);
+        	BigDecimal addScorePercent=BigDecimal.valueOf(dc.getClubScoreUpPercent()).divide(BigDecimal.valueOf(100),2,RoundingMode.HALF_EVEN);
+        	score+=(BigDecimal.valueOf(score).multiply(addScorePercent).intValue());
+        	userTravelHistory.setCarId(carId);
+        }
+        
         if(score<30) {
         	score=30;
         }
         userTravelHistory.setScore(String.valueOf(score));
+        userTravelHistory.setUserCarId(userCarId);
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
 		return true;
 		
