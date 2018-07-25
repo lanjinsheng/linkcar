@@ -32,6 +32,7 @@ public interface ComponentMapper {
 	
 	
 	public List<ComponentUser> getFreeComponentUser(@Param("userId") Long userId);
+	public List<ComponentUser> getFreeComponentTypeUser(Map<String,Object> map);
 	
 	public List<ComponentFamily> getFreeComponentFamily(@Param("familyId") Long familyId);
 	

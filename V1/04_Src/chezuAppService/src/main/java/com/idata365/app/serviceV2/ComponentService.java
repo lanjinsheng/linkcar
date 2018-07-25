@@ -363,6 +363,7 @@ public class ComponentService extends BaseService<ComponentService> {
 				}else{
 					Map<String,Object> m=new HashMap<>();	
 					m.put("componentGiveLogId", String.valueOf(componentGiveLog.getId()));
+					m.put("userId", memberId);
 					m.put("logType", "2");
 					m.put("headImg", imgBase+user.get("imgUrl"));
 					m.put("nick", user.get("nickName"));
@@ -481,20 +482,55 @@ public class ComponentService extends BaseService<ComponentService> {
 				  null,dc.getComponentValue());
           return msg;
 	  }	
+	  
+	  
+	  
+	   public Map<String,Object> prayingSelect(long userId,long componentGiveLogId){
+		   ComponentGiveLog log= componentMapper.findComponentGiveLog(componentGiveLogId);
+		   Map<String,Object> rtMap=new HashMap<>();
+		   Map<String,Object> paramMap=new HashMap<>();
+		   List<Map<String,Object>> componentList=new ArrayList<>();
+		   int componentType=DicComponentConstant.getDicComponent(log.getComponentId()).getComponentType();
+		   paramMap.put("userId", userId);
+		   paramMap.put("componentType", componentType);
+		   List<ComponentUser> components=componentMapper.getFreeComponentTypeUser(paramMap);
+		   
+		   if(components==null || components.size()==0){
+			  
+		   }else{
+			   for(ComponentUser component:components){
+				   Map<String,Object> m1=new HashMap<>();
+				   m1.put("userComponentId", String.valueOf(component.getId()));
+				   DicComponent dicComponent=DicComponentConstant.getDicComponent(component.getComponentId());
+				   m1.put("componentName", dicComponent.getComponentValue());
+				   m1.put("quality", dicComponent.getQuality());
+				   m1.put("imgUrl", dicComponent.getComponentUrl());
+				   m1.put("componentNum","1");
+				   m1.put("componentType", dicComponent.getComponentType());
+				   m1.put("componentDesc",dicComponent.getComponentDesc());
+				   m1.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
+				   m1.put("componentLoss", dicComponent.getTravelNum()+"次行程");
+				   componentList.add(m1);
+			   }
+		   }
+		   rtMap.put("componentList",  componentList) ;
+		   return rtMap;
+	   }
+	   
 	  //个人祈愿审批通过
 	  @Transactional
-	  public ReturnMessage  applyPraying(long componentGiveLogId, long userId,String nickName){
+	  public ReturnMessage  applyPraying(long componentGiveLogId,long userComponentId, long userId,String nickName){
 		  ReturnMessage msg=new ReturnMessage();
 		  ComponentGiveLog log= componentMapper.findComponentGiveLog(componentGiveLogId);
-		  DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
+		
 		  //通过类型来给予用户锁定发放
-		  Map<String,Object> map=new HashMap<>();
-		  map.put("componentType", dicComponent.getComponentType());
-		  map.put("userId",userId);
-		  ComponentUser cmpUser=componentMapper.getUserComponentByType(map);
-		  if(cmpUser==null){
+//		  Map<String,Object> map=new HashMap<>();
+//		  map.put("componentType", dicComponent.getComponentType());
+//		  map.put("userId",userId);
+		  ComponentUser cmpUser=componentMapper.getComponentUser(userComponentId);
+		  if(cmpUser==null || cmpUser.getComponentStatus()>1 || cmpUser.getInUse()==1){
 			  msg.setStatus(0);
-			  msg.setMsg("无闲置的零件");
+			  msg.setMsg("零件使用中或者已销毁");
 			  return msg;
 		  }
 		  //更新销毁零件
@@ -524,6 +560,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		  componentMapper.updateComponentGiveLogApplyPraying(log);
 		  
 		  //发送消息
+		  DicComponent dicComponent=DicComponentConstant.getDicComponent(useLog.getComponentId());
 		  sendSysMsg(userId,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyPraying,
 				nickName,dicComponent.getComponentValue());
 		  //发放奖励

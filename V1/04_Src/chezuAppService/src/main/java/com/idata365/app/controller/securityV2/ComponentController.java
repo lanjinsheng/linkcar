@@ -133,12 +133,13 @@ public class ComponentController extends BaseController {
 	@RequestMapping(value = "/listPraying")
 	Map<String, Object> listPraying(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
-	Map<String,Object> rtMap=componentService.listPraying(this.getUserId(),this.getImgBasePath());
-	if(rtMap==null){
-		return ResultUtils.rtFailParam(null, "配件卖出失败");
-	}
-	return ResultUtils.rtSuccess(rtMap);
-	}
+//		Long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		Map<String,Object> rtMap=componentService.listPraying(this.getUserId(),this.getImgBasePath());
+		if(rtMap==null){
+			return ResultUtils.rtFailParam(null, "配件卖出失败");
+		}
+		return ResultUtils.rtSuccess(rtMap);
+		}
 	//配件字典表
 	@RequestMapping(value = "/listDicComponent")
 	Map<String, Object> listDicComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
@@ -191,12 +192,23 @@ public class ComponentController extends BaseController {
 	ReturnMessage msg= componentService.applyGiveLog(componentGiveLogId, clickEvent,this.getUserId());
 	return ResultUtils.rtJsonMap(msg);
 	}
+	//选择列表
+	@RequestMapping(value = "/prayingSelect")
+	Map<String, Object> prayingSelect(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+	Long  componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
+	 Map<String,Object> rtMap= componentService.prayingSelect(this.getUserId(),componentGiveLogId);
+	return ResultUtils.rtSuccess(rtMap);
+	}
+	
 	//同意赠予
 	@RequestMapping(value = "/applyPraying")
 	Map<String, Object> applyPraying(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 	Long componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
-	ReturnMessage msg= componentService.applyPraying(componentGiveLogId,this.getUserId(),this.getUserInfo().getNickName());
+	Long userComponentId=Long.valueOf(requestBodyParams.get("userComponentId").toString());
+	
+	ReturnMessage msg= componentService.applyPraying(componentGiveLogId,userComponentId,this.getUserId(),this.getUserInfo().getNickName());
 	return ResultUtils.rtJsonMap(msg);
 	}
 	
