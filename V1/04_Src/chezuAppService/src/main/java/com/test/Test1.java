@@ -1,6 +1,8 @@
 package com.test;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -8,6 +10,9 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.idata365.app.util.DateTools;
+import com.idata365.app.util.RandUtils;
 
 public class Test1 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Test1.class);
@@ -30,7 +35,9 @@ public class Test1 {
 
 		// int generateRand = RandUtils.generateRand(1, 200);
 
-		hidePhone();
+//		hidePhone();
+		String s = "5520动力";
+		System.out.println(s.replaceAll("动力", ""));
 	}
 
 	public static String hidePhone() {
