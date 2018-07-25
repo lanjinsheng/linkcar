@@ -128,7 +128,7 @@ public class UserHomeController extends BaseController {
 		long userId = this.getUserId();
 		LOG.info("userId=========================" + userId);
 		Map<String, Object> map = this.scoreServiceV2.queryClubBonusInfo(userId);
-		boolean b = this.chezuAssetService.receiveClubBonus(userId, Long.valueOf(map.get("totalPower").toString()), "sign");
+		boolean b = this.chezuAssetService.receiveClubBonus(userId, Long.valueOf(map.get("totalPower").toString().replaceAll("动力", "")), "sign");
 		if(b) {
 			return ResultUtils.rtSuccess(null);
 		}else {
