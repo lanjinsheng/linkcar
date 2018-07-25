@@ -1222,6 +1222,10 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	 */
 	public Map<String, Object> queryClubBonusInfo(long userId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
+		Map<String, String> clubScoreInfo = new HashMap<String, String>();
+		Map<String, String> clubMemberInfo = new HashMap<String, String>();
+		Map<String, String> clubTypeInfo = new HashMap<String, String>();
+		Map<String, String> pkStatusInfo = new HashMap<String, String>();
 		Long familyId = this.familyMapper.queryCreateFamilyId(userId);
 		String yesterday = DateTools.getCurDateAddDay(-1);
 		// 昨日对战家族ID
@@ -1239,23 +1243,23 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		if (opponentId != null && this.gameMapper.queryFamilyScore(opponentId, yesterday) != null) {
 			score2 = this.gameMapper.queryFamilyScore(opponentId, yesterday).getScore();
 		}
-		rtMap.put("clubScore", String.valueOf(score1));
-		rtMap.put("clubMemberNum", String.valueOf(membersNum) + "人");
-		rtMap.put("clubType", DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
+		clubScoreInfo.put("score", String.valueOf(score1));
+		clubMemberInfo.put("usersNum", String.valueOf(membersNum) + "人");
+		clubTypeInfo.put("clubType", DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
 		// 算分三维度：人数、等级、挑战结果
 		Double x1 = 1d;
 		Double x2 = 1d;
 		Double x3 = 1d;
 		if(opponentId == null){
-			rtMap.put("challengeStatus", "无挑战");
+			pkStatusInfo.put("challengeStatus", "无挑战");
 		}else if (score1 > score2) {
-			rtMap.put("challengeStatus", "胜利");
+			pkStatusInfo.put("challengeStatus", "胜利");
 			x3 = 2d;
 		} else if (score1 == score2) {
-			rtMap.put("challengeStatus", "平局");
+			pkStatusInfo.put("challengeStatus", "平局");
 			x3 = 1.5d;
 		} else {
-			rtMap.put("challengeStatus", "失败");
+			pkStatusInfo.put("challengeStatus", "失败");
 		}
 
 		long score = Math.round(score1 / 10);
@@ -1276,15 +1280,24 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		long totalPower = Math.round(score * (x1 + x2 + x3));
 		rtMap.put("totalPower", String.valueOf(totalPower));
 		int hadGetBonus = this.queryHadGetBonus(userId);
-		if (totalPower != 0 && hadGetBonus == 1) {
-			rtMap.put("canTake", "1");
-		} else {
+		if(totalPower == 0) {
+			rtMap.put("canTake", "2");
+		}else if(hadGetBonus == 1) {
 			rtMap.put("canTake", "0");
+		}else {
+			rtMap.put("canTake", "1");
 		}
-		rtMap.put("basePower", "奖励" + String.valueOf(score));
-		rtMap.put("memberNumAddition", "倍数" + String.valueOf(x1));
-		rtMap.put("clubTypeAddition", "倍数" + String.valueOf(x2));
-		rtMap.put("challengeAddition", "倍数" + String.valueOf(x3));
+		clubScoreInfo.put("basePower", "奖励" + String.valueOf(score));
+		clubMemberInfo.put("memberNumAddition", "倍数" + String.valueOf(x1));
+		clubTypeInfo.put("clubTypeAddition", "倍数" + String.valueOf(x2));
+		pkStatusInfo.put("challengeAddition", "倍数" + String.valueOf(x3));
+		
+		
+		
+		rtMap.put("clubScoreInfo", clubScoreInfo);
+		rtMap.put("clubMemberInfo", clubMemberInfo);
+		rtMap.put("clubTypeInfo", clubTypeInfo);
+		rtMap.put("pkStatusInfo", pkStatusInfo);
 		return rtMap;
 	}
 	
