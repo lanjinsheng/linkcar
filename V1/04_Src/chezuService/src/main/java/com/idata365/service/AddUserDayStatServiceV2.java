@@ -195,21 +195,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		BigDecimal validDistance=BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(distance)).divide(BigDecimal.valueOf(100000),1,RoundingMode.HALF_EVEN); 
 		double dkm=validDistance.doubleValue();
 		double x1=0d,x2=0d,x3=0d;
-		if(carId==1) {//suv
-			if(dkm>200) {
-				 
-			}
-			if(dkm>80) {
-				  x1=Math.min(200d, (dkm-80))*5;
-			}
-			if(dkm>20) {
-				  x2=Math.min(80d, (dkm-20))*8;
-			}
-			if(dkm>0) {
-				  x3=Math.min(20d, dkm)*10;
-			}
-			
-		 }else if(carId==2) {//豪华
+		 if(carId==2) {//豪华
 			  if(dkm>200) {
 				 
 				}
@@ -222,7 +208,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 				if(dkm>0) {
 					  x3=Math.min(20d, dkm)*12;
 				}
-		 }else {//跑车
+		 }else if(carId==3){//跑车
 			 if(dkm>200) {
 				 
 				}
@@ -235,7 +221,21 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 				if(dkm>0) {
 					  x3=Math.min(20d, dkm)*16;
 				} 
-		 }
+		 }else {//suv
+				if(dkm>200) {
+					 
+				}
+				if(dkm>80) {
+					  x1=Math.min(200d, (dkm-80))*5;
+				}
+				if(dkm>20) {
+					  x2=Math.min(80d, (dkm-20))*8;
+				}
+				if(dkm>0) {
+					  x3=Math.min(20d, dkm)*10;
+				}
+				
+			 }
 	 
     	return Double.valueOf((x1+x2+x3)).intValue();
 	}
