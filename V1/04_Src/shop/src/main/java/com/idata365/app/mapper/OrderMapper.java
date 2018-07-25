@@ -22,4 +22,6 @@ public interface OrderMapper {
 	int sendReward(@Param("convertId") Long convertId, @Param("operatingUser") String operatingUser);
 
 	int updateOrder(Map<String,Object> data);
+	
+	int updateOrderStatus(@Param("orderId") long orderId, @Param("orderStatus") String orderStatus);
 }

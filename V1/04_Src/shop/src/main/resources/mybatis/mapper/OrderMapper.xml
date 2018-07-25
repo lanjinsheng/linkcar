@@ -36,7 +36,7 @@
 		*
 		from `order`
 		where
-		orderStatus='1' and businessType='1'
+		businessType='1'
 		order by orderTime desc
 	</select>
 
@@ -64,5 +64,10 @@
 	<update id="updateOrder"  parameterType="java.util.HashMap">
 		update `order` set phone=#{phone},orderStatus=1,userName=#{name},address=#{address},provinceCode=#{provinceCode},cityCode=#{cityCode},areaCode=#{areaCode}
 		where prizeId=#{auctionGoodsId} and userId=#{userId}
+	</update>
+	
+	<update id="updateOrderStatus" >
+		update `order` set
+		orderStatus=#{orderStatus} where orderId=#{orderId}
 	</update>
 </mapper>

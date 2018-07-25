@@ -15,6 +15,10 @@ public class DateTools
 	private static FastDateFormat yyMMddHHmmssSSS = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
 	private static FastDateFormat yyyyMMdd = FastDateFormat.getInstance("yyyyMMdd");
 	
+	public static String getYYYYMMDDMMSS() {
+		  String 	customDate = yyMMddHHmmss.format(new Date());
+		  return customDate;
+	}
 	public static String getYYYYMMDD() {
 	  String 	customDate = yyyyMMdd.format(new Date());
 	  return customDate;

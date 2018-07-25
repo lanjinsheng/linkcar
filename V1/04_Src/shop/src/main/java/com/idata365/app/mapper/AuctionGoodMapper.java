@@ -36,4 +36,6 @@ public interface AuctionGoodMapper {
 	List<Map<String, Object>> getChartInfoByTag(@Param("auctionTag") String auctionTag);
 	
 	List<Map<String, Object>> getChartInfoByTag10Time(@Param("auctionTag") String auctionTag);
+
+	int updateGoodsRemark(@Param("auctionGoodsId") long auctionGoodsId, @Param("remark") String remark);
 }

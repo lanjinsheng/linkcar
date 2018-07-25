@@ -5,7 +5,7 @@
 	</resultMap>
 	
 	<select id="listAuctionGoods" resultMap="BaseResultMap">
-		select * from auctionGoods order by auctionEndTime desc
+		select * from auctionGoods order by auctionRealEndTime desc
 	</select>
 	
 	<select id="findAuctionGoodById" resultMap="BaseResultMap">
@@ -46,6 +46,11 @@
 		ORDER BY
 			auctionRealEndTime DESC
      </select>
+     
+     <update id="updateGoodsRemark" >
+		update auctionGoods set
+		remark=#{remark} where auctionGoodsId=#{auctionGoodsId}
+	 </update>
      
      <select id="getChartInfoByTag10Time" resultType="java.util.HashMap" >
        SELECT
