@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +22,9 @@ import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.enums.UserImgsEnum;
 import com.idata365.app.partnerApi.QQSSOTools;
 import com.idata365.app.partnerApi.SSOTools;
-import com.idata365.app.remote.ChezuAppService;
-import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.AuctionService;
 import com.idata365.app.service.OrderService;
-import com.idata365.app.service.PrizeService;
 import com.idata365.app.util.DateTools;
-import com.idata365.app.util.ResultUtils;
 import com.idata365.app.util.ServerUtil;
 
 /**
@@ -44,16 +39,9 @@ import com.idata365.app.util.ServerUtil;
 public class OpenController extends BaseController {
 
 	@Autowired
-	ChezuAssetService chezuAssetService;
-
-	@Autowired
-	private PrizeService prizeService;
-	@Autowired
 	private OrderService orderService;
 	@Autowired
-	private ChezuAppService chezuAppService;
-	@Autowired
-	SystemProperties systemProperties;
+	private SystemProperties systemProperties;
 	@Autowired
 	private AuctionService auctionService;
 
@@ -126,7 +114,7 @@ public class OpenController extends BaseController {
 		map.putAll(requestParameterToMap(request));
 		Long orderId = Long.valueOf(request.getParameter("convertId").toString());
 		String operatingUser = request.getParameter("operatingUser").toString();
-		int status = orderService.sendVirtualReward(orderId, operatingUser);
+		int status = orderService.sendVirtualReward(orderId, map, operatingUser);
 		StringBuffer sb = new StringBuffer("");
 		sb.append(ServerUtil.toJson(status));
 		ServerUtil.putSuccess(map);

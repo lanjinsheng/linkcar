@@ -425,4 +425,42 @@ public class AuctionController extends BaseController {
 			return ResultUtils.rtSuccess(datas);
 		}
 	}
+	
+	/**
+	 * 
+	 * @Title: queryCdKey
+	 * @Description: TODO(查看红包兑换码)
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             lcc
+	 */
+	@RequestMapping("/queryCdKey")
+	public Map<String, Object> queryCdKey(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Long convertId = Long.valueOf(requestBodyParams.get("convertId").toString());
+		LOG.info("convertId=================" + convertId);
+		Map<String, Object> rtMap = auctionService.queryCdKey(convertId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+	
+	/**
+	 * 
+	 * @Title: applyCdKey
+	 * @Description: TODO(重新申领红包)
+	 * @param @return
+	 *            参数
+	 * @return Map<String,Object> 返回类型
+	 * @throws @author
+	 *             lcc
+	 */
+	@RequestMapping("/applyCdKey")
+	public Map<String, Object> applyCdKey(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Long convertId = Long.valueOf(requestBodyParams.get("convertId").toString());
+		LOG.info("convertId=================" + convertId);
+		auctionService.applyCdKey(convertId);
+		return ResultUtils.rtSuccess(null);
+	}
 }

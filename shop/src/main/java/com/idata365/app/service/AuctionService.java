@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.AuctionLogs;
+import com.idata365.app.entity.Order;
 import com.idata365.app.entity.bean.AuctionBean;
 import com.idata365.app.mapper.AuctionGoodMapper;
 import com.idata365.app.mapper.AuctionLogsMapper;
@@ -37,6 +38,8 @@ public class AuctionService {
 	private ChezuAssetService chezuAssetService;
 	@Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private AuctionGoodMapper auctionGoodMapper;
 
 	public AuctionGoods findOneAuctionGoodById(long auctionGoodsId) {
 		return auctionMapper.findAuctionGoodById(auctionGoodsId);
@@ -226,5 +229,34 @@ public class AuctionService {
 		// 修改商品状态
 		auctionMapper.updateGoodsStatus(Long.valueOf(data.get("auctionGoodsId").toString()),2);//2：待发货
 		orderMapper.updateOrder(data);
+	}
+
+	public Map<String, Object> queryCdKey(Long convertId) {
+		Map<String, Object> rtMap = new HashMap<>();
+		Order order = orderMapper.getOrderByOrderId(convertId);
+		Long goodsId = order.getPrizeId();
+		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
+		String remark = goods.getRemark();
+		String[] split = remark.split("-");
+		String dayStamp = split[1];
+		if (new Date().getTime() - DateTools.getDateTimeOfStr(dayStamp, "yyyy-MM-dd HH:mm:ss")
+				.getTime() > (1000 * 3600 * 24 - 1000 * 120)) {
+			// 超时
+			rtMap.put("flag", "0");
+		} else {
+			rtMap.put("flag", "1");
+			rtMap.put("cdKey", split[0]);
+		}
+		return rtMap;
+	}
+
+	public void applyCdKey(Long convertId) {
+		Order order = orderMapper.getOrderByOrderId(convertId);
+		Long goodsId = order.getPrizeId();
+		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
+		// 修改商品状态
+		auctionGoodMapper.updateGoodsStatus(goods.getAuctionGoodsId(), 2);
+		// 修改订单状态
+		orderMapper.updateOrderStatus(order.getOrderId(), "1");
 	}
 }

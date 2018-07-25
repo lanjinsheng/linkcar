@@ -78,9 +78,9 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			int type = auctionGoods.getAuctionGoodsType();
 			if (type == 3) {
 				// 现金红包
-				auctionGoods.setAuctionStatus(3);
+				auctionGoods.setAuctionStatus(4);//
 			} else {
-				auctionGoods.setAuctionStatus(4);
+				auctionGoods.setAuctionStatus(3);
 			}
 			auctionGoodMapper.updateGoodsStatusByTask(auctionGoods);
 			return true;
@@ -88,7 +88,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			// 更新竞价状态
 			int type = auctionGoodMapper.findAuctionGoodById(max.getAuctionGoodsId()).getAuctionGoodsType().intValue();
 			if (type == 3) {
-				// 现金红包无需填写信息 0：未拍获 1：待填写信息2：待发货3.待确认4：完成
+				// 现金红包无需填写信息 0：未拍获 1：待填写信息2：待发货3.已完成4：待确认
 				auctionGoods.setAuctionStatus(2);
 			} else {
 				auctionGoods.setAuctionStatus(1);
