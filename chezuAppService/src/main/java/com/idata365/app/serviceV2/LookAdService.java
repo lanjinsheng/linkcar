@@ -79,7 +79,11 @@ public class LookAdService extends BaseService<LookAdService> {
 		logs.setAdSign(adSign);
 		if (adSign != 0) {
 			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
-			if (info == null || (new Date().getTime() - info.getCreateTime().getTime() > 1000 * 5)) {
+//			if (info == null || (new Date().getTime() - info.getCreateTime().getTime() > 1000 * 5)) {
+//				powerNum = (long) RandUtils.generateRand(30, 200);
+//				valid = 1;
+//			}
+			if (info == null || info.getAdPassId() != adPassId) {
 				powerNum = (long) RandUtils.generateRand(30, 200);
 				valid = 1;
 			}
