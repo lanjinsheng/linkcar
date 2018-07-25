@@ -275,6 +275,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		  userCompUpdate.put("inUse", 1);
 		  userCompUpdate.put("componentStatus", 1);
 		  userCompUpdate.put("userComponentId", userComponentId);
+		  userCompUpdate.put("userCarId", userCarId);
 		  componentMapper.updateUserComponent(userCompUpdate);
 		  
 		  //老的销毁
