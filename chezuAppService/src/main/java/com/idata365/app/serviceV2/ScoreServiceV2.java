@@ -1222,6 +1222,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	 */
 	public Map<String, Object> queryClubBonusInfo(long userId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
+		List<Map<String, String>> rtList = new ArrayList<>();
 		Map<String, String> clubScoreInfo = new HashMap<String, String>();
 		Map<String, String> clubMemberInfo = new HashMap<String, String>();
 		Map<String, String> clubTypeInfo = new HashMap<String, String>();
@@ -1243,23 +1244,24 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		if (opponentId != null && this.gameMapper.queryFamilyScore(opponentId, yesterday) != null) {
 			score2 = this.gameMapper.queryFamilyScore(opponentId, yesterday).getScore();
 		}
-		clubScoreInfo.put("score", String.valueOf(score1));
-		clubMemberInfo.put("usersNum", String.valueOf(membersNum) + "人");
-		clubTypeInfo.put("clubType", DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
+		
+		clubScoreInfo.put("value", String.valueOf(score1));
+		clubMemberInfo.put("value", String.valueOf(membersNum) + "人");
+		clubTypeInfo.put("value", DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
 		// 算分三维度：人数、等级、挑战结果
 		Double x1 = 1d;
 		Double x2 = 1d;
 		Double x3 = 1d;
 		if(opponentId == null){
-			pkStatusInfo.put("challengeStatus", "无挑战");
+			pkStatusInfo.put("value", "无挑战");
 		}else if (score1 > score2) {
-			pkStatusInfo.put("challengeStatus", "胜利");
+			pkStatusInfo.put("value", "胜利");
 			x3 = 2d;
 		} else if (score1 == score2) {
-			pkStatusInfo.put("challengeStatus", "平局");
+			pkStatusInfo.put("value", "平局");
 			x3 = 1.5d;
 		} else {
-			pkStatusInfo.put("challengeStatus", "失败");
+			pkStatusInfo.put("value", "失败");
 		}
 
 		long score = Math.round(score1 / 10);
@@ -1287,17 +1289,19 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		}else {
 			rtMap.put("canTake", "1");
 		}
-		clubScoreInfo.put("basePower", "奖励" + String.valueOf(score)+"动力");
-		clubMemberInfo.put("memberNumAddition", "倍数" + String.valueOf(x1));
-		clubTypeInfo.put("clubTypeAddition", "倍数" + String.valueOf(x2));
-		pkStatusInfo.put("challengeAddition", "倍数" + String.valueOf(x3));
+		clubScoreInfo.put("num", "奖励" + String.valueOf(score)+"动力");
+		clubMemberInfo.put("num", "倍数" + String.valueOf(x1));
+		clubTypeInfo.put("num", "倍数" + String.valueOf(x2));
+		pkStatusInfo.put("num", "倍数" + String.valueOf(x3));
+		clubScoreInfo.put("desc", "俱乐部成绩");
+		clubMemberInfo.put("desc", "俱乐部人数");
+		clubTypeInfo.put("desc", "俱乐部等级");
+		pkStatusInfo.put("desc", "挑战结果");
 		
-		
-		
-		rtMap.put("clubScoreInfo", clubScoreInfo);
-		rtMap.put("clubMemberInfo", clubMemberInfo);
-		rtMap.put("clubTypeInfo", clubTypeInfo);
-		rtMap.put("pkStatusInfo", pkStatusInfo);
+		rtList.add(clubScoreInfo);
+		rtList.add(clubMemberInfo);
+		rtList.add(clubTypeInfo);
+		rtList.add(pkStatusInfo);
 		return rtMap;
 	}
 	
