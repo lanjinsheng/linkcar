@@ -513,6 +513,7 @@ public class CarService extends BaseService<CarService> {
 		logs2.setId(userCarId);
 		logs2.setUserId(userId);
 		logs2.setStartTime(now);
+		logs2.setUserCarId(userCarId);
 		//更新旧车
 		this.userCarLogsMapper.updateEndTimeById(logs1);
 		//插入新车
