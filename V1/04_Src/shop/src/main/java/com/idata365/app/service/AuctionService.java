@@ -160,6 +160,9 @@ public class AuctionService {
 		List<Map<String, String>> result = new ArrayList<>();
 		// 商品标签
 		String auctionTag = this.auctionMapper.findAuctionGoodById(auctionGoodsId).getAuctionTag();
+		if (auctionTag == null || auctionTag.equals("")) {
+			return result;
+		}
 		List<Map<String, Object>> list = new ArrayList<>();
 		if(param == 1) {
 			//全部记录
