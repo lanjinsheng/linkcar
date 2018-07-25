@@ -1278,7 +1278,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 
 		// 合计：
 		long totalPower = Math.round(score * (x1 + x2 + x3));
-		rtMap.put("totalPower", String.valueOf(totalPower));
+		rtMap.put("totalPower", String.valueOf(totalPower)+"动力");
 		int hadGetBonus = this.queryHadGetBonus(userId);
 		if(totalPower == 0) {
 			rtMap.put("canTake", "2");
@@ -1287,7 +1287,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		}else {
 			rtMap.put("canTake", "1");
 		}
-		clubScoreInfo.put("basePower", "奖励" + String.valueOf(score));
+		clubScoreInfo.put("basePower", "奖励" + String.valueOf(score)+"动力");
 		clubMemberInfo.put("memberNumAddition", "倍数" + String.valueOf(x1));
 		clubTypeInfo.put("clubTypeAddition", "倍数" + String.valueOf(x2));
 		pkStatusInfo.put("challengeAddition", "倍数" + String.valueOf(x3));
