@@ -15,7 +15,7 @@ public class CarpoolService extends BaseService<CalScoreUserDayService>{
 CarpoolMapper carpoolMapper;
 @Transactional
 public void clearTask(String daystamp){
-	 DateTools.getAddMinuteDateTime(daystamp,1,"yyyy-MM-dd");
+	 DateTools.getAddMinuteDateTime(daystamp,1*24*60,"yyyy-MM-dd");
 	carpoolMapper.clearCarPool(daystamp+" 00:00:00");
 }
 }

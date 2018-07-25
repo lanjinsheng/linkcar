@@ -65,7 +65,7 @@ public class ClearYesterdayTask extends TimerTask {
 				try {
 				List<TaskSystemScoreFlag> taskList=configSystemTaskService.getUnFinishClearYesterday();
 				for(TaskSystemScoreFlag tf:taskList) {
-					carpoolService.clearTask(tf.getDaystamp());
+//					carpoolService.clearTask(tf.getDaystamp());
 					configSystemTaskService.finishClearYesterdayTask(tf);
 				}
 				}catch(Exception e) {
