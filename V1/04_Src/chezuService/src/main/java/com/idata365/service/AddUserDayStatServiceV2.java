@@ -18,6 +18,7 @@ import com.idata365.entity.TaskAchieveAddValue;
 import com.idata365.entity.TaskPowerLogs;
 import com.idata365.enums.AchieveEnum;
 import com.idata365.enums.PowerEnum;
+import com.idata365.constant.DicComponentConstant;
 import com.idata365.constant.FamilyRelationConstant;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.FamilyRelation;
@@ -27,6 +28,7 @@ import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
+import com.idata365.mapper.app.CarMapper;
 import com.idata365.mapper.app.CarpoolMapper;
 import com.idata365.mapper.app.FamilyInfoMapper;
 import com.idata365.mapper.app.InteractPeccancyMapper;
@@ -71,6 +73,8 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	CarpoolMapper carpoolMapper;
 	@Autowired
 	BoxTreasureService boxTreasureService;
+	@Autowired
+	CarMapper carMapper;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -242,9 +246,9 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	
 	
 	public static void main(String []args) {
-		int power=53;
+		int power=(int)(32*(1+0.3-0.1));
 		 
-		System.out.println(Double.valueOf(power*0.1).intValue());
+		System.out.println(power);
 	}
 	
 	private void addCar(List<InteractTempCar> batchInsert,UserTravelHistory uth,int r,int type) {
@@ -288,9 +292,28 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		int peccancyNum=interactPeccancyMapper.getUnpayPeccancy(payMap);
 		int power=calPower;
 		List<InteractTempCar> batchInsert=new ArrayList<InteractTempCar>();
+		double reduce=0;
 		if(peccancyNum>0) {
-			 power=(int)(calPower*(1-Double.valueOf(peccancyNum)/10));//减去罚单降低的动力
+			reduce= Double.valueOf(peccancyNum)/10;//减去罚单降低的动力
 		} 
+		
+		List<Map<String,Object>> compList=carMapper.getCarComponents(uth.getUserCarId());
+		double addCar=0d;
+		for(Map<String,Object> comp:compList) {
+			int componentId=Integer.valueOf(comp.get("componentId").toString());
+			String quality=DicComponentConstant.getDicComponent(componentId).getQuality();
+			if(quality.equals("B")) {
+				addCar+=0.1;
+			}else if(quality.equals("A")) {
+				addCar+=0.2;
+			}else if(quality.equals("S")) {
+				addCar+=0.3;
+			}
+			comp.put("userComponentId", comp.get("id"));
+		 carMapper.updateCarComponents(Long.valueOf(comp.get("id").toString()));
+		 carMapper.insertComponentUserUseLog(comp);
+		}
+		power=(int)(calPower*(1+addCar-reduce));
 		//插入power任务
 		TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
     	taskPowerLogs.setUserId(uth.getUserId());
