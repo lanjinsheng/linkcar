@@ -19,7 +19,7 @@
 	       update
 	            carpool
 	            set isComplete=1,getOffTime=now()
-	            where createTime <![CDATA[<]]>#{daystamp}
+	            where createTime <![CDATA[<]]>#{daystamp} and isComplete=0
 	    </update>  
          
 </mapper>
