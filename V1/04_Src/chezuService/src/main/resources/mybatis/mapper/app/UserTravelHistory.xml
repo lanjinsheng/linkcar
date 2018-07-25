@@ -22,7 +22,8 @@
 		useShachepian=#{useShachepian},useHongniu=#{useHongniu},useYeshijing=#{useYeshijing},
 		useFadongji=#{useFadongji},useCheluntai=#{useCheluntai},useZengyaqi=#{useZengyaqi},
 		taskFlag='0',addDayStatFlag=0,score=#{score},
-		brakeScore=#{brakeScore},turnScore=#{turnScore},overspeedScore=#{overspeedScore},tiredRate=#{tiredRate}
+		brakeScore=#{brakeScore},turnScore=#{turnScore},overspeedScore=#{overspeedScore},tiredRate=#{tiredRate},
+		userCarId=#{userCarId},carId=#{carId}
 		where userId=#{userId} and habitId=#{habitId}
 	 </update>
 	
