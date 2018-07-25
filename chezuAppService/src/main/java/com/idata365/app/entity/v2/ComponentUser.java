@@ -17,9 +17,15 @@ public class ComponentUser implements Serializable{
 	private Integer leftTravelNum;
 	private Integer gainType;
 	private Integer componentType;
+	private Long userCarId;
 	
 	
-	
+	public Long getUserCarId() {
+		return userCarId;
+	}
+	public void setUserCarId(Long userCarId) {
+		this.userCarId = userCarId;
+	}
 	public Integer getComponentType() {
 		return componentType;
 	}

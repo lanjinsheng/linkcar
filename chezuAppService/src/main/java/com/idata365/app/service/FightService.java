@@ -134,9 +134,8 @@ public class FightService extends BaseService<FightService> {
     	}
     	challegeTimesToday=challegeTimesToday+1;
     	family.put("challegeTime", today+","+(challegeTimesToday));
-    	
-    	
-    	Integer familyType=Integer.valueOf(family.get("familyType").toString())-10;
+        int i=(int)challegeTimesToday/4+1;
+    	Integer familyType=Integer.valueOf(family.get("familyType").toString())-(i*10);
     	family.put("familyType", familyType);
     	Map<String,Object> pkFamily=familyRelationMapper.getMatchFamily(family);
     	if(challegeTimesToday<2){
@@ -175,8 +174,8 @@ public class FightService extends BaseService<FightService> {
     	}
     }
     public static void main(String []args){
-    	Long a=Long.valueOf(5);
-    	Long b=Long.valueOf(5);
-    	System.out.println(a==b);
+    int challegeTimesToday=8;
+    int i=(int)challegeTimesToday/4+1;
+    	System.out.println(i);
     }
 }
