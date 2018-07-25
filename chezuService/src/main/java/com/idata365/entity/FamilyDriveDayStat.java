@@ -12,6 +12,7 @@ public class FamilyDriveDayStat  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private Long familyId;
+	private Integer familyType;
 	private String daystamp;
 	private Integer useHoldNum;
 	private Integer orderNo;
@@ -53,6 +54,22 @@ public class FamilyDriveDayStat  implements Serializable {
 	private String startDay;
 	private String endDay;
 	
+	private boolean isWin=false;
+	
+	
+	
+	public Integer getFamilyType() {
+		return familyType;
+	}
+	public void setFamilyType(Integer familyType) {
+		this.familyType = familyType;
+	}
+	public boolean isWin() {
+		return isWin;
+	}
+	public void setWin(boolean isWin) {
+		this.isWin = isWin;
+	}
 	//附加
 	private Integer memberNum;
 	

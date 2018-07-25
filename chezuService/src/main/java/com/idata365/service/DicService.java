@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.entity.DicComponent;
 import com.idata365.entity.DicFamilyType;
 import com.idata365.entity.FamilyRelation;
+import com.idata365.mapper.app.DicComponentMapper;
 import com.idata365.mapper.app.DicFamilyTypeMapper;
 import com.idata365.mapper.app.FamilyRelationMapper;
 import com.idata365.util.DateTools;
@@ -24,7 +26,8 @@ public class DicService extends BaseService<DicService>
 	private DicFamilyTypeMapper dicFamilyTypeMapper;
 	@Autowired
 	FamilyRelationMapper familyRelationMapper;
-	
+	@Autowired
+	DicComponentMapper dicComponentMapper;
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType()
 	{
@@ -35,4 +38,12 @@ public class DicService extends BaseService<DicService>
 	{
 		return familyRelationMapper.getFamilyRelation(DateTools.getYYYY_MM_DD());
 	}
+	
+	@Transactional
+	public List<DicComponent> getDicComponent() {
+		return dicComponentMapper.getDicComponent(null);
+	}
+
 }
+
+

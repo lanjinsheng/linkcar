@@ -14,8 +14,17 @@ public class TaskFamilyDayScore implements Serializable {
 	private Long familyId;
 	private String taskFlag;
     private Integer taskStatus;
+    private Integer familyType;
 	private String daystamp;
 	private Integer failTimes;
+	
+	
+	public Integer getFamilyType() {
+		return familyType;
+	}
+	public void setFamilyType(Integer familyType) {
+		this.familyType = familyType;
+	}
 	public Long getId() {
 		return id;
 	}

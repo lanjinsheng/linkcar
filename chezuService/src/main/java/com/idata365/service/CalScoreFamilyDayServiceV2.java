@@ -221,6 +221,7 @@ public class CalScoreFamilyDayServiceV2 {
 		fscore.setMemberNum(familyPersonNum);
 		fscore.setScore(avgScore);
 		fscore.setScoreComm(scoreComm);
+		fscore.setFamilyType(taskFamilyDayScore.getFamilyType());
 		taskFamilyDayScoreMapper.insertFamilyDriveDayStat(fscore);
 		FamilyScore fs=new FamilyScore();
 		fs.setFamilyId(familyId);

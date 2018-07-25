@@ -31,6 +31,8 @@ public class CalFamilyPkServiceV2 {
     TaskFamilyPkMapper taskFamilyPkMapper;
 	@Autowired
 	ChezuAssetService chezuAssetService;
+	@Autowired
+	BoxTreasureService boxTreasureService;
 	
 	public String getDateStr(int diff)
 	{
@@ -110,6 +112,7 @@ public class CalFamilyPkServiceV2 {
 			}
 			winMemberNum=fdds1.getMemberNum();
 			hadSendAsset=true;
+			fdds1.setWin(true);
 		}else if(fdds1.getScore()<fdds2.getScore()) {
 			if(taskFamilyPk.getRelationType()==2) {
 				hadSendAsset=true;
@@ -123,7 +126,7 @@ public class CalFamilyPkServiceV2 {
 			}else {
 				trophy1=d1.getLoss();
 			}
-		 
+			fdds2.setWin(true);
 		}else {
 			trophy1=d1.getDogfall();
 			trophy2=d2.getDogfall();
@@ -151,6 +154,11 @@ public class CalFamilyPkServiceV2 {
 	        //更新family结果,更新奖杯
 	        taskFamilyPkMapper.updateFamilyInfo(fdds1);
 	        taskFamilyPkMapper.updateFamilyInfo(fdds2);
+	        if(fdds1.isWin()) {
+	        	boxTreasureService.insertChallengeBoxNoTran(fdds1.getFamilyId(), fdds1.getFamilyType(), fdds1.getMemberNum());
+	        }else if(fdds2.isWin()) {
+	        	boxTreasureService.insertChallengeBoxNoTran(fdds2.getFamilyId(), fdds2.getFamilyType(), fdds2.getMemberNum());
+	        }
         }else if(taskFamilyPk.getRelationType()==1) {//单边更新
         	 //更新日pk结果,更新奖杯
 	        taskFamilyPkMapper.updateFamilyDayScoreById(fdds1);
@@ -158,6 +166,9 @@ public class CalFamilyPkServiceV2 {
 	        taskFamilyPkMapper.updateFamilyScore(fdds1);
 	        //更新family结果,更新奖杯
 	        taskFamilyPkMapper.updateFamilyInfo(fdds1);
+	        if(fdds1.isWin()) {
+	        	boxTreasureService.insertChallengeBoxNoTran(fdds1.getFamilyId(), fdds1.getFamilyType(), fdds1.getMemberNum());
+	        }
         }
         if(hadSendAsset) {
 		    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum,
