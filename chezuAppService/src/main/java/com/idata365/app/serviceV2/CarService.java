@@ -407,8 +407,19 @@ public class CarService extends BaseService<CarService> {
 	    * @author LiXing
 	 */
 	public void initUserCar(long userId) {
-		this.userCarMapper.initUserCar(userId);
-		this.userCarLogsMapper.initUserCar(userId);
+		UserCar userCar = new UserCar();
+		userCar.setUserId(userId);
+		userCar.setCarId(1);
+		userCar.setCreateTime(new Date());
+		userCar.setInUse(1);
+		this.userCarMapper.initUserCar(userCar);
+		
+		UserCarLogs logs = new UserCarLogs();
+		logs.setCarId(1);
+		logs.setStartTime(new Date());
+		logs.setUserId(userId);
+		logs.setUserCarId(userCar.getId());
+		this.userCarLogsMapper.initUserCar(logs);
 	}
 	
 	/**

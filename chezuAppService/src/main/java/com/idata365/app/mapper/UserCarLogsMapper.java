@@ -13,7 +13,7 @@ public interface UserCarLogsMapper {
 
 	public Map<String, Object> getUserCarHistory(@Param("id") Long id);
 
-	public int initUserCar(@Param("userId") Long userId);
+	public int initUserCar(UserCarLogs logs);
 
 	public int updateEndTimeById(UserCarLogs UserCarLogs);
 

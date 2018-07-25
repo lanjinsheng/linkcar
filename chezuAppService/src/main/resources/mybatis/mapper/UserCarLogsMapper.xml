@@ -20,8 +20,8 @@
        where   a.id=#{id}
      </select>
      
-     <insert id="initUserCar" >
-       INSERT INTO userCarLogs (userId,carId,startTime,endTime) VALUES (#{userId}, 1, now(),str_to_date('2118-01-01 00:00:00','%Y-%m-%d %H:%i:%s'))
+     <insert id="initUserCar" parameterType="com.idata365.app.entity.UserCarLogs">
+       INSERT INTO userCarLogs (userId,carId,startTime,endTime,userCarId) VALUES (#{userId}, #{carId}, #{startTime},str_to_date('2118-01-01 00:00:00','%Y-%m-%d %H:%i:%s'),#{userCarId})
      </insert>
     
      <update id="updateEndTimeById" parameterType="com.idata365.app.entity.UserCarLogs">
