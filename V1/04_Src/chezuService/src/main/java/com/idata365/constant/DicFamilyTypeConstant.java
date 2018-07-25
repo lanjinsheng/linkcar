@@ -59,7 +59,20 @@ public class DicFamilyTypeConstant {
     public  final static Integer GuanJun_19=138;
     public  final static Integer GuanJun_20=139;
     
-    
+    public static int getFamilyLevel(Integer familyType) {
+    	if(familyType>=GuanJun_1) {
+    		return 1;
+    	}else if(familyType>=ZuanShi_4) {
+    		return 2;
+    	}else if(familyType>=HuangJin_5) {
+    		return 3;
+    	}else if(familyType>=BaiYing_5) {
+    		return 4;
+    	}else if(familyType>=QingTong_5) {
+    		return 5;
+    	}
+    	return 0;
+    }
 	public static DicFamilyType getDicFamilyType(Integer familyType){
 		if(familyTypeMap.size()==0){
 			DicService dicService=SpringContextUtil.getBean("dicService", DicService.class);

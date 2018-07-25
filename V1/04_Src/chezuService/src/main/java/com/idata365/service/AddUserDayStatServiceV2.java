@@ -69,6 +69,8 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	InteractTempCarMapper interactTempCarMapper;
 	@Autowired
 	CarpoolMapper carpoolMapper;
+	@Autowired
+	BoxTreasureService boxTreasureService;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -363,12 +365,15 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 				userScoreDayStat.setFamilyId(0L);
 				userScoreDayStatMapper.insertOrUpdateUserDayStat(userScoreDayStat);
 			}
-		LOG.info("UPDATE SUCCESS");
+		
+			//行程宝箱
+			boxTreasureService.insertTripBoxNotran(uth.getId(), uth.getUserId());
+		LOG.info(uth.getId()+"addUserDay SUCCESS");
 	    return true;
    }
 	
 	@Transactional
-	   public boolean testTempCar(UserTravelHistory uth) {
+	public boolean testTempCar(UserTravelHistory uth) {
 //			UserRoleLog role= userRoleLogService.getLatestUserRoleLogNoTrans(uth.getUserId());
 	 
 			//行程power
