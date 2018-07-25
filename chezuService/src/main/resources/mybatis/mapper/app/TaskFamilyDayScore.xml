@@ -10,8 +10,8 @@
 	</insert>
     <insert id="insertTaskFamilyDayScoreByTime" parameterType="java.util.HashMap">
 		 INSERT IGNORE INTO  taskFamilyDayScore
-		 (daystamp,familyId,taskFlag,taskStatus,failTimes)
-         select #{daystamp},id as familyId,0,0,0 from familyInfo where createTimeStr<![CDATA[<=]]>#{endTime}
+		 (daystamp,familyId,taskFlag,taskStatus,failTimes,familyType)
+         select #{daystamp},id as familyId,0,0,0,familyType from familyInfo where createTimeStr<![CDATA[<=]]>#{endTime}
 	</insert>
 	
 	
@@ -21,7 +21,7 @@
 		 speedTimesUpdateTime,brakeTimes,brakePenalTimes,brakeTimesUpdateTime,turnTimes,turnPenalTimes,turnTimesUpdateTime,
 		 overspeedTimes,overspeedPenalTimes,overspeedTimesUpdateTime,nightDriveTimes,nightDrivePenalTimes,nightDriveTimesUpdateTime,
 		 tiredDriveTimes,tiredDrivePenalTimes,tiredDriveTimesUpdateTime,illegalStopTimes,illegalStopPenalTimes,illegalStopUpdateTime,
-		 usePhoneTimes,maxspeed,familyNumFactor,roleFactor,memberFactor,familyLevelFactor,mileage,time,memberNum)
+		 usePhoneTimes,maxspeed,familyNumFactor,roleFactor,memberFactor,familyLevelFactor,mileage,time,memberNum,familyType)
 		 VALUES(
 		 #{familyId}, #{daystamp}, #{useHoldNum}, #{score}, #{scoreComm}, #{scoreAdd}, #{speedTimes}, #{speedPenalTimes},
 		  #{speedTimesUpdateTime}, #{brakeTimes}, #{brakePenalTimes}, #{brakeTimesUpdateTime}, #{turnTimes}, #{turnPenalTimes},
@@ -31,7 +31,7 @@
 		  #{tiredDriveTimes}, #{tiredDrivePenalTimes}, #{tiredDriveTimesUpdateTime}, #{illegalStopTimes},
 		   #{illegalStopPenalTimes}, #{illegalStopUpdateTime},
 		  #{usePhoneTimes}, #{maxspeed}, #{familyNumFactor}, #{roleFactor}, #{memberFactor}, #{familyLevelFactor},
-		   #{mileage}, #{time},#{memberNum})
+		   #{mileage}, #{time},#{memberNum},#{familyType})
 		 ON DUPLICATE KEY UPDATE 
 		 useHoldNum=#{useHoldNum},score=#{score},scoreComm=#{scoreComm},scoreAdd=#{scoreAdd},speedTimes=#{speedTimes},speedPenalTimes=#{speedPenalTimes},
 		 speedTimesUpdateTime=#{speedTimesUpdateTime},brakeTimes=#{brakeTimes},brakePenalTimes=#{brakePenalTimes},brakeTimesUpdateTime=#{brakeTimesUpdateTime},
