@@ -62,19 +62,36 @@ String shopUrl = CommentUtil.shopUrl;
 					{title:'订单状态',field:'convertStatus',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var t='无';
 					    if(value == '1'){
-					    	t="未发放";
+					    	t="待发放";
+					    }else if(value == '2'){
+					    	t="待收货";
+					    }else if(value == '3'){
+					    	t="待确认";
 					    }else if(value == '4'){
-					    	t="已发放";
+					    	t="已完成";
 					    }
 	                    return t;
 					}},
 					{title:'操作',field:'opearting',width:100,align:'center',formatter:function(value,rowData,rowIndex){
 					    var convertId=rowData.convertId;
-					    if(rowData.phone==null||rowData.phone==""){
-					    	return ;
-					    }
 					    
-	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 发货</span>";
+					    if(rowData.auctionType==3){
+					    	//现金红包
+					    	if(rowData.convertStatus==1){
+					    		return "<span style=\"text-decoration:underline\" onclick=\"javascript:writeCode("+convertId+");\"> 填写兑换码</span>";
+					    	}else if(rowData.convertStatus==3){
+					    		return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 确认完成</span>";
+					    	}else{
+					    		return ;
+					    	}
+					    	
+					    }else{
+					    	if(rowData.convertStatus!=1||rowData.phone==null||rowData.phone==""){
+					    		return ;
+					   		}else{
+					   			return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 发货</span>";
+					   		}
+					    }
 					}}
 				]],
 				onClickCell:function(rowIndex,field,value){
@@ -131,16 +148,67 @@ String shopUrl = CommentUtil.shopUrl;
 				}
 			});
         }
+		
+		function writeCode(convertId) {
+            showMyWindow("填写兑换码",convertId,800,600);
+        }
+        
+	    function showMyWindow(convertId, width, height) {  
+	    	$('#convertId').val(convertId);
+	        $('#myWindow').window(  
+	                        {  
+	                            title : title,  
+	                            width : width,  
+	                            height : height,  
+	                            modal : true,
+	                            minimizable : true,  
+	                            maximizable : true,  
+	                            shadow : false,  
+	                            cache : false,  
+	                            closed : false,
+	                            closable : true,
+	                            draggable :true,
+	                            collapsible : true,  
+	                            resizable : true,  
+	                            loadingMessage : '正在加载数据，请稍等片刻......'  
+	                        });  
+	    }
+	    function myFunction(){
+	    	var param = $("#box").serialize();
+	    	var person = "<%=person %>";
+        	param=param+"&operatingUser="+person;
+		    $.ajax({
+				type:'POST',
+				url:"<%=shopUrl%>/ment/sendVirtualReward",
+				data:param,
+				dataType:'json',
+				success:function(rtJson){
+					if(rtJson.rtState == '1'){
+						$.messager.alert("提示","操作成功");
+		                setTimeout(function () {
+		                    window.location.reload();
+		                }, 1000);
+					}
+					else{
+						$.messager.alert("提示",rtJson.errorMsg);
+						//window.close();
+					}
+				}
+			});
+		}
 </script>
 <body style="height: 97%">
 	<div id="table" data-options="fit:true"></div>
-	<!--  
-	<div id="tb" style="padding:3px;height:auto">
-		<div align="right">
-			用户ID：<input  id="userId" name="userId" >&nbsp;&nbsp; 
-			点火区间：<input id="startTime" class="easyui-datetimebox">--<input id="endTime" class="easyui-datetimebox">
-				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="doSearch();"></a>
+	<div id="myWindow" class="easyui-dialog" closed="true">
+		<div class="center">
+			<div>
+				<form id="box" class="easyui-form" method="post"action=""> 
+				<span style="color:red">*</span>兑换码: <input type="text" name="userName" style="margin-top: 5px;"><br>
+				<input id="cdkey" type="hidden" name="cdkey" style="margin-top: 5px;">
+				</form>
+				<button onclick="myFunction()">提交</button>
+			</div>
 		</div>
-	</div>-->
+	</div>
 </body>
 </html>
