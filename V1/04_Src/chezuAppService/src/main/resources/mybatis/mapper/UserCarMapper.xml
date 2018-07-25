@@ -6,7 +6,7 @@
     
     <insert id="initUserCar" >
        insert   IGNORE INTO
-            userCar (userId,carId,createTime) values (#{userId}, 1, now())
+            userCar (userId,carId,createTime,inUse) values (#{userId}, 1, now(),1)
             ON DUPLICATE KEY UPDATE createTime=now()
     </insert>
     
