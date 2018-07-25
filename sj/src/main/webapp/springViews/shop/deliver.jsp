@@ -62,14 +62,21 @@ String shopUrl = CommentUtil.shopUrl;
 					{title:'订单状态',field:'convertStatus',width:50,align:'center',formatter:function(value,rowData,rowIndex){
 					    var t='无';
 					    if(value == '1'){
-					    	t="未发放";
+					    	t="待发放";
+					    }else if(value == '2'){
+					    	t="待收货";
+					    }else if(value == '3'){
+					    	t="待确认";
 					    }else if(value == '4'){
-					    	t="已发放";
+					    	t="已完成";
 					    }
 	                    return t;
 					}},
 					{title:'操作',field:'opearting',width:100,align:'center',formatter:function(value,rowData,rowIndex){
 					    var convertId=rowData.convertId;
+					    if(rowData.convertStatus!=1){
+					    	return ;
+					    }
 	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 发货</span>";
 					}}
 				]],
