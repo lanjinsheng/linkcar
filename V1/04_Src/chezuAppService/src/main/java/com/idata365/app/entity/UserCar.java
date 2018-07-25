@@ -21,6 +21,7 @@ public class UserCar implements Serializable{
 	private Long userId;
 	private Integer carId;
 	private Date createTime;
+	private Integer inUse;
 	public Long getId() {
 		return id;
 	}
@@ -45,6 +46,11 @@ public class UserCar implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
- 
+	public Integer getInUse() {
+		return inUse;
+	}
+	public void setInUse(Integer inUse) {
+		this.inUse = inUse;
+	}
 
 }

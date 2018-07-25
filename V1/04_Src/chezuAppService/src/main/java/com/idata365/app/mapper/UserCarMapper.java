@@ -8,7 +8,7 @@ import com.idata365.app.entity.UserCar;
 
 public interface UserCarMapper {
 
-	public int initUserCar(@Param("userId") Long userId);
+	public int initUserCar(UserCar userCar);
 	
 	public int sendUserCarAndCarIdIs2(@Param("userId") Long userId);
 	
