@@ -118,7 +118,13 @@
      select * from 
           componentUser where componentStatus=1 and inUse=0
           and  componentType=#{componentType} and userId=#{userId} limit 1
-</select> 
+</select>
+<select id="getFreeComponentTypeUser"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+     select * from 
+          componentUser where componentStatus=1 and inUse=0
+          and  componentType=#{componentType} and userId=#{userId} group by componentId
+</select>
+ 
 <update id="gotUserComponent"  parameterType="com.idata365.app.entity.v2.ComponentUser">
       update
           componentUser
