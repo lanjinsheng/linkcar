@@ -71,7 +71,7 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String AuctionFailMassage="您参与的竞拍 %s 被别人抢走啦，请继续关注我们的竞拍活动，下一个大奖就是你！";
 	public static final String AuctionSuccMassage="恭喜您成功拍下 %s ！请尽快填写相关信息，以便我们将奖品顺利无误的下发给您。";
 	public static final String AuctionExchangeMassage="您获拍的%s 已经由工作人员下发给您，请注意查看手机短信提示。您还可以继续关注我们其他的竞拍活动，各种大奖拿到手软！";
-	
+	public static final String AuctionRedPacketSuccMassage="恭喜您成功拍下 %s ！请在24小时内去支付宝填写兑换码";
 	
 	
 	//证件审核通过
@@ -418,7 +418,7 @@ public class MessageService extends BaseService<MessageService>{
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.SystemType_Auction_Succ);
-		message.setContent(String.format(AuctionSuccMassage, goodsName));
+		
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
@@ -429,7 +429,15 @@ public class MessageService extends BaseService<MessageService>{
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
 		String convertId=String.valueOf(auctionGoodsId);
 		String type=String.valueOf(auctionGoodsType);
-		message.setToUrl(String.format(MyAuctionInfoApendUrl,type,convertId));
+		
+		if(auctionGoodsType == 3) {
+			//红包
+			message.setContent(String.format(AuctionRedPacketSuccMassage, goodsName));
+			message.setToUrl(String.format(MyAuctionInfoApendUrl,type,convertId));
+		}else {
+			message.setContent(String.format(AuctionSuccMassage, goodsName));
+			message.setToUrl(String.format(MyAuctionInfoApendUrl,type,convertId));
+		}
 		return message;
 	}
 	public Message buildAuctionExchangeMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
