@@ -63,9 +63,9 @@
  <insert id="insertComponentGiveLog"  parameterType="com.idata365.app.entity.v2.ComponentGiveLog" useGeneratedKeys="true" keyProperty="id">
      INSERT IGNORE  INTO 
           componentGiveLog
-          (componentId,fromId,operationManId,fromComponentId,eventTime,logType,toUserId,giveStatus,uniKey) 
+          (componentId,fromId,operationManId,fromComponentId,eventTime,logType,toUserId,giveStatus,uniKey,daystamp) 
       VALUES
-          (#{componentId},#{fromId},#{operationManId},#{fromComponentId},now(),#{logType},#{toUserId},#{giveStatus},#{uniKey})
+          (#{componentId},#{fromId},#{operationManId},#{fromComponentId},now(),#{logType},#{toUserId},#{giveStatus},#{uniKey},#{daystamp})
 </insert>
  
  
