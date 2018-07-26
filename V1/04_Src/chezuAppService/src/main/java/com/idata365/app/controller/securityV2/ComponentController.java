@@ -146,12 +146,17 @@ public class ComponentController extends BaseController {
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 	Map<String,Object> rtMap=new HashMap<>();
 	List<Map<String,Object>> list=new ArrayList<>();
+	DicComponentConstant.getDicComponent(1);
 	Collection<DicComponent> c=DicComponentConstant.dicComponentMap.values();
 	for(DicComponent comp:c){
-		Map<String,Object> m=new HashMap<String,Object>();
-		m.put("componentId", comp.getComponentId());
-		m.put("imgUrl", comp.getComponentUrl());
-		list.add(m);
+		Integer id = comp.getComponentId();
+		if(id == 10||id == 20||id == 30||id == 40||id == 50) {
+			Map<String,Object> m=new HashMap<String,Object>();
+			m.put("componentId", comp.getComponentId());
+			m.put("imgUrl", comp.getComponentUrl());
+			m.put("componentName", comp.getComponentValue());
+			list.add(m);
+		}
 	}
 	rtMap.put("components", list);
 	 

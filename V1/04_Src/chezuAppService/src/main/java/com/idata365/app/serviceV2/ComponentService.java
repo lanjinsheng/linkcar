@@ -67,6 +67,8 @@ public class ComponentService extends BaseService<ComponentService> {
 	TaskPowerLogsMapper taskPowerLogsMapper;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	UsersAccountMapper usersAccountMapper;
 	
 	   public Map<String,Object> getUserComponent(long userId){
 		   Map<String,Object> rtMap=new HashMap<>();
@@ -221,12 +223,29 @@ public class ComponentService extends BaseService<ComponentService> {
 		   rtMap.put("logType",String.valueOf(log.getLogType()));
 		   DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
 		   rtMap.put("componentName",dicComponent.getComponentValue());
-		   rtMap.put("quality",dicComponent.getComponentValue());
+		   rtMap.put("quality",dicComponent.getQuality());
 		   rtMap.put("imgUrl", dicComponent.getComponentUrl());
 		   rtMap.put("componentType", dicComponent.getComponentType());
 		   rtMap.put("componentDesc",dicComponent.getComponentDesc());
 		   rtMap.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
 		   rtMap.put("componentLoss", dicComponent.getTravelNum()+"次行程");
+		   
+			Long fromId = log.getFromId();
+			if (log.getLogType() == 1) {
+				rtMap.put("title", "零件赠送");
+				long userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
+				String nickNameA = usersAccountMapper.findAccountById(userIdA).getNickName();
+				rtMap.put("desc", "发福利了!俱乐部经理" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
+			} else if (log.getLogType() == 2) {
+				rtMap.put("title", "零件祈愿");
+				String nickNameA = usersAccountMapper.findAccountById(fromId).getNickName();
+				rtMap.put("desc", nickNameA + " 在俱乐部祈愿中给您赠送了一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级)!");
+			} else {
+				rtMap.put("title", "零件申请");
+				String nickNameA = usersAccountMapper.findAccountById(fromId).getNickName();
+				rtMap.put("desc", "俱乐部成员 " + nickNameA + " 在零件库中申请领取一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),是否同意发放?");
+			}
+		   
 		   return rtMap;
 	  }
 	  
