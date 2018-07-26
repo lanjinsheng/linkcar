@@ -524,7 +524,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		} else {
 			cardinalNum = 100;
 		}
-		int userCount = this.gameMapper.queryMembersNumByTime(myFamilyId, daystamp);
+		int userCount = this.gameMapper.queryMembersNumByTime(myFamilyId, getCurrentDayStr());
 		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
 		int a = 0;
 		int c = 0;
