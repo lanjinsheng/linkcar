@@ -21,6 +21,7 @@ public class UserLookAdLogs implements Serializable {
 	private int adSign;
 	private Long adPassId;
 	private int valid;
+	private int type;
 
 	public BigDecimal getDiamondNum() {
 		return diamondNum;
@@ -102,4 +103,13 @@ public class UserLookAdLogs implements Serializable {
 		this.valid = valid;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	
 }
