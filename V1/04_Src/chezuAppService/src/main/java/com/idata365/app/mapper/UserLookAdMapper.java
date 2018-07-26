@@ -11,4 +11,6 @@ public interface UserLookAdMapper {
 	public int insertLogs(UserLookAdLogs logs);
 	
 	public UserLookAdLogs getUserLastLookInfo(@Param("userId") Long userId);
+	
+	public Long getAllPowerNumOfType2(@Param("userId") Long userId);
 }

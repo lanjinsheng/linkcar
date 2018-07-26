@@ -10,13 +10,17 @@
     <insert id="insertLogs" parameterType="com.idata365.app.entity.v2.UserLookAdLogs" >
        INSERT INTO 
             userLookAdLogs
-            (userId,createTime,daystamp,remark,powerNum,adSign,adPassId,valid) 
+            (userId,createTime,daystamp,remark,powerNum,adSign,adPassId,valid,type) 
         VALUES
-            (#{userId}, #{createTime}, #{daystamp}, #{remark}, #{powerNum},#{adSign},#{adPassId},#{valid})
+            (#{userId}, #{createTime}, #{daystamp}, #{remark}, #{powerNum},#{adSign},#{adPassId},#{valid},#{type})
     </insert>
     
     <select id="getUserLastLookInfo" resultType="com.idata365.app.entity.v2.UserLookAdLogs" >
-        SELECT * FROM userLookAdLogs WHERE userId = #{userId} order by createTime desc limit 1
+        SELECT * FROM userLookAdLogs WHERE userId = #{userId} and type=1 order by createTime desc limit 1
+    </select>
+    
+    <select id="getAllPowerNumOfType2" resultType="Long" >
+        SELECT IFNULL(sum(powerNum),0) FROM userLookAdLogs WHERE userId = #{userId} and type=2 and daystamp=DATE_FORMAT(now(),'%Y-%m%-%d')
     </select>
 
 </mapper>
