@@ -65,6 +65,7 @@ import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
+import com.idata365.app.mapper.BoxTreasureMapper;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.GameMapper;
@@ -100,6 +101,8 @@ public class ScoreService extends BaseService<ScoreService>
 	private InteractService interactService;
 	@Autowired
     CarpoolApproveMapper carpoolApproveMapper;
+	@Autowired
+	BoxTreasureMapper boxTreasureMapper;
 	
 	/**
 	 * 
@@ -328,6 +331,15 @@ public class ScoreService extends BaseService<ScoreService>
 			sharingMyPoint=1;
 		}
 		resultBean.setIsHaveRide(String.valueOf(sharingMyPoint));
+		
+		Long createFamilyId = this.familyMapper.queryCreateFamilyId(bean.getUserId());
+		// 创建家族页面俱乐部ICON小红点---新挑战宝箱
+		if (createFamilyId != null && createFamilyId.longValue() == bean.getFamilyId()
+				&& (boxTreasureMapper.getCanGetNow(createFamilyId) > 0)) {
+			resultBean.setIsHaveBox(1);
+		} else {
+			resultBean.setIsHaveBox(0);
+		}
 		return resultBean;
 	}
 	

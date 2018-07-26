@@ -33,6 +33,9 @@ public class MainResultBean
 	
 	//“俱乐部奖金图标”是否闪烁
 	private int clubBonusIconStatus;
+	
+	//创建家族页面俱乐部ICON小红点---新挑战宝箱
+	private int isHaveBox;
 
 	public int getGamerNum()
 	{
@@ -129,6 +132,13 @@ public class MainResultBean
 	public void setClubBonusIconStatus(int clubBonusIconStatus) {
 		this.clubBonusIconStatus = clubBonusIconStatus;
 	}
-	
+
+	public int getIsHaveBox() {
+		return isHaveBox;
+	}
+
+	public void setIsHaveBox(int isHaveBox) {
+		this.isHaveBox = isHaveBox;
+	}
 	
 }
