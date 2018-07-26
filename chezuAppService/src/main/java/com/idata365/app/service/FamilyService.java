@@ -53,6 +53,7 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
+import com.idata365.app.mapper.BoxTreasureMapper;
 import com.idata365.app.mapper.CarpoolApproveMapper;
 import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
@@ -115,6 +116,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	FamilyInviteMapper familyInviteMapper;
 	@Autowired
 	ScoreServiceV2 scoreServiceV2;
+	@Autowired
+	BoxTreasureMapper boxTreasureMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -1062,6 +1065,14 @@ public class FamilyService extends BaseService<FamilyService> {
 			resultBean.setClubBonusIconStatus(1);
 		}else {
 			resultBean.setClubBonusIconStatus(0);
+		}
+		
+		//创建家族页面俱乐部ICON小红点---新挑战宝箱
+		if (createFamilyId != null && createFamilyId.longValue() != 0
+				&& (boxTreasureMapper.getCanGetNow(createFamilyId) > 0)) {
+			resultBean.setIsHaveBox(1);
+		} else {
+			resultBean.setIsHaveBox(0);
 		}
 		
 		return resultBean;
