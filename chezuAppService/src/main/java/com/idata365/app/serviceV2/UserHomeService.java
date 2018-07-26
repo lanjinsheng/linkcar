@@ -84,7 +84,6 @@ public class UserHomeService extends BaseService<UserHomeService>{
 
 		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 		DicCar dicCar = dicCarMapper.getCarByCarId(userCurCar.getCarId());
-		Map<String, Object> car = carService.getUserCar(userId);
 		rtMap.put("userCarId", userCurCar.getId().toString());
 		// 车名
 		rtMap.put("carName", dicCar.getCarName().toString());

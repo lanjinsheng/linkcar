@@ -463,7 +463,7 @@ public class ScoreService extends BaseService<ScoreService>
 				tempResultBean.setIsCanStealPower("0");
 				tempResultBean.setIsCanPayTicket("0");
 			} else {
-				int canStealPower = interactService.isCanStealPower(userId);
+				int canStealPower = interactService.carPoolStealStatus(bean.getUserId(), userId);
 				int canPayTicket = interactService.isCanPayTicket(userId);
 				tempResultBean.setIsCanStealPower(canStealPower == 0 ? "0" : "1");
 				tempResultBean.setIsCanPayTicket(canPayTicket == 0 ? "0" : "1");
