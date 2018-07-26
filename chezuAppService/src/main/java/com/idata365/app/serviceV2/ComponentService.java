@@ -383,7 +383,7 @@ public class ComponentService extends BaseService<ComponentService> {
 				}else{
 					Map<String,Object> m=new HashMap<>();	
 					m.put("componentGiveLogId", String.valueOf(componentGiveLog.getId()));
-					m.put("userId", memberId);
+					m.put("userId", String.valueOf(memberId));
 					m.put("logType", "2");
 					m.put("headImg", imgBase+user.get("imgUrl"));
 					m.put("nick", user.get("nickName"));
