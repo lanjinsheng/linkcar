@@ -524,7 +524,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		} else {
 			cardinalNum = 100;
 		}
-		int userCount = this.gameMapper.queryMembersNumByTime(myFamilyId, getCurrentDayStr());
+		int userCount = member.size();
 		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
 		int a = 0;
 		int c = 0;
@@ -561,6 +561,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		String win = "";
 		String loss = "";
 		int familyType = 0;// 我俱乐部等级
+		int userCount = 0;
 		long[] arr = { myFamilyId, fightFamilyId };
 		List<Map<String, Object>> memberList1 = new ArrayList<>();
 		List<Map<String, Object>> memberList2 = new ArrayList<>();
@@ -603,6 +604,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					memberList2.add(bean);
 				}
 			}
+			userCount = users.size();
 			Collections.sort(memberList1, new Comparator<Map<String, Object>>() {
 				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
 					return Double.valueOf(o2.get("score").toString())
@@ -660,7 +662,6 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		} else {
 			cardinalNum = 100;
 		}
-		int userCount = this.gameMapper.queryMembersNumByTime(myFamilyId, daystamp);
 		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
 		int a = 0;
 		int c = 0;
