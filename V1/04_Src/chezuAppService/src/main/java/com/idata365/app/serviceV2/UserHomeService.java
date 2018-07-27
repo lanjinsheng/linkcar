@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.constant.DicComponentConstant;
 import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UsersAccount;
@@ -130,6 +131,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
         * @author LiXing
 	 */
 	public Map<String, Object> getUserCarInfo(long userId, Long userCarId) {
+		   
 		Integer carId = this.userCarMapper.getCarInfo(userCarId).getCarId();
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> componentList = new ArrayList<>();
