@@ -28,26 +28,7 @@ public class CarListResultBean implements Serializable {
 	private String isUnlock;// 是否解锁
 	private String isDriving;// 是否驾驶
 	private Map<String, String> powerUpInfo;
-	
-	public Map<String, String> getPowerUpInfo() {
-		return powerUpInfo;
-	}
-	public void setPowerUpInfo(Map<String, String> powerUpInfo) {
-		this.powerUpInfo = powerUpInfo;
-	}
-	public String getIsDriving() {
-		return isDriving;
-	}
-	public void setIsDriving(String isDriving) {
-		this.isDriving = isDriving;
-	}
-	public String getPowerConvertDesc() {
-		return powerConvertDesc;
-	}
-	public void setPowerConvertDesc(String powerConvertDesc) {
-		this.powerConvertDesc = powerConvertDesc;
-	}
-	public String getCarId() {
+	public String getUserCarId() {
 		return userCarId;
 	}
 	public void setUserCarId(String userCarId) {
@@ -107,6 +88,12 @@ public class CarListResultBean implements Serializable {
 	public void setPowerConvert3(String powerConvert3) {
 		this.powerConvert3 = powerConvert3;
 	}
+	public String getPowerConvertDesc() {
+		return powerConvertDesc;
+	}
+	public void setPowerConvertDesc(String powerConvertDesc) {
+		this.powerConvertDesc = powerConvertDesc;
+	}
 	public String getIsCanUnlock() {
 		return isCanUnlock;
 	}
@@ -137,5 +124,17 @@ public class CarListResultBean implements Serializable {
 	public void setIsUnlock(String isUnlock) {
 		this.isUnlock = isUnlock;
 	}
-
+	public String getIsDriving() {
+		return isDriving;
+	}
+	public void setIsDriving(String isDriving) {
+		this.isDriving = isDriving;
+	}
+	public Map<String, String> getPowerUpInfo() {
+		return powerUpInfo;
+	}
+	public void setPowerUpInfo(Map<String, String> powerUpInfo) {
+		this.powerUpInfo = powerUpInfo;
+	}
+	
 }

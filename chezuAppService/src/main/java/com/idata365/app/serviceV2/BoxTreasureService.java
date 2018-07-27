@@ -210,4 +210,8 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   
 	   return true;
    }  
+   
+   public static void main(String[] args) {
+	   
+   }
 }

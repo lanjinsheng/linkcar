@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.idata365.app.entity.DicCar;
-import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.service.DicService;
 import com.idata365.app.service.SpringContextUtil;
@@ -31,6 +29,34 @@ public class DicComponentConstant {
     public final static Integer XUDIANCHI_B=50;
     public final static Integer XUDIANCHI_A=51;
     public final static Integer XUDIANCHI_S=52;
+    
+    public static Map<Integer,Integer> dicComponentMapS=new HashMap<Integer,Integer>();
+	static {
+		dicComponentMapS.put(1, LUNTAI_S);
+		dicComponentMapS.put(2, HUOHUASAI_S);
+		dicComponentMapS.put(3, JIYOU_S);
+		dicComponentMapS.put(4, SHACHEPIAN_S);
+		dicComponentMapS.put(5, XUDIANCHI_S);
+	}
+    
+    
+	public static Map<Integer,Integer> dicComponentMapA=new HashMap<Integer,Integer>();
+	static {
+		dicComponentMapA.put(1, LUNTAI_A);
+		dicComponentMapA.put(2, HUOHUASAI_A);
+		dicComponentMapA.put(3, JIYOU_A);
+		dicComponentMapA.put(4, SHACHEPIAN_A);
+		dicComponentMapA.put(5, XUDIANCHI_A);
+	}
+    
+	public static Map<Integer,Integer> dicComponentMapB=new HashMap<Integer,Integer>();
+	static {
+		dicComponentMapB.put(1, LUNTAI_B);
+		dicComponentMapB.put(2, HUOHUASAI_B);
+		dicComponentMapB.put(3, JIYOU_B);
+		dicComponentMapB.put(4, SHACHEPIAN_B);
+		dicComponentMapB.put(5, XUDIANCHI_B);
+	}
     
     /**
      * 
