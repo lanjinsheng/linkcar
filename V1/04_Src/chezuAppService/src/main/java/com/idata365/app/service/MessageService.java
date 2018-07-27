@@ -407,7 +407,7 @@ public class MessageService extends BaseService<MessageService>{
 		message.setIsPush(1);
 		message.setParentType(MessageTypeConstant.FamilyType);
 		message.setPicture("");
-		message.setTitle("ApplyGiveLog");
+		message.setTitle("奖励通知");
 		message.setToUserId(toUserId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
 		message.setToUrl(String.format(componentUrl,componentGiveLogId));

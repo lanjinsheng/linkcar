@@ -101,16 +101,19 @@ public class ComponentService extends BaseService<ComponentService> {
 				   m1.put("componentDesc",dicComponent.getComponentDesc());
 				   m1.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
 				   m1.put("componentLoss", dicComponent.getTravelNum()+"次行程");
-				   paramMap.get(String.valueOf(dicComponent.getComponentType())).add(m1);
+				   Integer componentType = dicComponent.getComponentType();
+				   List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
+				   list.add(m1);
+//				   paramMap.get(String.valueOf(componentType)).add(m1);
 				   componentList.add(m1);
 			   }
 		   }
 		   rtMap.put("componentList",  componentList) ;
 		   rtMap.put("componentLT",  componentLT) ;
 		   rtMap.put("componentJY",  componentJY) ;
-		   rtMap.put("componentHHS",  componentJY) ;
-		   rtMap.put("componentSCP",  componentJY) ;
-		   rtMap.put("componentXDC",  componentJY) ;
+		   rtMap.put("componentHHS",  componentHHS) ;
+		   rtMap.put("componentSCP",  componentSCP) ;
+		   rtMap.put("componentXDC",  componentXDC) ;
 		   return rtMap;
 	   }
 	   
@@ -134,8 +137,8 @@ public class ComponentService extends BaseService<ComponentService> {
 				   m1.put("componentNum","1");
 				   m1.put("componentType", dicComponent.getComponentType());
 				   m1.put("componentDesc",dicComponent.getComponentDesc());
-				   m1.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
-				   m1.put("componentLoss", dicComponent.getTravelNum()+"次行程");
+				   m1.put("powerAddition","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
+				   m1.put("travelNum", dicComponent.getTravelNum()+"次行程");
 				   componentList.add(m1);
 			   }
 		   }
@@ -164,6 +167,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		   log.setLogType(1);
 		   log.setOperationManId(userId);
 		   log.setToUserId(toUserId);
+		   log.setDaystamp(DateTools.getYYYYMMDD());
 		   log.setUniKey(log.getFromId()+"-"+log.getLogType()+"-"+log.getToUserId()+DateTools.getYYYYMMDD());
 		   componentMapper.insertComponentGiveLog(log);
 		   Map<String,Object> updateMap=new HashMap<>();
@@ -216,37 +220,50 @@ public class ComponentService extends BaseService<ComponentService> {
 	  
 	  
 	  //分配列表 
-	  public Map<String,Object> getComponentGiveLog(long componentGiveLogId){
-		   Map<String,Object> rtMap=new HashMap<>();
-		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
-		   rtMap.put("giveStatus",String.valueOf(log.getGiveStatus()) );
-		   rtMap.put("logType",String.valueOf(log.getLogType()));
-		   DicComponent dicComponent=DicComponentConstant.getDicComponent(log.getComponentId());
-		   rtMap.put("componentName",dicComponent.getComponentValue());
-		   rtMap.put("quality",dicComponent.getQuality());
-		   rtMap.put("imgUrl", dicComponent.getComponentUrl());
-		   rtMap.put("componentType", dicComponent.getComponentType());
-		   rtMap.put("componentDesc",dicComponent.getComponentDesc());
-		   rtMap.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
-		   rtMap.put("componentLoss", dicComponent.getTravelNum()+"次行程");
-		   
-			Long fromId = log.getFromId();
-			if (log.getLogType() == 1) {
-				rtMap.put("title", "零件赠送");
-				long userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
-				String nickNameA = usersAccountMapper.findAccountById(userIdA).getNickName();
-				rtMap.put("desc", "发福利了!俱乐部经理" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
-			} else if (log.getLogType() == 2) {
-				rtMap.put("title", "零件祈愿");
-				String nickNameA = usersAccountMapper.findAccountById(fromId).getNickName();
-				rtMap.put("desc", nickNameA + " 在俱乐部祈愿中给您赠送了一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级)!");
-			} else {
-				rtMap.put("title", "零件申请");
-				String nickNameA = usersAccountMapper.findAccountById(fromId).getNickName();
-				rtMap.put("desc", "俱乐部成员 " + nickNameA + " 在零件库中申请领取一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),是否同意发放?");
+	  public Map<String,Object> getComponentGiveLog(long componentGiveLogId, Long userId){
+		Map<String, Object> rtMap = new HashMap<>();
+		ComponentGiveLog log = componentMapper.findComponentGiveLog(componentGiveLogId);
+		
+		rtMap.put("logType", String.valueOf(log.getLogType()));
+		DicComponent dicComponent = DicComponentConstant.getDicComponent(log.getComponentId());
+		rtMap.put("componentName", dicComponent.getComponentValue());
+		rtMap.put("quality", dicComponent.getQuality());
+		rtMap.put("imgUrl", dicComponent.getComponentUrl());
+		rtMap.put("componentType", dicComponent.getComponentType());
+		rtMap.put("componentDesc", dicComponent.getComponentDesc());
+		rtMap.put("componentAttribute", "动力加成" + (int) (dicComponent.getPowerAddition() * 100) + "%");
+		rtMap.put("componentLoss", dicComponent.getTravelNum() + "次行程");
+		Integer status = log.getGiveStatus();
+		Long toUserId = log.getToUserId();
+		if(userId != toUserId) {
+			if(log.getLogType() == 3 && (status == 1||status==2)) {
+				status = -2;
 			}
+		}
+		rtMap.put("giveStatus", String.valueOf(status));
+			
+		Long fromId = log.getFromId();
+		long userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
+		String nickNameA = usersAccountMapper.findAccountById(userIdA).getNickName();
+		String nickNameB = usersAccountMapper.findAccountById(toUserId).getNickName();
+	    if (log.getLogType() == 1 ) {
+			rtMap.put("title", "零件分配");
+			rtMap.put("desc", "发福利了!俱乐部经理" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
+	    } else if (log.getLogType() == 2) {
+			rtMap.put("title", "零件祈愿");
+			rtMap.put("desc", nickNameA + " 在俱乐部祈愿中给您赠送了一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级)!");
+	    } else if (log.getLogType() == 3){
+	    	if(userId == log.getToUserId()) {
+	    		rtMap.put("title", "零件分配");
+				rtMap.put("desc", "发福利了!俱乐部经理" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
+	    	}else {
+	    		rtMap.put("title", "零件申请");
+				rtMap.put("desc", "俱乐部成员 " + nickNameB + " 在零件库中申请领取一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),是否同意发放?");
+	    	}
+			
+	    }
 		   
-		   return rtMap;
+	    return rtMap;
 	  }
 	  
       //	  消息点击领取  (发放方已经销毁置位了，该领取只是对用户记录的增加)
@@ -487,9 +504,9 @@ public class ComponentService extends BaseService<ComponentService> {
 				  componentMapper.updateComponentGiveLog(log);
 				  
 				  //将该道具的其他的消息置位为忽略
-				  log.setGiveStatus(-1);
-				  log.setFromComponentId(log.getFromComponentId());
-				  componentMapper.ignoreGiveLog(log);
+//				  log.setGiveStatus(-1);
+//				  log.setFromComponentId(log.getFromComponentId());
+//				  componentMapper.ignoreGiveLog(log);
 				  
 			  }else{
 				  msg.setStatus(0);
@@ -498,7 +515,9 @@ public class ComponentService extends BaseService<ComponentService> {
 			  }
 		  }
 		  DicComponent dc=DicComponentConstant.getDicComponent(log.getComponentId());
-		  sendSysMsg(0L,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyGiveLog,
+		  Long fromId = log.getFromId();
+		  long userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
+		  sendSysMsg(userIdA,log.getToUserId(),componentGiveLogId,MessageEnum.ApplyGiveLog,
 				  null,dc.getComponentValue());
           return msg;
 	  }	
@@ -608,7 +627,7 @@ public class ComponentService extends BaseService<ComponentService> {
 			  messageService.pushMessageNotrans(msg2,MessageEnum.RequestComponent);
 			  break;
 		  case ApplyGiveLog:
-			  Message msg3= messageService.buildRequestComponentMessage(fromUser, toUser, nickName, componentName, componentGiveLogId);
+			  Message msg3= messageService.buildApplyGiveLogMessage(fromUser, toUser, componentName, componentGiveLogId);
 			  messageService.insertMessage(msg3, MessageEnum.ApplyGiveLog);
 			  messageService.pushMessageNotrans(msg3,MessageEnum.ApplyGiveLog);
 			  break;

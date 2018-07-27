@@ -91,7 +91,7 @@ public class ComponentController extends BaseController {
 	Map<String, Object> getComponentGiveLog(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		long componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
-		Map<String,Object> rtMap=componentService.getComponentGiveLog(componentGiveLogId);
+		Map<String,Object> rtMap=componentService.getComponentGiveLog(componentGiveLogId,this.getUserId());
 		return ResultUtils.rtSuccess(rtMap);
 	}
 	
