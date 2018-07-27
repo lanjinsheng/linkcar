@@ -130,33 +130,56 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   }else{
 		   rtMap.put("hadBox",  "0") ; 
 	   }
-	   List<BoxTreasureFamily> boxIds=boxTreasureMapper.getChallengeBoxIds(paramMap);
-	   List<Map<String,Object>> boxList=new ArrayList<>();
-	   if(boxIds==null || boxIds.size()==0){
-		  
-	   }else{
-		   for(BoxTreasureFamily box:boxIds){
-			   Map<String,Object> m1=new HashMap<>();
-			   m1.put("boxId", box.getBoxId());
-			   List<BoxTreasureFamily> treasures=  boxTreasureMapper.getFamilyTreasureByBoxId(box.getBoxId());
-			   List<Map<String,Object>> componentList=new ArrayList<>();
-			   for(BoxTreasureFamily treasure:treasures){
-				   Map<String,Object> m2=new HashMap<>();
-				   m2.put("componentId", String.valueOf(treasure.getComponentId()));
-				   DicComponent component=DicComponentConstant.getDicComponent(treasure.getComponentId());
-				   m2.put("componentName",  component.getComponentValue());
-				   m2.put("quality", component.getQuality());
-				   m2.put("imgUrl", component.getComponentUrl());
-				   m2.put("componentNum", String.valueOf(treasure.getComponentNum()));
-				   componentList.add(m2);
-			   }
-			   m1.put("componentList", componentList);
-			   boxList.add(m1);
-		   }
-	   }
-	   rtMap.put("boxList",  boxList) ;
-	   return rtMap;
-   }
+//	   List<BoxTreasureFamily> boxIds=boxTreasureMapper.getChallengeBoxIds(paramMap);
+//	   List<Map<String,Object>> boxList=new ArrayList<>();
+//	   if(boxIds==null || boxIds.size()==0){
+//		  
+//	   }else{
+//		   for(BoxTreasureFamily box:boxIds){
+//			   Map<String,Object> m1=new HashMap<>();
+//			   m1.put("boxId", box.getBoxId());
+//			   List<BoxTreasureFamily> treasures=  boxTreasureMapper.getFamilyTreasureByBoxId(box.getBoxId());
+//			   List<Map<String,Object>> componentList=new ArrayList<>();
+//			   for(BoxTreasureFamily treasure:treasures){
+//				   Map<String,Object> m2=new HashMap<>();
+//				   m2.put("componentId", String.valueOf(treasure.getComponentId()));
+//				   DicComponent component=DicComponentConstant.getDicComponent(treasure.getComponentId());
+//				   m2.put("componentName",  component.getComponentValue());
+//				   m2.put("quality", component.getQuality());
+//				   m2.put("imgUrl", component.getComponentUrl());
+//				   m2.put("componentNum", String.valueOf(treasure.getComponentNum()));
+//				   componentList.add(m2);
+//			   }
+//			   m1.put("componentList", componentList);
+//			   boxList.add(m1);
+//		   }
+//	   }
+	   
+		List<BoxTreasureFamily> boxIds = boxTreasureMapper.getChallengeBoxIdsNew(paramMap);
+		List<Map<String, Object>> boxList = new ArrayList<>();
+		if (boxIds == null || boxIds.size() == 0) {
+
+		} else {
+			for (BoxTreasureFamily box : boxIds) {
+				Map<String, Object> m1 = new HashMap<>();
+				m1.put("boxId", box.getBoxId());
+				m1.put("componentId", String.valueOf(box.getComponentId()));
+				DicComponent component = DicComponentConstant.getDicComponent(box.getComponentId());
+				m1.put("componentName", component.getComponentValue());
+				m1.put("quality", component.getQuality());
+				m1.put("imgUrl", component.getComponentUrl());
+				m1.put("componentNum", String.valueOf(box.getComponentNum()));
+				boxList.add(m1);
+			}
+		}
+		
+		
+		rtMap.put("boxList", boxList);
+		return rtMap;
+	}
+	   
+	  
+
    @Transactional
    public boolean receiveUserBox(String boxId,Long userId){
 	   Map<String,Object> paramMap=new HashMap<>();
