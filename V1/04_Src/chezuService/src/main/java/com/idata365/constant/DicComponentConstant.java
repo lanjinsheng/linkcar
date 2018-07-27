@@ -34,7 +34,7 @@ public class DicComponentConstant {
     public final static Integer XUDIANCHI_S=52;
     
 	public static Map<Integer,Integer> dicComponentMapS=new HashMap<Integer,Integer>();
-	{
+	static {
 		dicComponentMapS.put(1, LUNTAI_S);
 		dicComponentMapS.put(2, HUOHUASAI_S);
 		dicComponentMapS.put(3, JIYOU_S);
@@ -44,7 +44,7 @@ public class DicComponentConstant {
     
     
 	public static Map<Integer,Integer> dicComponentMapA=new HashMap<Integer,Integer>();
-	{
+	static {
 		dicComponentMapA.put(1, LUNTAI_A);
 		dicComponentMapA.put(2, HUOHUASAI_A);
 		dicComponentMapA.put(3, JIYOU_A);
@@ -53,7 +53,7 @@ public class DicComponentConstant {
 	}
     
 	public static Map<Integer,Integer> dicComponentMapB=new HashMap<Integer,Integer>();
-	{
+	static {
 		dicComponentMapB.put(1, LUNTAI_B);
 		dicComponentMapB.put(2, HUOHUASAI_B);
 		dicComponentMapB.put(3, JIYOU_B);
