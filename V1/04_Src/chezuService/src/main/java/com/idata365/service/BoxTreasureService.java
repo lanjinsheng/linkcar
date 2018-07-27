@@ -191,7 +191,7 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 			     addBoxTrasureFamily(list,comp,box);
 		   }
 	   }
-	   
+	   boxTreasureMapper.insertBoxTreasureFamily(list);
 	   return 0;
    }
    public static void main(String []args) {
