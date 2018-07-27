@@ -226,10 +226,12 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		   cmpFamily.setComponentId(component.getComponentId());
 		   cmpFamily.setGainType(treasure.getGainType());
 		   cmpFamily.setComponentType(component.getComponentType());
+		   cmpFamily.setFamilyId(familyId);
+		   cmpFamily.setComponentStatus(1);
 		   componentMapper.insertComponentFamily(cmpFamily);
 	   }
 	   //更新领取记录
-	   boxTreasureMapper.receiveBox(boxId);
+	   boxTreasureMapper.receiveBoxFamily(boxId);
 	   
 	   return true;
    }  
