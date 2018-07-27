@@ -13,6 +13,11 @@
 		 daystamp=#{daystamp}  and hadGet=0 group by boxId
 	</select>
 	
+	<select id="getChallengeBoxIdsNew" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.BoxTreasureFamily">
+		select * from boxTreasureFamily where toFamilyId=#{familyId} and gainType=#{gainType}  and 
+		 daystamp=#{daystamp}  and hadGet=0 order by componentId
+	</select>
+	
 	<select id="getCanGetNow" resultType="java.lang.Integer">
 		select count(1) from boxTreasureFamily where toFamilyId=#{familyId} and gainType=1  and daystamp=DATE_FORMAT(now(),'%Y%m%d') and hadGet=0
 	</select>

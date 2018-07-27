@@ -12,8 +12,10 @@ public interface BoxTreasureMapper {
 
 	// CarpoolApprove getCarpoolApproveById(@Param("id") Long id);
 	List<BoxTreasureUser> getTripBoxIds(Map<String, Object> map);
-
+	
 	List<BoxTreasureFamily> getChallengeBoxIds(Map<String, Object> map);
+	
+	List<BoxTreasureFamily> getChallengeBoxIdsNew(Map<String, Object> map);
 
 	int hadChallengeBoxIds(Map<String, Object> map);
 
