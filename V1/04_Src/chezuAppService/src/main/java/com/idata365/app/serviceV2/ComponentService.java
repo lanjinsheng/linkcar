@@ -1,30 +1,20 @@
 package com.idata365.app.serviceV2;
 
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.constant.DicCarConstant;
 import com.idata365.app.constant.DicComponentConstant;
-import com.idata365.app.entity.CarListResultBean;
-import com.idata365.app.entity.Carpool;
-import com.idata365.app.entity.CarpoolApprove;
-import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.Message;
 import com.idata365.app.entity.TaskPowerLogs;
-import com.idata365.app.entity.UserCar;
-import com.idata365.app.entity.UserCarLogs;
 import com.idata365.app.entity.bean.ReturnMessage;
 import com.idata365.app.entity.v2.ComponentFamily;
 import com.idata365.app.entity.v2.ComponentGiveLog;
@@ -33,15 +23,9 @@ import com.idata365.app.entity.v2.ComponentUserUseLog;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.enums.MessageEnum;
 import com.idata365.app.enums.PowerEnum;
-import com.idata365.app.mapper.CarpoolApproveMapper;
-import com.idata365.app.mapper.CarpoolMapper;
 import com.idata365.app.mapper.ComponentMapper;
-import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.FamilyMapper;
-import com.idata365.app.mapper.InteractPeccancyMapper;
 import com.idata365.app.mapper.TaskPowerLogsMapper;
-import com.idata365.app.mapper.UserCarLogsMapper;
-import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.MessageService;
@@ -408,8 +392,8 @@ public class ComponentService extends BaseService<ComponentService> {
 					DicComponent dicComponent= DicComponentConstant.getDicComponent(componentGiveLog.getComponentId());
 					m.put("imgUrl", dicComponent.getComponentUrl());
 					int hadNum=0;
-					if(keyMap.get(dicComponent.getComponentType())!=null){
-						hadNum=Integer.valueOf(keyMap.get(dicComponent.getComponentType()).toString());	
+					if(keyMap.get(dicComponent.getComponentType().toString())!=null){
+						hadNum=Integer.valueOf(keyMap.get(dicComponent.getComponentType().toString()).toString());	
 					}
 					m.put("hadNum", hadNum);
 					
@@ -477,9 +461,7 @@ public class ComponentService extends BaseService<ComponentService> {
           //发送消息
           DicComponent dc=DicComponentConstant.getDicComponent(cf.getComponentId());
           Long toUserId=familyMapper.getLeaderIdByFamilyId(cf.getFamilyId());
-          sendSysMsg(userId, toUserId, giveLog.getId(), MessageEnum.RequestComponent,
-        		nickName,  dc.getComponentValue()+"("+dc.getQuality()+")"
-        		  );
+          sendSysMsg(userId, toUserId, giveLog.getId(), MessageEnum.RequestComponent, nickName, dc.getComponentValue()+"("+dc.getQuality()+")");
           
           return msg;
 	  }	  
@@ -504,9 +486,9 @@ public class ComponentService extends BaseService<ComponentService> {
 				  componentMapper.updateComponentGiveLog(log);
 				  
 				  //将该道具的其他的消息置位为忽略
-//				  log.setGiveStatus(-1);
-//				  log.setFromComponentId(log.getFromComponentId());
-//				  componentMapper.ignoreGiveLog(log);
+				  log.setGiveStatus(-1);
+				  log.setFromComponentId(log.getFromComponentId());
+				  componentMapper.ignoreGiveLog(log);
 				  
 			  }else{
 				  msg.setStatus(0);
