@@ -162,7 +162,7 @@
      update
           componentGiveLog
           set giveStatus=#{giveStatus},operationManId=#{operationManId} where fromComponentId=#{fromComponentId}
-          and logType=3
+          and logType=3 and id!=#{id}
 </update> 
     
 </mapper>
