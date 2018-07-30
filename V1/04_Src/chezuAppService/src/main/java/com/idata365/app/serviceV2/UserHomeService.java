@@ -150,6 +150,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			map.put("componentDesc", "");
 			map.put("componentAttribute", "");
 			map.put("componentLoss", "");
+			map.put("componentAttribute","");
+			map.put("componentLoss", "");
 			if (list != null && list.size() != 0) {
 				for (int j = 0; j < list.size(); j++) {
 					if (list.get(j).getComponentType() == i) {
@@ -158,8 +160,14 @@ public class UserHomeService extends BaseService<UserHomeService>{
 						map.put("quality", list.get(j).getQuality());
 						map.put("imgUrl", list.get(j).getComponentUrl());
 						map.put("componentDesc", list.get(j).getComponentDesc());
-						map.put("componentAttribute", String.valueOf(list.get(j).getPowerAddition()));
-						map.put("componentLoss", String.valueOf(list.get(j).getTravelNum()));
+						Double powerAddition = list.get(j).getPowerAddition();
+						Integer travelNum = list.get(j).getTravelNum();
+						
+						map.put("componentAttribute", "动力加成" + (powerAddition.intValue() * 100) + "%");
+						map.put("componentLoss", String.valueOf(travelNum) + "次行程");
+						map.put("componentAttribute","");
+						map.put("componentLoss", "");
+						
 					}
 				}
 			}
