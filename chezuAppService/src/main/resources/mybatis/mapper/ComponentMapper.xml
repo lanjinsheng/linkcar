@@ -39,7 +39,7 @@
           componentUserUseLog
           (componentId,userId,userComponentId,eventTime,eventType,userCarId) 
       VALUES
-          (#{componentId},#{userId},now(),#{userComponentId},now(),#{eventType},#{userCarId})
+          (#{componentId},#{userId},#{userComponentId},now(),#{eventType},#{userCarId})
 </insert> 
  
  
