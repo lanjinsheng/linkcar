@@ -15,6 +15,8 @@ public interface OrderMapper {
 	
 	Order getOrderByOrderId(@Param("orderId")Long orderId);
 	
+	Order getOrderByGoodsIdUserId(@Param("prizeId")Long prizeId,@Param("userId")Long userId);
+	
 	List<Order> orderList();
 	
 	List<Order> orderListVirtual();

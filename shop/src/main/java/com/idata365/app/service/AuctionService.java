@@ -234,16 +234,17 @@ public class AuctionService {
 		orderMapper.updateOrder(data);
 	}
 
-	public Map<String, Object> queryCdKey(Long convertId) {
+	public Map<String, Object> queryCdKey(Long logId) {
 		Map<String, Object> rtMap = new HashMap<>();
-		Order order = orderMapper.getOrderByOrderId(convertId);
-		Long goodsId = order.getPrizeId();
+		AuctionLogs logs = auctionLogsMapper.getLogByLogId(logId);
+		Long goodsId = logs.getAuctionGoodsId();
 		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
 		String remark = goods.getRemark();
 		String[] split = remark.split("-");
-		String dayStamp = split[1];
+		String cdkey = remark.substring(0, remark.indexOf("-"));
+		String dayStamp = remark.substring(remark.indexOf("-")+1, remark.length());
 		if (new Date().getTime() - DateTools.getDateTimeOfStr(dayStamp, "yyyy-MM-dd HH:mm:ss")
-				.getTime() > (1000 * 3600 * 24 - 1000 * 120)) {
+				.getTime() > (1000 * 3600 * 24 - 1000 * 120)) {//111-2018-07-30 12:34:38
 			// 超时
 			rtMap.put("flag", "0");
 		} else {
@@ -253,13 +254,14 @@ public class AuctionService {
 		return rtMap;
 	}
 
-	public void applyCdKey(Long convertId) {
-		Order order = orderMapper.getOrderByOrderId(convertId);
-		Long goodsId = order.getPrizeId();
+	public void applyCdKey(Long logId) {
+		AuctionLogs logs = auctionLogsMapper.getLogByLogId(logId);
+		Long goodsId = logs.getAuctionGoodsId();
 		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
 		// 修改商品状态
 		auctionGoodMapper.updateGoodsStatus(goods.getAuctionGoodsId(), 2);
 		// 修改订单状态
+		Order order = orderMapper.getOrderByGoodsIdUserId(goodsId, goods.getWinnerId());
 		orderMapper.updateOrderStatus(order.getOrderId(), "1");
 	}
 }
