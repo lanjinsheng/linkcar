@@ -50,13 +50,14 @@ public class UserInfoService extends BaseService<UserInfoService> {
 		rtMap.put("VehicleTravelIsOK", "0");
 		IDCard idCard = iDCardMapper.findIDCardByUserId(userId);
 		List<LicenseVehicleTravel> licenseVehicleTravels = licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
-		if (idCard != null && licenseVehicleTravels != null && licenseVehicleTravels.size()!=0) {
-			// 证件上传即认证
-			if(idCard.getStatus()==1) {
+		if (idCard != null) {
+			if (idCard.getStatus() == 1) {
 				rtMap.put("IdCardIsOK", "1");
 			}
+		}
+		if (licenseVehicleTravels != null && licenseVehicleTravels.size() != 0) {
 			for (LicenseVehicleTravel l : licenseVehicleTravels) {
-				if(l.getStatus()==1) {
+				if (l.getStatus() == 1) {
 					rtMap.put("VehicleTravelIsOK", "1");
 					break;
 				}
