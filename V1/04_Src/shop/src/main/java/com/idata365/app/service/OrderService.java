@@ -201,11 +201,13 @@ public class OrderService {
 			String code = String.valueOf(map.get("cdkey")) + "-" + DateTools.getYYYYMMDDMMSS();
 			auctionGoodMapper.updateGoodsRemark(goodsId, code);
 			a = auctionGoodMapper.updateGoodsStatus(goodsId, 4);// 4.待确认
-			chezuAppService.sendAuctionMsg(auctionLogsMapper.getMaxAuctionDiamond(goods.getAuctionGoodsId()).getAuctionLogsId(), goods.getAuctionGoodsType(), 1, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
+			chezuAppService.sendAuctionMsg(auctionLogsMapper.getMaxAuctionDiamond(goods.getAuctionGoodsId()).getAuctionLogsId(), goods.getAuctionGoodsType(), 2, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
 			b = orderMapper.updateOrderStatus(orderId, "3");
 		} else {
 			auctionGoodMapper.updateGoodsStatus(goodsId, 3);// 3.交易成功
-			chezuAppService.sendAuctionMsg(goods.getAuctionGoodsId(), goods.getAuctionGoodsType(), 2, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
+			if(goods.getAuctionGoodsType() != 3) {
+				chezuAppService.sendAuctionMsg(goods.getAuctionGoodsId(), goods.getAuctionGoodsType(), 2, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
+			}
 			b = orderMapper.sendReward(orderId, operatingUser);
 		}
 		
