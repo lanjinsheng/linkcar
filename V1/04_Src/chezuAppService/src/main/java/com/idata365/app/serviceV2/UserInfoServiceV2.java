@@ -352,27 +352,4 @@ public class UserInfoServiceV2 extends BaseService<UserInfoServiceV2> {
 		return userShareLogsMapper.queryUserShareCountToday(userId);
 	}
 
-	/**
-	 * 
-        * @Title: sengCar
-        * @Description: TODO(完成sxz认证送车)
-        * @param @param userId
-        * @param @param cardNumber 参数
-        * @return void 返回类型
-        * @throws
-        * @author LiXing
-	 */
-	public void sengCar(Long userId, String cardNumber) {
-		LOG.info("userId==========================="+userId);
-		List<LicenseVehicleTravel> list = this.licenseVehicleTravelMapper.findLicenseVehicleTravelByUserId(userId);
-		for (LicenseVehicleTravel license : list) {
-			if(!license.getPlateNo().equals(cardNumber)&&license.getStatus()==1) {
-				return;
-			}
-		}
-		
-		//系统送车(CarId=3的跑车)
-		this.userCarMapper.sendUserCarAndCarIdIs3(userId);
-		
-	}
 }

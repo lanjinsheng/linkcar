@@ -14,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.DicUserMission;
+import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UserMissionLogs;
+import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.DicUserMissionMapper;
 import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UserMissionLogsMapper;
@@ -50,6 +53,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	private InteractService interactService;
 	@Autowired
 	UserCarMapper userCarMapper;
+	@Autowired
+	DicCarMapper dicCarMapper;
 
 	// 从字典表查询所有任务
 	public List<DicUserMission> getAllDicUserMission() {
@@ -284,18 +289,30 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			throw new RuntimeException("系统异常领取失败");
 		}
 		
-		//完成行驶证认证 送 跑车一辆
-		if(missionId == 7) {
-			this.userCarMapper.sendUserCarAndCarIdIs3(userId);
-			rtMap.put("otherPrizeImg", "http://product-h5.idata365.com/appImgs/car_3.png");
-			rtMap.put("ImgDesc", "跑车");
+		// 完成行驶证认证 送 跑车一辆
+		if (missionId == 7) {
+			UserCar userCar = new UserCar();
+			userCar.setUserId(userId);
+			userCar.setCarId(3);
+			userCar.setCreateTime(new Date());
+			userCar.setInUse(0);
+			this.userCarMapper.insertUserCar(userCar);
+			DicCar car = dicCarMapper.getCarByCarId(3);
+			rtMap.put("otherPrizeImg", car.getCarUrl());
+			rtMap.put("ImgDesc", car.getCarName());
 		}
-		
-		//创建的俱乐部达到黄金 送 豪华轿车一辆
-		if(missionId == 11) {
-			this.userCarMapper.sendUserCarAndCarIdIs2(userId);
-			rtMap.put("otherPrizeImg", "http://product-h5.idata365.com/appImgs/car_2.png");
-			rtMap.put("ImgDesc", "豪华轿车");
+
+		// 创建的俱乐部达到黄金 送 豪华轿车一辆
+		if (missionId == 11) {
+			UserCar userCar = new UserCar();
+			userCar.setUserId(userId);
+			userCar.setCarId(2);
+			userCar.setCreateTime(new Date());
+			userCar.setInUse(0);
+			this.userCarMapper.insertUserCar(userCar);
+			DicCar car = dicCarMapper.getCarByCarId(2);
+			rtMap.put("otherPrizeImg", car.getCarUrl());
+			rtMap.put("ImgDesc", car.getCarName());
 		}
 		
 		return rtMap;
