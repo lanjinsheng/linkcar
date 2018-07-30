@@ -167,7 +167,7 @@ public class MessageOpenController {
 	    	}
     	}else if(eventType==2){
     		for(String userId:users){
-	    		Message msg=messageService.buildAuctionExchangeMessage(null,Long.valueOf(userId),goodsName,auctionGoodsId);
+	    		Message msg=messageService.buildAuctionExchangeMessage(null,Long.valueOf(userId),goodsName, auctionGoodsType, auctionGoodsId);
 	        	//插入消息
 	     		messageService.insertMessage(msg, MessageEnum.AuctionExchange);
 	     		//用定时器推送

@@ -71,7 +71,8 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String AuctionFailMassage="您参与的竞拍 %s 被别人抢走啦，请继续关注我们的竞拍活动，下一个大奖就是你！";
 	public static final String AuctionSuccMassage="恭喜您成功拍下 %s ！请尽快填写相关信息，以便我们将奖品顺利无误的下发给您。";
 	public static final String AuctionExchangeMassage="您获拍的%s 已经由工作人员下发给您，请注意查看手机短信提示。您还可以继续关注我们其他的竞拍活动，各种大奖拿到手软！";
-	public static final String AuctionRedPacketSuccMassage="恭喜您成功拍下 %s ！请在24小时内去支付宝填写兑换码";
+	public static final String AuctionRedPacketSuccMassage="恭喜您成功拍下 %s ！工作人员会在1~3个工作日内处理，请耐心等待通知";
+	public static final String AuctionRedPacketExchangeMassage="您获拍的%s 红包码已经由工作人员下发给您，请在24小时内去支付宝填写兑换码。您还可以继续关注我们其他的竞拍活动，各种大奖拿到手软！";
 	
 	
 	//证件审核通过
@@ -108,7 +109,7 @@ public class MessageService extends BaseService<MessageService>{
 	
 	public static final String MyAuctionUrl="com.shujin.haochezu://AuctionNotes.push";           
 	public static final String MyAuctionInfoApendUrl="com.shujin.haochezu://convertAddress.push?type=%s&convertId=%s";
-	
+	public static final String MyAuctionRedPacketUrl="com.shujin.haochezu://RedPacket.push?convertId=%s";
 	//順風車推送
 	public static final String CarpoolUrl="com.shujin.haochezu://CarPool.push?tab=%s";
 	public static final String CarpoolApply="俱乐部成员【%s】申请搭乘您的【%s】，点击处理顺风车申请";
@@ -433,19 +434,19 @@ public class MessageService extends BaseService<MessageService>{
 		if(auctionGoodsType == 3) {
 			//红包
 			message.setContent(String.format(AuctionRedPacketSuccMassage, goodsName));
-			message.setToUrl(String.format(MyAuctionInfoApendUrl,type,convertId));
+			message.setToUrl("");
 		}else {
 			message.setContent(String.format(AuctionSuccMassage, goodsName));
 			message.setToUrl(String.format(MyAuctionInfoApendUrl,type,convertId));
 		}
 		return message;
 	}
-	public Message buildAuctionExchangeMessage(Long fromUserId,Long toUserId,String goodsName,Long auctionGoodsId) {
+	public Message buildAuctionExchangeMessage(Long fromUserId,Long toUserId,String goodsName,Integer auctionGoodsType, Long auctionGoodsId) {
 		Message message=new Message();
 		message.setFromUserId(fromUserId==null?0:fromUserId);
 		message.setBottomText("");
 		message.setChildType(MessageTypeConstant.SystemType_Auction_Exchange);
-		message.setContent(String.format(AuctionExchangeMassage, goodsName));
+		
 		message.setCreateTime(new Date());
 		message.setIcon("");
 		message.setIsPush(1);
@@ -454,7 +455,16 @@ public class MessageService extends BaseService<MessageService>{
 		message.setTitle("兑换成功");
 		message.setToUserId(toUserId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
-		message.setToUrl(MyAuctionUrl);
+		
+		String convertId=String.valueOf(auctionGoodsId);
+		if(auctionGoodsType == 3) {
+			//红包
+			message.setContent(String.format(AuctionRedPacketExchangeMassage, goodsName));
+			message.setToUrl(String.format(MyAuctionRedPacketUrl,convertId));
+		}else {
+			message.setContent(String.format(AuctionExchangeMassage, goodsName));
+			message.setToUrl(MyAuctionUrl);
+		}
 		return message;
 	}
 	
