@@ -191,8 +191,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			int finishCount = Integer.valueOf(map.get("finishCount").toString());
 			int targetCount = Integer.valueOf(map.get("targetCount").toString());
 			int status = Integer.valueOf(map.get("status").toString());
-			String actionLink = String.valueOf(map.get("actionLink"));
-			String otherPrize = String.valueOf(map.get("otherPrize"));
+			String actionLink = String.valueOf((map.get("actionLink") == null ? "" : map.get("actionLink")));
+			String otherPrize = String.valueOf((map.get("otherPrize") == null ? "" : map.get("otherPrize")));
 			String missionProgress = "";
 			String missionReward = "";
 			if (missionId == 5) {
@@ -237,7 +237,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			rtMap.put("missionReward", missionReward);
 			rtMap.put("missionActionDesc", missionActionDesc);
 			rtMap.put("missionActionStatus", actionStatus);
-			rtMap.put("otherPrize", otherPrize == null ? "" : otherPrize);
+			rtMap.put("otherPrize", otherPrize);
 			rtMap.put("missionActionLink", actionLink == null ? "" : actionLink);
 			rtMap.put("missionEndTime", map.get("endTime") == null ? "" : String.valueOf(map.get("endTime")));
 			rtMap.put("flag", String.valueOf(map.get("status")));
