@@ -85,6 +85,7 @@ public class ComponentService extends BaseService<ComponentService> {
 				   m1.put("componentDesc",dicComponent.getComponentDesc());
 				   m1.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
 				   m1.put("componentLoss", dicComponent.getTravelNum()+"次行程");
+				   m1.put("power", dicComponent.getPower().toString());
 				   Integer componentType = dicComponent.getComponentType();
 				   List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
 				   list.add(m1);
