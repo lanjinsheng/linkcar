@@ -117,7 +117,7 @@ public class MessageService extends BaseService<MessageService>{
 	//配件零件申请审批消息
 	public static final String componentUrl= "com.shujin.haochezu://componentHandle.push?msgId=%s";
 	public static final String RequestComponent= "俱乐部成员 %s 在零件库中申请领取一个%s，是否同意发放？";
-	public static final String ApplyGiveLog= "发福利了！俱乐部经理在零件库中给分配给您一个 %s，快去看看吧。";
+	public static final String ApplyGiveLog= "发福利了！俱乐部经理在零件库中分配给您一个 %s，快去看看吧。";
 	public static final String ApplyPraying= "%s 在俱乐部祈愿中给您赠予了一个 %s。";
 	
 	@Autowired

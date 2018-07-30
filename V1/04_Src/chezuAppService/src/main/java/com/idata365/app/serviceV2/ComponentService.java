@@ -159,6 +159,8 @@ public class ComponentService extends BaseService<ComponentService> {
 		   updateMap.put("componentStatus", 3);
 		   updateMap.put("familyComponentId", familyComponentId);
 		   int update=componentMapper.updateFamilyComponent(updateMap);
+		   DicComponent dc = DicComponentConstant.getDicComponent(log.getComponentId());
+		   sendSysMsg(userId, toUserId, log.getComponentId().longValue(), MessageEnum.ApplyGiveLog, null, dc.getComponentValue());
 		   return update;
 	   }
 	   
