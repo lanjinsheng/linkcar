@@ -44,7 +44,7 @@
 		GROUP BY
 			( DATE_FORMAT( auctionRealEndTime, '%Y-%m-%d' ) ) 
 		ORDER BY
-			auctionRealEndTime DESC
+			auctionRealEndTime
      </select>
      
      <update id="updateGoodsRemark" >
@@ -61,7 +61,7 @@
 		GROUP BY
 			( DATE_FORMAT( auctionRealEndTime, '%Y-%m-%d' ) ) 
 		ORDER BY
-			auctionRealEndTime DESC
+			auctionRealEndTime
      </select>
 	
 	
