@@ -28,19 +28,19 @@
 	</select>
 	
 	
-    <select id="getTripsByBoxId" parameterType="java.lang.String" resultType="com.idata365.app.entity.v2.BoxTreasureUser">
+    <select id="getTripsByBoxId" resultType="com.idata365.app.entity.v2.BoxTreasureUser">
 		select * from boxTreasureUser where boxId=#{boxId}  
 	</select> 
 		
-    <select id="getFamilyTreasureByBoxId" parameterType="java.lang.String" resultType="com.idata365.app.entity.v2.BoxTreasureFamily">
+    <select id="getFamilyTreasureByBoxId" resultType="com.idata365.app.entity.v2.BoxTreasureFamily">
 		select * from boxTreasureFamily where boxId=#{boxId}  
 	</select> 
 	
 	
-    <update id="receiveBox" parameterType="java.lang.String">
+    <update id="receiveBox" >
 		update boxTreasureUser set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
 	</update> 
-	 <update id="receiveBoxFamily" parameterType="java.lang.String">
+	 <update id="receiveBoxFamily" >
 		update boxTreasureFamily set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
 	 </update> 
 	

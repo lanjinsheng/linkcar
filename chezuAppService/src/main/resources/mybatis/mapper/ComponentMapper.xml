@@ -8,13 +8,13 @@
 	 and componentStatus=1 and inUse=0
 </select>
  
-  <select id="getFreeComponentUser" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentUser">
+  <select id="getFreeComponentUser" resultType="com.idata365.app.entity.v2.ComponentUser">
 	select * from componentUser 
 	 where userId=#{userId}
 	 and componentStatus=1 and inUse=0
 </select>   
 
-  <select id="getFreeComponentUserGroupType" parameterType="java.util.HashMap" resultType="java.lang.Long">
+  <select id="getFreeComponentUserGroupType" resultType="java.util.HashMap">
 		select count(1) hadNum,componentType from componentUser 
 		where userId=#{userId} and inUse=0 and componentStatus=1 group by componentType
 </select> 
@@ -75,7 +75,7 @@
 </select>
 
 
- <select id="findComponentGiveLog" parameterType="java.lang.Long" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
+ <select id="findComponentGiveLog" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
 	select * from componentGiveLog 
 	 where id=#{id}
 </select>
@@ -86,20 +86,20 @@
 </select>
      
      
- <update id="dropFamilyComponent"  parameterType="java.lang.Long" >
+ <update id="dropFamilyComponent" >
      update
           componentFamily
           set componentStatus=2 where id=#{familyComponentId} and componentStatus=1
 </update> 
 
 
- <select id="getFamilyComponent" resultType="com.idata365.app.entity.v2.ComponentFamily" parameterType="java.lang.Long">
+ <select id="getFamilyComponent" resultType="com.idata365.app.entity.v2.ComponentFamily" >
 	select * from componentFamily 
 	 where id=#{familyComponentId}
 </select>
 
 
- <select id="getComponentUser" resultType="com.idata365.app.entity.v2.ComponentUser" parameterType="java.lang.Long">
+ <select id="getComponentUser" resultType="com.idata365.app.entity.v2.ComponentUser">
 	select * from componentUser 
 	 where id=#{userComponentId}
 </select>
@@ -138,7 +138,7 @@
           set inUse=#{inUse},componentStatus=#{componentStatus} where id=#{userComponentId}
 </update> 
 
-<update id="recieveComponentGiveLog"   parameterType="java.lang.Long">
+<update id="recieveComponentGiveLog" >
      update
           componentGiveLog
           set giveStatus=2,recievedTime=now() where id=#{id}
