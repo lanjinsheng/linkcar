@@ -121,8 +121,8 @@ public class ComponentService extends BaseService<ComponentService> {
 				   m1.put("componentNum","1");
 				   m1.put("componentType", dicComponent.getComponentType());
 				   m1.put("componentDesc",dicComponent.getComponentDesc());
-				   m1.put("powerAddition","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
-				   m1.put("travelNum", dicComponent.getTravelNum()+"次行程");
+				   m1.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
+				   m1.put("componentLoss", dicComponent.getTravelNum()+"次行程");
 				   componentList.add(m1);
 			   }
 		   }
