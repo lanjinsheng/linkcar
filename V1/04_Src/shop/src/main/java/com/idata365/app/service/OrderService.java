@@ -192,17 +192,19 @@ public class OrderService {
 		Long goodsId = order.getPrizeId();
 		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
 		int a = 0;
+		int b = 0;
 		if (goods.getAuctionGoodsType() == 3 && goods.getAuctionStatus() != 4) {
 			// 现金红包
 			String code = String.valueOf(map.get("cdkey")) + "-" + DateTools.getYYYYMMDDMMSS();
 			auctionGoodMapper.updateGoodsRemark(goodsId, code);
 			a = auctionGoodMapper.updateGoodsStatus(goodsId, 4);// 4.待确认
 			chezuAppService.sendAuctionMsg(order.getOrderId(), goods.getAuctionGoodsType(), 1, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
+			b = orderMapper.updateOrderStatus(orderId, "3");
 		} else {
 			auctionGoodMapper.updateGoodsStatus(goodsId, 3);// 3.交易成功
 			chezuAppService.sendAuctionMsg(goods.getAuctionGoodsId(), goods.getAuctionGoodsType(), 2, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
+			b = orderMapper.sendReward(orderId, operatingUser);
 		}
-		int b = orderMapper.sendReward(orderId, operatingUser);
 		
 		return a + b;
 	}
