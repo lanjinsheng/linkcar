@@ -80,7 +80,7 @@ String shopUrl = CommentUtil.shopUrl;
 					    	if(rowData.convertStatus==1){
 					    		return "<span style=\"text-decoration:underline\" onclick=\"javascript:writeCode("+convertId+");\"> 填写兑换码</span>";
 					    	}else if(rowData.convertStatus==3){
-					    		return "<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 确认完成</span>";
+					    		return "<span style=\"text-decoration:underline\" onclick=\"javascript:writeCode("+convertId+");\"> 重填兑换码</span>"+"  "+"<span style=\"text-decoration:underline\" onclick=\"javascript:sendReward("+convertId+");\"> 确认完成</span>";
 					    	}else{
 					    		return ;
 					    	}
@@ -150,14 +150,14 @@ String shopUrl = CommentUtil.shopUrl;
         }
 		
 		function writeCode(convertId) {
-            showMyWindow("填写兑换码",convertId,800,600);
+            showMyWindow("填写兑换码",convertId,400,300);
         }
         
-	    function showMyWindow(convertId, width, height) {  
+	    function showMyWindow(title, convertId, width, height) {  
 	    	$('#convertId').val(convertId);
 	        $('#myWindow').window(  
 	                        {  
-	                            title : title,  
+	                            title : title,
 	                            width : width,  
 	                            height : height,  
 	                            modal : true,
@@ -172,6 +172,7 @@ String shopUrl = CommentUtil.shopUrl;
 	                            resizable : true,  
 	                            loadingMessage : '正在加载数据，请稍等片刻......'  
 	                        });  
+	                        
 	    }
 	    function myFunction(){
 	    	var param = $("#box").serialize();
@@ -203,8 +204,8 @@ String shopUrl = CommentUtil.shopUrl;
 		<div class="center">
 			<div>
 				<form id="box" class="easyui-form" method="post"action=""> 
-				<span style="color:red">*</span>兑换码: <input type="text" name="userName" style="margin-top: 5px;"><br>
-				<input id="cdkey" type="hidden" name="cdkey" style="margin-top: 5px;">
+				<span style="color:red">*</span>兑换码: <input type="text" name="cdkey" id="cdkey" style="margin-top: 5px;"><br>
+				<input id="convertId" type="hidden" name="convertId" style="margin-top: 5px;">
 				</form>
 				<button onclick="myFunction()">提交</button>
 			</div>
