@@ -230,7 +230,13 @@ public class ComponentService extends BaseService<ComponentService> {
 		rtMap.put("giveStatus", String.valueOf(status));
 			
 		Long fromId = log.getFromId();
-		long userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
+		long userIdA = 0L;
+		if(log.getLogType() == 2) {
+			userIdA = fromId;
+		}else {
+			userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
+		}
+		
 		String nickNameA = usersAccountMapper.findAccountById(userIdA).getNickName();
 		String nickNameB = usersAccountMapper.findAccountById(toUserId).getNickName();
 	    if (log.getLogType() == 1 ) {
@@ -593,11 +599,12 @@ public class ComponentService extends BaseService<ComponentService> {
 		  //发放奖励
 		  int power=RandUtils.generateRand(10, 50);
 		  TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
-	    	taskPowerLogs.setUserId(userId);
-	    	taskPowerLogs.setTaskType(PowerEnum.ApplyPraying);
-	    	//type =1  行程动力
-	    	taskPowerLogs.setJsonValue(String.format(jsonValue,userId,power,cmpUser.getId()));
-	    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
+		  taskPowerLogs.setUserId(userId);
+		  taskPowerLogs.setTaskType(PowerEnum.ApplyPraying);
+		  //type =1  行程动力
+		  taskPowerLogs.setJsonValue(String.format(jsonValue,userId,power,cmpUser.getId()));
+		  int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
+		  msg.getData().put("power", String.valueOf(power));
           return msg;
 	  }	
 	  
