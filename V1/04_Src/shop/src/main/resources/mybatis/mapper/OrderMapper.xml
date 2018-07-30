@@ -21,6 +21,14 @@
 		where
 		orderId=#{orderId}
 	</select>
+	
+	<select id="getOrderByGoodsIdUserId" resultMap="BaseResultMap">
+		select
+		*
+		from `order`
+		where 
+		prizeId=#{prizeId} and userId=#{userId}
+	</select>
 
 	<select id="orderList" resultMap="BaseResultMap">
 		select

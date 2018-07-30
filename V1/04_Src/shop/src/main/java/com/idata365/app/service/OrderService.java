@@ -13,6 +13,7 @@ import com.idata365.app.entity.AuctionGoods;
 import com.idata365.app.entity.Order;
 import com.idata365.app.entity.Prize;
 import com.idata365.app.mapper.AuctionGoodMapper;
+import com.idata365.app.mapper.AuctionLogsMapper;
 import com.idata365.app.mapper.OrderMapper;
 import com.idata365.app.mapper.PrizeMapper;
 import com.idata365.app.remote.ChezuAppService;
@@ -43,6 +44,8 @@ public class OrderService {
 	private ChezuAppService chezuAppService;
 	@Autowired
 	private AuctionGoodMapper auctionGoodMapper;
+	@Autowired
+	private AuctionLogsMapper auctionLogsMapper;
 
 	/**
 	 * 
@@ -198,7 +201,7 @@ public class OrderService {
 			String code = String.valueOf(map.get("cdkey")) + "-" + DateTools.getYYYYMMDDMMSS();
 			auctionGoodMapper.updateGoodsRemark(goodsId, code);
 			a = auctionGoodMapper.updateGoodsStatus(goodsId, 4);// 4.待确认
-			chezuAppService.sendAuctionMsg(order.getOrderId(), goods.getAuctionGoodsType(), 1, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
+			chezuAppService.sendAuctionMsg(auctionLogsMapper.getMaxAuctionDiamond(goods.getAuctionGoodsId()).getAuctionLogsId(), goods.getAuctionGoodsType(), 1, String.valueOf(order.getUserId()), goods.getPrizeName(), SignUtils.encryptHMAC(String.valueOf(order.getUserId())));
 			b = orderMapper.updateOrderStatus(orderId, "3");
 		} else {
 			auctionGoodMapper.updateGoodsStatus(goodsId, 3);// 3.交易成功

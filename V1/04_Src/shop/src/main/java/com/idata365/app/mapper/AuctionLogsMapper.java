@@ -24,5 +24,5 @@ public interface AuctionLogsMapper {
 	
 	List<AuctionLogs> listAllAuctionUsers(@Param("auctionGoodsId") Long auctionGoodsId);
 	
-	
+	AuctionLogs getLogByLogId(@Param("auctionLogsId")long auctionLogsId);
 }

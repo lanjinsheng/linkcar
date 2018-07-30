@@ -44,5 +44,9 @@
 		(auctionTime,auctionUserId,auctionUserNick,auctionDiamond,auctionGoodsId)
 		values(#{auctionTime},#{auctionUserId},#{auctionUserNick},#{auctionDiamond},#{auctionGoodsId})
 	 </insert>
+	 
+	 <select id="getLogByLogId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		 select * FROM  auctionLogs where auctionLogsId=#{auctionLogsId}
+      </select>
 	
 </mapper>

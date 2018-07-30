@@ -439,9 +439,9 @@ public class AuctionController extends BaseController {
 	@RequestMapping("/queryCdKey")
 	public Map<String, Object> queryCdKey(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Long convertId = Long.valueOf(requestBodyParams.get("convertId").toString());
-		LOG.info("convertId=================" + convertId);
-		Map<String, Object> rtMap = auctionService.queryCdKey(convertId);
+		Long logId = Long.valueOf(requestBodyParams.get("convertId").toString());
+		LOG.info("logId=================" + logId);
+		Map<String, Object> rtMap = auctionService.queryCdKey(logId);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 	
@@ -458,9 +458,9 @@ public class AuctionController extends BaseController {
 	@RequestMapping("/applyCdKey")
 	public Map<String, Object> applyCdKey(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Long convertId = Long.valueOf(requestBodyParams.get("convertId").toString());
-		LOG.info("convertId=================" + convertId);
-		auctionService.applyCdKey(convertId);
+		Long logId = Long.valueOf(requestBodyParams.get("convertId").toString());
+		LOG.info("logId=================" + logId);
+		auctionService.applyCdKey(logId);
 		return ResultUtils.rtSuccess(null);
 	}
 }
