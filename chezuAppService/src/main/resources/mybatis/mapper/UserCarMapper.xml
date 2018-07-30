@@ -28,6 +28,6 @@
        SET 
         inUse=#{inUse}
        WHERE 
-            carId = #{userCarId}
+          id = #{userCarId}
     </update>
 </mapper>
