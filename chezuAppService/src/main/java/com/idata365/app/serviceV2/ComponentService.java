@@ -400,13 +400,16 @@ public class ComponentService extends BaseService<ComponentService> {
 					}
 					m.put("hadNum", hadNum);
 					
-					//查看拥有的道具类型闲置数量
-					if(memberId.longValue()==userId || hadNum==0){
-						m.put("showGiven","0");
-						
-					}else{
+					//0：自己	1：无多余零件	2：已受赠	3：可赠送
+					if(memberId.longValue()==userId ){
+						m.put("showGiven", "0");
+					}else if(hadNum == 0){
 						m.put("showGiven", "1");
-						
+					}else {
+						m.put("showGiven", "3");
+					}
+					if(componentGiveLog.getGiveStatus() == 1||componentGiveLog.getGiveStatus() == 2) {
+						m.put("showGiven", "2");
 					}
 					
 					prayingList.add(m);
