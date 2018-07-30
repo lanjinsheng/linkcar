@@ -174,7 +174,7 @@ public class ComponentService extends BaseService<ComponentService> {
 				Map<String,Object> paramMap=new HashMap<>();
 				paramMap.put("familyId", familyId);
 				paramMap.put("logType", 1);
-				paramMap.put("eventTime", DateTools.getYYYYMMDD()+" 00:00:00");
+				paramMap.put("eventTime", DateTools.getYYYY_MM_DD()+" 00:00:00");
 				List<ComponentGiveLog> logs=componentMapper.getComponentGiveLog(paramMap);
 				for(ComponentGiveLog log:logs){
 					keyMap.put(log.getToUserId(), log);
