@@ -141,7 +141,7 @@
 <update id="recieveComponentGiveLog"   parameterType="java.lang.Long">
      update
           componentGiveLog
-          set giveStatus=1,recievedTime=now() where id=#{id}
+          set giveStatus=2,recievedTime=now() where id=#{id}
 </update> 
  
 <update id="updateComponentGiveLog"   parameterType="com.idata365.app.entity.v2.ComponentGiveLog">

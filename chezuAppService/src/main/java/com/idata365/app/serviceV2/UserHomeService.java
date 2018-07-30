@@ -163,10 +163,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 						Double powerAddition = list.get(j).getPowerAddition();
 						Integer travelNum = list.get(j).getTravelNum();
 						
-						map.put("componentAttribute", "动力加成" + (powerAddition.intValue() * 100) + "%");
+						map.put("componentAttribute", "动力加成" + (int)(powerAddition * 100) + "%");
 						map.put("componentLoss", String.valueOf(travelNum) + "次行程");
-						map.put("componentAttribute","");
-						map.put("componentLoss", "");
 						
 					}
 				}
