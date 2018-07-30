@@ -143,23 +143,23 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		
 		for (int i = 1; i < 6; i++) {
 			Map<String, String> map = new HashMap<>();
-			map.put("componentId", "");
+			map.put("userComponentId", "");
 			map.put("componentName", "");
 			map.put("quality", "");
 			map.put("imgUrl", "");
 			map.put("componentDesc", "");
-			map.put("powerAddition", "");
-			map.put("travelNum", "");
+			map.put("componentAttribute", "");
+			map.put("componentLoss", "");
 			if (list != null && list.size() != 0) {
 				for (int j = 0; j < list.size(); j++) {
 					if (list.get(j).getComponentType() == i) {
-						map.put("componentId", String.valueOf(list.get(j).getComponentId()));
+						map.put("userComponentId", String.valueOf(list.get(j).getComponentId()));
 						map.put("componentName", list.get(j).getComponentValue());
 						map.put("quality", list.get(j).getQuality());
 						map.put("imgUrl", list.get(j).getComponentUrl());
 						map.put("componentDesc", list.get(j).getComponentDesc());
-						map.put("powerAddition", String.valueOf(list.get(j).getPowerAddition()));
-						map.put("travelNum", String.valueOf(list.get(j).getTravelNum()));
+						map.put("componentAttribute", String.valueOf(list.get(j).getPowerAddition()));
+						map.put("componentLoss", String.valueOf(list.get(j).getTravelNum()));
 					}
 				}
 			}
