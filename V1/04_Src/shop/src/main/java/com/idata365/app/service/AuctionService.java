@@ -240,7 +240,6 @@ public class AuctionService {
 		Long goodsId = logs.getAuctionGoodsId();
 		AuctionGoods goods = auctionGoodMapper.findAuctionGoodById(goodsId);
 		String remark = goods.getRemark();
-		String[] split = remark.split("-");
 		String cdkey = remark.substring(0, remark.indexOf("-"));
 		String dayStamp = remark.substring(remark.indexOf("-")+1, remark.length());
 		if (new Date().getTime() - DateTools.getDateTimeOfStr(dayStamp, "yyyy-MM-dd HH:mm:ss")
@@ -249,7 +248,7 @@ public class AuctionService {
 			rtMap.put("flag", "0");
 		} else {
 			rtMap.put("flag", "1");
-			rtMap.put("cdKey", split[0]);
+			rtMap.put("cdKey", cdkey);
 		}
 		return rtMap;
 	}
