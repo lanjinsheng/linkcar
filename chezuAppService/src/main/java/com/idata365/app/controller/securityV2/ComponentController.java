@@ -101,11 +101,8 @@ public class ComponentController extends BaseController {
 	Map<String, Object> recieveGiveLog(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		long componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
-		int i=componentService.recieveGiveLog(componentGiveLogId);
-		if(i==0){
-			return ResultUtils.rtFailParam(null, "领取失败");
-		}
-		return ResultUtils.rtSuccess(null);
+		Map<String,Object> rtMap=componentService.recieveGiveLog(componentGiveLogId);
+		return ResultUtils.rtSuccess(rtMap);
 	}
 	
 	//上架装备
