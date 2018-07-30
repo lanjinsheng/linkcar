@@ -107,7 +107,7 @@
 <update id="updateFamilyComponent"  parameterType="java.util.HashMap" >
      update
           componentFamily
-          set componentStatus=#{componentStatus} where id=#{familyComponentId}
+          set componentStatus=#{componentStatus} where id=#{familyComponentId} and componentStatus=1
 </update> 
 <update id="gotFamilyComponent"  parameterType="java.util.HashMap" >
      update

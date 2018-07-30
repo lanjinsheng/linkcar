@@ -154,14 +154,14 @@ public class ComponentService extends BaseService<ComponentService> {
 		   log.setToUserId(toUserId);
 		   log.setDaystamp(DateTools.getYYYYMMDD());
 		   log.setUniKey(log.getFromId()+"-"+log.getLogType()+"-"+log.getToUserId()+DateTools.getYYYYMMDD());
-		   componentMapper.insertComponentGiveLog(log);
-		   Map<String,Object> updateMap=new HashMap<>();
-		   updateMap.put("componentStatus", 3);
-		   updateMap.put("familyComponentId", familyComponentId);
-		   int update=componentMapper.updateFamilyComponent(updateMap);
+		   int i = componentMapper.insertComponentGiveLog(log);
+//		   Map<String,Object> updateMap=new HashMap<>();
+//		   updateMap.put("componentStatus", 3);
+//		   updateMap.put("familyComponentId", familyComponentId);
+//		   int update=componentMapper.updateFamilyComponent(updateMap);
 		   DicComponent dc = DicComponentConstant.getDicComponent(log.getComponentId());
 		   sendSysMsg(userId, toUserId, log.getComponentId().longValue(), MessageEnum.ApplyGiveLog, null, dc.getComponentValue());
-		   return update;
+		   return i;
 	   }
 	   
 	   
@@ -255,8 +255,7 @@ public class ComponentService extends BaseService<ComponentService> {
 	  
       //	  消息点击领取  (发放方已经销毁置位了，该领取只是对用户记录的增加)
 	  @Transactional
-	  public Map<String,Object> recieveGiveLog(long componentGiveLogId){
-		   Map<String,Object> rtMap=new HashMap<>();
+	  public int recieveGiveLog(long componentGiveLogId){
 		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
 		   ComponentUser componentUser=new ComponentUser();
 		   if(log.getLogType().intValue()==1){//家族赠送
@@ -278,7 +277,12 @@ public class ComponentService extends BaseService<ComponentService> {
 		   componentMapper.insertComponentUser(componentUser);
 		   //更新ComponentGiveLog 为已领取
 		   componentMapper.recieveComponentGiveLog(componentGiveLogId);
-		   return rtMap;
+		   //
+		   Map<String,Object> updateMap=new HashMap<>();
+		   updateMap.put("componentStatus", 3);
+		   updateMap.put("familyComponentId", log.getFromComponentId());
+		   int update=componentMapper.updateFamilyComponent(updateMap);
+		   return update;
 	  }
 	  
 	  @Transactional
