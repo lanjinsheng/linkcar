@@ -412,7 +412,7 @@ public class CarService extends BaseService<CarService> {
 		userCar.setCarId(1);
 		userCar.setCreateTime(new Date());
 		userCar.setInUse(1);
-		this.userCarMapper.initUserCar(userCar);
+		this.userCarMapper.insertUserCar(userCar);
 		
 		UserCarLogs logs = new UserCarLogs();
 		logs.setCarId(1);

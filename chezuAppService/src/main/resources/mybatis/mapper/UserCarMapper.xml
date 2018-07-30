@@ -4,21 +4,9 @@
     <resultMap id="BaseUserCarMap" type="com.idata365.app.entity.UserCar" >
     </resultMap>
     
-    <insert id="initUserCar" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UserCar" >
+    <insert id="insertUserCar" useGeneratedKeys="true" keyProperty="id"  parameterType="com.idata365.app.entity.UserCar" >
        insert   IGNORE INTO
             userCar (userId,carId,createTime,inUse) values (#{userId}, #{carId}, #{createTime},#{inUse})
-            ON DUPLICATE KEY UPDATE createTime=now()
-    </insert>
-    
-     <insert id="sendUserCarAndCarIdIs2" >
-       insert   IGNORE INTO
-            userCar (userId,carId,createTime) values (#{userId}, 2, now())
-            ON DUPLICATE KEY UPDATE createTime=now()
-    </insert>
-    
-    <insert id="sendUserCarAndCarIdIs3" >
-       insert   IGNORE INTO
-            userCar (userId,carId,createTime) values (#{userId}, 2, now())
             ON DUPLICATE KEY UPDATE createTime=now()
     </insert>
     
