@@ -6,7 +6,7 @@
     
     <select id="getUserCar" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT a.*,b.carName,b.carSeat,b.carUrl,b.clubScoreUpPercent from userCarLogs a left join dicCar b on a.carId=b.carId
-       where a.startTime<![CDATA[<]]>#{nowTime} and a.endTime<![CDATA[>=]]>#{nowTime}
+       where a.startTime<![CDATA[<=]]>#{nowTime} and a.endTime<![CDATA[>]]>#{nowTime}
        and a.userId=#{userId}
      </select>
      
