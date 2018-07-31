@@ -459,10 +459,17 @@ public class ComponentService extends BaseService<ComponentService> {
 	  @Transactional
 	  public ReturnMessage  requestComponent(Long familyComponentId,Long userId,String nickName){
 		  ReturnMessage msg=new ReturnMessage();
+		  int i = componentMapper.countOfPray(userId);
+		  if(i>0) {
+			  msg.setStatus(0);
+			  msg.setMsg("今天已分配");
+			  return msg;
+		  }
 		   ComponentFamily cf= componentMapper.getFamilyComponent(familyComponentId);
 		   if(cf.getComponentStatus()!=1){
 			   msg.setStatus(0);
 			   msg.setMsg("此零件已经被送出");
+			   return msg;
 			  //此零件已经被送出
 		   }
 		  ComponentGiveLog giveLog=new ComponentGiveLog();
@@ -499,6 +506,12 @@ public class ComponentService extends BaseService<ComponentService> {
 			  log.setOperationManId(userId);
 			  componentMapper.updateComponentGiveLog(log);
 		  }else{
+			  int i = componentMapper.countOfPray(userId);
+			  if(i>0) {
+				  msg.setStatus(0);
+				  msg.setMsg("该玩家今天已分配");
+				  return msg;
+			  }
 			  //到componentFamily 查询零件是否存在
 			  Map<String,Object> paramMap=new HashMap<>();
 			  paramMap.put("componentStatus", 4);
