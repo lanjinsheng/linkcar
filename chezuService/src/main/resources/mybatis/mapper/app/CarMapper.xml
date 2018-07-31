@@ -21,7 +21,7 @@
             componentUserUseLog
             (componentId,userId,userComponentId,eventTime,eventType,userCarId) 
         VALUES
-            (#{componentId},#{userId},#{userComponentId},now,3,#{userCarId})  
+            (#{componentId},#{userId},#{userComponentId},now(),3,#{userCarId})  
      </insert>    
     
 </mapper>
