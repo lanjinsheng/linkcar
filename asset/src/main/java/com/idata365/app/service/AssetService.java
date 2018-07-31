@@ -154,11 +154,12 @@ public class AssetService extends BaseService<AssetService> {
 				rtMap.put("receiveTypeName", AssetConstant.UserDiamondsEventMap.get(list.get(i).getEventType()));
 				rtMap.put("num", String.valueOf(list.get(i).getDiamondsNum().setScale(2, RoundingMode.HALF_UP)));
 				String time = String.valueOf(DateTools.formatDateYMD(list.get(i).getCreateTime()));
-				if ((new Date().getTime() - list.get(i).getCreateTime().getTime()) > (1000 * 3600 * 24 * 365)) {
-					rtMap.put("time", time.substring(0, 10));
-				} else {
-					rtMap.put("time", time.substring(5, 10));
-				}
+//				if ((new Date().getTime() - list.get(i).getCreateTime().getTime()) > (1000 * 3600 * 24 * 365)) {
+//					rtMap.put("time", time.substring(0, 10));
+//				} else {
+//					rtMap.put("time", time.substring(5, 10));
+//				}
+				rtMap.put("time", time.substring(5, 10));
 				rtMap.put("isCanQuery", "0");
 				if ("2".equals(String.valueOf(list.get(i).getEventType()))) {
 					String fightingTime = DateTools.getAddMinuteDateTime(time, -1 * 60 * 24).substring(0, 10);
@@ -1052,7 +1053,7 @@ public class AssetService extends BaseService<AssetService> {
 	public Map<String, Object> pltfDiamondsDetail(Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<>();
 		// 运营账号钻石
-		rtMap.put("pltfDiamondsNum", assetUsersAssetMapper.getUserAssetByUserId(1L).getDiamondsNum().toString());
+		rtMap.put("pltfDiamondsNum", assetUsersAssetMapper.getUserAssetByUserId(1L).getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN).toString());
 		// list
 		List<Map<String, String>> list = this.getIndexDiamonds(1L, requestBodyParams);
 		rtMap.put("list", list);
