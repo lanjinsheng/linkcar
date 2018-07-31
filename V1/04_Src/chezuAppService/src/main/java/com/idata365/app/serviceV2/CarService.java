@@ -221,6 +221,13 @@ public class CarService extends BaseService<CarService> {
 	 * @param userId
 	 */
 	public List<Map<String,Object>>  getSelfCarSeats(Long userId,String imgBase,String nick){
+		long currentTimeMillis = System.currentTimeMillis();
+		try {
+			Thread.sleep(100L);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List<Map<String,Object>> rtList=new ArrayList<>();
 		String nowTime=DateTools.getYYYYMMDDMMSS();
 				Map<String,Object> rtMap=new HashMap<>();
@@ -248,6 +255,8 @@ public class CarService extends BaseService<CarService> {
 				rtMap.put("passengerNum", passengers.size());
 				rtMap.put("carSeats", car.get("carSeat"));
 				rtList.add(rtMap);
+				long currentTimeMillis1 = System.currentTimeMillis();
+				System.out.println(currentTimeMillis1 -currentTimeMillis);
 		return rtList;
 	}
 	
@@ -503,6 +512,7 @@ public class CarService extends BaseService<CarService> {
         * @author LiXing
 	 */
 	public int changeCar(long userId, long userCarId) {
+		long currentTimeMillis = System.currentTimeMillis();
 		Map<String, Object> car = this.getUserCar(userId);
 		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 		long carLogsId = Long.valueOf(car.get("id").toString());
@@ -535,7 +545,8 @@ public class CarService extends BaseService<CarService> {
 		//userCar状态修改
 		userCarMapper.updateInUse(1, userCarId);	//1:使用中
 		userCarMapper.updateInUse(0, userCarIdOld);	//0：下架
-		
+		long currentTimeMillis1 = System.currentTimeMillis();
+		System.out.println(currentTimeMillis1 -currentTimeMillis);
 		return 1;
 	}
 	
