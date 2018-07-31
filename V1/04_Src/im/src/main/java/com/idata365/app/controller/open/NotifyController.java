@@ -119,7 +119,7 @@ public class NotifyController extends BaseController{
 			@RequestParam(value="propName") String propName,
 			@RequestParam(value="sign") String sign){
 		String sign2=SignUtils.encryptHMAC(toUserName);
-		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserName), sign2);
+		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserId), sign2);
 		Map<String,Object> insert=new HashMap<>();
 		insert.put("userId", 0);
 		insert.put("nick", "");
@@ -155,7 +155,7 @@ public class NotifyController extends BaseController{
 			@RequestParam(value="sign") String sign)
 	{
 		String sign2=SignUtils.encryptHMAC(toUserName);
-		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserName), sign2);
+		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserId), sign2);
 		Map<String,Object> insert=new HashMap<>();
 		insert.put("userId", 0);
 		insert.put("nick", "");
