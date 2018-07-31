@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * 
  * @ClassName: ChezuImService
- * @Description: TODO(获取用户证件认证情况)
+ * @Description: TODO()
  * @author lcc
  * @date 2018年6月14日
  *
@@ -24,4 +24,18 @@ public interface ChezuImService {
  
 	@RequestMapping(value = "/im/notifyFamilyChange",method = RequestMethod.POST)
 	public boolean notifyFamilyChange(@RequestBody List<Map<String,Object>> list,@RequestParam(value="sign") String sign);
+
+	@RequestMapping(value = "/im/prayingRealize",method = RequestMethod.POST)
+	public boolean prayingRealize(@RequestParam(value="fromUserName") String fromUserName,
+			@RequestParam(value="toUserName") String toUserName,
+			@RequestParam(value="toUserId") String toUserId,
+			@RequestParam(value="propName") String propName,
+			@RequestParam(value="sign") String sign);
+
+	@RequestMapping(value = "/im/prayingSubmit",method = RequestMethod.POST)
+	public boolean prayingSubmit(@RequestParam(value="fromUserName") String fromUserName,
+			@RequestParam(value="toUserName") String toUserName,
+			@RequestParam(value="toUserId") String toUserId,
+			@RequestParam(value="propName") String propName,
+			@RequestParam(value="sign") String sign);
 }

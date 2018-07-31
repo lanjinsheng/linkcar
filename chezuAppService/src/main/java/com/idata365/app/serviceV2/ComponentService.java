@@ -27,7 +27,9 @@ import com.idata365.app.mapper.ComponentMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.TaskPowerLogsMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.service.BaseService;
+import com.idata365.app.service.ImService;
 import com.idata365.app.service.MessageService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
@@ -47,12 +49,17 @@ public class ComponentService extends BaseService<ComponentService> {
 	ComponentMapper componentMapper;
 	@Autowired
 	FamilyMapper familyMapper;
+	
+	@Autowired
+	UsersAccountMapper usersAccountMapperr;
 	@Autowired
 	TaskPowerLogsMapper taskPowerLogsMapper;
 	@Autowired
 	MessageService messageService;
 	@Autowired
 	UsersAccountMapper usersAccountMapper;
+	@Autowired
+	ChezuImService chezuImService;
 	
 	   public Map<String,Object> getUserComponent(long userId){
 		   Map<String,Object> rtMap=new HashMap<>();
@@ -430,7 +437,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		  return rtMap;
 	  }
 	  @Transactional
-	  public int  submitPraying(Integer componentId,Long userId){
+	  public int  submitPraying(Integer componentId,Long userId,String nick){
 		  DicComponent dicComponent=DicComponentConstant.getDicComponent(componentId);
 		  ComponentGiveLog giveLog=new ComponentGiveLog();
 		  giveLog.setComponentId(dicComponent.getComponentId());//祈愿只需要类型
@@ -444,6 +451,9 @@ public class ComponentService extends BaseService<ComponentService> {
 //          logType-toUserId-daystamp-giveStatus
           giveLog.setUniKey(giveLog.getLogType()+"-"+userId+"-"+giveLog.getDaystamp()+"-"+0);//一天只能祈愿一次
           int insert=componentMapper.insertComponentGiveLog(giveLog);
+          if(insert>0){
+        	  chezuImService.prayingSubmit("", nick, String.valueOf(userId),dicComponent.getComponentValue(), "");
+          }
           return insert;
 	  }
 	  @Transactional
@@ -607,6 +617,8 @@ public class ComponentService extends BaseService<ComponentService> {
 		  taskPowerLogs.setJsonValue(String.format(jsonValue,userId,power,cmpUser.getId()));
 		  int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 		  msg.getData().put("power", String.valueOf(power));
+		  String toUserNickName= usersAccountMapper.findAccountById(log.getToUserId()).getNickName();
+		  chezuImService.prayingSubmit(nickName, toUserNickName, String.valueOf(log.getToUserId()),dicComponent.getComponentValue(), "");
           return msg;
 	  }	
 	  
