@@ -52,7 +52,7 @@
  
     <select id="getMatchFamily" resultType="java.util.HashMap" parameterType="java.util.HashMap">
 		SELECT *,rand() b
-		FROM familyInfo where familyType<![CDATA[>=]]>94 and id!=${id}  order by b limit 1
+		FROM familyInfo where familyType<![CDATA[>=]]>${familyType} and id!=${id}  order by b limit 1
     </select>
      
  <select id="getFamilyAvgScore" resultType="java.lang.Double" parameterType="java.lang.Long">
