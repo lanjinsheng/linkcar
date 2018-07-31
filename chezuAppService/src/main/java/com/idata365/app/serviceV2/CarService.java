@@ -507,6 +507,9 @@ public class CarService extends BaseService<CarService> {
 		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 		long carLogsId = Long.valueOf(car.get("id").toString());
 		long userCarIdOld = userCurCar.getId();
+		if(userCarId == userCarIdOld) {
+			return 1;
+		}
 		//查询当前车辆是否有顺风车乘客
 		int passengersNum = this.carpoolMapper.getPassengersNum(carLogsId);
 		if(passengersNum > 0) {
