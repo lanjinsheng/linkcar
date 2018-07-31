@@ -164,5 +164,8 @@
           set giveStatus=#{giveStatus},operationManId=#{operationManId} where fromComponentId=#{fromComponentId}
           and logType=3 and id!=#{id}
 </update> 
+<select id="countOfPray" resultType="Integer">
+	SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' ) AND logType =2
+</select> 
     
 </mapper>

@@ -424,6 +424,8 @@ public class ComponentService extends BaseService<ComponentService> {
 			}
 			
 		}
+			int i = componentMapper.countOfPray(userId);
+			rtMap.put("isCanPray", i > 0 ? "0" : "1");
 			rtMap.put("prayingList", prayingList);
 		  return rtMap;
 	  }

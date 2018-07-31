@@ -71,9 +71,7 @@ public interface ComponentMapper {
 	
 	public int updateComponentGiveLogApplyPraying(ComponentGiveLog componentGiveLog);
 	
-	
-	
 	public int ignoreGiveLog(ComponentGiveLog componentGiveLog);
 	
-	
+	public int countOfPray(@Param("userId") Long userId);
 }
