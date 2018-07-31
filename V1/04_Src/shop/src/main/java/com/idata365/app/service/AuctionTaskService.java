@@ -75,13 +75,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 		AuctionLogs max = auctionLogsMapper.getMaxAuctionDiamond(auctionGoods.getAuctionGoodsId());
 		if (max == null) {// 无竞价者
 			// 更新竞价状态
-			int type = auctionGoods.getAuctionGoodsType();
-			if (type == 3) {
-				// 现金红包
-				auctionGoods.setAuctionStatus(4);//
-			} else {
-				auctionGoods.setAuctionStatus(3);
-			}
+			auctionGoods.setAuctionStatus(3);
 			auctionGoodMapper.updateGoodsStatusByTask(auctionGoods);
 			return true;
 		} else {
