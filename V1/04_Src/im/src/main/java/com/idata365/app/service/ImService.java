@@ -101,7 +101,31 @@ public class ImService extends BaseService<ImService>
 			}
 		}
 	}
-	
+	public void sendUserFamilyImByPraying(Map<String,Object> msg,Map<String, Object> familiesMap,int type) {
+
+		msg.put("type", 1);
+		String msg1=GsonUtils.toJson(msg, false);
+		msg.put("type", 2);
+		String msg2=GsonUtils.toJson(msg, false);
+		
+		List<Map<String,Object>> list=null;
+		if(type==1) {//创建家族
+		    list=(List<Map<String,Object>>)familiesMap.get("createFamily");
+			
+		}else if(type==2) {//参与家族
+			list=(List<Map<String,Object>>)familiesMap.get("partakeFamily");
+		}
+		if(list!=null) {
+			for(Map<String,Object> m:list) {
+				String id=String.valueOf(m.get("userId"));
+				if(m.get("isLeader").equals(1)) {
+					Global.sendImUser(msg1,id);
+				}else {
+					Global.sendImUser(msg2,id);
+				}
+			}
+		}
+	}
 	public void changeFamiliesUsersIm(List<Map<String,Object>> list) {
 //		String json=GsonUtils.toJson(msg, false);
 		for(Map<String,Object> m:list) {
