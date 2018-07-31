@@ -1,5 +1,7 @@
 package com.idata365.app.service.common;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -42,6 +44,6 @@ public class FamilyScoreService {
 
 			}
 		}
-		return avgScore;
+		return BigDecimal.valueOf(avgScore).setScale(2,RoundingMode.HALF_EVEN).doubleValue();
 	}
 }
