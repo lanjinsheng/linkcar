@@ -152,6 +152,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			map.put("componentLoss", "");
 			map.put("componentAttribute","");
 			map.put("componentLoss", "");
+			map.put("componentDesc", "");
 			if (list != null && list.size() != 0) {
 				for (int j = 0; j < list.size(); j++) {
 					if (list.get(j).getComponentType() == i) {
@@ -162,7 +163,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 						map.put("componentDesc", list.get(j).getComponentDesc());
 						Double powerAddition = list.get(j).getPowerAddition();
 						Integer travelNum = list.get(j).getTravelNum();
-						
+						map.put("componentDesc", list.get(j).getComponentType().toString());
 						map.put("componentAttribute", "动力加成" + (int)(powerAddition * 100) + "%");
 						map.put("componentLoss", String.valueOf(travelNum) + "次行程");
 						

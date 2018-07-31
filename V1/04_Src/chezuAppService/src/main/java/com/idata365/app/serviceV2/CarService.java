@@ -478,8 +478,8 @@ public class CarService extends BaseService<CarService> {
 	public Map<String, String> getPowerUpInfo(long userId,int carId,long carCarId){
 		Map<String, String> powerUpInfo = new HashMap<>();
 		// 配件加成
-		long partsUpPercent = Math.round(dicComponentMapper.getCountCurComponentByUserIdCarId(userId, carCarId));
-		powerUpInfo.put("partsUpPercent", "配件加成：" + partsUpPercent * 10 + "%");
+		Double dd = dicComponentMapper.getCountCurComponentByUserIdCarId(userId, carCarId);
+		powerUpInfo.put("partsUpPercent", "配件加成：" + Math.round(dd * 100) + "%");
 		// 搭车加成
 		int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
 		powerUpInfo.put("rideUpPercent", "搭车加成：" + sitsCount * 10 + "%");
@@ -491,7 +491,7 @@ public class CarService extends BaseService<CarService> {
 		int iPCount = interactPeccancyMapper.getUserPeccancyCount(pamMap);
 		powerUpInfo.put("ticketDebuffPercent", "贴条减益：-" + iPCount * 10 + "%");
 		// 动力加成
-		powerUpInfo.put("powerUpPercent", "动力加成：" + (partsUpPercent + sitsCount - iPCount) * 10 + "%");
+		powerUpInfo.put("powerUpPercent", "动力加成：" + (Math.round(dd * 100) + sitsCount*10 - iPCount*10) + "%");
 		return powerUpInfo;
 	}
 	
