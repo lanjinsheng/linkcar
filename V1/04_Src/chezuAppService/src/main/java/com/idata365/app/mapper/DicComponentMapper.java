@@ -12,6 +12,6 @@ public interface DicComponentMapper {
 
 	public Double getCountCurComponentByUserIdCarId(@Param("userId") Long userId, @Param("userCarId") Long userCarId);
 
-	public List<DicComponent> getCurComponentByUserIdCarId(@Param("userId") Long userId, @Param("userCarId") Long userCarId);
+	public List<Map<String, Object>> getCurComponentByUserIdCarId(@Param("userCarId") Long userCarId);
 
 }

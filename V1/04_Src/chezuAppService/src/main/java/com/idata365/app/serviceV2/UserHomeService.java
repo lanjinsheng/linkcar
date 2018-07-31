@@ -138,8 +138,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		// 动力加成操作
 		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId,userCarId);
 		rtMap.put("powerUpInfo", powerUpInfo);
-		List<DicComponent> list = dicComponentMapper.getCurComponentByUserIdCarId(userId, userCarId);
-		
+		List<Map<String, Object>> list = dicComponentMapper.getCurComponentByUserIdCarId(userCarId);
 		
 		for (int i = 1; i < 6; i++) {
 			Map<String, String> map = new HashMap<>();
@@ -150,23 +149,23 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			map.put("componentDesc", "");
 			map.put("componentAttribute", "");
 			map.put("componentLoss", "");
-			map.put("componentAttribute","");
+			map.put("componentAttribute", "");
 			map.put("componentLoss", "");
 			map.put("componentDesc", "");
 			if (list != null && list.size() != 0) {
 				for (int j = 0; j < list.size(); j++) {
-					if (list.get(j).getComponentType() == i) {
-						map.put("userComponentId", String.valueOf(list.get(j).getComponentId()));
-						map.put("componentName", list.get(j).getComponentValue());
-						map.put("quality", list.get(j).getQuality());
-						map.put("imgUrl", list.get(j).getComponentUrl());
-						map.put("componentDesc", list.get(j).getComponentDesc());
-						Double powerAddition = list.get(j).getPowerAddition();
-						Integer travelNum = list.get(j).getTravelNum();
-						map.put("componentDesc", list.get(j).getComponentType().toString());
-						map.put("componentAttribute", "动力加成" + (int)(powerAddition * 100) + "%");
+					if (Integer.valueOf(list.get(j).get("componentType").toString()) == i) {
+						map.put("userComponentId", String.valueOf(list.get(j).get("componentId")));
+						map.put("componentName", String.valueOf(list.get(j).get("componentValue")));
+						map.put("quality", String.valueOf(list.get(j).get("quality")));
+						map.put("imgUrl", String.valueOf(list.get(j).get("componentUrl")));
+						map.put("componentDesc", String.valueOf(list.get(j).get("componentDesc")));
+						Double powerAddition = Double.valueOf(String.valueOf(list.get(j).get("powerAddition")));
+						Integer travelNum = Integer.valueOf(String.valueOf(list.get(j).get("travelNum")));
+						map.put("componentAttribute", "动力加成" + (int) (powerAddition * 100) + "%");
 						map.put("componentLoss", String.valueOf(travelNum) + "次行程");
-						
+						map.put("componentRemainingLossCount",
+								String.valueOf(list.get(j).get("leftTravelNum")) + "次行程");
 					}
 				}
 			}

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,6 +245,33 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   
 	   return true;
    }  
+   
+	@Transactional
+	public boolean receiveUserBoxBySys(Long userId) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("userId", userId);
+		int freeCount = componentMapper.countFreeCabinet(paramMap);
+		if (freeCount == 0) {
+			LOG.info("道具箱已满");
+			return false;
+			// throw new RuntimeException("满柜了");
+		}
+		// 插入用户零件库
+		int r[] = { 10, 11, 12, 20, 21, 22, 30, 31, 32, 40, 41, 42, 50, 51, 52 };
+		DicComponent component = DicComponentConstant.getDicComponent(r[RandUtils.generateRand(0, r.length - 1)]);
+		// 查看是否满柜
+		ComponentUser cmpUser = new ComponentUser();
+		cmpUser.setComponentId(component.getComponentId());
+		cmpUser.setGainType(5);
+		cmpUser.setLeftTravelNum(component.getTravelNum());
+		cmpUser.setComponentType(component.getComponentType());
+		cmpUser.setUserId(userId);
+		cmpUser.setInUse(0);
+		cmpUser.setComponentStatus(1);
+		componentMapper.insertComponentUser(cmpUser);
+
+		return true;
+	}
    
    public static void main(String[] args) {
 	   
