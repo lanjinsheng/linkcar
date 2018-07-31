@@ -221,17 +221,18 @@ public class CarService extends BaseService<CarService> {
 	 * @param userId
 	 */
 	public List<Map<String,Object>>  getSelfCarSeats(Long userId,String imgBase,String nick){
-		long currentTimeMillis = System.currentTimeMillis();
 		List<Map<String,Object>> rtList=new ArrayList<>();
 		String nowTime=DateTools.getYYYYMMDDMMSS();
-		System.out.println(nowTime);
 				Map<String,Object> rtMap=new HashMap<>();
 				//查询车辆信息
-				Map<String,Object> param=new HashMap<>();
-				param.put("nowTime", nowTime);
-				param.put("userId", userId);
-				Map<String,Object> car=userCarLogsMapper.getUserCar(param);
+//				Map<String,Object> param=new HashMap<>();
+//				param.put("nowTime", nowTime);
+//				param.put("userId", userId);
+//				Map<String,Object> car=userCarLogsMapper.getUserCar(param);
 				UserCar userCurCar = userCarMapper.getUserCurCar(userId);
+				Long id = userCurCar.getId();
+				Map<String, Object> car = userCarLogsMapper.getUserCarByUserCarId(id);
+				
 				rtMap.put("sharingId", String.valueOf(car.get("id")));
 				rtMap.put("nick", String.valueOf(nick));
 				rtMap.put("carName", String.valueOf(car.get("carName")));
@@ -251,8 +252,6 @@ public class CarService extends BaseService<CarService> {
 				rtMap.put("passengerNum", passengers.size());
 				rtMap.put("carSeats", car.get("carSeat"));
 				rtList.add(rtMap);
-				long currentTimeMillis1 = System.currentTimeMillis();
-				System.out.println(currentTimeMillis1 -currentTimeMillis);
 		return rtList;
 	}
 	
@@ -509,7 +508,6 @@ public class CarService extends BaseService<CarService> {
 	 */
 	@Transactional
 	public int changeCar(long userId, long userCarId) {
-		long currentTimeMillis = System.currentTimeMillis();
 		Map<String, Object> car = this.getUserCar(userId);
 		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 		long carLogsId = Long.valueOf(car.get("id").toString());
@@ -535,7 +533,6 @@ public class CarService extends BaseService<CarService> {
 		logs2.setUserId(userId);
 		logs2.setStartTime(now);
 		logs2.setUserCarId(userCarId);
-		System.out.println(now);
 		//更新旧车
 		this.userCarLogsMapper.updateEndTimeById(logs1);
 		//插入新车
@@ -543,8 +540,6 @@ public class CarService extends BaseService<CarService> {
 		//userCar状态修改
 		userCarMapper.updateInUse(1, userCarId);	//1:使用中
 		userCarMapper.updateInUse(0, userCarIdOld);	//0：下架
-		long currentTimeMillis1 = System.currentTimeMillis();
-		System.out.println(currentTimeMillis1 -currentTimeMillis);
 		return 1;
 	}
 	

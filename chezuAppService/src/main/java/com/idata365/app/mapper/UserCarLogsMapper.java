@@ -8,7 +8,7 @@ import com.idata365.app.entity.UserCarLogs;
 
 public interface UserCarLogsMapper {
 	public Map<String, Object> getUserCar(Map<String, Object> map);
-
+	
 	public UserCarLogs getUserCarLogById(@Param("id") Long id);
 
 	public Map<String, Object> getUserCarHistory(@Param("id") Long id);
@@ -19,4 +19,5 @@ public interface UserCarLogsMapper {
 
 	public int insertUserCarLogs(UserCarLogs UserCarLogs);
 
+	public Map<String, Object> getUserCarByUserCarId(@Param("userCarId") Long userCarId);
 }
