@@ -224,12 +224,14 @@ public class CarService extends BaseService<CarService> {
 		long currentTimeMillis = System.currentTimeMillis();
 		List<Map<String,Object>> rtList=new ArrayList<>();
 		String nowTime=DateTools.getYYYYMMDDMMSS();
+		System.out.println(nowTime);
 				Map<String,Object> rtMap=new HashMap<>();
 				//查询车辆信息
 				Map<String,Object> param=new HashMap<>();
 				param.put("nowTime", nowTime);
 				param.put("userId", userId);
 				Map<String,Object> car=userCarLogsMapper.getUserCar(param);
+				UserCar userCurCar = userCarMapper.getUserCurCar(userId);
 				rtMap.put("sharingId", String.valueOf(car.get("id")));
 				rtMap.put("nick", String.valueOf(nick));
 				rtMap.put("carName", String.valueOf(car.get("carName")));
@@ -533,6 +535,7 @@ public class CarService extends BaseService<CarService> {
 		logs2.setUserId(userId);
 		logs2.setStartTime(now);
 		logs2.setUserCarId(userCarId);
+		System.out.println(now);
 		//更新旧车
 		this.userCarLogsMapper.updateEndTimeById(logs1);
 		//插入新车
