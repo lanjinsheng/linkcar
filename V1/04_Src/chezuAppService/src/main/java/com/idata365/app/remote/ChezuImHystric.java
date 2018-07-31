@@ -21,4 +21,20 @@ public class ChezuImHystric implements ChezuImService {
 		return false;
 	}
 
+	@Override
+	public boolean prayingRealize(String fromUserName, String toUserName,String toUserId,
+			String propName, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("prayingRealize 挂了");
+		return false;
+	}
+
+	@Override
+	public boolean prayingSubmit(String fromUserName, String toUserName,String toUserId,
+			String propName, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error("prayingSubmit 挂了");
+		return false;
+	}
+
 }

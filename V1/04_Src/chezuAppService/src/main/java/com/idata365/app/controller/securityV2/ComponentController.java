@@ -173,7 +173,7 @@ public class ComponentController extends BaseController {
 	
 	Integer componentId=Integer.valueOf(requestBodyParams.get("componentId").toString());
 	rtMap.put("components", list);
-	int insert= componentService.submitPraying(componentId, this.getUserId());
+	int insert= componentService.submitPraying(componentId, this.getUserId(),this.getUserInfo().getNickName());
 	if(insert==0){
 		return ResultUtils.rtFailParam(null,"今日已经祈愿过");
 	}
@@ -212,7 +212,6 @@ public class ComponentController extends BaseController {
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 	Long componentGiveLogId=Long.valueOf(requestBodyParams.get("componentGiveLogId").toString());
 	Long userComponentId=Long.valueOf(requestBodyParams.get("userComponentId").toString());
-	
 	ReturnMessage msg= componentService.applyPraying(componentGiveLogId,userComponentId,this.getUserId(),this.getUserInfo().getNickName());
 	return ResultUtils.rtJsonMap(msg);
 	}
