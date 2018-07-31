@@ -222,12 +222,6 @@ public class CarService extends BaseService<CarService> {
 	 */
 	public List<Map<String,Object>>  getSelfCarSeats(Long userId,String imgBase,String nick){
 		long currentTimeMillis = System.currentTimeMillis();
-		try {
-			Thread.sleep(100L);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		List<Map<String,Object>> rtList=new ArrayList<>();
 		String nowTime=DateTools.getYYYYMMDDMMSS();
 				Map<String,Object> rtMap=new HashMap<>();
@@ -352,7 +346,6 @@ public class CarService extends BaseService<CarService> {
 		return i==1;
 	}
 	
-	@Transactional
 	public List<Map<String,Object>> getCarpoolRecords(Long userId,Long maxId){
 		List<Map<String,Object>>  rtList=new ArrayList<>();
 		Map<String,Object> paramMap=new HashMap<>();
@@ -415,6 +408,7 @@ public class CarService extends BaseService<CarService> {
 	    * @throws
 	    * @author LiXing
 	 */
+	@Transactional
 	public void initUserCar(long userId) {
 		UserCar userCar = new UserCar();
 		userCar.setUserId(userId);
@@ -511,6 +505,7 @@ public class CarService extends BaseService<CarService> {
         * @throws
         * @author LiXing
 	 */
+	@Transactional
 	public int changeCar(long userId, long userCarId) {
 		long currentTimeMillis = System.currentTimeMillis();
 		Map<String, Object> car = this.getUserCar(userId);
