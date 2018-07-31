@@ -135,7 +135,7 @@
 <update id="updateUserComponent"  parameterType="java.util.HashMap" >
      update
           componentUser
-          set inUse=#{inUse},componentStatus=#{componentStatus} where id=#{userComponentId}
+          set inUse=#{inUse},componentStatus=#{componentStatus},userCarId=#{userCarId} where id=#{userComponentId}
 </update> 
 
 <update id="recieveComponentGiveLog" >
