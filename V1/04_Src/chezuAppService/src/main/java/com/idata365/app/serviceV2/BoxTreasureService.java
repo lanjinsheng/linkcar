@@ -85,15 +85,16 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   Map<String,Object> paramMap=new HashMap<>();
 	   paramMap.put("userId", userId);
 	   paramMap.put("gainType", 1);
-	   paramMap.put("createTime", DateTools.getCurDateAddMinute(24*60));
+	   paramMap.put("createTime", DateTools.getCurDateAddMinute(-24*60));
 	   
 	   List<BoxTreasureUser> boxIds=boxTreasureMapper.getTripBoxIds(paramMap);
 	   List<Map<String,Object>> boxList=new ArrayList<>();
+	   int count = 0;
 	   if(boxIds==null || boxIds.size()==0){
 		  
 	   }else{
-		  
-		   for(BoxTreasureUser box:boxIds){
+		   
+		  a: for(BoxTreasureUser box:boxIds){
 			   Map<String,Object> m1=new HashMap<>();
 			   m1.put("boxId", box.getBoxId());
 			   m1.put("travelId", String.valueOf(box.getTravelId()));
@@ -108,9 +109,13 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 				   m2.put("imgUrl", component.getComponentUrl());
 				   m2.put("componentNum", String.valueOf(treasure.getComponentNum()));
 				   componentList.add(m2);
+				   count++;
 			   }
 			   m1.put("componentList", componentList);
 			   boxList.add(m1);
+			   if(count == 5) {
+				   break a;
+			   }
 		   }
 	   }
 	   rtMap.put("boxList",  boxList) ;
@@ -200,6 +205,9 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		   cmpUser.setGainType(treasure.getGainType());
 		   cmpUser.setLeftTravelNum(component.getTravelNum());
 		   cmpUser.setComponentType(component.getComponentType());
+		   cmpUser.setUserId(userId);
+		   cmpUser.setInUse(0);
+		   cmpUser.setComponentStatus(1);
 		   componentMapper.insertComponentUser(cmpUser);
 	   }
 	   //更新领取记录
