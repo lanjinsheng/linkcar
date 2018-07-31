@@ -35,7 +35,7 @@
       <select id="getMaxAuctionDiamond" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		 select b.* from  (select max(auctionDiamond) auctionDiamond
 			       FROM  auctionLogs where auctionGoodsId=#{auctionGoodsId})a left join auctionLogs b
-			on a.auctionDiamond=b.auctionDiamond limit 1
+			on a.auctionDiamond=b.auctionDiamond where b.auctionGoodsId=#{auctionGoodsId} order by auctionLogsId desc limit 1
       </select>
      
      <insert id="insertAuctionLogs"
