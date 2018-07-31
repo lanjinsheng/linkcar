@@ -115,6 +115,7 @@ public class NotifyController extends BaseController{
 	@RequestMapping(value = "/im/prayingSubmit",method = RequestMethod.POST)
 	public boolean prayingSubmit(@RequestParam(value="fromUserName") String fromUserName,
 			@RequestParam(value="toUserName") String toUserName,
+			@RequestParam(value="toUserId") String toUserId,
 			@RequestParam(value="propName") String propName,
 			@RequestParam(value="sign") String sign){
 		String sign2=SignUtils.encryptHMAC(toUserName);
@@ -149,6 +150,7 @@ public class NotifyController extends BaseController{
 	@RequestMapping(value = "/im/prayingRealize",method = RequestMethod.POST)
 	public boolean prayingRealize(@RequestParam(value="fromUserName") String fromUserName,
 			@RequestParam(value="toUserName") String toUserName,
+			@RequestParam(value="toUserId") String toUserId,
 			@RequestParam(value="propName") String propName,
 			@RequestParam(value="sign") String sign)
 	{
