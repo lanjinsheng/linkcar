@@ -25,22 +25,21 @@
 	)
     </select>
     
-    <select id="getCurComponentByUserIdCarId" resultMap="BaseDicComponentMap" >
-  	  SELECT
-			*
-		FROM
-			dicComponent 
-		WHERE
-			componentId IN (
+    <select id="getCurComponentByUserIdCarId" resultType="java.util.HashMap" >
 		SELECT
-			componentId 
+			c.*,
+			b.leftTravelNum AS leftTravelNum 
 		FROM
-			componentUserUseLog 
+			componentUserUseLog a
+			RIGHT JOIN componentUser b ON a.userComponentId = b.id
+			RIGHT JOIN dicComponent c ON a.componentId = c.componentId 
 		WHERE
-			userComponentId IN ( SELECT id FROM componentUser WHERE userId = #{userId} AND inUse = 1 AND componentStatus = 1 AND leftTravelNum > 0 ) 
-			AND eventType = 1 
-			AND userCarId = #{userCarId}
-		)
-		order by `id`
+			a.eventType = 1 
+			AND a.userCarId = #{userCarId} 
+			AND b.inUse = 1 
+			AND b.componentStatus = 1 
+			AND b.leftTravelNum > 0 
+		ORDER BY
+			a.componentId
     </select>
 </mapper>

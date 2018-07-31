@@ -65,4 +65,14 @@ public class BoxTreasureController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 	
+	@RequestMapping(value = "/receiveUserBoxBySys")
+	Map<String, Object> receiveUserBoxBySys(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
+		boolean rt=boxTreasureService.receiveUserBoxBySys(this.getUserId());
+		if(!rt){
+			return ResultUtils.rtFailParam(null, "零件库已满，请清理");
+		}
+		return ResultUtils.rtSuccess(null);
+	}
+	
 }
