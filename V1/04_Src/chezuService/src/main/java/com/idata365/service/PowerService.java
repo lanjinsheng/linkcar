@@ -153,7 +153,7 @@ public class PowerService extends BaseService<PowerService>
 		 		AssetUsersPowerLogs prayingLog=new AssetUsersPowerLogs();
 		 		prayingLog.setEffectId(Long.valueOf(String.valueOf(map.get("effectId"))));
 		 		prayingLog.setEventType(EVENTTYPE_POWER_APPLY_PRAYING);//行程
-		 		prayingLog.setPowerNum(Long.valueOf(String.valueOf(map.get("prayingLog"))));
+		 		prayingLog.setPowerNum(Long.valueOf(String.valueOf(map.get("power"))));
 		 		prayingLog.setRecordType(RecordType_1);//增加1，减少2
 		 		prayingLog.setUserId(taskPowerLog.getUserId());
 		 		prayingLog.setRemark("祈愿赠送获取power");
