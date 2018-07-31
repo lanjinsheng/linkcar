@@ -31,4 +31,9 @@
 	 <insert id="insertUserCarLogs" parameterType="com.idata365.app.entity.UserCarLogs">
        INSERT INTO userCarLogs (userId,carId,startTime,endTime,userCarId) VALUES (#{userId}, #{carId}, #{startTime},str_to_date('2118-01-01 00:00:00','%Y-%m-%d %H:%i:%s'),#{userCarId})
      </insert>
+     
+     <select id="getUserCarByUserCarId" resultType="java.util.HashMap" >
+       SELECT a.*,b.carName,b.carSeat,b.carUrl,b.clubScoreUpPercent from userCarLogs a left join dicCar b on a.carId=b.carId
+       where a.userCarId=#{userCarId} order by id desc limit 1
+     </select>
 </mapper>
