@@ -126,7 +126,7 @@ public class NotifyController extends BaseController{
 		insert.put("time", DateTools.getCurDate2());
 		insert.put("imgUrl", "");
 		insert.put("familyId",rtMap.get("createFamilyId"));
-		insert.put("content", String.format(PrayingSubmit, toUserName,propName));
+		insert.put("msg", String.format(PrayingSubmit,toUserName,propName));
 		imService.insertMsg(insert);
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
 		imService.insertMsg(insert);
@@ -162,7 +162,7 @@ public class NotifyController extends BaseController{
 		insert.put("time", DateTools.getCurDate2());
 		insert.put("imgUrl", "");
 		insert.put("familyId",rtMap.get("createFamilyId"));
-		insert.put("content", String.format(PrayingSubmit, toUserName,propName));
+		insert.put("msg", String.format(PrayingRealize,fromUserName,toUserName,propName));
 		imService.insertMsg(insert);
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
 		imService.insertMsg(insert);
