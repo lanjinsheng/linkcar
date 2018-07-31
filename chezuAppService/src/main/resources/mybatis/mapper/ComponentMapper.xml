@@ -82,7 +82,7 @@
  
 <select id="findComponentGiveLogByMap" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
 	select * from componentGiveLog 
-	 where daystamp=#{daystamp} and logType=2 and giveStatus=0 and toUserId=#{userId}
+	 where daystamp=#{daystamp} and logType=2 and toUserId=#{userId}
 </select>
      
      
