@@ -94,5 +94,79 @@ public class NotifyController extends BaseController{
 		 imService.changeFamiliesUsersIm(list);
 		return true;
 	}
-
+	
+	
+	private final String PrayingSubmit="家族通知:玩家@【%s】@祈愿一个 %s,一方有难八方支援,各位大佬快去资助TA吧。";
+	private final String PrayingRealize="家族统治:感动俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
+			
+   /**
+    * 
+       * @Title: prayingSubmit
+       * @Description: TODO(祈愿提交)
+       * @param @param fromUserName
+	   * @param @param toUserName
+	   * @param @param propName
+	   * @param @param sign
+       * @param @return    参数
+       * @return boolean    返回类型
+       * @throws
+       * @author LanYeYe
+    */
+	@RequestMapping(value = "/im/prayingSubmit",method = RequestMethod.POST)
+	public boolean prayingSubmit(@RequestParam(value="fromUserName") String fromUserName,
+			@RequestParam(value="toUserName") String toUserName,
+			@RequestParam(value="propName") String propName,
+			@RequestParam(value="sign") String sign){
+		String sign2=SignUtils.encryptHMAC(toUserName);
+		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserName), sign2);
+		Map<String,Object> insert=new HashMap<>();
+		insert.put("userId", 0);
+		insert.put("nick", "");
+		insert.put("time", DateTools.getCurDate2());
+		insert.put("imgUrl", "");
+		insert.put("familyId",rtMap.get("createFamilyId"));
+		insert.put("content", String.format(PrayingSubmit, toUserName,propName));
+		imService.insertMsg(insert);
+		insert.put("familyId",rtMap.get("partakeFamilyId"));
+		imService.insertMsg(insert);
+		imService.sendUserFamilyImByPraying(insert,rtMap,1);
+		imService.sendUserFamilyImByPraying(insert,rtMap,2);
+		return true;
+	}
+	/**
+	 * 
+	    * @Title: prayingRealize
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param fromUserName
+	    * @param @param toUserName
+	    * @param @param propName
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author LanYeYe
+	 */
+	@RequestMapping(value = "/im/prayingRealize",method = RequestMethod.POST)
+	public boolean prayingRealize(@RequestParam(value="fromUserName") String fromUserName,
+			@RequestParam(value="toUserName") String toUserName,
+			@RequestParam(value="propName") String propName,
+			@RequestParam(value="sign") String sign)
+	{
+		String sign2=SignUtils.encryptHMAC(toUserName);
+		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserName), sign2);
+		Map<String,Object> insert=new HashMap<>();
+		insert.put("userId", 0);
+		insert.put("nick", "");
+		insert.put("time", DateTools.getCurDate2());
+		insert.put("imgUrl", "");
+		insert.put("familyId",rtMap.get("createFamilyId"));
+		insert.put("content", String.format(PrayingSubmit, toUserName,propName));
+		imService.insertMsg(insert);
+		insert.put("familyId",rtMap.get("partakeFamilyId"));
+		imService.insertMsg(insert);
+		imService.sendUserFamilyImByPraying(insert,rtMap,1);
+		imService.sendUserFamilyImByPraying(insert,rtMap,2);
+		return true;
+	}
+	
 }
