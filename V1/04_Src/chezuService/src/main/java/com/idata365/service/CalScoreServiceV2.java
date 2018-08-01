@@ -191,7 +191,7 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         }
         userTravelHistory.setTiredRate(tireRatio.doubleValue());
         int score=scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
-        
+        int driveScore=score;
         //查询车辆进行分数加成
         String endTime=dm.getDriveEndTime().substring(0, 19);
         Map<String,Object> paramMap=new HashMap<>();
@@ -211,6 +211,10 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         if(score<30) {
         	score=30;
         }
+        if(driveScore<30) {
+        	driveScore=30;
+        }
+        userTravelHistory.setDriveScore(String.valueOf(driveScore));
         userTravelHistory.setScore(String.valueOf(score));
         userTravelHistory.setUserCarId(userCarId);
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
