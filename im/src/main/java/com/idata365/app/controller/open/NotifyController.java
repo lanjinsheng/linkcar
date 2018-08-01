@@ -97,7 +97,7 @@ public class NotifyController extends BaseController{
 	
 	
 	private final String PrayingSubmit="家族通知:玩家@【%s】@祈愿一个 %s,一方有难八方支援,各位大佬快去资助TA吧。";
-	private final String PrayingRealize="家族通知:感动俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
+	private final String PrayingRealize="家族通知:感谢俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
 			
    /**
     * 
