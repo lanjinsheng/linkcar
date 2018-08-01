@@ -121,7 +121,7 @@ public class TripController extends BaseController {
 		rtMap.put("turnScore", "0");
 		if (dbMap != null) {
 			// 驾驶得分
-			rtMap.put("score", String.valueOf(dbMap.get("score")));
+			rtMap.put("score", String.valueOf(dbMap.get("driveScore")));
 			// 疲劳驾驶系数
 			rtMap.put("tiredNum", dbMap.get("tiredRate").toString());
 			// 超速系数
