@@ -35,10 +35,17 @@ public class UserTravelHistory implements Serializable {
 	int highSpeedTimesOffset;
 	String hiddenFlag; 
 	String score;
+	String driveScore;
     Long userCarId;
     int carId=0;
     
     
+	public String getDriveScore() {
+		return driveScore;
+	}
+	public void setDriveScore(String driveScore) {
+		this.driveScore = driveScore;
+	}
 	public int getCarId() {
 		return carId;
 	}
