@@ -68,7 +68,7 @@ public class TripController extends BaseController {
 				rtMap.put("mileage", dbMap.get("mileage"));
 				rtMap.put("driveTip", TripConstant.getTipByScore(Double.valueOf(score)));
 				rtMap.put("dayStr", dbMap.get("endTime"));
-				rtMap.put("score", dbMap.get("score"));
+				rtMap.put("score", dbMap.get("driveScore"));
 				String sign = SignUtils.encryptHMAC(String.valueOf(dbMap.get("id")));
 				String power = chezuAssetService.getUserPowerByEffectId(Long.valueOf(String.valueOf(dbMap.get("id"))),
 						sign);
