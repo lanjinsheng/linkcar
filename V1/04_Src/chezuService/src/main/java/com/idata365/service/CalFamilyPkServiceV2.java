@@ -173,11 +173,9 @@ public class CalFamilyPkServiceV2 {
         if(hadSendAsset) {
 		    boolean r=addFamilyGameOrder(startDay, endDay, winFamily, taskFamilyPk.getDaystamp(),winMemberNum,
 		    		winFamilyType);
-	        
 	        if(!r) {
 	        	throw new RemoteException();  
 	        }
-	       
 			return r;
         }
         return true;
