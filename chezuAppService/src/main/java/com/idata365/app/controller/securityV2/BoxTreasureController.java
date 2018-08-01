@@ -30,7 +30,7 @@ public class BoxTreasureController extends BaseController {
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		Long userId=this.getUserId();
 		Map<String,Object> data=boxTreasureService.getTripBox(userId);
-		return ResultUtils.rtSuccess(data);   
+		return ResultUtils.rtSuccess(data);    
 	}
 	 
 	@RequestMapping(value = "/receiveUserBox")
