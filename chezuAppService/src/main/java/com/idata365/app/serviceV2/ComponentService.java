@@ -631,7 +631,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		  int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 		  msg.getData().put("power", String.valueOf(power));
 		  String toUserNickName= usersAccountMapper.findAccountById(log.getToUserId()).getNickName();
-		  chezuImService.prayingSubmit(nickName, toUserNickName, String.valueOf(log.getToUserId()),dicComponent.getComponentValue(), "");
+		  chezuImService.prayingRealize(nickName, toUserNickName, String.valueOf(log.getToUserId()),dicComponent.getComponentValue(), "");
           return msg;
 	  }	
 	  
