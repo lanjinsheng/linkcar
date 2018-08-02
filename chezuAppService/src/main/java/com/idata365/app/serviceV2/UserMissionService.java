@@ -234,7 +234,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			rtMap.put("missionName", String.valueOf(map.get("missionName")));
 			rtMap.put("missionDesc", String.valueOf(map.get("missionCondition")));
 			rtMap.put("missionProgress", missionProgress);
-			rtMap.put("missionReward", missionReward);
+			rtMap.put("missionReward", powerPrize == 0 ? "":missionReward);
 			rtMap.put("missionActionDesc", missionActionDesc);
 			rtMap.put("missionActionStatus", actionStatus);
 			rtMap.put("otherPrize", otherPrize);
