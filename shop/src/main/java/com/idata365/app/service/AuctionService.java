@@ -147,6 +147,7 @@ public class AuctionService {
 		if (auctionLogs != null && auctionLogs.size() != 0) {
 			for (AuctionLogs auctionLog : auctionLogs) {
 				Map<String, String> map = new HashMap<>();
+				map.put("userId", auctionLog.getAuctionUserId().toString());
 				map.put("nick", auctionLog.getAuctionUserNick().toString());
 				map.put("auctionTime", DateTools.formatDateYMD(auctionLog.getAuctionTime()));
 				map.put("auctionDiamond", auctionLog.getAuctionDiamond().stripTrailingZeros().toPlainString());
