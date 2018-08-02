@@ -37,6 +37,21 @@ public class DicFamilyTypeConstant {
     public  final static Integer GuanJun_3=122;
     public  final static Integer GuanJun_4=123;
     public  final static Integer GuanJun_5=124;
+    public  final static Integer GuanJun_6=125;
+    public  final static Integer GuanJun_7=126;
+    public  final static Integer GuanJun_8=127;
+    public  final static Integer GuanJun_9=128;
+    public  final static Integer GuanJun_10=129;
+    public  final static Integer GuanJun_11=130;
+    public  final static Integer GuanJun_12=131;
+    public  final static Integer GuanJun_13=132;
+    public  final static Integer GuanJun_14=133;
+    public  final static Integer GuanJun_15=134;
+    public  final static Integer GuanJun_16=135;
+    public  final static Integer GuanJun_17=136;
+    public  final static Integer GuanJun_18=137;
+    public  final static Integer GuanJun_19=138;
+    public  final static Integer GuanJun_20=139;
     public  final static Integer GuanJun_1000=12400000;
     public static Map<Integer,Integer> FamilyLeverPower=new HashMap<Integer,Integer>();
     
@@ -70,6 +85,21 @@ public class DicFamilyTypeConstant {
      	FamilyLeverPower.put(GuanJun_3, 300);
      	FamilyLeverPower.put(GuanJun_4, 300);
      	FamilyLeverPower.put(GuanJun_5, 300);
+     	FamilyLeverPower.put(GuanJun_6, 300);
+     	FamilyLeverPower.put(GuanJun_7, 300);
+     	FamilyLeverPower.put(GuanJun_8, 300);
+     	FamilyLeverPower.put(GuanJun_9, 300);
+     	FamilyLeverPower.put(GuanJun_10, 300);
+     	FamilyLeverPower.put(GuanJun_11, 300);
+     	FamilyLeverPower.put(GuanJun_12, 300);
+     	FamilyLeverPower.put(GuanJun_13, 300);
+     	FamilyLeverPower.put(GuanJun_14, 300);
+     	FamilyLeverPower.put(GuanJun_15, 300);
+     	FamilyLeverPower.put(GuanJun_16, 300);
+     	FamilyLeverPower.put(GuanJun_17, 300);
+     	FamilyLeverPower.put(GuanJun_18, 300);
+     	FamilyLeverPower.put(GuanJun_19, 300);
+     	FamilyLeverPower.put(GuanJun_20, 300);
     }
     
     public static int getPowerByFamilyType(Integer familyType) {
