@@ -957,7 +957,7 @@ public class AssetService extends BaseService<AssetService> {
 		map.put("powerDesc", IntroduceConstant.POWERINTRODUCE);
 
 		// 运营账号钻石
-		map.put("pltfDiamondsNum", assetUsersAssetMapper.getUserAssetByUserId(1L).getDiamondsNum().toString());
+		map.put("pltfDiamondsNum", assetUsersAssetMapper.getUserAssetByUserId(1L).getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN).toString());
 		return map;
 	}
 
