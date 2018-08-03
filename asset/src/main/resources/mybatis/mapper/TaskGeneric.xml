@@ -65,7 +65,7 @@
 	 </select>
 	 
 	 <select id="getPowerDayTotal"  resultType="java.lang.Long" parameterType="java.util.HashMap">
-		SELECT sum(powerNum+pkPower)  from ${tableName} 
+		SELECT sum(powerNum+pkPower)  from ${tableName}  where userId>1
 	 </select>
 	
 	 <select id="getPersonPower"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
