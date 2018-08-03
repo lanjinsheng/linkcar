@@ -323,6 +323,9 @@ public class TaskGenericService {
 		Long pkPower=Long.valueOf(personPower.get("pkPower").toString());
 		power=power.longValue()+pkPower.longValue();
 		Long userId=Long.valueOf(personPower.get("userId").toString());
+		if(userId<=1) {//运营账号 忽略
+			return true;
+		}
 		if(power>0) {
 		BigDecimal dayDiamond=BigDecimal.valueOf(power).multiply(BigDecimal.valueOf(AssetConstant.DAY_DAIMONDS_FOR_POWER_ALLNET)).divide(BigDecimal.valueOf(total), 5,RoundingMode.HALF_EVEN);
 		 //进行分配
