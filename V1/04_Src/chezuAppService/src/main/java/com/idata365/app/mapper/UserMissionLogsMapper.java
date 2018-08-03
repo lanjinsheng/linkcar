@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.entity.UserMissionLogs;
+import com.idata365.app.entity.v2.MissionLogsResultBean;
 
 public interface UserMissionLogsMapper {
 
@@ -16,6 +17,9 @@ public interface UserMissionLogsMapper {
 
 	public List<Map<String, Object>> getLogsByUserIdAndType(@Param("userId") long userId,
 			@Param("missionType") int missionType);
+
+	public List<MissionLogsResultBean> getLogsByUserIdAndParentMID(@Param("userId") long userId,
+			@Param("parentMissionId") int parentMissionId);
 
 	public int updateLogsStatus(@Param("userId") long userId, @Param("missionId") int missionId,
 			@Param("status") int status);
@@ -31,15 +35,15 @@ public interface UserMissionLogsMapper {
 
 	public Map<String, Object> getOneLogsByUserIdAndMissionId(@Param("userId") long userId,
 			@Param("missionId") int missionId);
-	
-	public int queryCountByType(@Param("userId") long userId,@Param("missionType") int missionType);
-	
+
+	public int queryCountByType(@Param("userId") long userId, @Param("missionType") int missionType);
+
 	public int queryFinishedCount(@Param("userId") long userId);
 
 	public int updateCountOfId5(@Param("userId") long userId);
 
-	public int queryHadRecord(@Param("userId") long userId);
-	
+	public List<Integer> queryHadRecord(@Param("userId") long userId);
+
 	public UserMissionLogs queryMissionId1(@Param("userId") long userId);
 
 	public int updateValid(@Param("userId") long userId);

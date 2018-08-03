@@ -43,5 +43,9 @@
 	 <update id="receiveBoxFamily" >
 		update boxTreasureFamily set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
 	 </update> 
+	 
+	 <select id="countOfOpenUserBox" resultType="java.lang.Integer">
+		select count(1) from boxTreasureUser where toUserId=#{userId} and gainType=1 and hadGet=1
+	</select>
 	
 </mapper>

@@ -16,10 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.DicUserMission;
+import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UserMissionLogs;
+import com.idata365.app.entity.v2.MissionLogsResultBean;
+import com.idata365.app.entity.v2.MissionResultBean;
+import com.idata365.app.mapper.BoxTreasureMapper;
+import com.idata365.app.mapper.CarpoolMapper;
+import com.idata365.app.mapper.ComponentMapper;
 import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.DicUserMissionMapper;
+import com.idata365.app.mapper.FamilyMapper;
+import com.idata365.app.mapper.FamilyRelationMapper;
 import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.remote.ChezuAccountService;
@@ -27,6 +35,7 @@ import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.FamilyService;
 import com.idata365.app.service.TripService;
+import com.idata365.app.util.AdBeanUtils;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.SignUtils;
 
@@ -55,6 +64,16 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	UserCarMapper userCarMapper;
 	@Autowired
 	DicCarMapper dicCarMapper;
+	@Autowired
+	CarpoolMapper carpoolMapper;
+	@Autowired
+	ComponentMapper componentMapper;
+	@Autowired
+	BoxTreasureMapper boxTreasureMapper;
+	@Autowired
+	FamilyMapper familyMapper;
+	@Autowired
+	FamilyRelationMapper familyRelationMapper;
 
 	// 从字典表查询所有任务
 	public List<DicUserMission> getAllDicUserMission() {
@@ -66,11 +85,6 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		return userMissionLogsMapper.getLogsByUserId(userId);
 	}
 
-	//初始化用户任务logs
-	public int initLogsToUser(List<DicUserMission> missions, long userId) {
-		return userMissionLogsMapper.initLogsToUser(missions,userId);
-	}
-	
 	//
 	public void insertOrUpdateLogs(long userId, int missionType) {
 		List<Map<String, Object>> logs = userMissionLogsMapper.getLogsByUserIdAndType(userId, missionType);
@@ -168,6 +182,67 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					// 连续5次行程获得100分
 					count = tripService.getTripCountQuintic100Score(userId);
 					break;
+				case 17:
+					// 搭乘顺风车并完成行程1次
+					count = carpoolMapper.getTodayLiftCountByUserId(userId);
+					break;
+				case 18:
+					// 今日发布祈愿1次
+					count = componentMapper.countOfPray(userId);
+					break;
+				case 19:
+					// 在加入的俱乐部配件库中获得3次分配的配件
+					count = componentMapper.countGetGive(userId);
+					break;
+				case 20:
+					// 创建的俱乐部内成员数量达到3个
+					Long familyId = familyMapper.queryCreateFamilyId(userId);
+					if (familyId != null) {
+						FamilyParamBean bean = new FamilyParamBean();
+						bean.setFamilyId(familyId);
+						count = familyMapper.countUsersByFamilyId(bean);
+					}
+					break;
+				case 21:
+					// 创建的俱乐部内成员数量达到5个
+					Long familyId1 = familyMapper.queryCreateFamilyId(userId);
+					if (familyId1 != null) {
+						FamilyParamBean bean = new FamilyParamBean();
+						bean.setFamilyId(familyId1);
+						count = familyMapper.countUsersByFamilyId(bean);
+					}
+					break;
+				case 22:
+					// 完成一次赛车场挑战
+					Long familyId2 = familyMapper.queryCreateFamilyId(userId);
+					if (familyId2 != null) {
+						count = familyRelationMapper.countOfInitiativeFight(familyId2);
+					}
+					break;
+				case 23:
+					// 打开一次配件库宝箱
+					count = boxTreasureMapper.countOfOpenUserBox(userId);
+					break;
+				case 24:
+					// 在俱乐部配件库中分配三次配件--针对族长
+					count = componentMapper.countAllotGive(userId);
+					break;
+				case 25:
+					// 在祈愿中为其他玩家赠送3次配件
+					count = componentMapper.countSendRequest(userId);
+					break;
+				case 26:
+					// 累计搭乘顺风车并完成行程5次
+					count = carpoolMapper.getTotalLiftCountByUserId(userId);
+					break;
+				case 27:
+					// 累计搭乘顺风车并完成行程10次
+					count = carpoolMapper.getTotalLiftCountByUserId(userId);
+					break;
+				case 28:
+					// 累计搭乘顺风车并完成行程20次
+					count = carpoolMapper.getTotalLiftCountByUserId(userId);
+					break;
 				}
 				
 				if (missionId != 5) {
@@ -180,87 +255,105 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	}
 	
 	// 个人任务列表
-	public List<Map<String, String>> userMissionList(long userId, int missionType) {
-		List<Map<String, String>> rtList = new ArrayList<>();
+	public List<MissionResultBean> userMissionList(long userId, int missionType) {
+		List<MissionResultBean> rtList = new ArrayList<>();
+		List<Integer> parentMissionIds = dicUserMissionMapper.getParentMissionId(missionType);
+		for (Integer parentMissionId : parentMissionIds) {
+			List<MissionLogsResultBean> logs = userMissionLogsMapper.getLogsByUserIdAndParentMID(userId,parentMissionId);
+			MissionResultBean bean = new MissionResultBean();
+			Map<String, Object> levelDic = new HashMap<>();
+			if (logs.size() == 1) {
+				MissionLogsResultBean log = logs.get(0);
+				AdBeanUtils.copyOtherPropToStr(bean, log);
 
-		List<Map<String, Object>> logs = userMissionLogsMapper.getLogsByUserIdAndType(userId, missionType);
-		for (Map<String, Object> map : logs) {
-			Map<String, String> rtMap = new HashMap<>();
-			int missionId = Integer.valueOf(map.get("missionId").toString());
-			int powerPrize = Integer.valueOf(String.valueOf(map.get("powerPrize")));
-			int finishCount = Integer.valueOf(map.get("finishCount").toString());
-			int targetCount = Integer.valueOf(map.get("targetCount").toString());
-			int status = Integer.valueOf(map.get("status").toString());
-			String actionLink = String.valueOf((map.get("actionLink") == null ? "" : map.get("actionLink")));
-			String otherPrize = String.valueOf((map.get("otherPrize") == null ? "" : map.get("otherPrize")));
-			String missionProgress = "";
-			String missionReward = "";
-			if (missionId == 5) {
-				// 处理连续登录任务
-				powerPrize = (powerPrize * finishCount) >= 150 ? 150 : (powerPrize * finishCount);
-				missionProgress = "连续签到第" + finishCount + "日";
-			} else {
-				missionProgress = "(" + finishCount + "/" + targetCount + ")次";
-			}
-
-			missionReward = "奖励：+" + powerPrize + "动力";
-
-			String missionActionDesc = "";
-			String actionStatus = "1";
-			if (status == 1) {
-				// 领取
-				missionActionDesc = "领取";
-				actionLink = "0";
-			} else if (status == 3) {
-				// 已完成
-				missionActionDesc = "已领取";
-				actionStatus = "0";
-			} else {
-				if (missionId == 4) {
-					missionActionDesc = "去分享";
-				} else if (missionId == 6 || missionId == 7) {
-					missionActionDesc = "去认证";
-				} else if (missionId == 8) {
-					missionActionDesc = "去加入";
-				} else if (missionId == 9) {
-					missionActionDesc = "去创建";
+				String missionProgress = "";
+				int powerPrize = 0;
+				if (log.getMissionId() == 5) {
+					// 持之以恒
+					powerPrize = (Integer.valueOf(log.getPowerPrize()) * log.getFinishCount())>=150?150:(Integer.valueOf(log.getPowerPrize()) * log.getFinishCount());
+					missionProgress = "连续登录第" + log.getFinishCount() + "日";
 				} else {
-					missionActionDesc = "未完成";
-					actionStatus = "0";
+					missionProgress = "(" + log.getFinishCount() + "/" + log.getTargetCount() + ")次";
 				}
+
+				bean.setMissionActionDesc(log.getStatus() == 1 ? "领取" : (log.getStatus() == 3 ? "已领取" : log.getLinkDesc()));
+				bean.setMissionActionStatus(log.getStatus() == 3 ? "0" : String.valueOf(log.getActionStatus()));
+				bean.setMissionActionLink(log.getStatus() == 1 ? "0" : log.getMissionActionLink());
+				bean.setMissionProgress(missionProgress);
+				bean.setMissionReward("奖励:+" + powerPrize + "动力");
+				bean.setFlag(String.valueOf(log.getStatus()));
+				bean.setLevelDic(levelDic);
+			} else {
+				int a=-1;
+				int b=-1;
+				int c=-1;
+				for (int i = 0; i < logs.size(); i++) {
+					if(logs.get(i).getStatus()==1) {
+						a=i;
+						break;
+					}else if (logs.get(i).getStatus()==2) {
+						b=i;
+					}else {
+						c=i;
+					}
+				}
+				int index = a > -1 ? a : (b > -1 ? b : c);
+				MissionLogsResultBean resultBean = logs.get(index);
+				AdBeanUtils.copyOtherPropToStr(bean, resultBean);
+
+				String missionProgress = "";
+				int powerPrize = 0;
+				if (resultBean.getMissionId() == 5) {
+					// 持之以恒
+					powerPrize=(Integer.valueOf(resultBean.getPowerPrize())*resultBean.getFinishCount())>=150?150:(Integer.valueOf(resultBean.getPowerPrize())*resultBean.getFinishCount());
+					missionProgress = "连续登录第" + resultBean.getFinishCount() + "日";
+				} else {
+					missionProgress = "(" + resultBean.getFinishCount() + "/" + resultBean.getTargetCount() + ")次";
+				}
+
+				bean.setMissionActionDesc(
+						resultBean.getStatus() == 1 ? "领取" : (resultBean.getStatus() == 3 ? "已领取" : resultBean.getLinkDesc()));
+				bean.setMissionActionStatus(resultBean.getStatus() == 3 ? "0" : String.valueOf(resultBean.getActionStatus()));
+				bean.setMissionActionLink(resultBean.getStatus() == 1 ? "0" : resultBean.getMissionActionLink());
+				bean.setMissionProgress(missionProgress);
+				bean.setMissionReward("奖励:+" + powerPrize + "动力");
+				bean.setFlag(String.valueOf(resultBean.getStatus()));
+				List<Map<String, String>> list = new ArrayList<>();
+				for (int i = 0; i < logs.size(); i++) {
+					Map<String, String> map = new HashMap<>();
+					map.put("missionDesc", logs.get(i).getMissionDesc());
+					if (i == index) {
+						map.put("statusDesc", "进行中");
+					} else if (logs.get(i).getStatus() == 3) {
+						map.put("statusDesc", "0");
+					} else {
+						if (logs.get(i).getPowerPrize().equals("")) {
+							map.put("statusDesc", "奖励:" + logs.get(i).getOtherPrize());
+						} else {
+							map.put("statusDesc", "奖励:+" + logs.get(i).getPowerPrize() + "动力");
+						}
+					}
+					list.add(map);
+				}
+				levelDic.put("dic", list);
+				bean.setLevelDic(levelDic);
 			}
-
-			rtMap.put("missionId", String.valueOf(map.get("missionId")));
-			rtMap.put("missionName", String.valueOf(map.get("missionName")));
-			rtMap.put("missionDesc", String.valueOf(map.get("missionCondition")));
-			rtMap.put("missionProgress", missionProgress);
-			rtMap.put("missionReward", powerPrize == 0 ? "":missionReward);
-			rtMap.put("missionActionDesc", missionActionDesc);
-			rtMap.put("missionActionStatus", actionStatus);
-			rtMap.put("otherPrize", otherPrize);
-			rtMap.put("missionActionLink", actionLink == null ? "" : actionLink);
-			rtMap.put("missionEndTime", map.get("endTime") == null ? "" : String.valueOf(map.get("endTime")));
-			rtMap.put("flag", String.valueOf(map.get("status")));
-
-			rtList.add(rtMap);
+			rtList.add(bean);
 		}
-		
-		Collections.sort(rtList, new Comparator<Map<String, String>>() {
-			public int compare(Map<String, String> o1, Map<String, String> o2) {
-				return Double.valueOf(o1.get("missionId").toString()).compareTo(Double.valueOf(o2.get("missionId").toString()));
+
+		Collections.sort(rtList, new Comparator<MissionResultBean>() {
+			public int compare(MissionResultBean o1, MissionResultBean o2) {
+				return Double.valueOf(o1.getMissionId()).compareTo(Double.valueOf(o2.getMissionId()));
 			}
 		});
-		//排序--- flag 1-->2-->3
-		Collections.sort(rtList, new Comparator<Map<String, String>>() {
-			public int compare(Map<String, String> o1, Map<String, String> o2) {
-				return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+		// 排序--- flag 1-->2-->3
+		Collections.sort(rtList, new Comparator<MissionResultBean>() {
+			public int compare(MissionResultBean o1, MissionResultBean o2) {
+				return Double.valueOf(o1.getFlag()).compareTo(Double.valueOf(o2.getFlag()));
 			}
 		});
-		
 		return rtList;
 	}
-	
-	
 
 	public Map<String, Object> getMissionPrize(long userId, int missionId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
@@ -330,16 +423,6 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		return rtMap;
 	}
 
-	//预更新每日登录的任务
-	public int updateCountOfId5(Long userId) {
-		// TODO Auto-generated method stub
-		return userMissionLogsMapper.updateCountOfId5(userId);
-	}
-
-	//查询表里面是否有记录
-	public int queryHadRecord(long userId) {
-		return userMissionLogsMapper.queryHadRecord(userId);
-	}
 
 	// 更新每日任务
 	public boolean updateDayMission(long userId) {
@@ -371,17 +454,27 @@ public class UserMissionService extends BaseService<UserMissionService> {
 
 	public void initMissionOfUserId(long userId) {
 		// 初始化任务系统
+		// 初始化
+		List<Integer> record = userMissionLogsMapper.queryHadRecord(userId);
+		List<DicUserMission> missions = this.getAllDicUserMission();
+		if (record == null || record.size() != missions.size()) {
+			LOG.info("初始化任务log============userId=================" + userId);
+			List<DicUserMission> beanList = new ArrayList<>();
+			if (record == null) {
+				beanList = missions;
+			} else {
+				for (DicUserMission dicUserMission : missions) {
+					if (!record.contains(dicUserMission.getMissionId())) {
+						beanList.add(dicUserMission);
+					}
+				}
+			}
+			userMissionLogsMapper.initLogsToUser(beanList, userId);
+			userMissionLogsMapper.updateCountOfId5(userId);
+		}
 		// 更新每日任务
 		boolean flag = this.updateDayMission(userId);
 		LOG.info("更新每日任务状态=================" + flag);
-		// 初始化
-		int count = this.queryHadRecord(userId);
-		if (count == 0) {
-			LOG.info("初始化任务log============userId=================" + userId);
-			List<DicUserMission> missions = this.getAllDicUserMission();
-			this.initLogsToUser(missions, userId);
-			this.updateCountOfId5(userId);
-		}
 		// 预查询
 		this.insertOrUpdateLogs(userId, 1);
 		this.insertOrUpdateLogs(userId, 2);

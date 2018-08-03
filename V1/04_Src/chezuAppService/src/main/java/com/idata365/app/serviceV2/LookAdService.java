@@ -101,9 +101,11 @@ public class LookAdService extends BaseService<LookAdService> {
 
 		String paramSign = userId + String.valueOf(powerNum);
 		String sign = SignUtils.encryptHMAC(paramSign);
-		boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 17, sign);// 观看广告任务ID为17
-		if (b == false) {
-			throw new RuntimeException("系统异常领取失败");
+		if(powerNum>=0) {
+			boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 99, sign);// 观看广告任务ID为99
+			if (b == false) {
+				throw new RuntimeException("系统异常领取失败");
+			}
 		}
 		rtMap.put("powerPrizeNum", String.valueOf(powerNum));
 		rtMap.put("diamondPrizeNum", "0");
@@ -130,14 +132,20 @@ public class LookAdService extends BaseService<LookAdService> {
 			powerNum = 0L;
 			valid = 0;
 		} else {
-			valid = 1;
 			if (loadFlag == 0) {
-				powerNum = 10L;
+				valid = 0;
+				powerNum = 0L;
 			} else if (loadFlag == 1) {
-				powerNum = (long) RandUtils.generateRand(10, loadFlag * 40);
+				valid = 1;
+				powerNum = (long) RandUtils.generateRand(11, 40);
 			} else {
-				powerNum = (long) RandUtils.generateRand((loadFlag - 1) * 40, loadFlag * 40);// 30 60 90 120 150 160
+				valid = 1;
+				powerNum = (long) RandUtils.generateRand((loadFlag - 1) * 40,loadFlag * 40);// 30 60 90 120 150 160
 			}
+		}
+		if(powerNum>300) {
+			powerNum=300L;
+			LOG.error("POWERNUM重置为300");
 		}
 		logs.setPowerNum(powerNum);
 		logs.setValid(valid);
@@ -150,10 +158,13 @@ public class LookAdService extends BaseService<LookAdService> {
 
 		String paramSign = userId + String.valueOf(powerNum);
 		String sign = SignUtils.encryptHMAC(paramSign);
-		boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 18, sign);// 完成活动任务ID为18
-		if (b == false) {
-			throw new RuntimeException("系统异常领取失败");
+		if(powerNum>0L) {
+			boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 98, sign);// 完成活动任务ID为98
+			if (b == false) {
+				throw new RuntimeException("系统异常领取失败");
+			}
 		}
+		
 		rtMap.put("powerPrizeNum", String.valueOf(powerNum));
 		rtMap.put("diamondPrizeNum", "0");
 		return rtMap;

@@ -55,9 +55,13 @@
 		FROM familyInfo where familyType<![CDATA[>=]]>${familyType} and id!=${id}  order by b limit 1
     </select>
      
- <select id="getFamilyAvgScore" resultType="java.lang.Double" parameterType="java.lang.Long">
- select ROUND(AVG(score),2) from (select * from familyDriveDayStat where 
- familyId=#{familyId} order by id desc limit 3) a
- </select>
+	<select id="getFamilyAvgScore" resultType="java.lang.Double" parameterType="java.lang.Long">
+		select ROUND(AVG(score),2) from (select * from familyDriveDayStat where 
+		familyId=#{familyId} order by id desc limit 3) a
+	</select>
+	
+	<select id="countOfInitiativeFight" resultType="java.lang.Integer" >
+		select count(1) from familyRelation where selfFamilyId=#{familyId} or (competitorFamilyId=#{familyId} and relationType=2)
+	</select>
  
 </mapper>

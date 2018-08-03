@@ -50,9 +50,19 @@ public class TripService extends BaseService<TripService>
 	} 
 	public int getTripCountQuintic100Score(long userId) {
 		String m = tripMapper.getTripCountQuintic100Score(userId);
-		if(m != null && m.contains("1,1,1,1,1")) {
+		if(m == null) {
+			return 0;
+		}else if(m.contains("1,1,1,1,1")){
+			return 5;
+		}else if(m.contains("1,1,1,1")){
+			return 4;
+		}else if(m.contains("1,1,1")){
+			return 3;
+		}else if(m.contains("1,1")){
+			return 2;
+		}else if(m.contains("1")){
 			return 1;
-		}else {
+		}else{
 			return 0;
 		}
 	} 

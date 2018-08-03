@@ -29,6 +29,6 @@ public interface FamilyRelationMapper {
 	
 	int deleteRelation(@Param("id")long id);
 	
-	
+	int countOfInitiativeFight(@Param("familyId")long familyId);
 	
 }

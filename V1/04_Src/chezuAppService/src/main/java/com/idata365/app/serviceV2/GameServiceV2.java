@@ -596,8 +596,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			    m.put("nowTime", curdate);
 				Map<String,Object> car=userCarLogsMapper.getUserCar(m);
 				
-				bean.put("carImg", car.get("carUrl").toString());
-				bean.put("powerUpPercent", "车辆加成+" + car.get("clubScoreUpPercent").toString() + "%");
+				bean.put("carImg", car==null?"http://product-h5.idata365.com/appImgs/car_1.png":car.get("carUrl").toString());
+				bean.put("powerUpPercent", "车辆加成+" + car==null?"0":car.get("clubScoreUpPercent").toString() + "%");
 				if (i == 0) {
 					memberList1.add(bean);
 				} else {

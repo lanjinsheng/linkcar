@@ -76,4 +76,10 @@ public interface ComponentMapper {
 	public int countOfPray(@Param("userId") Long userId);
 	
 	public int countHadRequest(@Param("userId") Long userId);
+	
+	public int countGetGive(@Param("userId") Long userId);
+	
+	public int countAllotGive(@Param("userId") Long userId);
+	
+	public int countSendRequest(@Param("userId") Long userId);
 }

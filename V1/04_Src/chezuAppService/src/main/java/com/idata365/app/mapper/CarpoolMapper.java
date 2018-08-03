@@ -26,4 +26,8 @@ public interface CarpoolMapper {
 	int querySitsNum(@Param("userId") Long userId);
 	
 	int querySitsNumById(@Param("userId") Long userId,@Param("carId") Integer carId);
+	
+	Integer getTodayLiftCountByUserId(@Param("passengerId") Long passengerId);
+	
+	Integer getTotalLiftCountByUserId(@Param("passengerId") Long passengerId);
 }
