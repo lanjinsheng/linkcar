@@ -15,6 +15,7 @@
         INSERT IGNORE INTO  taskGeneric
 		 (genericKey,jsonValue,taskType,priority,createTime)
 		 select CONCAT(#{genericKey},'_do',id),CONCAT('{"id":',id,',"tableName":"',#{tableName},'","powerTotal":',${powerTotal},'}'),#{taskType},#{priority},now() from ${tableName}
+		   where userId>1
     </insert>
     <insert id="initDoFamilyDayReward"  parameterType="java.util.HashMap">
         INSERT IGNORE INTO  taskGeneric
