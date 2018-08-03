@@ -6,4 +6,8 @@
   	  select  * from dicUserMission
     </select>
     
+     <select id="getParentMissionId" resultType="Integer">
+  	 	select parentMissionId from dicUserMission where missionType=#{missionType} GROUP BY parentMissionId order by parentMissionId
+    </select>
+    
 </mapper>

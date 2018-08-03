@@ -172,5 +172,17 @@
 	SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' ) AND logType =3
 	AND giveStatus=2
 </select>
+
+<select id="countGetGive" resultType="Integer">
+	SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND logType =1 AND giveStatus=2
+</select>
+
+<select id="countAllotGive" resultType="Integer">
+	SELECT COUNT(1) FROM componentGiveLog WHERE operationManId = #{userId} AND logType =1
+</select>
+
+<select id="countSendRequest" resultType="Integer">
+	SELECT COUNT(1) FROM componentGiveLog WHERE operationManId = #{userId} AND logType =2
+</select>
     
 </mapper>

@@ -54,4 +54,14 @@
            set isComplete=1,getOffTime=now() where  userCarLogsId=#{userCarLogsId}
            and passengerId=#{passengerId} and isComplete=0
     </update>
+    
+    <select id="getTodayLiftCountByUserId" resultType="Integer" parameterType="java.lang.Long">
+       SELECT  count(1) from carpool  
+        where  passengerId=#{passengerId} and  isComplete=1 and date_format(createTime,'%Y%m%d')=date_format(now(),'%Y%m%d')
+     </select>
+     
+     <select id="getTotalLiftCountByUserId" resultType="Integer" parameterType="java.lang.Long">
+       SELECT  count(1) from carpool  
+        where  passengerId=#{passengerId} and  isComplete=1
+     </select>
 </mapper>

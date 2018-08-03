@@ -27,8 +27,15 @@
 
 	<select id="getLogsByUserIdAndType" resultType="java.util.HashMap" >
   	  select 
-  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,b.otherPrize,a.finishCount,a.targetCount,a.status,a.daystamp,b.actionStatus,b.actionLink,b.endTime
-		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and b.missionType=#{missionType} and a.valid=1 order by a.updateTime desc
+  	  	a.missionId,b.missionName,b.missionCondition,b.powerPrize,b.otherPrize,a.finishCount,a.targetCount,a.status,a.daystamp,b.actionStatus,b.actionLink,b.endTime,b.linkDesc
+		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and b.missionType=#{missionType} and a.valid=1 order by a.missionId
+    </select>
+    
+    <select id="getLogsByUserIdAndParentMID" resultType="com.idata365.app.entity.v2.MissionLogsResultBean" >
+  	  select 
+  	  	a.missionId,b.missionName,b.missionCondition as missionDesc,b.powerPrize as powerPrize,b.otherPrize,a.finishCount,
+  	  	a.targetCount,a.status,a.daystamp,b.actionStatus,b.actionLink as missionActionLink,b.endTime as missionEndTime,b.linkDesc as linkDesc
+		from userMissionLogs a left join dicUserMission b on a.missionId=b.missionId where a.userId=#{userId} and a.valid=1 and b.parentMissionId=#{parentMissionId} order by a.missionId
     </select>
     
      <update id="updateLogsStatus" >
@@ -69,7 +76,7 @@
     </update>
     
     <select id="queryHadRecord" resultType="java.lang.Integer" >
-  	  select count(1) from userMissionLogs where userId=#{userId}
+  	  select missionId from userMissionLogs where valid=1 and userId=#{userId}
     </select>
     
     <select id="queryMissionId1" resultType="com.idata365.app.entity.UserMissionLogs" >

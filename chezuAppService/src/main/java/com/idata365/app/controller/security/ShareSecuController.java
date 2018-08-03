@@ -1,5 +1,6 @@
 package com.idata365.app.controller.security;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +48,8 @@ public class ShareSecuController  extends BaseController {
 	    		String datas=familyId+":"+inviteCode+":"+System.currentTimeMillis();
 				String key=SignUtils.encryptDataAes(String.valueOf(datas));
 				String shareUrl=this.getFamilyInviteBasePath(systemProperties.getH5Host())+key+"&shareType="+shareType;
-				shareUrl=shareUrl+"&userName="+this.getUserInfo().getNickName();
-				shareUrl=shareUrl+"&familyName="+family.get("familyName").toString();
+				shareUrl=shareUrl+"&userName="+URLEncoder.encode(this.getUserInfo().getNickName(),"UTF-8");
+				shareUrl=shareUrl+"&familyName="+URLEncoder.encode(family.get("familyName").toString(),"UTF-8");
 				rtMap.put("shareUrl", shareUrl);
 				rtMap.put("title", String.format("邀请您参与【%s】玩赚链车", family.get("familyName").toString()));
 				rtMap.put("content", "安全驾驶，即有机会获得超丰厚奖品！");
@@ -61,7 +62,7 @@ public class ShareSecuController  extends BaseController {
 	    		String datas=inviteCode+":"+System.currentTimeMillis();
 				String key=SignUtils.encryptDataAes(String.valueOf(datas));
 				String shareUrl=this.getFamilyShareBasePath(systemProperties.getH5Host())+key+"&shareType="+shareType;
-				shareUrl=shareUrl+"&userName="+this.getUserInfo().getNickName();
+				shareUrl=shareUrl+"&userName="+URLEncoder.encode(this.getUserInfo().getNickName(),"UTF-8");
 				rtMap.put("shareUrl", shareUrl);
 				rtMap.put("title", "开车挖矿拍豪宅，好玩就在链车!");
 				rtMap.put("content", "区块链时代的车联网新玩法，驾驶行为就能挖矿，丰厚好礼换不停！");

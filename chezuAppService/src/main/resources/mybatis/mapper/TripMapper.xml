@@ -43,5 +43,4 @@
 		select GROUP_CONCAT(IF(score=100,1,0)) score from userTravelHistory where userId=#{userId}
 	</select>
 	
-     
 </mapper>

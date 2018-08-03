@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.entity.v2.MissionResultBean;
 import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.ResultUtils;
 
@@ -42,7 +43,7 @@ public class UserMissionController extends BaseController {
 		LOG.info("missionType=================" + missionType);
 		
 		//初始化任务系统
-		// userMissionService.initMissionOfUserId(userId);
+		 userMissionService.initMissionOfUserId(userId);
 		
 		// 预查询
 		userMissionService.insertOrUpdateLogs(userId, missionType);
@@ -50,7 +51,7 @@ public class UserMissionController extends BaseController {
 		// 查询所有类型任务完成情况
 		Map<String, String> rtMap = userMissionService.queryMissionStatus(userId);
 		// 返回任务列表
-		List<Map<String, String>> rtList = userMissionService.userMissionList(userId, missionType);
+		List<MissionResultBean> rtList = userMissionService.userMissionList(userId, missionType);
 
 		Map<String, Object> rtDate = new HashMap<>();
 		rtDate.put("rtMap", rtMap);

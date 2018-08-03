@@ -18,7 +18,7 @@ public interface BoxTreasureMapper {
 	List<BoxTreasureFamily> getChallengeBoxIdsNew(Map<String, Object> map);
 
 	int hadChallengeBoxIds(Map<String, Object> map);
-
+	
 	int getCanGetNow(@Param("familyId") Long familyId);
 
 	List<BoxTreasureUser> getTripsByBoxId(@Param("boxId") String boxId);
@@ -28,5 +28,7 @@ public interface BoxTreasureMapper {
 	int receiveBox(@Param("boxId") String boxId);
 
 	int receiveBoxFamily(@Param("boxId") String boxId);
+	
+	int countOfOpenUserBox(@Param("userId") Long userId);
 
 }
