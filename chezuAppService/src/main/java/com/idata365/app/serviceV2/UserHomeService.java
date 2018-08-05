@@ -139,7 +139,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId,carId,userCarId);
 		rtMap.put("powerUpInfo", powerUpInfo);
 		List<Map<String, Object>> list = dicComponentMapper.getCurComponentByUserIdCarId(userCarId);
-		
+		int [] arr = {1,3,2,4,5};
 		for (int i = 1; i < 6; i++) {
 			Map<String, String> map = new HashMap<>();
 			map.put("userComponentId", "");
@@ -155,7 +155,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			map.put("componentRemainingLossCount","");
 			if (list != null && list.size() != 0) {
 				for (int j = 0; j < list.size(); j++) {
-					if (Integer.valueOf(list.get(j).get("componentType").toString()) == i) {
+					if (Integer.valueOf(list.get(j).get("componentType").toString()) == arr[i-1]) {
 						map.put("userComponentId", String.valueOf(list.get(j).get("componentId")));
 						map.put("componentName", String.valueOf(list.get(j).get("componentValue")));
 						map.put("quality", String.valueOf(list.get(j).get("quality")));
