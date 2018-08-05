@@ -404,6 +404,7 @@ public class InteractService extends BaseService<InteractService> {
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您交了罚金"+log.getSomeValue()+"点动力");
 				}
+				m.put("interactUserId", log.getUserIdA().toString());
 				rtList.add(m);
 			}
 		}else if(tabType==2){//自己搞别人的记录
@@ -448,6 +449,7 @@ public class InteractService extends BaseService<InteractService> {
 					//有问题
 					m.put("log", "帮 "+String.format("【%s】",log.getUserNameB())+"缴了罚金"+log.getSomeValue()+"点动力");
 				}
+				m.put("interactUserId", log.getUserIdB().toString());
 				rtList.add(m);
 			}
 			
@@ -493,6 +495,7 @@ public class InteractService extends BaseService<InteractService> {
 					//有问题
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮TA缴了罚金"+log.getSomeValue()+"点动力");
 				}
+				m.put("interactUserId", log.getUserIdA().toString());
 				rtList.add(m);
 			}
 		}
