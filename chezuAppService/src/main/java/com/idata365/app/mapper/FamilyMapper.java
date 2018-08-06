@@ -204,4 +204,6 @@ public interface FamilyMapper {
 	
 	public int updateOtherFamilyInviteStatus(@Param("userId")long userId);
 
+	public int updateFamilyInfo(@Param("familyId")long familyId, @Param("familyName")String familyName, @Param("imgUrl")String imgUrl);
+
 }
