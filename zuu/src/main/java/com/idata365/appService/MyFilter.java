@@ -29,6 +29,8 @@ public class MyFilter extends ZuulFilter{
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
+        String token=request.getHeader("token");
+        MobileChbLogUtils.info("event", token);
         log.info(String.format("%s >>> %s", request.getMethod(), request.getRequestURL().toString()));
         log.info("ok");
         return null;
