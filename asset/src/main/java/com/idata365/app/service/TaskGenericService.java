@@ -84,7 +84,7 @@ public class TaskGenericService {
 	@Transactional
 	public boolean initUserDayRewardTask(TaskGeneric task) {
 		
-		//这边需要判断家族pk是否已经完全完成了
+		//这边需要判断俱乐部pk是否已经完全完成了
 		String key=task.getGenericKey();
 		String day=key.split("_")[0];
 		day=day.substring(0, 4)+"-"+day.substring(4,6)+"-"+day.substring(6, 8);
@@ -259,7 +259,7 @@ public class TaskGenericService {
 				assetUsersDiamondsLogs.setDiamondsNum(diamondsNum);
 				assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
 				assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
-				//远程消息调用,发送的diamonds是家族获取的
+				//远程消息调用,发送的diamonds是俱乐部获取的
 				if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
 				chezuAppService.sendFamilyDiamondsSeasonMsg(daystamp, String.valueOf(familyId), familyType, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), String.valueOf(diamondsNum.doubleValue()), sign);
 				}
@@ -347,7 +347,7 @@ public class TaskGenericService {
 	/**
 	 * 
 	    * @Title: doFamilyDayReward
-	    * @Description: TODO(家族钻石分配，并增加子任务 家族内部成员钻石分配)
+	    * @Description: TODO(俱乐部钻石分配，并增加子任务 俱乐部内部成员钻石分配)
 	    * @param @param task
 	    * @param @return    参数
 	    * @return boolean    返回类型
@@ -427,7 +427,7 @@ public class TaskGenericService {
 	/**
 	 * 
 	    * @Title: doUserFamilyDayReward
-	    * @Description: TODO(家族成员间进行钻石分配)
+	    * @Description: TODO(俱乐部成员间进行钻石分配)
 	    * @param @param task
 	    * @param @return    参数
 	    * @return boolean    返回类型
@@ -485,7 +485,7 @@ public class TaskGenericService {
 			j++;
 			assetUsersDiamondsLogsMapper.insertUsersDiamondsDay(assetUsersDiamondsLogs);
 			assetUsersAssetMapper.updateDiamondsAdd(assetUsersDiamondsLogs);
-			//远程消息调用,发送的diamonds是家族获取的
+			//远程消息调用,发送的diamonds是俱乐部获取的
 			if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
 			chezuAppService.sendFamilyDiamondsMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersDiamondsLogs.getUserId(), String.valueOf(familyDiamonds.doubleValue()), String.valueOf(d.doubleValue()), sign);
 			}
@@ -561,7 +561,7 @@ public class TaskGenericService {
 				map.put("pkPower", d.intValue());
 				map.put("userId", assetUsersPowerLogs.getUserId());
 				taskGenericMapper.updateUserPowerDayTable(map);
-				//远程消息调用,发送的diamonds是家族获取的
+				//远程消息调用,发送的diamonds是俱乐部获取的
 				if(familyId!=FamilyConstant.ROBOT_FAMILY_ID) {
 				chezuAppService.sendFamilyPowerMsg(daystamp, String.valueOf(familyId), orderNum, assetUsersPowerLogs.getUserId(), String.valueOf(familyPowers.longValue()), String.valueOf(d.doubleValue()), sign);
 				}

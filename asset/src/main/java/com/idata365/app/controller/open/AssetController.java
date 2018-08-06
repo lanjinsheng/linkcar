@@ -228,7 +228,7 @@ public class AssetController extends BaseController {
 		power.setPowerNum(Double.valueOf(Math.pow(2, challegeTimesToday)).longValue());
 		power.setRecordType(AssetConstant.RECORDTYPE_2);
 		power.setEventType(AssetConstant.EVENTTYPE_POWER_CHALLGE_REDUCE);
-		power.setRemark("挑战家族选择消耗");
+		power.setRemark("挑战俱乐部选择消耗");
 		boolean b = assetService.reduceUserPowers(power);
 		if(b) {
 			map.put("flag", "1");

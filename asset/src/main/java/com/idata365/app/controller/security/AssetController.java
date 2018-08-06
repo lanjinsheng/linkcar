@@ -100,7 +100,7 @@ public class AssetController extends BaseController {
 	/**
 	 * 
 	 * @Title: getFamilyFightPowers
-	 * @Description: TODO(获取家族对战动力情况---停车场)
+	 * @Description: TODO(获取俱乐部对战动力情况---停车场)
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param
@@ -129,7 +129,7 @@ public class AssetController extends BaseController {
 	/**
 	 * 
 	 * @Title: stoleFamilyFightPowers
-	 * @Description: TODO(家族对战能量偷取)
+	 * @Description: TODO(俱乐部对战能量偷取)
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param
@@ -170,7 +170,7 @@ public class AssetController extends BaseController {
 	/**
 	 * 
 	 * @Title: getStoleFamilyFightPowers
-	 * @Description: TODO(家族对战能量偷取记录)
+	 * @Description: TODO(俱乐部对战能量偷取记录)
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param

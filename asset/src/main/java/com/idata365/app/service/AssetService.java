@@ -411,7 +411,7 @@ public class AssetService extends BaseService<AssetService> {
 	/**
 	 * 
 	 * @Title: addFamiliesPowers
-	 * @Description: TODO(家族动力值增加)
+	 * @Description: TODO(俱乐部动力值增加)
 	 * @param @param
 	 *            assetFamiliesPowerLogs
 	 * @param @return
@@ -430,7 +430,7 @@ public class AssetService extends BaseService<AssetService> {
 	/**
 	 * 
 	 * @Title: getFamilyPowers
-	 * @Description: TODO(获取家族对战动力情况)
+	 * @Description: TODO(获取俱乐部对战动力情况)
 	 * @param @param
 	 *            userId
 	 * @param @param
@@ -533,7 +533,7 @@ public class AssetService extends BaseService<AssetService> {
 			powerBall.put("createTime", String.valueOf(DateTools.formatDateYMD(logs.getCreateTime())));
 			powerBalls.add(powerBall);
 
-			// 家族贡献
+			// 俱乐部贡献
 			if (logs.getFamilyId() == familyId) {
 				myFamilyContribution += logs.getPowerNum();
 			} else {
@@ -565,7 +565,7 @@ public class AssetService extends BaseService<AssetService> {
 	/**
 	 * 
 	 * @Title: stoleFamilyFightPowers
-	 * @Description: TODO(家族对战动力偷取)
+	 * @Description: TODO(俱乐部对战动力偷取)
 	 * @param @param
 	 *            ballId
 	 * @param @param
@@ -593,7 +593,7 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersPowerLogs.setRemark("");
 		this.addUserPowers(assetUsersPowerLogs);
 
-		// 修改家族相关数据
+		// 修改俱乐部相关数据
 		AssetFamiliesPowerLogs assetFamiliesPowerLogs = assetFamiliesPowerLogsMapper.getFamiliesPowerLogs(ballId);
 		long count = assetFamiliesPowerLogs.getCount() + 1;
 		if (assetFamiliesPowerLogs.getFamilyId() == familyId) {
@@ -621,7 +621,7 @@ public class AssetService extends BaseService<AssetService> {
 	 * 
 	 * @param fightFamilyId 
 	 * @Title: getStoleFamilyFightPowers
-	 * @Description: TODO(家族动力偷取记录)
+	 * @Description: TODO(俱乐部动力偷取记录)
 	 * @param @param
 	 * 
 	 * @param @return
@@ -754,7 +754,7 @@ public class AssetService extends BaseService<AssetService> {
 		AssetUsersAsset yestodayPower = assetUsersAssetMapper.getYestodayPower(parmMap);
 		rtMap1.put("assetName", "个人获得动力");
 		rtMap1.put("assetType", "1");
-		rtMap2.put("assetName", "家族奖励动力");
+		rtMap2.put("assetName", "俱乐部奖励动力");
 		rtMap2.put("assetType", "1");
 		rtMap3.put("assetName", "动力产出钻石");
 		rtMap3.put("assetType", "2");
@@ -808,7 +808,7 @@ public class AssetService extends BaseService<AssetService> {
 	/**
 	 * 
 	 * @Title: initFamily
-	 * @Description: TODO(创建家族时候调用)
+	 * @Description: TODO(创建俱乐部时候调用)
 	 * @param @param
 	 *            familyId
 	 * @param @return
@@ -991,7 +991,7 @@ public class AssetService extends BaseService<AssetService> {
 		String s = "0";
 		long familyId = Long.valueOf(familiesInfo.get("familyId").toString());
 		long fightFamilyId = Long.valueOf(familiesInfo.get("fightFamilyId").toString());
-		// 双方家族产生的所有动力球
+		// 双方俱乐部产生的所有动力球
 		List<AssetFamiliesPowerLogs> rtPowerList = assetFamiliesPowerLogsMapper.getFamilyPowers(familyId,fightFamilyId);
 		List<AssetFamiliesPowerLogs> powerList = new ArrayList<>();
 		// 过滤
