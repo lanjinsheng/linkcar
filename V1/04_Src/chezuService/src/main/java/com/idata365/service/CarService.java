@@ -30,7 +30,7 @@ public class CarService extends BaseService<CarService> {
 	/**
 	 * 
         * @Title: sendUserCarAndCarIdIs2
-        * @Description: TODO(所创建家族等级达到黄金时候奖励CarID为2的车)
+        * @Description: TODO(所创建俱乐部等级达到黄金时候奖励CarID为2的车)
         * @param  参数
         * @return void 返回类型
         * @throws

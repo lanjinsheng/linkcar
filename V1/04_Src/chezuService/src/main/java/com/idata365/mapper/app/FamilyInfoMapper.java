@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 
     * @ClassName: FamilyInfoMapper
-    * @Description: TODO(家族成员)
+    * @Description: TODO(俱乐部成员)
     * @author LanYeYe
     * @date 2018年04月24日
     *

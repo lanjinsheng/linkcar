@@ -56,7 +56,7 @@ public static final String TaskType_FamilyLevel="FamilyLevel";
 	}
 	@Transactional
 	public boolean insertFamilyLevelTask(String daystamp,int order,Long familyId) {
-		//家族黄金，白银，青铜等级任务加入
+		//俱乐部黄金，白银，青铜等级任务加入
 		TaskFamilyDayEnd task=new TaskFamilyDayEnd();
 		task.setDaystamp(daystamp);
 		task.setTaskType(TaskType_FamilyLevel);

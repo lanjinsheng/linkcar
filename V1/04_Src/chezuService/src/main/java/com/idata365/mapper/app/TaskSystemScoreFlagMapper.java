@@ -54,7 +54,7 @@ public interface TaskSystemScoreFlagMapper {
 	 int finishGameEndTask(TaskSystemScoreFlag systemScoreFlag);
 	 //gameEnd===end
 	 
-	 //家族类型
+	 //俱乐部类型
 	 List<TaskSystemScoreFlag> getUnFinishFamilyLevelDayEndList();
 	 int  finishFamilyLevelDayEndTask(TaskSystemScoreFlag systemScoreFlag);
 	 
@@ -68,7 +68,7 @@ public interface TaskSystemScoreFlagMapper {
 	 int  finishUserBestDriveDayEndTask(TaskSystemScoreFlag systemScoreFlag);
 	 
 	 
-	 //家族pk匹配处理
+	 //俱乐部pk匹配处理
 	 List<TaskSystemScoreFlag> getUnInitPkRelationList(); 
 	 int  updatePkRelationInit(TaskSystemScoreFlag systemScoreFlag);
 	 

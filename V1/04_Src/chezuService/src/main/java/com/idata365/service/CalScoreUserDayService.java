@@ -165,7 +165,7 @@ public class CalScoreUserDayService  extends BaseService<CalScoreUserDayService>
 		}else {
 			userScoreDayStat.setScore(endScore);
 		}
-		//计算完分数,进行家族行程热度增加
+		//计算完分数,进行俱乐部行程热度增加
 //		long familyId=userRoleLog.getFamilyId();
 //		familyInfoMapper.updateFamilyDriveFlag(familyId);
 //		familyInfoMapper.updateFamilyActiveLevel(familyId);

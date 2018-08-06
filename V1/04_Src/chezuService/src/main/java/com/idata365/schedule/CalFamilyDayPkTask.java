@@ -20,7 +20,7 @@ import com.idata365.util.SignUtils;
 /**
  * 
     * @ClassName: CalFamilyDayPkTask
-    * @Description: TODO(家族pk结果统计并更新奖杯数，同步赢家到资产模块)
+    * @Description: TODO(俱乐部pk结果统计并更新奖杯数，同步赢家到资产模块)
     * @author LanYeYe
     * @date 2017年12月31日
     *

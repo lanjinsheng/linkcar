@@ -39,7 +39,7 @@ public class CalGameEndServiceV2 {
 	@Transactional
 	public boolean calGameEnd(TaskGameEnd taskGameEnd) throws RemoteException {
 		 //最后得分的统计增加
-		//判断家族的比赛时长
+		//判断俱乐部的比赛时长
 //		int dayTimes=taskGameEnd.getDayTimes();
 		FamilySeasonAsset familySeasonAsset=new FamilySeasonAsset();
 		FamilyScore fs=taskGameEndMapper.getFamilyScore(taskGameEnd);

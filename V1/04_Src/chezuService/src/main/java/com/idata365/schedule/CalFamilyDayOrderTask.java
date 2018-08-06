@@ -22,7 +22,7 @@ import com.idata365.service.TaskKeyLogService;
 /**
  * 
     * @ClassName: CalFamilyDayOrderTask
-    * @Description: TODO(计算家族日排名任务)
+    * @Description: TODO(计算俱乐部日排名任务)
     * @author LanYeYe
     * @date 2017年12月31日
     *

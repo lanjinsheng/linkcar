@@ -19,7 +19,7 @@ import com.idata365.service.TaskKeyLogService;
 /**
  * 
     * @ClassName: CalFamilyDayScoreTask
-    * @Description: TODO(家族日分统计)
+    * @Description: TODO(俱乐部日分统计)
     * @author LanYeYe
     * @date 2017年12月31日
     *

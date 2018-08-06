@@ -119,7 +119,7 @@
 	</update>
    <!--end 初始化Order任务关系 -->
    
-    <!--begin  家族类型 -->
+    <!--begin  俱乐部类型 -->
    	<select id="getUnFinishFamilyLevelDayEndList" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
 	   select * from taskSystemScoreFlag where taskFamilyMonthAvgOrder=1
 	   and  taskFamilyLevelDayEnd=0
@@ -128,7 +128,7 @@
 		 update taskSystemScoreFlag
 		  set taskFamilyLevelDayEnd=${taskFamilyLevelDayEnd} where daystamp=#{daystamp}
 	</update>
-    <!--end  家族类型 -->
+    <!--end  俱乐部类型 -->
         <!--begin  昨日任务清理 -->
    	<select id="getUnFinishClearYesterday" resultMap="BaseTaskSystemScoreMap"   parameterType="com.idata365.entity.TaskSystemScoreFlag">
 	   select * from taskSystemScoreFlag where taskClearYesterday=0
