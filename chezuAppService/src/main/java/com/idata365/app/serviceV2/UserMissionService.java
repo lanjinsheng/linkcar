@@ -293,6 +293,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 						: (Integer.valueOf(resultBean.getPowerPrize()) * resultBean.getFinishCount());
 				missionProgress = "连续登录第" + resultBean.getFinishCount() + "日";
 			} else {
+				powerPrize = Integer.valueOf(resultBean.getPowerPrize());
 				missionProgress = "(" + resultBean.getFinishCount() + "/" + resultBean.getTargetCount() + ")次";
 			}
 
@@ -324,7 +325,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 				}
 			}
 			bean.setMissionProgress(missionProgress);
-			bean.setMissionReward("奖励:+" + powerPrize + "动力");
+			bean.setMissionReward(powerPrize == 0 ? ("奖励:" + resultBean.getOtherPrize()) : ("奖励:+" + powerPrize + "动力"));
 			bean.setFlag(String.valueOf(resultBean.getStatus()));
 			List<Map<String, String>> list = new ArrayList<>();
 			if (logs.size() > 1) {
