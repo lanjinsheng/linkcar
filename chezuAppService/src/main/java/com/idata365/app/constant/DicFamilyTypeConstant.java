@@ -57,6 +57,7 @@ public class DicFamilyTypeConstant {
     public  final static Integer GuanJun_19=138;
     public  final static Integer GuanJun_20=139;
     
+    
     /**
      * 
      * @param familyType
@@ -73,4 +74,5 @@ public class DicFamilyTypeConstant {
 		return familyTypeMap.get(familyType);
 			
 	}
+	
 }

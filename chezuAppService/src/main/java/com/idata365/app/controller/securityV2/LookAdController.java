@@ -33,7 +33,7 @@ public class LookAdController extends BaseController {
 	 */
 
 	@RequestMapping("/ad/countOfOddLookAd")
-	public Map<String, Object> missionList(@RequestParam(required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> countOfOddLookAd(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<>();
 		long userId = this.getUserId();

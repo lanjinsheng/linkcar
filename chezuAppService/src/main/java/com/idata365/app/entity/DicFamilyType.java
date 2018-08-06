@@ -18,6 +18,14 @@ public class DicFamilyType implements Serializable{
 	private Integer loss2;
 	private Integer dogfall;
 	private Integer nextExtends;
+	private String iconUrl;
+	
+	public String getIconUrl() {
+		return iconUrl;
+	}
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
+	}
 	public Integer getId() {
 		return id;
 	}

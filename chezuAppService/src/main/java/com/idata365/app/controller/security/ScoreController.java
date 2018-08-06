@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.entity.CompetitorFamilyInfoResultBean;
 import com.idata365.app.entity.CompetitorResultBean;
 import com.idata365.app.entity.DicFamilyType;
@@ -157,7 +158,8 @@ public class ScoreController extends BaseController {
 		//是否申请过
 		resultBean.setIsApplied(String.valueOf(familyInviteService.queryIsApplied(this.getUserId(), bean.getFamilyId())));
 		//是否能申请
-		resultBean.setIsCanApply(String.valueOf(familyInviteService.queryIsCanApply(bean.getFamilyId())));
+		resultBean.setIsCanApply(String.valueOf(familyInviteService.queryIsCanApply(bean.getFamilyId())));//Integer.valueOf(infoFamily.get("familyType"))
+		resultBean.setClubLevelImg(DicFamilyTypeConstant.getDicFamilyType(Integer.valueOf(infoFamily.get("familyType"))).getIconUrl());
 		
 		resultList.add(resultBean);
 		return ResultUtils.rtSuccess(resultList);

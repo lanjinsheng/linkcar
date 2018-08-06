@@ -35,6 +35,16 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	//创建俱乐部页面俱乐部ICON小红点---新挑战宝箱
 	private int isHaveBox;
 	
+	private String clubLevelImg;
+	
+	public String getClubLevelImg() {
+		return clubLevelImg;
+	}
+
+	public void setClubLevelImg(String clubLevelImg) {
+		this.clubLevelImg = clubLevelImg;
+	}
+	
 	public String getIsHaveRide() {
 		return isHaveRide;
 	}

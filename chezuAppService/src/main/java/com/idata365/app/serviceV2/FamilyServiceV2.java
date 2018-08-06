@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.idata365.app.entity.FamilyParamBean;
+import com.idata365.app.entity.FamilyResultBean;
 import com.idata365.app.entity.ImNotify;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.mapper.FamilyMapper;
@@ -35,16 +36,19 @@ public class FamilyServiceV2 extends BaseService<FamilyServiceV2> {
 	 */
 	public int updateFamily(Map<String, Object> entity, Long userId) {
 		LOG.info("param=============" + JSON.toJSONString(entity));
-		FamilyParamBean countNameParam = new FamilyParamBean();
-		countNameParam.setName(entity.get("familyName").toString());
-		int nameCounts = this.familyMapper.countByName(countNameParam);
-		if (nameCounts > 0) {
-			return -1;
-		}
-		long familyId = Long.valueOf(entity.get("familyId").toString());
 		String familyName = entity.get("familyName").toString();
 		String familyNotify = entity.get("familyNotify").toString();
 		String imgUrl = entity.get("imgUrl").toString();
+		FamilyParamBean countNameParam = new FamilyParamBean();
+		countNameParam.setName(entity.get("familyName").toString());
+		FamilyParamBean bean = new FamilyParamBean();
+		bean.setUserId(userId);
+		FamilyResultBean familyInfo = this.familyMapper.queryFamilyByUserId(bean);
+		int nameCounts = this.familyMapper.countByName(countNameParam);
+		if (nameCounts > 0 && !familyName.equals(familyInfo.getMyFamilyName())) {
+			return -1;
+		}
+		long familyId = Long.valueOf(entity.get("familyId").toString());
 		int i = this.familyMapper.updateFamilyInfo(familyId, familyName, imgUrl);
 		if (i != 1) {
 			return -1;
