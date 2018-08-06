@@ -56,7 +56,7 @@ public class AccountController extends BaseController{
     /**
      * 
         * @Title: getFamiliesInfoByUserId
-        * @Description: TODO(获取家族信息)
+        * @Description: TODO(获取俱乐部信息)
         * @param @param userId
         * @param @param sign
         * @param @return    参数
