@@ -21,8 +21,8 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_SIGNIN = 1;// 签到
 	public final static int EVENTTYPE_POWER_STEAL = 3;// 拾取动力球
 	public final static int EVENTTYPE_POWER_AIRDROP=5; //???
-	public final static int EVENTTYPE_POWER_GAMEEND_USER=6; //家族挑战获胜分配
-	public final static int EVENTTYPE_POWER_CHALLGE_REDUCE=8; //挑战家族选择消耗
+	public final static int EVENTTYPE_POWER_GAMEEND_USER=6; //俱乐部挑战获胜分配
+	public final static int EVENTTYPE_POWER_CHALLGE_REDUCE=8; //挑战俱乐部选择消耗
 
 	public final static int EVENTTYPE_POWER_TRIPBE_STOLE1 = 11;// 行程动力偷取
 	public final static int EVENTTYPE_POWER_TRIPBE_STOLE2 = 12;// 行程动力被偷取
@@ -33,7 +33,7 @@ public class AssetConstant {
 	
 	public final static int EVENTTYPE_POWER_PAY_TICKET = 15;// 缴罚单扣除
 	public final static int EVENTTYPE_POWER_HELPPAY_TICKET = 16;// 帮别人缴罚单扣除
-	public final static int EVENTTYPE_POWER_CLUB_BONUS = 17;// 俱乐部奖励动力--针对俱乐部经理
+	public final static int EVENTTYPE_POWER_CLUB_BONUS = 17;// 俱乐部奖励动力--针对俱乐部老板
 
 	public final static int EVENTTYPE_POWER_SELL_COMPONENET=18;//卖道具
 	public final static int EVENTTYPE_POWER_APPLY_PRAYING=19;//祈愿赠送获得
@@ -55,13 +55,25 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_MISSION_SCORE_ID = 114; // 单次行程10公里以上时获得100分评分
 	public final static int EVENTTYPE_POWER_MISSION_KM500_ID = 115; // 累计里程500公里
 	public final static int EVENTTYPE_POWER_MISSION_SCORETIMES5_ID = 116; // 连续5次行程获得100分
-	public final static int EVENTTYPE_POWER_MISSION_AD = 117; // 观看广告
-	public final static int EVENTTYPE_POWER_MISSION_INTERACTAD = 118; // 参与活动
+	public final static int EVENTTYPE_POWER_MISSION_CARPOOL_ID = 117;//搭乘顺风车并完成行程1次
+	public final static int EVENTTYPE_POWER_MISSION_PUBLISHPRAY_ID = 118;//发布祈愿1次
+	public final static int EVENTTYPE_POWER_MISSION_GETCPT3TIMES_ID = 119;//在加入的俱乐部配件库中获得3次分配的配件
+	public final static int EVENTTYPE_POWER_MISSION_CFMYUSERS3_ID = 120;//创建的俱乐部内成员数量达到3个
+	public final static int EVENTTYPE_POWER_MISSION_CFMYUSERS5_ID = 121;//创建的俱乐部内成员数量达到5个
+	public final static int EVENTTYPE_POWER_MISSION_DOCHALLENGE_ID = 122;//完成一次赛车场挑战
+	public final static int EVENTTYPE_POWER_MISSION_OPENBOX_ID = 123;//打开一次配件库宝箱
+	public final static int EVENTTYPE_POWER_MISSION_SHARECOMP3TIMESOFBOSS_ID = 124;//在俱乐部配件库中分配三次配件
+	public final static int EVENTTYPE_POWER_MISSION_SHARECOMP3TIMESOFPRAY_ID = 125;//在祈愿中为其他玩家赠送3次配件
+	public final static int EVENTTYPE_POWER_MISSION_CARPOOL5TIMES_ID = 126;//累计搭乘顺风车并完成行程5次
+	public final static int EVENTTYPE_POWER_MISSION_CARPOOL10TIMES_ID = 127;//累计搭乘顺风车并完成行程10次
+	public final static int EVENTTYPE_POWER_MISSION_CARPOOL20TIMES_ID = 128;//累计搭乘顺风车并完成行程20次
+	public final static int EVENTTYPE_POWER_MISSION_AD = 199; // 观看广告
+	public final static int EVENTTYPE_POWER_MISSION_INTERACTAD = 198; // 参与活动
 	//个人钻石表
 	public final static int EVENTTYPE_DAIMOND_DAYPOWER_USER = 1;// 每日分配
-	public final static int EVENTTYPE_DAIMOND_GAMEEND_USER = 2;// PK结束家族分配
+	public final static int EVENTTYPE_DAIMOND_GAMEEND_USER = 2;// PK结束俱乐部分配
 	public final static int EVENTTYPE_BUY = 3;//购买消费
-	public final static int EVENTTYPE_DAIMOND_SEASONEND_USER = 4;// 比赛赛季结束家族分配      
+	public final static int EVENTTYPE_DAIMOND_SEASONEND_USER = 4;// 比赛赛季结束俱乐部分配      
 	public final static int EVENTTYPE_EARN = 5;// 交易收入
 	public final static int EVENTTYPE_DAIMOND_AUCTION_BUY = 10;//竞拍消费
 	public final static int EVENTTYPE_DAIMOND_AUCTION_EARN = 11;//竞拍收入
@@ -71,12 +83,12 @@ public class AssetConstant {
 	public final static int EVENTTYPE_FREEZE = 6;// 竞拍冻结
 	public final static int EVENTTYPE_THAW = 7;// 竞拍解冻
 	
-	//家族钻石
+	//俱乐部钻石
 	public final static int EVENTTYPE_DAIMOND_GAMEEND = 1;// 比赛获取
 	public final static int EVENTTYPE_DAIMOND_DISTR = 2;// PK比赛分配消耗
 	public final static int EVENTTYPE_DAIMOND_SEASONEND = 3;// 赛季获取
 	public final static int EVENTTYPE_DAIMOND_SEASONEND_DISTR = 4;// 赛季分配消耗
-	//家族动力
+	//俱乐部动力
 	public final static int EVENTTYPE_POWER_TRIP_FAMILY = 1;// 行程贡献
 	public final static int EVENTTYPE_POWER_GAMEEND_FAMILY = 2;// 比赛获取
 	public final static int EVENTTYPE_POWER_DISTR_FAMILY = 3;// 比赛分配消耗
@@ -102,7 +114,7 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_STEAL, "拾取动力球");
 		UserPowerEventMap.put(EVENTTYPE_POWER_TRIP, "行程中获取");
 		UserPowerEventMap.put(EVENTTYPE_POWER_GAMEEND_USER, "俱乐部挑战获胜");
-		UserPowerEventMap.put(EVENTTYPE_POWER_CHALLGE_REDUCE, "挑选对战家族");
+		UserPowerEventMap.put(EVENTTYPE_POWER_CHALLGE_REDUCE, "挑选对战俱乐部");
 
 		UserPowerEventMap.put(EVENTTYPE_POWER_TRIPBE_STOLE1, "行程动力偷取");
 		UserPowerEventMap.put(EVENTTYPE_POWER_TRIPBE_STOLE2, "行程动力被偷取");
@@ -130,6 +142,18 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_SCORE_ID, "完成任务-稳定驾驶");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_KM500_ID, "完成任务-一路相伴");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_SCORETIMES5_ID, "完成任务-满分司机");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CARPOOL_ID, "完成任务-顺路搭车");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_PUBLISHPRAY_ID, "完成任务-祈愿互动");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_GETCPT3TIMES_ID, "完成任务-有福同享");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CFMYUSERS3_ID, "完成任务-壮大势力");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CFMYUSERS5_ID, "完成任务-势不可挡");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_DOCHALLENGE_ID, "完成任务-赛场风云");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_OPENBOX_ID, "完成任务-职业老板");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_SHARECOMP3TIMESOFBOSS_ID, "完成任务-福利发放");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_SHARECOMP3TIMESOFPRAY_ID, "完成任务-慷慨相助");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CARPOOL5TIMES_ID, "完成任务-顺风而行");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CARPOOL10TIMES_ID, "完成任务-一路顺风");
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CARPOOL20TIMES_ID, "完成任务-路路顺风");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_AD, "观看广告奖励");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_INTERACTAD, "完成活动奖励");
 

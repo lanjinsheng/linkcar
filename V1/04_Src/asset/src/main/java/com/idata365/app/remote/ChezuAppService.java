@@ -67,7 +67,7 @@ public interface ChezuAppService {
 	/**
 	 * 
 	 * @Title: getFightRelationAsset
-	 * @Description: TODO(用于从app获取对战家族ID和人数，临时使用)
+	 * @Description: TODO(用于从app获取对战俱乐部ID和人数，临时使用)
 	 */
 	@RequestMapping("/app/getFightRelationAsset")
 	public Map<String, Object> getFightRelationAsset(@RequestParam(value = "familyId") long familyId,
