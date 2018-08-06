@@ -38,13 +38,12 @@ public abstract  class BaseController {
 	}
 	protected String getImgBasePath() {
 	   	  return systemProperties.getAppHost()+"userFiles/getImgs?key=";
-       
-	  }
+	}
 	
 	protected String getFamilyInviteBasePath() {
 	   	     return systemProperties.getAppHost()+"share/goInvite?key=";
 
-	  }
+	}
 	protected String getFamilyInviteBasePath(String host) {
 	   	     return host+"share/invite1.html?key=";
 

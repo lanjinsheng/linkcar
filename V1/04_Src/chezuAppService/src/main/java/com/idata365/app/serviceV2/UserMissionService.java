@@ -262,63 +262,72 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			List<MissionLogsResultBean> logs = userMissionLogsMapper.getLogsByUserIdAndParentMID(userId,parentMissionId);
 			MissionResultBean bean = new MissionResultBean();
 			Map<String, Object> levelDic = new HashMap<>();
+			MissionLogsResultBean resultBean = new MissionLogsResultBean();
+			int index = 0;
 			if (logs.size() == 1) {
-				MissionLogsResultBean log = logs.get(0);
-				AdBeanUtils.copyOtherPropToStr(bean, log);
-
-				String missionProgress = "";
-				int powerPrize = 0;
-				if (log.getMissionId() == 5) {
-					// 持之以恒
-					powerPrize = (Integer.valueOf(log.getPowerPrize()) * log.getFinishCount())>=150?150:(Integer.valueOf(log.getPowerPrize()) * log.getFinishCount());
-					missionProgress = "连续登录第" + log.getFinishCount() + "日";
-				} else {
-					missionProgress = "(" + log.getFinishCount() + "/" + log.getTargetCount() + ")次";
-				}
-
-				bean.setMissionActionDesc(log.getStatus() == 1 ? "领取" : (log.getStatus() == 3 ? "已领取" : log.getLinkDesc()));
-				bean.setMissionActionStatus(log.getStatus() == 3 ? "0" : String.valueOf(log.getActionStatus()));
-				bean.setMissionActionLink(log.getStatus() == 1 ? "0" : log.getMissionActionLink());
-				bean.setMissionProgress(missionProgress);
-				bean.setMissionReward("奖励:+" + powerPrize + "动力");
-				bean.setFlag(String.valueOf(log.getStatus()));
-				bean.setLevelDic(levelDic);
+				resultBean = logs.get(0);
 			} else {
-				int a=-1;
-				int b=-1;
-				int c=-1;
+				int a = -1;
+				int b = -1;
+				int c = -1;
 				for (int i = 0; i < logs.size(); i++) {
-					if(logs.get(i).getStatus()==1) {
-						a=i;
+					if (logs.get(i).getStatus() == 1) {
+						a = i;
 						break;
-					}else if (logs.get(i).getStatus()==2) {
-						b=i;
-					}else {
-						c=i;
+					} else if (logs.get(i).getStatus() == 2) {
+						b = i;
+					} else {
+						c = i;
 					}
 				}
-				int index = a > -1 ? a : (b > -1 ? b : c);
-				MissionLogsResultBean resultBean = logs.get(index);
-				AdBeanUtils.copyOtherPropToStr(bean, resultBean);
+				index = a > -1 ? a : (b > -1 ? b : c);
+				resultBean = logs.get(index);
+			}
+			AdBeanUtils.copyOtherPropToStr(bean, resultBean);
 
-				String missionProgress = "";
-				int powerPrize = 0;
-				if (resultBean.getMissionId() == 5) {
-					// 持之以恒
-					powerPrize=(Integer.valueOf(resultBean.getPowerPrize())*resultBean.getFinishCount())>=150?150:(Integer.valueOf(resultBean.getPowerPrize())*resultBean.getFinishCount());
-					missionProgress = "连续登录第" + resultBean.getFinishCount() + "日";
-				} else {
-					missionProgress = "(" + resultBean.getFinishCount() + "/" + resultBean.getTargetCount() + ")次";
+			String missionProgress = "";
+			int powerPrize = 0;
+			if (resultBean.getMissionId() == 5) {
+				// 持之以恒
+				powerPrize = (Integer.valueOf(resultBean.getPowerPrize()) * resultBean.getFinishCount()) >= 150 ? 150
+						: (Integer.valueOf(resultBean.getPowerPrize()) * resultBean.getFinishCount());
+				missionProgress = "连续登录第" + resultBean.getFinishCount() + "日";
+			} else {
+				missionProgress = "(" + resultBean.getFinishCount() + "/" + resultBean.getTargetCount() + ")次";
+			}
+
+			bean.setMissionActionDesc(resultBean.getStatus() == 1 ? "领取" : (resultBean.getStatus() == 3 ? "已领取" : (resultBean.getLinkDesc().equals("")==true?"未完成":resultBean.getLinkDesc())));
+			bean.setMissionActionStatus((resultBean.getStatus() == 3||resultBean.getLinkDesc().equals(""))? "0" : "1");
+			bean.setMissionActionLink(resultBean.getStatus() == 1 ? "0" : resultBean.getMissionActionLink());
+			int missionId = resultBean.getMissionId();
+			if ((missionId == 17 || missionId == 18 || missionId == 20 || missionId == 21 || missionId == 22
+					|| missionId == 24 || missionId == 25 || missionId == 26 || missionId == 27 || missionId == 28)
+					&& resultBean.getStatus() == 2) {
+				// 根据不同用户处理条跳转逻辑
+				// 创建家族和加入家族信息
+				Long createFamilyId = this.familyMapper.queryCreateFamilyId(userId);
+				Long joinFamilyId = this.familyMapper.queryJoinFamilyId(userId);
+				if (missionId == 17 || missionId == 26 || missionId == 27 || missionId == 28 || missionId == 18
+						|| missionId == 25) {
+					if (createFamilyId == null && joinFamilyId == null) {
+						bean.setMissionActionDesc("未完成");
+						bean.setMissionActionStatus("0");
+						bean.setMissionActionLink("");
+					}
 				}
-
-				bean.setMissionActionDesc(
-						resultBean.getStatus() == 1 ? "领取" : (resultBean.getStatus() == 3 ? "已领取" : resultBean.getLinkDesc()));
-				bean.setMissionActionStatus(resultBean.getStatus() == 3 ? "0" : String.valueOf(resultBean.getActionStatus()));
-				bean.setMissionActionLink(resultBean.getStatus() == 1 ? "0" : resultBean.getMissionActionLink());
-				bean.setMissionProgress(missionProgress);
-				bean.setMissionReward("奖励:+" + powerPrize + "动力");
-				bean.setFlag(String.valueOf(resultBean.getStatus()));
-				List<Map<String, String>> list = new ArrayList<>();
+				if (missionId == 22 || missionId == 24) {
+					if (createFamilyId == null) {
+						bean.setMissionActionDesc("未完成");
+						bean.setMissionActionStatus("0");
+						bean.setMissionActionLink("");
+					}
+				}
+			}
+			bean.setMissionProgress(missionProgress);
+			bean.setMissionReward("奖励:+" + powerPrize + "动力");
+			bean.setFlag(String.valueOf(resultBean.getStatus()));
+			List<Map<String, String>> list = new ArrayList<>();
+			if (logs.size() > 1) {
 				for (int i = 0; i < logs.size(); i++) {
 					Map<String, String> map = new HashMap<>();
 					map.put("missionDesc", logs.get(i).getMissionDesc());
@@ -335,17 +344,18 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					}
 					list.add(map);
 				}
-				levelDic.put("dic", list);
-				bean.setLevelDic(levelDic);
 			}
+			levelDic.put("dic", list);
+			bean.setLevelDic(levelDic);
+
 			rtList.add(bean);
 		}
 
-		Collections.sort(rtList, new Comparator<MissionResultBean>() {
-			public int compare(MissionResultBean o1, MissionResultBean o2) {
-				return Double.valueOf(o1.getMissionId()).compareTo(Double.valueOf(o2.getMissionId()));
-			}
-		});
+//		Collections.sort(rtList, new Comparator<MissionResultBean>() {
+//			public int compare(MissionResultBean o1, MissionResultBean o2) {
+//				return Double.valueOf(o1.getMissionId()).compareTo(Double.valueOf(o2.getMissionId()));
+//			}
+//		});
 		// 排序--- flag 1-->2-->3
 		Collections.sort(rtList, new Comparator<MissionResultBean>() {
 			public int compare(MissionResultBean o1, MissionResultBean o2) {
