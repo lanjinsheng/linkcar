@@ -81,37 +81,37 @@ public interface UserAchieveMapper
 	public void updateNextLevAchieveValue(Map<String, Object> m);
 
 	/**
-	 * 查询家族占领黄金榜信息
+	 * 查询俱乐部占领黄金榜信息
 	 */
 	public FamilyStayGoldLogBean queryFamilyStayGoldInfo(long familyId);
 
 	/**
-	 * 添加家族占领黄金榜信息
+	 * 添加俱乐部占领黄金榜信息
 	 */
 	public void insertFamilyStayGoldLog(long familyId);
 
 	/**
-	 * 更新家族占领黄金榜信息
+	 * 更新俱乐部占领黄金榜信息
 	 */
 	public void updateFamilyStayGoldLog(FamilyStayGoldLogBean bean);
 
 	/**
-	 * 所有指定家族成员
+	 * 所有指定俱乐部成员
 	 */
 	public List<Long> getFamilyUsers(Long familyId);
 
 	/**
-	 * 解锁黄金家族
+	 * 解锁黄金俱乐部
 	 */
 	public void unlockGoldFamilyAchieve(Map<String, Object> m);
 
 	/**
-	 * 查询用户参加的另一个家族连续黄金天数
+	 * 查询用户参加的另一个俱乐部连续黄金天数
 	 */
 	public FamilyStayGoldLogBean queryUserOtherStayGoldDays(Map<String, Object> m);
 
 	/**
-	 * 更新用户黄金家族成就值
+	 * 更新用户黄金俱乐部成就值
 	 */
 	public void updateGoldFamilyAchieveValue(Map<String, Object> m);
 

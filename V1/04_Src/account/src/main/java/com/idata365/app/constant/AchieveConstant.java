@@ -14,7 +14,7 @@ public class AchieveConstant
 	public static final int BESTDRIVER_ID = 5;
 	// 道具收集者
 	public static final int COLLECT_ID = 6;
-	// 黄金家族
+	// 黄金俱乐部
 	public static final int GOLDFAMILY_ID = 7;
 	// 夺宝名人
 	public static final int GRAB_ID = 8;
