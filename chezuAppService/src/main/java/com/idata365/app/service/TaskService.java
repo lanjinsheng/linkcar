@@ -122,7 +122,7 @@ public class TaskService extends BaseService<TaskService>
 	@Transactional
 	public void syncTomorrowRole()
 	{
-		//查询用户家族实时关系
+		//查询用户俱乐部实时关系
 		List<UserFamilyRelationBean> tempList = this.taskMapper.queryUserFamilyRelation();
 		//格式：yyyyMMdd
 		String tomorrowDayStrUndelimiter = getTomorrowDateUndelimiterStr();
@@ -269,12 +269,12 @@ public class TaskService extends BaseService<TaskService>
 	}
 	
 	/**
-	 * 初始化第二天的家族PK关系
+	 * 初始化第二天的俱乐部PK关系
 	 */
 	@Transactional
 	
 	/**
-	 * 随机familyList中的家族与familyId配对，并从familyList移除被配对的家族
+	 * 随机familyList中的俱乐部与familyId配对，并从familyList移除被配对的俱乐部
 	 * @param familyList
 	 * @param familyId
 	 */

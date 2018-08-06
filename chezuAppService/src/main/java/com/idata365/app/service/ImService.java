@@ -96,7 +96,7 @@ public class ImService extends BaseService<ImService>
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	ImNotify imNotify=imNotifyMapper.getNotify(familyId);
     	if(imNotify==null) {
-    		//获取家族信息
+    		//获取俱乐部信息
     		Map<String,Object> leaderInfo=familyService.findLeaderByFamilyId(familyId);
     		imNotify=new ImNotify();
     		imNotify.setFamilyName(String.valueOf(leaderInfo.get("familyName")));

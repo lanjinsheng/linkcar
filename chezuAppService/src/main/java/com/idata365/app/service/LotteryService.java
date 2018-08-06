@@ -413,7 +413,7 @@ public class LotteryService extends BaseService<LotteryService>
 			}
 		}
 		
-		//如果有一个用户在自己创建的家族和加入的家族重复出险，去掉后面一个
+		//如果有一个用户在自己创建的俱乐部和加入的俱乐部重复出险，去掉后面一个
 		if (null != userFamilyRelation1 && null != userFamilyRelation0)
 		{
 			int count1 = this.lotteryMigrateInfoMsgMapper.countFamilyByUserAndId(userFamilyRelation1);

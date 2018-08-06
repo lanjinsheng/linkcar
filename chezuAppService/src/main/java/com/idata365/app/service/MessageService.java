@@ -42,26 +42,26 @@ import com.idata365.app.util.ValidTools;
 public class MessageService extends BaseService<MessageService>{
 	private final static Logger LOG = LoggerFactory.getLogger(MessageService.class);
 	public static final String  H5Host="http://apph5.idata365.com/";
-	public static final String  InviteMessage="玩家【%s】申请加入您的车族，请尽快审核，别让您的粉丝等太久哦！";
-	public static final String  PassFamilyMessage="族长【%s】同意了您的申请，欢迎来到【%s】大家族！";
-	public static final String  PassFamilyMessage2="玩家【%s】同意了进入您创建的家族，快去看看吧！";
-	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】家族失败！";
-	public static final String  FailFamilyMessage2="抱歉，玩家【%s】很拒绝加入您创建的家族！";
+	public static final String  InviteMessage="玩家【%s】申请加入您的俱乐部，请尽快审核，别让您的粉丝等太久哦！";
+	public static final String  PassFamilyMessage="老板【%s】同意了您的申请，欢迎来到【%s】大俱乐部！";
+	public static final String  PassFamilyMessage2="玩家【%s】同意了进入您创建的俱乐部，快去看看吧！";
+	public static final String  FailFamilyMessage="抱歉，您申请加入【%s】俱乐部失败！";
+	public static final String  FailFamilyMessage2="抱歉，玩家【%s】很拒绝加入您创建的俱乐部！";
 	public static final String  QuitFamilyMessage="您的俱乐部成员【%s】离开了您创建的俱乐部! ";
-	public static final String  ReveiceInvite="【%s】俱乐部经理【%s】邀请你进入俱乐部! ";
+	public static final String  ReveiceInvite="【%s】俱乐部老板【%s】邀请你进入俱乐部! ";
 	//踢人
-	public static final String KickMemberMessage="【%s】俱乐部经理【%s】将您移出了俱乐部！";
-	public static final String ChallengeMessage="下战书！您的家族被【%s】家族挑战了，将成为明天的对战家族，请号令成员做好准备！";
+	public static final String KickMemberMessage="【%s】俱乐部老板【%s】将您移出了俱乐部！";
+	public static final String ChallengeMessage="下战书！您的俱乐部被【%s】俱乐部挑战了，将成为明天的对战俱乐部，请号令成员做好准备！";
 	//获奖
-	public static final String RewardMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族共获得【%s】钻石，按照贡献比例分配给您【%s】钻石，已发放至您的账户，点此查看昨日对战详情。";
-	public static final String RewardPowerMessage="恭喜！您的家族【%s】在【%s】每日对战中获胜，家族共获得【%s】动力，按照贡献比例分配给您【%s】动力，已发放至您的账户，点此查看昨日对战详情。";
+	public static final String RewardMessage="恭喜！您的俱乐部【%s】在【%s】每日对战中获胜，俱乐部共获得【%s】钻石，按照贡献比例分配给您【%s】钻石，已发放至您的账户，点此查看昨日对战详情。";
+	public static final String RewardPowerMessage="恭喜！您的俱乐部【%s】在【%s】每日对战中获胜，俱乐部共获得【%s】动力，按照贡献比例分配给您【%s】动力，已发放至您的账户，点此查看昨日对战详情。";
 	
 	
 	//获奖
-	public static final String SeasonRewardMessage="恭喜！您的家族【%s】在【%s】赛季中获得好成绩，家族共获得【%s】钻石，分配给您【%s】钻石，已发放至您的账户.";
+	public static final String SeasonRewardMessage="恭喜！您的俱乐部【%s】在【%s】赛季中获得好成绩，俱乐部共获得【%s】钻石，分配给您【%s】钻石，已发放至您的账户.";
 	
 	public static final String RegMessage="欢迎您加入【链车】游戏，在这里您可以关注自身驾驶行为，即有机会赢取超级大奖！快快点击查看玩法指导！";
-	public static final String TietiaoMessage="ohh，车族【%s】发生了一起违规，赶紧来贴条吧！";
+	public static final String TietiaoMessage="ohh，俱乐部【%s】发生了一起违规，赶紧来贴条吧！";
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";
 	//兑换
@@ -100,7 +100,7 @@ public class MessageService extends BaseService<MessageService>{
 	
 	//道具赠送通知
 	public static final String PropsSend="com.idata365.haochezu://propsReceive.push?msgId=%s";
-	//家族钻石分配记录
+	//俱乐部钻石分配记录
 //	public static final String FamilyDiamondsDistr="com.idata365.haochezu://DEPNotes.push?enterType=0&familyId=%s";
 	
 	public static final String FamilyFightHistoryDetailUrl="com.idata365.haochezu://FightHistoryDetail.push?familyId=%s&fightTime=%s";
@@ -118,7 +118,7 @@ public class MessageService extends BaseService<MessageService>{
 	//配件零件申请审批消息
 	public static final String componentUrl= "com.shujin.haochezu://componentHandle.push?msgId=%s";
 	public static final String RequestComponent= "俱乐部成员 %s 在零件库中申请领取一个%s，是否同意发放？";
-	public static final String ApplyGiveLog= "发福利了！俱乐部经理在零件库中分配给您一个 %s，快去看看吧。";
+	public static final String ApplyGiveLog= "发福利了！俱乐部老板在零件库中分配给您一个 %s，快去看看吧。";
 	public static final String ApplyPraying= "%s 在俱乐部祈愿中给您赠予了一个 %s。";
 	
 	@Autowired
@@ -202,7 +202,7 @@ public class MessageService extends BaseService<MessageService>{
 			message.setIsPush(1);
 			message.setParentType(MessageTypeConstant.FamilyType);
 			message.setPicture("");
-			message.setTitle("族长审核");
+			message.setTitle("老板审核");
 			message.setToUserId(toUserId);
 			message.setUrlType(0);
 			message.setToUrl(getPassMessageUrl(f.getMyFamilyId()));
@@ -641,7 +641,7 @@ public class MessageService extends BaseService<MessageService>{
 		message.setIsPush(1);
 		message.setParentType(MessageTypeConstant.FamilyType);
 		message.setPicture("");
-		message.setTitle("家族踢出通知");
+		message.setTitle("俱乐部踢出通知");
 		message.setToUserId(toUserId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
 		message.setToUrl("");
@@ -749,10 +749,10 @@ public class MessageService extends BaseService<MessageService>{
 	 * 
 	    * @Title: buildTieTiaoMessage
 	    * @Description: TODO(这里用一句话描述这个方法的作用)
-	    * @param @param opponentFamily 对手家族
-	    * @param @param opponentFamilyName 对手家族名称
+	    * @param @param opponentFamily 对手俱乐部
+	    * @param @param opponentFamilyName 对手俱乐部名称
 	    * @param @param fromUserId 用户id
-	    * @param @param myFamilyId 自家家族id
+	    * @param @param myFamilyId 自家俱乐部id
 	    * @param @return    参数
 	    * @return List<Message>    返回类型
 	    * @throws
@@ -939,7 +939,7 @@ public class MessageService extends BaseService<MessageService>{
 		rtMap2.put("desc", "个人消息，快来看吧!");
 	 
 		Map<String,String>  rtMap3=new HashMap<String,String>();
-		rtMap3.put("desc", "家族审核/挑战/奖励消息，来看看吧!");
+		rtMap3.put("desc", "俱乐部审核/挑战/奖励消息，来看看吧!");
 		
 		List<Map<String,Object>> findList=messageMapper.getMsgMainTypes(userId);
 		for(Map<String,Object> map:findList) {
@@ -960,7 +960,7 @@ public class MessageService extends BaseService<MessageService>{
 				rtMap3.put("msgType", "3");
 				rtMap3.put("unRead", String.valueOf(map.get("typeCount")));
 				rtMap3.put("icon",MessageImgs.get("3"));
-				rtMap3.put("title", "家族消息");
+				rtMap3.put("title", "俱乐部消息");
 				hadFamily=true;
 			}
 			 
@@ -1001,7 +1001,7 @@ public class MessageService extends BaseService<MessageService>{
 			rtMap3.put("msgType", "3");
 			rtMap3.put("unRead","0");
 			rtMap3.put("icon",MessageImgs.get("3"));
-			rtMap3.put("title", "家族消息");
+			rtMap3.put("title", "俱乐部消息");
 		}
 		paramMap.put("parentType", 3);
 		timeMsg=messageMapper.getMsgMainTypeTime(paramMap);

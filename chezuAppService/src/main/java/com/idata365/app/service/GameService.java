@@ -164,26 +164,26 @@ public class GameService extends BaseService<GameService>
 		
 		FamilyParamBean familyParamBean = new FamilyParamBean();
 		familyParamBean.setFamilyId(bean.getFamilyId());
-		//查询发起挑战的家族信息
+		//查询发起挑战的俱乐部信息
 		FamilyInfoBean familyInfoBean = this.familyMapper.queryFamilyInfo(familyParamBean);
 		
-		//被挑战家族类型的总数
+		//被挑战俱乐部类型的总数
 		familyParamBean.setFamilyType(bean.getFamilyType());
 		int allFamilyTypeCount = this.familyMapper.countByType(familyParamBean);
 		
-		//指定类型家族已经被挑战的数量
+		//指定类型俱乐部已经被挑战的数量
 		FamilyChallengeLogParamBean beChallengedLogParamBean = new FamilyChallengeLogParamBean();
 		beChallengedLogParamBean.setChallengeType(bean.getFamilyType());
 		beChallengedLogParamBean.setChallengeDay(tomorrowDateStr);
 		int tomorrowBeChallengedCount = this.gameMapper.countBeChallenge(beChallengedLogParamBean);
 		
-		//指定类型家族已经发起挑战的数量
+		//指定类型俱乐部已经发起挑战的数量
 		FamilyChallengeLogParamBean challengeLogParamBean = new FamilyChallengeLogParamBean();
 		challengeLogParamBean.setPrevType(bean.getFamilyType());
 		challengeLogParamBean.setChallengeDay(tomorrowDateStr);
 		int tomorrowChallengeCount = this.gameMapper.countChallenge(challengeLogParamBean);
 		
-		//如果指定家族类型的总数大于(这个类型家族挑战别人和被别人挑战数量的和)，则挑战成功
+		//如果指定俱乐部类型的总数大于(这个类型俱乐部挑战别人和被别人挑战数量的和)，则挑战成功
 		if (allFamilyTypeCount > tomorrowBeChallengedCount + tomorrowChallengeCount)
 		{
 			if (bean.getFamilyType() == familyInfoBean.getFamilyType())
@@ -195,7 +195,7 @@ public class GameService extends BaseService<GameService>
 			}
 			
 			saveChallgenParamBean.setPrevType(familyInfoBean.getFamilyType());
-			//记录挑战家族日志 
+			//记录挑战俱乐部日志 
 			this.gameMapper.saveChallengeLog(saveChallgenParamBean);
 			return 1;
 		}
@@ -227,7 +227,7 @@ public class GameService extends BaseService<GameService>
 		boolean challengeFlag = judgeChallenged(saveChallgenParamBean);
 		if (challengeFlag)
 		{
-			rtMap.put("error", "你已经匹配过家族了!");
+			rtMap.put("error", "你已经匹配过俱乐部了!");
 			return rtMap;
 		}
 		Map<String,Object> pkKey=new HashMap<String,Object>();
@@ -237,10 +237,10 @@ public class GameService extends BaseService<GameService>
 		pkKey.put("matchKey", matchKey);
 		int getPk=familyMapper.updateFamilyPkKeyGet(pkKey);
 		if(getPk==0) {
-			rtMap.put("error", "来迟了,该等级家族已被匹配光!");
+			rtMap.put("error", "来迟了,该等级俱乐部已被匹配光!");
 			return rtMap;
 		}else {
-			//插入匹配家族
+			//插入匹配俱乐部
 			long  competitorFamilyId=familyMapper.getCompetitorFamilyId(pkKey);
 			int updateSelf=familyMapper.updateFamilyPkSelfKey(pkKey);
 			Map<String,Object> pkRelation=new HashMap<String,Object>();
@@ -248,7 +248,7 @@ public class GameService extends BaseService<GameService>
 			pkRelation.put("competitorFamilyId", competitorFamilyId);
 			pkRelation.put("daystamp", tomorrowDateStr);
 			familyMapper.insertPkRelation(pkRelation);
-			//查询家族
+			//查询俱乐部
 			FamilyParamBean paramBean=new FamilyParamBean();
 			paramBean.setFamilyId(competitorFamilyId);
 			FamilyInfoBean familyBean=familyMapper.queryFamilyInfo(paramBean);
@@ -257,7 +257,7 @@ public class GameService extends BaseService<GameService>
 			rtMap.put("familyType", familyBean.getFamilyType());
 			rtMap.put("imgUrl", basePath+familyBean.getImgUrl());
 			if(competitorFamilyId!=FamilyConstant.ROBOT_FAMILY_ID) {
-			//循环查找出对方家族组员
+			//循环查找出对方俱乐部组员
 				FamilyParamBean familyParamBean=new FamilyParamBean();
 				familyParamBean.setFamilyId(bean.getFamilyId());
 				FamilyResultBean familyResultBean=familyMapper.queryFamilyById(familyParamBean);
@@ -343,7 +343,7 @@ public class GameService extends BaseService<GameService>
 //				FamilyChallengeLogBean tempTypeResultBean = this.gameMapper.queryChallengeType(tempParamTypeBean);
 //				int challengeType = tempTypeResultBean.getChallengeType();
 //				
-//				String msgTemplate = "您已成功挑战FAMILY_HOLD家族\\n中午12：00将公布您的竞争对手，敬请期待！";
+//				String msgTemplate = "您已成功挑战FAMILY_HOLD俱乐部\\n中午12：00将公布您的竞争对手，敬请期待！";
 //				String tempMsg;
 //				if (FamilyConstant.BRONZE_TYPE == challengeType)
 //				{
@@ -393,7 +393,7 @@ public class GameService extends BaseService<GameService>
 				paramBean.setFamilyId(Long.valueOf(rtMap.get("selfFamilyId").toString()));
 				rtMap.put("passive", "1");
 			}
-			//查询家族
+			//查询俱乐部
 			FamilyInfoBean familyBean=familyMapper.queryFamilyInfo(paramBean);
 			rtMap.put("competitorFamilyId", familyBean.getId());
 			rtMap.put("familyName", familyBean.getFamilyName());
@@ -404,7 +404,7 @@ public class GameService extends BaseService<GameService>
 		return rtMap;
 		
 	}
-	//查询正在对战的家族系信息
+	//查询正在对战的俱乐部系信息
 	public CompetitorFamilyInfoResultBean queryCompetitorFamilyInfo(GameFamilyParamBean bean)
 	{
 		FamilyRelationBean relationBean = new FamilyRelationBean();
@@ -956,7 +956,7 @@ public class GameService extends BaseService<GameService>
 	}
 	
 	/**
-	 * 通知家族内其他人去贴条
+	 * 通知俱乐部内其他人去贴条
 	 * @param bean
 	 * @param userInfo
 	 */
@@ -1417,7 +1417,7 @@ public class GameService extends BaseService<GameService>
 	
 	
 	/**
-	 * 随机familyList中的家族与familyId配对，并从familyList移除被配对的家族
+	 * 随机familyList中的俱乐部与familyId配对，并从familyList移除被配对的俱乐部
 	 * @param familyList
 	 * @param familyId
 	 */

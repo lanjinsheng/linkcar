@@ -224,7 +224,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					count = boxTreasureMapper.countOfOpenUserBox(userId);
 					break;
 				case 24:
-					// 在俱乐部配件库中分配三次配件--针对族长
+					// 在俱乐部配件库中分配三次配件--针对老板
 					count = componentMapper.countAllotGive(userId);
 					break;
 				case 25:

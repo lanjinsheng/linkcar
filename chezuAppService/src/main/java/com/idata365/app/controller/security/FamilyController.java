@@ -82,7 +82,7 @@ public class FamilyController extends BaseController {
 	}
 	
 	/**
-	 * 查看家族邀请(招募)
+	 * 查看俱乐部邀请(招募)
 	 * 
 	 * @param bean
 	 * @return
@@ -97,7 +97,7 @@ public class FamilyController extends BaseController {
 	}
 
 	/**
-	 * 审核成员通过OR通过家族邀请
+	 * 审核成员通过OR通过俱乐部邀请
 	 * 
 	 * @param reqBean
 	 * @return
@@ -119,7 +119,7 @@ public class FamilyController extends BaseController {
 	}
 
 	/**
-	 * 拒绝用户加入OR拒绝家族邀请
+	 * 拒绝用户加入OR拒绝俱乐部邀请
 	 * 
 	 * @param reqBean
 	 * @return
@@ -131,7 +131,7 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 	
-	//退出家族
+	//退出俱乐部
 	@RequestMapping("/family/quitFromFamily")
 	public Map<String, Object> quitFromFamily(@RequestBody FamilyParamBean reqBean) {
 		List<Map<String,Object>> list1=userInfoService.getFamilyUsers(reqBean.getFamilyId(),this.getImgBasePath());
@@ -140,7 +140,7 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(null);
 	}
 
-	//可加入家族列表
+	//可加入俱乐部列表
 	@RequestMapping("/family/listRecruFamily")
 	public Map<String, Object> listRecruFamily() {
 		Long userId = super.getUserId();
@@ -153,7 +153,7 @@ public class FamilyController extends BaseController {
 		return ResultUtils.rtSuccess(resultList);
 	}
 
-	//通过邀请码查询家族
+	//通过邀请码查询俱乐部
 	@RequestMapping("/family/findFamilyByCode")
 	public Map<String, Object> findFamilyByCode(@RequestBody FamilyParamBean reqBean) {
 		Long userId = super.getUserId();
@@ -168,7 +168,7 @@ public class FamilyController extends BaseController {
 		}
 	}
 
-	//通过名字查询家族
+	//通过名字查询俱乐部
 	@RequestMapping("/family/queryFamilyByName")
 	public Map<String, Object> queryFamilyByName(@RequestBody FamilyParamBean reqBean) {
 		List<FamilyRandResultBean> result = new ArrayList<>();
@@ -192,7 +192,7 @@ public class FamilyController extends BaseController {
 	/**
 	 * 
 	 * @Title: applyByFamily
-	 * @Description: TODO(申请加入指定家族OR家族邀请指定用户)
+	 * @Description: TODO(申请加入指定俱乐部OR俱乐部邀请指定用户)
 	 * @param @return
 	 *            参数
 	 * @return <Map<String,Object>> 返回类型
@@ -205,13 +205,13 @@ public class FamilyController extends BaseController {
 
 		int i = this.familyService.applyByFamily(bean, userInfo);
 		if(i==0) {
-			return ResultUtils.rtFail(null, "该用户已在该家族中", "100");
+			return ResultUtils.rtFail(null, "该用户已在该俱乐部中", "100");
 		}
 		return ResultUtils.rtSuccess(null);
 	}
 
 	/**
-	 * 检查家族名称
+	 * 检查俱乐部名称
 	 * 
 	 * @param bean
 	 * @return
@@ -227,7 +227,7 @@ public class FamilyController extends BaseController {
 	}
 
 	/**
-	 * 创建家族
+	 * 创建俱乐部
 	 * 
 	 * @param reqBean
 	 * @return
@@ -241,9 +241,9 @@ public class FamilyController extends BaseController {
 		} else if (-2 == familyId) {
 			return ResultUtils.rtFailParam(null,"俱乐部昵称已存在");
 		}
-		// 初始化家族分数
+		// 初始化俱乐部分数
 
-		// 家族资产初始化
+		// 俱乐部资产初始化
 		chezuAssetService.initFamilyCreate(familyId, SignUtils.encryptHMAC(String.valueOf(familyId)));
 		Map<String, Long> resultMap = new HashMap<>();
 		resultMap.put("familyId", familyId);
@@ -270,7 +270,7 @@ public class FamilyController extends BaseController {
 	/**
 	 * 
 	 * @Title: generateInviteInfo
-	 * @Description: TODO(家族头像)
+	 * @Description: TODO(俱乐部头像)
 	 * @param @param
 	 *            reqBean
 	 * @param @return
@@ -317,7 +317,7 @@ public class FamilyController extends BaseController {
 	}
 
 	/**
-	 * 查询自己创建的家族
+	 * 查询自己创建的俱乐部
 	 * 
 	 * @param reqBean
 	 * @return
@@ -334,7 +334,7 @@ public class FamilyController extends BaseController {
 	}
 
 	/**
-	 * 查询用户创建的家族及加入的家族信息
+	 * 查询用户创建的俱乐部及加入的俱乐部信息
 	 * 
 	 * @param reqBean
 	 * @return

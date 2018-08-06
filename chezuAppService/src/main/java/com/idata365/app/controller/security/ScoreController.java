@@ -79,7 +79,7 @@ public class ScoreController extends BaseController {
 	
 
 	/**
-	 * 发起家族、参与家族查询
+	 * 发起俱乐部、参与俱乐部查询
 	 * 
 	 * @param bean
 	 * @return
@@ -115,7 +115,7 @@ public class ScoreController extends BaseController {
 	}
 
 	/**
-	 * 今日上榜家族
+	 * 今日上榜俱乐部
 	 * 
 	 * @return
 	 */
@@ -133,7 +133,7 @@ public class ScoreController extends BaseController {
 	}
 
 	/**
-	 * 查看家族信息
+	 * 查看俱乐部信息
 	 * 
 	 * @return
 	 */
@@ -164,7 +164,7 @@ public class ScoreController extends BaseController {
 	}
 
 	/**
-	 * 查看家族成员
+	 * 查看俱乐部成员
 	 * 
 	 * @return
 	 */
@@ -419,7 +419,7 @@ public class ScoreController extends BaseController {
 	}
 
 	/**
-	 * 昨日赛果-家族成员详情
+	 * 昨日赛果-俱乐部成员详情
 	 * 
 	 * @param bean
 	 * @return

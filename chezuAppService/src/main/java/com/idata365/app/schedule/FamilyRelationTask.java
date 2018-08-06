@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idata365.app.service.TaskService;
 
 /**
- * 初始化第二天的家族PK关系
+ * 初始化第二天的俱乐部PK关系
  * @author Administrator
  *
  */

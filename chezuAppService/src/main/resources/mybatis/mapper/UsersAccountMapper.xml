@@ -5,7 +5,7 @@
     </resultMap>
 
 
-<!-- 临时使用的，转移到家族逻辑中 -->
+<!-- 临时使用的，转移到俱乐部逻辑中 -->
      <select id="getFamilyByUserId" resultType="java.util.HashMap" parameterType="java.lang.Long">
        SELECT *
        FROM  familyInfo where createUserId=#{userId}

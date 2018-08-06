@@ -72,7 +72,7 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		rtMap.put("score", String.valueOf(score));
 		rtMap.put("imgUrl", imgBasePath + account.getImgUrl());
 		rtMap.put("powerNum", powerNum);
-		// 家族信息
+		// 俱乐部信息
 		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
 		rtMap.put("createFamilyInfo", familyInfo.get("createFamilyInfo"));
 		rtMap.put("joinFamilyInfo", familyInfo.get("joinFamilyInfo"));

@@ -38,7 +38,7 @@ public class FamilyInviteService extends BaseService<FamilyInviteService> {
 	/**
 	 * 
 	 * @Title: insertInviteFamily
-	 * @Description: TODO(网页插入家族邀请表)
+	 * @Description: TODO(网页插入俱乐部邀请表)
 	 * @param @param
 	 *            familyInvite 参数
 	 * @return void 返回类型

@@ -156,15 +156,15 @@ public interface FamilyMapper {
 
 	public List<UserFamilyRoleLogBean> queryStartEnd(UserFamilyRoleLogParamBean bean);
 
-	// 家族人数更新活跃度--begin
+	// 俱乐部人数更新活跃度--begin
 	void addFamilyMemberNum(@Param("familyId") Long familyId);
 
 	void removeFamilyMemberNum(@Param("familyId") Long familyId);
 
 //	void updateFamilyActiveLevel(@Param("familyId") Long familyId);
 
-	// 家族人数更新活跃度--end
-	// 挑选对战家族--begin
+	// 俱乐部人数更新活跃度--end
+	// 挑选对战俱乐部--begin
 	int updateFamilyPkKeyGet(Map<String, Object> map);
 
 	int updateFamilyPkSelfKey(Map<String, Object> map);
@@ -172,12 +172,12 @@ public interface FamilyMapper {
 	int insertPkRelation(Map<String, Object> map);
 
 	long getCompetitorFamilyId(Map<String, Object> pkKey);
-	// 挑选对战家族--end
+	// 挑选对战俱乐部--end
 
 	List<Map<String, Object>> findUsersByFamilyId(@Param("familyId") Long familyId);
 
 	long getLeaderIdByFamilyId(@Param("familyId") Long familyId);
-	// 初始化家族日分
+	// 初始化俱乐部日分
 	int insertFamilyDriveDayStat(FamilyDriveDayStat familyDriveDayStat);
 	
 	int queryCountJoinFamily(@Param("userId") Long userId);

@@ -307,7 +307,7 @@ public class ShareCommController extends BaseController
 	// Map<String,Object> rtMap=new HashMap<String,Object>();
 	// Map<String,Object> family=familyService.findFamilyIdByUserId(userId);
 	// if(family==null) {
-	// return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建");
+	// return ResultUtils.rtFailParam(null,"参数错误，或者用户俱乐部未创建");
 	// }
 	// try {
 	// Long familyId=Long.valueOf(rtMap.get("id").toString());
@@ -333,7 +333,7 @@ public class ShareCommController extends BaseController
 		Map<String, Object> family = familyService.findFamilyIdByUserId(userId);
 		if (family == null)
 		{
-			return ResultUtils.rtFailParam(null, "参数错误，或者用户家族未创建");
+			return ResultUtils.rtFailParam(null, "参数错误，或者用户俱乐部未创建");
 		}
 		try
 		{

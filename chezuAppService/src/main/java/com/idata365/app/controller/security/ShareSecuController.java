@@ -34,14 +34,14 @@ public class ShareSecuController  extends BaseController {
     @RequestMapping("/share/createInvite")
     public Map<String,Object> createInvite(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
     	String shareType=String.valueOf(requestBodyParams.get("shareType"));
-    	LOG.info("Param:shareType="+shareType);//1家族邀请，2应用分享
+    	LOG.info("Param:shareType="+shareType);//1俱乐部邀请，2应用分享
     	Map<String,Object> rtMap=new HashMap<String,Object>();
     	
     	try {
     		if(shareType.equals("1")){
 	    		Map<String,Object>  family=familyService.findFamilyIdByUserId(this.getUserId());
 	        	if(family==null) {
-	        		return ResultUtils.rtFailParam(null,"参数错误，或者用户家族未创建\"");
+	        		return ResultUtils.rtFailParam(null,"参数错误，或者用户俱乐部未创建\"");
 	        	}
 	    		Long familyId=Long.valueOf(family.get("id").toString());
 	    		String inviteCode=this.getUserId().toString();

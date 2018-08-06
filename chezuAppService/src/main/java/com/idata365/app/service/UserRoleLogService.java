@@ -91,7 +91,7 @@ public class UserRoleLogService extends BaseService<UserRoleLogService>
 		userRoleLog.setStartTime(getDateStr(0));
 		userRoleLog.setEndTime(getDateStr(3650));
 		userRoleLogMapper.insertUserRole(userRoleLog);
-		//更新家族里的role信息
+		//更新俱乐部里的role信息
 		userRoleLogMapper.updateUserFamilyRelationRole(userRoleLog);
 		return userRoleLog;
 	}

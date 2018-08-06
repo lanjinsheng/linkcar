@@ -67,7 +67,7 @@ public class GameController extends BaseController
 	}
 	
 	/**
-	 * 挑战家族
+	 * 挑战俱乐部
 	 * @param bean
 	 * @return
 	 */
@@ -82,7 +82,7 @@ public class GameController extends BaseController
 	}
 	
 	/**
-	 * 挑战家族
+	 * 挑战俱乐部
 	 * @param bean
 	 * @return
 	 */
@@ -101,7 +101,7 @@ public class GameController extends BaseController
 	
 	
 	/**
-	 * 查询正在对战的家族系信息---由Game ControllerV2中同名方法覆盖
+	 * 查询正在对战的俱乐部系信息---由Game ControllerV2中同名方法覆盖
 	 * @param bean
 	 * @return
 	 */
@@ -128,7 +128,7 @@ public class GameController extends BaseController
 	}
 	
 	/**
-	 * 查询家族当天是否发起了第二天的挑战
+	 * 查询俱乐部当天是否发起了第二天的挑战
 	 * @param bean
 	 * @return
 	 */
@@ -342,7 +342,7 @@ public class GameController extends BaseController
 	}
 	
 	/**
-	 * 通知家族内其他人去贴条
+	 * 通知俱乐部内其他人去贴条
 	 * @param bean
 	 * @return
 	 */

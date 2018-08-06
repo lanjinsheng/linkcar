@@ -90,7 +90,7 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", "");
 			rtMap.put("avgScore", "0");
 			rtMap.put("reducePower", "0");
-			return ResultUtils.rtFailParam(rtMap, "动力不足,无法匹配到对战家族!");
+			return ResultUtils.rtFailParam(rtMap, "动力不足,无法匹配到对战俱乐部!");
 		}else{
 			rtMap.put("familyId", String.valueOf(randFamily.get("id")));
 			rtMap.put("familyName", String.valueOf(randFamily.get("familyName")));
@@ -119,7 +119,7 @@ public class FightController extends BaseController {
 		Long selfFamilyId=Long.valueOf(requestBodyParams.get("selfFamilyId").toString());
 		Long competitorFamilyId=Long.valueOf(requestBodyParams.get("competitorFamilyId").toString());
 		if(competitorFamilyId.longValue()==0 || selfFamilyId.longValue()==0){
-			return ResultUtils.rtFailParam(null, "家族入参错误。");
+			return ResultUtils.rtFailParam(null, "俱乐部入参错误。");
 		}
 		fightService.insertFightRelation(selfFamilyId, competitorFamilyId);
 		return ResultUtils.rtSuccess(null);
