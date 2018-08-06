@@ -767,7 +767,6 @@ public class FamilyService extends BaseService<FamilyService> {
 		notify.setLeaderId(account.getId());
 		notify.setLeaderPic(account.getImgUrl());
 		notify.setInUse(1);
-		notify.setFamilyId(familyId);
 		notify.setNotifyMsg(bean.getNotifyMsg());
 		imService.insertNotify(notify);
 		

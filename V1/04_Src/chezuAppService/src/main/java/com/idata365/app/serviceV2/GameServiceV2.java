@@ -79,24 +79,24 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 
 		List<Map<String, String>> billList = new ArrayList<>();
 		List<Map<String, Object>> list = familyMapper.queryAllFamilyOrderNo();
-		long familyId = 0;
-		// 加入自己俱乐部排名信息
-		if (ValidTools.isNotBlank(queryFamily)) {
-			if (ValidTools.isNotBlank(queryFamily.getOriFamily())) {
-				familyId = queryFamily.getOriFamily().getFamilyId();
-				Map<String, Object> map = familyMapper.queryFamilyOrderNoByFamilyId(familyId);
-				if (map != null) {
-					list.add(map);
-				}
-			}
-			if (ValidTools.isNotBlank(queryFamily.getJoinFamily())) {
-				familyId = queryFamily.getJoinFamily().getFamilyId();
-				Map<String, Object> map = familyMapper.queryFamilyOrderNoByFamilyId(familyId);
-				if (map != null) {
-					list.add(map);
-				}
-			}
-		}
+//		long familyId = 0;
+//		// 加入自己俱乐部排名信息
+//		if (ValidTools.isNotBlank(queryFamily)) {
+//			if (ValidTools.isNotBlank(queryFamily.getOriFamily())) {
+//				familyId = queryFamily.getOriFamily().getFamilyId();
+//				Map<String, Object> map = familyMapper.queryFamilyOrderNoByFamilyId(familyId);
+//				if (map != null) {
+//					list.add(map);
+//				}
+//			}
+//			if (ValidTools.isNotBlank(queryFamily.getJoinFamily())) {
+//				familyId = queryFamily.getJoinFamily().getFamilyId();
+//				Map<String, Object> map = familyMapper.queryFamilyOrderNoByFamilyId(familyId);
+//				if (map != null) {
+//					list.add(map);
+//				}
+//			}
+//		}
 		for (int i = 0; i < list.size(); i++) {
 			Map<String, String> bill = new HashMap<>();
 			UsersAccount usersAccount = usersAccountMapper

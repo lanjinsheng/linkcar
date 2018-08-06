@@ -186,7 +186,7 @@
  	<select id="queryAllFamilyOrderNo" resultType="java.util.HashMap">
  		<![CDATA[select a.familyId,a.trophy,a.yesterdayOrderNo,a.familyType,a.startDay,a.endDay,b.familyName,b.createUserId from familyScore a left join familyInfo b 
 		on a.familyId=b.id where (yesterdayOrderNo > 0) and a.startDay<=date(now()) and a.endDay>=date(now())
-		order by a.yesterdayOrderNo  limit 20]]>
+		order by a.yesterdayOrderNo  limit 10]]>
  	</select>
  	
  	<select id="queryFamilyOrderNoByFamilyId" resultType="java.util.HashMap">
@@ -447,6 +447,10 @@
     
     <update id="updateOtherFamilyInviteStatus" >
  	    update familyInvite set status=2 where memberUserId=#{userId} and status=0 and inviteType=2
+    </update>
+    
+    <update id="updateFamilyInfo" >
+ 	    update familyInfo set familyName=#{familyName},imgUrl=#{imgUrl} where id=#{familyId}
     </update>
     
   </mapper>
