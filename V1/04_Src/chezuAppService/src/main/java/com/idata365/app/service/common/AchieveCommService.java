@@ -192,9 +192,9 @@ public class AchieveCommService
 
 	/****************************************** 坑爹模块start **************************************************/
 	/**
-	 * 7.黄金家族
+	 * 7.黄金俱乐部
 	 * 
-	 * @Description:TODO 所在家族连续X天位于黄金档内，当该成就完成时，该家族下的所有成员都加分
+	 * @Description:TODO 所在俱乐部连续X天位于黄金档内，当该成就完成时，该俱乐部下的所有成员都加分
 	 */
 	protected void addGoldFamilyTimes(long familyId)
 	{
@@ -284,16 +284,16 @@ public class AchieveCommService
 	}
 
 	/**
-	 * 更新该家族下所有成员当前天数
-	 * 	逻辑： 1.先看该家族有没有占领黄金榜记录，如果没有，则生成记录；有，则更新天数（断签则置为0)
+	 * 更新该俱乐部下所有成员当前天数
+	 * 	逻辑： 1.先看该俱乐部有没有占领黄金榜记录，如果没有，则生成记录；有，则更新天数（断签则置为0)
 	 *      2.校验连续天数是否达到解锁标准：【30天】个人评分+5；【60天】个人评分8分；【100天】个人评分+10
-	 *               	 		达到：将家族下所有成员(不包括 已经解锁该成就的成员)的该成就解锁。并将天数置为0
-	 *               			没达到：更新该家族加所有成员的该项成就天数
+	 *               	 		达到：将俱乐部下所有成员(不包括 已经解锁该成就的成员)的该成就解锁。并将天数置为0
+	 *               			没达到：更新该俱乐部加所有成员的该项成就天数
 	 */
 	void updateAchieveDaysByFamily(long familyId)
 	{
 		LOG.info("updateAchieveDaysByFamily.start==================================familyId={}", familyId);
-		// 查询家族占领黄金榜信息
+		// 查询俱乐部占领黄金榜信息
 		FamilyStayGoldLogBean bean = userAchieveMapper.queryFamilyStayGoldInfo(familyId);
 		LOG.info("FamilyStayGoldLogBean>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}", bean);
 		if (bean != null && bean.getLev() >= 3)// 当登榜等级为3级时，不再更新(ps:3级已是最高等级)
@@ -317,7 +317,7 @@ public class AchieveCommService
 		{
 			goldCountDays = 1;// 重置，从第一天开始
 		}
-		// 该家族下所有成员列表
+		// 该俱乐部下所有成员列表
 		List<Long> user = userAchieveMapper.getFamilyUsers(familyId);
 		if (lev == 0)
 		{
@@ -374,7 +374,7 @@ public class AchieveCommService
 		LOG.info("updateAchieveDaysByFamily.end========================================{}");
 	}
 
-	// 解锁用户黄金家族
+	// 解锁用户黄金俱乐部
 	void unclockUserGoldAchieve(List<Long> user, int lev)
 	{
 		for (Long userId : user)
@@ -382,12 +382,12 @@ public class AchieveCommService
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("userId", userId);
 			map.put("lev", lev);
-			// 解锁该家族下所有成员此项成就
+			// 解锁该俱乐部下所有成员此项成就
 			userAchieveMapper.unlockGoldFamilyAchieve(map);
 		}
 	}
 
-	// 增加用户黄金家族登榜成就数量
+	// 增加用户黄金俱乐部登榜成就数量
 	void addUserGoldAchieveNum(List<Long> user, int lev, long familyId, int continueCount)
 	{
 		for (Long userId : user)
@@ -397,9 +397,9 @@ public class AchieveCommService
 			map.put("userId", userId);
 			map.put("achieve", 7);
 			map.put("familyId", familyId);
-			// 查询用户参加的另一个家族的黄金期
+			// 查询用户参加的另一个俱乐部的黄金期
 			FamilyStayGoldLogBean fb = userAchieveMapper.queryUserOtherStayGoldDays(map);
-			if (fb != null && fb.getGoldCountDays() > continueCount)// 当用户参加的另一个家族成就更高时，将更新最高值
+			if (fb != null && fb.getGoldCountDays() > continueCount)// 当用户参加的另一个俱乐部成就更高时，将更新最高值
 			{
 				nowNum = fb.getGoldCountDays();
 			}

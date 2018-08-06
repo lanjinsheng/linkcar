@@ -29,7 +29,7 @@ public class FightService extends BaseService<FightService> {
 	@Autowired
 	ChezuAssetService chezuAssetService;
      /**
-      * 获取对手家族id，无对战记录返回null
+      * 获取对手俱乐部id，无对战记录返回null
       * @param selfFamilyId
       * @return
       */
@@ -48,7 +48,7 @@ public class FightService extends BaseService<FightService> {
 	}
 	
 	 /**
-     * 获取对手家族，无对战记录返回null---Asset
+     * 获取对手俱乐部，无对战记录返回null---Asset
      * @param selfFamilyId
      * @return
      */
@@ -146,7 +146,7 @@ public class FightService extends BaseService<FightService> {
     		}else{
     			//扣除动力
 //    			Map<String,Object> powerLog=new HashMap<String,Object>();
-//    			powerLog.put("userId", family.get("createUserId"));//族长id
+//    			powerLog.put("userId", family.get("createUserId"));//老板id
 //    			powerLog.put("effectId",pkFamily.get("id"));
 //    			powerLog.put("powerNum",pkFamily.get("id"));
     			String sign=SignUtils.encryptHMAC(family.get("createUserId").toString());

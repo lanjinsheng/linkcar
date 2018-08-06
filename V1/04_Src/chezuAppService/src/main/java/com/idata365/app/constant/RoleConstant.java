@@ -2,7 +2,7 @@ package com.idata365.app.constant;
 
 public class RoleConstant
 {
-	public static final int Family_NoRole = 0;//家族角色作废
+	public static final int Family_NoRole = 0;//俱乐部角色作废
 	
 	public static final int LAOSIJI_ROLE = 1;
 	

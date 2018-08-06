@@ -102,14 +102,14 @@
 		update userAchieveInfo set nowNum=nowNum+#{nowNum},editTime=now() where userId=#{userId} AND achieveId=#{achieveId} and lev=#{lev}
 	</update>
 	
-	<!-- 查询家族登榜信息 -->
+	<!-- 查询俱乐部登榜信息 -->
 	<select id="queryFamilyStayGoldInfo" parameterType="java.lang.Long" resultType="com.idata365.app.entity.FamilyStayGoldLogBean">
 		SELECT id,familyId,goldCountDays,lev,TO_DAYS(NOW())-TO_DAYS(editTime) AS continueFlag
 		FROM familyStayGoldLog 
 		WHERE familyId=#{familyId}
 	</select>
 	
-	<!-- 插入家族登榜信息 -->
+	<!-- 插入俱乐部登榜信息 -->
 	<insert id="insertFamilyStayGoldLog" parameterType="java.lang.Long">
 	insert into familyStayGoldLog
 	(familyId,goldCountDays,addTime,editTime)
@@ -117,7 +117,7 @@
 	(#{familyId},0,now(),now())
 	</insert>
 	
-	<!-- 更新家族登榜信息 -->
+	<!-- 更新俱乐部登榜信息 -->
 	<update id="updateFamilyStayGoldLog" parameterType="com.idata365.app.entity.FamilyStayGoldLogBean">
 	update familyStayGoldLog 
 	set goldCountDays=#{goldCountDays},editTime=now(),lev=#{lev}
@@ -128,7 +128,7 @@
  		select userId from userFamilyRelation where familyId=#{familyId}
  	</select>
  	
- 	<!-- 解锁黄金家族 -->
+ 	<!-- 解锁黄金俱乐部 -->
  	<update id="unlockGoldFamilyAchieve" parameterType="java.util.HashMap">
  		UPDATE userAchieveInfo 
  		SET flag=1 
@@ -136,12 +136,12 @@
  	</update>
  	
  	 	
- 	<!-- 更新用户黄金家族成就值 -->
+ 	<!-- 更新用户黄金俱乐部成就值 -->
  	<update id="updateGoldFamilyAchieveValue" parameterType="java.util.HashMap">
  		UPDATE userAchieveInfo SET nowNum=#{nowNum} WHERE userId=#{userId} AND achieveId=7 AND flag=0 and lev=#{lev}
  	</update>
  	
- 	<!-- 查询用户参加的另一个家族的今日连续天数 -->
+ 	<!-- 查询用户参加的另一个俱乐部的今日连续天数 -->
  	<select id="queryUserOtherStayGoldDays" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.FamilyStayGoldLogBean">
 		select r.familyId,g.goldCountDays 
 		from userFamilyRelation r

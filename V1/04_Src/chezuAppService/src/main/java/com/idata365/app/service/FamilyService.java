@@ -199,7 +199,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 移出家族
+	 * 移出俱乐部
 	 * 
 	 * @param bean
 	 */
@@ -213,7 +213,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		bean.setEndTime(ts);
 		bean.setDaystamp(daystamp);
 		this.familyMapper.updateFamilyRoleLog(bean);
-		// 更新家族热度
+		// 更新俱乐部热度
 		familyMapper.removeFamilyMemberNum(bean.getFamilyId());
 		// familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 
@@ -262,7 +262,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 	
 	/**
-	 * 查看家族邀请
+	 * 查看俱乐部邀请
 	 * @param bean
 	 * @return
 	 */
@@ -276,7 +276,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		tempResultBean.setTypeValue(DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
 		//人数
 		tempResultBean.setNum(familyInfo.get("memberNum").toString()+"/8");
-		//家族名
+		//俱乐部名
 		tempResultBean.setName(familyInfo.get("familyName").toString());
 		//公告
 		ImNotify notify = imNotifyMapper.getNotify(Long.valueOf(familyInviteBean.getFamilyId()));
@@ -286,7 +286,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 审核成员通过OR通过家族邀请  2：房间已满；3：审核通过，同意加入；
+	 * 审核成员通过OR通过俱乐部邀请  2：房间已满；3：审核通过，同意加入；
 	 * 
 	 * @param bean
 	 * @param path 
@@ -304,7 +304,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		if (CollectionUtils.isNotEmpty(familyIdList) && familyIdList.size() >= 1) {
 //			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 //			return 1;
-			//业务修改为退出之前的家族
+			//业务修改为退出之前的俱乐部
 			FamilyParamBean reqBean = new FamilyParamBean();
 			reqBean.setUserId(bean.getUserId());
 			reqBean.setFamilyId(familyIdList.get(0));
@@ -319,7 +319,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			return 2;
 		}
 
-		// 记录用户、家族关系
+		// 记录用户、俱乐部关系
 		String timeStamp = generateTimeStamp();
 		bean.setJoinTime(timeStamp);
 
@@ -338,7 +338,7 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		// if (CollectionUtils.isNotEmpty(relationIds))
 		// {
-		// 初始化用户在新家族的角色到userFamilyRelation
+		// 初始化用户在新俱乐部的角色到userFamilyRelation
 		UserFamilyRoleLogParamBean roleLogParamBean = new UserFamilyRoleLogParamBean();
 		roleLogParamBean.setUserId(bean.getUserId());
 		roleLogParamBean.setFamilyId(bean.getFamilyId());
@@ -346,7 +346,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		this.taskMapper.updateUserRole(roleLogParamBean);
 
 		// 初始化用户角色、成绩记录表start------------------
-		// 记录用户在新家族的角色到userFamilyRoleLog
+		// 记录用户在新俱乐部的角色到userFamilyRoleLog
 		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
 		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
 		userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
@@ -356,7 +356,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		userFamilyRoleLogParamBean.setEndTime(getCurrentDayStr() + " 23:59:59");
 		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
 
-		// 初始化加入新家族后的userScoreDayStat记录
+		// 初始化加入新俱乐部后的userScoreDayStat记录
 		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 		tempScoreDayParamBean.setUserId(bean.getUserId());
 		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean.getId());
@@ -381,9 +381,9 @@ public class FamilyService extends BaseService<FamilyService> {
 			
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.PASS_FAMILY);
 		}else {
-			//通过家族邀请
+			//通过俱乐部邀请
 			
-			//取消其他家族对该用户的邀请
+			//取消其他俱乐部对该用户的邀请
 			this.familyMapper.updateOtherFamilyInviteStatus(bean.getUserId());
 			
 			dealtMsg(userInfo, null, familyMapper.queryCreateUserId(bean), MessageEnum.PASS_FAMILY2);
@@ -416,13 +416,13 @@ public class FamilyService extends BaseService<FamilyService> {
 			//拒绝用户的加入
 			dealtMsg(userInfo, null, bean.getUserId(), MessageEnum.FAIL_FAMILY);
 		}else {
-			//拒绝家族的邀请
+			//拒绝俱乐部的邀请
 			dealtMsg(userInfo, null, familyMapper.queryCreateUserId(bean), MessageEnum.FAIL_FAMILY2);
 		}
 	}
 
 	/**
-	 * 退出家族
+	 * 退出俱乐部
 	 * 
 	 * @param bean
 	 */
@@ -453,7 +453,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 显示可以加入的家族
+	 * 显示可以加入的俱乐部
 	 * 
 	 * @return
 	 */
@@ -511,7 +511,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 根据邀请码查询家族
+	 * 根据邀请码查询俱乐部
 	 * 
 	 * @param bean
 	 * @param userId
@@ -541,7 +541,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 根据名字模糊查询家族
+	 * 根据名字模糊查询俱乐部
 	 * 
 	 * @param bean
 	 * @param userId
@@ -633,7 +633,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 检查家族名称
+	 * 检查俱乐部名称
 	 * 
 	 * @param bean
 	 */
@@ -647,7 +647,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 创建家族
+	 * 创建俱乐部
 	 * 
 	 * @param bean
 	 * @return
@@ -674,11 +674,11 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		FamilyHistoryParamBean tempHistoryParamBean = new FamilyHistoryParamBean();
 		tempHistoryParamBean.setFamilyId(familyId);
-		tempHistoryParamBean.setRecord("家族(" + bean.getFamilyName() + ")成立");
+		tempHistoryParamBean.setRecord("俱乐部(" + bean.getFamilyName() + ")成立");
 		this.familyMapper.saveFamilyHistory(tempHistoryParamBean);
 
 		UserRoleLog role = userRoleLogMapper.getLatestUserRoleLogByUserId(userId);
-		// 组长自己绑定新创建的家族
+		// 组长自己绑定新创建的俱乐部
 		bean.setFamilyId(familyId);
 		bean.setJoinTime(generateTimeStamp());
 		bean.setRole(role.getRole());
@@ -688,7 +688,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		String curDayStr = getCurrentDayStr();
 		// 初始化用户角色、成绩记录表start------------------
 
-		// 记录用户在新家族的合约
+		// 记录用户在新俱乐部的合约
 		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean0 = new UserFamilyRoleLogParamBean();
 		userFamilyRoleLogParamBean0.setUserId(bean.getUserId());
 		userFamilyRoleLogParamBean0.setFamilyId(familyId);
@@ -698,7 +698,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		userFamilyRoleLogParamBean0.setEndTime(curDayStr + " 23:59:59");
 		this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean0);
 
-		// 记录用户在新家族的明天的角色
+		// 记录用户在新俱乐部的明天的角色
 		// UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new
 		// UserFamilyRoleLogParamBean();
 		// userFamilyRoleLogParamBean.setUserId(bean.getUserId());
@@ -709,7 +709,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		// userFamilyRoleLogParamBean.setEndTime(endTime);
 		// this.taskMapper.saveUserFamilyRole(userFamilyRoleLogParamBean);
 
-		// 初始化加入新家族后的userScoreDayStat记录
+		// 初始化加入新俱乐部后的userScoreDayStat记录
 		UserScoreDayParamBean tempScoreDayParamBean = new UserScoreDayParamBean();
 		tempScoreDayParamBean.setUserId(bean.getUserId());
 		tempScoreDayParamBean.setUserFamilyScoreId(userFamilyRoleLogParamBean0.getId());
@@ -720,7 +720,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		this.taskMapper.saveOrUpdateUserScoreDay(tempScoreDayParamBean);
 		// 初始化用户角色、成绩记录表end------------------
 
-		// 初始化家族的分数信息用于实时展示家族得分[实时分通过实时计算获得]
+		// 初始化俱乐部的分数信息用于实时展示俱乐部得分[实时分通过实时计算获得]
 
 		FamilyDriveDayStat familyDriveDayStat = new FamilyDriveDayStat();
 		familyDriveDayStat.setFamilyId(familyId);
@@ -731,7 +731,7 @@ public class FamilyService extends BaseService<FamilyService> {
 
 		// 更新是否通过邀请码加入状态
 
-		// 初始化家族赛季
+		// 初始化俱乐部赛季
 		DicGameDay dicGameDay = dicGameDayMapper.getGameDicByDaystamp(curDayStr);
 		if (dicGameDay != null) {
 			FamilyScoreBean familyScoreBean = new FamilyScoreBean();
@@ -845,7 +845,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	}
 
 	/**
-	 * 查询自己创建的家族
+	 * 查询自己创建的俱乐部
 	 * 
 	 * @param reqBean
 	 * @return
@@ -1053,7 +1053,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		}
 		resultBean.setClubHave(sharingMyPoint);
 		
-		//创建家族页面是否有“俱乐部奖金”图标
+		//创建俱乐部页面是否有“俱乐部奖金”图标
 		resultBean.setHaveClubBonusIcon(0);
 		Long createFamilyId = this.familyMapper.queryCreateFamilyId(bean.getUserId());
 		if (createFamilyId != null && createFamilyId.longValue() != 0) {
@@ -1067,7 +1067,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			resultBean.setClubBonusIconStatus(0);
 		}
 		
-		//创建家族页面俱乐部ICON小红点---新挑战宝箱
+		//创建俱乐部页面俱乐部ICON小红点---新挑战宝箱
 		if (createFamilyId != null && createFamilyId.longValue() != 0
 				&& (boxTreasureMapper.getCanGetNow(createFamilyId) > 0)) {
 			resultBean.setIsHaveBox(1);
@@ -1137,7 +1137,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		}
 	}
 
-	//根据userId查询创建家族和加入家族的相关信息
+	//根据userId查询创建俱乐部和加入俱乐部的相关信息
 	public Map<String, String> queryFamilyByUserId(long userId) {
 		Map<String, String> rtMap = new HashMap<>();//    
 		rtMap.put("createFamilyInfo", "");

@@ -74,7 +74,7 @@ public interface ChezuAssetService {
 	/**
 	 * 
 	 * @Title: initFamilyCreate
-	 * @Description: TODO(家族信息初始化)
+	 * @Description: TODO(俱乐部信息初始化)
 	 * @param @param
 	 *            familyId
 	 * @param @param

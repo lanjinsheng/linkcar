@@ -80,7 +80,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		List<Map<String, String>> billList = new ArrayList<>();
 		List<Map<String, Object>> list = familyMapper.queryAllFamilyOrderNo();
 		long familyId = 0;
-		// 加入自己家族排名信息
+		// 加入自己俱乐部排名信息
 		if (ValidTools.isNotBlank(queryFamily)) {
 			if (ValidTools.isNotBlank(queryFamily.getOriFamily())) {
 				familyId = queryFamily.getOriFamily().getFamilyId();
@@ -118,7 +118,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		return billList;
 	}
 
-	// 根据家族ID获取分数、名称、奖杯数、等级
+	// 根据俱乐部ID获取分数、名称、奖杯数、等级
 	public Map<String, String> getInfoByFamilyId(long familyId, String daystamp) {
 		if (daystamp == null) {
 			daystamp = getCurrentDayStr();
@@ -142,7 +142,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		return bill;
 	}
 
-	// 根据时间查询正在对战的家族系信息
+	// 根据时间查询正在对战的俱乐部系信息
 	public CompetitorFamilyInfoResultBean queryCompetitorFamilyInfo(long myFamilyId, String fightingTime) {
 		FamilyRelationBean relationBean = new FamilyRelationBean();
 		relationBean.setFamilyId(myFamilyId);
@@ -230,7 +230,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		}
 	}
 
-	// 查询所在家族对战信息
+	// 查询所在俱乐部对战信息
 	public List<FamilyRelation> queryFightRecordByFamilyId(long myFamilyId, long recordId) {
 		FamilyRelationBean relationBean = new FamilyRelationBean();
 		relationBean.setFamilyId(myFamilyId);
@@ -249,12 +249,12 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		return familyRelationList;
 	}
 
-	// 根据时间获取家族分数
+	// 根据时间获取俱乐部分数
 	public FamilyDriveDayStat queryFamilyScore(long familyId, String daystamp) {
 		return gameMapper.queryFamilyScore(familyId, daystamp);
 	}
 
-	// 获取家族实时排名
+	// 获取俱乐部实时排名
 	public String queryFamilyOrderByFId(long familyId) {
 		return String.valueOf(familyMapper.queryFamilyOrderByFId(familyId)).toString();
 	}
@@ -294,12 +294,12 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		map.put(7, "7th");
 		map.put(8, "8th");
 
-		// 根据时间获取我家族的人数
+		// 根据时间获取我俱乐部的人数
 		String sign = "";
 		String ids = chezuAccountService.getCurrentUsersByFamilyId(myFamilyId, daystamp, sign);
 		String[] count = ids.split(",");
 		int userCount = count.length;
-		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
+		long totalprizeNum = cardinalNum * userCount;// 俱乐部共获得动力
 
 		if (status == 0) {
 			// 平局
@@ -525,7 +525,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			cardinalNum = 100;
 		}
 		int userCount = member.size();
-		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
+		long totalprizeNum = cardinalNum * userCount;// 俱乐部共获得动力
 		int a = 0;
 		int c = 0;
 		for (int i = 0; i < users.size(); i++) {
@@ -556,7 +556,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	// 历史成绩
 	public Map<String, Object> getFightingHistory(long myFamilyId, String daystamp, Map<String, Object> result) {
 		List<Map<String, Object>> data = new ArrayList<>();
-		// 获取对战家族
+		// 获取对战俱乐部
 		Long fightFamilyId = fightService.getOpponentIdBySelfId(myFamilyId, daystamp);
 		String win = "";
 		String loss = "";
@@ -566,7 +566,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		List<Map<String, Object>> memberList1 = new ArrayList<>();
 		List<Map<String, Object>> memberList2 = new ArrayList<>();
 		for (int i = 0; i < arr.length; i++) {
-			// 对应家族信息
+			// 对应俱乐部信息
 			Map<String, String> map = this.getInfoByFamilyId(arr[i], daystamp);
 			Map<String, Object> familyInfo = new HashMap<>();
 			familyInfo.put("familyId", String.valueOf(arr[i]));
@@ -576,7 +576,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			familyInfo.put("trophyNum", map.get("trophyNum"));
 			familyInfo.put("grade", map.get("gradeOrNum"));
 
-			// 家族成员信息
+			// 俱乐部成员信息
 			List<Map<String, Object>> users = scoreService.getMemberInfoByTime(arr[i], daystamp);
 			for (int j = 0; j < users.size(); j++) {
 				Map<String, Object> bean = new HashMap<>();
@@ -621,7 +621,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 
 			// 输赢奖励与惩罚
 			if (i == 0) {
-				// 我的家族等级
+				// 我的俱乐部等级
 				familyType = Integer.valueOf(map.get("familyType").toString());
 				DicFamilyType type = DicFamilyTypeConstant.getDicFamilyType(familyType);
 				win = "+" + type.getWin();
@@ -662,7 +662,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		} else {
 			cardinalNum = 100;
 		}
-		long totalprizeNum = cardinalNum * userCount;// 家族共获得动力
+		long totalprizeNum = cardinalNum * userCount;// 俱乐部共获得动力
 		int a = 0;
 		int c = 0;
 		for (int i = 0; i < memberList1.size(); i++) {

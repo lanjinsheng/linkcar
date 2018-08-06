@@ -101,7 +101,7 @@ public class GameControllerV2 extends BaseController {
 		Map<String, String> map = new HashMap<>();
 		Long familyId = Long.valueOf(String.valueOf(bean.getFamilyId()));
 
-		// 明日对战家族ID
+		// 明日对战俱乐部ID
 		Long flag = fightService.getOpponentIdBySelfId(familyId, DateTools.getTomorrowDateStr());
 		if (flag == null || flag == 0) {
 			map.put("isChallengeFamilyToday", "0");
@@ -109,7 +109,7 @@ public class GameControllerV2 extends BaseController {
 			map.put("isChallengeFamilyToday", "1");
 		}
 
-		// 当前对战家族ID
+		// 当前对战俱乐部ID
 		Long opponentId = fightService.getOpponentIdBySelfId(familyId, DateTools.getYYYY_MM_DD());
 		map.put("familyId", String.valueOf(familyId));
 		map.put("familyName", bean.getName());
@@ -343,7 +343,7 @@ public class GameControllerV2 extends BaseController {
 	/**
 	 * 
 	 * @Title: queryCompetitorFamilyInfo
-	 * @Description: TODO(获取赛车场双方家族名字、分数)覆盖原Game Controller中的该方法
+	 * @Description: TODO(获取赛车场双方俱乐部名字、分数)覆盖原Game Controller中的该方法
 	 * @param @param
 	 *            allRequestParams
 	 * @param @param

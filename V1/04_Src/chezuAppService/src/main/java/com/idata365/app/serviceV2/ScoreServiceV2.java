@@ -102,7 +102,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	/**
 	 * 
 	 * @Title: intiScoreFamilyInfoBeanByUser
-	 * @Description: TODO(初始化家族view数据)
+	 * @Description: TODO(初始化俱乐部view数据)
 	 * @param @param
 	 *            userId
 	 * @param @return
@@ -136,7 +136,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	/**
 	 * 
 	 * @Title: intiScoreFamilyInfoBeanByFamily
-	 * @Description: TODO(初始化家族view数据)
+	 * @Description: TODO(初始化俱乐部view数据)
 	 * @param @param
 	 *            familyId
 	 * @param @return
@@ -168,7 +168,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	}
 
 	/**
-	 * 发起家族、参与家族查询
+	 * 发起俱乐部、参与俱乐部查询
 	 * 
 	 * @param bean
 	 * @return
@@ -177,7 +177,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		ScoreFamilyInfoAllBean resultBean = new ScoreFamilyInfoAllBean();
 		bean.setTimeStr(getYesterdayDateStr());
 		ScoreFamilyInfoBean oriFamilyBean = this.scoreMapper.queryFamilyByUserId(bean);
-		if (oriFamilyBean == null) {// 发起家族为今日创建
+		if (oriFamilyBean == null) {// 发起俱乐部为今日创建
 			oriFamilyBean = intiScoreFamilyInfoBeanByUser(bean.getUserId());
 		} else {
 			ScoreFamilyInfoParamBean oriYesterdayParamBean = new ScoreFamilyInfoParamBean();
@@ -214,7 +214,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 					tempParamBean.setFamilyId(tempFamilyId);
 					tempParamBean.setTimeStr(getYesterdayDateStr());
 					ScoreFamilyInfoBean joinFamilyBean = this.scoreMapper.queryFamilyByFamilyId(tempParamBean);
-					if (joinFamilyBean == null) {// 参与家族为今日创建
+					if (joinFamilyBean == null) {// 参与俱乐部为今日创建
 						joinFamilyBean = intiScoreFamilyInfoBeanByFamily(tempFamilyId);
 					} else {
 						ScoreFamilyInfoParamBean joinYesterdayParamBean = new ScoreFamilyInfoParamBean();
@@ -246,7 +246,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	}
 
 	/**
-	 * 今日上榜家族
+	 * 今日上榜俱乐部
 	 * 
 	 * @return
 	 */
@@ -279,7 +279,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	}
 
 	/**
-	 * 查看家族信息
+	 * 查看俱乐部信息
 	 * 
 	 * @param bean
 	 * @return
@@ -312,7 +312,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	}
 
 	/**
-	 * 查看家族成员
+	 * 查看俱乐部成员
 	 * 
 	 * @param bean
 	 * @return
@@ -1198,7 +1198,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		return resultBean;
 	}
 
-	// 获取家族成员实时分数
+	// 获取俱乐部成员实时分数
 	public double getAvgScore(String memberId, long myFamilyId) {
 		// TODO Auto-generated method stub
 		String daystamp = getCurrentDayStr();
@@ -1229,7 +1229,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		Map<String, String> pkStatusInfo = new HashMap<String, String>();
 		Long familyId = this.familyMapper.queryCreateFamilyId(userId);
 		String yesterday = DateTools.getCurDateAddDay(-1);
-		// 昨日对战家族ID
+		// 昨日对战俱乐部ID
 		Long opponentId = this.fightService.getOpponentIdBySelfId(familyId, yesterday);
 		FamilyDriveDayStat stat = this.gameMapper.queryFamilyScore(familyId, yesterday);
 		double score1 = 0D;

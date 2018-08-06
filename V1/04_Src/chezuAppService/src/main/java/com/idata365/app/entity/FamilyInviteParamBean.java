@@ -21,7 +21,7 @@ public class FamilyInviteParamBean implements Serializable
 	
 	private String createTime;
 	
-	private int inviteType;	//1:用户主动申请   2:家族邀请
+	private int inviteType;	//1:用户主动申请   2:俱乐部邀请
 
 	public long getMsgId()
 	{

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.idata365.app.service.TaskService;
 
 /**
- * 判断用户所在家族的PK关系，并且初始化角色
+ * 判断用户所在俱乐部的PK关系，并且初始化角色
  * @author Administrator
  *
  */

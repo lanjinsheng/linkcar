@@ -147,7 +147,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		   return rtMap;
 	   }
 	   
-	   //家族零件分配提交
+	   //俱乐部零件分配提交
 	   @Transactional
 	   public int submitComponentDistribute(long familyComponentId, long familyId,long toUserId,long userId){
 		   ComponentFamily cf=componentMapper.getFamilyComponent(familyComponentId);
@@ -248,14 +248,14 @@ public class ComponentService extends BaseService<ComponentService> {
 		String nickNameB = usersAccountMapper.findAccountById(toUserId).getNickName();
 	    if (log.getLogType() == 1 ) {
 			rtMap.put("title", "零件分配");
-			rtMap.put("desc", "发福利了!俱乐部经理" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
+			rtMap.put("desc", "发福利了!俱乐部老板" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
 	    } else if (log.getLogType() == 2) {
 			rtMap.put("title", "零件祈愿");
 			rtMap.put("desc", nickNameA + " 在俱乐部祈愿中给您赠送了一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级)!");
 	    } else if (log.getLogType() == 3){
 	    	if(userId == log.getToUserId()) {
 	    		rtMap.put("title", "零件分配");
-				rtMap.put("desc", "发福利了!俱乐部经理" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
+				rtMap.put("desc", "发福利了!俱乐部老板" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
 	    	}else {
 	    		rtMap.put("title", "零件申请");
 				rtMap.put("desc", "俱乐部成员 " + nickNameB + " 在零件库中申请领取一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),是否同意发放?");
@@ -272,7 +272,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		   Map<String,Object> rtMap=new HashMap<>();
 		   ComponentGiveLog log=  componentMapper.findComponentGiveLog(componentGiveLogId);
 		   ComponentUser componentUser=new ComponentUser();
-		   if(log.getLogType().intValue()==1){//家族赠送
+		   if(log.getLogType().intValue()==1){//俱乐部赠送
 			   componentUser.setGainType(3);
 		   }else if(log.getLogType().intValue()==2){//个人赠送
 			   componentUser.setGainType(2);
@@ -383,9 +383,9 @@ public class ComponentService extends BaseService<ComponentService> {
 				keyMap.put(String.valueOf(freeComp.get("componentType")), freeComp.get("hadNum"));
 			}
 			
-			for(Map<String,Object> map:list){//家族循环
+			for(Map<String,Object> map:list){//俱乐部循环
 			Long familyId =Long.valueOf(map.get("familyId").toString());
-		  //获取家族成员列表
+		  //获取俱乐部成员列表
 			List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
 			for(Map<String,Object> user:users){//成员循环
 				Long memberId=Long.valueOf(user.get("userId").toString());
@@ -477,7 +477,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		  giveLog.setFromComponentId(cf.getId());//
 		  giveLog.setFromId(cf.getFamilyId());//请求发放的用户未知。
           giveLog.setGiveStatus(0);//申请中
-          giveLog.setLogType(3);//个人申请家族零件库
+          giveLog.setLogType(3);//个人申请俱乐部零件库
           giveLog.setOperationManId(0L);//发配件人未知
           giveLog.setToUserId(userId);
           giveLog.setDaystamp(DateTools.getYYYYMMDD());

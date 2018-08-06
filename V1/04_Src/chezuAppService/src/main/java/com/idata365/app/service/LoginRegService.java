@@ -261,7 +261,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 	}
 
 	// 小菜补充
-	// 用familyId查出该族长用户id,后调用成就公共接口统计方法
+	// 用familyId查出该老板用户id,后调用成就公共接口统计方法
 	public void achieveAddNewUser(long familyId)
 	{
 		FamilyParamBean bean = new FamilyParamBean();
@@ -302,7 +302,7 @@ public class LoginRegService extends BaseService<LoginRegService>
 				//初始化账号
 				chezuAssetService.initUserCreate(account.getId(), SignUtils.encryptHMAC(String.valueOf(account.getId())));
 				
-				// 进行家族绑定的检索，如果存在家族邀请，则发送申请消息
+				// 进行俱乐部绑定的检索，如果存在俱乐部邀请，则发送申请消息
 				List<FamilyInvite> list = familyInviteMapper.getFamilyInviteByPhone(phone);
 				for (FamilyInvite invite : list)
 				{

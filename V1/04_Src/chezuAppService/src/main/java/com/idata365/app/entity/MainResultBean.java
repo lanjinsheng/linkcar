@@ -28,13 +28,13 @@ public class MainResultBean
 	//1表弹出新手引导；0表不需要弹出
 	private int readFlag;
 	
-	//创建家族页面是否有“俱乐部奖金”图标
+	//创建俱乐部页面是否有“俱乐部奖金”图标
 	private int haveClubBonusIcon;
 	
 	//“俱乐部奖金图标”是否闪烁
 	private int clubBonusIconStatus;
 	
-	//创建家族页面俱乐部ICON小红点---新挑战宝箱
+	//创建俱乐部页面俱乐部ICON小红点---新挑战宝箱
 	private int isHaveBox;
 
 	public int getGamerNum()

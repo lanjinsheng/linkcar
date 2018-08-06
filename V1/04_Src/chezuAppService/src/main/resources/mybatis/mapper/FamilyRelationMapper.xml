@@ -10,13 +10,13 @@
         VALUES
             (#{selfFamilyId},#{competitorFamilyId},#{daystamp},#{relationType},#{uniKey1})
     </insert>
-      <!-- 通过家族id获取已确立对战关系的对战记录 -->
+      <!-- 通过俱乐部id获取已确立对战关系的对战记录 -->
      <select id="getFightRelation" resultMap="BaseResultMap" parameterType="java.util.HashMap">
        SELECT *
        FROM  familyRelation where ((selfFamilyId=#{familyId})
        or  (competitorFamilyId=#{familyId} and relationType=2)) and daystamp=#{daystamp}
      </select>
-     <!-- 通过家族id获取已确立对战关系的对战记录Asset工程 -->
+     <!-- 通过俱乐部id获取已确立对战关系的对战记录Asset工程 -->
      <select id="getFightRelationAsset" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT *
        FROM  familyRelation where ((selfFamilyId=#{familyId})

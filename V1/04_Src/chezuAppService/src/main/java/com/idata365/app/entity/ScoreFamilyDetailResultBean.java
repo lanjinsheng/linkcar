@@ -32,7 +32,7 @@ public class ScoreFamilyDetailResultBean implements Serializable
 	//是否能申请加入
 	private String isCanApply;
 	
-	//创建家族页面俱乐部ICON小红点---新挑战宝箱
+	//创建俱乐部页面俱乐部ICON小红点---新挑战宝箱
 	private int isHaveBox;
 	
 	public String getIsHaveRide() {

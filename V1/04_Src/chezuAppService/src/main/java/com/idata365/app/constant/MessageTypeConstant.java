@@ -26,7 +26,7 @@ public class MessageTypeConstant {
 //	public static final int PersonType_Reveice_Fail=6;
 //	public static final int PersonType_REVEICE_INVITE=7;
 	
-	//家族消息
+	//俱乐部消息
 	public static final int FamilyType=3;
 	public static final int FamilyType_Apply=1;
 	public static final int FamilyType_Pass=2;
