@@ -29,7 +29,7 @@ public class CalGameEndService {
 	@Transactional
 	public boolean calGameEnd(TaskGameEnd taskGameEnd) {
 		 //最后得分的统计增加
-		//判断家族的比赛时长
+		//判断俱乐部的比赛时长
 		int dayTimes=taskGameEnd.getDayTimes();
 //		【1，5】	1
 //		（5，10】	1.05

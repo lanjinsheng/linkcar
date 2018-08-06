@@ -227,7 +227,7 @@ public class CalScoreFamilyDayServiceV2 {
 		fs.setFamilyId(familyId);
 		fs.setMonth(taskFamilyDayScore.getDaystamp().replaceAll("-", "").substring(0,6));
 		fs.setScore(score);
-		//插入家族赛季得分
+		//插入俱乐部赛季得分
 		fs.setDayTimes(1);
 		fs.setStartDay(startDay);
 		fs.setEndDay(endDay);

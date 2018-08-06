@@ -103,7 +103,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	/**
 	 * 
 	    * @Title: addFamilyTripPowerLogs
-	    * @Description: TODO(行程给家族贡献值)
+	    * @Description: TODO(行程给俱乐部贡献值)
 	    * @param @param userId
 	    * @param @param habitId
 	    * @param @param familyId
@@ -364,7 +364,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			addUserCarPoolPowerLogs(uth.getUserId(),uth.getId(),Double.valueOf(power*0.1*carpools.size()).intValue());
 		}
 		
-		//查询当前家族，并贡献分数与动力
+		//查询当前俱乐部，并贡献分数与动力
 		   List<Map<String,Object>> families=familyInfoMapper.getFamiliesByUserId(uth.getUserId());
 			UserScoreDayStat userScoreDayStat=new UserScoreDayStat();
 			userScoreDayStat.setUserId(uth.getUserId());

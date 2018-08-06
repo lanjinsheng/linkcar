@@ -20,7 +20,7 @@ import com.idata365.mapper.app.TaskFamilyPkRelationMapper;
 /**
  * 
     * @ClassName: CalFamilyPkRelationService
-    * @Description: TODO(自动匹配家族pk赛)
+    * @Description: TODO(自动匹配俱乐部pk赛)
     * @author LanYeYe
     * @date 2018年4月19日
     *

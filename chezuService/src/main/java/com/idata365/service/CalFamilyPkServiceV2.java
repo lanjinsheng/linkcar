@@ -54,9 +54,9 @@ public class CalFamilyPkServiceV2 {
 		   for(FamilyDriveDayStat fd:list) {
 			   //更新familyInfo
 			   taskFamilyPkMapper.updateFamilyInfo(fd);
-			   log.info("新家族发送pk接口:"+fd.getFamilyId());
+			   log.info("新俱乐部发送pk接口:"+fd.getFamilyId());
 			   boolean r=addFamilyGameOrder(startDay, endDay, fd.getFamilyId(), fd.getDaystamp(),fd.getMemberNum(),80);
-			   log.info("新家族发送pk接口结束:"+fd.getFamilyId()+r);
+			   log.info("新俱乐部发送pk接口结束:"+fd.getFamilyId()+r);
 			   if(!r) {
 		        	throw new RemoteException();  
 		        }

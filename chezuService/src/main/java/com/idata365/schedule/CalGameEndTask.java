@@ -21,7 +21,7 @@ import com.idata365.util.SignUtils;
 /**
  * 
     * @ClassName: CalGameEndTask
-    * @Description: TODO(赛季结束通知与家族荣誉回退)
+    * @Description: TODO(赛季结束通知与俱乐部荣誉回退)
     * @author LanYeYe
     * @date 2017年12月31日
     *
