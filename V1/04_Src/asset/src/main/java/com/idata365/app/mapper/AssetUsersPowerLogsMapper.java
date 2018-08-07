@@ -31,4 +31,6 @@ public interface AssetUsersPowerLogsMapper {
 	
 	int queryHadGetBonus(@Param("userId") long userId);
 	
+	int queryReceiveDayMissionBox(@Param("userId") long userId);
+	
 }
