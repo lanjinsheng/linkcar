@@ -6,7 +6,7 @@ server:
   port: 8769
 spring:
   application:
-    name: service-zuul-ljs
+    name: service-zuul
   datasource:
     app:
       type: com.alibaba.druid.pool.DruidDataSource
