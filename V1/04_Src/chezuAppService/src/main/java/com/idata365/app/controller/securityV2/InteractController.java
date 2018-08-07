@@ -115,6 +115,7 @@ public class InteractController extends BaseController {
 		log.setUserIdB(toUserId);
 		log.setUserNameA(this.getUserInfo().getNickName());
 		log.setUserNameB(toUserName);
+		log.setUserCarId(0L);
 		tempCarService.insertInteractLogs(log);
 		return ResultUtils.rtSuccess(null);
 	}
@@ -155,6 +156,7 @@ public class InteractController extends BaseController {
 		log.setUserIdB(toUserId);
 		log.setUserNameA(this.getUserInfo().getNickName());
 		log.setUserNameB(userInfoServiceV2.getUsersAccount(toUserId).getNickName());
+		log.setUserCarId(userCarId);
 		tempCarService.insertInteractLogs(log);
 		return ResultUtils.rtSuccess(null);
 	}
