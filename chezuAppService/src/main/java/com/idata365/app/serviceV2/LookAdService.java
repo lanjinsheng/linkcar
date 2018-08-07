@@ -86,7 +86,7 @@ public class LookAdService extends BaseService<LookAdService> {
 //				valid = 1;
 //			}
 			if (info == null || info.getAdPassId() != adPassId) {
-				powerNum = (long) RandUtils.generateRand(30, 200);
+				powerNum = 30L;
 				valid = 1;
 			}
 		}

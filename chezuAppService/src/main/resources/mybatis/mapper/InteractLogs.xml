@@ -21,7 +21,7 @@
  
     <select id="getUserBByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
         select a.*,DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') createTimeStr
-       		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdB=#{userId}
+       		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdB=#{userId} and a.userIdA!=#{userId}
        		order by a.id desc 
        		 limit 5
    </select>
