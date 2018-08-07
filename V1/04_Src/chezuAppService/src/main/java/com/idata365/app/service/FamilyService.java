@@ -23,6 +23,7 @@ import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.RoleConstant;
+import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.entity.FamilyDriveDayStat;
 import com.idata365.app.entity.FamilyHistoryParamBean;
@@ -1157,6 +1158,35 @@ public class FamilyService extends BaseService<FamilyService> {
 		}
 		return rtMap;
 	}
+	
+	//根据userId查询创建俱乐部和加入俱乐部的相关信息--v2.1
+		public Map<String, Object> queryClubInfoByUserId(long userId) {
+			Map<String, Object> rtMap = new HashMap<>();//    
+			Map<String, String> createClubInfo = new HashMap<>();//    
+			Map<String, String> joinClubInfo = new HashMap<>();//    
+			
+			Long createFamilyId = familyMapper.queryCreateFamilyId(userId);
+			Long joinFamilyId = familyMapper.queryJoinFamilyId(userId);
+			if ((createFamilyId != null) && (createFamilyId.longValue() != 0L)) {
+				FamilyParamBean bean = new FamilyParamBean();
+				bean.setFamilyId(createFamilyId);
+				FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
+				createClubInfo.put("clubName", info.getFamilyName());
+				DicFamilyType familyType = DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType());
+				createClubInfo.put("clubLevel", familyType.getFamilyTypeValue());
+			}
+			if ((joinFamilyId != null) && (joinFamilyId.longValue() != 0L)) {
+				FamilyParamBean bean = new FamilyParamBean();
+				bean.setFamilyId(joinFamilyId);
+				FamilyInfoBean info = familyMapper.queryFamilyInfo(bean);
+				joinClubInfo.put("clubName", info.getFamilyName());
+				DicFamilyType familyType = DicFamilyTypeConstant.getDicFamilyType(info.getFamilyType());
+				joinClubInfo.put("clubLevel", familyType.getFamilyTypeValue());
+			}
+			rtMap.put("createClubInfo", createClubInfo);
+			rtMap.put("joinClubInfo", joinClubInfo);
+			return rtMap;
+		}
 
 	public List<Map<String, String>> canRecruitList(long userId, long familyId, String nickName) {
 		List<Map<String, String>> resultList = new ArrayList<>();

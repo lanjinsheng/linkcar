@@ -462,7 +462,7 @@ public class CarService extends BaseService<CarService> {
 					}
 					carListResultBean.setUserCarId(userCar.getId().toString());
 					// 动力加成部分
-					Map<String, String> powerUpInfo = this.getPowerUpInfo(userId, carId,userCurCar.getId());
+					Map<String, String> powerUpInfo = this.getPowerUpInfo(userId, carId,userCar.getId());
 					
 					carListResultBean.setPowerUpInfo(powerUpInfo);
 				}

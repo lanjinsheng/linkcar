@@ -19,6 +19,16 @@ public class FamilyInfoScoreResultBean implements Serializable
 	private String role;
 	
 	private String orderNo;
+	
+	private int familyType;
+	
+	public int getFamilyType() {
+		return familyType;
+	}
+
+	public void setFamilyType(int familyType) {
+		this.familyType = familyType;
+	}
 
 	public String getFamilyId()
 	{
