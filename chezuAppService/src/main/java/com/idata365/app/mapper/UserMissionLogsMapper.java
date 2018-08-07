@@ -35,8 +35,10 @@ public interface UserMissionLogsMapper {
 
 	public Map<String, Object> getOneLogsByUserIdAndMissionId(@Param("userId") long userId,
 			@Param("missionId") int missionId);
-
+	
 	public int queryCountByType(@Param("userId") long userId, @Param("missionType") int missionType);
+	
+	public Integer queryCountByTypeHad(@Param("userId") long userId, @Param("missionType") int missionType);
 
 	public int queryFinishedCount(@Param("userId") long userId);
 

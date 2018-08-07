@@ -429,10 +429,10 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		Map<String, String> rtMap = new HashMap<>();
 		int a = userMissionLogsMapper.queryCountByType(userId, 1);
 		int b = userMissionLogsMapper.queryCountByType(userId, 2);
-		int c = userMissionLogsMapper.queryCountByType(userId, 3);
 		rtMap.put("dayMission", String.valueOf(a));
 		rtMap.put("achieveMission", String.valueOf(b));
-		rtMap.put("activityMission", String.valueOf(c));
+		rtMap.put("activityMission", "0");
+		rtMap.put("dayMissionHad", userMissionLogsMapper.queryCountByTypeHad(userId, 1).toString());
 		return rtMap;
 	}
 
