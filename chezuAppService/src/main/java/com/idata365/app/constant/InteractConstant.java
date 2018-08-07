@@ -7,4 +7,5 @@ public class InteractConstant {
 	public static final int PAY_PECCANCY_OTHER=4;
 	public static final int PAY_PECCANCY_SELF=5;
 	public static final int PAY_PECCANCY_OTHER_HELP=6;
+	public static final int CLEAN_CAR=7;
 }

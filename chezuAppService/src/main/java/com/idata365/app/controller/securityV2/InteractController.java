@@ -1,5 +1,6 @@
 package com.idata365.app.controller.securityV2;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.idata365.app.constant.InteractConstant;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.entity.InteractLogs;
 import com.idata365.app.serviceV2.InteractService;
+import com.idata365.app.serviceV2.UserInfoServiceV2;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
 
@@ -24,6 +26,8 @@ public class InteractController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(InteractController.class);
 	@Autowired
 	InteractService tempCarService;
+	@Autowired
+	UserInfoServiceV2 userInfoServiceV2;
 
 	 /**
 	  * 
@@ -129,6 +133,31 @@ public class InteractController extends BaseController {
 		return ResultUtils.rtSuccess(rtMap);
 	}
 		
+	@RequestMapping(value = "/cleanCar")
+	Map<String, Object> cleanCar(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<String, Object> requestBodyParams) {
+		Long toUserId = Long.valueOf(requestBodyParams.get("toUserId").toString());
+		Long userCarId = Long.valueOf(requestBodyParams.get("userCarId").toString());
+
+		Map<String, Object> m = new HashMap<>();
+		m.put("userCarId", userCarId);
+		Date daystamp = DateTools.getAddMinuteDateTime(new Date(), -60 * 3);
+		m.put("daystamp", daystamp);
+		int i = tempCarService.queryIsCanCleanCar(m);
+		if (i > 0) {
+			return ResultUtils.rtFailParam(null, "别人已经擦过了");
+		}
+
+		InteractLogs log = new InteractLogs();
+		log.setEventType(InteractConstant.CLEAN_CAR);
+		log.setSomeValue(0);
+		log.setUserIdA(this.getUserId());
+		log.setUserIdB(toUserId);
+		log.setUserNameA(this.getUserInfo().getNickName());
+		log.setUserNameB(userInfoServiceV2.getUsersAccount(toUserId).getNickName());
+		tempCarService.insertInteractLogs(log);
+		return ResultUtils.rtSuccess(null);
+	}
 	
 	 public static void main(String []args) {
 		 System.out.println(System.currentTimeMillis());

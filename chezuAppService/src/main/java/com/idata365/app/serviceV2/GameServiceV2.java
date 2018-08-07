@@ -534,7 +534,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			if (Long.valueOf(users.get(i).get("familyId").toString()) == myFamilyId) {
 				long d = Double.valueOf(users.get(i).get("score").toString()).longValue();
 				long powerNum = (long) ((totalprizeNum * d) / sc);
-				users.get(i).put("desc", "挑战获胜后可获得+" + powerNum);
+				users.get(i).put("desc", "挑战获胜后可获得" + powerNum);
 				// users.get(i).put("isMyFamilyFlag", "1");
 				a++;
 				if (a > 4) {

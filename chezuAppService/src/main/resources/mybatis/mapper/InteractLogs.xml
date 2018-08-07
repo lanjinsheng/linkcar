@@ -40,5 +40,9 @@
    <select id="queryLikeCount" resultType="java.lang.Integer">
       select count(1) from interactLogs where userIdB=#{userIdB} and eventType=1
    </select>
+   
+   <select id="queryIsCanCleanCar" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+      select count(1) FROM  interactLogs  where createTime>#{daystamp} and userCarId=#{userCarId} and eventType=7
+   </select>
     
 </mapper>
