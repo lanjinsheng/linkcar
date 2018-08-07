@@ -482,7 +482,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			Map<String,Object> car=userCarLogsMapper.getUserCar(map);
 			
 			entity.put("carImg", car.get("carUrl").toString());
-			entity.put("powerUpPercent", "车辆加成+" + car.get("clubScoreUpPercent").toString() + "%");
+			String powerUpPercent = car.get("clubScoreUpPercent").toString() + "%";
+			entity.put("powerUpPercent", "车辆加成+" + powerUpPercent);
 			users.add(entity);
 		}
 		// 按照分数从高到低排序
@@ -587,8 +588,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				bean.put("familyId", arr[i]);
 				bean.put("name", account.getNickName());
 				bean.put("score", score);
-				// 用户当前车辆
-				// 用户当前车辆
+				// 用户当时车辆
 				Date dd = DateTools.getDateTimeOfStr(daystamp,"yyyy-MM-dd");
 				Date curdate = DateTools.getAddMinuteDateTime(dd,60*24-1);
 				Map<String,Object> m=new HashMap<>();
@@ -597,14 +597,14 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				Map<String,Object> car=userCarLogsMapper.getUserCar(m);
 				
 				bean.put("carImg", car==null?"http://product-h5.idata365.com/appImgs/car_1.png":car.get("carUrl").toString());
-				bean.put("powerUpPercent", "车辆加成+" + car==null?"0":car.get("clubScoreUpPercent").toString() + "%");
+				String powerUpPercent = car==null?"0":car.get("clubScoreUpPercent").toString() + "%";
+				bean.put("powerUpPercent", "车辆加成+" + powerUpPercent);
 				if (i == 0) {
 					memberList1.add(bean);
 				} else {
 					memberList2.add(bean);
 				}
 			}
-			userCount = users.size();
 			Collections.sort(memberList1, new Comparator<Map<String, Object>>() {
 				public int compare(Map<String, Object> o1, Map<String, Object> o2) {
 					return Double.valueOf(o2.get("score").toString())
@@ -630,6 +630,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 				} else {
 					loss = "" + type.getLoss();
 				}
+				userCount = users.size();
 			}
 		}
 
