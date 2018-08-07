@@ -13,13 +13,12 @@ public class MobileChbLogUtils {
 	//报文日志接口
 	private static Logger LOG = LoggerFactory.getLogger("EVENTLOG");
 	
-	public static final void info(String msgType, String msg)
+	public static final void info(String userId, String uri,String token)
 	{
-		LOG.info("{}={}", msgType, msg);
+		LOG.info("{}={}={}",userId, uri, token);
 	}
 	
 	 
 	public static void main(String []args){
-		MobileChbLogUtils.info("RRRR", "BBBB");
 	}
 }
