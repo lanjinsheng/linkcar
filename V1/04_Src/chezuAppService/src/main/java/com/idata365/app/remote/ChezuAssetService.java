@@ -157,5 +157,13 @@ public interface ChezuAssetService {
 	@RequestMapping(value = "/asset/receiveClubBonus", method = RequestMethod.POST)
 	boolean receiveClubBonus(@RequestParam(value = "userId") long userId,
 			@RequestParam(value = "powerNum") long powerNum, @RequestParam(value = "sign") String sign);
+	
+	//领取每日任务宝箱
+		@RequestMapping(value = "/asset/receiveDayMissionBox", method = RequestMethod.POST)
+		boolean receiveDayMissionBox(@RequestParam(value = "userId") long userId,
+				@RequestParam(value = "powerNum") long powerNum, @RequestParam(value = "sign") String sign);
 
+	// 查询用户领取每日任务宝箱次数
+	@RequestMapping(value = "/asset/queryReceiveDayMissionBox", method = RequestMethod.POST)
+	int queryReceiveDayMissionBox(@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign);
 }
