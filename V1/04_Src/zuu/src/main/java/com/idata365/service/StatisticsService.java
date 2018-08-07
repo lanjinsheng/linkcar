@@ -75,8 +75,8 @@ public class StatisticsService
 			String eventTime=line.substring(0, 23);
 			String otherLog=line.substring(64, line.length());
 			String []logs=otherLog.split("=");
-			Long userId=Long.valueOf(logs[0]);
-			String action=logs[1];
+			Long userId=Long.valueOf(logs[0].trim());
+			String action=logs[1].trim();
 			Statistics statistics=new Statistics();
 			statistics.setAction(action);
 			statistics.setEventTime(eventTime);
@@ -84,8 +84,8 @@ public class StatisticsService
 			list.add(statistics);
 			if(list.size()>999) {
 				statisticsMapper.insertRecord(list);
+				list.clear();
 			}
-			list.clear();
 		}
 		if(list.size()>0) {
 			statisticsMapper.insertRecord(list);
