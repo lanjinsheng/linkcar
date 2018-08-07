@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.mapper.statistics.StatisticsMapper">
+ 
+
+     <insert id="insertRecord"  parameterType="java.util.HashMap">
+      insert ignore into statistics
+       (userId,action,eventTime) 
+         VALUES
+    	<foreach collection="list" item="item" index="index" separator=",">
+    		(#{item.userId},#{item.action},#{item.eventTime}) 
+    	</foreach>
+     </insert>
+    
+    <select id="jugeTable"  resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select 1 as id from INFORMATION_SCHEMA.TABLES where 
+          TABLE_NAME=#{tbName}
+	</select>
+	
+	 <select id="getMaxId"  resultType="java.lang.Long" parameterType="java.util.HashMap">
+		select max(id) from  ${tbName}           
+	</select>
+	
+    <update id="createTableSql" parameterType="java.util.HashMap">
+      <![CDATA[ 
+CREATE TABLE ${tbName} (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) DEFAULT NULL,
+  `action` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `eventTime` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+]]>
+   </update>
+    
+    
+   <insert id="moveRecord"  parameterType="java.util.HashMap">
+      insert ignore into ${tbName} 
+      select * from statistics where 
+      <![CDATA[eventTime<#{eventTime} 
+      and id>#{id} ]]> limit 50000
+   </insert>
+   <delete id="deleteRecord"  parameterType="java.util.HashMap">
+       delete from statistics where 
+       <![CDATA[eventTime<#{eventTime}]]>
+   </delete> 
+</mapper>
