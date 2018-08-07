@@ -9,11 +9,11 @@
      </select>
      <select id="billBoardByPower" resultMap="BaseResultMap">
        SELECT *
-       FROM  assetUsersAsset where userId>1 order by powerNum desc limit 50
+       FROM  assetUsersAsset where userId>1 order by powerNum desc limit 10
      </select>
      <select id="billBoardByDiamond" resultMap="BaseResultMap">
        SELECT *
-       FROM  assetUsersAsset where userId>1 order by diamondsNum desc limit 50
+       FROM  assetUsersAsset where userId>1 order by diamondsNum desc limit 10
      </select>
      
      <select id="getDiamondsCurOrder" resultType="java.lang.Integer" parameterType="java.lang.Long">
