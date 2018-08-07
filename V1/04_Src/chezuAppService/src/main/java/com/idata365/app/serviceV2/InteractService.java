@@ -392,6 +392,7 @@ public class InteractService extends BaseService<InteractService> {
 //				最后的晚餐给您点了赞
 //				5、我贴条的用户向我缴纳罚金：
 //				最后的晚餐 给您缴了罚金 20点动力
+//				7、其他玩家擦我的车
 				int type=log.getEventType();
 				if(type==InteractConstant.STEAL_POWER){
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 偷取您的动力"+log.getSomeValue()+"点");
@@ -403,6 +404,8 @@ public class InteractService extends BaseService<InteractService> {
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 给您缴了罚金"+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您交了罚金"+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.CLEAN_CAR){
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您擦了车");
 				}
 				m.put("interactUserId", log.getUserIdA().toString());
 				rtList.add(m);
@@ -436,6 +439,7 @@ public class InteractService extends BaseService<InteractService> {
 //					我给 最后的晚餐 点了赞
 //					5、我给自己缴罚单
 //					我向 最后的晚餐缴了罚金 20点动力
+//					7、我擦其他玩家的车
 				int type=log.getEventType();
 				if(type==InteractConstant.STEAL_POWER){
 					m.put("log", "偷取了 "+String.format("【%s】",log.getUserNameB())+" "+log.getSomeValue()+"点动力");
@@ -448,6 +452,12 @@ public class InteractService extends BaseService<InteractService> {
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					//有问题
 					m.put("log", "帮 "+String.format("【%s】",log.getUserNameB())+"缴了罚金"+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.CLEAN_CAR){
+					if(log.getUserIdA()==userId) {
+						m.put("log", "我给自己擦了车");
+					}else {
+						m.put("log", "帮 "+String.format("【%s】",log.getUserNameB())+"擦了车");
+					}
 				}
 				m.put("interactUserId", log.getUserIdB().toString());
 				rtList.add(m);
@@ -482,6 +492,7 @@ public class InteractService extends BaseService<InteractService> {
 //				最后的晚餐给TA点了赞
 //				5、我贴条的用户向我缴纳罚金：
 //				最后的晚餐 给TA缴了罚金 20点动力
+//				7、其他玩家擦其他玩家的车
 				int type=log.getEventType();
 				if(type==InteractConstant.STEAL_POWER){
 					m.put("log",String.format("【%s】",log.getUserNameA())  +" 偷取TA的动力 "+log.getSomeValue()+"点");
@@ -494,6 +505,8 @@ public class InteractService extends BaseService<InteractService> {
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					//有问题
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮TA缴了罚金"+log.getSomeValue()+"点动力");
+				}else if(type==InteractConstant.CLEAN_CAR){
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 给TA擦了车");
 				}
 				m.put("interactUserId", log.getUserIdA().toString());
 				rtList.add(m);
