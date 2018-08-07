@@ -7,8 +7,8 @@
 	parameterType="com.idata365.app.entity.InteractLogs">
 		INSERT   INTO
 		interactLogs
-		(userIdA,userNameA,userIdB,userNameB,eventType,someValue,createTime)
-		values(#{userIdA}, #{userNameA}, #{userIdB}, #{userNameB}, #{eventType}, #{someValue}, now()) 
+		(userIdA,userNameA,userIdB,userNameB,eventType,someValue,createTime,userCarId)
+		values(#{userIdA}, #{userNameA}, #{userIdB}, #{userNameB}, #{eventType}, #{someValue}, now(),#{userCarId}) 
 	</insert>
 	
    <select id="getUserAByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">

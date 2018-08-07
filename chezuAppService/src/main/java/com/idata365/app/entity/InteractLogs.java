@@ -19,7 +19,14 @@ public class InteractLogs implements Serializable{
 	private int someValue;
 	private Date createTime;
 	private String  createTimeStr;
+	private Long userCarId;
 	
+	public Long getUserCarId() {
+		return userCarId;
+	}
+	public void setUserCarId(Long userCarId) {
+		this.userCarId = userCarId;
+	}
 	public String getCreateTimeStr() {
 		return createTimeStr;
 	}
