@@ -45,8 +45,8 @@ public class ScanLogsTask extends TimerTask {
 		return yesterdayDateStr;
 	}
 	//在主线程中执行任务线程.....    
-	public String filePath="D:\\usr\\local\\chezu\\zuul\\logs\\%s\\event.log";
-//	public String filePath="/usr/local/chezu/zuul/logs/%s/event.log";
+//	public String filePath="D:\\usr\\local\\chezu\\zuul\\logs\\%s\\event.log";
+	public String filePath="/usr/local/chezu/zuul/logs/%s/event.log";
 	
 	@Override  
 	public void run() {  
