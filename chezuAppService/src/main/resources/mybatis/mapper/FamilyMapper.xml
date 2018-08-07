@@ -152,7 +152,7 @@
  	</delete>
  	
  	<select id="queryOwnFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
- 		select t1.id as familyId, imgUrl, familyName as name, t2.role as role from familyInfo t1 
+ 		select t1.id as familyId, imgUrl, familyName as name, t2.role as role,t1.familyType as familyType from familyInfo t1
 			 join userFamilyRelation t2 on(t1.id=t2.familyId)
 			where t1.createUserId=#{userId} and t2.userId=#{userId}
  	</select>
@@ -170,7 +170,7 @@
  	</select>
  	
  	<select id="queryJoinFamily" resultType="com.idata365.app.entity.FamilyInfoScoreBean" parameterType="com.idata365.app.entity.FamilyParamBean">
-		select t1.id as familyId, imgUrl, familyName as name, t2.role as role from familyInfo t1 
+		select t1.id as familyId, imgUrl, familyName as name, t2.role as role,t1.familyType as familyType from familyInfo t1 
 		 join userFamilyRelation t2 on(t1.id=t2.familyId)
 		where t1.id=#{familyId} and t2.userId=#{userId}
  	</select>

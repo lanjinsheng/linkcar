@@ -80,6 +80,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		Map<String, String> familyInfo = familyService.queryFamilyByUserId(userId);
 		rtMap.put("createFamilyInfo", familyInfo.get("createFamilyInfo"));
 		rtMap.put("joinFamilyInfo", familyInfo.get("joinFamilyInfo"));
+		rtMap.put("createdClubInfo", familyService.queryClubInfoByUserId(userId).get("createClubInfo"));
+		rtMap.put("joinedClubInfo", familyService.queryClubInfoByUserId(userId).get("joinClubInfo"));
 		// 车库名
 		if (ownerId == userId) {
 			rtMap.put("title", "我的车库");

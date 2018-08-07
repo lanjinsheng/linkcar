@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.LotteryNotEnoughException;
 import com.idata365.app.constant.DateConstant;
+import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.constant.FamilyConstant;
 import com.idata365.app.constant.LotteryConstant;
 import com.idata365.app.constant.ResultConstant;

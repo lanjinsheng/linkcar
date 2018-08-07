@@ -576,7 +576,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 			familyInfo.put("familyScore", familyScore);
 			familyInfo.put("trophyNum", map.get("trophyNum"));
 			familyInfo.put("grade", map.get("gradeOrNum"));
-
+			
 			// 俱乐部成员信息
 			List<Map<String, Object>> users = scoreService.getMemberInfoByTime(arr[i], daystamp);
 			for (int j = 0; j < users.size(); j++) {
