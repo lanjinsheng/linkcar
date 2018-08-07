@@ -549,6 +549,42 @@ public class AssetController extends BaseController {
 		return assetService.addUserPowers(logs);
 	}
 	
+	/**
+	 * 
+	 * @Title: receiveDayMissionBox
+	 * @Description: TODO(领取每日任务宝箱)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/receiveDayMissionBox", method = RequestMethod.POST)
+	boolean receiveDayMissionBox(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerNum") long powerNum,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"   powerNum:" + powerNum +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("receiveClubBonus·~~~controller");
+		AssetUsersPowerLogs logs = new AssetUsersPowerLogs();
+		logs.setUserId(userId);
+		logs.setPowerNum(powerNum);
+		logs.setEventType(AssetConstant.EVENTTYPE_POWER_MISSION_DAYBOX);
+		logs.setRecordType(AssetConstant.RECORDTYPE_1);
+		logs.setRemark("每日任务宝箱领取power");
+		return assetService.addUserPowers(logs);
+	}
+	
+	/**
+	 * 
+	 * @Title: queryReceiveDayMissionBox
+	 * @Description: TODO(由app调用资产工程查询用户领取每日任务宝箱次数)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/queryReceiveDayMissionBox", method = RequestMethod.POST)
+	int queryReceiveDayMissionBox(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryReceiveDayMissionBox·~~~controller");
+		int count = assetService.queryReceiveDayMissionBox(userId);
+		return count;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
 	}

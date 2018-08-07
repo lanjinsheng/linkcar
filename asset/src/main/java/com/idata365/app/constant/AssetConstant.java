@@ -69,6 +69,7 @@ public class AssetConstant {
 	public final static int EVENTTYPE_POWER_MISSION_CARPOOL20TIMES_ID = 128;//累计搭乘顺风车并完成行程20次
 	public final static int EVENTTYPE_POWER_MISSION_AD = 199; // 观看广告
 	public final static int EVENTTYPE_POWER_MISSION_INTERACTAD = 198; // 参与活动
+	public final static int EVENTTYPE_POWER_MISSION_DAYBOX = 200; // 每日任务进度宝箱
 	//个人钻石表
 	public final static int EVENTTYPE_DAIMOND_DAYPOWER_USER = 1;// 每日分配
 	public final static int EVENTTYPE_DAIMOND_GAMEEND_USER = 2;// PK结束俱乐部分配
@@ -156,6 +157,6 @@ public class AssetConstant {
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_CARPOOL20TIMES_ID, "完成任务-路路顺风");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_AD, "观看广告奖励");
 		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_INTERACTAD, "完成活动奖励");
-
+		UserPowerEventMap.put(EVENTTYPE_POWER_MISSION_DAYBOX, "领取每日任务宝箱");
 	}
 }

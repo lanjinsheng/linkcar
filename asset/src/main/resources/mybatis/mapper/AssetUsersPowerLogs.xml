@@ -73,4 +73,8 @@
      <select id="queryHadGetBonus" resultType="java.lang.Integer" parameterType="java.lang.Long">
 		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=17 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
+	
+	<select id="queryReceiveDayMissionBox" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=200 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
+	</select>
 </mapper>
