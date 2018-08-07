@@ -903,7 +903,7 @@ public class AssetService extends BaseService<AssetService> {
 	public List<Map<String, String>> billBoard(String billBoardType, long userId) {
 		List<Map<String, String>> billBoard = new ArrayList<>();
 		List<AssetUsersAsset> users = new ArrayList<>();
-		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
+//		AssetUsersAsset usersAsset = assetUsersAssetMapper.getUserAssetByUserId(userId);
 
 		if ("2".equals(billBoardType)) {
 			// 按照今日动力排名
@@ -912,7 +912,7 @@ public class AssetService extends BaseService<AssetService> {
 			// 按照钻石数量排名
 			users = assetUsersAssetMapper.billBoardByDiamond();
 		}
-		users.add(usersAsset);
+//		users.add(usersAsset);
 		for (int i = 0; i < users.size(); i++) {
 			Map<String, String> bill = new HashMap<>();
 			if ("2".equals(billBoardType)) {
