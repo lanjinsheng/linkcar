@@ -1,6 +1,7 @@
 package com.idata365.app.serviceV2;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.v2.DicComponent;
 import com.idata365.app.mapper.DicCarMapper;
 import com.idata365.app.mapper.DicComponentMapper;
+import com.idata365.app.mapper.InteractLogsMapper;
 import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
@@ -49,6 +51,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 	private DicCarMapper dicCarMapper;
 	@Autowired
 	private UserCarMapper userCarMapper;
+	@Autowired
+	private InteractLogsMapper interactLogsMapper;
 	
 	/**
 	 * 
@@ -115,7 +119,18 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		// 动力加成操作
 		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(userId, userCurCar.getCarId(),userCurCar.getId());
 		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
-
+		//是否可以擦车
+		Map<String,Object> m=new HashMap<>();
+		m.put("userCarId", userCurCar.getId());
+		Date daystamp = DateTools.getAddMinuteDateTime(new Date(), -60 * 3);
+	    m.put("daystamp", daystamp);
+		int i = interactLogsMapper.queryIsCanCleanCar(m);
+		if (i > 0) {
+			rtMap.put("isCanCleanCar", "0");
+		} else {
+			rtMap.put("isCanCleanCar", "1");
+		}
+		
 		return rtMap;
 	}
 

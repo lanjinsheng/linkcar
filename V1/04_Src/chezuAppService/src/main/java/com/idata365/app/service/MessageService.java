@@ -41,7 +41,7 @@ import com.idata365.app.util.ValidTools;
 @Service
 public class MessageService extends BaseService<MessageService>{
 	private final static Logger LOG = LoggerFactory.getLogger(MessageService.class);
-	public static final String  H5Host="http://apph5.idata365.com/";
+	public static final String  H5Host="http://product-h5.idata365.com/";
 	public static final String  InviteMessage="玩家【%s】申请加入您的俱乐部，请尽快审核，别让您的粉丝等太久哦！";
 	public static final String  PassFamilyMessage="老板【%s】同意了您的申请，欢迎来到【%s】大俱乐部！";
 	public static final String  PassFamilyMessage2="玩家【%s】同意了进入您创建的俱乐部，快去看看吧！";

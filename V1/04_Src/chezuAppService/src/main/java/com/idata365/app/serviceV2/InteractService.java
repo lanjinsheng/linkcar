@@ -623,6 +623,10 @@ public class InteractService extends BaseService<InteractService> {
 		return this.interactLogsMapper.queryLikeCount(userId);
 	}
 	
+	public int queryIsCanCleanCar(Map<String,Object> map){
+		return interactLogsMapper.queryIsCanCleanCar(map);
+	}
+	
 	public static void main(String []args) {
 		System.out.println(System.currentTimeMillis()-(2*60*1000));
 	}

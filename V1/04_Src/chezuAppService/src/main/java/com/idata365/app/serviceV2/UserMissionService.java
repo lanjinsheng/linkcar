@@ -298,7 +298,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			}
 
 			bean.setMissionActionDesc(resultBean.getStatus() == 1 ? "领取" : (resultBean.getStatus() == 3 ? "已领取" : (resultBean.getLinkDesc().equals("")==true?"未完成":resultBean.getLinkDesc())));
-			bean.setMissionActionStatus((resultBean.getStatus() == 3||resultBean.getLinkDesc().equals(""))? "0" : "1");
+			bean.setMissionActionStatus((resultBean.getStatus() == 3 || (resultBean.getStatus() == 2 && resultBean.getLinkDesc().equals(""))) ? "0" : "1");
 			bean.setMissionActionLink(resultBean.getStatus() == 1 ? "0" : resultBean.getMissionActionLink());
 			int missionId = resultBean.getMissionId();
 			if ((missionId == 17 || missionId == 18 || missionId == 20 || missionId == 21 || missionId == 22
@@ -321,6 +321,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 						bean.setMissionActionDesc("未完成");
 						bean.setMissionActionStatus("0");
 						bean.setMissionActionLink("");
+					} else {
+						bean.setMissionActionLink(resultBean.getMissionActionLink() + createFamilyId.longValue());
 					}
 				}
 			}
