@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.mapper.ImMapper;
 import com.idata365.app.remote.ChezuAppService;
+import com.idata365.app.util.DateTools;
 import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.SignUtils;
 import com.idata365.websocket.Global;
@@ -180,6 +181,27 @@ public class ImService extends BaseService<ImService>
 		rtMap.put("2", list3);
 		return rtMap;
 	} 
+	
+	@Transactional
+	public void insertInLog(String userId,String channelId) {
+		Map<String,Object> map=new HashMap<>();
+		map.put("userId", userId);
+		map.put("channelId", channelId);
+		map.put("inTime", System.currentTimeMillis());
+		map.put("inTimeStr", DateTools.getCurDate());
+		map.put("offTime",0);
+		map.put("offTimeStr", "");
+		map.put("onlineTime",-1);
+		imMapper.insertOrUpdateLog(map);
+	}
+	@Transactional
+	public void updateOffLog(String channelId) {
+		Map<String,Object> map=new HashMap<>();
+		map.put("channelId", channelId);
+		map.put("offTime",System.currentTimeMillis());
+		map.put("offTimeStr", DateTools.getCurDate());
+		imMapper.insertOrUpdateLog(map);
+	}
 	
 public static void main(String []args) {
 	Map<String,Object> map=new HashMap<String,Object>();

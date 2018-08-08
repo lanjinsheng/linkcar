@@ -11,5 +11,7 @@ public interface ImMapper {
     
     void insert(Map<String,Object> msg);
  
+    void insertOrUpdateLog(Map<String,Object> msg);
+    
 
 }
