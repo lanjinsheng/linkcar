@@ -113,7 +113,7 @@ public class CalFamilyPkServiceV2 {
 			}
 //			winMemberNum=fdds1.getMemberNum();
 			Long familyId = fdds1.getFamilyId();
-			String daystamp = DateTools.getYYYY_MM_DD();
+			String daystamp = DateTools.getAddMinuteDateTime(DateTools.getYYYY_MM_DD(), -24, "yyyy-MM-dd");
 			winMemberNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, daystamp);
 			hadSendAsset=true;
 			fdds1.setWin(true);
@@ -124,7 +124,7 @@ public class CalFamilyPkServiceV2 {
 			winFamily=competitorFamilyId;
 //			winMemberNum=fdds2.getMemberNum();
 			Long familyId = fdds2.getFamilyId();
-			String daystamp = DateTools.getYYYY_MM_DD();
+			String daystamp = DateTools.getAddMinuteDateTime(DateTools.getYYYY_MM_DD(), -24, "yyyy-MM-dd");
 			winMemberNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, daystamp);
 			winFamilyType=level2;
 			trophy2=d2.getWin();
