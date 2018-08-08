@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.idata365.app.controller.security.BaseController;
 import com.idata365.app.entity.v2.MissionResultBean;
 import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.serviceV2.LookAdService;
 import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.ResultUtils;
 
@@ -26,6 +27,8 @@ public class UserMissionController extends BaseController {
 	public UserMissionService userMissionService;
 	@Autowired
 	public ChezuAssetService chezuAssetService;
+	@Autowired
+	public LookAdService lookAdService;
 
 	/**
 	 * 
@@ -62,13 +65,13 @@ public class UserMissionController extends BaseController {
 		rtDate.put("rtList", rtList);
 		
 		
-		//任务进度宝箱
+		// 任务进度宝箱
 		Map<String, Object> box = new HashMap<>();
-		if(missionType==1) {
-			List<Map<String, String>> boxList = new ArrayList<Map<String,String>>();
+		if (missionType == 1) {
+			List<Map<String, String>> boxList = new ArrayList<Map<String, String>>();
 			int count = chezuAssetService.queryReceiveDayMissionBox(userId, "");
-			int [] arr = {1,2,3,4};
-			int [] sureNum = {2,4,6,7};
+			int[] arr = { 1, 2, 3, 4 };
+			int[] sureNum = { 2, 4, 6, 7 };
 			for (int i = 0; i < arr.length; i++) {
 				Map<String, String> b = new HashMap<>();
 				b.put("boxId", String.valueOf(arr[i]));
@@ -77,8 +80,23 @@ public class UserMissionController extends BaseController {
 				boxList.add(b);
 			}
 			box.put("boxList", boxList);
-			box.put("totalNum", "7");
+			box.put("totalNum", "7");// 共需要完成任务数
 			box.put("currentNum", rtMap.get("dayMissionHad"));
+		} else if (missionType == 3) {
+			List<Map<String, String>> boxList = new ArrayList<Map<String, String>>();
+			int count = chezuAssetService.queryReceiveActMissionBox(userId, "");
+			int[] arr = { 1, 2, 3, 4 };
+			int[] sureNum = { 2, 6, 10, 14 };
+			for (int i = 0; i < arr.length; i++) {
+				Map<String, String> b = new HashMap<>();
+				b.put("boxId", String.valueOf(arr[i]));
+				b.put("isOpen", count > i ? "1" : "0");
+				b.put("sureNum", String.valueOf(sureNum[i]));
+				boxList.add(b);
+			}
+			box.put("boxList", boxList);
+			box.put("totalNum", "14");// 共需要完成任务数
+			box.put("currentNum", String.valueOf(lookAdService.getTodayCountAllType(userId)));
 		}
 		
 		rtDate.put("boxInfo", box);
@@ -124,15 +142,25 @@ public class UserMissionController extends BaseController {
 	 *             LiXing
 	 */
 
-	@RequestMapping("/receiveDayMissionBox")
+	@RequestMapping("/receiveMissionBox")
 	public Map<String, Object> receiveMissionBox(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		long userId = this.getUserId();
 		int boxId = Integer.valueOf(requestBodyParams.get("boxId").toString());
+		int missionType = Integer.valueOf(requestBodyParams.get("missionType").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("boxId=================" + boxId);
-		long[] power = { 20, 40, 60, 100 };
-		chezuAssetService.receiveDayMissionBox(userId, power[boxId - 1], "");
+		LOG.info("missionType=================" + missionType);
+		if(missionType==1) {
+			long[] power = { 20, 40, 60, 100 };
+			chezuAssetService.receiveDayMissionBox(userId, power[boxId - 1], "");
+		}else if (missionType==3) {
+			long[] power = { 50, 80, 100, 120 };
+			chezuAssetService.receiveActMissionBox(userId, power[boxId - 1], "");
+		}
+		
 		return ResultUtils.rtSuccess(null);
 	}
+	
+	
 }

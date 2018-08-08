@@ -166,4 +166,13 @@ public interface ChezuAssetService {
 	// 查询用户领取每日任务宝箱次数
 	@RequestMapping(value = "/asset/queryReceiveDayMissionBox", method = RequestMethod.POST)
 	int queryReceiveDayMissionBox(@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign);
+	
+	//领取活动任务宝箱
+	@RequestMapping(value = "/asset/receiveActMissionBox", method = RequestMethod.POST)
+	boolean receiveActMissionBox(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerNum") long powerNum, @RequestParam(value = "sign") String sign);
+
+	// 查询用户领取活动任务宝箱次数
+	@RequestMapping(value = "/asset/queryReceiveActMissionBox", method = RequestMethod.POST)
+	int queryReceiveActMissionBox(@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign);
 }
