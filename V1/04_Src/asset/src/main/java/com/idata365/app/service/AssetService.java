@@ -1070,4 +1070,9 @@ public class AssetService extends BaseService<AssetService> {
 		// TODO Auto-generated method stub
 		return assetUsersPowerLogsMapper.queryReceiveDayMissionBox(userId);
 	}
+	
+	public int queryReceiveActMissionBox(long userId) {
+		// TODO Auto-generated method stub
+		return assetUsersPowerLogsMapper.queryReceiveActMissionBox(userId);
+	}
 }

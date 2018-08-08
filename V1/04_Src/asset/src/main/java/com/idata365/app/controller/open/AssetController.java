@@ -560,7 +560,7 @@ public class AssetController extends BaseController {
 			@RequestParam(value = "powerNum") long powerNum,@RequestParam(value = "sign") String sign) {
 		LOG.info("userId:" + userId +"   powerNum:" + powerNum +"===sign:" + sign);
 		LOG.info("校验逻辑待处理·~~~sign:");
-		LOG.info("receiveClubBonus·~~~controller");
+		LOG.info("receiveDayMissionBox·~~~controller");
 		AssetUsersPowerLogs logs = new AssetUsersPowerLogs();
 		logs.setUserId(userId);
 		logs.setPowerNum(powerNum);
@@ -582,6 +582,42 @@ public class AssetController extends BaseController {
 		LOG.info("校验逻辑待处理·~~~sign:");
 		LOG.info("queryReceiveDayMissionBox·~~~controller");
 		int count = assetService.queryReceiveDayMissionBox(userId);
+		return count;
+	}
+	
+	/**
+	 * 
+	 * @Title: receiveDayMissionBox
+	 * @Description: TODO(领取活动任务宝箱)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/receiveActMissionBox", method = RequestMethod.POST)
+	boolean receiveActMissionBox(@RequestParam(value = "userId") long userId,
+			@RequestParam(value = "powerNum") long powerNum,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"   powerNum:" + powerNum +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("receiveActMissionBox·~~~controller");
+		AssetUsersPowerLogs logs = new AssetUsersPowerLogs();
+		logs.setUserId(userId);
+		logs.setPowerNum(powerNum);
+		logs.setEventType(AssetConstant.EVENTTYPE_POWER_MISSION_ACTBOX);
+		logs.setRecordType(AssetConstant.RECORDTYPE_1);
+		logs.setRemark("活动任务宝箱领取power");
+		return assetService.addUserPowers(logs);
+	}
+	
+	/**
+	 * 
+	 * @Title: queryReceiveActMissionBox
+	 * @Description: TODO(由app调用资产工程查询用户领取活动任务宝箱次数)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/queryReceiveActMissionBox", method = RequestMethod.POST)
+	int queryReceiveActMissionBox(@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("userId:" + userId +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryReceiveDayMissionBox·~~~controller");
+		int count = assetService.queryReceiveActMissionBox(userId);
 		return count;
 	}
 	

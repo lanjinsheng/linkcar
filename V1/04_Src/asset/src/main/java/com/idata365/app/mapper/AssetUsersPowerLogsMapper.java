@@ -33,4 +33,6 @@ public interface AssetUsersPowerLogsMapper {
 	
 	int queryReceiveDayMissionBox(@Param("userId") long userId);
 	
+	int queryReceiveActMissionBox(@Param("userId") long userId);
+	
 }
