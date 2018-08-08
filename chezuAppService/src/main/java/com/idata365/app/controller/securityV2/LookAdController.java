@@ -35,11 +35,13 @@ public class LookAdController extends BaseController {
 	@RequestMapping("/ad/countOfOddLookAd")
 	public Map<String, Object> countOfOddLookAd(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Map<String, Object> rtMap = new HashMap<>();
 		long userId = this.getUserId();
+		Map<String, Object> rtMap = new HashMap<>();
+		long adId = Long.valueOf(requestBodyParams.get("adId").toString()).longValue();
 		LOG.info("userId=================" + userId);
-		int count = this.lookAdService.countOfOddLookAd(userId);
-		rtMap.put("oddCount", String.valueOf(count));
+		LOG.info("adId=================" + adId);
+		Map<String, Object> map = this.lookAdService.countOfOddLookAd(userId,adId);
+		rtMap.put("rtInfo", map);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 	
@@ -57,16 +59,15 @@ public class LookAdController extends BaseController {
 	@RequestMapping("/ad/adCallBack")
 	public Map<String, Object> adCallBack(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		Map<String, Object> rtMap = new HashMap<>();
+//		Map<String, Object> rtMap = new HashMap<>();
 		long userId = this.getUserId();
 		int adSign = Integer.valueOf(requestBodyParams.get("adSign").toString()).intValue();
 		long adPassId = Long.valueOf(requestBodyParams.get("adPassId").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("adPassId=================" + adPassId);
 		try {
-			Map<String, Object> prizeInfo = this.lookAdService.receiveLookAdPower(userId, adSign, adPassId);
-			rtMap.put("prizeInfo", prizeInfo);
-			return ResultUtils.rtSuccess(rtMap);
+			this.lookAdService.adCallBack(userId, adSign, adPassId);
+			return ResultUtils.rtSuccess(null);
 		} catch (Exception e) {
 			return ResultUtils.rtFail(null, e.getMessage(), "100");
 		}

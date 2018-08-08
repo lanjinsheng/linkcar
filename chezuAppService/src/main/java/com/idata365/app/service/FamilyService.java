@@ -273,6 +273,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		int familyType = Integer.valueOf(familyInfo.get("familyType").toString());
 		FamilyInviteResultBean tempResultBean = new FamilyInviteResultBean();
 		AdBeanUtils.copyOtherPropToStr(tempResultBean, familyInviteBean);
+		tempResultBean.setImgUrl(familyInfo.get("imgUrl").toString());
 		//等级
 		tempResultBean.setTypeValue(DicFamilyTypeConstant.getDicFamilyType(familyType).getFamilyTypeValue());
 		//人数

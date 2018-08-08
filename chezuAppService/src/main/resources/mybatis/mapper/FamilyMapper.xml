@@ -196,7 +196,7 @@
  	
  	
  	<select id="queryFamilyByFId" resultType="java.util.HashMap">
- 		select id,familyType,trophy,familyName,createUserId,memberNum from familyInfo where id=#{familyId}
+ 		select id,familyType,trophy,familyName,imgUrl,createUserId,memberNum from familyInfo where id=#{familyId}
  	</select>
  	  
  	<!-- <select id="queryFamilyOrderByFId" resultType="java.lang.Integer">
