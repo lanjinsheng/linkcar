@@ -31,6 +31,13 @@
 		VALUES
 		(#{userId},#{channelId},#{inTime},#{inTimeStr},#{offTime},#{offTimeStr},#{onlineTime})
     </insert>
+   
+    <delete id="delLog"     parameterType="java.util.HashMap" >
+    delete from 
+		imLog
+		where userId=#{userId} and onlineTime=-1
+    </delete>
+   
     
     <update id="updateLog"     parameterType="java.util.HashMap" >
 UPDATE imLog 
