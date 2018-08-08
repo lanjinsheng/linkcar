@@ -19,7 +19,6 @@ import com.idata365.app.util.ResultUtils;
 
 @RestController
 public class RuleController extends BaseController {
-	private static long lastNotifyTime = 0;
 	List<Map<String, String>> result = new ArrayList<>();
 	protected static final Logger LOG = LoggerFactory.getLogger(RuleController.class);
 	@Autowired
@@ -28,15 +27,11 @@ public class RuleController extends BaseController {
 	@RequestMapping("/getRules")
 	public Map<String, Object> getRules(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
-		long now = System.currentTimeMillis();
 		long userId = this.getUserId();
 		int ruleType = Integer.valueOf(requestBodyParams.get("ruleType").toString());
 		LOG.info("userId==============" + userId);
-		if ((now - lastNotifyTime) > (3600 * 1000)) {// 一个小时重新去库获取
-			result = dicService.getRulesByType(ruleType);
-			lastNotifyTime = now;
-		}
-		Map<String,Object> rtMap=new HashMap<String,Object> ();
+		result = dicService.getRulesByType(ruleType);
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("rules", result);
 		rtMap.put("ruleName", result.get(0).get("ruleName"));
 		return ResultUtils.rtSuccess(rtMap);
