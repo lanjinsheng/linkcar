@@ -25,6 +25,7 @@ import com.idata365.app.mapper.DicComponentMapper;
 import com.idata365.app.mapper.DicFamilyTypeMapper;
 import com.idata365.app.mapper.DicGameDayMapper;
 import com.idata365.app.mapper.DicNotifyMapper;
+import com.idata365.app.mapper.DicRuleMapper;
 import com.idata365.app.mapper.DicUserMissionMapper;
 
 @Service
@@ -43,6 +44,8 @@ public class DicService extends BaseService<DicService> {
 	DicCarMapper dicCarMapper;
 	@Autowired
 	DicComponentMapper dicComponentMapper;
+	@Autowired
+	DicRuleMapper dicRuleMapper;
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType() {
 		return dicFamilyTypeMapper.getDicFamilyType(null);
@@ -60,7 +63,7 @@ public class DicService extends BaseService<DicService> {
 	public List<DicComponent> getDicComponent() {
 		return dicComponentMapper.getDicComponent(null);
 	}
-
+	
 	@Transactional
 	public String getNotify() {
 		Map<String, String> map = dicNotifyMapper.getLatestNotify();
@@ -92,6 +95,11 @@ public class DicService extends BaseService<DicService> {
 
 	public List<Map<String, String>> playHelper() {
 		List<Map<String, String>> list = dicNotifyMapper.playHelper();
+		return list;
+	}
+	
+	public List<Map<String, String>> getRulesByType(int ruleType) {
+		List<Map<String, String>> list = dicRuleMapper.getRulesByType(ruleType);
 		return list;
 	}
 

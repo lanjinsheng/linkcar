@@ -64,6 +64,7 @@ import com.idata365.app.mapper.ImNotifyMapper;
 import com.idata365.app.mapper.ScoreMapper;
 import com.idata365.app.mapper.TaskMapper;
 import com.idata365.app.mapper.UserConfigMapper;
+import com.idata365.app.mapper.UserLookAdMapper;
 import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.mapper.UserRoleLogMapper;
 import com.idata365.app.mapper.UsersAccountMapper;
@@ -119,6 +120,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	ScoreServiceV2 scoreServiceV2;
 	@Autowired
 	BoxTreasureMapper boxTreasureMapper;
+	@Autowired
+	UserLookAdMapper userLookAdMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -1034,7 +1037,8 @@ public class FamilyService extends BaseService<FamilyService> {
 		
 		// 任务已完成未领取
 		int i = userMissionLogsMapper.queryFinishedCount(bean.getUserId());
-		if (i > 0) {
+		int count = userLookAdMapper.getTodayCount(bean.getUserId(), DateTools.getYYYY_MM_DD());
+		if (i > 0 || count < 11) {
 			resultBean.setMissionHave(1);
 		} else {
 			resultBean.setMissionHave(0);

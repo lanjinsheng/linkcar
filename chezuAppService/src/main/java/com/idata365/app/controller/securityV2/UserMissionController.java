@@ -145,22 +145,27 @@ public class UserMissionController extends BaseController {
 	@RequestMapping("/receiveMissionBox")
 	public Map<String, Object> receiveMissionBox(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		Map<String, String> prizeInfo = new HashMap<String, String>();
 		long userId = this.getUserId();
 		int boxId = Integer.valueOf(requestBodyParams.get("boxId").toString());
 		int missionType = Integer.valueOf(requestBodyParams.get("missionType").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("boxId=================" + boxId);
 		LOG.info("missionType=================" + missionType);
+		long powerNum = 0L;
 		if(missionType==1) {
 			long[] power = { 20, 40, 60, 100 };
-			chezuAssetService.receiveDayMissionBox(userId, power[boxId - 1], "");
+			powerNum = power[boxId - 1];
+			chezuAssetService.receiveDayMissionBox(userId, powerNum, "");
 		}else if (missionType==3) {
 			long[] power = { 50, 80, 100, 120 };
-			chezuAssetService.receiveActMissionBox(userId, power[boxId - 1], "");
+			powerNum = power[boxId - 1];
+			chezuAssetService.receiveActMissionBox(userId, powerNum, "");
 		}
-		
-		return ResultUtils.rtSuccess(null);
+		prizeInfo.put("powerNum", String.valueOf(powerNum));
+		rtMap.put("prizeInfo", prizeInfo);
+		return ResultUtils.rtSuccess(rtMap);
 	}
-	
 	
 }
