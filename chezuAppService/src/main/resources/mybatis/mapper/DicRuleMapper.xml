@@ -3,6 +3,6 @@
 <mapper namespace="com.idata365.app.mapper.DicRuleMapper">
     
     <select id="getRulesByType" resultType="java.util.HashMap">
- 		select * from dicRule where ruleType=select ruleType,ruleTypeValue as ruleName,title,content,image from dicRule where ruleType=#{ruleType}
+ 		select ruleType,ruleTypeValue as ruleName,title,content,image from dicRule where ruleType=#{ruleType}
  	</select>
 </mapper>
