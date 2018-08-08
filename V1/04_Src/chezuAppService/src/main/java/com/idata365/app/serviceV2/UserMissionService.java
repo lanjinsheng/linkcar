@@ -29,6 +29,7 @@ import com.idata365.app.mapper.DicUserMissionMapper;
 import com.idata365.app.mapper.FamilyMapper;
 import com.idata365.app.mapper.FamilyRelationMapper;
 import com.idata365.app.mapper.UserCarMapper;
+import com.idata365.app.mapper.UserLookAdMapper;
 import com.idata365.app.mapper.UserMissionLogsMapper;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAssetService;
@@ -74,6 +75,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	FamilyMapper familyMapper;
 	@Autowired
 	FamilyRelationMapper familyRelationMapper;
+	@Autowired
+	UserLookAdMapper userLookAdMapper;
 
 	// 从字典表查询所有任务
 	public List<DicUserMission> getAllDicUserMission() {
@@ -431,7 +434,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		int b = userMissionLogsMapper.queryCountByType(userId, 2);
 		rtMap.put("dayMission", String.valueOf(a));
 		rtMap.put("achieveMission", String.valueOf(b));
-		rtMap.put("activityMission", "0");
+		rtMap.put("activityMission", String.valueOf(userLookAdMapper.getTodayCount(userId, DateTools.getYYYY_MM_DD())));
 		rtMap.put("dayMissionHad", userMissionLogsMapper.queryCountByTypeHad(userId, 1).toString());
 		return rtMap;
 	}
