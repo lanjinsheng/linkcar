@@ -74,7 +74,12 @@
 		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=17 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
 	
+	<!-- 领取每日任务宝箱的次数 -->
 	<select id="queryReceiveDayMissionBox" resultType="java.lang.Integer" parameterType="java.lang.Long">
 		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=200 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
+	</select>
+	<!-- 领取活动任务宝箱的次数 -->
+	<select id="queryReceiveActMissionBox" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=201 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
 </mapper>
