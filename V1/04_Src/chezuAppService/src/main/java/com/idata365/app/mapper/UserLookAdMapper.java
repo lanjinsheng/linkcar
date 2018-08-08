@@ -15,4 +15,6 @@ public interface UserLookAdMapper {
 	public UserLookAdLogs getUserLastLookInfo(@Param("userId") Long userId);
 	
 	public Long getAllPowerNumOfType2(@Param("userId") Long userId);
+	
+	int updateHadGet(@Param("userId") Long userId,@Param("adPassId") Long adPassId, @Param("daystamp") String daystamp);
 }

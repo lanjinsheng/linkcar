@@ -31,7 +31,8 @@ public class LookAdService extends BaseService<LookAdService> {
 
 	/**
 	 * 
-        * @Title: countOfOddLookAd
+        * @param adId 
+	 * @Title: countOfOddLookAd
         * @Description: TODO()
         * @param @param userId
         * @param @return 参数
@@ -39,14 +40,47 @@ public class LookAdService extends BaseService<LookAdService> {
         * @throws
         * @author LiXing
 	 */
-	public int countOfOddLookAd(long userId) {
+	public Map<String, Object> countOfOddLookAd(long userId, long adId) {
+		Map<String, Object> rtMap = new HashMap<>();
 		String daystamp = DateTools.getYYYY_MM_DD();
 		int count = this.userLookAdMapper.getTodayCount(userId, daystamp);
 		if (count >= 10) {
-			return 0;
+			count = 0;
 		} else {
-			return 10 - count;
+			count = 10 - count;
 		}
+		rtMap.put("oddCount", String.valueOf(count));
+		
+		String isAdEnd = "0";
+		String rtAdId = String.valueOf(adId);
+		String powerPrizeNum = "0";
+		if(adId==0) {
+			//第一次调用
+			rtAdId = "1";
+			isAdEnd = "0";
+		}else {
+			//
+			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
+			if(info!=null&&info.getAdPassId()==adId) {
+				int i = this.userLookAdMapper.updateHadGet(userId, adId, daystamp);
+				if(i>0) {
+					chezuAssetService.getMissionPrize(userId, 30, 99, "");// 观看广告任务ID为99
+					powerPrizeNum = "30";
+					rtAdId = String.valueOf(info.getAdPassId()+1);
+					isAdEnd = "1";
+				}
+			}
+		}
+		
+		if(count == 0) {
+			rtAdId = "0";
+		}
+		
+		rtMap.put("adId", rtAdId);
+		rtMap.put("isAdEnd", isAdEnd);
+		rtMap.put("powerPrizeNum", String.valueOf(powerPrizeNum));
+		rtMap.put("diamondPrizeNum", "0");
+		return rtMap;
 	}
 	
 	public int getTodayCountAllType(long userId) {
@@ -54,26 +88,10 @@ public class LookAdService extends BaseService<LookAdService> {
 		return  this.userLookAdMapper.getTodayCountAllType(userId, daystamp);
 	}
 
-	/**
-	 * 
-        * @param eventType 
-	 * @param adPassId 
-	 * @Title: receiveLookAdPower
-        * @Description: TODO(这里用一句话描述这个方法的作用)
-        * @param @param userId
-        * @param @return 参数
-        * @return String 返回类型
-        * @throws
-        * @author LiXing
-	 */
-	public Map<String, Object> receiveLookAdPower(long userId, int adSign, long adPassId) {
+	public Map<String, Object> adCallBack(long userId, int adSign, long adPassId) {
 		Long powerNum = 0L;
 		int valid = 0;
 		Map<String, Object> rtMap = new HashMap<String, Object>();
-		int count = this.countOfOddLookAd(userId);
-		if (count == 0) {
-			throw new RuntimeException("次数已达到限制");
-		}
 
 		UserLookAdLogs logs = new UserLookAdLogs();
 		logs.setUserId(userId);
@@ -86,10 +104,6 @@ public class LookAdService extends BaseService<LookAdService> {
 		logs.setType(1);
 		if (adSign != 0) {
 			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
-//			if (info == null || (new Date().getTime() - info.getCreateTime().getTime() > 1000 * 5)) {
-//				powerNum = (long) RandUtils.generateRand(30, 200);
-//				valid = 1;
-//			}
 			if (info == null || info.getAdPassId() != adPassId) {
 				powerNum = 30L;
 				valid = 1;
@@ -97,23 +111,9 @@ public class LookAdService extends BaseService<LookAdService> {
 		}
 		logs.setPowerNum(powerNum);
 		logs.setValid(valid);
-		int i = this.userLookAdMapper.insertLogs(logs);
+		logs.setHadGet(0);
+		this.userLookAdMapper.insertLogs(logs);
 
-		if (i <= 0) {
-			LOG.error("插入Logs状态失败：==" + userId + "==" + userId);
-			throw new RuntimeException("系统异常领取失败");
-		}
-
-		String paramSign = userId + String.valueOf(powerNum);
-		String sign = SignUtils.encryptHMAC(paramSign);
-		if(powerNum>=0) {
-			boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 99, sign);// 观看广告任务ID为99
-			if (b == false) {
-				throw new RuntimeException("系统异常领取失败");
-			}
-		}
-		rtMap.put("powerPrizeNum", String.valueOf(powerNum));
-		rtMap.put("diamondPrizeNum", "0");
 		return rtMap;
 	}
 

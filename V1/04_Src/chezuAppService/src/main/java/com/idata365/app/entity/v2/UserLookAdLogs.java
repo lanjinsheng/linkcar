@@ -22,6 +22,15 @@ public class UserLookAdLogs implements Serializable {
 	private Long adPassId;
 	private int valid;
 	private int type;
+	private int hadGet;
+
+	public int getHadGet() {
+		return hadGet;
+	}
+
+	public void setHadGet(int hadGet) {
+		this.hadGet = hadGet;
+	}
 
 	public BigDecimal getDiamondNum() {
 		return diamondNum;
