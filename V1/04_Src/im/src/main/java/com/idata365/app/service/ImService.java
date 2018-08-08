@@ -192,7 +192,7 @@ public class ImService extends BaseService<ImService>
 		map.put("offTime",0);
 		map.put("offTimeStr", "");
 		map.put("onlineTime",-1);
-		imMapper.insertOrUpdateLog(map);
+		imMapper.insertLog(map);
 	}
 	@Transactional
 	public void updateOffLog(String channelId) {
@@ -200,7 +200,7 @@ public class ImService extends BaseService<ImService>
 		map.put("channelId", channelId);
 		map.put("offTime",System.currentTimeMillis());
 		map.put("offTimeStr", DateTools.getCurDate());
-		imMapper.insertOrUpdateLog(map);
+		imMapper.updateLog(map);
 	}
 	
 public static void main(String []args) {
