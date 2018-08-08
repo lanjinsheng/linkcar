@@ -1,6 +1,7 @@
 package com.idata365.app.controller.securityV2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +36,10 @@ public class RuleController extends BaseController {
 			result = dicService.getRulesByType(ruleType);
 			lastNotifyTime = now;
 		}
-
-		return ResultUtils.rtSuccess(result);
+		Map<String,Object> rtMap=new HashMap<String,Object> ();
+		rtMap.put("rules", result);
+		rtMap.put("ruleName", result.get(0).get("ruleName"));
+		return ResultUtils.rtSuccess(rtMap);
 	}
 
 }
