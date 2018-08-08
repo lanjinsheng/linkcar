@@ -20,6 +20,7 @@ import com.idata365.entity.BoxTreasureUser;
 import com.idata365.entity.DicComponent;
 import com.idata365.entity.DicFamilyType;
 import com.idata365.mapper.app.BoxTreasureMapper;
+import com.idata365.mapper.app.TaskFamilyPkMapper;
 import com.idata365.util.DateTools;
 import com.idata365.util.RandUtils;
 
@@ -37,6 +38,8 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	private final static Logger LOG = LoggerFactory.getLogger(BoxTreasureService.class);
 	@Autowired
 	BoxTreasureMapper boxTreasureMapper;
+	@Autowired
+    TaskFamilyPkMapper taskFamilyPkMapper;
 	/**
 	 * 随机生成道具配件
 	 * @return
@@ -102,9 +105,13 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   List<BoxTreasureFamily> list=new ArrayList<>();
 	   int level=DicFamilyTypeConstant.getFamilyLevel(familyType);
 	   int componentNum=1;
-		int r=RandUtils.generateRand(1, 100);
+	   int r=RandUtils.generateRand(1, 100);
 	   String boxId=UUID.randomUUID().toString().replace("-", "");
 	   String daystamp=DateTools.getYYYYMMDD();
+	   //familyNum改为有分数人数
+	   String date = DateTools.getAddMinuteDateTime(DateTools.getYYYY_MM_DD(), -24, "yyyy-MM-dd");
+	   familyNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, date);
+	   
 	   if(level==1) {//冠军
 		  int add=RandUtils.generateRand(1, 3);
 		  componentNum=familyNum+add;
