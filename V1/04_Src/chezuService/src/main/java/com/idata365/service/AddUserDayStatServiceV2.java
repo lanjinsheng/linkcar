@@ -334,11 +334,19 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			 addCar(batchInsert, uth,stealPower,1) ;
 		 }
 	 }
-		int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
-		if(fadan>0) {//三急+超速
-			fadan=fadan>8?8:fadan;
-			for(int j=0;j<fadan;j++) {
-				addCar(batchInsert, uth,(int)(power*0.1),2) ;
+//		int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
+//		if(fadan>0) {//三急+超速
+//			fadan=fadan>8?8:fadan;
+//			for(int j=0;j<fadan;j++) {
+//				addCar(batchInsert, uth,(int)(power*0.1),2) ;
+//			}
+//		}
+		int fadan = uth.getBrakeTimes() + uth.getSpeedTimes() + uth.getTurnTimes() + uth.getOverspeedTimes();
+		if (Double.valueOf(uth.getDriveScore()) < 100) {
+			fadan = fadan > 8 ? 8 : fadan;
+			for (int j = 0; j < fadan; j++) {
+				int p = (int) (power * 0.1) < 1 ? 1 : (int) (power * 0.1);
+				addCar(batchInsert, uth, p, 2);
 			}
 		}
 		 //批量插入
