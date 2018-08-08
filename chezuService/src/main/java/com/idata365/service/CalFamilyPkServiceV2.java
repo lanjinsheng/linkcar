@@ -23,6 +23,7 @@ import com.idata365.mapper.app.TaskFamilyDayScoreMapper;
 import com.idata365.mapper.app.TaskFamilyPkMapper;
 import com.idata365.remote.ChezuAssetService;
 import com.idata365.schedule.CalFamilyDayPkTask;
+import com.idata365.util.DateTools;
 import com.idata365.util.SignUtils;
 @Service
 public class CalFamilyPkServiceV2 {
@@ -110,7 +111,10 @@ public class CalFamilyPkServiceV2 {
 			}else {
 				trophy2=d2.getLoss();
 			}
-			winMemberNum=fdds1.getMemberNum();
+//			winMemberNum=fdds1.getMemberNum();
+			Long familyId = fdds1.getFamilyId();
+			String daystamp = DateTools.getYYYY_MM_DD();
+			winMemberNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, daystamp);
 			hadSendAsset=true;
 			fdds1.setWin(true);
 		}else if(fdds1.getScore()<fdds2.getScore()) {
@@ -118,7 +122,10 @@ public class CalFamilyPkServiceV2 {
 				hadSendAsset=true;
 			}
 			winFamily=competitorFamilyId;
-			winMemberNum=fdds2.getMemberNum();
+//			winMemberNum=fdds2.getMemberNum();
+			Long familyId = fdds2.getFamilyId();
+			String daystamp = DateTools.getYYYY_MM_DD();
+			winMemberNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, daystamp);
 			winFamilyType=level2;
 			trophy2=d2.getWin();
 			if(fdds1.getScore()==0) {

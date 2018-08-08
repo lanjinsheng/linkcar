@@ -18,6 +18,10 @@
 		SELECT *  from familyDriveDayStat where familyId=#{familyId} and daystamp=#{daystamp}
 	 </select>
 	 
+	 <select id="getHaveScoreMemberNum"  resultType="java.lang.Integer" >
+		SELECT count(1) from userScoreDayStat where familyId=#{familyId} and daystamp=#{daystamp} and avgScore>0
+	 </select>
+	 
 	 
 	 <select id="getNewFamilyDayScore"  resultMap="BaseTaskFamilyDriveDayMap" parameterType="java.util.HashMap">
 		SELECT *  from familyDriveDayStat where daystamp=#{daystamp} and familyFlag=0

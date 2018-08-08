@@ -36,4 +36,5 @@ public interface TaskFamilyPkMapper {
 		
 		void clearLockTask(@Param("compareTimes") Long compareTimes);
 		
+		Integer getHaveScoreMemberNum(@Param("familyId") Long familyId,@Param("daystamp") String daystamp);
 }
