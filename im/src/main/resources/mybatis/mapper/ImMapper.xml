@@ -23,15 +23,21 @@
             (#{userId},#{familyId},#{type}, #{msg},#{imgUrl}, #{nick}, #{time})
     </insert>
     
-   <insert id="insertOrUpdateLog"     parameterType="java.util.HashMap" >
+   <insert id="insertLog"     parameterType="java.util.HashMap" >
    INSERT IGNORE INTO
 		imLog
 		(userId,channelId,inTime,inTimeStr,offTime,offTimeStr,
 		onlineTime)
 		VALUES
 		(#{userId},#{channelId},#{inTime},#{inTimeStr},#{offTime},#{offTimeStr},#{onlineTime})
-		ON DUPLICATE KEY UPDATE
-		offTime=#{offTime},offTimeStr=#{offTimeStr},onlineTime=(offTime-inTime)
     </insert>
     
+    <update id="updateLog"     parameterType="java.util.HashMap" >
+UPDATE imLog 
+		set offTime=#{offTime},offTimeStr=#{offTimeStr},onlineTime=(offTime-inTime)
+		where channelId=#{channelId}
+	
+    </update>
+    
+    	  
 </mapper>
