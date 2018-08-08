@@ -192,6 +192,7 @@ public class ImService extends BaseService<ImService>
 		map.put("offTime",0);
 		map.put("offTimeStr", "");
 		map.put("onlineTime",-1);
+		imMapper.delLog(map);//清理无效纪录
 		imMapper.insertLog(map);
 	}
 	@Transactional
