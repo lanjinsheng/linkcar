@@ -48,6 +48,11 @@ public class LookAdService extends BaseService<LookAdService> {
 			return 10 - count;
 		}
 	}
+	
+	public int getTodayCountAllType(long userId) {
+		String daystamp = DateTools.getYYYY_MM_DD();
+		return  this.userLookAdMapper.getTodayCountAllType(userId, daystamp);
+	}
 
 	/**
 	 * 

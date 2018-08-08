@@ -112,5 +112,17 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("queryReceiveDayMissionBox 挂了");
 		return 0;
 	}
+
+	@Override
+	public boolean receiveActMissionBox(long userId, long powerNum, String sign) {
+		LOG.error("receiveActMissionBox 挂了");
+		return false;
+	}
+
+	@Override
+	public int queryReceiveActMissionBox(long userId, String sign) {
+		LOG.error("queryReceiveActMissionBox 挂了");
+		return 0;
+	}
  
 }
