@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.idata365.app.config.SystemProperties;
+import com.idata365.app.service.ImService;
 import com.idata365.app.service.SpringContextUtil;
 import com.idata365.app.util.GsonUtils;
 
@@ -36,6 +37,9 @@ public class MyWebSocketServerHandler extends
 		// 添加
 		Global.group.add(ctx.channel());
 		String id=ctx.channel().id().asLongText();
+		//插入日志
+		ImService imService=(ImService)SpringContextUtil.getBean("imService");
+		imService.updateOffLog(id);
 		logger.info(id+"客户端与服务端连接开启");
 	}
 	@Override
@@ -104,6 +108,9 @@ public class MyWebSocketServerHandler extends
 				String keyIds=String.valueOf(datas.get("keyId"));
 				Global.mapChannelUser(ctx.channel().id().asLongText(),userId);
 				Global.addMoudle(notifyMoudle, ctx.channel(), userId, keyIds);
+				//插入日志
+				ImService imService=(ImService)SpringContextUtil.getBean("imService");
+				imService.insertInLog(userId, ctx.channel().id().asLongText());
 				
 			}else if(map.get("msgType").equals("11")) {//移除模块
 				String userId=String.valueOf(map.get("userId"));
