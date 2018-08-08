@@ -13,5 +13,6 @@ public interface ImMapper {
  
     int insertLog(Map<String,Object> map);
     int updateLog(Map<String,Object> map);
+    int delLog(Map<String,Object> map);
     
 }
