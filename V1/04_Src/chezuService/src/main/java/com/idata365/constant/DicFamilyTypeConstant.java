@@ -88,45 +88,45 @@ public class DicFamilyTypeConstant {
 	
 	public static Integer getDicFamilyTypeByTrophy(Integer trophy){
 		  if(trophy>=250) {
-			  if(trophy>=1330) {
+			  if(trophy>=2700) {
 				  return GuanJun_20;
-			  }else if(trophy>=1270) {
+			  }else if(trophy>=2600) {
 				  return GuanJun_19;
-			  }else if(trophy>=1240) {
+			  }else if(trophy>=2500) {
 				  return GuanJun_18;
-			  }else if(trophy>=1210) {
+			  }else if(trophy>=2400) {
 				  return GuanJun_17;
-			  }else if(trophy>=1180) {
+			  }else if(trophy>=2300) {
 				  return GuanJun_16;
-			  }else if(trophy>=1150) {
+			  }else if(trophy>=2200) {
 				  return GuanJun_15;
-			  }else if(trophy>=1120) {
+			  }else if(trophy>=2100) {
 				  return GuanJun_14;
-			  }else if(trophy>=1090) {
+			  }else if(trophy>=2000) {
 				  return GuanJun_13;
-			  }else if(trophy>=1060) {
+			  }else if(trophy>=1900) {
 				  return GuanJun_12;
-			  }else if(trophy>=1030) {
+			  }else if(trophy>=1800) {
 				  return GuanJun_11;
-			  }else if(trophy>=1000) {
+			  }else if(trophy>=1700) {
 				  return GuanJun_10;
-			  }else if(trophy>=970) {
+			  }else if(trophy>=1600) {
 				  return GuanJun_9;
-			  }else if(trophy>=940) {
+			  }else if(trophy>=1500) {
 				  return GuanJun_8;
-			  }else if(trophy>=910) {
+			  }else if(trophy>=1400) {
 				  return GuanJun_7;
-			  }else if(trophy>=850) {
+			  }else if(trophy>=1300) {
 				  return GuanJun_6;
-			  }else if(trophy>=880) {
+			  }else if(trophy>=1200) {
 				  return GuanJun_5;
-			  }else if(trophy>=850) {
+			  }else if(trophy>=1100) {
 				  return GuanJun_4;
-			  }else if(trophy>=820) {
+			  }else if(trophy>=1000) {
 				  return GuanJun_3;
-			  }else if(trophy>=790) {
+			  }else if(trophy>=900) {
 				  return GuanJun_2;
-			  }else if(trophy>=760) {
+			  }else if(trophy>=800) {
 				  return GuanJun_1;
 			  }else if(trophy>=700) {
 				  return ZuanShi_1;
