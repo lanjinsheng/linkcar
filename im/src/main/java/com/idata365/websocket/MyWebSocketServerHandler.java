@@ -37,9 +37,6 @@ public class MyWebSocketServerHandler extends
 		// 添加
 		Global.group.add(ctx.channel());
 		String id=ctx.channel().id().asLongText();
-		//插入日志
-		ImService imService=(ImService)SpringContextUtil.getBean("imService");
-		imService.updateOffLog(id);
 		logger.info(id+"客户端与服务端连接开启");
 	}
 	@Override
@@ -49,6 +46,9 @@ public class MyWebSocketServerHandler extends
 		// 移除
 		Global.inActiveChannel(id);
 		Global.group.remove(ctx.channel());
+		//插入日志
+		ImService imService=(ImService)SpringContextUtil.getBean("imService");
+		imService.updateOffLog(id);
 		
 	}
 	@Override
