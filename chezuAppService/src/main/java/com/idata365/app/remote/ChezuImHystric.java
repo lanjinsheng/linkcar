@@ -44,7 +44,7 @@ public class ChezuImHystric implements ChezuImService {
 	}
 
 	@Override
-	public boolean doingAllActMission(String userName, String userId, String sign) {
+	public boolean doingAllActMission(String userName, long powerNum, String userId, String sign) {
 		LOG.error("doingAllActMission 挂了");
 		return false;
 	}
