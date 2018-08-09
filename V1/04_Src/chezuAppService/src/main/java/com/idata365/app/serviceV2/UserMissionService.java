@@ -308,7 +308,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					|| missionId == 24 || missionId == 25 || missionId == 26 || missionId == 27 || missionId == 28)
 					&& resultBean.getStatus() == 2) {
 				// 根据不同用户处理条跳转逻辑
-				// 创建家族和加入家族信息
+				// 创建俱乐部和加入俱乐部信息
 				Long createFamilyId = this.familyMapper.queryCreateFamilyId(userId);
 				Long joinFamilyId = this.familyMapper.queryJoinFamilyId(userId);
 				if (missionId == 17 || missionId == 26 || missionId == 27 || missionId == 28 || missionId == 18
