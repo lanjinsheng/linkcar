@@ -75,7 +75,7 @@ public interface ComponentMapper {
 	
 	public int countOfPray(@Param("userId") Long userId);
 	
-	public int countHadRequest(@Param("userId") Long userId);
+	public int countHadRequest(@Param("userId") Long userId,@Param("daystamp") String daystamp);
 	
 	public int countGetGive(@Param("userId") Long userId);
 	

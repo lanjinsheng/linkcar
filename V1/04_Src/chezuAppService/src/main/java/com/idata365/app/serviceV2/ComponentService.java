@@ -506,10 +506,10 @@ public class ComponentService extends BaseService<ComponentService> {
 			  log.setOperationManId(userId);
 			  componentMapper.updateComponentGiveLog(log);
 		  }else{
-			  int i = componentMapper.countHadRequest(log.getToUserId());
+			  int i = componentMapper.countHadRequest(log.getToUserId(),log.getDaystamp());
 			  if(i>0) {
 				  msg.setStatus(0);
-				  msg.setMsg("该玩家今天已分配");
+				  msg.setMsg("该申请已过期");
 				  return msg;
 			  }
 			  //到componentFamily 查询零件是否存在
