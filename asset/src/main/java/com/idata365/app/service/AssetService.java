@@ -1075,4 +1075,20 @@ public class AssetService extends BaseService<AssetService> {
 		// TODO Auto-generated method stub
 		return assetUsersPowerLogsMapper.queryReceiveActMissionBox(userId);
 	}
+	
+	public long queryMaxActPowerByTime(String daystamp) {
+		Long powerNum = assetUsersPowerLogsMapper.queryMaxActPowerByTime(daystamp);
+		if (powerNum == null) {
+			powerNum = 0L;
+		}
+		return powerNum;
+	}
+	
+	public long queryMaxActPowerByTimeAndUserId(String daystamp,long userId) {
+		Long powerNum = assetUsersPowerLogsMapper.queryMaxActPowerByTimeAndUserId(daystamp,userId);
+		if (powerNum == null) {
+			powerNum = 0L;
+		}
+		return powerNum;
+	}
 }

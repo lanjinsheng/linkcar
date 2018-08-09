@@ -35,4 +35,8 @@ public interface AssetUsersPowerLogsMapper {
 	
 	int queryReceiveActMissionBox(@Param("userId") long userId);
 	
+	Long queryMaxActPowerByTime(@Param("daystamp") String daystamp);
+	
+	Long queryMaxActPowerByTimeAndUserId(@Param("daystamp") String daystamp,@Param("userId") long userId);
+	
 }
