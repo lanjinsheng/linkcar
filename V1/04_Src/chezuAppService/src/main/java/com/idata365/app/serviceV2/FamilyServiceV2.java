@@ -48,7 +48,7 @@ public class FamilyServiceV2 extends BaseService<FamilyServiceV2> {
 		if (nameCounts > 0 && !familyName.equals(familyInfo.getMyFamilyName())) {
 			return -1;
 		}
-		long familyId = Long.valueOf(entity.get("familyId").toString());
+		long familyId = familyMapper.queryCreateFamilyId(userId);
 		int i = this.familyMapper.updateFamilyInfo(familyId, familyName, imgUrl);
 		if (i != 1) {
 			return -1;
