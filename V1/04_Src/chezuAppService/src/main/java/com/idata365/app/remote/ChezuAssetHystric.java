@@ -124,5 +124,17 @@ public class ChezuAssetHystric implements ChezuAssetService {
 		LOG.error("queryReceiveActMissionBox 挂了");
 		return 0;
 	}
+
+	@Override
+	public long queryMaxActPowerByTime(String daystamp, String sign) {
+		LOG.error("queryMaxActPowerByTime 挂了");
+		return 0;
+	}
+
+	@Override
+	public long queryMaxActPowerByTimeAndUserId(String daystamp, long userId, String sign) {
+		LOG.error("queryMaxActPowerByTimeAndUserId 挂了");
+		return 0;
+	}
  
 }

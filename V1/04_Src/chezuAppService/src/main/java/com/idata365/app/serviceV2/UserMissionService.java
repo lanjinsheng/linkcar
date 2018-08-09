@@ -41,7 +41,7 @@ import com.idata365.app.util.DateTools;
 import com.idata365.app.util.SignUtils;
 
 @Service
-@Transactional
+
 public class UserMissionService extends BaseService<UserMissionService> {
 	protected static final Logger LOG = LoggerFactory.getLogger(UserMissionService.class);
 	
@@ -89,6 +89,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 	}
 
 	//
+	@Transactional
 	public void insertOrUpdateLogs(long userId, int missionType) {
 		List<Map<String, Object>> logs = userMissionLogsMapper.getLogsByUserIdAndType(userId, missionType);
 		for (Map<String, Object> map : logs) {
@@ -371,6 +372,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		return rtList;
 	}
 
+	@Transactional
 	public Map<String, Object> getMissionPrize(long userId, int missionId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("otherPrizeImg", "");
@@ -441,6 +443,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 
 
 	// 更新每日任务
+	@Transactional
 	public boolean updateDayMission(long userId) {
 		UserMissionLogs logs = userMissionLogsMapper.queryMissionId1(userId);
 		if(logs == null) {
@@ -468,6 +471,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		return false;
 	}
 
+	
 	public void initMissionOfUserId(long userId) {
 		// 初始化任务系统
 		// 初始化

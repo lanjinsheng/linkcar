@@ -28,7 +28,7 @@
     </select>
     
     <update id="updateHadGet" >
-       UPDATE userLookAdLogs SET hadGet=1 WHERE userId = #{userId} and adPassId=#{adPassId} and daystamp=#{daystamp} and valid=1
+       UPDATE userLookAdLogs SET hadGet=1 WHERE userId = #{userId} and adPassId=#{adPassId} and daystamp=#{daystamp} and valid=1 and hadGet=0
     </update>
 
 </mapper>

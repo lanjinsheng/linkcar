@@ -175,4 +175,12 @@ public interface ChezuAssetService {
 	// 查询用户领取活动任务宝箱次数
 	@RequestMapping(value = "/asset/queryReceiveActMissionBox", method = RequestMethod.POST)
 	int queryReceiveActMissionBox(@RequestParam(value = "userId") long userId, @RequestParam(value = "sign") String sign);
+	
+	// 根据时间获取当时活动任务最高动力值
+	@RequestMapping(value = "/asset/queryMaxActPowerByTime", method = RequestMethod.POST)
+	long queryMaxActPowerByTime(@RequestParam(value = "daystamp") String daystamp, @RequestParam(value = "sign") String sign);
+	
+	// 根据时间和UesrId
+	@RequestMapping(value = "/asset/queryMaxActPowerByTimeAndUserId", method = RequestMethod.POST)
+	long queryMaxActPowerByTimeAndUserId(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign);
 }
