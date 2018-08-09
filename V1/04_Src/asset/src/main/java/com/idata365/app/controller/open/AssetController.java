@@ -621,6 +621,36 @@ public class AssetController extends BaseController {
 		return count;
 	}
 	
+	/**
+	 * 
+	 * @Title: queryMaxActPowerByTime
+	 * @Description: TODO(由app调用资产工程 根据时间获取当时活动任务最高动力值)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/queryMaxActPowerByTime", method = RequestMethod.POST)
+	long queryMaxActPowerByTime(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "sign") String sign) {
+		LOG.info("daystamp:" + daystamp +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryReceiveDayMissionBox·~~~controller");
+		long powerNum = assetService.queryMaxActPowerByTime(daystamp);
+		return powerNum;
+	}
+	
+	/**
+	 * 
+	 * @Title: queryMaxActPowerByTimeAndUserId
+	 * @Description: TODO(由app调用资产工程 根据时间获取当时活动任务最高动力值)
+	 * @param @param
+	 */
+	@RequestMapping(value = "/asset/queryMaxActPowerByTimeAndUserId", method = RequestMethod.POST)
+	long queryMaxActPowerByTimeAndUserId(@RequestParam(value = "daystamp") String daystamp,@RequestParam(value = "userId") long userId,@RequestParam(value = "sign") String sign) {
+		LOG.info("daystamp:" + daystamp +"===sign:" + sign);
+		LOG.info("校验逻辑待处理·~~~sign:");
+		LOG.info("queryMaxActPowerByTimeAndUserId·~~~controller");
+		long powerNum = assetService.queryMaxActPowerByTimeAndUserId(daystamp,userId);
+		return powerNum;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));
 	}

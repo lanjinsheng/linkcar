@@ -82,4 +82,15 @@
 	<select id="queryReceiveActMissionBox" resultType="java.lang.Integer" parameterType="java.lang.Long">
 		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=201 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
+	
+	<!-- 根据时间领取活动任务最高动力 -->
+	<select id="queryMaxActPowerByTime" resultType="java.lang.Long">
+		SELECT IFNULL(sum( powerNum ),0) AS sum FROM assetUsersPowerLogs WHERE eventType = 198 AND DATE_FORMAT( createTime, '%Y%m%d' ) = #{daystamp} 
+		GROUP BY userId ORDER BY sum DESC LIMIT 1
+	</select>
+	
+	<!-- 时间和USerId -->
+	<select id="queryMaxActPowerByTimeAndUserId" resultType="java.lang.Long">
+		SELECT IFNULL(sum( powerNum ),0) AS sum FROM assetUsersPowerLogs WHERE eventType = 198 AND DATE_FORMAT( createTime, '%Y%m%d' ) = #{daystamp} and userId=#{userId}
+	</select>
 </mapper>
