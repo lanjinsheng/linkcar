@@ -72,11 +72,13 @@ public class UserMissionController extends BaseController {
 			int count = chezuAssetService.queryReceiveDayMissionBox(userId, "");
 			int[] arr = { 1, 2, 3, 4 };
 			int[] sureNum = { 2, 4, 6, 7 };
+			long[] power = { 20, 40, 60, 100 };
 			for (int i = 0; i < arr.length; i++) {
 				Map<String, String> b = new HashMap<>();
 				b.put("boxId", String.valueOf(arr[i]));
 				b.put("isOpen", count > i ? "1" : "0");
 				b.put("sureNum", String.valueOf(sureNum[i]));
+				b.put("hintInfo", "完成"+sureNum[i]+"个每日任务领取,打开后获得"+power[i]+"点动力");
 				boxList.add(b);
 			}
 			box.put("boxList", boxList);
@@ -87,11 +89,13 @@ public class UserMissionController extends BaseController {
 			int count = chezuAssetService.queryReceiveActMissionBox(userId, "");
 			int[] arr = { 1, 2, 3, 4 };
 			int[] sureNum = { 2, 6, 10, 14 };
+			long[] power = { 50, 80, 100, 120 };
 			for (int i = 0; i < arr.length; i++) {
 				Map<String, String> b = new HashMap<>();
 				b.put("boxId", String.valueOf(arr[i]));
 				b.put("isOpen", count > i ? "1" : "0");
 				b.put("sureNum", String.valueOf(sureNum[i]));
+				b.put("hintInfo", "完成"+sureNum[i]+"次活动任务领取,打开后获得"+power[i]+"点动力");
 				boxList.add(b);
 			}
 			box.put("boxList", boxList);
