@@ -99,17 +99,13 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 //		}
 		for (int i = 0; i < list.size(); i++) {
 			Map<String, String> bill = new HashMap<>();
-			UsersAccount usersAccount = usersAccountMapper
-					.findAccountById(Long.valueOf(list.get(i).get("createUserId").toString()));
-			DicFamilyType familyType = DicFamilyTypeConstant
-					.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
-			bill.put("id", (list.get(i).get("familyId").toString()));
-			bill.put("familyId", (list.get(i).get("familyId").toString()));
-			bill.put("rank", (list.get(i).get("yesterdayOrderNo").toString()));
+			UsersAccount usersAccount = usersAccountMapper.findAccountById(Long.valueOf(list.get(i).get("createUserId").toString()));
+			DicFamilyType familyType = DicFamilyTypeConstant.getDicFamilyType(Integer.valueOf(list.get(i).get("familyType").toString()));
+			bill.put("id", (list.get(i).get("id").toString()));
+			bill.put("familyId", (list.get(i).get("id").toString()));
+			bill.put("rank", String.valueOf(i+1));
 			bill.put("name", list.get(i).get("familyName").toString());
-			bill.put("captainOrGroupName",
-					usersAccount.getNickName() == null ? PhoneUtils.hidePhone(usersAccount.getPhone())
-							: usersAccount.getNickName());
+			bill.put("captainOrGroupName",usersAccount.getNickName());
 			bill.put("gradeOrNum", familyType.getFamilyTypeValue());
 			bill.put("trophyNum", list.get(i).get("trophy").toString());
 			billList.add(bill);
