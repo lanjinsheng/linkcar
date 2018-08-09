@@ -98,8 +98,8 @@ public class NotifyController extends BaseController{
 	
 	private final String PrayingSubmit="俱乐部通知:玩家@【%s】@祈愿一个 %s,一方有难八方支援,各位大佬快去资助TA吧。";
 	private final String PrayingRealize="俱乐部通知:感谢俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
-	private final String LookedAllAd="通知:玩家@【%s】@的今日完成所有视频任务啦!";
-	private final String DoingAllActMission="通知:玩家@【%s】@的活动任务奖励达到昨天最高啦!";
+	private final String LookedAllAd="通知:玩家@【%s】@今日完成所有视频任务,奖励300点动力!";
+	private final String DoingAllActMission="通知:玩家@【 %s】@今日的活动任务奖励已达到昨日最高啦，动力为 %s点!";
 			
    /**
     * 
@@ -219,7 +219,7 @@ public class NotifyController extends BaseController{
 	    * @author lcc
 	 */
 	@RequestMapping(value = "/im/doingAllActMission",method = RequestMethod.POST)
-	public boolean doingAllActMission(@RequestParam(value="userName") String userName,
+	public boolean doingAllActMission(@RequestParam(value="userName") String userName,@RequestParam(value="powerNum")long powerNum,
 			@RequestParam(value="userId") String userId,
 			@RequestParam(value="sign") String sign)
 	{
@@ -229,7 +229,7 @@ public class NotifyController extends BaseController{
 		insert.put("time", DateTools.getCurDate2());
 		insert.put("imgUrl", "");
 		insert.put("familyId",0);
-		insert.put("msg", String.format(DoingAllActMission,userName));
+		insert.put("msg", String.format(DoingAllActMission,userName,String.valueOf(powerNum)));
 		insert.put("type", 0);
 		imService.insertMsg(insert);
 		imService.sendGloadIm(insert);
