@@ -96,8 +96,10 @@ public class NotifyController extends BaseController{
 	}
 	
 	
-	private final String PrayingSubmit="家族通知:玩家@【%s】@祈愿一个 %s,一方有难八方支援,各位大佬快去资助TA吧。";
-	private final String PrayingRealize="家族通知:感谢俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
+	private final String PrayingSubmit="俱乐部通知:玩家@【%s】@祈愿一个 %s,一方有难八方支援,各位大佬快去资助TA吧。";
+	private final String PrayingRealize="俱乐部通知:感谢俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
+	private final String LookedAllAd="通知:玩家@【%s】@的今日完成所有视频任务啦!";
+	private final String DoingAllActMission="通知:玩家@【%s】@的活动任务奖励达到昨天最高啦!";
 			
    /**
     * 
@@ -127,13 +129,16 @@ public class NotifyController extends BaseController{
 		insert.put("imgUrl", "");
 		insert.put("familyId",rtMap.get("createFamilyId"));
 		insert.put("msg", String.format(PrayingSubmit,toUserName,propName));
+		insert.put("type", 1);
 		imService.insertMsg(insert);
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
+		insert.put("type", 2);
 		imService.insertMsg(insert);
 		imService.sendUserFamilyImByPraying(insert,rtMap,1);
 		imService.sendUserFamilyImByPraying(insert,rtMap,2);
 		return true;
 	}
+	
 	/**
 	 * 
 	    * @Title: prayingRealize
@@ -163,12 +168,71 @@ public class NotifyController extends BaseController{
 		insert.put("imgUrl", "");
 		insert.put("familyId",rtMap.get("createFamilyId"));
 		insert.put("msg", String.format(PrayingRealize,fromUserName,toUserName,propName));
+		insert.put("type", 1);
 		imService.insertMsg(insert);
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
+		insert.put("type", 2);
 		imService.insertMsg(insert);
 		imService.sendUserFamilyImByPraying(insert,rtMap,1);
 		imService.sendUserFamilyImByPraying(insert,rtMap,2);
 		return true;
 	}
 	
+	/**
+	 * 
+	    * @Title: lookedAllAd
+	    * @Description: TODO(这里用一句话描述这个方法的作用)
+	    * @param @param toUserName
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author lcc
+	 */
+	@RequestMapping(value = "/im/lookedAllAd",method = RequestMethod.POST)
+	public boolean lookedAllAd(@RequestParam(value="userName") String userName,
+			@RequestParam(value="userId") String userId,
+			@RequestParam(value="sign") String sign)
+	{
+		Map<String,Object> insert=new HashMap<>();
+		insert.put("userId", 0);
+		insert.put("nick", userName);
+		insert.put("time", DateTools.getCurDate2());
+		insert.put("imgUrl", "");
+		insert.put("familyId",0);
+		insert.put("msg", String.format(LookedAllAd,userName));
+		insert.put("type", 0);
+		imService.insertMsg(insert);
+		imService.sendGloadIm(insert);
+		return true;
+	}
+	
+	/**
+	 * 
+	    * @Title: doingAllActMission
+	    * @Description: TODO()
+	    * @param @param toUserName
+	    * @param @param sign
+	    * @param @return    参数
+	    * @return boolean    返回类型
+	    * @throws
+	    * @author lcc
+	 */
+	@RequestMapping(value = "/im/doingAllActMission",method = RequestMethod.POST)
+	public boolean doingAllActMission(@RequestParam(value="userName") String userName,
+			@RequestParam(value="userId") String userId,
+			@RequestParam(value="sign") String sign)
+	{
+		Map<String,Object> insert=new HashMap<>();
+		insert.put("userId", 0);
+		insert.put("nick", userName);
+		insert.put("time", DateTools.getCurDate2());
+		insert.put("imgUrl", "");
+		insert.put("familyId",0);
+		insert.put("msg", String.format(DoingAllActMission,userName));
+		insert.put("type", 0);
+		imService.insertMsg(insert);
+		imService.sendGloadIm(insert);
+		return true;
+	}
 }
