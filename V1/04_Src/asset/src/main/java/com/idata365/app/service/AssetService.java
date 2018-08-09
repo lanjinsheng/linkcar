@@ -115,10 +115,10 @@ public class AssetService extends BaseService<AssetService> {
 				assetUsersAssetMapper.getAllAppDiamonds().setScale(0, RoundingMode.HALF_UP).toString());
 		map.put("yesterdayDiamonds", "980");
 		map.put("allAppPowers", String.valueOf(assetUsersAssetMapper.getAllAppPowers()));
-		map.put("allAppDiamondsDesc", "全网钻石总量");
-		map.put("yesterdayDiamondsDesc", "昨日钻石产量");
-		map.put("allAppPowersDesc", "全网总动力");
-		map.put("totalPowersNumDesc", "今日个人动力");
+		map.put("allAppDiamondsDesc", "全网总量");
+		map.put("yesterdayDiamondsDesc", "昨日产量");
+		map.put("allAppPowersDesc", "全网总量");
+		map.put("totalPowersNumDesc", "今日个人");
 		return map;
 	}
 
