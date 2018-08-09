@@ -37,4 +37,16 @@ public class ChezuImHystric implements ChezuImService {
 		return false;
 	}
 
+	@Override
+	public boolean lookedAllAd(String userName, String userId, String sign) {
+		LOG.error("lookedAllAd 挂了");
+		return false;
+	}
+
+	@Override
+	public boolean doingAllActMission(String userName, String userId, String sign) {
+		LOG.error("doingAllActMission 挂了");
+		return false;
+	}
+
 }

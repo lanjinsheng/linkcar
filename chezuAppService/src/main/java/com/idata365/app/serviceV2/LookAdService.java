@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.entity.v2.UserLookAdLogs;
 import com.idata365.app.mapper.UserLookAdMapper;
+import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.RandUtils;
@@ -28,6 +30,10 @@ public class LookAdService extends BaseService<LookAdService> {
 	private UserLookAdMapper userLookAdMapper;
 	@Autowired
 	private ChezuAssetService chezuAssetService;
+	@Autowired
+	private ChezuImService chezuImService;
+	@Autowired
+	private UsersAccountMapper usersAccountMapper;
 
 	/**
 	 * 
@@ -63,11 +69,17 @@ public class LookAdService extends BaseService<LookAdService> {
 			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
 			if(info!=null&&info.getAdPassId()==adId) {
 				int i = this.userLookAdMapper.updateHadGet(userId, adId, daystamp);
+				rtAdId = String.valueOf(info.getAdPassId()+1);
 				if(i>0) {
-					chezuAssetService.getMissionPrize(userId, 30, 99, "");// 观看广告任务ID为99
+					chezuAssetService.getMissionPrize(userId, 30, 99, "");// 观看广告任务ID为199
 					powerPrizeNum = "30";
-					rtAdId = String.valueOf(info.getAdPassId()+1);
 					isAdEnd = "1";
+					
+					String dd = DateTools.getYYYY_MM_DD();
+					int cc = this.userLookAdMapper.getTodayCount(userId, dd);
+					if(cc>=10) {
+						chezuImService.lookedAllAd(usersAccountMapper.findAccountById(userId).getNickName(), String.valueOf(userId), "");
+					}
 				}
 			}
 		}
@@ -113,7 +125,7 @@ public class LookAdService extends BaseService<LookAdService> {
 		logs.setValid(valid);
 		logs.setHadGet(0);
 		this.userLookAdMapper.insertLogs(logs);
-
+		
 		return rtMap;
 	}
 
@@ -164,9 +176,14 @@ public class LookAdService extends BaseService<LookAdService> {
 		String paramSign = userId + String.valueOf(powerNum);
 		String sign = SignUtils.encryptHMAC(paramSign);
 		if(powerNum>0L) {
-			boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 98, sign);// 完成活动任务ID为98
+			boolean b = chezuAssetService.getMissionPrize(userId, powerNum.intValue(), 98, sign);// 完成活动任务ID为198
 			if (b == false) {
 				throw new RuntimeException("系统异常领取失败");
+			}
+			long yesterday = chezuAssetService.queryMaxActPowerByTime(DateTools.getAddMinuteDateTime(DateTools.getYYYYMMDD(), -24, "yyyyMMdd"), "");
+			long now = chezuAssetService.queryMaxActPowerByTimeAndUserId(DateTools.getYYYYMMDD(),userId, "");
+			if(now>=yesterday) {
+				chezuImService.doingAllActMission(usersAccountMapper.findAccountById(userId).getNickName(), String.valueOf(userId), "");
 			}
 		}
 		

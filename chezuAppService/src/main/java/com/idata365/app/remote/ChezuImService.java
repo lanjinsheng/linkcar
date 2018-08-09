@@ -38,4 +38,14 @@ public interface ChezuImService {
 			@RequestParam(value="toUserId") String toUserId,
 			@RequestParam(value="propName") String propName,
 			@RequestParam(value="sign") String sign);
+	
+	@RequestMapping(value = "/im/lookedAllAd",method = RequestMethod.POST)
+	public boolean lookedAllAd(@RequestParam(value="userName") String userName,
+			@RequestParam(value="userId") String userId,
+			@RequestParam(value="sign") String sign);
+	
+	@RequestMapping(value = "/im/doingAllActMission",method = RequestMethod.POST)
+	public boolean doingAllActMission(@RequestParam(value="userName") String userName,
+			@RequestParam(value="userId") String userId,
+			@RequestParam(value="sign") String sign);
 }
