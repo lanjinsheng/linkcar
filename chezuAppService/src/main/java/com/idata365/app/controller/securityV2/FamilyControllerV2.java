@@ -27,7 +27,7 @@ public class FamilyControllerV2 extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/family/updateFamily")
-	public Map<String, Object> createFamily(@RequestParam (required = false) Map<String, String> allRequestParams,
+	public Map<String, Object> updateFamily(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams) {
 		LOG.info("userId==========="+this.getUserId());
 		int status = this.familyServiceV2.updateFamily(requestBodyParams, this.getUserId());
