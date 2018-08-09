@@ -54,7 +54,7 @@
 	</select>
 	
 	<select id="queryCountOfSteal" resultType="java.lang.Integer" parameterType="java.lang.Long">
-		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and eventType=2 and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
+		SELECT IFNULL(count(1),0) FROM assetUsersPowerLogs where userId=#{userId} and (eventType=2 or eventType=11) and DATE_FORMAT(createTime,'%m%d%Y')=DATE_FORMAT(NOW(),'%m%d%Y')
 	</select>
 	
 	<select id="getRecordByEffectId" resultMap="BaseResultMap" parameterType="java.lang.Long">
