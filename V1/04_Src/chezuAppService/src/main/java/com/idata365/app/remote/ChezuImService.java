@@ -45,7 +45,7 @@ public interface ChezuImService {
 			@RequestParam(value="sign") String sign);
 	
 	@RequestMapping(value = "/im/doingAllActMission",method = RequestMethod.POST)
-	public boolean doingAllActMission(@RequestParam(value="userName") String userName,
+	public boolean doingAllActMission(@RequestParam(value="userName") String userName,@RequestParam(value="powerNum")long powerNum, 
 			@RequestParam(value="userId") String userId,
 			@RequestParam(value="sign") String sign);
 }

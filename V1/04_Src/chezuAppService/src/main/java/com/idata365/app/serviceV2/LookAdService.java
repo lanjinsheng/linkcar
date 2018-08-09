@@ -60,10 +60,16 @@ public class LookAdService extends BaseService<LookAdService> {
 		String isAdEnd = "0";
 		String rtAdId = String.valueOf(adId);
 		String powerPrizeNum = "0";
-		if(adId==0) {
-			//第一次调用
-			rtAdId = "1";
-			isAdEnd = "0";
+		if (adId == 0) {
+			// 第一次调用
+			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
+			if (info != null && info.getHadGet() == 0) {
+				isAdEnd = "1";
+				rtAdId = String.valueOf(info.getAdPassId());
+			} else {
+				rtAdId = "1";
+				isAdEnd = "0";
+			}
 		}else {
 			//
 			UserLookAdLogs info = this.userLookAdMapper.getUserLastLookInfo(userId);
@@ -73,8 +79,7 @@ public class LookAdService extends BaseService<LookAdService> {
 				if(i>0) {
 					chezuAssetService.getMissionPrize(userId, 30, 99, "");// 观看广告任务ID为199
 					powerPrizeNum = "30";
-					isAdEnd = "1";
-					
+					isAdEnd = "0";
 					String dd = DateTools.getYYYY_MM_DD();
 					int cc = this.userLookAdMapper.getTodayCount(userId, dd);
 					if(cc>=10) {
@@ -183,7 +188,7 @@ public class LookAdService extends BaseService<LookAdService> {
 			long yesterday = chezuAssetService.queryMaxActPowerByTime(DateTools.getAddMinuteDateTime(DateTools.getYYYYMMDD(), -24, "yyyyMMdd"), "");
 			long now = chezuAssetService.queryMaxActPowerByTimeAndUserId(DateTools.getYYYYMMDD(),userId, "");
 			if(now>=yesterday) {
-				chezuImService.doingAllActMission(usersAccountMapper.findAccountById(userId).getNickName(), String.valueOf(userId), "");
+				chezuImService.doingAllActMission(usersAccountMapper.findAccountById(userId).getNickName(),now, String.valueOf(userId), "");
 			}
 		}
 		
