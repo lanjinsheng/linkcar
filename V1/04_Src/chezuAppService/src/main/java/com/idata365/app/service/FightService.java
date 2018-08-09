@@ -138,6 +138,11 @@ public class FightService extends BaseService<FightService> {
     	Integer familyType=Integer.valueOf(family.get("familyType").toString())-(i*10);
     	family.put("familyType", familyType);
     	Map<String,Object> pkFamily=familyRelationMapper.getMatchFamily(family);
+		while (pkFamily == null) {
+			familyType = familyType - 10;
+			family.put("familyType", familyType);
+			pkFamily = familyRelationMapper.getMatchFamily(family);
+		}
     	if(challegeTimesToday<2){
     		//首次匹配，不进行扣能量
     	}else{
