@@ -11,7 +11,7 @@ public class FamilyParamBean implements Serializable
 
 	private long id;
 	
-	private long familyId;
+	private Long familyId;
 	
 	private long userId;
 	
@@ -95,7 +95,7 @@ public class FamilyParamBean implements Serializable
 		this.id = id;
 	}
 
-	public long getFamilyId()
+	public Long getFamilyId()
 	{
 		return familyId;
 	}

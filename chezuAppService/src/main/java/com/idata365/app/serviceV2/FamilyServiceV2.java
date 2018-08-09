@@ -39,7 +39,7 @@ public class FamilyServiceV2 extends BaseService<FamilyServiceV2> {
 		String familyName = entity.get("familyName").toString();
 		String familyNotify = entity.get("familyNotify").toString();
 		String imgUrl = entity.get("imgUrl").toString();
-		String[] arr = imgUrl.split("?key=");
+		String[] arr = imgUrl.split("\\?key=");
 		imgUrl = arr[arr.length - 1];
 		FamilyParamBean countNameParam = new FamilyParamBean();
 		countNameParam.setName(entity.get("familyName").toString());

@@ -988,52 +988,56 @@ public class FamilyService extends BaseService<FamilyService> {
 		int countUnRead = this.familyMapper.countUnRead(bean);
 		resultBean.setNewsNum(countUnRead);
 
-		// 统计聊天未读消息
-		int countUnReadChats = this.familyMapper.countUnReadChats(bean);
-		resultBean.setChatsNum(countUnReadChats);
+		
+		if(bean.getFamilyId()==null||bean.getFamilyId()==0) {
+			resultBean.setChatsNum(0);
+			resultBean.setReadFlag(0);
+		}else {
+			// 统计聊天未读消息
+			int countUnReadChats = this.familyMapper.countUnReadChats(bean);
+			resultBean.setChatsNum(countUnReadChats);
+			
+			int taskFlag = this.familyMapper.queryTaskFlag(bean);
 
-		int taskFlag = this.familyMapper.queryTaskFlag(bean);
+			String yesterdayStr = getYesterdayStr();
 
-		String yesterdayStr = getYesterdayStr();
+			UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
+			userFamilyRoleLogParamBean.setUserId(bean.getUserId());
+			userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
 
-		UserFamilyRoleLogParamBean userFamilyRoleLogParamBean = new UserFamilyRoleLogParamBean();
-		userFamilyRoleLogParamBean.setUserId(bean.getUserId());
-		userFamilyRoleLogParamBean.setFamilyId(bean.getFamilyId());
+			List<UserFamilyRoleLogBean> startEndList = this.familyMapper.queryStartEnd(userFamilyRoleLogParamBean);
+			String startTime = null;
+			String endTime = null;
+			int countUnReceive = 0;
 
-		List<UserFamilyRoleLogBean> startEndList = this.familyMapper.queryStartEnd(userFamilyRoleLogParamBean);
-		String startTime = null;
-		String endTime = null;
-		int countUnReceive = 0;
+			if (CollectionUtils.isNotEmpty(startEndList)) {
+				for (UserFamilyRoleLogBean tempBean : startEndList) {
+					String tempEndTime = tempBean.getEndTime();
+					if (StringUtils.startsWith(tempEndTime, yesterdayStr)) {
+						startTime = tempBean.getStartTime();
+						endTime = tempEndTime;
 
-		if (CollectionUtils.isNotEmpty(startEndList)) {
-			for (UserFamilyRoleLogBean tempBean : startEndList) {
-				String tempEndTime = tempBean.getEndTime();
-				if (StringUtils.startsWith(tempEndTime, yesterdayStr)) {
-					startTime = tempBean.getStartTime();
-					endTime = tempEndTime;
+						bean.setStartTime(startTime);
+						bean.setEndTime(endTime);
+						List<Long> habitList = this.familyMapper.queryHabits(bean);
 
-					bean.setStartTime(startTime);
-					bean.setEndTime(endTime);
-					List<Long> habitList = this.familyMapper.queryHabits(bean);
-
-					if (CollectionUtils.isNotEmpty(habitList)) {
-						countUnReceive = this.familyMapper.countUnReceive(habitList);
-						break;
-					} else {
-						countUnReceive = 0;
+						if (CollectionUtils.isNotEmpty(habitList)) {
+							countUnReceive = this.familyMapper.countUnReceive(habitList);
+							break;
+						} else {
+							countUnReceive = 0;
+						}
 					}
 				}
 			}
-		}
 
-		if (0 == taskFlag && countUnReceive > 0 && 0 != bean.getFamilyId()) {
-			resultBean.setReadFlag(1);
-		} else {
-			resultBean.setReadFlag(0);
+			if (0 == taskFlag && countUnReceive > 0 && 0 != bean.getFamilyId()) {
+				resultBean.setReadFlag(1);
+			} else {
+				resultBean.setReadFlag(0);
+			}
 		}
 		
-		//初始化任务系统
-		userMissionService.initMissionOfUserId(bean.getUserId());
 		
 		// 任务已完成未领取
 		int i = userMissionLogsMapper.queryFinishedCount(bean.getUserId());
