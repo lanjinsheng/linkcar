@@ -506,7 +506,7 @@ public class ComponentService extends BaseService<ComponentService> {
 			  log.setOperationManId(userId);
 			  componentMapper.updateComponentGiveLog(log);
 		  }else{
-			  int i = componentMapper.countOfPray(userId);
+			  int i = componentMapper.countHadRequest(log.getToUserId());
 			  if(i>0) {
 				  msg.setStatus(0);
 				  msg.setMsg("该玩家今天已分配");
