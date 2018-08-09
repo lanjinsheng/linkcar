@@ -110,10 +110,10 @@ public class ImService extends BaseService<ImService>
 		String msg2=GsonUtils.toJson(msg, false);
 		
 		List<Map<String,Object>> list=null;
-		if(type==1) {//创建家族
+		if(type==1) {//创建俱乐部
 		    list=(List<Map<String,Object>>)familiesMap.get("createFamily");
 			
-		}else if(type==2) {//参与家族
+		}else if(type==2) {//参与俱乐部
 			list=(List<Map<String,Object>>)familiesMap.get("partakeFamily");
 		}
 		if(list!=null) {
