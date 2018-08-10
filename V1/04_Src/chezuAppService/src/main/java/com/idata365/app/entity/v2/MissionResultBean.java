@@ -1,6 +1,7 @@
 package com.idata365.app.entity.v2;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 public class MissionResultBean implements Serializable {
@@ -20,7 +21,7 @@ public class MissionResultBean implements Serializable {
 	private String otherPrize;
 	private String missionActionDesc;
 	private String missionActionLink;
-	private Map<String, Object> levelDic;
+	private List<Map<String, String>> levelDic;
 
 	public String getMissionId() {
 		return missionId;
@@ -110,12 +111,13 @@ public class MissionResultBean implements Serializable {
 		this.missionActionLink = missionActionLink;
 	}
 
-	public Map<String, Object> getLevelDic() {
+	public List<Map<String, String>> getLevelDic() {
 		return levelDic;
 	}
 
-	public void setLevelDic(Map<String, Object> levelDic) {
+	public void setLevelDic(List<Map<String, String>> levelDic) {
 		this.levelDic = levelDic;
 	}
+
 
 }

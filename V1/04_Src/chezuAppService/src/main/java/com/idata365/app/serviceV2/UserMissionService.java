@@ -312,7 +312,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 				// 创建俱乐部和加入俱乐部信息
 				Long createFamilyId = this.familyMapper.queryCreateFamilyId(userId);
 				Long joinFamilyId = this.familyMapper.queryJoinFamilyId(userId);
-				if (missionId == 17 || missionId == 26 || missionId == 27 || missionId == 28 || missionId == 18
+				if (missionId == 17|| missionId == 18 || missionId == 26 || missionId == 27 || missionId == 28 
 						|| missionId == 25) {
 					if (createFamilyId == null && joinFamilyId == null) {
 						bean.setMissionActionDesc("未完成");
@@ -320,7 +320,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 						bean.setMissionActionLink("");
 					}
 				}
-				if (missionId == 22 || missionId == 24) {
+				if (missionId == 20|| missionId == 21|| missionId == 22 || missionId == 24) {
 					if (createFamilyId == null) {
 						bean.setMissionActionDesc("未完成");
 						bean.setMissionActionStatus("0");
@@ -352,8 +352,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					list.add(map);
 				}
 			}
-			levelDic.put("dic", list);
-			bean.setLevelDic(levelDic);
+			bean.setLevelDic(list);
 
 			rtList.add(bean);
 		}
