@@ -272,18 +272,21 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			} else {
 				int a = -1;
 				int b = -1;
-				int c = -1;
 				for (int i = 0; i < logs.size(); i++) {
 					if (logs.get(i).getStatus() == 1) {
 						a = i;
 						break;
 					} else if (logs.get(i).getStatus() == 2) {
 						b = i;
-					} else {
-						c = i;
 					}
 				}
-				index = a > -1 ? a : (b > -1 ? b : c);
+				index = a > -1 ? 1 : (b > -1 ? 2 : 3);
+				for (int i = 0; i < logs.size(); i++) {
+					if (logs.get(i).getStatus() == index) {
+						index = i;
+						break;
+					}
+				}
 				resultBean = logs.get(index);
 			}
 			AdBeanUtils.copyOtherPropToStr(bean, resultBean);
@@ -337,7 +340,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 				for (int i = 0; i < logs.size(); i++) {
 					Map<String, String> map = new HashMap<>();
 					map.put("missionDesc", logs.get(i).getMissionDesc());
-					if (i == index) {
+					if (i == index&&logs.get(i).getStatus() != 3) {
 						map.put("statusDesc", "进行中");
 					} else if (logs.get(i).getStatus() == 3) {
 						map.put("statusDesc", "0");
@@ -348,14 +351,14 @@ public class UserMissionService extends BaseService<UserMissionService> {
 							map.put("statusDesc", "奖励:+" + logs.get(i).getPowerPrize() + "动力");
 						}
 					}
-					map.put("flag", String.valueOf(logs.get(i).getStatus()));
+					map.put("flag", String.valueOf(logs.get(i).getMissionId()==22?0:logs.get(i).getMissionId()));
 					list.add(map);
 				}
 			}
 			if (list.size() != 0) {
 				Collections.sort(list, new Comparator<Map<String, String>>() {
 					public int compare(Map<String, String> o1, Map<String, String> o2) {
-						return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+						return Double.valueOf(o2.get("flag").toString()).compareTo(Double.valueOf(o1.get("flag").toString()));
 					}
 				});
 			}
