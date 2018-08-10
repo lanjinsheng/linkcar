@@ -50,7 +50,7 @@
     <property name="runnable" ref="scanLogsTask" />  
     <!-- 容器加载10秒后开始执行 -->  
     <property name="delay" value="10000" /> 
-        <!-- 每次任务间隔 60秒-->  
+    <!-- 每次任务间隔 60秒-->  
     <property name="period" value="20000" />   
   </bean> 
    <!--End#######################同步日志分片#######################################################-->
