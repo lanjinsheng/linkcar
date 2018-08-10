@@ -265,7 +265,6 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		for (Integer parentMissionId : parentMissionIds) {
 			List<MissionLogsResultBean> logs = userMissionLogsMapper.getLogsByUserIdAndParentMID(userId,parentMissionId);
 			MissionResultBean bean = new MissionResultBean();
-			Map<String, Object> levelDic = new HashMap<>();
 			MissionLogsResultBean resultBean = new MissionLogsResultBean();
 			int index = 0;
 			if (logs.size() == 1) {
@@ -349,19 +348,23 @@ public class UserMissionService extends BaseService<UserMissionService> {
 							map.put("statusDesc", "奖励:+" + logs.get(i).getPowerPrize() + "动力");
 						}
 					}
+					map.put("flag", String.valueOf(logs.get(i).getStatus()));
 					list.add(map);
 				}
+			}
+			if (list.size() != 0) {
+				Collections.sort(list, new Comparator<Map<String, String>>() {
+					public int compare(Map<String, String> o1, Map<String, String> o2) {
+						return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+					}
+				});
 			}
 			bean.setLevelDic(list);
 
 			rtList.add(bean);
 		}
 
-//		Collections.sort(rtList, new Comparator<MissionResultBean>() {
-//			public int compare(MissionResultBean o1, MissionResultBean o2) {
-//				return Double.valueOf(o1.getMissionId()).compareTo(Double.valueOf(o2.getMissionId()));
-//			}
-//		});
+
 		// 排序--- flag 1-->2-->3
 		Collections.sort(rtList, new Comparator<MissionResultBean>() {
 			public int compare(MissionResultBean o1, MissionResultBean o2) {
