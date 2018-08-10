@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.constant.DicFamilyTypeConstant;
 import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.service.FightService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.ResultUtils;
@@ -81,6 +82,8 @@ public class FightController extends BaseController {
 		Long competitorFamilyId=Long.valueOf(requestBodyParams.get("competitorFamilyId").toString());
 		Map<String,Object> randFamily=fightService.getRandFightFamily(selfFamilyId,competitorFamilyId);
 		Map<String,String> rtMap=new HashMap<String,String>();
+		String win = "";
+		String loss = "";
 		if(randFamily==null){
 			rtMap.put("familyId", "");
 			rtMap.put("familyName", "");
@@ -90,6 +93,8 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", "");
 			rtMap.put("avgScore", "0");
 			rtMap.put("reducePower", "0");
+			rtMap.put("win", "");
+			rtMap.put("loss", "");
 			return ResultUtils.rtFailParam(rtMap, "动力不足,无法匹配到对战俱乐部!");
 		}else{
 			rtMap.put("familyId", String.valueOf(randFamily.get("id")));
@@ -102,6 +107,15 @@ public class FightController extends BaseController {
 			Double d=fightService.getAvgThreeDayScore(Long.valueOf(randFamily.get("id").toString()));
 			rtMap.put("avgScore", String.valueOf(d.doubleValue()));
 			rtMap.put("reducePower",String.valueOf(randFamily.get("reducePower")));
+			DicFamilyType type = DicFamilyTypeConstant.getDicFamilyType(familyType);
+			win = "+" + type.getWin();
+			if (type.getLoss() >= 0) {
+				loss = "+" + type.getLoss();
+			} else {
+				loss = "-" + type.getLoss();
+			}
+			rtMap.put("win", win);
+			rtMap.put("loss", loss);
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
