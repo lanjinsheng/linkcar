@@ -4,7 +4,7 @@
 
 
     <select id="getTodayCount" resultType="Integer">
-        SELECT count(1) FROM userLookAdLogs WHERE userId = #{userId} and daystamp=#{daystamp} and valid=1 and type=1
+        SELECT count(1) FROM userLookAdLogs WHERE userId = #{userId} and daystamp=#{daystamp} and valid=1 and type=1 and hadGet=1
     </select>
     
     <select id="getTodayCountAllType" resultType="Integer">

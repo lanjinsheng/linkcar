@@ -66,8 +66,8 @@ public class LookAdService extends BaseService<LookAdService> {
 			if (info != null && info.getHadGet() == 0) {
 				isAdEnd = "1";
 				rtAdId = String.valueOf(info.getAdPassId());
-			} else {
-				rtAdId = "1";
+			} else if(info != null && info.getHadGet() == 1){
+				rtAdId = String.valueOf(info.getAdPassId()+1);
 				isAdEnd = "0";
 			}
 		}else {
