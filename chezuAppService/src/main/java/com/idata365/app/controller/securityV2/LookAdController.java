@@ -65,6 +65,7 @@ public class LookAdController extends BaseController {
 		long adPassId = Long.valueOf(requestBodyParams.get("adPassId").toString());
 		LOG.info("userId=================" + userId);
 		LOG.info("adPassId=================" + adPassId);
+		LOG.info("adSign=================" + adSign);
 		try {
 			this.lookAdService.adCallBack(userId, adSign, adPassId);
 			return ResultUtils.rtSuccess(null);
