@@ -21,6 +21,8 @@ public interface InteractLogsMapper {
 
 	// 用户任务--是否点别人三次
 	int userLikeMissionCount(@Param("userIdA") long userIdA);
+	
+	int userCleanCarCount(@Param("userIdA") long userIdA);
 
 	int queryIsCanCleanCar(Map<String,Object> map);
 }

@@ -108,7 +108,8 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					break;
 				case 2:
 					// 在其他玩家车库点赞3次
-					count = interactService.userLikeMissionCount(userId);
+//					count = interactService.userLikeMissionCount(userId);
+					count = interactService.userCleanCarCount(userId);
 					break;
 				case 3:
 					// 今日出行1次
@@ -334,6 +335,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			}
 			bean.setMissionProgress(missionProgress);
 			bean.setMissionReward(powerPrize == 0 ? ("奖励:" + resultBean.getOtherPrize()) : ("奖励:+" + powerPrize + "动力"));
+			bean.setOtherPrize("");
 			bean.setFlag(String.valueOf(resultBean.getStatus()));
 			List<Map<String, String>> list = new ArrayList<>();
 			if (logs.size() > 1) {
@@ -476,7 +478,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		return false;
 	}
 
-	
+	@Transactional
 	public void initMissionOfUserId(long userId) {
 		// 初始化任务系统
 		// 初始化
