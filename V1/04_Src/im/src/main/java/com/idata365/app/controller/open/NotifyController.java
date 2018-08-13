@@ -100,7 +100,8 @@ public class NotifyController extends BaseController{
 	private final String PrayingRealize="俱乐部通知:感谢俱乐部！玩家@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
 	private final String LookedAllAd="通知:玩家@【%s】@今日的所有视频任务已完成,奖励300点动力!";
 	private final String DoingAllActMission="通知:玩家@【 %s】@今日的所有活动任务已完成，奖励动力 %s点!";
-			
+	private final String PrayingSubmitToUrl="lc://PrayPartsInClubVC.push";
+	
    /**
     * 
        * @Title: prayingSubmit
@@ -130,6 +131,7 @@ public class NotifyController extends BaseController{
 		insert.put("familyId",rtMap.get("createFamilyId"));
 		insert.put("msg", String.format(PrayingSubmit,toUserName,propName));
 		insert.put("type", 1);
+		insert.put("toUrl", PrayingSubmitToUrl);
 		imService.insertMsg(insert);
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
 		insert.put("type", 2);
