@@ -38,9 +38,6 @@ public class NotifyController extends BaseController {
 			Map<String,String> rtMap=new HashMap<String,String> ();
 			rtMap.put("notice", notifyText);
 			
-			//初始化任务系统
-			userMissionService.initMissionOfUserId(userId);
-			
 		    return ResultUtils.rtSuccess(rtMap);
 	}
     
