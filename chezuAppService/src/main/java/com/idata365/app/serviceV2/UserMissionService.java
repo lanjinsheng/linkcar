@@ -443,7 +443,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 		int b = userMissionLogsMapper.queryCountByType(userId, 2);
 		rtMap.put("dayMission", String.valueOf(a));
 		rtMap.put("achieveMission", String.valueOf(b));
-		rtMap.put("activityMission", String.valueOf(11-userLookAdMapper.getTodayCount(userId, DateTools.getYYYY_MM_DD())));
+		rtMap.put("activityMission", String.valueOf(10-userLookAdMapper.getTodayCount(userId, DateTools.getYYYY_MM_DD())));
 		rtMap.put("dayMissionHad", String.valueOf(userMissionLogsMapper.queryCountByTypeHad(userId, 1)));
 		return rtMap;
 	}
