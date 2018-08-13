@@ -37,6 +37,11 @@
        		FROM  interactLogs  where userIdA=#{userIdA} and eventType=1 and date(createTime)=date(now())
    </select>
    
+   <select id="userCleanCarCount" resultType="java.lang.Integer">
+      select count(1) 
+       		FROM  interactLogs where userIdA=#{userIdA} and userIdB!=#{userIdA} and eventType=7 and date(createTime)=date(now())
+   </select>
+   
    <select id="queryLikeCount" resultType="java.lang.Integer">
       select count(1) from interactLogs where userIdB=#{userIdB} and eventType=1
    </select>
