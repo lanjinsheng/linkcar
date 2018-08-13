@@ -342,9 +342,9 @@ public class UserMissionService extends BaseService<UserMissionService> {
 				for (int i = 0; i < logs.size(); i++) {
 					Map<String, String> map = new HashMap<>();
 					map.put("missionDesc", logs.get(i).getMissionDesc());
-					if (i == index&&logs.get(i).getStatus() != 3) {
+					if (i == index&&logs.get(i).getStatus() == 2) {
 						map.put("statusDesc", "进行中");
-					} else if (logs.get(i).getStatus() == 3) {
+					} else if (logs.get(i).getStatus() == 3||logs.get(i).getStatus() == 1) {
 						map.put("statusDesc", "0");
 					} else {
 						if (logs.get(i).getPowerPrize().equals("")) {
