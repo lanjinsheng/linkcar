@@ -36,6 +36,7 @@ import com.idata365.app.service.TaskService;
 import com.idata365.app.service.UserInfoService;
 import com.idata365.app.service.common.FamilyScoreService;
 import com.idata365.app.serviceV2.GameServiceV2;
+import com.idata365.app.serviceV2.UserMissionService;
 import com.idata365.app.util.DateTools;
 import com.idata365.app.util.PhoneUtils;
 import com.idata365.app.util.ResultUtils;
@@ -62,6 +63,8 @@ public class GameControllerV2 extends BaseController {
 	TaskService taskService;
 	@Autowired
 	FightService fightService;
+	@Autowired
+	public UserMissionService userMissionService;
 
 	/**
 	 * 
@@ -80,6 +83,8 @@ public class GameControllerV2 extends BaseController {
 		long userId = this.getUserId();
 		// 更新活跃时间
 		taskService.updateLastLoginTimeByUserId(userId);
+		//初始化任务系统
+		userMissionService.initMissionOfUserId(userId);
 		LOG.info("userId=================" + userId);
 		ScoreFamilyInfoParamBean bean = new ScoreFamilyInfoParamBean();
 		bean.setUserId(userId);

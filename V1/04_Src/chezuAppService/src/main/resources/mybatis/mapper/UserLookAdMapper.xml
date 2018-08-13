@@ -20,7 +20,7 @@
     </insert>
     
     <select id="getUserLastLookInfo" resultType="com.idata365.app.entity.v2.UserLookAdLogs" >
-        SELECT * FROM userLookAdLogs WHERE userId = #{userId} and type=1 and valid=1 order by createTime desc limit 1
+        SELECT * FROM userLookAdLogs WHERE userId = #{userId} and type=1 and valid=1 and date(createTime)=date(now()) order by createTime desc limit 1
     </select>
     
     <select id="getAllPowerNumOfType2" resultType="Long" >

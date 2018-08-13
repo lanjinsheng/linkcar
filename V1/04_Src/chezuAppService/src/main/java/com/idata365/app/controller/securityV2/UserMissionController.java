@@ -50,9 +50,7 @@ public class UserMissionController extends BaseController {
 		LOG.info("missionType=================" + missionType);
 		
 //		初始化任务系统
-		if(missionType==1) {
-			userMissionService.initMissionOfUserId(userId);
-		}
+//		userMissionService.initMissionOfUserId(userId);
 		
 		// 预查询
 		userMissionService.insertOrUpdateLogs(userId, missionType);
