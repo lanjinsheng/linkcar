@@ -174,7 +174,7 @@ public class LookAdService extends BaseService<LookAdService> {
 		} else {
 			if (loadFlag == 0) {
 				int count = this.userLookAdMapper.countOfLoadFlagZero(userId);
-				if(count<=3) {
+				if (count < 3) {
 					valid = 1;
 					powerNum = 10L;
 				}else {
