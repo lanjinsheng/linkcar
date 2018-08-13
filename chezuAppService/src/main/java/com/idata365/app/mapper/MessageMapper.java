@@ -26,5 +26,5 @@ public interface MessageMapper {
 	Message getMessageById(@Param("id") Long msgId);
 
 	void deleteMessage(int[] msgIds);
-
+	
 }
