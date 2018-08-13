@@ -3,14 +3,14 @@
 <mapper namespace="com.idata365.app.mapper.ImMapper">
     <select id="getMsg" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT id,cast(familyId as  CHAR(32)) familyId,#{msgType} as type,
-       cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time
+       cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time,IFNULL(toUrl,"") as toUrl
        FROM  imGlobal 
        where familyId=#{familyId} and id<![CDATA[<]]>${id}
        order by id desc limit 30
     </select>
     <select id="getMsgGlobal" resultType="java.util.HashMap" parameterType="java.util.HashMap">
        SELECT id,cast(familyId as  CHAR(32)) familyId,cast(msgType as  CHAR(32)) as type,
-       cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time
+       cast(userId as  CHAR(32)) as userId,CONCAT(#{imgPath},imgUrl) as imgUrl,content as msg,nick,createTime as time,IFNULL(toUrl,"") as toUrl
        FROM  imGlobal 
        where msgType=#{msgType} and familyId=#{familyId} and id<![CDATA[<]]>${id}
        order by id desc limit 30
@@ -18,9 +18,9 @@
     <insert id="insert"   useGeneratedKeys="true" keyProperty="id"  parameterType="java.util.HashMap" >
        INSERT    INTO 
             imGlobal
-            (userId,familyId,msgType,content,imgUrl,nick,createTime) 
+            (userId,familyId,msgType,content,imgUrl,nick,createTime,toUrl) 
         VALUES
-            (#{userId},#{familyId},#{type}, #{msg},#{imgUrl}, #{nick}, #{time})
+            (#{userId},#{familyId},#{type}, #{msg},#{imgUrl}, #{nick}, #{time},#{toUrl})
     </insert>
     
    <insert id="insertLog"     parameterType="java.util.HashMap" >
