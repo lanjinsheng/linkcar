@@ -3,7 +3,7 @@
 <mapper namespace="com.idata365.app.mapper.UserShareLogsMapper">
 
     <insert id="insertShareLogs" parameterType="java.util.HashMap">
-		INSERT INTO userShareLogs (userId,daystamp,shareType) values (#{keyId},NOW(),#{shareType})
+		INSERT INTO userShareLogs (userId,daystamp,shareType) values (#{userId},NOW(),#{shareType})
 	</insert>
 	
 	<select id="queryUserShareCountToday" resultType="java.lang.Integer" parameterType="java.lang.Long">

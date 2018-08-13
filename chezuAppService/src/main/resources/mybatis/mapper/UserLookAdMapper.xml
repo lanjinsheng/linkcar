@@ -27,6 +27,14 @@
         SELECT IFNULL(sum(powerNum),0) FROM userLookAdLogs WHERE userId = #{userId} and type=2 and daystamp=DATE_FORMAT(now(),'%Y-%m%-%d')
     </select>
     
+    <select id="countOfLoadFlagZero" resultType="Integer" >
+        SELECT count(1) FROM userLookAdLogs WHERE userId = #{userId} and type=2 and daystamp=DATE_FORMAT(now(),'%Y-%m%-%d') and remark='0' and valid=1
+    </select>
+    
+    <select id="queryTodayLoadFlag" resultType="java.lang.String" >
+        SELECT remark FROM userLookAdLogs WHERE userId = #{userId} and type=2 and daystamp=DATE_FORMAT(now(),'%Y-%m%-%d')
+    </select>
+    
     <update id="updateHadGet" >
        UPDATE userLookAdLogs SET hadGet=1 WHERE userId = #{userId} and adPassId=#{adPassId} and daystamp=#{daystamp} and valid=1 and hadGet=0
     </update>
