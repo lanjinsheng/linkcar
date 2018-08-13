@@ -3,6 +3,7 @@ package com.idata365.app.serviceV2;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -49,13 +50,6 @@ public class LookAdService extends BaseService<LookAdService> {
 	public Map<String, Object> countOfOddLookAd(long userId, long adId) {
 		Map<String, Object> rtMap = new HashMap<>();
 		String daystamp = DateTools.getYYYY_MM_DD();
-		int count = this.userLookAdMapper.getTodayCount(userId, daystamp);
-		if (count >= 10) {
-			count = 0;
-		} else {
-			count = 10 - count;
-		}
-		rtMap.put("oddCount", String.valueOf(count));
 		
 		String isAdEnd = "0";
 		String rtAdId = String.valueOf(adId);
@@ -66,8 +60,11 @@ public class LookAdService extends BaseService<LookAdService> {
 			if (info != null && info.getHadGet() == 0) {
 				isAdEnd = "1";
 				rtAdId = String.valueOf(info.getAdPassId());
-			} else if(info != null && info.getHadGet() == 1){
-				rtAdId = String.valueOf(info.getAdPassId()+1);
+			} else if (info != null && info.getHadGet() == 1) {
+				rtAdId = String.valueOf(info.getAdPassId() + 1);
+				isAdEnd = "0";
+			} else {
+				rtAdId = "1";
 				isAdEnd = "0";
 			}
 		}else {
@@ -88,7 +85,13 @@ public class LookAdService extends BaseService<LookAdService> {
 				}
 			}
 		}
-		
+		int count = this.userLookAdMapper.getTodayCount(userId, daystamp);
+		if (count >= 10) {
+			count = 0;
+		} else {
+			count = 10 - count;
+		}
+		rtMap.put("oddCount", String.valueOf(count));
 		if(count == 0) {
 			rtAdId = "0";
 		}
@@ -102,7 +105,22 @@ public class LookAdService extends BaseService<LookAdService> {
 	
 	public int getTodayCountAllType(long userId) {
 		String daystamp = DateTools.getYYYY_MM_DD();
-		return  this.userLookAdMapper.getTodayCountAllType(userId, daystamp);
+		// 广告次数
+		int count1 = this.userLookAdMapper.getTodayCount(userId, daystamp);
+		// 互动任务次数
+		int count2 = 0;
+		List<String> list = this.userLookAdMapper.queryTodayLoadFlag(userId);
+		if (list != null && list.size() != 0) {
+			for (String s : list) {
+				count2 += Integer.valueOf(s);
+			}
+		}
+		int count3 = this.userLookAdMapper.countOfLoadFlagZero(userId);
+		count3 = count3 > 3 ? 3 : count3;
+		count2 += count3;
+		
+		int count = count1 + count2;
+		return count > 14 ? 14 : count;
 	}
 
 	public Map<String, Object> adCallBack(long userId, int adSign, long adPassId) {
@@ -143,7 +161,7 @@ public class LookAdService extends BaseService<LookAdService> {
 		logs.setUserId(userId);
 		logs.setCreateTime(new Date());
 		logs.setDaystamp(DateTools.getYYYY_MM_DD());
-		logs.setRemark("");
+		logs.setRemark(String.valueOf(loadFlag));
 		logs.setDiamondNum(BigDecimal.valueOf(0));
 		logs.setAdPassId(999L);
 		logs.setAdSign(1);
@@ -155,11 +173,17 @@ public class LookAdService extends BaseService<LookAdService> {
 			valid = 0;
 		} else {
 			if (loadFlag == 0) {
-				valid = 0;
-				powerNum = 0L;
+				int count = this.userLookAdMapper.countOfLoadFlagZero(userId);
+				if(count<=3) {
+					valid = 1;
+					powerNum = 10L;
+				}else {
+					valid = 0;
+					powerNum = 0L;
+				}
 			} else if (loadFlag == 1) {
 				valid = 1;
-				powerNum = (long) RandUtils.generateRand(11, 40);
+				powerNum = (long) RandUtils.generateRand(10, 40);
 			} else {
 				valid = 1;
 				powerNum = (long) RandUtils.generateRand((loadFlag - 1) * 40,loadFlag * 40);// 30 60 90 120 150 160
