@@ -18,8 +18,8 @@ import com.idata365.util.DateTools;
 
 /**
  * 
-    * @ClassName: CalFamilyDayPkTask
-    * @Description: TODO(俱乐部pk结果统计并更新分数)
+    * @ClassName: CalFamilyDayPkRelationTask
+    * @Description: TODO(暂停使用)
     * @author LanYeYe
     * @date 2017年12月31日
     *
