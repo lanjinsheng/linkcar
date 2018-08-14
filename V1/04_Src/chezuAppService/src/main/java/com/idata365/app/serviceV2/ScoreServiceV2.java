@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DateConstant;
 import com.idata365.app.constant.DicFamilyTypeConstant;
@@ -1221,6 +1222,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
         * @throws
         * @author LiXing
 	 */
+	@Transactional
 	public Map<String, Object> queryClubBonusInfo(long userId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> rtList = new ArrayList<>();
@@ -1285,7 +1287,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		int hadGetBonus = this.queryHadGetBonus(userId);
 		if (totalPower == 0) {
 			rtMap.put("canTake", "2");
-		} else if (hadGetBonus == 1) {
+		} else if (hadGetBonus >= 1) {
 			rtMap.put("canTake", "0");
 		} else {
 			rtMap.put("canTake", "1");
