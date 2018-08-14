@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.idata365.app.util.ResultUtils;
 @ControllerAdvice
 public class ExceptionHandle {
-
+ //log记录
  private final static Logger LOGGER = LoggerFactory.getLogger(ExceptionHandle.class);
 
   /**
