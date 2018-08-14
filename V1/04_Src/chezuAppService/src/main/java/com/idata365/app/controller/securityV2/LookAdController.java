@@ -1,6 +1,8 @@
 package com.idata365.app.controller.securityV2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.service.DicService;
 import com.idata365.app.serviceV2.LookAdService;
 import com.idata365.app.util.ResultUtils;
 
@@ -20,6 +23,8 @@ public class LookAdController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(LookAdController.class);
 	@Autowired
 	public LookAdService lookAdService;
+	@Autowired
+	DicService dicService;
 
 	/**
 	 * 
@@ -100,6 +105,18 @@ public class LookAdController extends BaseController {
 		} catch (Exception e) {
 			return ResultUtils.rtFail(null, e.getMessage(), "100");
 		}
+	}
+	
+	@RequestMapping("/getAdMaps")
+	public Map<String, Object> getRules(@RequestParam(required = false) Map<String, String> allRequestParams,
+			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		List<Map<String, String>> result = new ArrayList<>();
+		long userId = this.getUserId();
+		LOG.info("userId==============" + userId);
+		result = dicService.getDicAdMap();
+		Map<String, Object> rtMap = new HashMap<String, Object>();
+		rtMap.put("rtList", result);
+		return ResultUtils.rtSuccess(rtMap);
 	}
 	
 }
