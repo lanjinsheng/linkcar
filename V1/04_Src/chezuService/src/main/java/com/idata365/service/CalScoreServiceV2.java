@@ -2,7 +2,6 @@ package com.idata365.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ import com.idata365.entity.DicCar;
 import com.idata365.entity.DriveDataMain;
 import com.idata365.entity.DriveScore;
 import com.idata365.entity.ReadyLotteryBean;
-import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserTravelHistory;
 import com.idata365.mapper.app.CalDriveTaskMapper;
 import com.idata365.mapper.app.CarMapper;
