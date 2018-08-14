@@ -1,8 +1,5 @@
 package com.idata365.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -55,8 +52,113 @@ public class ServiceConstant {
 	private Integer tiredHourGrade3Key=1;
 	private Double	  tiredHourGrade3Rate=1.0;	 
 	 
+	private String qualityBKey="B";
+	private Double qualityBRate=0.1;
+	private String  qualityAKey="A";
+	private Double qualityARate=0.2;	
+	private String  qualitySKey="S";
+	private Double qualitySRate=0.3;
+ 
+	 private Double stealPowerRate=0.2;
+	 private Integer stealPowerMin=1;
+	 private Integer stealPowerMax=3;
+	private Double stickRate=0.1;
+	 private Double alarmStickRate=0.1;
+	 private Integer maxStickPerTrip=8;
 	 
-	 public Integer getTiredHourMaxKey() {
+	 
+//	 #顺风车司机单行程按乘客加层比例
+	 private Double driverPowerPerPassenger=0.1;
+//	 #顺风车乘客单行程奖励动力
+	 private Double passengerPowerPerDrive=0.8;
+	 
+	 
+	 
+	 public Double getDriverPowerPerPassenger() {
+		return driverPowerPerPassenger;
+	}
+	public void setDriverPowerPerPassenger(Double driverPowerPerPassenger) {
+		this.driverPowerPerPassenger = driverPowerPerPassenger;
+	}
+	public Double getPassengerPowerPerDrive() {
+		return passengerPowerPerDrive;
+	}
+	public void setPassengerPowerPerDrive(Double passengerPowerPerDrive) {
+		this.passengerPowerPerDrive = passengerPowerPerDrive;
+	}
+	public Double getAlarmStickRate() {
+		return alarmStickRate;
+	}
+	public void setAlarmStickRate(Double alarmStickRate) {
+		this.alarmStickRate = alarmStickRate;
+	}
+	public Integer getMaxStickPerTrip() {
+		return maxStickPerTrip;
+	}
+	public void setMaxStickPerTrip(Integer maxStickPerTrip) {
+		this.maxStickPerTrip = maxStickPerTrip;
+	}
+	public Double getStickRate() {
+		return stickRate;
+	}
+	public void setStickRate(Double stickRate) {
+		this.stickRate = stickRate;
+	}
+	public Double getStealPowerRate() {
+		return stealPowerRate;
+	}
+	public void setStealPowerRate(Double stealPowerRate) {
+		this.stealPowerRate = stealPowerRate;
+	}
+	public Integer getStealPowerMin() {
+		return stealPowerMin;
+	}
+	public void setStealPowerMin(Integer stealPowerMin) {
+		this.stealPowerMin = stealPowerMin;
+	}
+	public Integer getStealPowerMax() {
+		return stealPowerMax;
+	}
+	public void setStealPowerMax(Integer stealPowerMax) {
+		this.stealPowerMax = stealPowerMax;
+	}
+	public String getQualityBKey() {
+		return qualityBKey;
+	}
+	public void setQualityBKey(String qualityBKey) {
+		this.qualityBKey = qualityBKey;
+	}
+	public Double getQualityBRate() {
+		return qualityBRate;
+	}
+	public void setQualityBRate(Double qualityBRate) {
+		this.qualityBRate = qualityBRate;
+	}
+	public String getQualityAKey() {
+		return qualityAKey;
+	}
+	public void setQualityAKey(String qualityAKey) {
+		this.qualityAKey = qualityAKey;
+	}
+	public Double getQualityARate() {
+		return qualityARate;
+	}
+	public void setQualityARate(Double qualityARate) {
+		this.qualityARate = qualityARate;
+	}
+	public String getQualitySKey() {
+		return qualitySKey;
+	}
+	public void setQualitySKey(String qualitySKey) {
+		this.qualitySKey = qualitySKey;
+	}
+	public Double getQualitySRate() {
+		return qualitySRate;
+	}
+	public void setQualitySRate(Double qualitySRate) {
+		this.qualitySRate = qualitySRate;
+	}
+	public Integer getTiredHourMaxKey() {
 		return tiredHourMaxKey;
 	}
 	public void setTiredHourMaxKey(Integer tiredHourMaxKey) {
@@ -104,23 +206,7 @@ public class ServiceConstant {
 	public void setTiredHourGrade3Rate(Double tiredHourGrade3Rate) {
 		this.tiredHourGrade3Rate = tiredHourGrade3Rate;
 	}
-	static Map<Integer,Integer> ThreeAlarmScoreMap=new HashMap<Integer,Integer>();
- 
-	 
-	 public int getScoreByTimes(Integer times) {
-		 if(ThreeAlarmScoreMap.size()==0) {
-			 ThreeAlarmScoreMap.put(threeAlarmTimes0Key, threeAlarmTimes0Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes1Key, threeAlarmTimes1Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes2Key, threeAlarmTimes2Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes3Key, threeAlarmTimes3Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes4Key, threeAlarmTimes4Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes5Key, threeAlarmTimes5Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes6Key, threeAlarmTimes6Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes7Key, threeAlarmTimes7Score);
-			ThreeAlarmScoreMap.put(threeAlarmTimes8Key, threeAlarmTimes8Score);
-		 }
-		 return ThreeAlarmScoreMap.get(times);
-	 }
+	
 	public Integer getProtectScore() {
 		return protectScore;
 	}
