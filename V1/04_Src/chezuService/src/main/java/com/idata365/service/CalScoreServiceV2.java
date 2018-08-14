@@ -101,7 +101,23 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
 		return true;
 	}
-	
+	static Map<Integer,Integer> ThreeAlarmScoreMap=new HashMap<Integer,Integer>();
+	 
+	 
+	 public int getScoreByTimes(Integer times) {
+		 if(ThreeAlarmScoreMap.size()==0) {
+			 ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes0Key(), serviceConstant.getThreeAlarmTimes0Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes1Key(), serviceConstant.getThreeAlarmTimes1Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes2Key(), serviceConstant.getThreeAlarmTimes2Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes3Key(), serviceConstant.getThreeAlarmTimes3Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes4Key(), serviceConstant.getThreeAlarmTimes4Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes5Key(), serviceConstant.getThreeAlarmTimes5Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes6Key(), serviceConstant.getThreeAlarmTimes6Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes7Key(), serviceConstant.getThreeAlarmTimes7Score());
+			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes8Key(), serviceConstant.getThreeAlarmTimes8Score());
+		 }
+		 return ThreeAlarmScoreMap.get(times);
+	 }
 	
 	/**
 	 * 
@@ -151,17 +167,17 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         brakeTurn= brakeTurn.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
         //急减
         Integer brakeDownTimes=brakeDown.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():brakeDown.intValue();
-        scoreBrakeDown=BigDecimal.valueOf(serviceConstant.getScoreByTimes(brakeDownTimes));
+        scoreBrakeDown=BigDecimal.valueOf(getScoreByTimes(brakeDownTimes));
         userTravelHistory.setBrakeScore(scoreBrakeDown.doubleValue());
        //超速
         Integer overSpeedTimes=overSpeed.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():overSpeed.intValue();
-        scoreOverSpeed=BigDecimal.valueOf(serviceConstant.getScoreByTimes(overSpeedTimes));
+        scoreOverSpeed=BigDecimal.valueOf(getScoreByTimes(overSpeedTimes));
         userTravelHistory.setOverspeedScore(scoreOverSpeed.doubleValue());
  
         //急转
         
         Integer brakeTurnTimes=brakeTurn.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():brakeTurn.intValue();
-        scoreBrakeTurn=BigDecimal.valueOf(serviceConstant.getScoreByTimes(brakeTurnTimes));
+        scoreBrakeTurn=BigDecimal.valueOf(getScoreByTimes(brakeTurnTimes));
         userTravelHistory.setTurnScore(scoreBrakeTurn.doubleValue());
 
         

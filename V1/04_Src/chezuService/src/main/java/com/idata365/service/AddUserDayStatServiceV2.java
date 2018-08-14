@@ -18,6 +18,7 @@ import com.idata365.entity.TaskAchieveAddValue;
 import com.idata365.entity.TaskPowerLogs;
 import com.idata365.enums.AchieveEnum;
 import com.idata365.enums.PowerEnum;
+import com.idata365.config.ServiceConstant;
 import com.idata365.constant.DicComponentConstant;
 import com.idata365.constant.FamilyRelationConstant;
 import com.idata365.entity.DriveScore;
@@ -75,6 +76,8 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	BoxTreasureService boxTreasureService;
 	@Autowired
 	CarMapper carMapper;
+	@Autowired
+	ServiceConstant serviceConstant;
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -141,58 +144,6 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
     	}
 	return false;
 }
-	/**
-	 * 
-	    * @Title: addUserTripPowerLogs
-	    * @Description: TODO(行程给个人贡献值)
-	    * @param @param userId
-	    * @param @param habitId
-	    * @param @param distance
-	    * @param @param score
-	    * @param @return    参数
-	    * @return int    返回类型
-	    * @throws
-	    * @author LanYeYe
-	 */
-	private int addUserTripPowerLogs_del(long effectId,long userId,long habitId,double distance,Double score) {
-		 
-		String jsonValue="{\"userId\":%d,\"habitId\":%d,\"toUserValue\":%s,\"effectId\":%d}";
-		//(10+分数-45/10)*公里
-//		BigDecimal score1=(BigDecimal.valueOf(score).subtract(BigDecimal.valueOf(45))).divide(BigDecimal.valueOf(10),0,RoundingMode.HALF_EVEN);
-//    	int power=(score1.add(BigDecimal.valueOf(10))).multiply(BigDecimal.valueOf(distance)).divide(BigDecimal.valueOf(1000),0,RoundingMode.HALF_EVEN).intValue();
-    	BigDecimal power=BigDecimal.valueOf(0);
-    	if(distance>=(100*1000)) {
-    		double d=distance-100000;
-    		power=BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(160000),1,RoundingMode.HALF_EVEN);
-    	}
-    	if(distance>(50*1000)) {//50-100
-//    		double d=distance-50000;
-    		double d=Math.min(distance, 100000)-50000;
-    		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(80000),1,RoundingMode.HALF_EVEN));
-    	}
-    	if(distance>(20*1000)) {//20-50
-//    		double d=distance-20000;
-    		double d=Math.min(distance, 50000)-20000;
-    		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(40000),1,RoundingMode.HALF_EVEN));
-    	}
-    	if(distance>(10*1000)) {//10-20
-//    		double d=distance-10000;
-    		double d=Math.min(distance, 20000)-10000;
-    		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(20000),1,RoundingMode.HALF_EVEN));
-    	}
-    	if(distance>(0) ) {//0-10
-//    		double d=distance;
-    		double d=Math.min(distance, 10000);
-    		power=power.add(BigDecimal.valueOf(score).multiply(BigDecimal.valueOf(d)).divide(BigDecimal.valueOf(10000),1,RoundingMode.HALF_EVEN));
-    	}
-    	
-      	TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
-    	taskPowerLogs.setUserId(userId);
-    	taskPowerLogs.setTaskType(PowerEnum.TripToUser);
-    	taskPowerLogs.setJsonValue(String.format(jsonValue, userId,habitId,String.valueOf(power.intValue()),effectId));
-    	taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
-    	return power.intValue();
-	}
 	
 	private int addUserTripPowerLogsV2(double distance,Double score,int carId) {
 		//有效公里数
@@ -264,6 +215,20 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		 car.setR(RandUtils.generateRand(1, 100));
 		 batchInsert.add(car);
 	}
+
+	static Map<String,Double> QualityRateMap=new HashMap<>();
+	public double getRateByQuality(String quality) {
+		if(QualityRateMap.size()==0) {
+			QualityRateMap.put(serviceConstant.getQualityBKey(), serviceConstant.getQualityBRate());
+			QualityRateMap.put(serviceConstant.getQualityAKey(), serviceConstant.getQualityARate());
+			QualityRateMap.put(serviceConstant.getQualitySKey(), serviceConstant.getQualitySRate());
+		}
+		if( QualityRateMap.get(quality)==null) {
+			return 0d;
+		}
+		return QualityRateMap.get(quality);
+	}
+	
 	String jsonValue="{\"userId\":%d,\"habitId\":%d,\"toUserValue\":%s,\"effectId\":%d}";
 
 	/**
@@ -294,7 +259,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		List<InteractTempCar> batchInsert=new ArrayList<InteractTempCar>();
 		double reduce=0;
 		if(peccancyNum>0) {
-			reduce= Double.valueOf(peccancyNum)/10;//减去罚单降低的动力
+			reduce=  peccancyNum*serviceConstant.getStickRate();//减去罚单降低的动力
 		} 
 		
 		List<Map<String,Object>> compList=carMapper.getCarComponents(uth.getUserCarId());
@@ -302,13 +267,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		for(Map<String,Object> comp:compList) {
 			int componentId=Integer.valueOf(comp.get("componentId").toString());
 			String quality=DicComponentConstant.getDicComponent(componentId).getQuality();
-			if(quality.equals("B")) {
-				addCar+=0.1;
-			}else if(quality.equals("A")) {
-				addCar+=0.2;
-			}else if(quality.equals("S")) {
-				addCar+=0.3;
-			}
+			addCar+=getRateByQuality(quality);
 			comp.put("userComponentId", comp.get("id"));
 		 carMapper.updateCarComponents(Long.valueOf(comp.get("id").toString()));
 		 carMapper.insertComponentUserUseLog(comp);
@@ -323,12 +282,12 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	 if(power>0) {
 		 //形成被偷动力小车
 		 int stealPower=calPower;
-		 stealPower=Double.valueOf((stealPower*0.2)).intValue();
-		 int r=RandUtils.generateRand(1,3);
+		 stealPower=Double.valueOf((stealPower*serviceConstant.getStealPowerRate())).intValue();
+		 int r=RandUtils.generateRand(serviceConstant.getStealPowerMin(),serviceConstant.getStealPowerMax());
 		 while(r<=stealPower) {
 			 addCar(batchInsert, uth,r,1) ;
 			 stealPower=stealPower-r;
-			 r=RandUtils.generateRand(1,3);
+			 r=RandUtils.generateRand(serviceConstant.getStealPowerMin(),serviceConstant.getStealPowerMax());
 		 }
 		 if(stealPower>0) {
 			 addCar(batchInsert, uth,stealPower,1) ;
@@ -343,9 +302,9 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 //		}
 		int fadan = uth.getBrakeTimes() + uth.getSpeedTimes() + uth.getTurnTimes() + uth.getOverspeedTimes();
 		if (Double.valueOf(uth.getDriveScore()) < 100) {
-			fadan = fadan > 8 ? 8 : fadan;
+			fadan = fadan > serviceConstant.getMaxStickPerTrip().intValue() ?  serviceConstant.getMaxStickPerTrip().intValue() : fadan;
 			for (int j = 0; j < fadan; j++) {
-				int p = (int) (power * 0.1) < 1 ? 1 : (int) (power * 0.1);
+				int p = (int) (power * serviceConstant.getAlarmStickRate().doubleValue()) < 1 ? 1 : (int) (power *serviceConstant.getAlarmStickRate().doubleValue());
 				addCar(batchInsert, uth, p, 2);
 			}
 		}
@@ -360,8 +319,8 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			long passengerId=Long.valueOf(carpool.get("passengerId").toString());
 			if(addUserCarPoolPowerLogs(passengerId,uth.getId(),Double.valueOf((power*0.8)).intValue())) {
 				//更新用户顺风车记录
-				carpool.put("driverPower", Double.valueOf(power*0.1).intValue());
-				carpool.put("passengerPower", Double.valueOf(power*0.8).intValue());
+				carpool.put("driverPower", Double.valueOf(power*serviceConstant.getDriverPowerPerPassenger().doubleValue()).intValue());
+				carpool.put("passengerPower", Double.valueOf(power*serviceConstant.getPassengerPowerPerDrive().doubleValue()).intValue());
 				carpool.put("travelId",uth.getId());
 				carpoolMapper.updateCarPool(carpool);
 			}else {
@@ -369,7 +328,7 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			}
 		}
 		if(carpools!=null && carpools.size()>0) {
-			addUserCarPoolPowerLogs(uth.getUserId(),uth.getId(),Double.valueOf(power*0.1*carpools.size()).intValue());
+			addUserCarPoolPowerLogs(uth.getUserId(),uth.getId(),Double.valueOf(power*serviceConstant.getDriverPowerPerPassenger().doubleValue()*carpools.size()).intValue());
 		}
 		
 		//查询当前俱乐部，并贡献分数与动力
