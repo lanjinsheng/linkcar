@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.idata365.config.ServiceConstant;
 import com.idata365.constant.DicCarConstant;
 import com.idata365.entity.CalDriveTask;
 import com.idata365.entity.DicCar;
@@ -56,6 +57,8 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
 	UserRoleLogMapper userRoleLogMapper;
 	@Autowired 
 	CarMapper carMapper;
+	@Autowired 
+	ServiceConstant serviceConstant;
 	/**
 	 * 查询装配的道具列表
 	 * @param userId
@@ -98,20 +101,7 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
 		return true;
 	}
-	static Map<Integer,Integer> ThreeAlarmScoreMap=new HashMap<Integer,Integer>();
-	static {
-		ThreeAlarmScoreMap.put(0, 20);
-		ThreeAlarmScoreMap.put(1, 17);
-		ThreeAlarmScoreMap.put(2, 12);
-		ThreeAlarmScoreMap.put(3, 8);
-		ThreeAlarmScoreMap.put(4, 3);
-		ThreeAlarmScoreMap.put(5, -3);
-		ThreeAlarmScoreMap.put(6, -9);
-		ThreeAlarmScoreMap.put(7, -15);
-		ThreeAlarmScoreMap.put(8, -20);
-		ThreeAlarmScoreMap.put(9, -20);
-		ThreeAlarmScoreMap.put(10, -20);
-	}
+	
 	
 	/**
 	 * 
@@ -150,7 +140,7 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         BigDecimal scoreBrakeDown=BigDecimal.valueOf(20);
         BigDecimal scoreBrakeUp=BigDecimal.valueOf(20);
         BigDecimal scoreBrakeTurn=BigDecimal.valueOf(20);
-        
+        BigDecimal scoreOverSpeed=BigDecimal.valueOf(20);
         BigDecimal brakeDown=BigDecimal.valueOf(dm.getBrakeTimes());
 //        BigDecimal brakeUp=BigDecimal.valueOf(dm.getSpeedUpTimes());
         BigDecimal overSpeed=BigDecimal.valueOf(0);
@@ -160,34 +150,29 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         overSpeed= overSpeed.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
         brakeTurn= brakeTurn.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
         //急减
-        if(brakeDown.intValue()>=10) {
-        	scoreBrakeDown=BigDecimal.valueOf(ThreeAlarmScoreMap.get(10));
-        }else {
-        	scoreBrakeDown=BigDecimal.valueOf(ThreeAlarmScoreMap.get(brakeDown.intValue()));
-        }
+        Integer brakeDownTimes=brakeDown.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():brakeDown.intValue();
+        scoreBrakeDown=BigDecimal.valueOf(serviceConstant.getScoreByTimes(brakeDownTimes));
         userTravelHistory.setBrakeScore(scoreBrakeDown.doubleValue());
        //超速
-        if(overSpeed.intValue()>=10) {
-        	overSpeed=BigDecimal.valueOf(ThreeAlarmScoreMap.get(10));
-        }else {
-        	overSpeed=BigDecimal.valueOf(ThreeAlarmScoreMap.get(overSpeed.intValue()));
-        }
-        userTravelHistory.setOverspeedScore(overSpeed.doubleValue());
+        Integer overSpeedTimes=overSpeed.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():overSpeed.intValue();
+        scoreOverSpeed=BigDecimal.valueOf(serviceConstant.getScoreByTimes(overSpeedTimes));
+        userTravelHistory.setOverspeedScore(scoreOverSpeed.doubleValue());
+ 
         //急转
-        if(brakeTurn.intValue()>=10) {
-        	scoreBrakeTurn=BigDecimal.valueOf(ThreeAlarmScoreMap.get(10));
-        }else {
-        	scoreBrakeTurn=BigDecimal.valueOf(ThreeAlarmScoreMap.get(brakeTurn.intValue()));
-        }
+        
+        Integer brakeTurnTimes=brakeTurn.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():brakeTurn.intValue();
+        scoreBrakeTurn=BigDecimal.valueOf(serviceConstant.getScoreByTimes(brakeTurnTimes));
         userTravelHistory.setTurnScore(scoreBrakeTurn.doubleValue());
-        if(driveTimes>=4*3600) {
-        	tireRatio=BigDecimal.valueOf(0.85);
-        }else if(driveTimes>=3*3600) {
-        	tireRatio=BigDecimal.valueOf(0.9);
-        }else if(driveTimes>=2*3600){
-        	tireRatio=BigDecimal.valueOf(0.95);
+
+        
+        if(driveTimes>=serviceConstant.getTiredHourMaxKey().intValue()*3600) {
+        	tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourMaxRate());
+        }else if(driveTimes>=serviceConstant.getTiredHourGrade1Key().intValue()*3600) {
+        	tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourGrade1Rate());
+        }else if(driveTimes>=serviceConstant.getTiredHourGrade2Key().intValue()*3600){
+        	tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourGrade2Rate());
         }else {
-        	tireRatio=BigDecimal.valueOf(1);
+        	tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourGrade3Rate());
         }
         userTravelHistory.setTiredRate(tireRatio.doubleValue());
         int score=scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
@@ -208,11 +193,11 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         	userTravelHistory.setCarId(carId);
         }
         
-        if(score<30) {
-        	score=30;
+        if(score<serviceConstant.getProtectScore().intValue()) {
+        	score=serviceConstant.getProtectScore().intValue();
         }
-        if(driveScore<30) {
-        	driveScore=30;
+        if(driveScore<serviceConstant.getProtectScore().intValue()) {
+        	driveScore=serviceConstant.getProtectScore().intValue();
         }
         userTravelHistory.setDriveScore(String.valueOf(driveScore));
         userTravelHistory.setScore(String.valueOf(score));
