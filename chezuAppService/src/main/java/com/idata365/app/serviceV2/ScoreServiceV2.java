@@ -1,6 +1,7 @@
 package com.idata365.app.serviceV2;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -1290,7 +1291,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 			rtMap.put("canTake", "1");
 		}
 		clubScoreInfo.put("num", "奖励" + String.valueOf(score) + "动力");
-		clubMemberInfo.put("num", "倍数" + String.valueOf(x1));
+		clubMemberInfo.put("num", "倍数" + BigDecimal.valueOf(x1).setScale(1,RoundingMode.HALF_EVEN).toString());
 		clubTypeInfo.put("num", "倍数" + String.valueOf(x2));
 		pkStatusInfo.put("num", "倍数" + String.valueOf(x3));
 		clubScoreInfo.put("desc", "俱乐部成绩");
