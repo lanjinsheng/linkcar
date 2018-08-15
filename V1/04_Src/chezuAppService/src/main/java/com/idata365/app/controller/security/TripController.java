@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,8 @@ public class TripController extends BaseController {
 	private TripService tripService;
 	@Autowired
 	ChezuAssetService chezuAssetService;
-
+	@Autowired
+	CheZuAppProperties cheZuAppProperties;
 	/**
 	 * 
 	 * @Title: getTripByUserLatest
@@ -126,15 +128,15 @@ public class TripController extends BaseController {
 			rtMap.put("tiredNum", dbMap.get("tiredRate").toString());
 			// 超速系数
 			double over = Double.valueOf(dbMap.get("overspeedScore").toString()).doubleValue();
-			double overspeedNum = over / 20;
+			double overspeedNum = over / cheZuAppProperties.getOverSpeedAllScore();
 			rtMap.put("overspeedNum", overspeedNum < 0 ? 0 : overspeedNum);
 			// 急转系数
 			double turn = Double.valueOf(dbMap.get("turnScore").toString()).doubleValue();
-			double turnNum = turn / 20;
+			double turnNum = turn / cheZuAppProperties.getTurnAllScore();
 			rtMap.put("turnNum", turnNum < 0 ? 0 : turnNum);
 			// 急刹系数
 			double breaK = Double.valueOf(dbMap.get("brakeScore").toString()).doubleValue();
-			double brakeNum = breaK / 20;
+			double brakeNum = breaK / cheZuAppProperties.getBrakeAllScore();
 			rtMap.put("brakeNum", brakeNum < 0 ? 0 : brakeNum);
 			rtMap.put("brakeScore", breaK);
 			rtMap.put("overspeedScore", over);

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class LookAdService extends BaseService<LookAdService> {
 	private ChezuImService chezuImService;
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
+	@Autowired
+	private CheZuAppProperties app;
 
 	/**
 	 * 
@@ -74,12 +77,12 @@ public class LookAdService extends BaseService<LookAdService> {
 				int i = this.userLookAdMapper.updateHadGet(userId, adId, daystamp);
 				rtAdId = String.valueOf(info.getAdPassId()+1);
 				if(i>0) {
-					chezuAssetService.getMissionPrize(userId, 30, 99, "");// 观看广告任务ID为199
-					powerPrizeNum = "30";
+					chezuAssetService.getMissionPrize(userId, app.getAdPowerNum(), 99, "");// 观看广告任务ID为199
+					powerPrizeNum = String.valueOf(app.getAdPowerNum());
 					isAdEnd = "0";
 					String dd = DateTools.getYYYY_MM_DD();
 					int cc = this.userLookAdMapper.getTodayCount(userId, dd);
-					if(cc>=10) {
+					if(cc==10) {
 						chezuImService.lookedAllAd(usersAccountMapper.findAccountById(userId).getNickName(), String.valueOf(userId), "");
 					}
 				}
@@ -183,10 +186,10 @@ public class LookAdService extends BaseService<LookAdService> {
 				}
 			} else if (loadFlag == 1) {
 				valid = 1;
-				powerNum = (long) RandUtils.generateRand(10, 40);
+				powerNum = (long) RandUtils.generateRand(10, app.getActPowerAddNum());
 			} else {
 				valid = 1;
-				powerNum = (long) RandUtils.generateRand((loadFlag - 1) * 40,loadFlag * 40);// 30 60 90 120 150 160
+				powerNum = (long) RandUtils.generateRand((loadFlag - 1) * app.getActPowerAddNum(),loadFlag * app.getActPowerAddNum());// 30 60 90 120 150 160
 			}
 		}
 		if(powerNum>300) {

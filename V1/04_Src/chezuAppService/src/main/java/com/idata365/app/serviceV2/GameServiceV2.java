@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -68,6 +69,8 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 	private UserInfoService userInfoService;
 	@Autowired
 	private UserCarLogsMapper userCarLogsMapper;
+	@Autowired
+	private CheZuAppProperties app;
 
 	/**
 	 * 实时榜单
@@ -268,16 +271,16 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 						+ "==myFamilyId==" + myFamilyId + "==fightFamilyId==" + fightFamilyId + "==score1==" + score1);
 		long cardinalNum = 0;
 		// 段位动力基数
-		if (familyType >= 120) {
-			cardinalNum = 300;
-		} else if (familyType >= 110) {
-			cardinalNum = 250;
-		} else if (familyType == 100) {
-			cardinalNum = 200;
-		} else if (familyType == 90) {
-			cardinalNum = 150;
+		if (familyType >= DicFamilyTypeConstant.GuanJun_1) {
+			cardinalNum = app.getCardinalNumG();
+		} else if (familyType >= DicFamilyTypeConstant.ZuanShi_4) {
+			cardinalNum = app.getCardinalNumZ();
+		} else if (familyType == DicFamilyTypeConstant.HuangJin_5) {
+			cardinalNum = app.getCardinalNumH();
+		} else if (familyType == DicFamilyTypeConstant.BaiYing_5) {
+			cardinalNum = app.getCardinalNumB();
 		} else {
-			cardinalNum = 100;
+			cardinalNum = app.getCardinalNumQ();
 		}
 
 		Map<Integer, String> map = new HashMap<>();
@@ -510,16 +513,16 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		// 俱乐部成员动力描述
 		long cardinalNum = 0;
 		// 段位动力基数
-		if (familyType >= 120) {
-			cardinalNum = 300;
-		} else if (familyType >= 110) {
-			cardinalNum = 250;
-		} else if (familyType == 100) {
-			cardinalNum = 200;
-		} else if (familyType == 90) {
-			cardinalNum = 150;
+		if (familyType >= DicFamilyTypeConstant.GuanJun_1) {
+			cardinalNum = app.getCardinalNumG();
+		} else if (familyType >= DicFamilyTypeConstant.ZuanShi_4) {
+			cardinalNum = app.getCardinalNumZ();
+		} else if (familyType == DicFamilyTypeConstant.HuangJin_5) {
+			cardinalNum = app.getCardinalNumH();
+		} else if (familyType == DicFamilyTypeConstant.BaiYing_5) {
+			cardinalNum = app.getCardinalNumB();
 		} else {
-			cardinalNum = 100;
+			cardinalNum = app.getCardinalNumQ();
 		}
 		int userCount = member.size();
 		long totalprizeNum = cardinalNum * userCount;// 俱乐部共获得动力
@@ -648,16 +651,16 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 		}
 		long cardinalNum = 0;
 		// 段位动力基数
-		if (familyType >= 120) {
-			cardinalNum = 300;
-		} else if (familyType >= 110) {
-			cardinalNum = 250;
-		} else if (familyType == 100) {
-			cardinalNum = 200;
-		} else if (familyType == 90) {
-			cardinalNum = 150;
+		if (familyType >= DicFamilyTypeConstant.GuanJun_1) {
+			cardinalNum = app.getCardinalNumG();
+		} else if (familyType >= DicFamilyTypeConstant.ZuanShi_4) {
+			cardinalNum = app.getCardinalNumZ();
+		} else if (familyType == DicFamilyTypeConstant.HuangJin_5) {
+			cardinalNum = app.getCardinalNumH();
+		} else if (familyType == DicFamilyTypeConstant.BaiYing_5) {
+			cardinalNum = app.getCardinalNumB();
 		} else {
-			cardinalNum = 100;
+			cardinalNum = app.getCardinalNumQ();
 		}
 		long totalprizeNum = cardinalNum * userCount;// 俱乐部共获得动力
 		int a = 0;

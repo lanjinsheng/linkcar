@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class FamilyScoreService {
 			.getLogger(FamilyScoreService.class);
 	@Autowired
 	UserScoreDayStatMapper userScoreDayStatMapper;
+	@Autowired
+	CheZuAppProperties app;
 
 	public Double familyScore(Long familyId, String daystamp) {
 		UserScoreDayStat pUserScoreDayStat = new UserScoreDayStat();
@@ -30,7 +33,7 @@ public class FamilyScoreService {
 		pUserScoreDayStat.setDaystamp(daystamp);
 		List<UserScoreDayStat> list = userScoreDayStatMapper
 				.getUsersDayScoreByFamily(pUserScoreDayStat);
-		int maxUserCount = 4;
+		int maxUserCount = app.getMaxUserCount();
 		int i = 0;
 		Double avgScore = 0D;
 		for (UserScoreDayStat userDayScore : list) {

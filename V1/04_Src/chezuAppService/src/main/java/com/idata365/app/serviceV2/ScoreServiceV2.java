@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -100,6 +101,8 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	ChezuAccountService chezuAccountService;
 	@Autowired
 	ChezuAssetService chezuAssetService;
+	@Autowired
+	private CheZuAppProperties app;
 
 	/**
 	 * 
@@ -1255,30 +1258,34 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		Double x1 = 1d;
 		Double x2 = 1d;
 		Double x3 = 1d;
+
+
 		if(opponentId == null){
 			pkStatusInfo.put("value", "无挑战");
+			x3=app.getNoFight();
 		}else if (score1 > score2) {
 			pkStatusInfo.put("value", "胜利");
-			x3 = 2d;
+			x3 = app.getWin();
 		} else if (score1 == score2) {
 			pkStatusInfo.put("value", "平局");
-			x3 = 1.5d;
+			x3 = app.getDogfall();
 		} else {
 			pkStatusInfo.put("value", "失败");
+			x3=app.getLoss();
 		}
 
 		long score = Math.round(score1 / 10);
 		x1 = (double) ((membersNum*0.1 + 1));
 		if (familyType >= DicFamilyTypeConstant.GuanJun_1) {
-			x2 = 3d;
+			x2 = ((double)app.getCardinalNumG())/100;
 		} else if (familyType >= DicFamilyTypeConstant.ZuanShi_4) {
-			x2 = 2.5d;
+			x2 = ((double)app.getCardinalNumZ())/100;
 		} else if (familyType >= DicFamilyTypeConstant.HuangJin_5) {
-			x2 = 2d;
+			x2 = ((double)app.getCardinalNumH())/100;
 		} else if (familyType >= DicFamilyTypeConstant.BaiYing_5) {
-			x2 = 1.5d;
+			x2 = ((double)app.getCardinalNumB())/100;
 		} else {
-			x2 = 1d;
+			x2 = ((double)app.getCardinalNumQ())/100;
 		}
 
 		// 合计：
