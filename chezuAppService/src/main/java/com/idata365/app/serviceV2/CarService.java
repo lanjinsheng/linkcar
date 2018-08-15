@@ -90,10 +90,10 @@ public class CarService extends BaseService<CarService> {
 		}
 		dataMap.put("sharingMyPoint", sharingMyPoint);
 		Map<Long,Integer> usersKeys=new HashMap<>();
-	a:	for(Map<String,Object> map:list){//俱乐部循环
+		for(Map<String,Object> map:list){//俱乐部循环
 			Long familyId =Long.valueOf(map.get("familyId").toString());
 			List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
-			for(Map<String,Object> user:users){//成员循环
+			a:	for(Map<String,Object> user:users){//成员循环
 				Map<String,Object> rtMap=new HashMap<>();
 				Long memberId=Long.valueOf(user.get("userId").toString());
 				if(usersKeys.get(memberId)!=null){
