@@ -5,11 +5,11 @@ import java.util.Map;
 
 public class AssetConstant {
 	
-	public final static int DAY_DAIMONDS_FOR_POWER=500;
-	public final static int DAY_DAIMONDS_FOR_PK=480;
-	public final static int DAY_DAIMONDS_FOR_SEASON=20;
+//	public final static int DAY_DAIMONDS_FOR_POWER=500;
+//	public final static int DAY_DAIMONDS_FOR_PK=480;
+//	public final static int DAY_DAIMONDS_FOR_SEASON=20;
 	
-	public final static int DAY_DAIMONDS_FOR_POWER_ALLNET=980;
+	public static int DAY_DAIMONDS_FOR_POWER_ALLNET=980;
 	
 	public static Map<Integer,String> UserDiamondsEventMap=new HashMap<Integer,String>();
 	public static Map<Integer,String> UserPowerEventMap=new HashMap<Integer,String>();
