@@ -10,7 +10,6 @@ import com.idata365.col.remote.ChezuDriveService;
 import com.idata365.col.service.DataService;
 
 
-
 public class TestTask extends TimerTask { 
 	private static Logger log = Logger.getLogger(TestTask.class);
 	private static Object lock = new Object();
