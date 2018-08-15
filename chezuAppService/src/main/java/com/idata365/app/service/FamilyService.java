@@ -1109,7 +1109,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	// 任务--创建俱乐部是否达到白银
 	public int queryCreateFamilyIsSilver(long userId) {
 		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
-		if (i != null && i >= 90) {
+		if (i != null && i >= DicFamilyTypeConstant.BaiYing_5) {
 			return 1;
 		} else {
 			return 0;
@@ -1119,7 +1119,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	// 任务--创建俱乐部是否达到黄金
 	public int queryCreateFamilyIsGold(long userId) {
 		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
-		if (i != null && i >= 100) {
+		if (i != null && i >= DicFamilyTypeConstant.HuangJin_5) {
 			return 1;
 		} else {
 			return 0;
@@ -1129,7 +1129,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	// 任务--创建俱乐部是否达到钻石
 	public int queryCreateFamilyIsDiamond(long userId) {
 		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
-		if (i != null && i >= 110) {
+		if (i != null && i >= DicFamilyTypeConstant.ZuanShi_4) {
 			return 1;
 		} else {
 			return 0;
@@ -1139,7 +1139,7 @@ public class FamilyService extends BaseService<FamilyService> {
 	// 任务--创建俱乐部是否达到冠军
 	public int queryCreateFamilyIsChampion(long userId) {
 		Integer i = familyMapper.queryFamilyTypeOfCreateFamily(userId);
-		if (i != null && i >= 120) {
+		if (i != null && i >= DicFamilyTypeConstant.GuanJun_1) {
 			return 1;
 		} else {
 			return 0;

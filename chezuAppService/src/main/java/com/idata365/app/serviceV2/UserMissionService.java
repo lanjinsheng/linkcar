@@ -462,9 +462,9 @@ public class UserMissionService extends BaseService<UserMissionService> {
 			// 重置missionId为1、2、3、4的logs
 			userMissionLogsMapper.updateValid(userId);
 			UserMissionLogs log = new UserMissionLogs();
-			int [] logId = {1,2,3,4};
-			int [] tgtCount = {5,3,1,1};
-			for (int i = 0; i < 4; i++) {
+			int [] logId = {1,2,3,4,17,18};
+			int [] tgtCount = {5,3,1,1,1,1};
+			for (int i = 0; i < 6; i++) {
 				log.setMissionId(logId[i]);
 				log.setFinishCount(0);
 				log.setTargetCount(tgtCount[i]);

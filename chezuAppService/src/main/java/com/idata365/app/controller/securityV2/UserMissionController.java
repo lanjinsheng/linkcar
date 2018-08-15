@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class UserMissionController extends BaseController {
 	public ChezuAssetService chezuAssetService;
 	@Autowired
 	public LookAdService lookAdService;
+	@Autowired
+	CheZuAppProperties app;
 
 	/**
 	 * 
@@ -70,9 +73,9 @@ public class UserMissionController extends BaseController {
 		if (missionType == 1) {
 			List<Map<String, String>> boxList = new ArrayList<Map<String, String>>();
 			int count = chezuAssetService.queryReceiveDayMissionBox(userId, "");
-			int[] arr = { 1, 2, 3, 4 };
-			int[] sureNum = { 2, 4, 6, 7 };
-			long[] power = { 20, 40, 60, 100 };
+			int[] arr = { 1, 2, 3, 4 };//宝箱ID
+			int[] sureNum = { app.getDayMissionBox1SureNum(), app.getDayMissionBox2SureNum(), app.getDayMissionBox3SureNum(), app.getDayMissionBox4SureNum() };//打开对应宝箱需要完成任务的数量
+			long[] power = { app.getDayMissionBox1PowerNum(),app.getDayMissionBox2PowerNum(),app.getDayMissionBox3PowerNum(),app.getDayMissionBox4PowerNum() };//对应宝箱奖励的动力值
 			for (int i = 0; i < arr.length; i++) {
 				Map<String, String> b = new HashMap<>();
 				b.put("boxId", String.valueOf(arr[i]));
@@ -87,9 +90,9 @@ public class UserMissionController extends BaseController {
 		} else if (missionType == 3) {
 			List<Map<String, String>> boxList = new ArrayList<Map<String, String>>();
 			int count = chezuAssetService.queryReceiveActMissionBox(userId, "");
-			int[] arr = { 1, 2, 3, 4 };
-			int[] sureNum = { 2, 6, 10, 14 };
-			long[] power = { 50, 80, 100, 120 };
+			int[] arr = { 1, 2, 3, 4 };//宝箱ID
+			int[] sureNum = { app.getActMissionBox1SureNum(),app.getActMissionBox2SureNum(),app.getActMissionBox3SureNum(),app.getActMissionBox4SureNum() };//打开对应宝箱需要完成任务的数量
+			long[] power = { app.getActMissionBox1PowerNum(),app.getActMissionBox2PowerNum(),app.getActMissionBox3PowerNum(),app.getActMissionBox4PowerNum() };//对应宝箱奖励的动力值
 			for (int i = 0; i < arr.length; i++) {
 				Map<String, String> b = new HashMap<>();
 				b.put("boxId", String.valueOf(arr[i]));
@@ -159,11 +162,11 @@ public class UserMissionController extends BaseController {
 		LOG.info("missionType=================" + missionType);
 		long powerNum = 0L;
 		if(missionType==1) {
-			long[] power = { 20, 40, 60, 100 };
+			long[] power = { app.getDayMissionBox1PowerNum(),app.getDayMissionBox2PowerNum(),app.getDayMissionBox3PowerNum(),app.getDayMissionBox4PowerNum()};
 			powerNum = power[boxId - 1];
 			chezuAssetService.receiveDayMissionBox(userId, powerNum, "");
 		}else if (missionType==3) {
-			long[] power = { 50, 80, 100, 120 };
+			long[] power = {  app.getActMissionBox1PowerNum(),app.getActMissionBox2PowerNum(),app.getActMissionBox3PowerNum(),app.getActMissionBox4PowerNum() };
 			powerNum = power[boxId - 1];
 			chezuAssetService.receiveActMissionBox(userId, powerNum, "");
 		}
