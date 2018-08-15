@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
+import com.idata365.col.config.ColProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.TaskDriveDataMain;
 import com.idata365.col.mapper.TaskDriveDataMainMapper;
@@ -32,6 +33,8 @@ public class TaskDriveDataMainService {
 	DataService dataService;
 	@Autowired
 	YingyanService yingyanService;
+	@Autowired
+	ColProperties colProperties;
 	public String getDateStr(int diff)
 	{
 		Date curDate = Calendar.getInstance().getTime();
@@ -61,7 +64,7 @@ public class TaskDriveDataMainService {
 		 }
   	  if(list.size()>0) {
   		 List<Map<String, String>> datas= PhoneGpsUtil.dealOrderGps(list);
-  		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(datas,"userId="+data.getUserId()+"==habitId="+data.getHabitId());
+  		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(datas,"userId="+data.getUserId()+"==habitId="+data.getHabitId(),colProperties);
   		  List<Map<String,Object>> eventList=new ArrayList<Map<String,Object>>();
   		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
   		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");

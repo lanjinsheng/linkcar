@@ -25,6 +25,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
+import com.idata365.col.config.ColProperties;
 import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.SensorDataLog;
@@ -42,7 +43,8 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
     DataService dataService;
 	@Autowired  
 	SystemProperties systemProPerties; 
-    
+	@Autowired  
+    ColProperties colProperties;
     @RequestMapping(value = "/v1/viewDriveData",method = RequestMethod.POST)
     public Map<String,Object>  viewDriveData(@RequestParam CommonsMultipartFile file,@RequestParam Map<String,Object> map) throws IOException {
     	return null;
@@ -246,7 +248,7 @@ public class BssGetDataController extends BaseController<BssGetDataController> {
 				 }
 		    	  List<Map<String,Object>> eventList=new ArrayList<Map<String,Object>>();
 		    	  if(list.size()>0) {
-		    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+driveLog.getUserId()+"==habitId="+driveLog.getHabitId());
+		    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+driveLog.getUserId()+"==habitId="+driveLog.getHabitId(),colProperties);
 		    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 		    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
 		    		 List<Map<String,Object>> alarmListZhuan= (List<Map<String,Object>>)datasMap.get("alarmListZhuan");
