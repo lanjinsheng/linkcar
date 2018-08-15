@@ -397,7 +397,7 @@ public class PhoneGpsUtil2 {
 		double sub8PointCourse=zhuanAngle(now,list,col);
 		if(sub8PointCourse>col.getDealPointsAngle().intValue()){
 			
-			boolean hadEvent=hadEventInXSecond(alarmList, 15, t);
+			boolean hadEvent=hadEventInXSecond(alarmList, col.getZhuanIntervalSecond().intValue(), t);
 			if(hadEvent) {
 				return false;
 			}
@@ -483,7 +483,7 @@ public class PhoneGpsUtil2 {
 				if(d<col.getIgnoreTwoPointAngle().intValue()){
 					return false;
 				}
-				boolean  hadEvent=hadEventInXSecond(alarmListZhuan,15,t);
+				boolean  hadEvent=hadEventInXSecond(alarmListZhuan,col.getZhuanIntervalSecond().intValue(),t);
 				if(hadEvent) {
 					return false;
 				}
