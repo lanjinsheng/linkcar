@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
+import com.idata365.col.config.ColProperties;
 import com.idata365.col.config.SystemProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.service.DataService;
@@ -34,6 +35,8 @@ public class MngCoreController extends BaseController<MngCoreController> {
     YingyanService yingyanService;
 	@Autowired  
 	SystemProperties systemProPerties; 
+	@Autowired
+	ColProperties colProperties;
 	
 	/**
 	 * 
@@ -76,7 +79,7 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	    	  if(list.size()>0) {
 	    		  Map<String, Object> datasMap=null;
 	    		  if(map.get("dev")!=null) {
-	    			   datasMap= PhoneGpsUtil2.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
+	    			   datasMap= PhoneGpsUtil2.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"),colProperties);
 	  	    		
 	    		  }else {
 	    			   datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
