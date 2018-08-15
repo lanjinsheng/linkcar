@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.idata365.col.config.ColProperties;
 import com.idata365.col.entity.bean.SpeedBean;
 import com.idata365.col.schedule.DatasDealTask;
 
@@ -24,13 +25,6 @@ import com.idata365.col.schedule.DatasDealTask;
 public class PhoneGpsUtil2 {
 	private static Logger log = Logger.getLogger(PhoneGpsUtil.class);
 	public static void main(String []args){
-		  List<Map<String,String>> list=new ArrayList<Map<String,String>>();
-		String str=txt2String("D:/drive1");
-		   Map<String,Object> jMap=GsonUtils.fromJson(str);
-	         if(jMap.get("gpsInfos")!=null) {
-	        	 list.addAll((List)jMap.get("gpsInfos"));
-	         }
-	         PhoneGpsUtil2.getGpsValues(list,"82");
 
 	}
 	final static double speed120=33.33;
@@ -110,7 +104,7 @@ public class PhoneGpsUtil2 {
 			list.get(validNum).put("invalid", "1");
 		}
 	}
-	public static Map<String,Object> getGpsValues(List<Map<String,String>> list,String uhIDs){
+	public static Map<String,Object> getGpsValues(List<Map<String,String>> list,String uhIDs,ColProperties col){
 //		   StringBuffer out=new StringBuffer();
 		//清理gps點
 		dealValidGps(list);
@@ -149,9 +143,9 @@ public class PhoneGpsUtil2 {
 			  et=new StringBuffer(first.get("t"));
 			  log.error("时间为空====错误行程号："+uhIDs);
 		} 
-		if(Integer.valueOf(first.get("h"))<100) {//h值小于100的才进行计算
-			addJia(first,i,size,list,alarmListJia);
-			addJian(first, i, size, list,  alarmListJian,alarmListZhuan);
+		if(Integer.valueOf(first.get("h"))<col.getGpsHa().intValue()) {//h值小于100的才进行计算
+			addJia(first,i,size,list,alarmListJia,col);
+			addJian(first, i, size, list,  alarmListJian,alarmListZhuan,col);
 		}
 		double lat1=Double.valueOf(first.get("x"));
 		double lng1=Double.valueOf(first.get("y"));
@@ -187,11 +181,11 @@ public class PhoneGpsUtil2 {
 //			   out.append(gps.get("t")+"==="+d+"\r\n");
 			   Gps1=Gps2;
 			   
-			   if(Integer.valueOf(gps.get("h"))<100) {//h值小于100的才进行计算
-				   addJia(gps,i,size,list,alarmListJia);
-				   boolean isTurn=addZhuan(gps, i, size, list, alarmListZhuan);
+			   if(Integer.valueOf(gps.get("h"))<col.getGpsHa().intValue()) {//h值小于100的才进行计算
+				   addJia(gps,i,size,list,alarmListJia,col);
+				   boolean isTurn=addZhuan(gps, i, size, list, alarmListZhuan,col);
 				   if(!isTurn){
-					   addJian(gps, i, size, list, alarmListJian,alarmListZhuan);
+					   addJian(gps, i, size, list, alarmListJian,alarmListZhuan,col);
 				   }
 			   }
 			   if(maxSpeed<Double.valueOf(gps.get("s"))){
@@ -223,10 +217,10 @@ public class PhoneGpsUtil2 {
 		return rtMap;
 	}
 	
-	public static  void addJia(Map<String,String> first,int i,int size,List<Map<String,String>> list,List<Map<String,Object>> alarmList){
+	public static  void addJia(Map<String,String> first,int i,int size,List<Map<String,String>> list,List<Map<String,Object>> alarmList,ColProperties col){
 		double s=Double.valueOf(first.get("s"));
 		String t=first.get("t");
-		if(s<=2){
+		if(s<=col.getJiaSpeedThreshold().intValue()){
 			return;
 		}
 		//减速条件
@@ -243,16 +237,16 @@ public class PhoneGpsUtil2 {
 			p++;
 			Double ds=BigDecimal.valueOf(s).divide(BigDecimal.valueOf(s2),3,RoundingMode.HALF_UP).doubleValue();
 			if(p==2){
-				if(ds<=0.5){
+				if(ds<=col.getJiaPoint2Value().doubleValue()){
 					j++;
 					continue;
 				}else{
 					break;
 				}
 			}else if(p==3){
-				if(ds<=0.4){
+				if(ds<=col.getJiaPoint3Value().doubleValue()){
 					//急加
-					boolean  hadEvent=hadEventInXSecond(alarmList,15,t);
+					boolean  hadEvent=hadEventInXSecond(alarmList,col.getJiaIntervalSecond().intValue(),t);
 					if(hadEvent) {
 						return;//有过15s内的急加，跳出。
 					}
@@ -276,16 +270,16 @@ public class PhoneGpsUtil2 {
 	}
  
 	//急减速判断
-	public static boolean addJian(Map<String,String> curPoint,int now,int total,List<Map<String,String>> list,List<Map<String,Object>> alarmList,List<Map<String,Object>> alarmListZhuan){
+	public static boolean addJian(Map<String,String> curPoint,int now,int total,List<Map<String,String>> list,List<Map<String,Object>> alarmList,List<Map<String,Object>> alarmListZhuan,ColProperties col){
 		double s=Double.valueOf(curPoint.get("s"));
 		String t=(curPoint.get("t"));
 		double s1=s;
 		String t1=t;
-		double d1=1.5;double d2=2.0;
-		if(s>=10){
-			d1=1.3; d2=1.7;
+		double d1=col.getJianPointOne1Value().doubleValue();double d2=col.getJianPointOne2Value().doubleValue();
+		if(s>=col.getJianTwoSpeed().intValue()){
+			d1=col.getJianPointTwo1Value().doubleValue(); d2=col.getJianPointTwo2Value().doubleValue();
 		}
-		if(s>=5){
+		if(s>=col.getJianOneSpeed().intValue()){
 			//减速条件
 			int j=now+1;
 			int p=1;
@@ -327,12 +321,12 @@ public class PhoneGpsUtil2 {
 				}else if(p==3){
 					if(ds>=d2){
 						//急减
-						boolean  hadEvent=hadEventInXSecond(alarmList,15,t);
+						boolean  hadEvent=hadEventInXSecond(alarmList,col.getJianIntervalSecond().intValue(),t);
 						if(hadEvent) {
 							return false;//有过15s内的急减，跳出。
 						}
 						//急减之前判断是否是急转，如果是，则急转优先
-						boolean zhuan=jugeZhuanInJian( curPoint, list, now,total, alarmListZhuan);
+						boolean zhuan=jugeZhuanInJian( curPoint, list, now,total, alarmListZhuan,col);
 						if(zhuan) {
 							return false;//有过急转,则跳出
 						}
@@ -364,16 +358,17 @@ public class PhoneGpsUtil2 {
 	//if(now>2 && now<tempTotal){
 	//dealZhuan(first, list,now,service,turnAlarmList);
    // }
-	public  static boolean  addZhuan(Map<String,String> first,int now,int size,List<Map<String,String>> list,List<Map<String,Object>> alarmList){
-		int tempTotal=size-5;
+	public  static boolean  addZhuan(Map<String,String> first,int now,int size,List<Map<String,String>> list,
+			List<Map<String,Object>> alarmList,ColProperties col){
+		int tempTotal=size-col.getZhuanNextPointNum().intValue();
 		boolean isZhuan=false;
 		String t=first.get("t");
 
-		if(now<2 || now>=tempTotal){
+		if(now<col.getZhuanPrePointNum().intValue() || now>=tempTotal){
 			return false;
 		}
 		double s=Double.valueOf(first.get("s"));
-		if(s<7){
+		if(s<col.getZhuanSpeedThreshold().intValue()){
 			return false;
 		}
 		String course=first.get("c");	
@@ -382,7 +377,7 @@ public class PhoneGpsUtil2 {
 		try {
 			long dif=0;
 			dif = DateTools.getDiffTimeS(t2, t);
-			if(dif>8) {//2点差8秒的，就不用算急转了
+			if(dif>col.getZhuanIgnoreTwoPointTime().intValue()) {//2点差8秒的，就不用算急转了
 				return false;
 			}
 		} catch (ParseException e) {
@@ -396,11 +391,11 @@ public class PhoneGpsUtil2 {
 		if(d>180 ){
 			d=360-d;
 		}
-		if(d<10){
+		if(d<col.getIgnoreTwoPointAngle().intValue()){
 			return false;
 		}
-		double sub8PointCourse=zhuanAngle(now,list);
-		if(sub8PointCourse>60){
+		double sub8PointCourse=zhuanAngle(now,list,col);
+		if(sub8PointCourse>col.getDealPointsAngle().intValue()){
 			
 			boolean hadEvent=hadEventInXSecond(alarmList, 15, t);
 			if(hadEvent) {
@@ -412,10 +407,10 @@ public class PhoneGpsUtil2 {
 			}
 			Double ds=BigDecimal.valueOf(s).divide(BigDecimal.valueOf(s2),3,RoundingMode.HALF_UP).doubleValue();
 			
-			if(ds<1.3) {
+			if(ds<col.getZhuanJugeBySpeedRate().doubleValue()) {
 				isZhuan= true;
 			}else {
-				if(s>10 && d>=30){//转角下速度与角度的判断
+				if(s>col.getZhuanJugeSpeedAndAngleSpeed().intValue() && d>=col.getZhuanJugeSpeedAndAngleAngle().intValue()){//转角下速度与角度的判断
 					isZhuan= true;
 				}
 				
@@ -435,23 +430,22 @@ public class PhoneGpsUtil2 {
 		return isZhuan;	
 	}
 	
-	public static double zhuanAngle(int now,List<Map<String,String>> list) {
-//		double d1= Double.valueOf(list.get(now-7).get("c"));
-//		double d2= Double.valueOf(list.get(now-6).get("c"));
-//		double d3= Double.valueOf(list.get(now-5).get("c"));
-//		double d4= Double.valueOf(list.get(now-4).get("c"));
-//		double d5= Double.valueOf(list.get(now-3).get("c"));
-		double d6= Double.valueOf(list.get(now-2).get("c"));
-		double d7= Double.valueOf(list.get(now-1).get("c"));
-		double d8= Double.valueOf(list.get(now).get("c"));
-		double d9= Double.valueOf(list.get(now+1).get("c"));
-		double d10= Double.valueOf(list.get(now+2).get("c"));
-		double d11= Double.valueOf(list.get(now+3).get("c"));
-		double d12= Double.valueOf(list.get(now+4).get("c"));
-		double d13= Double.valueOf(list.get(now+5).get("c"));
-//		double d14= Double.valueOf(list.get(now+6).get("c"));
-//		double d15= Double.valueOf(list.get(now+7).get("c"));
-		double sub9PointCourse=sub9PointCourse25(d6,d7,d8,d9,d10,d11,d12,d13);
+	public static double zhuanAngle(int now,List<Map<String,String>> list,ColProperties col) {
+		int i=now-col.getZhuanPrePointNum().intValue();
+		int j=now+col.getZhuanNextPointNum().intValue();
+		
+		double max=Double.valueOf(list.get(i).get("c"));
+		double min=max;
+		i=i+1;
+		for(;i<=j;i++) {
+			double value=Double.valueOf(list.get(i).get("c"));
+			if(value>max){
+				max=value;
+			}else if(value<min){
+				min=value;
+			}
+		}
+		double sub9PointCourse=max-min;
 		if(sub9PointCourse>180){
 			sub9PointCourse=360-sub9PointCourse;
 		}
@@ -472,20 +466,21 @@ public class PhoneGpsUtil2 {
 		 return false;
 	}
 	
-	public static boolean jugeZhuanInJian(Map<String,String> curPoint,List<Map<String,String>> list,int now,int total,List<Map<String,Object>> alarmListZhuan) {
+	public static boolean jugeZhuanInJian(Map<String,String> curPoint,List<Map<String,String>> list,int now,int total,List<Map<String,Object>> alarmListZhuan,
+			ColProperties col) {
 		//增加角度判断
-		int tempTotal=total-5;
-		if(now>=2 && now<tempTotal){
+		int tempTotal=total-col.getZhuanNextPointNum().intValue();
+		if(now>=col.getZhuanPrePointNum().intValue() && now<tempTotal){
 			String t=curPoint.get("t");
-			double sub8PointCourse=zhuanAngle(now,list);
-			if(sub8PointCourse>60){
+			double sub8PointCourse=zhuanAngle(now,list,col);
+			if(sub8PointCourse>col.getDealPointsAngle().intValue()){
 				String course=curPoint.get("c");	
 				String nextCoure=  list.get(now+1).get("c");
 				Double d=Math.abs(Double.valueOf(course) -Double.valueOf(nextCoure));
 				if(d>180 ){
 					d=360-d;
 				}
-				if(d<10){
+				if(d<col.getIgnoreTwoPointAngle().intValue()){
 					return false;
 				}
 				boolean  hadEvent=hadEventInXSecond(alarmListZhuan,15,t);
@@ -505,156 +500,58 @@ public class PhoneGpsUtil2 {
 		}
 		return false;
 	}
-	public static double sub9PointCourse(double d5,double d6,double d7,double d8,double d9,double d10,double d11,double d12,double d13,double d14,double d15){
-		double max=d5;
-		double min=d5;
-		if(d5>max){
-			max=d5;
-		}else if(d5<min){
-			min=d5;
-		}
-		if(d6>max){
-			max=d6;
-		}else if(d6<min){
-			min=d6;
-		}
-		if(d7>max){
-			max=d7;
-		}else if(d7<min){
-			min=d7;
-		}
-		if(d8>max){
-			max=d8;
-		}else if(d8<min){
-			min=d8;
-		}
-		if(d9>max){
-			max=d9;
-		}else if(d9<min){
-			min=d9;
-		}
-		if(d10>max){
-			max=d10;
-		}else if(d10<min){
-			min=d10;
-		}
-		if(d11>max){
-			max=d11;
-		}else if(d11<min){
-			min=d11;
-		}
-		if(d12>max){
-			max=d12;
-		}else if(d12<min){
-			min=d12;
-		}
-		if(d13>max){
-			max=d13;
-		}else if(d13<min){
-			min=d13;
-		}
-		if(d14>max){
-			max=d14;
-		}else if(d14<min){
-			min=d14;
-		}
-		if(d15>max){
-			max=d15;
-		}else if(d15<min){
-			min=d15;
-		}
-		return (max-min);
-	}
 	
-	public static double sub9PointCourse24(double d6,double d7,double d8,double d9,double d10,double d11,double d12){
-		double max=d6;
-		double min=d6;
-		
-		if(d6>max){
-			max=d6;
-		}else if(d6<min){
-			min=d6;
-		}
-		if(d7>max){
-			max=d7;
-		}else if(d7<min){
-			min=d7;
-		}
-		if(d8>max){
-			max=d8;
-		}else if(d8<min){
-			min=d8;
-		}
-		if(d9>max){
-			max=d9;
-		}else if(d9<min){
-			min=d9;
-		}
-		if(d10>max){
-			max=d10;
-		}else if(d10<min){
-			min=d10;
-		}
-		if(d11>max){
-			max=d11;
-		}else if(d11<min){
-			min=d11;
-		}
-		if(d12>max){
-			max=d12;
-		}else if(d12<min){
-			min=d12;
-		
-		}
-		return (max-min);
-	}
-	public static double sub9PointCourse25(double d6,double d7,double d8,double d9,double d10,double d11,double d12,double d13){
-		double max=d6;
-		double min=d6;
-		
-		if(d6>max){
-			max=d6;
-		}else if(d6<min){
-			min=d6;
-		}
-		if(d7>max){
-			max=d7;
-		}else if(d7<min){
-			min=d7;
-		}
-		if(d8>max){
-			max=d8;
-		}else if(d8<min){
-			min=d8;
-		}
-		if(d9>max){
-			max=d9;
-		}else if(d9<min){
-			min=d9;
-		}
-		if(d10>max){
-			max=d10;
-		}else if(d10<min){
-			min=d10;
-		}
-		if(d11>max){
-			max=d11;
-		}else if(d11<min){
-			min=d11;
-		}
-		if(d12>max){
-			max=d12;
-		}else if(d12<min){
-			min=d12;
-		
-		}
-		if(d13>max){
-			max=d13;
-		}else if(d13<min){
-			min=d13;
-		}
-		return (max-min);
-	}
+	
+	
+	
+	 
+//	public static double sub9PointCourse25(double d6,double d7,double d8,double d9,double d10,double d11,double d12,double d13){
+//		double max=d6;
+//		double min=d6;
+//		
+//		if(d6>max){
+//			max=d6;
+//		}else if(d6<min){
+//			min=d6;
+//		}
+//		if(d7>max){
+//			max=d7;
+//		}else if(d7<min){
+//			min=d7;
+//		}
+//		if(d8>max){
+//			max=d8;
+//		}else if(d8<min){
+//			min=d8;
+//		}
+//		if(d9>max){
+//			max=d9;
+//		}else if(d9<min){
+//			min=d9;
+//		}
+//		if(d10>max){
+//			max=d10;
+//		}else if(d10<min){
+//			min=d10;
+//		}
+//		if(d11>max){
+//			max=d11;
+//		}else if(d11<min){
+//			min=d11;
+//		}
+//		if(d12>max){
+//			max=d12;
+//		}else if(d12<min){
+//			min=d12;
+//		
+//		}
+//		if(d13>max){
+//			max=d13;
+//		}else if(d13<min){
+//			min=d13;
+//		}
+//		return (max-min);
+//	}
 	
 	/*==========================================================*/
 	/**
