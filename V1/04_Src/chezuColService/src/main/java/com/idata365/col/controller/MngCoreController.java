@@ -82,7 +82,7 @@ public class MngCoreController extends BaseController<MngCoreController> {
 	    			   datasMap= PhoneGpsUtil2.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"),colProperties);
 	  	    		
 	    		  }else {
-	    			   datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"));
+	    			   datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+map.get("userId")+"==habitId="+map.get("habitId"),colProperties);
 	 	    		 
 	    		  }
 	    		  List<Map<String,Object>> alarmList=OverspeedUtil.dealOverSpeed(jkList);

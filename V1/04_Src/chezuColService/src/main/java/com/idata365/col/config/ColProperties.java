@@ -18,6 +18,7 @@ public class ColProperties {
     //15s内重复数据过滤
     private Integer  jiaIntervalSecond=15; 
 
+    
     //急减速度2个阈值区间
     private Integer jianOneSpeed=5;
     private Integer jianTwoSpeed=10;

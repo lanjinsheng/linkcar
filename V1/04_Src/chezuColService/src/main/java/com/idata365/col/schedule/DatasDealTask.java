@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.idata365.col.api.QQSSOTools;
 import com.idata365.col.api.SSOTools;
+import com.idata365.col.config.ColProperties;
 import com.idata365.col.entity.DriveDataLog;
 import com.idata365.col.entity.DriveDataMain;
 import com.idata365.col.entity.UploadDataStatus;
@@ -43,6 +44,8 @@ public class DatasDealTask implements Runnable
 	{
 		 log.info("start=="+this.userId+"=="+this.habitId+"=="+this.taskId+"=="+this.hadSensorData);
 		 DataService dataService=SpringContextUtil.getBean("dataService", DataService.class);
+		 ColProperties col=SpringContextUtil.getBean("colProperties", ColProperties.class);
+		 
 //		 YingyanService yingyanService=SpringContextUtil.getBean("yingyanService", YingyanService.class);
 		 UploadDataStatus status=new UploadDataStatus();
 		 status.setTaskFlag(taskId);
@@ -76,7 +79,7 @@ public class DatasDealTask implements Runnable
 			         }
 			 }
 	    	  if(list.size()>0) {
-	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+userId+"==habitId="+habitId);
+	    		  Map<String, Object> datasMap= PhoneGpsUtil.getGpsValues(list,"userId="+userId+"==habitId="+habitId,col);
 	    		  List<Map<String,Object>> eventList=new ArrayList<Map<String,Object>>();
 	    		 List<Map<String,Object>> alarmListJia= (List<Map<String,Object>>)datasMap.get("alarmListJia");
 	    		 List<Map<String,Object>> alarmListJian= (List<Map<String,Object>>)datasMap.get("alarmListJian");
