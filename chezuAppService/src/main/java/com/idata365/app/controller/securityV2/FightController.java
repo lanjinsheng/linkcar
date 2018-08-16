@@ -112,7 +112,7 @@ public class FightController extends BaseController {
 			if (type.getLoss() >= 0) {
 				loss = "+" + type.getLoss();
 			} else {
-				loss = "-" + type.getLoss();
+				loss = "" + type.getLoss();
 			}
 			rtMap.put("win", win);
 			rtMap.put("loss", loss);
