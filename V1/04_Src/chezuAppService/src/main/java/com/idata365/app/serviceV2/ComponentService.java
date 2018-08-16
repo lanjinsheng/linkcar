@@ -459,7 +459,7 @@ public class ComponentService extends BaseService<ComponentService> {
 	  @Transactional
 	  public ReturnMessage  requestComponent(Long familyComponentId,Long userId,String nickName){
 		  ReturnMessage msg=new ReturnMessage();
-		  int i = componentMapper.countOfPray(userId);
+		  int i = componentMapper.countHadRequest(userId,DateTools.getYYYYMMDD());
 		  if(i>0) {
 			  msg.setStatus(0);
 			  msg.setMsg("今天已分配");
