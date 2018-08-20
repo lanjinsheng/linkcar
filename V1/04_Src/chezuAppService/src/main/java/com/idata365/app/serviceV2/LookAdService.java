@@ -82,17 +82,17 @@ public class LookAdService extends BaseService<LookAdService> {
 					isAdEnd = "0";
 					String dd = DateTools.getYYYY_MM_DD();
 					int cc = this.userLookAdMapper.getTodayCount(userId, dd);
-					if(cc==10) {
+					if(cc==20) {
 						chezuImService.lookedAllAd(usersAccountMapper.findAccountById(userId).getNickName(), String.valueOf(userId), "");
 					}
 				}
 			}
 		}
 		int count = this.userLookAdMapper.getTodayCount(userId, daystamp);
-		if (count >= 10) {
+		if (count >= 20) {
 			count = 0;
 		} else {
-			count = 10 - count;
+			count = 20 - count;
 		}
 		rtMap.put("oddCount", String.valueOf(count));
 		if(count == 0) {

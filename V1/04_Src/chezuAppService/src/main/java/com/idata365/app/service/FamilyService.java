@@ -1042,7 +1042,7 @@ public class FamilyService extends BaseService<FamilyService> {
 		// 任务已完成未领取
 		int i = userMissionLogsMapper.queryFinishedCount(bean.getUserId());
 		int count = userLookAdMapper.getTodayCount(bean.getUserId(), DateTools.getYYYY_MM_DD());
-		if (i > 0 || count < 10) {
+		if (i > 0 || count < 20) {
 			resultBean.setMissionHave(1);
 		} else {
 			resultBean.setMissionHave(0);
