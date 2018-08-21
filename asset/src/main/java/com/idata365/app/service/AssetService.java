@@ -479,7 +479,8 @@ public class AssetService extends BaseService<AssetService> {
 		List<Map<String, Object>> powerBalls = new ArrayList<>();
 		// 过滤
 		for (AssetFamiliesPowerLogs logs : rtPowerList) {
-			if (logs.getRelation().equals("0") && logs.getFamilyId() == familyId) {
+
+			if (logs.getFamilyId() == familyId) {
 				powerList.add(logs);
 			} else {
 				String[] str = logs.getRelation().split("-");
@@ -491,6 +492,7 @@ public class AssetService extends BaseService<AssetService> {
 					powerList.add(logs);
 				}
 			}
+
 		}
 		for (AssetFamiliesPowerLogs logs : powerList) {
 			Map<String, Object> powerBall = new HashMap<>();
