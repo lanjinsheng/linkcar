@@ -89,7 +89,7 @@
     </select>
     
     <update id="updateValid" >
-       update userMissionLogs set valid=0 where userId=#{userId} and missionId in (1,2,3,4) and valid=1
+       update userMissionLogs set valid=0 where userId=#{userId} and missionId in (1,2,3,4,17,18) and valid=1
     </update>
     
 </mapper>
