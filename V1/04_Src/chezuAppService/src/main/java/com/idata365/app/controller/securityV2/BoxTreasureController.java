@@ -37,9 +37,11 @@ public class BoxTreasureController extends BaseController {
 	Map<String, Object> receiveUserBox(@RequestParam (required = false) Map<String, String> allRequestParams,
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		String boxId=String.valueOf(requestBodyParams.get("boxId"));
-		boolean  rt=boxTreasureService.receiveUserBox(boxId,this.getUserId());
-		if(!rt){
+		int rt=boxTreasureService.receiveUserBox(boxId,this.getUserId());
+		if(rt==0){
 			return ResultUtils.rtFailParam(null, "配件箱已满，请清理");
+		}else if(rt==-1){
+			return ResultUtils.rtFailParam(null, "重复领取");
 		}
 		return ResultUtils.rtSuccess(null);
 	}
@@ -58,9 +60,11 @@ public class BoxTreasureController extends BaseController {
 			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){ 
 		String boxId=String.valueOf(requestBodyParams.get("boxId"));
 		Map<String,Object> family=familyService.findFamilyIdByUserId(this.getUserId());
-		boolean rt=boxTreasureService.receiveFamilyBox(boxId,Long.valueOf(family.get("id").toString()));
-		if(!rt){
+		int rt=boxTreasureService.receiveFamilyBox(boxId,Long.valueOf(family.get("id").toString()));
+		if(rt==0){
 			return ResultUtils.rtFailParam(null, "零件库已满，请清理");
+		}else if(rt==-1){
+			return ResultUtils.rtFailParam(null, "重复领取");
 		}
 		return ResultUtils.rtSuccess(null);
 	}

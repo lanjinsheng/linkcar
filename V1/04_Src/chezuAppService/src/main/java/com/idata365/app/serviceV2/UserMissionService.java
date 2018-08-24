@@ -347,7 +347,7 @@ public class UserMissionService extends BaseService<UserMissionService> {
 					} else if (logs.get(i).getStatus() == 3||logs.get(i).getStatus() == 1) {
 						map.put("statusDesc", "0");
 					} else {
-						if (logs.get(i).getPowerPrize().equals("")) {
+						if (Long.valueOf(logs.get(i).getPowerPrize().toString()).longValue() == 0) {
 							map.put("statusDesc", "奖励:" + logs.get(i).getOtherPrize());
 						} else {
 							map.put("statusDesc", "奖励:+" + logs.get(i).getPowerPrize() + "动力");
