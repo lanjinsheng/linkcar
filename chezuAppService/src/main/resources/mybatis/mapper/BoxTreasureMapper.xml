@@ -38,10 +38,10 @@
 	
 	
     <update id="receiveBox" >
-		update boxTreasureUser set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
+		update boxTreasureUser set receiveTime=now(),hadGet=1 where  boxId=#{boxId} and hadGet=0
 	</update> 
 	 <update id="receiveBoxFamily" >
-		update boxTreasureFamily set receiveTime=now(),hadGet=1 where  boxId=#{boxId}  
+		update boxTreasureFamily set receiveTime=now(),hadGet=1 where  boxId=#{boxId} and hadGet=0
 	 </update> 
 	 
 	 <select id="countOfOpenUserBox" resultType="java.lang.Integer">

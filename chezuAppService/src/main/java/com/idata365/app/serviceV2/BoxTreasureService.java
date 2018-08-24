@@ -81,7 +81,8 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
     	}
     	return DicComponentConstant.getDicComponent(componentId);
     }
-    
+
+   @Transactional
    public Map<String,Object> getTripBox(long userId){
 	   Map<String,Object> rtMap=new HashMap<>();
 	   Map<String,Object> paramMap=new HashMap<>();
@@ -123,8 +124,8 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   rtMap.put("boxList",  boxList) ;
 	   return rtMap;
    }
-   
-   
+
+   @Transactional
    public Map<String,Object> getChallengeBox(long familyId){
 	   Map<String,Object> rtMap=new HashMap<>();
 	   Map<String,Object> paramMap=new HashMap<>();
@@ -184,67 +185,81 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		rtMap.put("boxList", boxList);
 		return rtMap;
 	}
-	   
-	  
 
-   @Transactional
-   public boolean receiveUserBox(String boxId,Long userId){
-	   Map<String,Object> paramMap=new HashMap<>();
-	   paramMap.put("userId", userId);
-	   int freeCount=componentMapper.countFreeCabinet(paramMap);
-	   if(freeCount==0){
-		   LOG.info("道具箱已满");
-		   return false;
+
+	@Transactional
+	public int receiveUserBox(String boxId, Long userId) {
+		int flag = 1;
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("userId", userId);
+		int freeCount = componentMapper.countFreeCabinet(paramMap);
+		if (freeCount == 0) {
+			LOG.info("道具箱已满");
+			flag = 0;
+			return flag;
 //		   throw new RuntimeException("满柜了");
-	   }
-	   List<BoxTreasureUser> treasures=  boxTreasureMapper.getTripsByBoxId(boxId);
-	   for(BoxTreasureUser treasure:treasures){
-		   //插入用户零件库
-		   DicComponent component=DicComponentConstant.getDicComponent(treasure.getComponentId());
-		   //查看是否满柜
-		   ComponentUser cmpUser=new ComponentUser();
-		   cmpUser.setComponentId(component.getComponentId());
-		   cmpUser.setGainType(treasure.getGainType());
-		   cmpUser.setLeftTravelNum(component.getTravelNum());
-		   cmpUser.setComponentType(component.getComponentType());
-		   cmpUser.setUserId(userId);
-		   cmpUser.setInUse(0);
-		   cmpUser.setComponentStatus(1);
-		   componentMapper.insertComponentUser(cmpUser);
-	   }
-	   //更新领取记录
-	   boxTreasureMapper.receiveBox(boxId);
-	   
-	   return true;
-   }
-   @Transactional
-   public boolean receiveFamilyBox(String boxId,Long familyId){
-	   Map<String,Object> paramMap=new HashMap<>();
-	   paramMap.put("familyId", familyId);
-	   List<BoxTreasureFamily> treasures=  boxTreasureMapper.getFamilyTreasureByBoxId(boxId);
-	 //查看是否满柜
-	   int freeCount=componentMapper.countFamilyFreeCabinet(paramMap);
-	   if(freeCount==0){
-		   LOG.info("道具箱已满");
-		   return false;
+		}
+
+		//更新领取记录
+		int i = boxTreasureMapper.receiveBox(boxId);
+		if (i == 0) {
+			flag = -1;
+		}else{
+			List<BoxTreasureUser> treasures = boxTreasureMapper.getTripsByBoxId(boxId);
+			for (BoxTreasureUser treasure : treasures) {
+				//插入用户零件库
+				DicComponent component = DicComponentConstant.getDicComponent(treasure.getComponentId());
+				//查看是否满柜
+				ComponentUser cmpUser = new ComponentUser();
+				cmpUser.setComponentId(component.getComponentId());
+				cmpUser.setGainType(treasure.getGainType());
+				cmpUser.setLeftTravelNum(component.getTravelNum());
+				cmpUser.setComponentType(component.getComponentType());
+				cmpUser.setUserId(userId);
+				cmpUser.setInUse(0);
+				cmpUser.setComponentStatus(1);
+				componentMapper.insertComponentUser(cmpUser);
+			}
+		}
+
+		return flag;
+	}
+
+	@Transactional
+	public int receiveFamilyBox(String boxId, Long familyId) {
+		int flag = 1;
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("familyId", familyId);
+		List<BoxTreasureFamily> treasures = boxTreasureMapper.getFamilyTreasureByBoxId(boxId);
+		//查看是否满柜
+		int freeCount = componentMapper.countFamilyFreeCabinet(paramMap);
+		if (freeCount == 0) {
+			LOG.info("道具箱已满");
+			flag=0;
+			return flag;
 //		   throw new RuntimeException("满柜了");
-	   }
-	   for(BoxTreasureFamily treasure:treasures){
-		   //插入用户零件库
-		   DicComponent component=DicComponentConstant.getDicComponent(treasure.getComponentId());
-		   ComponentFamily cmpFamily=new ComponentFamily();
-		   cmpFamily.setComponentId(component.getComponentId());
-		   cmpFamily.setGainType(treasure.getGainType());
-		   cmpFamily.setComponentType(component.getComponentType());
-		   cmpFamily.setFamilyId(familyId);
-		   cmpFamily.setComponentStatus(1);
-		   componentMapper.insertComponentFamily(cmpFamily);
-	   }
-	   //更新领取记录
-	   boxTreasureMapper.receiveBoxFamily(boxId);
-	   
-	   return true;
-   }  
+		}
+
+		//更新领取记录
+		int i = boxTreasureMapper.receiveBoxFamily(boxId);
+		if (i == 0) {
+			flag = -1;
+		} else {
+			for (BoxTreasureFamily treasure : treasures) {
+				//插入用户零件库
+				DicComponent component = DicComponentConstant.getDicComponent(treasure.getComponentId());
+				ComponentFamily cmpFamily = new ComponentFamily();
+				cmpFamily.setComponentId(component.getComponentId());
+				cmpFamily.setGainType(treasure.getGainType());
+				cmpFamily.setComponentType(component.getComponentType());
+				cmpFamily.setFamilyId(familyId);
+				cmpFamily.setComponentStatus(1);
+				componentMapper.insertComponentFamily(cmpFamily);
+			}
+		}
+
+		return flag;
+	}
    
 	@Transactional
 	public boolean receiveUserBoxBySys(Long userId) {
