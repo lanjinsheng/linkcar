@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DicService extends BaseService<DicService> {
@@ -96,6 +93,13 @@ public class DicService extends BaseService<DicService> {
 	
 	public List<Map<String, String>> getRulesByType(int ruleType) {
 		List<Map<String, String>> list = dicRuleMapper.getRulesByType(ruleType);
+
+		if (ruleType == 1) {
+			Map<String, String> temp = new HashMap<>();
+			temp.put("subtitle", "偷动力，贴条，缴罚单，擦车");
+			list.add(1,temp);
+		}
+
 		return list;
 	}
 	

@@ -47,7 +47,7 @@ String colHost = Constant.colHost;
 				columns:[[
 					{title:'更新时间',field:'ctime',width:100,align:'center'},
 					{title:'二级域名',field:'ejym',width:100,align:'center',formatter:function(value,rowData,rowIndex){
-	                    return "http://hd.idata365.com";
+	                    return rowData.sld;
 					}},
 					{title:'来源相对地址',field:'fromUrl',width:100,align:'center'},
 					{title:'跳转地址',field:'toUrl',width:300,align:'center'},
@@ -58,7 +58,7 @@ String colHost = Constant.colHost;
 	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:editRouter('"+id+"','"+fromUrl+"','"+toUrl+"');\"> 点击编辑</span>";
 					}},
 					{title:'源地址二维码',field:'ydzewm',width:100,align:'center',formatter:function(value,rowData,rowIndex){
-					    var url="http://hd.idata365.com"+rowData.fromUrl;
+					    var url=rowData.sld+rowData.fromUrl;
 	                    return "<span style=\"text-decoration:underline\" onclick=\"javascript:createQrCode('"+url+"');\"> 点击生成二维码</span>";
 					}}
 					 
