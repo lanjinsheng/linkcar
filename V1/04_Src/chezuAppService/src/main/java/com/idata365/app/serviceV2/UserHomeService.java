@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.mapper.*;
+import com.netflix.discovery.converters.Auto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,6 @@ import com.idata365.app.entity.DicCar;
 import com.idata365.app.entity.UserCar;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.v2.DicComponent;
-import com.idata365.app.mapper.DicCarMapper;
-import com.idata365.app.mapper.DicComponentMapper;
-import com.idata365.app.mapper.InteractLogsMapper;
-import com.idata365.app.mapper.UserCarMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.FamilyService;
@@ -53,6 +51,8 @@ public class UserHomeService extends BaseService<UserHomeService>{
 	private UserCarMapper userCarMapper;
 	@Autowired
 	private InteractLogsMapper interactLogsMapper;
+	@Autowired
+	private ComponentMapper componentMapper;
 	
 	/**
 	 * 
@@ -132,7 +132,14 @@ public class UserHomeService extends BaseService<UserHomeService>{
 		} else {
 			rtMap.put("isCanCleanCar", "1");
 		}
-		
+
+		//是否有新配件
+		int hadNewCompU = componentMapper.queryHadNewCompU(userId);
+		if (hadNewCompU > 0) {
+			rtMap.put("hadNewCompU", "1");
+		} else {
+			rtMap.put("hadNewCompU", "0");
+		}
 		return rtMap;
 	}
 
@@ -166,8 +173,6 @@ public class UserHomeService extends BaseService<UserHomeService>{
 			map.put("componentDesc", "");
 			map.put("componentAttribute", "");
 			map.put("componentLoss", "");
-			map.put("componentAttribute", "");
-			map.put("componentDesc", "");
 			map.put("componentType", "");
 			map.put("componentRemainingLossCount","");
 			if (list != null && list.size() != 0) {

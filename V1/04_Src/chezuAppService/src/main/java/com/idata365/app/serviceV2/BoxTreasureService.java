@@ -218,6 +218,7 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 				cmpUser.setUserId(userId);
 				cmpUser.setInUse(0);
 				cmpUser.setComponentStatus(1);
+				cmpUser.setHadLooked(0);
 				componentMapper.insertComponentUser(cmpUser);
 			}
 		}
@@ -283,6 +284,7 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		cmpUser.setUserId(userId);
 		cmpUser.setInUse(0);
 		cmpUser.setComponentStatus(1);
+		cmpUser.setHadLooked(0);
 		componentMapper.insertComponentUser(cmpUser);
 
 		return true;

@@ -82,4 +82,8 @@ public interface ComponentMapper {
 	public int countAllotGive(@Param("userId") Long userId);
 	
 	public int countSendRequest(@Param("userId") Long userId);
+
+	public int updateCompUHadLooked(@Param("userId") Long userId);
+
+	public int queryHadNewCompU(@Param("userId") Long userId);
 }

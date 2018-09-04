@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.idata365.app.mapper.InteractLogsMapper">
-   <resultMap id="BaseLogsMap" type="com.idata365.app.entity.InteractLogs" >
+    <resultMap id="BaseLogsMap" type="com.idata365.app.entity.InteractLogs" >
     </resultMap>
-	<insert id="insertLog" useGeneratedKeys="true" keyProperty="id" 
-	parameterType="com.idata365.app.entity.InteractLogs">
+    <insert id="insertLog" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.idata365.app.entity.InteractLogs">
 		INSERT   INTO
 		interactLogs
 		(userIdA,userNameA,userIdB,userNameB,eventType,someValue,createTime,userCarId)
-		values(#{userIdA}, #{userNameA}, #{userIdB}, #{userNameB}, #{eventType}, #{someValue}, now(),#{userCarId}) 
+		values(#{userIdA}, #{userNameA}, #{userIdB}, #{userNameB}, #{eventType}, #{someValue}, now(),#{userCarId})
 	</insert>
-	
-   <select id="getUserAByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
+
+    <select id="getUserAByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
       select a.*,DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') createTimeStr
-       		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdA=#{userId} 
-       		order by a.id desc 
+       		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdA=#{userId}
+       		order by a.id desc
        		limit 5
    </select>
- 
- 
+
+
     <select id="getUserBByUserId" resultMap="BaseLogsMap" parameterType="java.util.HashMap">
         select a.*,DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') createTimeStr
        		FROM  interactLogs  a where a.id<![CDATA[<]]>${id} and a.userIdB=#{userId} and a.userIdA!=#{userId}
-       		order by a.id desc 
+       		order by a.id desc
        		 limit 5
    </select>
-   
-   <select id="getHadComeOn" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-      select count(1) 
+
+    <select id="getHadComeOn" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+      select count(1)
        		FROM  interactLogs  where date(createTime)=#{daystamp} and userIdA=#{userIdA}
        		 and userIdB=#{userIdB} and eventType=1
    </select>
-   
-   <select id="userLikeMissionCount" resultType="java.lang.Integer">
-      select count(1) 
+
+    <select id="userLikeMissionCount" resultType="java.lang.Integer">
+      select count(1)
        		FROM  interactLogs  where userIdA=#{userIdA} and eventType=1 and date(createTime)=date(now())
    </select>
-   
-   <select id="userCleanCarCount" resultType="java.lang.Integer">
-      select count(1) 
+
+    <select id="userCleanCarCount" resultType="java.lang.Integer">
+      select count(1)
        		FROM  interactLogs where userIdA=#{userIdA} and userIdB!=#{userIdA} and eventType=7 and date(createTime)=date(now())
    </select>
-   
-   <select id="queryLikeCount" resultType="java.lang.Integer">
+
+    <select id="queryLikeCount" resultType="java.lang.Integer">
       select count(1) from interactLogs where userIdB=#{userIdB} and eventType=1
    </select>
-   
-   <select id="queryIsCanCleanCar" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+
+    <select id="queryIsCanCleanCar" resultType="java.lang.Integer" parameterType="java.util.HashMap">
       select count(1) FROM  interactLogs  where createTime>#{daystamp} and userCarId=#{userCarId} and eventType=7
    </select>
-    
+
+    <select id="validCleanCarPowerUp" resultType="java.lang.Integer" >
+      SELECT count(1) FROM interactLogs where userCarId=#{userCarId} and eventType=7 and now()>createTime and date_add(createTime, interval 3 hour)>now()
+
+   </select>
+
 </mapper>

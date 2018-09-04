@@ -106,6 +106,9 @@ public class ComponentService extends BaseService<ComponentService> {
 		   rtMap.put("componentHHS",  componentHHS) ;
 		   rtMap.put("componentSCP",  componentSCP) ;
 		   rtMap.put("componentXDC",  componentXDC) ;
+
+		   componentMapper.updateCompUHadLooked(userId);
+
 		   return rtMap;
 	   }
 	   
@@ -287,6 +290,7 @@ public class ComponentService extends BaseService<ComponentService> {
 		   componentUser.setInUse(0);
 		   componentUser.setLeftTravelNum(dicComponent.getTravelNum());
 		   componentUser.setUserId(log.getToUserId());
+		   componentUser.setHadLooked(0);
 		   //插入道具
 		   componentMapper.insertComponentUser(componentUser);
 		   //更新ComponentGiveLog 为已领取
@@ -368,74 +372,75 @@ public class ComponentService extends BaseService<ComponentService> {
 	    	}
 		  return null;
 	  }
-	  public Map<String,Object> listPraying(long userId,String imgBase){
 
-			Map<String,Object> rtMap=new HashMap<>();
-			List<Map<String,Object>> prayingList=new ArrayList<>();
-			List<Map<String, Object>> list=familyMapper.getFamilyByUserId(userId);
-			Map<Long,Object> usersKey=new HashMap<>();	 
-			
-			Map<String,Object> paramMap=new HashMap<>();
-			paramMap.put("daystamp", DateTools.getYYYYMMDD());
-			Map<String,Object> keyMap=new HashMap<>();
-			List<Map<String,Object>> groupNum=componentMapper.getFreeComponentUserGroupType(userId);
-			for(Map<String,Object> freeComp:groupNum){
-				keyMap.put(String.valueOf(freeComp.get("componentType")), freeComp.get("hadNum"));
-			}
-			
-			for(Map<String,Object> map:list){//俱乐部循环
-			Long familyId =Long.valueOf(map.get("familyId").toString());
-		  //获取俱乐部成员列表
-			List<Map<String,Object>> users=familyMapper.getFamilyUsersMoreInfo(familyId);
-			for(Map<String,Object> user:users){//成员循环
-				Long memberId=Long.valueOf(user.get("userId").toString());
+	public Map<String, Object> listPraying(long userId, String imgBase) {
+
+		Map<String, Object> rtMap = new HashMap<>();
+		List<Map<String, Object>> prayingList = new ArrayList<>();
+		List<Map<String, Object>> list = familyMapper.getFamilyByUserId(userId);
+		Map<Long, Object> usersKey = new HashMap<>();
+
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("daystamp", DateTools.getYYYYMMDD());
+		Map<String, Object> keyMap = new HashMap<>();
+		List<Map<String, Object>> groupNum = componentMapper.getFreeComponentUserGroupType(userId);
+		for (Map<String, Object> freeComp : groupNum) {
+			keyMap.put(String.valueOf(freeComp.get("componentType")), freeComp.get("hadNum"));
+		}
+
+		for (Map<String, Object> map : list) {//俱乐部循环
+			Long familyId = Long.valueOf(map.get("familyId").toString());
+			//获取俱乐部成员列表
+			List<Map<String, Object>> users = familyMapper.getFamilyUsersMoreInfo(familyId);
+			for (Map<String, Object> user : users) {//成员循环
+				Long memberId = Long.valueOf(user.get("userId").toString());
 				paramMap.put("userId", memberId);
-				ComponentGiveLog componentGiveLog=componentMapper.findComponentGiveLogByMap(paramMap);
-				if(usersKey.get(memberId)!=null){
+				ComponentGiveLog componentGiveLog = componentMapper.findComponentGiveLogByMap(paramMap);
+				if (usersKey.get(memberId) != null) {
 					continue;
 				}
 				usersKey.put(memberId, "1");
-				if(componentGiveLog==null){
+				if (componentGiveLog == null) {
 					continue;
-				}else{
-					Map<String,Object> m=new HashMap<>();	
+				} else {
+					Map<String, Object> m = new HashMap<>();
 					m.put("componentGiveLogId", String.valueOf(componentGiveLog.getId()));
 					m.put("userId", String.valueOf(memberId));
 					m.put("logType", "2");
-					m.put("headImg", imgBase+user.get("imgUrl"));
+					m.put("headImg", imgBase + user.get("imgUrl"));
 					m.put("nick", user.get("nickName"));
-				
-					DicComponent dicComponent= DicComponentConstant.getDicComponent(componentGiveLog.getComponentId());
+
+					DicComponent dicComponent = DicComponentConstant.getDicComponent(componentGiveLog.getComponentId());
 					m.put("imgUrl", dicComponent.getComponentUrl());
-					int hadNum=0;
-					if(keyMap.get(dicComponent.getComponentType().toString())!=null){
-						hadNum=Integer.valueOf(keyMap.get(dicComponent.getComponentType().toString()).toString());	
+					int hadNum = 0;
+					if (keyMap.get(dicComponent.getComponentType().toString()) != null) {
+						hadNum = Integer.valueOf(keyMap.get(dicComponent.getComponentType().toString()).toString());
 					}
 					m.put("hadNum", hadNum);
-					
+
 					//0：自己	1：无多余零件	2：已受赠	3：可赠送
-					if(memberId.longValue()==userId ){
+					if (memberId.longValue() == userId) {
 						m.put("showGiven", "0");
-					}else if(hadNum == 0){
+					} else if (hadNum == 0) {
 						m.put("showGiven", "1");
-					}else {
+					} else {
 						m.put("showGiven", "3");
 					}
-					if(componentGiveLog.getGiveStatus() == 1||componentGiveLog.getGiveStatus() == 2) {
+					if (componentGiveLog.getGiveStatus() == 1 || componentGiveLog.getGiveStatus() == 2) {
 						m.put("showGiven", "2");
 					}
-					
+
 					prayingList.add(m);
 				}
-				
+
 			}
-			
+
 		}
-			int i = componentMapper.countOfPray(userId);
-			rtMap.put("isCanPray", i > 0 ? "0" : "1");
-			rtMap.put("prayingList", prayingList);
-		  return rtMap;
-	  }
+		int i = componentMapper.countOfPray(userId);
+		rtMap.put("isCanPray", i > 0 ? "0" : "1");
+		rtMap.put("prayingList", prayingList);
+		return rtMap;
+	}
 	  @Transactional
 	  public int  submitPraying(Integer componentId,Long userId,String nick){
 		  DicComponent dicComponent=DicComponentConstant.getDicComponent(componentId);

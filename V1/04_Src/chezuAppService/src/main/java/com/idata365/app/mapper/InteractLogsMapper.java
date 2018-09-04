@@ -25,4 +25,7 @@ public interface InteractLogsMapper {
 	int userCleanCarCount(@Param("userIdA") long userIdA);
 
 	int queryIsCanCleanCar(Map<String,Object> map);
+
+	int validCleanCarPowerUp(@Param("userCarId") long userCarId);
+
 }

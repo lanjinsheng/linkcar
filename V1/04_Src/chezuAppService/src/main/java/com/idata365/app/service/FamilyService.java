@@ -398,7 +398,15 @@ public class FamilyService extends BaseService<FamilyService> {
 		familyMapper.addFamilyMemberNum(bean.getFamilyId());
 		// familyMapper.updateFamilyActiveLevel(bean.getFamilyId());
 
-		return 3;
+		//修改用户配置
+        UserConfig config = new UserConfig();
+        config.setUserId(bean.getUserId());
+        config.setType(2);
+        config.setUpdateTime(new Date());
+        config.setUserConfigValue(0);
+        userConfigMapper.updateUserConfig(config);
+
+        return 3;
 	}
 
 	/**

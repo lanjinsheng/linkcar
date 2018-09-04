@@ -18,8 +18,16 @@ public class ComponentUser implements Serializable{
 	private Integer gainType;
 	private Integer componentType;
 	private Long userCarId;
-	
-	
+	private Integer hadLooked;
+
+	public Integer getHadLooked() {
+		return hadLooked;
+	}
+
+	public void setHadLooked(Integer hadLooked) {
+		this.hadLooked = hadLooked;
+	}
+
 	public Long getUserCarId() {
 		return userCarId;
 	}

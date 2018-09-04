@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.idata365.mapper.app.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,6 @@ import com.idata365.entity.UserFamilyRoleLog;
 import com.idata365.entity.UserRoleLog;
 import com.idata365.entity.UserScoreDayStat;
 import com.idata365.entity.UserTravelHistory;
-import com.idata365.mapper.app.CarMapper;
-import com.idata365.mapper.app.CarpoolMapper;
-import com.idata365.mapper.app.FamilyInfoMapper;
-import com.idata365.mapper.app.InteractPeccancyMapper;
-import com.idata365.mapper.app.InteractTempCarMapper;
-import com.idata365.mapper.app.ParkStationMapper;
-import com.idata365.mapper.app.TaskAchieveAddValueMapper;
-import com.idata365.mapper.app.TaskPowerLogsMapper;
-import com.idata365.mapper.app.UserFamilyLogsMapper;
-import com.idata365.mapper.app.UserScoreDayStatMapper;
-import com.idata365.mapper.app.UserTravelHistoryMapper;
 import com.idata365.util.RandUtils;
 
 @Service
@@ -78,6 +68,10 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	CarMapper carMapper;
 	@Autowired
 	ServiceConstant serviceConstant;
+	@Autowired
+	InteractLogsMapper interactLogsMapper;
+
+
  //任务执行
 //	void lockCalScoreTask(CalDriveTask driveScore);
 	@Transactional
@@ -272,7 +266,13 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		 carMapper.updateCarComponents(Long.valueOf(comp.get("id").toString()));
 		 carMapper.insertComponentUserUseLog(comp);
 		}
-		power=(int)(calPower*(1+addCar-reduce));
+		double clearCarUp = Double.valueOf(0);
+		int valid = interactLogsMapper.validCleanCarPowerUp(uth.getUserCarId());
+		if (valid > 0) {
+			clearCarUp = 0.1;
+		}
+
+		power=(int)(calPower*(1+addCar-reduce+clearCarUp));
 		//插入power任务
 		TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
     	taskPowerLogs.setUserId(uth.getUserId());

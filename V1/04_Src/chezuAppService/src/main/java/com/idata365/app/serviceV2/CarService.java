@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.idata365.app.entity.*;
+import com.idata365.app.mapper.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,23 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.idata365.app.constant.DicCarConstant;
-import com.idata365.app.entity.CarListResultBean;
-import com.idata365.app.entity.Carpool;
-import com.idata365.app.entity.CarpoolApprove;
-import com.idata365.app.entity.DicCar;
-import com.idata365.app.entity.Message;
-import com.idata365.app.entity.UserCar;
-import com.idata365.app.entity.UserCarLogs;
 import com.idata365.app.enums.MessageEnum;
-import com.idata365.app.mapper.CarpoolApproveMapper;
-import com.idata365.app.mapper.CarpoolMapper;
-import com.idata365.app.mapper.DicCarMapper;
-import com.idata365.app.mapper.DicComponentMapper;
-import com.idata365.app.mapper.FamilyMapper;
-import com.idata365.app.mapper.InteractPeccancyMapper;
-import com.idata365.app.mapper.UserCarLogsMapper;
-import com.idata365.app.mapper.UserCarMapper;
-import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.service.BaseService;
 import com.idata365.app.service.MessageService;
 import com.idata365.app.util.DateTools;
@@ -70,6 +56,8 @@ public class CarService extends BaseService<CarService> {
     InteractPeccancyMapper interactPeccancyMapper;
     @Autowired
     DicComponentMapper dicComponentMapper;
+	@Autowired
+	InteractLogsMapper interactLogsMapper;
     
 	public CarService() {
 
@@ -477,10 +465,10 @@ public class CarService extends BaseService<CarService> {
 	}
 	
 	// 动力加成部分
-	public Map<String, String> getPowerUpInfo(long userId,int carId,long carCarId){
+	public Map<String, String> getPowerUpInfo(long userId,int carId,long userCarId){
 		Map<String, String> powerUpInfo = new HashMap<>();
 		// 配件加成
-		Double dd = dicComponentMapper.getCountCurComponentByUserIdCarId(userId, carCarId);
+		Double dd = dicComponentMapper.getCountCurComponentByUserIdCarId(userId, userCarId);
 		powerUpInfo.put("partsUpPercent", "配件加成：" + Math.round(dd * 100) + "%");
 		// 搭车加成
 		int sitsCount = this.carpoolMapper.querySitsNumById(userId, carId);
@@ -492,8 +480,15 @@ public class CarService extends BaseService<CarService> {
 		pamMap.put("endLong", System.currentTimeMillis());
 		int iPCount = interactPeccancyMapper.getUserPeccancyCount(pamMap);
 		powerUpInfo.put("ticketDebuffPercent", "贴条减益：-" + iPCount * 10 + "%");
+		//擦车加成
+		int clearCarUp = 0;
+		int valid = interactLogsMapper.validCleanCarPowerUp(userCarId);
+		if (valid > 0) {
+			clearCarUp=1;
+		}
+		powerUpInfo.put("clearCarPercent", "擦车加成：-" + clearCarUp * 10 + "%");
 		// 动力加成
-		powerUpInfo.put("powerUpPercent", "动力加成：" + (Math.round(dd * 100) + sitsCount*10 - iPCount*10) + "%");
+		powerUpInfo.put("powerUpPercent", "动力加成：" + (Math.round(dd * 100) + sitsCount*10 - iPCount*10+clearCarUp*10) + "%");
 		return powerUpInfo;
 	}
 	
