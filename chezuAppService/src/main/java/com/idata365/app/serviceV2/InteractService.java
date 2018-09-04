@@ -413,7 +413,7 @@ public class InteractService extends BaseService<InteractService> {
 				}else if(type==InteractConstant.PAY_PECCANCY_OTHER_HELP){
 					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您交了罚金"+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.CLEAN_CAR){
-					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您擦了车");
+					m.put("log", String.format("【%s】",log.getUserNameA())+" 帮您擦了车,3小时内动力加成10%");
 				}
 				m.put("interactUserId", log.getUserIdA().toString());
 				rtList.add(m);
@@ -462,7 +462,7 @@ public class InteractService extends BaseService<InteractService> {
 					m.put("log", "帮 "+String.format("【%s】",log.getUserNameB())+"缴了罚金"+log.getSomeValue()+"点动力");
 				}else if(type==InteractConstant.CLEAN_CAR){
 					if(log.getUserIdA()==userId) {
-						m.put("log", "给自己擦了车");
+						m.put("log", "给自己擦了车,3小时内动力加成10%");
 					}else {
 						m.put("log", "帮 "+String.format("【%s】",log.getUserNameB())+"擦了车");
 					}

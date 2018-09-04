@@ -80,9 +80,14 @@
 	 where id=#{id}
 </select>
  
-<select id="findComponentGiveLogByMap" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
+<!--<select id="findComponentGiveLogByMap" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
 	select * from componentGiveLog 
 	 where daystamp=#{daystamp} and logType=2 and toUserId=#{userId}
+</select>-->
+
+<select id="findComponentGiveLogByMap" parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentGiveLog">
+    select * from componentGiveLog
+	where (daystamp=#{daystamp} and logType=2 and toUserId=#{userId} and giveStatus!=0) or (logType=2 and toUserId=#{userId} and giveStatus=0) order by eventTime desc limit 1
 </select>
      
      
@@ -164,9 +169,13 @@
           set giveStatus=#{giveStatus},operationManId=#{operationManId} where fromComponentId=#{fromComponentId}
           and logType=3 and id!=#{id}
 </update> 
-<select id="countOfPray" resultType="Integer">
+<!--<select id="countOfPray" resultType="Integer">
 	SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' ) AND logType =2
-</select> 
+</select>-->
+
+<select id="countOfPray" resultType="Integer">
+	 SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND logType =2 AND ((date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' ))or(giveStatus=0))
+</select>
 
 <select id="countHadRequest" resultType="Integer">
 	SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND daystamp =#{daystamp} AND logType =3 AND (giveStatus=2 or giveStatus=1)
@@ -183,5 +192,15 @@
 <select id="countSendRequest" resultType="Integer">
 	SELECT COUNT(1) FROM componentGiveLog WHERE operationManId = #{userId} AND logType =2
 </select>
-    
+
+<update id="updateCompUHadLooked" >
+      update
+      componentUser
+      set hadLooked=1 where userId=#{userId} and hadLooked=0
+</update>
+
+<select id="queryHadNewCompU" resultType="Integer">
+  SELECT COUNT(1) FROM componentUser WHERE userId=#{userId} and hadLooked=0
+</select>
+
 </mapper>
