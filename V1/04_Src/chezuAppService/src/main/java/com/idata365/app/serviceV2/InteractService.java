@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.idata365.app.config.CheZuAppProperties;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ public class InteractService extends BaseService<InteractService> {
  
  @Autowired 
  ChezuAssetService chezuAssetService;
+ @Autowired
+ CheZuAppProperties appProperties;
 	public InteractService() {
 
 	}
@@ -544,7 +547,7 @@ public class InteractService extends BaseService<InteractService> {
 				long endLong=System.currentTimeMillis()+(10*3600*1000);
 				interactPeccancy.setEndLong(endLong);
 				String createTime=DateTools.getCurDate("yyyy-MM-dd HH:mm:ss");
-				String endTime=DateTools.getAddMinuteDateTime(createTime, 600);
+				String endTime=DateTools.getAddMinuteDateTime(createTime, appProperties.getPeccancyTime());
 				interactPeccancy.setEndTimeStr(endTime);
 				interactPeccancy.setCreateTimeStr(createTime);
 				interactPeccancy.setCarId(r.getCarId());

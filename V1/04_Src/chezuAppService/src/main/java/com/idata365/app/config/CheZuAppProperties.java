@@ -45,7 +45,7 @@ public class CheZuAppProperties {
     private Long cardinalNumG = 300L;
 
     //视频任务奖励动力值
-    private Integer adPowerNum = 30;
+    private Integer adPowerNum = 20;
     //活动任务奖励动力增长值
     private Integer actPowerAddNum = 40;
 
@@ -58,6 +58,17 @@ public class CheZuAppProperties {
     private Double loss = 1D;
     //平局
     private Double dogfall = 1.5D;
+
+    //贴条存在时间
+    private Integer peccancyTime = 720;
+
+    public Integer getPeccancyTime() {
+        return peccancyTime;
+    }
+
+    public void setPeccancyTime(Integer peccancyTime) {
+        this.peccancyTime = peccancyTime;
+    }
 
     public Double getOverSpeedAllScore() {
         return overSpeedAllScore;
