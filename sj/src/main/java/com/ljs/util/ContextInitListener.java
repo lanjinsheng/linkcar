@@ -26,6 +26,7 @@ public class ContextInitListener  implements  ServletContextListener {
             CommentUtil.appUrl = (String)props.getProperty("appUrl");
             CommentUtil.shopUrl = (String)props.getProperty("shopUrl");
             CommentUtil.accountUrl = (String)props.getProperty("accountUrl");
+            CommentUtil.assetUrl = (String)props.getProperty("assetUrl");
             Constant.colHost=props.getProperty("colHost");
         } catch (IOException ex) { 
             ex.printStackTrace(); 

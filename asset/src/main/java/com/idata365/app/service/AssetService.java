@@ -592,7 +592,7 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersPowerLogs.setCreateTime(new Date());
 		assetUsersPowerLogs.setEventType(3);
 		assetUsersPowerLogs.setRecordType(1);
-		assetUsersPowerLogs.setRemark("");
+		assetUsersPowerLogs.setRemark(AssetConstant.UserPowerEventMap.get(3));
 		this.addUserPowers(assetUsersPowerLogs);
 
 		// 修改俱乐部相关数据
@@ -1090,5 +1090,9 @@ public class AssetService extends BaseService<AssetService> {
 			powerNum = 0L;
 		}
 		return powerNum;
+	}
+
+	public List<Map<String, Object>> queryPowerStatistics(Integer day){
+		return assetUsersPowerLogsMapper.queryPowerStatistics(day);
 	}
 }

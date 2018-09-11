@@ -93,4 +93,8 @@
 	<select id="queryMaxActPowerByTimeAndUserId" resultType="java.lang.Long">
 		SELECT IFNULL(sum( powerNum ),0) AS sum FROM assetUsersPowerLogs WHERE eventType = 198 AND DATE_FORMAT( createTime, '%Y%m%d' ) = #{daystamp} and userId=#{userId}
 	</select>
+
+	<select id="queryPowerStatistics"  resultType="java.util.HashMap" >
+		select remark as name,IFNULL(sum(powerNum),0) as value,eventType from assetUsersPowerLogs where date(createTime)>=date(date_add(now(), interval -#{day} day)) GROUP BY eventType
+	 </select>
 </mapper>

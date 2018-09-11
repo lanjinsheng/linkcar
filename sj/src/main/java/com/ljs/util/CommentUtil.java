@@ -15,7 +15,8 @@ public class CommentUtil {
 	public static String appUrl = "";
 	public static String shopUrl = "";
 	public static String accountUrl = "";
-	public static boolean createDir(String destDirName) {  
+	public static String assetUrl = "";
+	public static boolean createDir(String destDirName) {
         File dir = new File(destDirName);  
         if (dir.exists()) {  
             System.out.println("创建目录" + destDirName + "失败，目标目录已经存在");  
