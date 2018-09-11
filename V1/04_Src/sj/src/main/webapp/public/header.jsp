@@ -26,3 +26,4 @@ function openDialogResize(URL,width,height)
   <script type="text/javascript" src="<%=contextPath %>/public/js/json2.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/js/core.js"></script>
   <script type="text/javascript" src="<%=contextPath %>/public/js/qrious.min.js"></script>
+  <script type="text/javascript" src="<%=contextPath %>/public/js/echarts.js"></script>

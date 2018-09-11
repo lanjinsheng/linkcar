@@ -4,14 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.util.ServerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.idata365.app.constant.AssetConstant;
 import com.idata365.app.entity.AssetFamiliesPowerLogs;
@@ -27,6 +24,8 @@ import com.idata365.app.service.FamilySeasonAssetService;
 import com.idata365.app.service.TaskAutoAddService;
 import com.idata365.app.util.GsonUtils;
 import com.idata365.app.util.SignUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class AssetController extends BaseController {
@@ -649,6 +648,19 @@ public class AssetController extends BaseController {
 		LOG.info("queryMaxActPowerByTimeAndUserId·~~~controller");
 		long powerNum = assetService.queryMaxActPowerByTimeAndUserId(daystamp,userId);
 		return powerNum;
+	}
+
+	@RequestMapping(value = "/ment/queryPowerStatistics", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public @ResponseBody String queryPagePowerStatistics(HttpServletRequest request) {
+		Map<String, Object> map = this.getPagerMap(request);
+		map.putAll(requestParameterToMap(request));
+
+		List<Map<String, Object>> list = assetService.queryPowerStatistics(Integer.valueOf(map.get("day").toString()));
+		StringBuffer sb = new StringBuffer("");
+		sb.append(ServerUtil.toJson(list));
+		ServerUtil.putSuccess(map);
+		return sb.toString();
 	}
 	
 	public static void main(String[] args) {
