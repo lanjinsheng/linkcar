@@ -1051,18 +1051,21 @@ public class MessageService extends BaseService<MessageService>{
 		}
 	}
 
-  /**
-   * 
-      * @Title: updateRead
-      * @Description: TODO(这里用一句话描述这个方法的作用)
-      * @param @param msgId    参数
-      * @return void    返回类型
-      * @throws
-      * @author LanYeYe
-   */
-   public void updateRead(Long msgId) {
-	   messageMapper.updateRead(msgId);
-   }
+	/**
+	 * @param @param msgId    参数
+	 * @return void    返回类型
+	 * @throws
+	 * @Title: updateRead
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @author LanYeYe
+	 */
+	public void updateRead(Long msgId) {
+		messageMapper.updateRead(msgId);
+	}
+
+	public void updateReadAll(Integer msgType) {
+		messageMapper.updateReadAll(msgType);
+	}
    /**
     * 
        * @Title: getMsgListByType

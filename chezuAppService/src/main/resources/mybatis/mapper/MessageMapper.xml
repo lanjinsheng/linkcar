@@ -26,6 +26,12 @@
             message
              set isRead=1,readTime=now() where id=#{msgId} and isRead=0;
     </update>
+
+    <update id="updateReadAll"    parameterType="java.lang.Integer" >
+      update
+            message
+             set isRead=1,readTime=now() where parentType=#{msgType} and isRead=0;
+    </update>
  
      
      
