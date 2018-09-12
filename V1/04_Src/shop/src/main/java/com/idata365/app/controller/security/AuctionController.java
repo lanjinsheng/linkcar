@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.remote.ChezuAppService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,8 @@ public class AuctionController extends BaseController {
 	ChezuImService chezuImService;
 	@Autowired
 	ChezuAccountService chezuAccountService;
+	@Autowired
+	ChezuAppService chezuAppService;
 
 	@RequestMapping("/test/doTest2")
 	public Map<String, Object> doTest(@RequestParam(required = false) Map<String, String> allRequestParams,
@@ -405,6 +408,9 @@ public class AuctionController extends BaseController {
 			Map<String, Object> notifyAuction = chezuImService.notifyAuction(auctionBean,
 					String.valueOf(auctionService.joinPersons(auctionGoodsId)),
 					String.valueOf(auctionService.joinTimes(auctionGoodsId)));
+			if (1==1) {
+				chezuAppService.sendAuctionRobbedMsg(winnerId, auctionGoods.getPrizeName(), "sign");
+			}
 			HashMap<String, Object> datas = new HashMap<String, Object>();
 			datas.put("code", "1");
 			datas.put("msg", "交易成功");

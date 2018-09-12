@@ -65,9 +65,11 @@ public class MessageService extends BaseService<MessageService>{
 	public static final String AchieveMessage="新成就达成！来看看奖励吧！";
 	public static final String KaijiangMessage=H5Host+"share/lottery.html";
 	//兑换
+
 	public static final String ShopMessage="恭喜您兑换【%s】成功，工作人员会在1~3个工作日内处理您的兑换请求，请耐心等待通知";
 	public static final String GoodsSendMessage="您兑换的【%s】工作人员已经寄出，正在飞向您的路上，惊喜马上就到~";
-	
+
+	public static final String AuctionRobbedMassage="糟糕！您参与的竞拍 %s 被别人抢走啦，快去抢回来吧！";
 	public static final String AuctionFailMassage="您参与的竞拍 %s 被别人抢走啦，请继续关注我们的竞拍活动，下一个大奖就是你！";
 	public static final String AuctionSuccMassage="恭喜您成功拍下 %s ！请尽快填写相关信息，以便我们将奖品顺利无误的下发给您。";
 	public static final String AuctionExchangeMassage="您获拍的%s 已经由工作人员下发给您，请注意查看手机短信提示。您还可以继续关注我们其他的竞拍活动，各种大奖拿到手软！";
@@ -322,7 +324,24 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUrl(MyAuctionUrl);
 		return message;
 	}
-	
+
+	public Message buildAuctionRobbedMessage(Long toUserId,String goodsName) {
+		Message message=new Message();
+		message.setFromUserId(0L);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_Auction_Robbed);
+		message.setContent(String.format(AuctionRobbedMassage, goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("竞拍被抢");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(MyAuctionUrl);
+		return message;
+	}
 
 	public Message buildCarpoolApplyMessage(Long fromUserId,Long toUserId,String nickName,String carName) {
 		Message message=new Message();
