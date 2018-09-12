@@ -116,5 +116,25 @@ public class MessageController  extends BaseController {
         messageService.updateRead(msgId);
     	return ResultUtils.rtSuccess(null);
     }
+
+	/**
+	 *
+	 * @Title: getMsgListByType
+	 * @Description: TODO(获取某类消息列表)
+	 * @param @param allRequestParams
+	 * @param @param requestBodyParams
+	 * @param @return    参数
+	 * @return Map<String,Object>    返回类型
+	 * @throws
+	 * @author lcc
+	 */
+	@RequestMapping("/msg/hadReadAll")
+	public Map<String,Object> hadReadAll(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		if(requestBodyParams==null ||  ValidTools.isBlank(requestBodyParams.get("msgType")))
+			return ResultUtils.rtFailParam(null);
+		Integer msgType=Integer.valueOf(requestBodyParams.get("msgType").toString());
+		messageService.updateReadAll(msgType);
+		return ResultUtils.rtSuccess(null);
+	}
      
 }

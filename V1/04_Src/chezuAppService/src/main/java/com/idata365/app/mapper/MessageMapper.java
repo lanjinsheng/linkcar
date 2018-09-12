@@ -23,6 +23,8 @@ public interface MessageMapper {
 
 	void updateRead(@Param("msgId") Long msgId);
 
+	void updateReadAll(@Param("msgType") Integer msgType);
+
 	Message getMessageById(@Param("id") Long msgId);
 
 	void deleteMessage(int[] msgIds);
