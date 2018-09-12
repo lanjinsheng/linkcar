@@ -176,7 +176,22 @@ public class MessageOpenController {
     	}
     	 
     	return true;
-    } 
+    }
+
+    //竞拍被抢通知
+	@RequestMapping("/app/msg/sendAuctionRobbedMsg")
+	public boolean sendAuctionRobbedMsg(
+			@RequestParam(value = "userId") Long userId,
+			@RequestParam(value = "goodsName") String goodsName,
+			@RequestParam(value = "sign") String sign) {
+		LOG.info("param:" + userId + "==" + userId + "===" + goodsName + "===" + goodsName + "==sign=" + sign);
+		Message msg = messageService.buildAuctionRobbedMessage(userId, goodsName);
+		//插入消息
+		messageService.insertMessage(msg, MessageEnum.AuctionRobbed);
+		//用定时器推送
+		messageService.pushMessageTrans(msg, MessageEnum.AuctionRobbed);
+		return true;
+	}
     
     
     /**

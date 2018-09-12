@@ -9,9 +9,10 @@ public class MessageTypeConstant {
 	public static final int SystemType_VerifyIDCard_Ok=4;
 	public static final int SystemType_VerifyVehicleTravel_Ok=5;
 	//======競拍
-	public static final int SystemType_Auction_Fail=5;
-	public static final int SystemType_Auction_Succ=6;
-	public static final int SystemType_Auction_Exchange=7;
+	public static final int SystemType_Auction_Fail=5;//失败
+	public static final int SystemType_Auction_Succ=6;//成功
+	public static final int SystemType_Auction_Exchange=7;//发货
+	public static final int SystemType_Auction_Robbed=8;//被抢
 	
 	//个人消息
 	public static final int PersonType=2;

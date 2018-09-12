@@ -216,6 +216,10 @@ public class CalScoreServiceV2 extends BaseService<CalScoreServiceV2>{
         userTravelHistory.setDriveScore(String.valueOf(driveScore));
         userTravelHistory.setScore(String.valueOf(score));
         userTravelHistory.setUserCarId(userCarId);
+        //tiredDrive
+        if(driveTimes>=serviceConstant.getTiredHourMaxKey().intValue()*3600) {
+			userTravelHistory.setTiredDrive(driveTimes-serviceConstant.getTiredHourMaxKey().intValue()*3600);
+        }
 		userTravelHistoryMapper.updateTravelHistory(userTravelHistory);
 		return true;
 		

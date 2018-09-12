@@ -62,4 +62,9 @@ public interface ChezuAppService {
     		@RequestParam (value = "userIds") String userIds,
     		@RequestParam (value = "goodsName") String goodsName,
     		@RequestParam (value = "sign") String sign);
+
+    //竞拍被抢通知
+	@RequestMapping("/app/msg/sendAuctionRobbedMsg")
+	public boolean sendAuctionRobbedMsg(@RequestParam (value = "userId") Long userId,
+							   @RequestParam (value = "goodsName") String goodsName,@RequestParam (value = "sign") String sign);
 }
