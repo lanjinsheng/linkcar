@@ -16,7 +16,7 @@ public class ComponentFamily implements Serializable{
 	private Integer componentStatus;
 	private Integer gainType;
 	private Integer componentType;
-	
+	private Long effectId;
 	
 	public Integer getComponentType() {
 		return componentType;
@@ -67,5 +67,12 @@ public class ComponentFamily implements Serializable{
 	public void setGainType(Integer gainType) {
 		this.gainType = gainType;
 	}
-	 
+
+	public Long getEffectId() {
+		return effectId;
+	}
+
+	public void setEffectId(Long effectId) {
+		this.effectId = effectId;
+	}
 }

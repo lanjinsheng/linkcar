@@ -34,7 +34,7 @@
           (#{componentId},#{userId},now(),#{inUse},#{leftTravelNum},#{componentStatus},#{gainType},#{componentType})
 </insert> 
 
-<insert id="insertComponentUserUseLog"  parameterType="com.idata365.app.entity.v2.ComponentUser" >
+<insert id="insertComponentUserUseLog"  parameterType="com.idata365.app.entity.v2.ComponentUser" useGeneratedKeys="true" keyProperty="id">
      INSERT INTO 
           componentUserUseLog
           (componentId,userId,userComponentId,eventTime,eventType,userCarId) 
@@ -54,9 +54,9 @@
  <insert id="insertComponentFamily"  parameterType="com.idata365.app.entity.v2.ComponentUser" >
      INSERT INTO 
           componentFamily
-          (componentId,familyId,createTime,componentStatus,gainType,componentType) 
+          (componentId,familyId,createTime,componentStatus,gainType,componentType,effectId)
       VALUES
-          (#{componentId},#{familyId},now(),#{componentStatus},#{gainType},#{componentType})
+          (#{componentId},#{familyId},now(),#{componentStatus},#{gainType},#{componentType},#{effectId})
 </insert>
 
 

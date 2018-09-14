@@ -218,13 +218,16 @@ public class ComponentService extends BaseService<ComponentService> {
 				rtMap.put("members", list);
 		   return rtMap;
 	  }
-	  
-	  
-	  //分配列表 
-	  public Map<String,Object> getComponentGiveLog(long componentGiveLogId, Long userId){
+
+
+	//分配列表
+	public Map<String, Object> getComponentGiveLog(long componentGiveLogId, Long userId) {
 		Map<String, Object> rtMap = new HashMap<>();
 		ComponentGiveLog log = componentMapper.findComponentGiveLog(componentGiveLogId);
-		
+		if (log == null) {
+			return rtMap;
+		}
+
 		rtMap.put("logType", String.valueOf(log.getLogType()));
 		DicComponent dicComponent = DicComponentConstant.getDicComponent(log.getComponentId());
 		rtMap.put("componentName", dicComponent.getComponentValue());
@@ -236,42 +239,42 @@ public class ComponentService extends BaseService<ComponentService> {
 		rtMap.put("componentLoss", dicComponent.getTravelNum() + "次行程");
 		Integer status = log.getGiveStatus();
 		Long toUserId = log.getToUserId();
-		if(userId != toUserId) {
-			if(log.getLogType() == 3 && (status == 1||status==2)) {
+		if (userId != toUserId) {
+			if (log.getLogType() == 3 && (status == 1 || status == 2)) {
 				status = -2;
 			}
 		}
 		rtMap.put("giveStatus", String.valueOf(status));
-			
+
 		Long fromId = log.getFromId();
 		long userIdA = 0L;
-		if(log.getLogType() == 2) {
+		if (log.getLogType() == 2) {
 			userIdA = fromId;
-		}else {
+		} else {
 			userIdA = Long.valueOf(familyMapper.queryFamilyByFId(fromId).get("createUserId").toString());
 		}
-		
+
 		String nickNameA = usersAccountMapper.findAccountById(userIdA).getNickName();
 		String nickNameB = usersAccountMapper.findAccountById(toUserId).getNickName();
-	    if (log.getLogType() == 1 ) {
+		if (log.getLogType() == 1) {
 			rtMap.put("title", "零件分配");
 			rtMap.put("desc", "发福利了!俱乐部老板" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
-	    } else if (log.getLogType() == 2) {
+		} else if (log.getLogType() == 2) {
 			rtMap.put("title", "零件祈愿");
 			rtMap.put("desc", nickNameA + " 在俱乐部祈愿中给您赠送了一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级)!");
-	    } else if (log.getLogType() == 3){
-	    	if(userId == log.getToUserId()) {
-	    		rtMap.put("title", "零件分配");
+		} else if (log.getLogType() == 3) {
+			if (userId == log.getToUserId()) {
+				rtMap.put("title", "零件分配");
 				rtMap.put("desc", "发福利了!俱乐部老板" + nickNameA + "给您分配了一个 " + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),快去看看吧");
-	    	}else {
-	    		rtMap.put("title", "零件申请");
+			} else {
+				rtMap.put("title", "零件申请");
 				rtMap.put("desc", "俱乐部成员 " + nickNameB + " 在零件库中申请领取一个" + dicComponent.getComponentValue() + "(" + dicComponent.getQuality() + "级),是否同意发放?");
-	    	}
-			
-	    }
-		   
-	    return rtMap;
-	  }
+			}
+
+		}
+
+		return rtMap;
+	}
 	  
       //	  消息点击领取  (发放方已经销毁置位了，该领取只是对用户记录的增加)
 	  @Transactional
@@ -347,6 +350,9 @@ public class ComponentService extends BaseService<ComponentService> {
 	  @Transactional
 	  public Map<String,Object> sellComponent(long userComponentId,long userId){
 		  ComponentUser componentUser=componentMapper.getComponentUser(userComponentId);
+		  if (componentUser==null) {
+			  return null;
+		  }
 		  //插入componentUserUseLog
 		  ComponentUserUseLog log=new ComponentUserUseLog();
 		  log.setUserCarId(0L);
@@ -376,6 +382,53 @@ public class ComponentService extends BaseService<ComponentService> {
 	    	}
 		  return null;
 	  }
+
+	final String jsonValue2="{\"userId\":%d,\"power\":%d,\"effectId\":%d}";
+	@Transactional
+	public Map<String,Object> contributeComponent(long userComponentId,long userId,long familyId){
+		//Long joinFamilyId = familyMapper.queryJoinFamilyId(userId);
+		//if (joinFamilyId==null||joinFamilyId.longValue()==0) {
+		//	return null;
+		//}
+		ComponentUser componentUser=componentMapper.getComponentUser(userComponentId);
+		if (componentUser==null) {
+			return null;
+		}
+		//插入componentUserUseLog
+		ComponentUserUseLog log=new ComponentUserUseLog();
+		log.setUserCarId(0L);
+		log.setComponentId(componentUser.getComponentId());
+		log.setEventType(6);
+		log.setUserId(componentUser.getUserId());
+		log.setUserComponentId(userComponentId);
+		componentMapper.insertComponentUserUseLog(log);
+
+		//更新零件
+		Map<String,Object> userCompUpdate=new HashMap<>();
+		userCompUpdate.put("inUse", 0);
+		userCompUpdate.put("componentStatus", 5);
+		userCompUpdate.put("userComponentId", userComponentId);
+		componentMapper.updateUserComponent(userCompUpdate);
+		////获取奖励
+		//DicComponent dicComponent=DicComponentConstant.getDicComponent(componentUser.getComponentId());
+		//TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
+		//taskPowerLogs.setUserId(userId);
+		//taskPowerLogs.setTaskType(PowerEnum.SellComponent);
+		//int power=dicComponent.getPower();
+		////type =1  行程动力
+		//taskPowerLogs.setJsonValue(String.format(jsonValue2,userId,power,userComponentId));
+		//int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);
+		ComponentFamily c = new ComponentFamily();
+		c.setComponentId(componentUser.getComponentId());
+		c.setGainType(2);
+		c.setComponentType(componentUser.getComponentType());
+		c.setFamilyId(familyId);
+		c.setComponentStatus(1);
+		c.setEffectId(log.getId());
+		componentMapper.insertComponentFamily(c);
+		return new HashMap<>();
+
+	}
 
 	public Map<String, Object> listPraying(long userId, String imgBase) {
 
