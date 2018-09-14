@@ -128,6 +128,22 @@ public class ComponentController extends BaseController {
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
+
+	//配件贡献
+	@RequestMapping(value = "/contributeComponent")
+	Map<String, Object> contributeComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
+									  @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		long userComponentId=Long.valueOf(requestBodyParams.get("userComponentId").toString());
+		if (requestBodyParams.get("familyId")==null||requestBodyParams.get("familyId").equals("")) {
+			return ResultUtils.rtFailParam(null, "familyId参数不能为空");
+		}
+		long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		Map<String,Object> rtMap=componentService.contributeComponent(userComponentId,this.getUserId(),familyId);
+		if(rtMap==null){
+			return ResultUtils.rtFailParam(null, "贡献失败！");
+		}
+		return ResultUtils.rtSuccess(rtMap);
+	}
 	
 	//祈愿列表
 	@RequestMapping(value = "/listPraying")

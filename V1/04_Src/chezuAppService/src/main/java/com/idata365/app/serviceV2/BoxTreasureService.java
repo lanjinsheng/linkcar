@@ -255,6 +255,7 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 				cmpFamily.setComponentType(component.getComponentType());
 				cmpFamily.setFamilyId(familyId);
 				cmpFamily.setComponentStatus(1);
+				cmpFamily.setEffectId(0L);
 				componentMapper.insertComponentFamily(cmpFamily);
 			}
 		}
