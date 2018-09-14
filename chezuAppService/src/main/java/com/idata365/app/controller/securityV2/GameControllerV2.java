@@ -280,6 +280,13 @@ public class GameControllerV2 extends BaseController {
 			data.put("fightFamilyScore", fightFamilyScore);
 			data.put("fightFamilyName", fightFamilyName);
 			data.put("fightFamilyImg", super.getImgBasePath() + fightFamilyImg);
+			Integer trophy = familyDriveDayStat2.getTrophy();
+			if (trophy >= 0) {
+				data.put("trophy", "+"+trophy);
+			} else {
+				data.put("trophy", String.valueOf(trophy));
+			}
+
 			result.add(data);
 		}
 		rtMap.put("result", result);

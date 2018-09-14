@@ -31,7 +31,7 @@ public class ChezuImHystric implements ChezuImService {
 
 	@Override
 	public boolean prayingSubmit(String fromUserName, String toUserName,String toUserId,
-			String propName, String sign) {
+			String propName,String aInfo, String sign) {
 		// TODO Auto-generated method stub
 		LOG.error("prayingSubmit 挂了");
 		return false;

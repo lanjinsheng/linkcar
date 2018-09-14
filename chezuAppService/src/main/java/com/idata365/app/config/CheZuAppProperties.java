@@ -61,6 +61,15 @@ public class CheZuAppProperties {
 
     //贴条存在时间
     private Integer peccancyTime = 720;
+    private Integer maxAdCount;
+
+    public Integer getMaxAdCount() {
+        return maxAdCount;
+    }
+
+    public void setMaxAdCount(Integer maxAdCount) {
+        this.maxAdCount = maxAdCount;
+    }
 
     public Integer getPeccancyTime() {
         return peccancyTime;

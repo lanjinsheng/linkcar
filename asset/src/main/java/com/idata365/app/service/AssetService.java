@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.remote.ChezuAppService;
+import com.idata365.app.util.SignUtils;
 import org.apache.commons.lang3.RandomUtils;
 /**
  * 
@@ -71,6 +73,8 @@ public class AssetService extends BaseService<AssetService> {
 	FamilySeasonAssetMapper familySeasonAssetMapper;
 	@Autowired
 	AuctionUsersDiamondsLogsMapper auctionUsersDiamondsLogsMapper;
+	@Autowired
+	ChezuAppService chezuAppService;
 
 	public AssetService() {
 
@@ -743,56 +747,69 @@ public class AssetService extends BaseService<AssetService> {
 		return rtMap;
 	}
 	
-	public List<Map<String, Object>> getYestodayHarvestV2(long userId, long familyId) {
+	public List<Map<String, Object>> getYestodayHarvestV2(long userId) {
 		List<Map<String, Object>> rtList=new ArrayList<Map<String, Object>>();
+
 		Map<String, Object> rtMap1 = new HashMap<String, Object>();
-		Map<String, Object> rtMap2 = new HashMap<String, Object>();
-		Map<String, Object> rtMap3 = new HashMap<String, Object>();
 		Map<String, Object> parmMap = new HashMap<String, Object>();
 		parmMap.put("userId", userId);
 		parmMap.put("daystamp", DateTools.getCurDateYYYY_MM_DD());
 		String powerTable = "userPower" + DateTools.getCurDateAddDay(-1).replaceAll("-", "");
 		parmMap.put("powerTable", powerTable);
 		AssetUsersAsset yestodayPower = assetUsersAssetMapper.getYestodayPower(parmMap);
-		rtMap1.put("assetName", "个人获得动力");
+		rtMap1.put("assetName", "个人获得");
 		rtMap1.put("assetType", "1");
-		rtMap2.put("assetName", "俱乐部奖励动力");
-		rtMap2.put("assetType", "1");
-		rtMap3.put("assetName", "动力产出钻石");
-		rtMap3.put("assetType", "2");
 		if (yestodayPower == null) {
 			rtMap1.put("assetNum", "0");
 			
 		} else {
 			rtMap1.put("assetNum", String.valueOf(yestodayPower.getPowerNum()));
-			rtMap2.put("assetNum", String.valueOf(yestodayPower.getPkPower()));
+			//rtMap2.put("assetNum", String.valueOf(yestodayPower.getPkPower()));
 		}
-		FamilyGameAsset gameAsset = familyGameAssetMapper.getFamilyGameAssetByDay(familyId,
-				DateTools.getCurDateAddDay(-1));
-		if(gameAsset==null) {
-			rtMap2.put("assetNum", "0");
-		}else {
-			AssetUsersPowerLogs log=new AssetUsersPowerLogs();
-			log.setEffectId(gameAsset.getId());
-			log.setUserId(userId);
-			log.setEventType(AssetConstant.EVENTTYPE_POWER_GAMEEND_USER);
-			AssetUsersPowerLogs rtLog=assetUsersPowerLogsMapper.getUsersPowerLogsByUserEffectId(log);
-			if(rtLog==null) {
-				rtMap2.put("assetNum", "0");
-			}else {
-				rtMap2.put("assetNum", String.valueOf(rtLog.getPowerNum()));
-			}
+		rtList.add(rtMap1);
+
+		String sign=SignUtils.encryptHMAC(String.valueOf(userId));
+		String familyIds=chezuAppService.getFamiliesByUserId(userId, sign);
+		if(familyIds!=null&&familyIds.length()>0) {
+				String []ids=familyIds.split(",");
+				for (int i = 0; i < 2; i++) {
+					long fId = Long.valueOf(ids[i]);
+					if (fId != 0) {
+						Map<String, Object> rtMap2 = new HashMap<String, Object>();
+						rtMap2.put("assetName", "【"+chezuAppService.getFamilyById(fId,"sign").get("familyName").toString()+"】俱乐部奖励");
+						rtMap2.put("assetType", "1");
+						FamilyGameAsset gameAsset = familyGameAssetMapper.getFamilyGameAssetByDay(fId,
+								DateTools.getCurDateAddDay(-1));
+						if(gameAsset==null) {
+							rtMap2.put("assetNum", "0");
+						}else {
+							AssetUsersPowerLogs log=new AssetUsersPowerLogs();
+							log.setEffectId(gameAsset.getId());
+							log.setUserId(userId);
+							log.setEventType(AssetConstant.EVENTTYPE_POWER_GAMEEND_USER);
+							AssetUsersPowerLogs rtLog=assetUsersPowerLogsMapper.getUsersPowerLogsByUserEffectId(log);
+							if(rtLog==null) {
+								rtMap2.put("assetNum", "0");
+							}else {
+								rtMap2.put("assetNum", String.valueOf(rtLog.getPowerNum()));
+							}
+						}
+						rtList.add(rtMap2);
+					}
+				}
 		}
-		
+
+		Map<String, Object> rtMap3 = new HashMap<String, Object>();
+		rtMap3.put("assetName", "动力产出");
+		rtMap3.put("assetType", "2");
 		AssetUsersDiamondsLogs diamonds = assetUsersDiamondsLogsMapper.getYestodayPersonPowerDiamonds(userId);
 		if (diamonds == null) {
 			rtMap3.put("assetNum", "0");
 		} else {
 			rtMap3.put("assetNum", String.valueOf(diamonds.getDiamondsNum().setScale(2, RoundingMode.HALF_EVEN)));
 		}
-		rtList.add(rtMap1);
-		rtList.add(rtMap2);
 		rtList.add(rtMap3);
+
 		return rtList;
 	}
 	

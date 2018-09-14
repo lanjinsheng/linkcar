@@ -53,4 +53,18 @@ public class ChezuAppHystric implements ChezuAppService {
 		return false;
 	}
 
+	@Override
+	public String getFamiliesByUserId(Long userId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" getFamiliesByUserId 挂了  service-app-chezu");
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> getFamilyById(Long familyId, String sign) {
+		// TODO Auto-generated method stub
+		LOG.error(" getFamilyById 挂了  service-app-chezu");
+		return null;
+	}
+
 }

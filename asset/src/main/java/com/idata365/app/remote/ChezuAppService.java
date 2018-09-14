@@ -73,4 +73,10 @@ public interface ChezuAppService {
 	public Map<String, Object> getFightRelationAsset(@RequestParam(value = "familyId") long familyId,
 			@RequestParam(value = "sign") String sign);
 
+	@RequestMapping(value = "/app/getFamiliesByUserId",method = RequestMethod.POST)
+	public String  getFamiliesByUserId(@RequestParam(value="userId") Long userId,@RequestParam(value="sign") String sign);
+
+	@RequestMapping(value = "/app/getFamilyById",method = RequestMethod.POST)
+	public Map<String, Object> getFamilyById(@RequestParam(value="familyId") Long familyId,@RequestParam(value="sign") String sign);
+
 }

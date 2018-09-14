@@ -107,7 +107,7 @@ public class AuctionService {
 		return auctionLogsMapper.joinTimes(auctionGoodsId);
 	}
 
-	public List<Map<String, String>> myListAuctionGoods(Long userId) {
+	public List<Map<String, String>> myListAuctionGoods(Long userId,Integer type) {
 		List<Map<String, String>> result = new ArrayList<>();
 		List<AuctionLogs> auctionLogs = auctionLogsMapper.myListAuctionGoods(userId);
 		if (auctionLogs != null && auctionLogs.size() != 0) {
@@ -124,16 +124,24 @@ public class AuctionService {
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
+				if (type==1&&auctionGood.getAuctionRealEndTime().getTime() < new Date().getTime()) {//type:1正在竞拍 2已拍
+					continue;
+				}
+				if (type==2&&auctionGood.getAuctionRealEndTime().getTime() > new Date().getTime()) {//type:1正在竞拍 2已拍
+					continue;
+				}
 				map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
 				map.put("auctionGoodsType", auctionGood.getAuctionGoodsType().toString());
 				map.put("difference", auctionGood.getStepPrice().stripTrailingZeros().toPlainString());
 				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 				map.put("auctionTag", auctionGood.getAuctionTag());
+				map.put("winnerId", auctionGood.getWinnerId().toString());
 				if (auctionGood.getWinnerId() == userId
 						&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
 					map.put("convertStatus", auctionGood.getAuctionStatus().toString());
-				}else {
-					map.put("convertStatus","0");
+				} else if (type==2) {
+					//map.put("convertStatus","0");
+					continue;
 				}
 				result.add(map);
 			}

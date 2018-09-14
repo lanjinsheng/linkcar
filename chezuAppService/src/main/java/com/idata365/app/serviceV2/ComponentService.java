@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.support.spring.FastJsonJsonView;
+import com.google.gson.Gson;
+import com.idata365.app.util.GsonUtils;
+import com.netflix.discovery.converters.wrappers.CodecWrappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -441,26 +445,37 @@ public class ComponentService extends BaseService<ComponentService> {
 		rtMap.put("prayingList", prayingList);
 		return rtMap;
 	}
-	  @Transactional
-	  public int  submitPraying(Integer componentId,Long userId,String nick){
-		  DicComponent dicComponent=DicComponentConstant.getDicComponent(componentId);
-		  ComponentGiveLog giveLog=new ComponentGiveLog();
-		  giveLog.setComponentId(dicComponent.getComponentId());//祈愿只需要类型
-		  giveLog.setFromComponentId(0L);//还未发放
-		  giveLog.setFromId(0L);//请求发放的用户未知。
-          giveLog.setGiveStatus(0);//申请中
-          giveLog.setLogType(2);//个人祈愿
-          giveLog.setOperationManId(0L);//发配件人未知
-          giveLog.setToUserId(userId);
-          giveLog.setDaystamp(DateTools.getYYYYMMDD());
+
+	@Transactional
+	public int submitPraying(Integer componentId, Long userId, String nick) {
+		DicComponent dicComponent = DicComponentConstant.getDicComponent(componentId);
+		ComponentGiveLog giveLog = new ComponentGiveLog();
+		giveLog.setComponentId(dicComponent.getComponentId());//祈愿只需要类型
+		giveLog.setFromComponentId(0L);//还未发放
+		giveLog.setFromId(0L);//请求发放的用户未知。
+		giveLog.setGiveStatus(0);//申请中
+		giveLog.setLogType(2);//个人祈愿
+		giveLog.setOperationManId(0L);//发配件人未知
+		giveLog.setToUserId(userId);
+		giveLog.setDaystamp(DateTools.getYYYYMMDD());
 //          logType-toUserId-daystamp-giveStatus
-          giveLog.setUniKey(giveLog.getLogType()+"-"+userId+"-"+giveLog.getDaystamp()+"-"+0);//一天只能祈愿一次
-          int insert=componentMapper.insertComponentGiveLog(giveLog);
-          if(insert>0){
-        	  chezuImService.prayingSubmit("", nick, String.valueOf(userId),dicComponent.getComponentValue(), "");
-          }
-          return insert;
-	  }
+		giveLog.setUniKey(giveLog.getLogType() + "-" + userId + "-" + giveLog.getDaystamp() + "-" + 0);//一天只能祈愿一次
+		int insert = componentMapper.insertComponentGiveLog(giveLog);
+		if (insert > 0) {
+			Map<String, String> bean = new HashMap<>();
+			bean.put("userId", String.valueOf(userId));
+			bean.put("toUser", nick);
+			bean.put("infoTitle", "正在祈愿");
+			bean.put("infoImgUrl", dicComponent.getComponentUrl());
+			bean.put("infoDesc", "");
+			bean.put("aTitle", "资助");
+			Gson gson = new Gson();
+			String aInfo = gson.toJson(bean);
+
+			chezuImService.prayingSubmit("", nick, String.valueOf(userId), dicComponent.getComponentValue(),aInfo, "");
+		}
+		return insert;
+	}
 	  @Transactional
 	  public ReturnMessage  requestComponent(Long familyComponentId,Long userId,String nickName){
 		  ReturnMessage msg=new ReturnMessage();
