@@ -272,15 +272,7 @@ public class AssetController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		long userId = this.getUserId();
-		Object familyId = requestBodyParams.get("familyId");
-
-		if (familyId == null) {
-			// 通过userId获取全family分配值
-			return ResultUtils.rtFailParam(null);
-		}
-		// 
-		List<Map<String, Object>> list = assetService.getYestodayHarvestV2(userId,
-				Long.valueOf(familyId.toString()));
+		List<Map<String, Object>> list = assetService.getYestodayHarvestV2(userId);
 		rtMap.put("assetList", list);
 		return ResultUtils.rtSuccess(rtMap);
 	}

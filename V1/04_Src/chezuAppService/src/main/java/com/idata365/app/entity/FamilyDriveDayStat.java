@@ -53,8 +53,16 @@ public class FamilyDriveDayStat  implements Serializable {
 	private String month;
 	private String startDay;
 	private String endDay;
-	
-	
+	private Integer trophy;
+
+	public Integer getTrophy() {
+		return trophy;
+	}
+
+	public void setTrophy(Integer trophy) {
+		this.trophy = trophy;
+	}
+
 	public Integer getFamilyFlag() {
 		return familyFlag;
 	}

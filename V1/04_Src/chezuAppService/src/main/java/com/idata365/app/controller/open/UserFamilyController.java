@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.service.FamilyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class UserFamilyController extends BaseController {
 	private final static Logger LOG = LoggerFactory.getLogger(UserFamilyController.class);
 	@Autowired
 	private UserInfoService userInfoService;
+	@Autowired
+	private FamilyService familyService;
  
  
 	@RequestMapping(value = "/app/getFamiliesByUserId",method = RequestMethod.POST)
@@ -76,5 +79,12 @@ public class UserFamilyController extends BaseController {
 			}
 		} 
 		return rtMap;
+	}
+
+	@RequestMapping("/app/getFamilyById")
+	public Map<String, Object> getFamilyById(@RequestParam(value="familyId") Long familyId,@RequestParam(value="sign") String sign) {
+		LOG.info("familyId="+familyId+"==sign="+sign);
+		Map<String, Object> rtMap=new HashMap<String, Object>();
+		return familyService.findFamilyByFamilyId(familyId);
 	}
 }

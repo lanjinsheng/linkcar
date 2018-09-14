@@ -170,10 +170,12 @@ public class AuctionController extends BaseController {
 	 *             lcc
 	 */
 	@RequestMapping("/myListAuctionGoods")
-	public Map<String, Object> myListAuctionGoods() {
+	public Map<String, Object> myListAuctionGoods(@RequestParam(required = false) Map<String, String> allRequestParams,
+		@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Long userId = this.getUserId();
 		LOG.info("userId=================" + userId);
-		List<Map<String, String>> list = auctionService.myListAuctionGoods(userId);
+		int type = Integer.valueOf(requestBodyParams.get("type").toString());
+		List<Map<String, String>> list = auctionService.myListAuctionGoods(userId,type);
 		return ResultUtils.rtSuccess(list);
 	}
 
@@ -380,6 +382,12 @@ public class AuctionController extends BaseController {
 		}
 
 		long winnerId = auctionGoods.getWinnerId();
+		if (winnerId == userId) {
+			HashMap<String, Object> datas = new HashMap<String, Object>();
+			datas.put("code", "-1");
+			datas.put("msg", "亲！您已经是当前最高竞价者");
+			return ResultUtils.rtSuccess(datas);
+		}
 
 		// 插入竞拍记录
 		AuctionLogs auctionLogs = new AuctionLogs();

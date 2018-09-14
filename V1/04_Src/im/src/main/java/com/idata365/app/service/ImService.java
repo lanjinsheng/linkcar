@@ -149,35 +149,40 @@ public class ImService extends BaseService<ImService>
 	public void sendAuctionMsg(Map<String,String> goods,Map<String,Object> goodDetail,String keyId) {
 		Global.sendAuctionMsg(GsonUtils.toJson(goods, false), GsonUtils.toJson(goodDetail, false),keyId);
 	}
-	
-	public  Map<String,List<Map<String,String>>>   getMsgs(String baseUrl,Long familyId,Long partakeFamilyId)
-	{
-		Map<String,List<Map<String,String>>> rtMap=new HashMap<String,List<Map<String,String>>>();
-		Map<String,Object> map=new HashMap<String,Object>();
+
+	public Map<String, List<Map<String, String>>> getMsgs(String baseUrl, Long familyId, Long partakeFamilyId) {
+		Map<String, List<Map<String, String>>> rtMap = new HashMap<String, List<Map<String, String>>>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("msgType", 0);
 		map.put("familyId", 0);
 		map.put("id", 9999999999999999L);
 		map.put("imgPath", baseUrl);
-		List<Map<String,String>> list1=imMapper.getMsgGlobal(map);
-		if(list1==null) {	list1=new ArrayList<Map<String,String>>();}
+		List<Map<String, String>> list1 = imMapper.getMsgGlobal(map);
+		if (list1 == null) {
+			list1 = new ArrayList<Map<String, String>>();
+		}
 		rtMap.put("0", list1);
-		List<Map<String,String>> list2=null;
-		List<Map<String,String>> list3=null;
-		if(familyId>0) {
+		List<Map<String, String>> list2 = null;
+		List<Map<String, String>> list3 = null;
+		if (familyId > 0) {
 			map.put("familyId", familyId);
 			map.put("msgType", 1);
-			list2=imMapper.getMsg(map);
-			
+			list2 = imMapper.getMsg(map);
+
 		}
-		if(partakeFamilyId>0) {
+		if (partakeFamilyId > 0) {
 			map.put("familyId", partakeFamilyId);
 			map.put("msgType", 2);
-			list3=imMapper.getMsg(map);
-			 
+			list3 = imMapper.getMsg(map);
+
 		}
-		if(list2==null) {list2=new ArrayList<Map<String,String>>();}
+		if (list2 == null) {
+			list2 = new ArrayList<Map<String, String>>();
+		}
 		rtMap.put("1", list2);
-		if(list3==null) {list3=new ArrayList<Map<String,String>>();}
+		if (list3 == null) {
+			list3 = new ArrayList<Map<String, String>>();
+		}
 		rtMap.put("2", list3);
 		return rtMap;
 	} 

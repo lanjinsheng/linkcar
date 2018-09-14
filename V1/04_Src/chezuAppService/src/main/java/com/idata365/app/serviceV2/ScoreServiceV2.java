@@ -1299,13 +1299,13 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		} else {
 			rtMap.put("canTake", "1");
 		}
-		clubScoreInfo.put("num", "奖励" + String.valueOf(score) + "动力");
+		clubScoreInfo.put("num", "" + String.valueOf(score) + "动力");
 		clubMemberInfo.put("num", "×" + BigDecimal.valueOf(x1).setScale(1,RoundingMode.HALF_EVEN).toString());
 		clubTypeInfo.put("num", "×" + String.valueOf(x2));
 		pkStatusInfo.put("num", "×" + String.valueOf(x3));
-		clubScoreInfo.put("desc", "俱乐部成绩");
-		clubMemberInfo.put("desc", "俱乐部人数");
-		clubTypeInfo.put("desc", "俱乐部等级");
+		clubScoreInfo.put("desc", "成绩");
+		clubMemberInfo.put("desc", "人数");
+		clubTypeInfo.put("desc", "等级");
 		pkStatusInfo.put("desc", "挑战结果");
 
 		rtList.add(clubScoreInfo);

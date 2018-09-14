@@ -51,7 +51,8 @@ public class NotifyController extends BaseController{
 //		goodsList.put("auctionTime", String.valueOf(auctionBean.getAuctionGoods().getAuctionEndTime()));
 		goodsList.put("auctionDiamond", String.valueOf(auctionBean.getAuctionGoods().getDoneDiamond().doubleValue()));
 		goodsList.put("isEnd", String.valueOf(auctionBean.getAuctionGoods().getAuctionStatus()==0?0:1));
-		
+		goodsList.put("winnerId", String.valueOf(auctionBean.getAuctionGoods().getWinnerId()));
+
 		 
  
 		Map<String,Object> notifyInfo=new HashMap<String,Object>();
@@ -120,6 +121,7 @@ public class NotifyController extends BaseController{
 			@RequestParam(value="toUserName") String toUserName,
 			@RequestParam(value="toUserId") String toUserId,
 			@RequestParam(value="propName") String propName,
+			@RequestParam(value="aInfo") String aInfo,
 			@RequestParam(value="sign") String sign){
 		String sign2=SignUtils.encryptHMAC(toUserName);
 		Map<String, Object> rtMap=chezuAppService.familyUsers(Long.valueOf(toUserId), sign2);
@@ -130,14 +132,19 @@ public class NotifyController extends BaseController{
 		insert.put("imgUrl", "");
 		insert.put("familyId",rtMap.get("createFamilyId"));
 		insert.put("msg", String.format(PrayingSubmit,toUserName,propName));
+		insert.put("aInfo", aInfo);
 		insert.put("type", 1);
 		insert.put("toUrl", PrayingSubmitToUrl);
-		imService.insertMsg(insert);
+		if (rtMap.get("createFamilyId")!=null&&!rtMap.get("createFamilyId").equals("")) {
+			imService.insertMsg(insert);
+			imService.sendUserFamilyImByPraying(insert,rtMap,1);
+		}
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
 		insert.put("type", 2);
-		imService.insertMsg(insert);
-		imService.sendUserFamilyImByPraying(insert,rtMap,1);
-		imService.sendUserFamilyImByPraying(insert,rtMap,2);
+		if (rtMap.get("partakeFamilyId")!=null&&!rtMap.get("partakeFamilyId").equals("")) {
+			imService.insertMsg(insert);
+			imService.sendUserFamilyImByPraying(insert,rtMap,2);
+		}
 		return true;
 	}
 	
@@ -171,12 +178,17 @@ public class NotifyController extends BaseController{
 		insert.put("familyId",rtMap.get("createFamilyId"));
 		insert.put("msg", String.format(PrayingRealize,fromUserName,toUserName,propName));
 		insert.put("type", 1);
-		imService.insertMsg(insert);
+		if (rtMap.get("createFamilyId")!=null&&!rtMap.get("createFamilyId").equals("")) {
+			imService.insertMsg(insert);
+			imService.sendUserFamilyImByPraying(insert,rtMap,1);
+		}
 		insert.put("familyId",rtMap.get("partakeFamilyId"));
 		insert.put("type", 2);
-		imService.insertMsg(insert);
-		imService.sendUserFamilyImByPraying(insert,rtMap,1);
-		imService.sendUserFamilyImByPraying(insert,rtMap,2);
+		if (rtMap.get("partakeFamilyId")!=null&&!rtMap.get("partakeFamilyId").equals("")) {
+			imService.insertMsg(insert);
+			imService.sendUserFamilyImByPraying(insert,rtMap,2);
+		}
+
 		return true;
 	}
 	

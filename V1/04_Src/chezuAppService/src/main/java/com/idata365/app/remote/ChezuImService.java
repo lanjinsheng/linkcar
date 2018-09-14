@@ -36,7 +36,7 @@ public interface ChezuImService {
 	public boolean prayingSubmit(@RequestParam(value="fromUserName") String fromUserName,
 			@RequestParam(value="toUserName") String toUserName,
 			@RequestParam(value="toUserId") String toUserId,
-			@RequestParam(value="propName") String propName,
+			@RequestParam(value="propName") String propName,@RequestParam(value="aInfo") String aInfo,
 			@RequestParam(value="sign") String sign);
 	
 	@RequestMapping(value = "/im/lookedAllAd",method = RequestMethod.POST)
