@@ -206,4 +206,6 @@ public interface FamilyMapper {
 
 	public int updateFamilyInfo(@Param("familyId")long familyId, @Param("familyName")String familyName, @Param("imgUrl")String imgUrl);
 
+	List<Long> queryAllFamily();
+
 }

@@ -3,6 +3,7 @@ package com.idata365.app.mapper;
 
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
@@ -30,5 +31,7 @@ public interface FamilyRelationMapper {
 	int deleteRelation(@Param("id")long id);
 	
 	int countOfInitiativeFight(@Param("familyId")long familyId);
+
+	List<FamilyRelation> queryAllNotFightFamily(@Param("daystamp")String daystamp);
 	
 }

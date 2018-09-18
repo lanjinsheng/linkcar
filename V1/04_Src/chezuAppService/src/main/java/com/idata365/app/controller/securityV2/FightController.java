@@ -3,6 +3,7 @@ package com.idata365.app.controller.securityV2;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.idata365.app.serviceV2.RemindService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ import com.idata365.app.util.ResultUtils;
 public class FightController extends BaseController {
 	protected static final Logger LOG = LoggerFactory.getLogger(FightController.class);
 	@Autowired
-    FightService fightService;
+	FightService fightService;
+	@Autowired
+	RemindService remindService;
 	
 	/**
 	 * 获取明日挑战对象
@@ -47,6 +50,8 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", "");
 			rtMap.put("avgScore", "0");
 			rtMap.put("reducePower", "0");
+			String isCanRemindBoss = remindService.isCanRemindBoss(this.getUserId(),familyId);
+			rtMap.put("isCanRemindBoss", isCanRemindBoss);
 		}else{
 			Map<String,Object> family=fightService.getOpponentInfo(opponentId);
 			rtMap.put("challengeFlag", "1");
@@ -65,6 +70,7 @@ public class FightController extends BaseController {
     		String []dayTimes=challegeTime.split(",");
     		int reducePower=Integer.valueOf(dayTimes[1])*2;
 			rtMap.put("reducePower", String.valueOf(reducePower));
+			rtMap.put("isCanRemindBoss", "0");
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
@@ -136,6 +142,20 @@ public class FightController extends BaseController {
 			return ResultUtils.rtFailParam(null, "俱乐部入参错误。");
 		}
 		fightService.insertFightRelation(selfFamilyId, competitorFamilyId);
+		return ResultUtils.rtSuccess(null);
+	}
+
+	/**
+	 * 提醒老板
+	 * @param allRequestParams
+	 * @param requestBodyParams
+	 * @return
+	 */
+	@RequestMapping("/v2/game/remindBoss")
+	public Map<String, Object> remindBoss(@RequestParam(required = false) Map<String, String> allRequestParams,
+													 @RequestBody(required = false) Map<Object, Object> requestBodyParams) {
+		LOG.info("userId=================" + this.getUserId());
+		remindService.remindBoss(this.getUserId());
 		return ResultUtils.rtSuccess(null);
 	}
 }

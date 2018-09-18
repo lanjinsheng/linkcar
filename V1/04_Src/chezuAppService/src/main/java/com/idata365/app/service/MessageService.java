@@ -516,6 +516,43 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUrl(CardNotes);
 		return message;
 	}
+
+	/**
+	 *
+	 * @Title: buildRemindMessage
+	 * @Description: TODO(提醒老板消息)
+	 * @param @param
+	 * @param @param
+	 * @param @param
+	 * @param @return    参数
+	 * @return Message    返回类型
+	 * @throws
+	 * @author lcc
+	 */
+	public Message buildRemindMessage(Long userId, String userName, Long familyId) {
+		Message message=new Message();
+		message.setFromUserId(0L);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_VerifyIDCard_Ok);
+		if (userName.equals("")) {
+			message.setContent("halo，你明天还未选择挑战，快去选择吧，挑战胜利奖励丰富哦!!!");
+		} else {
+			userName.substring(0, userName.length());
+			message.setContent("halo，你明天还未选择挑战，你的成员"+userName+"等提醒你去选择明天的挑战,快去选择吧，挑战胜利奖励丰富哦!!!");
+		}
+
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("挑战提醒");
+
+		message.setToUserId(userId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
+		message.setToUrl("lc://ChallengesViewController.push?familyId="+familyId);
+		return message;
+	}
 	
 	
 	/**

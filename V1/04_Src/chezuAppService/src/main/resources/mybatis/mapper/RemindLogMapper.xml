@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.RemindLogMapper">
+
+	<select id="queryTodayRemindCount" resultType="java.lang.Integer">
+		select count(1) from remindLog where date(eventTime)=date(now()) and userId=#{userId} and familyId=#{familyId}
+	</select>
+
+	<insert id="insertRemindLog"  parameterType="java.util.HashMap" >
+     INSERT INTO
+          remindLog
+          (userId,familyId,eventType,eventTime,remark)
+      VALUES
+          (#{userId},#{familyId},#{eventType},now(),#{remark})
+	</insert>
+
+	<select id="queryTodayRemindUserIdsByFamilyId" resultType="java.lang.Long">
+		select DISTINCT(userId) from remindLog where date(eventTime)=date(now()) and familyId=#{familyId} order by eventType limit 3
+	</select>
+	
+</mapper>
