@@ -47,6 +47,14 @@ public class ComponentController extends BaseController {
 		Map<String,Object> rtMap=componentService.getFamilyComponent(familyId);
 		return ResultUtils.rtSuccess(rtMap);
 	}
+
+	@RequestMapping(value = "/getFamilyComponentV2")
+	Map<String, Object> getFamilyComponentV2(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		Map<String,Object> rtMap=componentService.getFamilyComponentV2(familyId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
 	
 	
 	@RequestMapping(value = "/dropFamilyComponent")

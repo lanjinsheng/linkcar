@@ -98,6 +98,21 @@
     <property name="period" value="10000" />   
   </bean> 
   <!--End#######################定时消息任务#######################################################-->
+
+	<!--Begin#######################定时提醒老板#######################################################-->
+	<!-- 延迟11s加载，并且每隔1小时进行处理扫描 -->
+	<bean id="remindBossTask" class="com.idata365.app.schedule.RemindBossTask">
+		<property name="threadPool" ref="threadPool"></property>
+	</bean>
+
+	<bean id="remindBossTaskExe" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+		<property name="runnable" ref="remindBossTask" />
+		<!-- 容器加载10秒后开始执行 -->
+		<property name="delay" value="11000" />
+		<!-- 每次任务间隔 60秒-->
+		<property name="period" value="3600000" />
+	</bean>
+	<!--End#######################定时提醒老板#######################################################-->
  
   <!--Begin#######################定时消息任务#######################################################-->
   <!-- 延迟11s加载，并且每隔10秒进行处理扫描,同步行程数据给业务层 -->
@@ -160,6 +175,7 @@
 		
 				<ref bean="messagePushTaskExe" />
 				<ref bean="clearLockTaskExe" />
+				<ref bean="remindBossTaskExe" />
 			</list>
 		</property>
 	</bean>

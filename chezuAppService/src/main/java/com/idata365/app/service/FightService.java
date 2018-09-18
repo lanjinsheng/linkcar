@@ -27,7 +27,8 @@ public class FightService extends BaseService<FightService> {
 	@Autowired
 	private UsersAccountMapper usersAccountMapper;
 	@Autowired
-	ChezuAssetService chezuAssetService;
+	private ChezuAssetService chezuAssetService;
+
      /**
       * 获取对手俱乐部id，无对战记录返回null
       * @param selfFamilyId

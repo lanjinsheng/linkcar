@@ -436,7 +436,7 @@
 			AND a.nickName LIKE #{nickName}
 		ORDER BY
 			a.lastLoginTime DESC) c left join
-		(select * from userFamilyRelation where familyId!=#{familyId} and isLeader=0) d on c.userId=d.userId 
+		(select * from userFamilyRelation where familyId!=#{familyId} and isLeader=0) d on c.userId=d.userId
  	</select>
     
     <update id="updateUserOtherApplyStatus" >
@@ -450,5 +450,9 @@
     <update id="updateFamilyInfo" >
  	    update familyInfo set familyName=#{familyName},imgUrl=#{imgUrl} where id=#{familyId}
     </update>
+
+	<select id="queryAllFamily" resultType="java.lang.Long">
+ 		select id from familyInfo
+ 	</select>
     
   </mapper>

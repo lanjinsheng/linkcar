@@ -19,9 +19,9 @@
 		where userId=#{userId} and inUse=0 and componentStatus=1 group by componentType
 </select> 
   <select id="getFreeComponentFamily" resultType="com.idata365.app.entity.v2.ComponentFamily">
-	select * from componentFamily 
-	 where familyId=#{familyId}
-	 and componentStatus=1
+	 select a.* from componentFamily a left join dicComponent b on a.componentId=b.componentId
+	 where a.familyId=#{familyId}
+	 and a.componentStatus=1 order by b.power desc
 </select>   
 
 

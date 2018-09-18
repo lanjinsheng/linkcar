@@ -116,8 +116,6 @@ public class ComponentService extends BaseService<ComponentService> {
 		   return rtMap;
 	   }
 	   
-	   
-	   
 	   public Map<String,Object> getFamilyComponent(long familyId){
 		   Map<String,Object> rtMap=new HashMap<>();
 		   List<Map<String,Object>> componentList=new ArrayList<>();
@@ -145,6 +143,72 @@ public class ComponentService extends BaseService<ComponentService> {
 
 		   return rtMap;
 	   }
+
+	   public Map<String,Object> getFamilyComponentV2(long familyId){
+		   Map<String,Object> rtMap=new HashMap<>();
+		   Map<String,List<Map<String,Object>>> paramMap=new HashMap<>();
+		   List<Map<String,Object>> componentLT=new ArrayList<>();
+		   List<Map<String,Object>> componentJY=new ArrayList<>();
+		   List<Map<String,Object>> componentHHS=new ArrayList<>();
+		   List<Map<String,Object>> componentSCP=new ArrayList<>();
+		   List<Map<String,Object>> componentXDC=new ArrayList<>();
+		   paramMap.put("1", componentLT);
+		   paramMap.put("2", componentHHS);
+		   paramMap.put("3", componentJY);
+		   paramMap.put("4", componentSCP);
+		   paramMap.put("5", componentXDC);
+		   List<ComponentFamily> components=componentMapper.getFreeComponentFamily(familyId);
+
+		   if(components==null || components.size()==0){
+
+		   }else{
+			   for(ComponentFamily component:components){
+				   Map<String,Object> m1=new HashMap<>();
+				   List<String> ids = new ArrayList<>();
+				   ids.add(component.getId().toString());
+				   m1.put("familyComponentId", ids);
+				   DicComponent dicComponent=DicComponentConstant.getDicComponent(component.getComponentId());
+				   m1.put("componentName", dicComponent.getComponentValue());
+				   m1.put("quality", dicComponent.getQuality());
+				   m1.put("imgUrl", dicComponent.getComponentUrl());
+				   m1.put("componentNum","1");
+				   m1.put("componentType", dicComponent.getComponentType());
+				   m1.put("componentDesc",dicComponent.getComponentDesc());
+				   m1.put("componentAttribute","动力加成"+(int)(dicComponent.getPowerAddition()*100)+"%");
+				   m1.put("componentLoss", dicComponent.getTravelNum()+"次行程");
+				   m1.put("isCanCompound", "1");
+				   Integer componentType = dicComponent.getComponentType();
+				   List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
+
+				   if (list.size() == 0) {
+					   list.add(m1);
+				   } else {
+					   for (int i = 0; i < list.size(); i++) {
+						   if (list.get(i).get("quality").equals(dicComponent.getQuality()) && Integer.valueOf(list.get(i).get("componentLoss").toString().substring(0,1)) == dicComponent.getTravelNum()) {
+							   list.get(i).put("componentNum", String.valueOf(Integer.valueOf(list.get(i).get("componentNum").toString()) + 1));
+							   List<String> ids1 = (List<String>) list.get(i).get("familyComponentId");
+							   ids1.add(component.getId().toString());
+							   list.get(i).put("familyComponentId", ids1);
+							   break;
+						   } else if (i==list.size()-1) {
+							   list.add(m1);
+							   break;
+						   }
+					   }
+				   }
+
+				   //list.add(m1);
+
+			   }
+		   }
+		   rtMap.put("componentLT",  componentLT) ;
+		   rtMap.put("componentJY",  componentJY) ;
+		   rtMap.put("componentHHS",  componentHHS) ;
+		   rtMap.put("componentSCP",  componentSCP) ;
+		   rtMap.put("componentXDC",  componentXDC) ;
+		   return rtMap;
+	   }
+
 	   public Map<String,Object> dropFamilyComponent(long familyComponentId){ 
 		   Map<String,Object> rtMap=new HashMap<>();
 		   int dropCount=componentMapper.dropFamilyComponent(familyComponentId);
