@@ -123,8 +123,70 @@ public class ComponentController extends BaseController {
 		Map<String,Object> rtMap=componentService.deployComponent(userComponentId,userCarId,destroyComponentId);
 		return ResultUtils.rtSuccess(rtMap);
 	}
-	
-	
+
+	//零件合成几率查询
+	@RequestMapping(value = "/getCompoundOdds")
+	Map<String, Object> getCompoundOdds(@RequestParam (required = false) Map<String, String> allRequestParams,
+			@RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		String componentIds=String.valueOf(requestBodyParams.get("componentIds"));
+		LOG.info("userId==="+this.getUserId()+"===componentIds=="+componentIds);
+		Map<String,Object> rtMap=componentService.getCompoundOdds(componentIds);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+
+	//零件合成提交
+	@RequestMapping(value = "/compoundComponent")
+	Map<String, Object> compoundComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
+								   @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		String componentIds=String.valueOf(requestBodyParams.get("componentIds"));
+		Integer stoveId=Integer.valueOf(requestBodyParams.get("stoveId").toString());
+		LOG.info("userId==="+this.getUserId()+"===componentIds=="+componentIds+"===+stoveId=="+stoveId);
+		Map<String,Object> rtMap=componentService.compoundComponent(this.getUserId(),componentIds,stoveId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+
+	//零件合成情况查询
+	@RequestMapping(value = "/queryCompoundStatus")
+	Map<String, Object> queryCompoundStatus(@RequestParam (required = false) Map<String, String> allRequestParams,
+										 @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		Integer stoveId=Integer.valueOf(requestBodyParams.get("stoveId").toString());
+		long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		LOG.info("userId==="+this.getUserId()+"===familyId=="+familyId+"===+stoveId=="+stoveId);
+		Map<String,Object> rtMap=componentService.queryCompoundStatus(this.getUserId(),familyId,stoveId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+
+	//合成--提交广告减少时间
+	@RequestMapping(value = "/reduceCompoundTime")
+	Map<String, Object> reduceCompoundTime(@RequestParam (required = false) Map<String, String> allRequestParams,
+										 @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		Integer stoveId=Integer.valueOf(requestBodyParams.get("stoveId").toString());
+		long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		LOG.info("userId==="+this.getUserId()+"===familyId=="+familyId+"===+stoveId=="+stoveId);
+		Map<String,Object> rtMap=componentService.reduceCompoundTime(this.getUserId(),familyId,stoveId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+
+	//零件合成入库
+	@RequestMapping(value = "/submitCompound")
+	Map<String, Object> submitCompound(@RequestParam (required = false) Map<String, String> allRequestParams,
+										 @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		Integer stoveId=Integer.valueOf(requestBodyParams.get("stoveId").toString());
+		LOG.info("userId==="+this.getUserId()+"===+stoveId=="+stoveId);
+		Map<String,Object> rtMap=componentService.submitCompound(this.getUserId(),stoveId);
+		return ResultUtils.rtSuccess(null);
+	}
+
+	//熔炉情况查询
+	@RequestMapping(value = "/queryStoveStatus")
+	Map<String, Object> queryStoveStatus(@RequestParam (required = false) Map<String, String> allRequestParams,
+											@RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		LOG.info("userId==="+this.getUserId()+"===familyId=="+familyId);
+		Map<String,Object> rtMap=componentService.queryStoveStatus(this.getUserId(),familyId);
+		return ResultUtils.rtSuccess(rtMap);
+	}
+
 	//出售装备
 	@RequestMapping(value = "/sellComponent")
 	Map<String, Object> sellComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
