@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idata365.app.mapper.CompoundMapper">
+
+    <select id="getOddByQualityAndTravelNum" resultType="java.lang.Integer" >
+	  SELECT odds FROM componentOdds where quality=#{quality} and travelNum=#{travelNum}
+    </select>
+
+
+    <insert id="insertCompoundInfo"  parameterType="com.idata365.app.entity.v2.CompoundInfo" useGeneratedKeys="true" keyProperty="id">
+     INSERT INTO
+          compoundInfo
+          (familyId,userId,stoveId,componentIds,startTime,endTime,status,finalComponentId,lookAdUserIds,lookAdCount)
+      VALUES
+          (#{familyId},#{userId},#{stoveId},#{componentIds},#{startTime},#{endTime},#{status},#{finalComponentId},#{lookAdUserIds},#{lookAdCount})
+    </insert>
+
+    <select id="getCompoundInfoByFamilyIdAndStoveId" resultType="com.idata365.app.entity.v2.CompoundInfo" >
+	  SELECT * FROM compoundInfo where familyId=#{familyId} and stoveId=#{stoveId} and status in(0,1) order by id desc limit 1
+    </select>
+
+    <update id="updateCompoundInfo" parameterType="com.idata365.app.entity.v2.CompoundInfo">
+     update
+          compoundInfo
+          set lookAdUserIds=#{lookAdUserIds},endTime=#{endTime},lookAdCount=#{lookAdCount} where familyId=#{familyId} and stoveId=#{stoveId} and status=1
+    </update>
+
+    <update id="updateCompoundInfoStatus" >
+     update
+          compoundInfo
+          set status=#{newStatus} where familyId=#{familyId} and stoveId=#{stoveId} and status=#{oldStatus}
+    </update>
+
+    <update id="updateFinalComponentId" >
+     update
+          compoundInfo
+          set finalComponentId=#{finalComponentId} where id=#{id} and status=1
+    </update>
+</mapper>

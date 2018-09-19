@@ -52,6 +52,8 @@ public interface ComponentMapper {
 	public int 	insertComponentGiveLog(ComponentGiveLog log);
 	
 	public int 	insertComponentUserUseLog(ComponentUserUseLog log);
+
+	public ComponentUserUseLog getComponentUserUseLogById(@Param("id") Long id);
 	
 	public int 	recieveComponentGiveLog(@Param("id") Long id);
 	

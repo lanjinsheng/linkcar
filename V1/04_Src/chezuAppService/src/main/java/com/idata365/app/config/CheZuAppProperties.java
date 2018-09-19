@@ -63,6 +63,25 @@ public class CheZuAppProperties {
     private Integer peccancyTime = 720;
     private Integer maxAdCount;
 
+    private Double compoundCoolHour;
+    private Double adReduceHour;
+
+    public Double getCompoundCoolHour() {
+        return compoundCoolHour;
+    }
+
+    public void setCompoundCoolHour(Double compoundCoolHour) {
+        this.compoundCoolHour = compoundCoolHour;
+    }
+
+    public Double getAdReduceHour() {
+        return adReduceHour;
+    }
+
+    public void setAdReduceHour(Double adReduceHour) {
+        this.adReduceHour = adReduceHour;
+    }
+
     public Integer getMaxAdCount() {
         return maxAdCount;
     }

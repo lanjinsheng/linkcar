@@ -40,11 +40,13 @@
           (componentId,userId,userComponentId,eventTime,eventType,userCarId) 
       VALUES
           (#{componentId},#{userId},#{userComponentId},now(),#{eventType},#{userCarId})
-</insert> 
- 
- 
- 
- <select id="countFamilyFreeCabinet" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+</insert>
+
+<select id="getComponentUserUseLogById" resultType="com.idata365.app.entity.v2.ComponentUserUseLog">
+	select * from componentUserUseLog where id=#{id}
+</select>
+
+<select id="countFamilyFreeCabinet" parameterType="java.util.HashMap" resultType="java.lang.Integer">
 	select (24-count(1)) from componentFamily 
 	 where familyId=#{familyId}
 	 and componentStatus=1
