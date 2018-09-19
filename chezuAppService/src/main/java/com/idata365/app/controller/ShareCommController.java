@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.idata365.app.constant.DicLivenessConstant;
+import com.idata365.app.serviceV2.LivenessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,8 @@ public class ShareCommController extends BaseController
 	private UserInfoService userInfoService;
 	@Autowired
 	private UserInfoServiceV2 userInfoServiceV2;
+	@Autowired
+	private LivenessService livenessService;
 
 	public ShareCommController()
 	{
@@ -370,6 +374,9 @@ public class ShareCommController extends BaseController
 		
 		//插入分享日志
 		userInfoServiceV2.insertShareLogs(userId,shareType);
+
+		//分享加入活跃值业务
+		livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId2);
 		
 		return ResultUtils.rtSuccess(rtMap);
 

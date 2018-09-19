@@ -1,5 +1,6 @@
 package com.idata365.app.serviceV2;
 
+import com.idata365.app.constant.DicLivenessConstant;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.FamilyRelation;
 import com.idata365.app.entity.Message;
@@ -33,6 +34,8 @@ public class RemindService extends BaseService<RemindService> {
     private FamilyRelationMapper familyRelationMapper;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private LivenessService livenessService;
 
 
     /**
@@ -65,6 +68,9 @@ public class RemindService extends BaseService<RemindService> {
         log.put("eventType", "1");
         log.put("remark", "");
         remindLogMapper.insertRemindLog(log);
+
+        //替缴罚单加入活跃值业务
+        livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId14);
     }
 
     public boolean remindBossByTask() {

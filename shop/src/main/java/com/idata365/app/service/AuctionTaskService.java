@@ -72,7 +72,9 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
    public boolean doEndAuction(AuctionGoods auctionGoods) {
 		LOG.info("auctionGoods=============" + JSON.toJSONString(auctionGoods));
 		// 查找最高竞价者
+		LOG.info("auctionGoodsId=============" + JSON.toJSONString(auctionGoods.getAuctionGoodsId()));
 		AuctionLogs max = auctionLogsMapper.getMaxAuctionDiamond(auctionGoods.getAuctionGoodsId());
+		LOG.info("max=============" + JSON.toJSONString(max));
 		if (max == null) {// 无竞价者
 			// 更新竞价状态
 			auctionGoods.setAuctionStatus(3);

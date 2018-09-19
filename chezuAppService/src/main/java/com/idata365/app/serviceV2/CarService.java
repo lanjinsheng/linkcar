@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.idata365.app.constant.DicLivenessConstant;
 import com.idata365.app.entity.*;
 import com.idata365.app.mapper.*;
 import org.apache.commons.beanutils.BeanUtils;
@@ -58,6 +59,8 @@ public class CarService extends BaseService<CarService> {
     DicComponentMapper dicComponentMapper;
 	@Autowired
 	InteractLogsMapper interactLogsMapper;
+	@Autowired
+	LivenessService livenessService;
     
 	public CarService() {
 
@@ -285,6 +288,9 @@ public class CarService extends BaseService<CarService> {
  		messageService.insertMessage(msg, MessageEnum.CARPOOL_APPLY);
  		//用定时器推送
         messageService.pushMessageNotrans(msg,MessageEnum.CARPOOL_APPLY);
+
+		//搭乘顺风车加入活跃值业务
+		livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId9);
 		return 1;
 	}
 	@Transactional
@@ -319,6 +325,9 @@ public class CarService extends BaseService<CarService> {
  		messageService.insertMessage(msg, MessageEnum.CARPOOL_APPLY_PASS);
  		//用定时器推送
         messageService.pushMessageNotrans(msg,MessageEnum.CARPOOL_APPLY_PASS);
+
+		//接纳顺风车加入活跃值业务
+		livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId10);
 		return i==1;
 	}
 	

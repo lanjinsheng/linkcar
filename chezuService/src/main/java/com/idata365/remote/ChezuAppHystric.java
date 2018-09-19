@@ -17,6 +17,12 @@ public class ChezuAppHystric implements ChezuAppService {
 		LOG.error("ChezuAppHystric  getUserLotter挂了");
 		return false;
 	}
-	 
- 
+
+	@Override
+	public boolean insertUserLivenessLog(long userId, int livenessId, String sign) {
+		LOG.error("ChezuAppHystric  insertUserLivenessLog挂了");
+		return false;
+	}
+
+
 }

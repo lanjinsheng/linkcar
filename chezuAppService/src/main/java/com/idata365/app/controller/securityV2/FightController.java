@@ -127,7 +127,7 @@ public class FightController extends BaseController {
 	}
 	
 	/**
-	 * 选择明日挑战对象
+	 * 提交明日挑战对象
 	 * @param allRequestParams
 	 * @param requestBodyParams
 	 * @return
@@ -141,7 +141,7 @@ public class FightController extends BaseController {
 		if(competitorFamilyId.longValue()==0 || selfFamilyId.longValue()==0){
 			return ResultUtils.rtFailParam(null, "俱乐部入参错误。");
 		}
-		fightService.insertFightRelation(selfFamilyId, competitorFamilyId);
+		fightService.insertFightRelation(selfFamilyId, competitorFamilyId,this.getUserId());
 		return ResultUtils.rtSuccess(null);
 	}
 

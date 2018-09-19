@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.idata365.remote.ChezuAppService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,8 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 	CalDriveTaskMapper calDriveTaskMapper;
 	@Autowired
 	UserTravelLotteryMapper userTravelLotteryMapper;
+	@Autowired
+	ChezuAppService chezuAppService;
 	
 	/**
 	 * 
@@ -119,6 +122,9 @@ public class SynDriveDataService extends BaseService<SynDriveDataService>{
 			}
 			list.add(uth);
 			lotterys.add(getTravelLottery(uth.getUserId(),uth.getHabitId()));
+
+			////开车加入活跃值业务
+			chezuAppService.insertUserLivenessLog(uth.getUserId(), 8, "sign");//开车ID：8
 		}
 		if(list.size()>0) {
 			userTravelHistoryMapper.batchInsert(list);
