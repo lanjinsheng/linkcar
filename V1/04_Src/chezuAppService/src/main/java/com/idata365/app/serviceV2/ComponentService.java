@@ -6,6 +6,7 @@ import java.util.*;
 import com.alibaba.fastjson.support.spring.FastJsonJsonView;
 import com.google.gson.Gson;
 import com.idata365.app.config.CheZuAppProperties;
+import com.idata365.app.constant.DicLivenessConstant;
 import com.idata365.app.entity.FamilyParamBean;
 import com.idata365.app.entity.v2.*;
 import com.idata365.app.mapper.*;
@@ -59,6 +60,8 @@ public class ComponentService extends BaseService<ComponentService> {
     CompoundMapper compoundMapper;
     @Autowired
     CheZuAppProperties appProperties;
+    @Autowired
+    LivenessService livenessService;
 
     public Map<String, Object> getUserComponent(long userId) {
         Map<String, Object> rtMap = new HashMap<>();
@@ -170,7 +173,17 @@ public class ComponentService extends BaseService<ComponentService> {
                 m1.put("componentType", dicComponent.getComponentType());
                 m1.put("componentDesc", dicComponent.getComponentDesc());
                 m1.put("componentAttribute", "动力加成" + (int) (dicComponent.getPowerAddition() * 100) + "%");
-                m1.put("componentLoss", dicComponent.getTravelNum() + "次行程");
+
+                Integer travelNum = 0;
+                if (component.getGainType() == 2) {
+                    //道具由成员贡献，计算行程损耗
+                    Long userComponentId = componentMapper.getComponentUserUseLogById(component.getEffectId()).getUserComponentId();
+                    //剩余行程数
+                    travelNum = componentMapper.getComponentUser(userComponentId).getLeftTravelNum();
+                } else {
+                    travelNum = dicComponent.getTravelNum();
+                }
+                m1.put("componentLoss", travelNum + "次行程");
                 m1.put("isCanCompound", "1");
                 Integer componentType = dicComponent.getComponentType();
                 List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
@@ -231,6 +244,8 @@ public class ComponentService extends BaseService<ComponentService> {
         int update = componentMapper.updateFamilyComponent(updateMap);
         DicComponent dc = DicComponentConstant.getDicComponent(log.getComponentId());
         sendSysMsg(userId, toUserId, log.getId().longValue(), MessageEnum.ApplyGiveLog, null, dc.getComponentValue());
+        //赠送配件加入活跃值业务
+        livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId17);
         return update;
     }
 
@@ -442,10 +457,10 @@ public class ComponentService extends BaseService<ComponentService> {
             }
             odd_tmp+=compoundMapper.getOddByQualityAndTravelNum(quality, travelNum);
         }
-        Integer odd_s = odd_tmp;
-        Integer odd_a = Long.valueOf(Math.round((100 - odd_tmp) * 0.7)).intValue();
+        Integer odd_s = odd_tmp>100?100:odd_tmp;
+        Integer odd_a = Long.valueOf(Math.round((100 - odd_s) * 0.7)).intValue();
         Integer odd_b = 100 - odd_s - odd_a;
-        int [] arr={odd_s,odd_a,odd_b};
+        String [] arr={odd_s+"%",odd_a+"%",odd_b+"%"};
         rtMap.put("odds", arr);
         return rtMap;
     }
@@ -455,6 +470,9 @@ public class ComponentService extends BaseService<ComponentService> {
         String[] ids = componentIds.split(",");
         if (ids.length!=3) {//目前合成材料长度为3个
             return ResultUtils.rtFailParam(null, "componentIds参数长度异常，日了狗了");
+        }
+        for (String componentId : ids) {
+            componentMapper.dropFamilyComponentByCompound(Long.valueOf(componentId));
         }
         Long familyId = familyMapper.queryCreateFamilyId(userId);
         CompoundInfo info = new CompoundInfo();
@@ -469,6 +487,8 @@ public class ComponentService extends BaseService<ComponentService> {
         info.setLookAdUserIds("");
         info.setLookAdCount(0);
         compoundMapper.insertCompoundInfo(info);
+        //合成配件加入活跃值业务
+        livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId16);
         return null;
     }
 
@@ -570,16 +590,16 @@ public class ComponentService extends BaseService<ComponentService> {
         Map<String, Object> rtMap = new HashMap<>();
         List<Map<String, Object>> componentList = new ArrayList<>();
         int[] arr = {1,2,3};
-        int[] status = new int[3];
+        String[] status = new String[3];
         for (int i = 0; i < arr.length; i++) {
             Map<String, Object> m1 = new HashMap<>();
             CompoundInfo compoundInfo = compoundMapper.getCompoundInfoByFamilyIdAndStoveId(familyId, arr[i]);
             if (compoundInfo==null) {
-                status[i] = 0;
+                status[i] = "0";
             } else if (compoundInfo.getStatus()==0) {
-                status[i] = 1;
+                status[i] = "1";
             } else if (compoundInfo.getStatus()==1) {
-                status[i] = 2;
+                status[i] = "2";
                 //处理合成业务
                 String componentIds = compoundInfo.getComponentIds();
                 String[] ids = componentIds.split(",");
@@ -658,6 +678,8 @@ public class ComponentService extends BaseService<ComponentService> {
         taskPowerLogs.setJsonValue(String.format(jsonValue, userId, power, userComponentId));
         int hadAdd = taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);
         if (hadAdd > 0) {
+            //贡献配件加入活跃值业务
+            livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId13);
             return new HashMap<>();
         }
         return null;
@@ -799,6 +821,9 @@ public class ComponentService extends BaseService<ComponentService> {
             String aInfo = gson.toJson(bean);
 
             chezuImService.prayingSubmit("", nick, String.valueOf(userId), dicComponent.getComponentValue(), aInfo, "");
+
+            //发布祈愿加入活跃值业务
+            livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId12);
         }
         return insert;
     }
@@ -979,6 +1004,9 @@ public class ComponentService extends BaseService<ComponentService> {
         msg.getData().put("power", String.valueOf(power));
         String toUserNickName = usersAccountMapper.findAccountById(log.getToUserId()).getNickName();
         chezuImService.prayingRealize(nickName, toUserNickName, String.valueOf(log.getToUserId()), dicComponent.getComponentValue(), "");
+
+        //满足祈愿加入活跃值业务
+        livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId11);
         return msg;
     }
 

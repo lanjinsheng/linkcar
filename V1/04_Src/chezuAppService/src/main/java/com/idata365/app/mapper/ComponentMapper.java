@@ -37,7 +37,8 @@ public interface ComponentMapper {
 	public List<ComponentFamily> getFreeComponentFamily(@Param("familyId") Long familyId);
 	
 	public int dropFamilyComponent(@Param("familyComponentId") Long familyComponentId);
-	
+	public int dropFamilyComponentByCompound(@Param("familyComponentId") Long familyComponentId);
+
 	public ComponentFamily getFamilyComponent(@Param("familyComponentId") Long familyComponentId);
 	public ComponentUser getComponentUser(@Param("userComponentId") Long userComponentId);
 	

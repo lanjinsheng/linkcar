@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.idata365.app.config.CheZuAppProperties;
+import com.idata365.app.constant.DicLivenessConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class LookAdService extends BaseService<LookAdService> {
 	private UsersAccountMapper usersAccountMapper;
 	@Autowired
 	private CheZuAppProperties app;
+	@Autowired
+	private LivenessService livenessService;
 
 	/**
 	 * 
@@ -149,6 +152,8 @@ public class LookAdService extends BaseService<LookAdService> {
 			if (info == null || info.getAdPassId() != adPassId) {
 				powerNum = 30L;
 				valid = 1;
+				//看视频加入活跃值业务
+				livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId4);
 			}
 		}
 		logs.setPowerNum(powerNum);

@@ -1,22 +1,22 @@
 package com.idata365.app.service;
 
- 
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.idata365.app.constant.DicLivenessConstant;
+import com.idata365.app.entity.FamilyRelation;
+import com.idata365.app.mapper.FamilyRelationMapper;
+import com.idata365.app.mapper.UsersAccountMapper;
+import com.idata365.app.remote.ChezuAssetService;
+import com.idata365.app.serviceV2.LivenessService;
+import com.idata365.app.util.DateTools;
+import com.idata365.app.util.SignUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.idata365.app.entity.FamilyRelation;
-import com.idata365.app.mapper.FamilyRelationMapper;
-import com.idata365.app.mapper.UsersAccountMapper;
-import com.idata365.app.remote.ChezuAssetService;
-import com.idata365.app.util.DateTools;
-import com.idata365.app.util.SignUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class FightService extends BaseService<FightService> {
@@ -28,6 +28,8 @@ public class FightService extends BaseService<FightService> {
 	private UsersAccountMapper usersAccountMapper;
 	@Autowired
 	private ChezuAssetService chezuAssetService;
+	@Autowired
+	private LivenessService livenessService;
 
      /**
       * 获取对手俱乐部id，无对战记录返回null
@@ -72,7 +74,7 @@ public class FightService extends BaseService<FightService> {
  * @return
  */
     @Transactional
-	public boolean insertFightRelation(Long selfFamilyId,Long competitorFamilyId){
+	public boolean insertFightRelation(Long selfFamilyId,Long competitorFamilyId,Long userId){
     	//删除老匹配
     	String tomorrow=DateTools.getTomorrowDateStr();
     	Map<String,Object> map=new HashMap<String,Object>();
@@ -104,10 +106,13 @@ public class FightService extends BaseService<FightService> {
 		relation.setUniKey1(key1+"-"+key2+"-"+tomorrow);
 		
 		FamilyRelation hadRelation=familyRelationMapper.hadMatch(relation);
-		if(hadRelation!=null){//存在被挑战记录，更新记录类型
+		if(hadRelation!=null){
+			//存在被挑战记录，更新记录类型
 			familyRelationMapper.updateRelationType(hadRelation.getId()); 
 		}else{//插入记录
-			familyRelationMapper.insertFamilyRelation(relation); 
+			familyRelationMapper.insertFamilyRelation(relation);
+			//赛车对战加入活跃值业务
+			livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId15);
 		}
 		return true;
 	}

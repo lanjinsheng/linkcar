@@ -6,6 +6,7 @@ import com.idata365.app.entity.DicFamilyType;
 import com.idata365.app.entity.DicGameDay;
 import com.idata365.app.entity.DicUserMission;
 import com.idata365.app.entity.v2.DicComponent;
+import com.idata365.app.entity.v2.DicLiveness;
 import com.idata365.app.mapper.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -38,6 +39,8 @@ public class DicService extends BaseService<DicService> {
 	DicRuleMapper dicRuleMapper;
 	@Autowired
 	DicAdMapMapper dicAdMapMapper;
+	@Autowired
+	UserLivenessLogMapper userLivenessLogMapper;
 
 	@Transactional
 	public List<DicFamilyType> getDicFamilyType() {
@@ -47,7 +50,7 @@ public class DicService extends BaseService<DicService> {
 	public List<DicCar> getDicCar() {
 		return dicCarMapper.getDicCar(null);
 	}
-	
+
 	@Transactional
 	public List<DicUserMission> getDicUserMission() {
 		return dicUserMissionMapper.getAllDicUserMission();
@@ -56,7 +59,7 @@ public class DicService extends BaseService<DicService> {
 	public List<DicComponent> getDicComponent() {
 		return dicComponentMapper.getDicComponent(null);
 	}
-	
+
 	@Transactional
 	public String getNotify() {
 		Map<String, String> map = dicNotifyMapper.getLatestNotify();
@@ -90,7 +93,7 @@ public class DicService extends BaseService<DicService> {
 		List<Map<String, String>> list = dicNotifyMapper.playHelper();
 		return list;
 	}
-	
+
 	public List<Map<String, String>> getRulesByType(int ruleType) {
 		List<Map<String, String>> list = dicRuleMapper.getRulesByType(ruleType);
 
@@ -102,9 +105,14 @@ public class DicService extends BaseService<DicService> {
 
 		return list;
 	}
-	
+
 	public List<Map<String, String>> getDicAdMap() {
 		List<Map<String, String>> list = dicAdMapMapper.getDicAdMap();
+		return list;
+	}
+
+	public List<DicLiveness> getLiveness() {
+		List<DicLiveness> list = userLivenessLogMapper.getLiveness();
 		return list;
 	}
 

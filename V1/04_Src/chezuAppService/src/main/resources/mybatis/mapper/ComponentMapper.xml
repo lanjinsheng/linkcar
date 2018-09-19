@@ -97,7 +97,13 @@
      update
           componentFamily
           set componentStatus=2 where id=#{familyComponentId} and componentStatus=1
-</update> 
+</update>
+
+<update id="dropFamilyComponentByCompound" >
+     update
+          componentFamily
+          set componentStatus=5 where id=#{familyComponentId} and componentStatus=1
+</update>
 
 
  <select id="getFamilyComponent" resultType="com.idata365.app.entity.v2.ComponentFamily" >

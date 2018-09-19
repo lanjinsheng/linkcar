@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.idata365.app.config.CheZuAppProperties;
+import com.idata365.app.constant.DicLivenessConstant;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,22 +45,24 @@ import com.idata365.app.util.SignUtils;
 @Service
 public class InteractService extends BaseService<InteractService> {
 	private final static Logger LOG = LoggerFactory.getLogger(InteractService.class);
- @Autowired
- InteractTempCarMapper interactTempCarMapper;
- @Autowired 
- TaskPowerLogsMapper taskPowerLogsMapper;
- @Autowired
- UsersAccountMapper usersAccountMapper;
- 
- @Autowired 
- InteractPeccancyMapper interactPeccancyMapper;
- @Autowired 
- InteractLogsMapper interactLogsMapper;
- 
- @Autowired 
- ChezuAssetService chezuAssetService;
- @Autowired
- CheZuAppProperties appProperties;
+	@Autowired
+	InteractTempCarMapper interactTempCarMapper;
+	@Autowired
+	TaskPowerLogsMapper taskPowerLogsMapper;
+	@Autowired
+	UsersAccountMapper usersAccountMapper;
+
+	@Autowired
+	InteractPeccancyMapper interactPeccancyMapper;
+	@Autowired
+	InteractLogsMapper interactLogsMapper;
+
+	@Autowired
+	ChezuAssetService chezuAssetService;
+	@Autowired
+	CheZuAppProperties appProperties;
+	@Autowired
+	private LivenessService livenessService;
 	public InteractService() {
 
 	}
@@ -135,10 +138,10 @@ public class InteractService extends BaseService<InteractService> {
 			UsersAccount account2=usersAccountMapper.findAccountById(dbPeccancy.getLawBreakerId());
 			log.setUserNameB(account2.getNickName());
 	    	interactLogsMapper.insertLog(log2);
-	    	
-	    	
-	    	
-	    	
+
+			//替缴罚单加入活跃值业务
+			livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId6);
+
 		}
 		Map<String, String> map=chezuAssetService.reducePowersByPeccancy(dbPeccancy.getLawManId(), userId, type,
 				dbPeccancy.getPowerNum(), peccancyId, SignUtils.encryptHMAC(String.valueOf(dbPeccancy.getLawManId())));
@@ -565,7 +568,9 @@ public class InteractService extends BaseService<InteractService> {
 				UsersAccount account=usersAccountMapper.findAccountById(r.getUserId());
 				log.setUserNameB(account.getNickName());
 		    	interactLogsMapper.insertLog(log);
-				
+
+				//贴条加入活跃值业务
+				livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId5);
 			}else{
 				//动力的处理
 				TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
@@ -583,6 +588,8 @@ public class InteractService extends BaseService<InteractService> {
 					UsersAccount account=usersAccountMapper.findAccountById(r.getUserId());
 					log.setUserNameB(account.getNickName());
 			    	interactLogsMapper.insertLog(log);
+					//偷取动力加入活跃值业务
+					livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId7);
 		    	}
 		    	int hadAdd=taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
 		    	if(hadAdd>0) {
