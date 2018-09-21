@@ -390,8 +390,33 @@ public class ComponentService extends BaseService<ComponentService> {
     }
 
     @Transactional
-    public Map<String, Object> deployComponent(long userComponentId, long userCarId, long destroyComponentId) {
+    public Map<String, Object> deployComponent(long userComponentId, long userCarId, long userId) {
         ComponentUser componentUser = componentMapper.getComponentUser(userComponentId);
+        //根据userId和type查询使用中的配件
+        Integer componentType = DicComponentConstant.getDicComponent(componentUser.getComponentId()).getComponentType();
+        ComponentUser inUse = componentMapper.getUserComponentByTypeInUse(componentType, userId);
+        //老的返回仓库
+        if (inUse!=null&&inUse.getId() > 0) {
+            Long destroyComponentId = inUse.getId();
+            ComponentUser componentUser2 = componentMapper.getComponentUser(destroyComponentId);
+            //插入componentUserUseLog
+            ComponentUserUseLog log2 = new ComponentUserUseLog();
+            log2.setUserCarId(0L);
+            log2.setComponentId(componentUser2.getComponentId());
+            log2.setEventType(7);
+            log2.setUserId(componentUser2.getUserId());
+            log2.setUserComponentId(userComponentId);
+            componentMapper.insertComponentUserUseLog(log2);
+
+            //更新零件
+            Map<String, Object> userCompUpdate2 = new HashMap<>();
+            userCompUpdate2.put("inUse", 0);
+            userCompUpdate2.put("componentStatus", 1);
+            userCompUpdate2.put("userComponentId", destroyComponentId);
+            componentMapper.updateUserComponent(userCompUpdate2);
+        }
+
+
         //插入componentUserUseLog
         ComponentUserUseLog log = new ComponentUserUseLog();
         log.setUserCarId(userCarId);
@@ -409,25 +434,7 @@ public class ComponentService extends BaseService<ComponentService> {
         userCompUpdate.put("userCarId", userCarId);
         componentMapper.updateUserComponent(userCompUpdate);
 
-        //老的销毁
-        if (destroyComponentId > 0) {
-            ComponentUser componentUser2 = componentMapper.getComponentUser(destroyComponentId);
-            //插入componentUserUseLog
-            ComponentUserUseLog log2 = new ComponentUserUseLog();
-            log2.setUserCarId(userCarId);
-            log2.setComponentId(componentUser2.getComponentId());
-            log2.setEventType(2);
-            log2.setUserId(componentUser2.getUserId());
-            log2.setUserComponentId(userComponentId);
-            componentMapper.insertComponentUserUseLog(log2);
 
-            //更新零件
-            Map<String, Object> userCompUpdate2 = new HashMap<>();
-            userCompUpdate2.put("inUse", 0);
-            userCompUpdate2.put("componentStatus", 2);
-            userCompUpdate2.put("userComponentId", destroyComponentId);
-            componentMapper.updateUserComponent(userCompUpdate2);
-        }
         return null;
     }
 
@@ -510,33 +517,58 @@ public class ComponentService extends BaseService<ComponentService> {
             return null;
         }
         String componentIds = compoundInfo.getComponentIds();
-        if (compoundInfo.getStatus()>0) {
-            componentIds += compoundInfo.getFinalComponentId();
-        }
         String[] ids = componentIds.split(",");
         for (String componentId : ids) {
             Map<String, Object> m1 = new HashMap<>();
             ComponentFamily componentFamily = componentMapper.getFamilyComponent(Long.valueOf(componentId));
-            DicComponent dicComponent = DicComponentConstant.getDicComponent(componentFamily.getComponentId());
-            Integer travelNum = 0;
-            if (componentFamily.getGainType() == 2) {
-                //道具由成员贡献，计算行程损耗
-                Long userComponentId = componentMapper.getComponentUserUseLogById(componentFamily.getEffectId()).getUserComponentId();
-                //剩余行程数
-                travelNum = componentMapper.getComponentUser(userComponentId).getLeftTravelNum();
-            } else {
-                travelNum = dicComponent.getTravelNum();
+            if (componentFamily!=null) {
+                DicComponent dicComponent = DicComponentConstant.getDicComponent(componentFamily.getComponentId());
+                Integer travelNum = 0;
+                if (componentFamily.getGainType() == 2) {
+                    //道具由成员贡献，计算行程损耗
+                    Long userComponentId = componentMapper.getComponentUserUseLogById(componentFamily.getEffectId()).getUserComponentId();
+                    //剩余行程数
+                    travelNum = componentMapper.getComponentUser(userComponentId).getLeftTravelNum();
+                } else {
+                    travelNum = dicComponent.getTravelNum();
+                }
+                m1.put("quality",dicComponent.getQuality());
+                m1.put("imgUrl",dicComponent.getComponentUrl());
+                m1.put("travelNum",travelNum+"/"+dicComponent.getTravelNum());
+                componentList.add(m1);
             }
+        }
+        if (compoundInfo.getStatus()>0) {
+            DicComponent dicComponent = DicComponentConstant.getDicComponent(compoundInfo.getFinalComponentId());
+            Map<String, Object> m1 = new HashMap<>();
             m1.put("quality",dicComponent.getQuality());
             m1.put("imgUrl",dicComponent.getComponentUrl());
-            m1.put("travelNum",travelNum+"/"+dicComponent.getTravelNum());
+            m1.put("travelNum",dicComponent.getTravelNum()+"/"+dicComponent.getTravelNum());
             componentList.add(m1);
         }
         Date endTime = compoundInfo.getEndTime();
         long time = endTime.getTime()-new Date().getTime();
         time = time<0?0:time;
+        if (time == 0) {
+            rtMap.put("status", "1");
+        } else {
+            rtMap.put("status", "0");
+        }
         rtMap.put("leftTime", DurationFormatUtils.formatDuration(time, "HH小时mm分钟"));
         rtMap.put("componentList", componentList);
+
+        String lookAdUserIds = compoundInfo.getLookAdUserIds();
+        if (lookAdUserIds.length() > 0) {
+            String[] split = lookAdUserIds.split(",");
+            List<String> list = Arrays.asList(split);
+            if (list.contains(String.valueOf(userId))) {
+                rtMap.put("canLookAd", "0");
+                rtMap.put("desc", "");
+            }
+        } else {
+            rtMap.put("canLookAd", "1");
+            rtMap.put("desc", "时间太长？快去看视频吧！可以缩短时间哦~");
+        }
         return rtMap;
     }
 
@@ -601,43 +633,45 @@ public class ComponentService extends BaseService<ComponentService> {
             } else if (compoundInfo.getStatus()==1) {
                 status[i] = "2";
                 //处理合成业务
-                String componentIds = compoundInfo.getComponentIds();
-                String[] ids = componentIds.split(",");
-                Integer odd_tmp=0;
-                Integer finalComponentId=0;
-                int type=0;
-                for (String componentId : ids) {
-                    ComponentFamily componentFamily = componentMapper.getFamilyComponent(Long.valueOf(componentId));
-                    DicComponent dicComponent = DicComponentConstant.getDicComponent(componentFamily.getComponentId());
-                    type = dicComponent.getComponentType();
-                    String quality = dicComponent.getQuality();
-                    Integer travelNum = 0;
-                    if (componentFamily.getGainType() == 2) {
-                        //道具由成员贡献，计算行程损耗
-                        Long userComponentId = componentMapper.getComponentUserUseLogById(componentFamily.getEffectId()).getUserComponentId();
-                        //剩余行程数
-                        travelNum = componentMapper.getComponentUser(userComponentId).getLeftTravelNum();
-                    } else {
-                        travelNum = dicComponent.getTravelNum();
+                if (compoundInfo.getFinalComponentId() != 0) {
+                    String componentIds = compoundInfo.getComponentIds();
+                    String[] ids = componentIds.split(",");
+                    Integer odd_tmp=0;
+                    Integer finalComponentId=0;
+                    int type=0;
+                    for (String componentId : ids) {
+                        ComponentFamily componentFamily = componentMapper.getFamilyComponent(Long.valueOf(componentId));
+                        DicComponent dicComponent = DicComponentConstant.getDicComponent(componentFamily.getComponentId());
+                        type = dicComponent.getComponentType();
+                        String quality = dicComponent.getQuality();
+                        Integer travelNum = 0;
+                        if (componentFamily.getGainType() == 2) {
+                            //道具由成员贡献，计算行程损耗
+                            Long userComponentId = componentMapper.getComponentUserUseLogById(componentFamily.getEffectId()).getUserComponentId();
+                            //剩余行程数
+                            travelNum = componentMapper.getComponentUser(userComponentId).getLeftTravelNum();
+                        } else {
+                            travelNum = dicComponent.getTravelNum();
+                        }
+                        odd_tmp+=compoundMapper.getOddByQualityAndTravelNum(quality, travelNum);
                     }
-                    odd_tmp+=compoundMapper.getOddByQualityAndTravelNum(quality, travelNum);
-                }
-                Integer odd_s = odd_tmp;
-                Integer odd_a = Long.valueOf(Math.round((100 - odd_tmp) * 0.7)).intValue();
-                Integer odd_b = 100 - odd_s - odd_a;
-                int rand = RandUtils.generateRand(1, 100);
-                if (rand <= odd_b) {
-                    //b
-                    finalComponentId = DicComponentConstant.dicComponentMapB.get(type);
-                } else if (rand > odd_b && rand <= odd_a + odd_b) {
-                    //a
-                    finalComponentId = DicComponentConstant.dicComponentMapA.get(type);
-                } else {
-                    //s
-                    finalComponentId = DicComponentConstant.dicComponentMapS.get(type);
-                }
+                    Integer odd_s = odd_tmp;
+                    Integer odd_a = Long.valueOf(Math.round((100 - odd_tmp) * 0.7)).intValue();
+                    Integer odd_b = 100 - odd_s - odd_a;
+                    int rand = RandUtils.generateRand(1, 100);
+                    if (rand <= odd_b) {
+                        //b
+                        finalComponentId = DicComponentConstant.dicComponentMapB.get(type);
+                    } else if (rand > odd_b && rand <= odd_a + odd_b) {
+                        //a
+                        finalComponentId = DicComponentConstant.dicComponentMapA.get(type);
+                    } else {
+                        //s
+                        finalComponentId = DicComponentConstant.dicComponentMapS.get(type);
+                    }
 
-                compoundMapper.updateFinalComponentId(compoundInfo.getId(),finalComponentId);
+                    compoundMapper.updateFinalComponentId(compoundInfo.getId(),finalComponentId);
+                }
             }
         }
         rtMap.put("statusList", status);
@@ -796,6 +830,7 @@ public class ComponentService extends BaseService<ComponentService> {
 
     @Transactional
     public int submitPraying(Integer componentId, Long userId, String nick) {
+        componentMapper.updateGiveLogStatus(userId);
         DicComponent dicComponent = DicComponentConstant.getDicComponent(componentId);
         ComponentGiveLog giveLog = new ComponentGiveLog();
         giveLog.setComponentId(dicComponent.getComponentId());//祈愿只需要类型

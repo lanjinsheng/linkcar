@@ -88,7 +88,7 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   Map<String,Object> paramMap=new HashMap<>();
 	   paramMap.put("userId", userId);
 	   paramMap.put("gainType", 1);
-	   paramMap.put("createTime", DateTools.getCurDateAddMinute(-24*60));
+	   paramMap.put("createTime", DateTools.getCurDateAddMinute(-3*60));//宝箱保留3个小时
 	   
 	   List<BoxTreasureUser> boxIds=boxTreasureMapper.getTripBoxIds(paramMap);
 	   List<Map<String,Object>> boxList=new ArrayList<>();

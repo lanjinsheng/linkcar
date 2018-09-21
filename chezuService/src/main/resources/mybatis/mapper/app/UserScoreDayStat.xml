@@ -75,6 +75,10 @@
     <select id="getUsersDayScoreByFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserScoreDayStat">
 		SELECT *  from userScoreDayStat where familyId=#{familyId}  and daystamp=#{daystamp} order by avgScore desc
 	 </select>
+
+    <select id="getUsersDayScoreByUserId"  resultMap="BaseUserScoreDayStatMap" >
+		SELECT *  from userScoreDayStat where userId=#{userId}  and daystamp=#{daystamp}
+	 </select>
 	
 	
 		<!-- 定时处理行程逻辑 -->
@@ -117,7 +121,11 @@
               taskStatus=-1 and taskFlag<![CDATA[<]]>${compareTimes}
      </update>
      
-<!-- 定时处理行程逻辑 结束-->		
-	
+<!-- 定时处理行程逻辑 结束-->
+
+
+    <select id="getHadScoreMembersToBox" resultType="java.lang.Integer">
+		select count(DISTINCT(userId)) from userScoreDayStat where daystamp=#{daystamp} and avgScore>0 and userId in (select userId from userFamilyRelation where familyId=#{familyId})
+	 </select>
 	
 </mapper>

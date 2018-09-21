@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.idata365.app.config.CheZuAppProperties;
+import com.idata365.app.mapper.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -68,10 +69,6 @@ import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
-import com.idata365.app.mapper.FamilyMapper;
-import com.idata365.app.mapper.GameMapper;
-import com.idata365.app.mapper.ScoreMapper;
-import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAccountService;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.service.BaseService;
@@ -103,6 +100,8 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	ChezuAssetService chezuAssetService;
 	@Autowired
 	private CheZuAppProperties app;
+	@Autowired
+	private UserLivenessLogMapper userLivenessLogMapper;
 
 	/**
 	 * 
@@ -1229,9 +1228,10 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 	public Map<String, Object> queryClubBonusInfo(long userId) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		List<Map<String, String>> rtList = new ArrayList<>();
-		Map<String, String> clubScoreInfo = new HashMap<String, String>();
-		Map<String, String> clubMemberInfo = new HashMap<String, String>();
-		Map<String, String> clubTypeInfo = new HashMap<String, String>();
+		Map<String, String> clubScoreInfo = new HashMap<String, String>();//分数
+		Map<String, String> clubMemberInfo = new HashMap<String, String>();//人数
+		Map<String, String> clubTypeInfo = new HashMap<String, String>();//等级
+		Map<String, String> clubLivenessInfo = new HashMap<String, String>();//活跃值
 		Map<String, String> pkStatusInfo = new HashMap<String, String>();
 		Long familyId = this.familyMapper.queryCreateFamilyId(userId);
 		String yesterday = DateTools.getCurDateAddDay(-1);
@@ -1258,6 +1258,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		Double x1 = 1d;
 		Double x2 = 1d;
 		Double x3 = 1d;
+		Double x4 = 1d;
 
 
 		if(opponentId == null){
@@ -1288,8 +1289,27 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 			x2 = ((double)app.getCardinalNumQ())/100;
 		}
 
+		//x4:
+		int livenessValue = userLivenessLogMapper.getYesterdayLivenessValueByFamilyId(familyId);
+		if (livenessValue > 1000) {
+			x4 = 2.5D;
+		} else if (livenessValue > 800) {
+			x4 = 2.5D;
+		} else if (livenessValue > 600) {
+			x4 = 2.0D;
+		} else if (livenessValue > 400) {
+			x4 = 1.75D;
+		} else if (livenessValue > 200) {
+			x4 = 1.25D;
+		} else {
+			x4 = 1D;
+		}
+		clubLivenessInfo.put("value",String.valueOf(livenessValue));
+		clubLivenessInfo.put("num", "×" + String.valueOf(x4));
+		clubLivenessInfo.put("desc","活跃值");
+
 		// 合计：
-		long totalPower = Math.round(score * (x1 + x2 + x3));
+		long totalPower = Math.round(score * (x4 + x2 + x3));
 		rtMap.put("totalPower", String.valueOf(totalPower) + "动力");
 		int hadGetBonus = this.queryHadGetBonus(userId);
 		if (totalPower == 0) {
@@ -1309,8 +1329,9 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		pkStatusInfo.put("desc", "挑战结果");
 
 		rtList.add(clubScoreInfo);
-		rtList.add(clubMemberInfo);
+		//rtList.add(clubMemberInfo);
 		rtList.add(clubTypeInfo);
+		rtList.add(clubLivenessInfo);
 		rtList.add(pkStatusInfo);
 		rtMap.put("infoList", rtList);
 		return rtMap;

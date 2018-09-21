@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.idata365.mapper.app.UserScoreDayStatMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,10 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	BoxTreasureMapper boxTreasureMapper;
 	@Autowired
     TaskFamilyPkMapper taskFamilyPkMapper;
+	@Autowired
+	UserScoreDayStatMapper userScoreDayStatMapper;
+
+
 	/**
 	 * 随机生成道具配件
 	 * @return
@@ -111,16 +116,19 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 	   //familyNum改为有分数人数
 	   String date = DateTools.getAddMinuteDateTime(DateTools.getYYYY_MM_DD(), -24, "yyyy-MM-dd");
 	   familyNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, date);
-	   
+	   int members = userScoreDayStatMapper.getHadScoreMembersToBox(date, familyId);
+	   componentNum = members;
+	   componentNum = componentNum < 1 ? 1 : componentNum;
+	   componentNum = componentNum > 8 ? 8 : componentNum;
 	   if(level==1) {//冠军
 		  int add=RandUtils.generateRand(1, 3);
-		  componentNum=familyNum+add;
+		  //componentNum=familyNum+add;
 		  for(int i=0;i<componentNum;i++) {
 			  int r2=RandUtils.generateRand(1, 5);
 			  DicComponent comp=null;
-			  if(r<=20) {//S
+			  if(r<=15) {//S
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapS.get(r2));
-			  }else if(r>20 && r<=80) {//A
+			  }else if(r>15 && r<=40) {//A
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapA.get(r2));
 				  
 			  }else {//B
@@ -131,13 +139,13 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		  }
 	   }else if(level==2) {//钻石
 		   int add=RandUtils.generateRand(1, 2);
-		   componentNum=familyNum+add;
+		   //componentNum=familyNum+add;
 		   for(int i=0;i<componentNum;i++) {
 			   int r2=RandUtils.generateRand(1, 5);
 			   DicComponent comp=null;
-			   if(r<=15) {//S
+			   if(r<=10) {//S
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapS.get(r2));
-			   }else if(r>15 && r<=65) {//A
+			   }else if(r>10 && r<=35) {//A
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapA.get(r2));
 				  
 			   }else {//B
@@ -148,13 +156,13 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		   }
 	   }else if(level==3) {//黄金
 		   int add=RandUtils.generateRand(0, 2);
-		   componentNum=familyNum+add;
+		   //componentNum=familyNum+add;
 		   for(int i=0;i<componentNum;i++) {
 			   int r2=RandUtils.generateRand(1, 5);
 			   DicComponent comp=null;
 			   if(r<=10) {//S
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapS.get(r2));
-			   }else if(r>10 && r<=50) {//A
+			   }else if(r>10 && r<=30) {//A
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapA.get(r2));
 				  
 			   }else {//B
@@ -165,13 +173,13 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 		   }
 	   }else if(level==4) {//白银
 		   int add=RandUtils.generateRand(0, 1);
-		   componentNum=familyNum+add;
+		   //componentNum=familyNum+add;
 		   for(int i=0;i<componentNum;i++) {
 			   int r2=RandUtils.generateRand(1, 5);
 			   DicComponent comp=null;
-			   if(r<=10) {//S
+			   if(r<=5) {//S
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapS.get(r2));
-			   }else if(r>10 && r<=40) {//A
+			   }else if(r>5 && r<=25) {//A
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapA.get(r2));
 				  
 			   }else {//B
@@ -180,17 +188,20 @@ public class BoxTreasureService extends BaseService<BoxTreasureService> {
 			     BoxTreasureFamily box=new BoxTreasureFamily(daystamp,boxId,familyId);
 			     addBoxTrasureFamily(list,comp,box);
 		   }
-	   }else if(level==5) {//白银
+	   }else if(level==5) {//	青铜
 		   int add=RandUtils.generateRand(-1, 1);
-		   componentNum=familyNum+add;
+		   //componentNum=familyNum+add;
 		   if(componentNum<1) {
 			   componentNum=1;
 		   }
 		   for(int i=0;i<componentNum;i++) {
 			   int r2=RandUtils.generateRand(1, 5);
 			   DicComponent comp=null;
-			   if(r<=30) {//A
+			   if(r<=5) {//S
+				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapS.get(r2));
+			   }else if(r>5 && r<=20) {//A
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapA.get(r2));
+
 			   }else {//B
 				   comp=DicComponentConstant.getDicComponent(DicComponentConstant.dicComponentMapB.get(r2));
 			   }

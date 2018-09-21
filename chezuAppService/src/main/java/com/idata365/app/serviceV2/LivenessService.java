@@ -28,8 +28,8 @@ public class LivenessService extends BaseService<LivenessService> {
         }
     }
 
-
-    public int insertUserLivenessLog(long userId,int livenessId) {
+    @Transactional
+    public int insertUserLivenessLog(long userId, int livenessId) {
         DicLiveness dicLiveness = DicLivenessConstant.getDicLiveness(livenessId);
         int countById = userLivenessLogMapper.getTodayCountById(userId, livenessId);
         if (countById > 0) {

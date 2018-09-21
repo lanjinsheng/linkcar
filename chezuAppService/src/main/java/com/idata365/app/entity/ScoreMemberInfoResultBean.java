@@ -31,7 +31,17 @@ public class ScoreMemberInfoResultBean implements Serializable {
 	private String isCanStealPower;
 	
 	private String isCanPayTicket;
-	
+
+	private String livenessValue;
+
+	public String getLivenessValue() {
+		return livenessValue;
+	}
+
+	public void setLivenessValue(String livenessValue) {
+		this.livenessValue = livenessValue;
+	}
+
 	public String getIsCanStealPower() {
 		return isCanStealPower;
 	}

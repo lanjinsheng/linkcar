@@ -45,6 +45,8 @@ public interface ComponentMapper {
 	public int 	updateFamilyComponent(Map<String,Object> map);
 	public int 	gotFamilyComponent(Map<String,Object> map);
 	public ComponentUser getUserComponentByType(Map<String,Object> map);
+
+	public ComponentUser getUserComponentByTypeInUse(@Param("componentType")Integer componentType,@Param("userId")Long userId);
 	public int gotUserComponent(ComponentUser componentUser);
 	
 	
@@ -75,6 +77,8 @@ public interface ComponentMapper {
 	public int updateComponentGiveLogApplyPraying(ComponentGiveLog componentGiveLog);
 	
 	public int ignoreGiveLog(ComponentGiveLog componentGiveLog);
+
+	public int updateGiveLogStatus(@Param("userId") Long userId);
 	
 	public int countOfPray(@Param("userId") Long userId);
 	

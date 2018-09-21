@@ -120,7 +120,7 @@ public class ComponentController extends BaseController {
 		long userComponentId=Long.valueOf(requestBodyParams.get("userComponentId").toString());
 		long userCarId=Long.valueOf(requestBodyParams.get("userCarId").toString());
 		long destroyComponentId=0;
-		Map<String,Object> rtMap=componentService.deployComponent(userComponentId,userCarId,destroyComponentId);
+		Map<String,Object> rtMap=componentService.deployComponent(userComponentId,userCarId,this.getUserId());
 		return ResultUtils.rtSuccess(rtMap);
 	}
 

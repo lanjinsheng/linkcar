@@ -7,7 +7,7 @@ public class FamilyParamBean implements Serializable
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3514235459591871607L;
+	private static final long serialVersionUID = -3514235459591841607L;
 
 	private long id;
 	

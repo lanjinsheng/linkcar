@@ -142,9 +142,10 @@ public class InteractService extends BaseService<InteractService> {
 			//替缴罚单加入活跃值业务
 			livenessService.insertUserLivenessLog(userId, DicLivenessConstant.livenessId6);
 
+
 		}
 		Map<String, String> map=chezuAssetService.reducePowersByPeccancy(dbPeccancy.getLawManId(), userId, type,
-				dbPeccancy.getPowerNum(), peccancyId, SignUtils.encryptHMAC(String.valueOf(dbPeccancy.getLawManId())));
+				dbPeccancy.getPowerNum()*appProperties.getPayPeccancyMultiplying().intValue(), peccancyId, SignUtils.encryptHMAC(String.valueOf(dbPeccancy.getLawManId())));
 		if(map==null || map.get("flag").equals("0")){
 			throw new RuntimeException("无法进行缴纳支付");
 		}
@@ -156,7 +157,7 @@ public class InteractService extends BaseService<InteractService> {
 	 * 罚单查询
 	 */
 	  final String remark1="玩家【%s】给您的爱车贴了一张条";
-	  final String remark2="他的爱车被贴了一张条，您是否要帮他缴纳罚金";
+	  final String remark2="他的爱车被贴了一张条，您是否要帮他缴纳罚金（6折）";
 	@Transactional
 	public List<Map<String,Object>> getPeccancyList(Long userId,int  type){
 		 Map<String,Object> pamMap=new HashMap<String,Object>();
@@ -173,6 +174,7 @@ public class InteractService extends BaseService<InteractService> {
 		 }else{//别人的条子
 			 for(Map<String,Object> m:list){
 				 m.put("remark",remark2);
+				 m.put("powerNum",Integer.valueOf(String.valueOf(m.get("powerNum")))*appProperties.getPayPeccancyMultiplying().intValue());
 			 }
 		 }
 		 return list;

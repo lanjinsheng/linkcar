@@ -3,6 +3,7 @@ package com.idata365.app.controller.securityV2;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.idata365.app.entity.v2.DicLiveness;
 import com.idata365.app.serviceV2.RemindService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,16 +113,34 @@ public class FightController extends BaseController {
 			rtMap.put("imgUrl", this.getImgBasePath()+randFamily.get("imgUrl"));
 			Double d=fightService.getAvgThreeDayScore(Long.valueOf(randFamily.get("id").toString()));
 			rtMap.put("avgScore", String.valueOf(d.doubleValue()));
+			Double selfAvgScore = fightService.getAvgThreeDayScore(selfFamilyId);
+			rtMap.put("selfAvgScore", String.valueOf(selfAvgScore));
 			rtMap.put("reducePower",String.valueOf(randFamily.get("reducePower")));
-			DicFamilyType type = DicFamilyTypeConstant.getDicFamilyType(familyType);
-			win = "+" + type.getWin();
-			if (type.getLoss() >= 0) {
-				loss = "+" + type.getLoss();
-			} else {
-				loss = "" + type.getLoss();
+			//DicFamilyType type = DicFamilyTypeConstant.getDicFamilyType(familyType);
+			//win = "+" + type.getWin();
+			//if (type.getLoss() >= 0) {
+			//	loss = "+" + type.getLoss();
+			//} else {
+			//	loss = "" + type.getLoss();
+			//}
+			Double difference = (selfAvgScore - d)/10;
+			//分数补偿
+			int c = difference.intValue();
+			int w = 30 - c;
+			if (w<5) {
+				w = 5;
+			} else if (w > 55) {
+				w = 55;
 			}
-			rtMap.put("win", win);
-			rtMap.put("loss", loss);
+			int l = -30 - c;
+			if (l<-55) {
+				l = -55;
+			} else if (l > -5) {
+				l = -5;
+			}
+
+			rtMap.put("win", String.valueOf(w));
+			rtMap.put("loss", String.valueOf(l));
 		}
 		return ResultUtils.rtSuccess(rtMap);
 	}
