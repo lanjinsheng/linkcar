@@ -662,6 +662,7 @@ public class AssetController extends BaseController {
 		ServerUtil.putSuccess(map);
 		return sb.toString();
 	}
+
 	
 	public static void main(String[] args) {
 		System.out.println("Share".equals(PowerEnum.Share));

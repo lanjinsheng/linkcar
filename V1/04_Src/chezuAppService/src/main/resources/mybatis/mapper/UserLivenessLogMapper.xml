@@ -23,4 +23,16 @@
   	  select count(1) from userLivenessLog where userId=#{userId} and date(eventTime)=date(now()) and livenessId=#{livenessId}
     </select>
 
+    <select id="get1DayLivenessValue" resultType="java.lang.Integer">
+  	  SELECT IFNULL(sum(livenessValue),0) FROM userLivenessLog where date(eventTime)=date(now()) and userId=#{userId}
+    </select>
+
+    <select id="get7DayLivenessValue" resultType="java.lang.Integer">
+        SELECT IFNULL(sum(livenessValue),0) FROM userLivenessLog where <![CDATA[date(date_add(now(), interval -7 day))<=date(eventTime)<=date(now())]]> and userId=#{userId}
+    </select>
+
+    <select id="getYesterdayLivenessValueByFamilyId" resultType="java.lang.Integer">
+       SELECT IFNULL(sum(livenessValue),0) FROM userLivenessLog where date(eventTime)=date(date_add(now(), interval -1 day)) and userId in(select userId from userFamilyRelation where familyId=#{familyId})
+    </select>
+
 </mapper>

@@ -15,5 +15,5 @@ public interface CompoundMapper {
 
     int updateCompoundInfoStatus(@Param("newStatus")Integer newStatus,@Param("familyId")Long familyId,@Param("stoveId")Integer stoveId,@Param("oldStatus")Integer oldStatus);
 
-    int updateFinalComponentId(Long id, Integer finalComponentId);
+    int updateFinalComponentId(@Param("id")Long id, @Param("finalComponentId")Integer finalComponentId);
 }

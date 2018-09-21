@@ -60,11 +60,21 @@ public class CheZuAppProperties {
     private Double dogfall = 1.5D;
 
     //贴条存在时间
-    private Integer peccancyTime = 720;
+    private Integer peccancyTime;
     private Integer maxAdCount;
 
     private Double compoundCoolHour;
     private Double adReduceHour;
+
+    private Double payPeccancyMultiplying;
+
+    public Double getPayPeccancyMultiplying() {
+        return payPeccancyMultiplying;
+    }
+
+    public void setPayPeccancyMultiplying(Double payPeccancyMultiplying) {
+        this.payPeccancyMultiplying = payPeccancyMultiplying;
+    }
 
     public Double getCompoundCoolHour() {
         return compoundCoolHour;

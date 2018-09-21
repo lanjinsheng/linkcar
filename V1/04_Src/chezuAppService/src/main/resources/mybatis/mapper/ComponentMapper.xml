@@ -132,6 +132,12 @@
           componentUser where componentStatus=1 and inUse=0
           and  componentType=#{componentType} and userId=#{userId} limit 1
 </select>
+
+<select id="getUserComponentByTypeInUse" resultType="com.idata365.app.entity.v2.ComponentUser">
+     select * from
+          componentUser where componentStatus=1 and inUse=1
+          and  componentType=#{componentType} and userId=#{userId} limit 1
+</select>
 <select id="getFreeComponentTypeUser"  parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentUser">
      select * from 
           componentUser where componentStatus=1 and inUse=0
@@ -182,10 +188,16 @@
 </select>-->
 
 <select id="countOfPray" resultType="Integer">
-	 SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND logType =2 AND ((date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' ))or(giveStatus=0))
+	 SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND logType =2 AND (date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' )
 </select>
 
-<select id="countHadRequest" resultType="Integer">
+<update id="updateGiveLogStatus" >
+     update
+          componentGiveLog
+          set giveStatus=-1 where logType=2 and userId=#{userId} and giveStatus=0
+</update>
+
+    <select id="countHadRequest" resultType="Integer">
 	SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND daystamp =#{daystamp} AND logType =3 AND (giveStatus=2 or giveStatus=1)
 </select>
 

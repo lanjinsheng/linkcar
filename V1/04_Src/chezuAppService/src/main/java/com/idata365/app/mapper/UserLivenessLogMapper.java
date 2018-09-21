@@ -15,4 +15,10 @@ public interface UserLivenessLogMapper {
     List<Map<String, Object>> getUserLivenessLog(@Param("userId") long userId);
 
     int getTodayCountById(@Param("userId") long userId, @Param("livenessId") int livenessId);
+
+    int get1DayLivenessValue(@Param("userId") long userId);
+
+    int get7DayLivenessValue(@Param("userId") long userId);
+
+    int getYesterdayLivenessValueByFamilyId(@Param("familyId") long familyId);
 }

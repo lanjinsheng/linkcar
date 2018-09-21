@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.mapper.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -65,13 +66,6 @@ import com.idata365.app.entity.UsersAccountBean;
 import com.idata365.app.entity.YesterdayContributionResultBean;
 import com.idata365.app.entity.YesterdayScoreBean;
 import com.idata365.app.entity.YesterdayScoreResultBean;
-import com.idata365.app.mapper.BoxTreasureMapper;
-import com.idata365.app.mapper.CarpoolApproveMapper;
-import com.idata365.app.mapper.FamilyMapper;
-import com.idata365.app.mapper.GameMapper;
-import com.idata365.app.mapper.ScoreMapper;
-import com.idata365.app.mapper.UserScoreDayStatMapper;
-import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuAssetService;
 import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.util.AdBeanUtils;
@@ -103,6 +97,8 @@ public class ScoreService extends BaseService<ScoreService>
     CarpoolApproveMapper carpoolApproveMapper;
 	@Autowired
 	BoxTreasureMapper boxTreasureMapper;
+	@Autowired
+	UserLivenessLogMapper userLivenessLogMapper;
 	
 	/**
 	 * 
@@ -468,7 +464,8 @@ public class ScoreService extends BaseService<ScoreService>
 				tempResultBean.setIsCanStealPower(canStealPower == 0 ? "0" : "1");
 				tempResultBean.setIsCanPayTicket(canPayTicket == 0 ? "0" : "1");
 			}
-			
+			//7日活跃值
+			tempResultBean.setLivenessValue(String.valueOf(userLivenessLogMapper.get7DayLivenessValue(tempBean.getUserId())));
 			resultList.add(tempResultBean);
 		}
 		
@@ -1336,7 +1333,7 @@ public class ScoreService extends BaseService<ScoreService>
 		if (scoreMapper.getAvgScore(memberId, myFamilyId, daystamp) == null) {
 			return 0;
 		}
-		return scoreMapper.getAvgScore(memberId, myFamilyId, daystamp);
+		return BigDecimal.valueOf(scoreMapper.getAvgScore(memberId, myFamilyId, daystamp)).setScale(2,RoundingMode.HALF_EVEN).doubleValue();
 	}
 
 	// 获取个人当日最高分

@@ -22,6 +22,9 @@
             (componentId,userId,userComponentId,eventTime,eventType,userCarId) 
         VALUES
             (#{componentId},#{userId},#{userComponentId},now(),3,#{userCarId})  
-     </insert>    
-    
+     </insert>
+
+    <select id="getUseMostCarIdTodayByUserId" resultType="java.lang.Integer" >
+       select carId from (SELECT count(1) as num,carId FROM userTravelHistory where userId=#{userId} and date(endTime)=date(now()) group by carId)a order by num desc limit 1
+     </select>
 </mapper>

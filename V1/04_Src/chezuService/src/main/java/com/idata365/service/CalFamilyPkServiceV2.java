@@ -104,13 +104,34 @@ public class CalFamilyPkServiceV2 {
 		int winFamilyType=level1;
 		Integer winMemberNum=0;
 		boolean hadSendAsset=false;
+
+		//v2.2 --- 分数 决定加减奖杯数量
+		Double selfAvgScore = taskFamilyPkMapper.getFamilyAvgScore(selfFamilyId);
+		Double avgScore = taskFamilyPkMapper.getFamilyAvgScore(competitorFamilyId);
+		Double difference = (selfAvgScore - avgScore)/10;
+		//分数补偿
+		int c = difference.intValue();
+		int w = 30 - c;
+		if (w<5) {
+			w = 5;
+		} else if (w > 55) {
+			w = 55;
+		}
+		int l = -30 - c;
+		if (l<-55) {
+			l = -55;
+		} else if (l > -5) {
+			l = -5;
+		}
 		if(fdds1.getScore()>fdds2.getScore()) {
-			trophy1=d1.getWin();
-			if(fdds2.getScore()==0) {
-				trophy2=d2.getLoss2();
-			}else {
-				trophy2=d2.getLoss();
-			}
+			//trophy1=d1.getWin();
+			//if(fdds2.getScore()==0) {
+			//	trophy2=d2.getLoss2();
+			//}else {
+			//	trophy2=d2.getLoss();
+			//}
+			trophy1 = w;
+			trophy2 = l;
 //			winMemberNum=fdds1.getMemberNum();
 			Long familyId = fdds1.getFamilyId();
 			String daystamp = DateTools.getAddMinuteDateTime(DateTools.getYYYY_MM_DD(), -24, "yyyy-MM-dd");
@@ -127,17 +148,23 @@ public class CalFamilyPkServiceV2 {
 			String daystamp = DateTools.getAddMinuteDateTime(DateTools.getYYYY_MM_DD(), -24, "yyyy-MM-dd");
 			winMemberNum = taskFamilyPkMapper.getHaveScoreMemberNum(familyId, daystamp);
 			winFamilyType=level2;
-			trophy2=d2.getWin();
-			if(fdds1.getScore()==0) {
-				trophy1=d1.getLoss2();
-			}else {
-				trophy1=d1.getLoss();
-			}
+			//trophy2=d2.getWin();
+			//if(fdds1.getScore()==0) {
+			//	trophy1=d1.getLoss2();
+			//}else {
+			//	trophy1=d1.getLoss();
+			//}
+			trophy1 = l;
+			trophy2 = w;
 			fdds2.setWin(true);
 		}else {
-			trophy1=d1.getDogfall();
-			trophy2=d2.getDogfall();
+			//trophy1=d1.getDogfall();
+			//trophy2=d2.getDogfall();
+			trophy1 = 0;
+			trophy2 = 0;
 		}
+
+
 		fdds1.setTrophy(trophy1);
 		fdds2.setTrophy(trophy2);
 

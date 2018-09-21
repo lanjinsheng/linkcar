@@ -16,5 +16,7 @@ public interface CarMapper {
 	int insertComponentUserUseLog(Map<String,Object> map);
 	
 	int updateCarComponents(@Param("id") Long id);
+
+	Integer getUseMostCarIdTodayByUserId(@Param("userId") Long userId);
 	
 }

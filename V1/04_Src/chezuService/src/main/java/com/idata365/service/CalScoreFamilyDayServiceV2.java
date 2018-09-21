@@ -45,54 +45,54 @@ public class CalScoreFamilyDayServiceV2 {
 	}
 	@Transactional
 	public boolean calScoreFamilyDay(TaskFamilyDayScore taskFamilyDayScore,String startDay,String endDay) {
-		FamilyDriveDayStat fscore=new FamilyDriveDayStat();
-		Long familyId=taskFamilyDayScore.getFamilyId();
-		String daystamp=taskFamilyDayScore.getDaystamp();
-	   Integer useHoldNum=0;
-	   Double score=0d;
-	   Double avgScore=0d;
-	   Double scoreComm=0d;
-	   Double scoreAdd=0d;
-	   Integer speedTimes=0;
-	   Integer  speedPenalTime=0;
-	   
-	   String speedTimesUpdateTime=null;
-	   Long  speedTimesUpdateTimeLong=0L;
-	   
-	   Integer brakeTimes=0;
-	   Integer brakePenalTimes=0;
-	   String brakeTimesUpdateTime=null;
-	   Long  brakeTimesUpdateTimeLong=0L;
-	   
-		  Integer turnTimes=0;
-		  Integer turnPenalTimes=0;
-		  String turnTimesUpdateTime=null;
-		  Long  turnTimesUpdateTimeLong=0L;
-		  
-		 Integer overspeedTimes=0;
-		 Integer overspeedPenalTimes=0;
-		 String overspeedTimesUpdateTime=null;
-		 Long  overspeedTimesUpdateTimeLong=0L;
-		 
-		 Integer nightDriveTimes=0;
-		 Integer nightDrivePenalTimes=0;
-		 String nightDriveTimesUpdateTime=null;	
-		 Long  nightDriveTimesUpdateTimeLong=0L;
-		 
-		Integer tiredDriveTimes=0;
-		Integer tiredDrivePenalTimes=0;
-		String tiredDriveTimesUpdateTime=null;	
-		Long  tiredDriveUpdateTimeLong=0L;
-		
-		Integer illegalStopTimes=0;
-		Integer illegalStopPenalTimes=0;
-		String illegalStopUpdateTime=null;	
-		Long  illegalStopUpdateTimeLong=0L;
-		Double mileage=0d;
-		Double time=0d;
-		Integer usePhoneTimes=0;
-		Double maxspeed=0d;
-		int familyPersonNum=0;
+		FamilyDriveDayStat fscore = new FamilyDriveDayStat();
+		Long familyId = taskFamilyDayScore.getFamilyId();
+		String daystamp = taskFamilyDayScore.getDaystamp();
+		Integer useHoldNum = 0;
+		Double score = 0d;
+		Double avgScore = 0d;
+		Double scoreComm = 0d;
+		Double scoreAdd = 0d;
+		Integer speedTimes = 0;
+		Integer speedPenalTime = 0;
+
+		String speedTimesUpdateTime = null;
+		Long speedTimesUpdateTimeLong = 0L;
+
+		Integer brakeTimes = 0;
+		Integer brakePenalTimes = 0;
+		String brakeTimesUpdateTime = null;
+		Long brakeTimesUpdateTimeLong = 0L;
+
+		Integer turnTimes = 0;
+		Integer turnPenalTimes = 0;
+		String turnTimesUpdateTime = null;
+		Long turnTimesUpdateTimeLong = 0L;
+
+		Integer overspeedTimes = 0;
+		Integer overspeedPenalTimes = 0;
+		String overspeedTimesUpdateTime = null;
+		Long overspeedTimesUpdateTimeLong = 0L;
+
+		Integer nightDriveTimes = 0;
+		Integer nightDrivePenalTimes = 0;
+		String nightDriveTimesUpdateTime = null;
+		Long nightDriveTimesUpdateTimeLong = 0L;
+
+		Integer tiredDriveTimes = 0;
+		Integer tiredDrivePenalTimes = 0;
+		String tiredDriveTimesUpdateTime = null;
+		Long tiredDriveUpdateTimeLong = 0L;
+
+		Integer illegalStopTimes = 0;
+		Integer illegalStopPenalTimes = 0;
+		String illegalStopUpdateTime = null;
+		Long illegalStopUpdateTimeLong = 0L;
+		Double mileage = 0d;
+		Double time = 0d;
+		Integer usePhoneTimes = 0;
+		Double maxspeed = 0d;
+		int familyPersonNum = 0;
 		UserScoreDayStat pUserScoreDayStat=new UserScoreDayStat();
 		pUserScoreDayStat.setFamilyId(familyId);
 		pUserScoreDayStat.setDaystamp(daystamp);
