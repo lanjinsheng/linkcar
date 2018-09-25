@@ -29,9 +29,9 @@
          mazhaScore=#{mazhaScore}
      where id=#{id}
     </update>
-    
-    
-	<insert id="insertOrUpdateUserDayStat" parameterType="com.idata365.entity.UserScoreDayStat" >
+
+
+    <insert id="insertOrUpdateUserDayStat" parameterType="com.idata365.entity.UserScoreDayStat">
 	       INSERT ignore INTO 
             userScoreDayStat
             (userId,daystamp,userFamilyScoreId,brakeTimes,brakeTimesUpdateTime,turnTimes,turnTimesUpdateTime,
@@ -68,6 +68,18 @@
       travelNum=travelNum+${travelNum}
          
     </insert>
+
+
+    <update id="updateUserDayStat" parameterType="com.idata365.entity.UserScoreDayStat" >
+        update userScoreDayStat set
+        avgScore=#{avgScore},
+        brakeTimesScore=#{brakeTimesScore},
+        turnTimesScore=#{turnTimesScore},
+        overspeedTimesScore=#{overspeedTimesScore},
+        tiredDriveProportion=#{tiredDriveProportion}
+        where  id=#{id}
+     </update>
+
     
     <select id="getUserDayScoreByUserFamily"  resultMap="BaseUserScoreDayStatMap" parameterType="com.idata365.entity.UserFamilyRoleLog">
 		SELECT *  from userScoreDayStat where familyId=#{familyId} and userId=#{userId} and daystamp=#{daystamp}

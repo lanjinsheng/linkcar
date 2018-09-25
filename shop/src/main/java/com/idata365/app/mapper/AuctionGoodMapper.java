@@ -13,6 +13,8 @@ public interface AuctionGoodMapper {
 
 	AuctionGoods findAuctionGoodById(@Param("auctionGoodsId") long auctionGoodsId);
 
+	AuctionGoods findRecentAuctionGoodByTag(@Param("auctionTag") String auctionTag);
+
 	int insertAuctionGoods(AuctionGoods auctionGoods);
 
 	int updateAuctionGoods(AuctionGoods auctionGoods);

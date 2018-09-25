@@ -97,4 +97,8 @@
 	<select id="queryPowerStatistics"  resultType="java.util.HashMap" >
 		select remark as name,IFNULL(sum(powerNum),0) as value,eventType from assetUsersPowerLogs where date(createTime)>=date(date_add(now(), interval -#{day} day)) GROUP BY eventType
 	 </select>
+
+	<select id="getLogsLatest" resultMap="BaseResultMap" >
+		SELECT * FROM assetUsersPowerLogs where userId=#{userId} order by createTime desc limit 1
+	</select>
 </mapper>

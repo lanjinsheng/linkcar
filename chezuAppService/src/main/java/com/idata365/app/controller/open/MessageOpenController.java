@@ -54,6 +54,34 @@ public class MessageOpenController {
         messageService.pushMessageTrans(msg,MessageEnum.SHOP);
     	return true;
     }
+
+	/**
+	 *
+	 * @Title: sendNoticeMsgToFailedAuctionPerson
+	 * @Description: TODO(给上次竞拍未成功的人通知--for 标签)
+	 * @param @param userIds
+	 * @param @param goodsName
+	 * @param @param sign
+	 * @param @return    参数
+	 * @return boolean    返回类型
+	 * @throws
+	 * @author Lcc
+	 */
+	@RequestMapping("/app/msg/sendNoticeMsgToFailedAuctionPerson")
+	public boolean sendNoticeMsgToFailedAuctionPerson(@RequestParam (value = "userIds") String userIds,
+													  @RequestParam (value = "goodsName") String goodsName,@RequestParam (value = "sign") String sign){
+		LOG.info("param:"+userIds+"=="+goodsName+"==sign="+sign);
+
+		String[] split = userIds.split(",");
+		for (String userId : split) {
+			Message msg=messageService.sendNoticeMsgToFailedAuctionPerson(Long.valueOf(userId), goodsName);
+			//插入消息
+			messageService.insertMessage(msg, MessageEnum.SHOP);
+			//用定时器推送
+			messageService.pushMessageTrans(msg,MessageEnum.SHOP);
+		}
+		return true;
+	}
     
     /**
      * 

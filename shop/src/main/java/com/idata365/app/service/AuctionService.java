@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.remote.ChezuAppService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,8 @@ public class AuctionService {
 	private OrderMapper orderMapper;
 	@Autowired
 	private AuctionGoodMapper auctionGoodMapper;
+	@Autowired
+	ChezuAppService chezuAppService;
 
 	public AuctionGoods findOneAuctionGoodById(long auctionGoodsId) {
 		return auctionMapper.findAuctionGoodById(auctionGoodsId);
@@ -198,6 +201,21 @@ public class AuctionService {
 
 	public int insertAuctionGoods(AuctionGoods auctionGoods) {
 		// TODO Auto-generated method stub
+		auctionGoods.getAuctionTag();
+		AuctionGoods recent = auctionMapper.findRecentAuctionGoodByTag(auctionGoods.getAuctionTag());
+		if (recent!=null) {
+			List<Long> userIds = auctionLogsMapper.listUserId(recent.getAuctionGoodsId());
+			userIds.remove(recent.getWinnerId());
+			String ids = "";
+			if (userIds.size() > 0) {
+				for (Long userId : userIds) {
+					ids += userId + ",";
+				}
+
+			}
+			ids.substring(0, ids.length()-1);
+			chezuAppService.sendNoticeMsgToFailedAuctionPerson(ids, auctionGoods.getPrizeName(), "sign");
+		}
 		return auctionMapper.insertAuctionGoods(auctionGoods);
 	}
 

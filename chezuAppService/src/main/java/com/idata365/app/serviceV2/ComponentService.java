@@ -114,6 +114,67 @@ public class ComponentService extends BaseService<ComponentService> {
         return rtMap;
     }
 
+    public Map<String, Object> getUserComponentV2(long userId) {
+        Map<String, Object> rtMap = new HashMap<>();
+        Map<String, List<Map<String, Object>>> paramMap = new HashMap<>();
+        List<Map<String, Object>> componentLT = new ArrayList<>();
+        List<Map<String, Object>> componentJY = new ArrayList<>();
+        List<Map<String, Object>> componentHHS = new ArrayList<>();
+        List<Map<String, Object>> componentSCP = new ArrayList<>();
+        List<Map<String, Object>> componentXDC = new ArrayList<>();
+        paramMap.put("1", componentLT);
+        paramMap.put("2", componentHHS);
+        paramMap.put("3", componentJY);
+        paramMap.put("4", componentSCP);
+        paramMap.put("5", componentXDC);
+        List<ComponentUser> components = componentMapper.getFreeComponentUser(userId);
+
+        if (components == null || components.size() == 0) {
+
+        } else {
+            for (ComponentUser component : components) {
+                Map<String, Object> m1 = new HashMap<>();
+                List<String> ids = new ArrayList<>();
+                ids.add(component.getId().toString());
+                m1.put("userComponentIds", ids);
+                DicComponent dicComponent = DicComponentConstant.getDicComponent(component.getComponentId());
+                m1.put("componentName", dicComponent.getComponentValue());
+                m1.put("quality", dicComponent.getQuality());
+                m1.put("imgUrl", dicComponent.getComponentUrl());
+                m1.put("componentNum", "1");
+                m1.put("componentType", dicComponent.getComponentType());
+                m1.put("componentDesc", dicComponent.getComponentDesc());
+                m1.put("componentAttribute", "动力加成" + (int) (dicComponent.getPowerAddition() * 100) + "%");
+                m1.put("componentLoss", component.getLeftTravelNum() + "次行程");
+                Integer componentType = dicComponent.getComponentType();
+                List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
+
+                if (list.size() == 0) {
+                    list.add(m1);
+                } else {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).get("quality").equals(dicComponent.getQuality()) && Integer.valueOf(list.get(i).get("componentLoss").toString().substring(0, 1)) == dicComponent.getTravelNum()) {
+                            list.get(i).put("componentNum", String.valueOf(Integer.valueOf(list.get(i).get("componentNum").toString()) + 1));
+                            List<String> ids1 = (List<String>) list.get(i).get("userComponentIds");
+                            ids1.add(component.getId().toString());
+                            list.get(i).put("userComponentIds", ids1);
+                            break;
+                        } else if (i == list.size() - 1) {
+                            list.add(m1);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        rtMap.put("componentLT", componentLT);
+        rtMap.put("componentJY", componentJY);
+        rtMap.put("componentHHS", componentHHS);
+        rtMap.put("componentSCP", componentSCP);
+        rtMap.put("componentXDC", componentXDC);
+        return rtMap;
+    }
+
     public Map<String, Object> getFamilyComponent(long familyId) {
         Map<String, Object> rtMap = new HashMap<>();
         List<Map<String, Object>> componentList = new ArrayList<>();
@@ -474,6 +535,7 @@ public class ComponentService extends BaseService<ComponentService> {
 
     @Transactional
     public Map<String, Object> compoundComponent(Long userId, String componentIds, Integer stoveId) {
+
         String[] ids = componentIds.split(",");
         if (ids.length!=3) {//目前合成材料长度为3个
             return ResultUtils.rtFailParam(null, "componentIds参数长度异常，日了狗了");
@@ -482,6 +544,10 @@ public class ComponentService extends BaseService<ComponentService> {
             componentMapper.dropFamilyComponentByCompound(Long.valueOf(componentId));
         }
         Long familyId = familyMapper.queryCreateFamilyId(userId);
+        CompoundInfo compoundInfo = compoundMapper.getCompoundInfoByFamilyIdAndStoveId(familyId, stoveId);
+        if (compoundInfo!=null) {
+            return ResultUtils.rtFailParam(null, "请勿重复提交");
+        }
         CompoundInfo info = new CompoundInfo();
         info.setFamilyId(familyId);
         info.setStoveId(stoveId);
@@ -516,8 +582,57 @@ public class ComponentService extends BaseService<ComponentService> {
         if (compoundInfo == null) {
             return null;
         }
+
         String componentIds = compoundInfo.getComponentIds();
         String[] ids = componentIds.split(",");
+        Date endTime = compoundInfo.getEndTime();
+        long time = endTime.getTime()-new Date().getTime();
+        time = time<0?0:time;
+        if (time == 0) {
+            rtMap.put("status", "1");
+            //处理合成业务
+            if (compoundInfo.getFinalComponentId() == 0) {
+                String componentIdss = compoundInfo.getComponentIds();
+                String[] idss = componentIdss.split(",");
+                Integer odd_tmp=0;
+                Integer finalComponentId=0;
+                int type=0;
+                for (String componentId : idss) {
+                    ComponentFamily componentFamily = componentMapper.getFamilyComponent(Long.valueOf(componentId));
+                    DicComponent dicComponent = DicComponentConstant.getDicComponent(componentFamily.getComponentId());
+                    type = dicComponent.getComponentType();
+                    String quality = dicComponent.getQuality();
+                    Integer travelNum = 0;
+                    if (componentFamily.getGainType() == 2) {
+                        //道具由成员贡献，计算行程损耗
+                        Long userComponentId = componentMapper.getComponentUserUseLogById(componentFamily.getEffectId()).getUserComponentId();
+                        //剩余行程数
+                        travelNum = componentMapper.getComponentUser(userComponentId).getLeftTravelNum();
+                    } else {
+                        travelNum = dicComponent.getTravelNum();
+                    }
+                    odd_tmp+=compoundMapper.getOddByQualityAndTravelNum(quality, travelNum);
+                }
+                Integer odd_s = odd_tmp;
+                Integer odd_a = Long.valueOf(Math.round((100 - odd_tmp) * 0.7)).intValue();
+                Integer odd_b = 100 - odd_s - odd_a;
+                int rand = RandUtils.generateRand(1, 100);
+                if (rand <= odd_b) {
+                    //b
+                    finalComponentId = DicComponentConstant.dicComponentMapB.get(type);
+                } else if (rand > odd_b && rand <= odd_a + odd_b) {
+                    //a
+                    finalComponentId = DicComponentConstant.dicComponentMapA.get(type);
+                } else {
+                    //s
+                    finalComponentId = DicComponentConstant.dicComponentMapS.get(type);
+                }
+
+                compoundMapper.updateFinalComponentId(compoundInfo.getId(),finalComponentId);
+            }
+        } else {
+            rtMap.put("status", "0");
+        }
         for (String componentId : ids) {
             Map<String, Object> m1 = new HashMap<>();
             ComponentFamily componentFamily = componentMapper.getFamilyComponent(Long.valueOf(componentId));
@@ -538,26 +653,19 @@ public class ComponentService extends BaseService<ComponentService> {
                 componentList.add(m1);
             }
         }
-        if (compoundInfo.getStatus()>0) {
-            DicComponent dicComponent = DicComponentConstant.getDicComponent(compoundInfo.getFinalComponentId());
+        CompoundInfo info = compoundMapper.getCompoundInfoByFamilyIdAndStoveId_KCache(familyId, stoveId);
+        if (info.getStatus()>0&&info.getFinalComponentId()!=0) {
+            DicComponent dicComponent = DicComponentConstant.getDicComponent(info.getFinalComponentId());
             Map<String, Object> m1 = new HashMap<>();
             m1.put("quality",dicComponent.getQuality());
             m1.put("imgUrl",dicComponent.getComponentUrl());
             m1.put("travelNum",dicComponent.getTravelNum()+"/"+dicComponent.getTravelNum());
             componentList.add(m1);
         }
-        Date endTime = compoundInfo.getEndTime();
-        long time = endTime.getTime()-new Date().getTime();
-        time = time<0?0:time;
-        if (time == 0) {
-            rtMap.put("status", "1");
-        } else {
-            rtMap.put("status", "0");
-        }
         rtMap.put("leftTime", DurationFormatUtils.formatDuration(time, "HH小时mm分钟"));
         rtMap.put("componentList", componentList);
 
-        String lookAdUserIds = compoundInfo.getLookAdUserIds();
+        String lookAdUserIds = info.getLookAdUserIds();
         if (lookAdUserIds.length() > 0) {
             String[] split = lookAdUserIds.split(",");
             List<String> list = Arrays.asList(split);
@@ -586,7 +694,7 @@ public class ComponentService extends BaseService<ComponentService> {
         }
         info.setLookAdUserIds(lookAdUserIds);
         info.setLookAdCount(compoundInfo.getLookAdCount()+1);
-        Date newEndTime = DateTools.getAddMinuteDateTime(compoundInfo.getEndTime(), -60 * appProperties.getAdReduceHour().intValue());
+        Date newEndTime = DateTools.getAddMinuteDateTime(compoundInfo.getEndTime(), (int)(-60.0 * appProperties.getAdReduceHour()));
         if (newEndTime.getTime()<new Date().getTime()) {
             newEndTime = new Date();
             compoundMapper.updateCompoundInfoStatus(1, familyId, stoveId, compoundInfo.getStatus());
@@ -601,8 +709,11 @@ public class ComponentService extends BaseService<ComponentService> {
 
         Long familyId = familyMapper.queryCreateFamilyId(userId);
         CompoundInfo compoundInfo = compoundMapper.getCompoundInfoByFamilyIdAndStoveId(familyId, stoveId);
-        if (compoundInfo.getStatus()==2) {
-            return ResultUtils.rtFailParam(null, "配件已经合成");
+        if (compoundInfo==null) {
+            return ResultUtils.rtFailParam(null, "请勿重复提交");
+        }
+        if (compoundInfo!=null&&compoundInfo.getStatus()==2) {
+            return ResultUtils.rtFailParam(null, "请勿重复提交");
         }
         ComponentFamily c = new ComponentFamily();
         DicComponent dicComponent = DicComponentConstant.getDicComponent(compoundInfo.getFinalComponentId());
@@ -633,7 +744,7 @@ public class ComponentService extends BaseService<ComponentService> {
             } else if (compoundInfo.getStatus()==1) {
                 status[i] = "2";
                 //处理合成业务
-                if (compoundInfo.getFinalComponentId() != 0) {
+                if (compoundInfo.getFinalComponentId() == 0) {
                     String componentIds = compoundInfo.getComponentIds();
                     String[] ids = componentIds.split(",");
                     Integer odd_tmp=0;

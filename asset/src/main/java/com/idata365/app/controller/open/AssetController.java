@@ -566,6 +566,10 @@ public class AssetController extends BaseController {
 		logs.setEventType(AssetConstant.EVENTTYPE_POWER_MISSION_DAYBOX);
 		logs.setRecordType(AssetConstant.RECORDTYPE_1);
 		logs.setRemark("每日任务宝箱领取power");
+		AssetUsersPowerLogs logsLatest = assetService.getLogsLatest(userId);
+		if (logsLatest!=null&&logsLatest.getEventType()==AssetConstant.EVENTTYPE_POWER_MISSION_DAYBOX&&logsLatest.getPowerNum()==powerNum) {
+			return false;
+		}
 		return assetService.addUserPowers(logs);
 	}
 	
@@ -602,6 +606,10 @@ public class AssetController extends BaseController {
 		logs.setEventType(AssetConstant.EVENTTYPE_POWER_MISSION_ACTBOX);
 		logs.setRecordType(AssetConstant.RECORDTYPE_1);
 		logs.setRemark("活动任务宝箱领取power");
+		AssetUsersPowerLogs logsLatest = assetService.getLogsLatest(userId);
+		if (logsLatest!=null&&logsLatest.getEventType()==AssetConstant.EVENTTYPE_POWER_MISSION_ACTBOX&&logsLatest.getPowerNum()==powerNum) {
+			return false;
+		}
 		return assetService.addUserPowers(logs);
 	}
 	

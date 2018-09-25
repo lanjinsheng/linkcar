@@ -37,8 +37,13 @@ public class ComponentController extends BaseController {
 		Map<String,Object> rtMap=componentService.getUserComponent(this.getUserId());
 		return ResultUtils.rtSuccess(rtMap);
 	}
-	
-	
+
+	@RequestMapping(value = "/getUserComponentV2")
+	Map<String, Object> getUserComponentV2(@RequestParam (required = false) Map<String, String> allRequestParams,
+										 @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
+		Map<String,Object> rtMap=componentService.getUserComponentV2(this.getUserId());
+		return ResultUtils.rtSuccess(rtMap);
+	}
 	
 	@RequestMapping(value = "/getFamilyComponent")
 	Map<String, Object> getFamilyComponent(@RequestParam (required = false) Map<String, String> allRequestParams,
@@ -174,7 +179,7 @@ public class ComponentController extends BaseController {
 		Integer stoveId=Integer.valueOf(requestBodyParams.get("stoveId").toString());
 		LOG.info("userId==="+this.getUserId()+"===+stoveId=="+stoveId);
 		Map<String,Object> rtMap=componentService.submitCompound(this.getUserId(),stoveId);
-		return ResultUtils.rtSuccess(null);
+		return ResultUtils.rtSuccess(rtMap);
 	}
 
 	//熔炉情况查询

@@ -30,12 +30,12 @@ public class TripServiceV2 extends BaseService<TripServiceV2> {
     public Map<String, Object> getTodayAllTravel(long userId) {
         Map<String, Object> rtMap = new HashMap<>();
         UserScoreDayStat userScoreDayStat = userScoreDayStatMapper.getTodayAllTravel(userId, DateTools.getYYYY_MM_DD());
-        if (userScoreDayStat == null) {
-            return null;
+        if (userScoreDayStat == null||userScoreDayStat.getTime()==0) {
+            return rtMap;
         }
         rtMap.put("time", DurationFormatUtils.formatDuration(userScoreDayStat.getTime().longValue() * 1000, "HH小时mm分钟"));
         rtMap.put("mileage", BigDecimal.valueOf(userScoreDayStat.getMileage() / 1000.0).setScale(2, RoundingMode.HALF_EVEN).toString());
-        rtMap.put("score", userScoreDayStat.getAvgScore().toString());
+        rtMap.put("score", BigDecimal.valueOf(userScoreDayStat.getAvgScore()).setScale(0,RoundingMode.HALF_EVEN).toString());
         rtMap.put("isShowMapFlag", "0");
 
         // 超速系数

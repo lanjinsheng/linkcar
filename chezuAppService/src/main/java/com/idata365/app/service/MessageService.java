@@ -67,6 +67,7 @@ public class MessageService extends BaseService<MessageService>{
 	//兑换
 
 	public static final String ShopMessage="恭喜您兑换【%s】成功，工作人员会在1~3个工作日内处理您的兑换请求，请耐心等待通知";
+	public static final String NewAuctionForRecentFailPerson="发布新品啦！您上期未成功竞拍的商品这期又发布了，名字为【%s】，快去看看吧";
 	public static final String GoodsSendMessage="您兑换的【%s】工作人员已经寄出，正在飞向您的路上，惊喜马上就到~";
 
 	public static final String AuctionRobbedMassage="糟糕！您参与的竞拍 %s 被别人抢走啦，快去抢回来吧！";
@@ -303,6 +304,24 @@ public class MessageService extends BaseService<MessageService>{
 		message.setToUserId(toUserId);
 		message.setUrlType(MessageTypeConstant.MessageUrl_Href_False);
 		message.setToUrl("");
+		return message;
+	}
+
+	public Message sendNoticeMsgToFailedAuctionPerson(Long toUserId,String goodsName) {
+		Message message=new Message();
+		message.setFromUserId(0L);
+		message.setBottomText("");
+		message.setChildType(MessageTypeConstant.SystemType_NewAuctionForRecentFailPerson);
+		message.setContent(getNewAuctionForRecentFailPerson(goodsName));
+		message.setCreateTime(new Date());
+		message.setIcon("");
+		message.setIsPush(1);
+		message.setParentType(MessageTypeConstant.SystemType);
+		message.setPicture("");
+		message.setTitle("发布新品");
+		message.setToUserId(toUserId);
+		message.setUrlType(MessageTypeConstant.MessageUrl_Href_App);
+		message.setToUrl(MyAuctionUrl);
 		return message;
 	}
 	
@@ -1208,6 +1227,10 @@ public class MessageService extends BaseService<MessageService>{
 	
 	private String getShopMessageDesc(String goodsName) {
 		return String.format(ShopMessage, goodsName);
+    }
+
+    private String getNewAuctionForRecentFailPerson(String goodsName) {
+		return String.format(NewAuctionForRecentFailPerson, goodsName);
     }
 	private String getIDCardMessageDesc(String userName,String cardNumber) {
 		return String.format(IDCardMessage, userName,cardNumber.substring(0, 1)+"**************"+cardNumber.substring(cardNumber.length()-1));

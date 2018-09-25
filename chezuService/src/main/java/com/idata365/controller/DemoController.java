@@ -1,14 +1,13 @@
 package com.idata365.controller;
 
-import java.util.List;
-
+import com.idata365.entity.UserEntity;
+import com.idata365.mapper.app.UserMapper;
+import com.idata365.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.entity.UserEntity;
-import com.idata365.mapper.app.UserMapper;
-import com.idata365.service.DemoService;
+import java.util.List;
 
 @RestController
 public class DemoController {
@@ -23,7 +22,7 @@ public class DemoController {
 	@RequestMapping("/getUsers")
 	public List<UserEntity> getUsers() {
 		List<UserEntity> users=userMapper.getAll();
-		return users;
+		return null;
 	}
  
 	@RequestMapping("/insert1")

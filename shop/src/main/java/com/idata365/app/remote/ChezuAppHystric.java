@@ -38,5 +38,11 @@ public class ChezuAppHystric implements ChezuAppService {
 		return false;
 	}
 
+	@Override
+	public boolean sendNoticeMsgToFailedAuctionPerson(String userIds, String goodsName, String sign) {
+		LOG.error("sendAuctionMsg==userIds="+userIds+"竞拍发布新内容"+goodsName+" sign="+sign+"消息发送失败");
+		return false;
+	}
+
 
 }
