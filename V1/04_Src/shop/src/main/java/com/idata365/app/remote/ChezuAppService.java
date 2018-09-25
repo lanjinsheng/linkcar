@@ -67,4 +67,20 @@ public interface ChezuAppService {
 	@RequestMapping("/app/msg/sendAuctionRobbedMsg")
 	public boolean sendAuctionRobbedMsg(@RequestParam (value = "userId") Long userId,
 							   @RequestParam (value = "goodsName") String goodsName,@RequestParam (value = "sign") String sign);
+
+	/**
+	 *
+	 * @Title: sendNoticeMsgToFailedAuctionPerson
+	 * @Description: TODO(给上次竞拍未成功的人通知--for 标签)
+	 * @param @param userIds
+	 * @param @param goodsName
+	 * @param @param sign
+	 * @param @return    参数
+	 * @return boolean    返回类型
+	 * @throws
+	 * @author Lcc
+	 */
+	@RequestMapping("/app/msg/sendNoticeMsgToFailedAuctionPerson")
+	public boolean sendNoticeMsgToFailedAuctionPerson(@RequestParam (value = "userIds") String userIds,
+							   @RequestParam (value = "goodsName") String goodsName,@RequestParam (value = "sign") String sign);
 }

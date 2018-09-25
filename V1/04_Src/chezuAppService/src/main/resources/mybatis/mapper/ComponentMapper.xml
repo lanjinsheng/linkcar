@@ -188,13 +188,13 @@
 </select>-->
 
 <select id="countOfPray" resultType="Integer">
-	 SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND logType =2 AND (date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' )
+	 SELECT COUNT(1) FROM componentGiveLog WHERE toUserId = #{userId} AND logType =2 AND (date_format( eventTime, '%Y%m%d' ) = date_format( now( ), '%Y%m%d' ))
 </select>
 
 <update id="updateGiveLogStatus" >
      update
           componentGiveLog
-          set giveStatus=-1 where logType=2 and userId=#{userId} and giveStatus=0
+          set giveStatus=-1 where logType=2 and toUserId=#{userId} and giveStatus=0
 </update>
 
     <select id="countHadRequest" resultType="Integer">

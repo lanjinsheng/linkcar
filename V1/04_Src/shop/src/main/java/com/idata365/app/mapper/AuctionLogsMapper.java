@@ -23,6 +23,8 @@ public interface AuctionLogsMapper {
 	AuctionLogs getMaxAuctionDiamond(@Param("auctionGoodsId")long auctionGoodsId);
 	
 	List<AuctionLogs> listAllAuctionUsers(@Param("auctionGoodsId") Long auctionGoodsId);
-	
+
+	List<Long> listUserId(@Param("auctionGoodsId") Long auctionGoodsId);
+
 	AuctionLogs getLogByLogId(@Param("auctionLogsId")long auctionLogsId);
 }

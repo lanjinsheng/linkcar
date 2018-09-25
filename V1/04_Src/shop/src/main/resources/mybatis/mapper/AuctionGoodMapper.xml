@@ -11,6 +11,10 @@
 	<select id="findAuctionGoodById" resultMap="BaseResultMap">
 		select * from auctionGoods where auctionGoodsId=#{auctionGoodsId}
 	</select>
+
+	<select id="findRecentAuctionGoodByTag" resultMap="BaseResultMap">
+		SELECT * FROM auctionGoods where auctionTag=${auctionTag} and auctionStatus!=0 order by auctionRealEndTime desc limit 1
+	</select>
 	
 	<insert id="insertAuctionGoods"
 		parameterType="com.idata365.app.entity.AuctionGoods">

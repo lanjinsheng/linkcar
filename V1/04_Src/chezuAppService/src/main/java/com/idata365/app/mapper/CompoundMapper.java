@@ -11,6 +11,8 @@ public interface CompoundMapper {
 
     CompoundInfo getCompoundInfoByFamilyIdAndStoveId(@Param("familyId")Long familyId,@Param("stoveId")Integer stoveId);
 
+    CompoundInfo getCompoundInfoByFamilyIdAndStoveId_KCache(@Param("familyId")Long familyId,@Param("stoveId")Integer stoveId);
+
     int updateCompoundInfo(CompoundInfo compoundInfo);
 
     int updateCompoundInfoStatus(@Param("newStatus")Integer newStatus,@Param("familyId")Long familyId,@Param("stoveId")Integer stoveId,@Param("oldStatus")Integer oldStatus);

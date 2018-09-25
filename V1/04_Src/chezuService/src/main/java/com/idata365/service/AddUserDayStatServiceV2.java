@@ -226,35 +226,35 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 	    * @author LanYeYe
 	 */
 	@Transactional
-   public boolean addUserDayStat(UserTravelHistory uth) {
-	   String driveEndTime=uth.getEndTime().substring(0,19);
+	public boolean addUserDayStat(UserTravelHistory uth) {
+		String driveEndTime = uth.getEndTime().substring(0, 19);
 //		UserRoleLog role= userRoleLogService.getLatestUserRoleLogNoTrans(uth.getUserId());
- 
+
 		//行程power
 //		String score="0";
-		int calPower=addUserTripPowerLogsV2(uth.getMileage(),Double.valueOf(uth.getScore()),uth.getCarId());
+		int calPower = addUserTripPowerLogsV2(uth.getMileage(), Double.valueOf(uth.getScore()), uth.getCarId());
 		//查看未缴纳罚单数
-		Map<String,Object> payMap=new HashMap<String,Object>();
+		Map<String, Object> payMap = new HashMap<String, Object>();
 		payMap.put("userId", uth.getUserId());
 		payMap.put("carId", 0L);
 		payMap.put("nowLong", System.currentTimeMillis());
-		int peccancyNum=interactPeccancyMapper.getUnpayPeccancy(payMap);
-		int power=calPower;
-		List<InteractTempCar> batchInsert=new ArrayList<InteractTempCar>();
-		double reduce=0;
-		if(peccancyNum>0) {
-			reduce=  peccancyNum*serviceConstant.getStickRate();//减去罚单降低的动力
-		} 
-		
-		List<Map<String,Object>> compList=carMapper.getCarComponents(uth.getUserCarId());
-		double addCar=0d;
-		for(Map<String,Object> comp:compList) {
-			int componentId=Integer.valueOf(comp.get("componentId").toString());
-			String quality=DicComponentConstant.getDicComponent(componentId).getQuality();
-			addCar+=getRateByQuality(quality);
+		int peccancyNum = interactPeccancyMapper.getUnpayPeccancy(payMap);
+		int power = calPower;
+		List<InteractTempCar> batchInsert = new ArrayList<InteractTempCar>();
+		double reduce = 0;
+		if (peccancyNum > 0) {
+			reduce = peccancyNum * serviceConstant.getStickRate();//减去罚单降低的动力
+		}
+
+		List<Map<String, Object>> compList = carMapper.getCarComponents(uth.getUserCarId());
+		double addCar = 0d;
+		for (Map<String, Object> comp : compList) {
+			int componentId = Integer.valueOf(comp.get("componentId").toString());
+			String quality = DicComponentConstant.getDicComponent(componentId).getQuality();
+			addCar += getRateByQuality(quality);
 			comp.put("userComponentId", comp.get("id"));
-		 carMapper.updateCarComponents(Long.valueOf(comp.get("id").toString()));
-		 carMapper.insertComponentUserUseLog(comp);
+			carMapper.updateCarComponents(Long.valueOf(comp.get("id").toString()));
+			carMapper.insertComponentUserUseLog(comp);
 		}
 		double clearCarUp = Double.valueOf(0);
 		int valid = interactLogsMapper.validCleanCarPowerUp(uth.getUserCarId());
@@ -262,27 +262,27 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 			clearCarUp = 0.1;
 		}
 
-		power=(int)(calPower*(1+addCar-reduce+clearCarUp));
+		power = (int) (calPower * (1 + addCar - reduce + clearCarUp));
 		//插入power任务
-		TaskPowerLogs taskPowerLogs=new TaskPowerLogs();
-    	taskPowerLogs.setUserId(uth.getUserId());
-    	taskPowerLogs.setTaskType(PowerEnum.TripToUser);
-    	taskPowerLogs.setJsonValue(String.format(jsonValue, uth.getUserId(),uth.getHabitId(),String.valueOf(power),uth.getId()));
-    	taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);	
-	 if(power>0) {
-		 //形成被偷动力小车
-		 int stealPower=calPower;
-		 stealPower=Double.valueOf((stealPower*serviceConstant.getStealPowerRate())).intValue();
-		 int r=RandUtils.generateRand(serviceConstant.getStealPowerMin(),serviceConstant.getStealPowerMax());
-		 while(r<=stealPower) {
-			 addCar(batchInsert, uth,r,1) ;
-			 stealPower=stealPower-r;
-			 r=RandUtils.generateRand(serviceConstant.getStealPowerMin(),serviceConstant.getStealPowerMax());
-		 }
-		 if(stealPower>0) {
-			 addCar(batchInsert, uth,stealPower,1) ;
-		 }
-	 }
+		TaskPowerLogs taskPowerLogs = new TaskPowerLogs();
+		taskPowerLogs.setUserId(uth.getUserId());
+		taskPowerLogs.setTaskType(PowerEnum.TripToUser);
+		taskPowerLogs.setJsonValue(String.format(jsonValue, uth.getUserId(), uth.getHabitId(), String.valueOf(power), uth.getId()));
+		taskPowerLogsMapper.insertTaskPowerLogs(taskPowerLogs);
+		if (power > 0) {
+			//形成被偷动力小车
+			int stealPower = calPower;
+			stealPower = Double.valueOf((stealPower * serviceConstant.getStealPowerRate())).intValue();
+			int r = RandUtils.generateRand(serviceConstant.getStealPowerMin(), serviceConstant.getStealPowerMax());
+			while (r <= stealPower) {
+				addCar(batchInsert, uth, r, 1);
+				stealPower = stealPower - r;
+				r = RandUtils.generateRand(serviceConstant.getStealPowerMin(), serviceConstant.getStealPowerMax());
+			}
+			if (stealPower > 0) {
+				addCar(batchInsert, uth, stealPower, 1);
+			}
+		}
 //		int fadan=uth.getBrakeTimes()+uth.getSpeedTimes()+uth.getTurnTimes()+uth.getOverspeedTimes();
 //		if(fadan>0) {//三急+超速
 //			fadan=fadan>8?8:fadan;
@@ -302,45 +302,45 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 
 		int driveScore = Integer.valueOf(uth.getDriveScore());
 		int fadan = 0;
-		if (driveScore>90) {
+		if (driveScore > 90) {
 			fadan = 1;
-		} else if (driveScore>80) {
+		} else if (driveScore > 80) {
 			fadan = 2;
-		} else if (driveScore>70) {
+		} else if (driveScore > 70) {
 			fadan = 3;
-		} else if (driveScore>60) {
+		} else if (driveScore > 60) {
 			fadan = 4;
-		} else{
+		} else {
 			fadan = 5;
 		}
 		if (driveScore < 100) {
 			for (int j = 0; j < fadan; j++) {
-				int p = (int) (power * serviceConstant.getAlarmStickRate().doubleValue()) < 1 ? 1 : (int) (power *serviceConstant.getAlarmStickRate().doubleValue());
+				int p = (int) (power * serviceConstant.getAlarmStickRate().doubleValue()) < 1 ? 1 : (int) (power * serviceConstant.getAlarmStickRate().doubleValue());
 				addCar(batchInsert, uth, p, 2);
 			}
 		}
 
-		 //批量插入
-		if(batchInsert.size()>0) {
+		//批量插入
+		if (batchInsert.size() > 0) {
 			interactTempCarMapper.batchInsertTempCar(batchInsert);
 		}
-		
+
 		//顺风车处理逻辑
-		List<Map<String,Object>> carpools=carpoolMapper.getCarPool(uth.getUserId());
-		for(Map<String,Object> carpool:carpools){
-			long passengerId=Long.valueOf(carpool.get("passengerId").toString());
-			if(addUserCarPoolPowerLogs(passengerId,uth.getId(),Double.valueOf((power*0.8)).intValue())) {
+		List<Map<String, Object>> carpools = carpoolMapper.getCarPool(uth.getUserId());
+		for (Map<String, Object> carpool : carpools) {
+			long passengerId = Long.valueOf(carpool.get("passengerId").toString());
+			if (addUserCarPoolPowerLogs(passengerId, uth.getId(), Double.valueOf((power * 0.8)).intValue())) {
 				//更新用户顺风车记录
-				carpool.put("driverPower", Double.valueOf(power*serviceConstant.getDriverPowerPerPassenger().doubleValue()).intValue());
-				carpool.put("passengerPower", Double.valueOf(power*serviceConstant.getPassengerPowerPerDrive().doubleValue()).intValue());
-				carpool.put("travelId",uth.getId());
+				carpool.put("driverPower", Double.valueOf(power * serviceConstant.getDriverPowerPerPassenger().doubleValue()).intValue());
+				carpool.put("passengerPower", Double.valueOf(power * serviceConstant.getPassengerPowerPerDrive().doubleValue()).intValue());
+				carpool.put("travelId", uth.getId());
 				carpoolMapper.updateCarPool(carpool);
-			}else {
-				LOG.error("插入顺风车记录失败passengerId="+passengerId+"==travelId="+uth.getId());
+			} else {
+				LOG.error("插入顺风车记录失败passengerId=" + passengerId + "==travelId=" + uth.getId());
 			}
 		}
-		if(carpools!=null && carpools.size()>0) {
-			addUserCarPoolPowerLogs(uth.getUserId(),uth.getId(),Double.valueOf(power*serviceConstant.getDriverPowerPerPassenger().doubleValue()*carpools.size()).intValue());
+		if (carpools != null && carpools.size() > 0) {
+			addUserCarPoolPowerLogs(uth.getUserId(), uth.getId(), Double.valueOf(power * serviceConstant.getDriverPowerPerPassenger().doubleValue() * carpools.size()).intValue());
 		}
 
 		//查询当前俱乐部，并贡献分数与动力
@@ -428,51 +428,51 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 				BigDecimal distance = BigDecimal.valueOf(scoreDayStat.getMileage());
 				//时间
 				long driveTimes = scoreDayStat.getTime().longValue();
-				BigDecimal tireRatio=BigDecimal.valueOf(1);
-				BigDecimal scoreBrakeDown=BigDecimal.valueOf(20);
-				BigDecimal scoreBrakeUp=BigDecimal.valueOf(20);
-				BigDecimal scoreBrakeTurn=BigDecimal.valueOf(20);
-				BigDecimal scoreOverSpeed=BigDecimal.valueOf(20);
-				BigDecimal brakeDown=BigDecimal.valueOf(scoreDayStat.getBrakeTimes());
-				BigDecimal brakeTurn=BigDecimal.valueOf(scoreDayStat.getTurnTimes());
+				BigDecimal tireRatio = BigDecimal.valueOf(1);
+				BigDecimal scoreBrakeDown = BigDecimal.valueOf(20);
+				BigDecimal scoreBrakeUp = BigDecimal.valueOf(20);
+				BigDecimal scoreBrakeTurn = BigDecimal.valueOf(20);
+				BigDecimal scoreOverSpeed = BigDecimal.valueOf(20);
+				BigDecimal brakeDown = BigDecimal.valueOf(scoreDayStat.getBrakeTimes());
+				BigDecimal brakeTurn = BigDecimal.valueOf(scoreDayStat.getTurnTimes());
 
-				brakeDown= brakeDown.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
-				brakeTurn= brakeTurn.multiply(BigDecimal.valueOf(10000)).divide(distance,1,RoundingMode.HALF_EVEN);
+				brakeDown = brakeDown.multiply(BigDecimal.valueOf(10000)).divide(distance, 1, RoundingMode.HALF_EVEN);
+				brakeTurn = brakeTurn.multiply(BigDecimal.valueOf(10000)).divide(distance, 1, RoundingMode.HALF_EVEN);
 				//急减
-				Integer brakeDownTimes=brakeDown.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():brakeDown.intValue();
-				scoreBrakeDown=BigDecimal.valueOf(getScoreByTimes(brakeDownTimes));
+				Integer brakeDownTimes = brakeDown.intValue() > serviceConstant.getMaxAlarmTimes() ? serviceConstant.getMaxAlarmTimes() : brakeDown.intValue();
+				scoreBrakeDown = BigDecimal.valueOf(getScoreByTimes(brakeDownTimes));
 				scoreDayStat.setBrakeTimesScore(scoreBrakeDown.doubleValue());
 				//超速
 				scoreDayStat.setOverspeedTimesScore(scoreOverSpeed.doubleValue());
 				//急转
-				Integer brakeTurnTimes=brakeTurn.intValue()>serviceConstant.getMaxAlarmTimes()?serviceConstant.getMaxAlarmTimes():brakeTurn.intValue();
-				scoreBrakeTurn=BigDecimal.valueOf(getScoreByTimes(brakeTurnTimes));
+				Integer brakeTurnTimes = brakeTurn.intValue() > serviceConstant.getMaxAlarmTimes() ? serviceConstant.getMaxAlarmTimes() : brakeTurn.intValue();
+				scoreBrakeTurn = BigDecimal.valueOf(getScoreByTimes(brakeTurnTimes));
 				scoreDayStat.setTurnTimesScore(scoreBrakeTurn.doubleValue());
 
-				if(driveTimes>=serviceConstant.getTiredHourMaxKey().intValue()*3600) {
-					tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourMaxRate());
-				}else if(driveTimes>=serviceConstant.getTiredHourGrade1Key().intValue()*3600) {
-					tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourGrade1Rate());
-				}else if(driveTimes>=serviceConstant.getTiredHourGrade2Key().intValue()*3600){
-					tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourGrade2Rate());
-				}else {
-					tireRatio=BigDecimal.valueOf(serviceConstant.getTiredHourGrade3Rate());
+				if (driveTimes >= serviceConstant.getTiredHourMaxKey().intValue() * 3600) {
+					tireRatio = BigDecimal.valueOf(serviceConstant.getTiredHourMaxRate());
+				} else if (driveTimes >= serviceConstant.getTiredHourGrade1Key().intValue() * 3600) {
+					tireRatio = BigDecimal.valueOf(serviceConstant.getTiredHourGrade1Rate());
+				} else if (driveTimes >= serviceConstant.getTiredHourGrade2Key().intValue() * 3600) {
+					tireRatio = BigDecimal.valueOf(serviceConstant.getTiredHourGrade2Rate());
+				} else {
+					tireRatio = BigDecimal.valueOf(serviceConstant.getTiredHourGrade3Rate());
 				}
 				scoreDayStat.setTiredDriveProportion(tireRatio.doubleValue());
 
-				int score=scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
+				int score = scoreBrakeDown.add(scoreBrakeUp).add(scoreBrakeTurn).add(BigDecimal.valueOf(40)).multiply(tireRatio).intValue();
 				//查询车辆进行分数加成
 				Integer carId = carMapper.getUseMostCarIdTodayByUserId(scoreDayStat.getUserId());
 				carId = carId == null ? 1 : carId;
 
-				DicCar dc=	DicCarConstant.getDicCar(carId);
-				BigDecimal addScorePercent=BigDecimal.valueOf(dc.getClubScoreUpPercent()).divide(BigDecimal.valueOf(100),2,RoundingMode.HALF_EVEN);
-				score+=(BigDecimal.valueOf(score).multiply(addScorePercent).intValue());
-				if(score<serviceConstant.getProtectScore().intValue()) {
-					score=serviceConstant.getProtectScore().intValue();
+				DicCar dc = DicCarConstant.getDicCar(carId);
+				BigDecimal addScorePercent = BigDecimal.valueOf(dc.getClubScoreUpPercent()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
+				score += (BigDecimal.valueOf(score).multiply(addScorePercent).intValue());
+				if (score < serviceConstant.getProtectScore().intValue()) {
+					score = serviceConstant.getProtectScore().intValue();
 				}
 				scoreDayStat.setAvgScore(Double.valueOf(score));
-				userScoreDayStatMapper.insertOrUpdateUserDayStat(scoreDayStat);
+				userScoreDayStatMapper.updateUserDayStat(scoreDayStat);
 			}
 		} else {
 			userScoreDayStat.setFamilyId(0L);
@@ -484,9 +484,12 @@ public class AddUserDayStatServiceV2 extends BaseService<AddUserDayStatServiceV2
 		LOG.info(uth.getId() + "addUserDay SUCCESS");
 		return true;
 	}
-	static Map<Integer,Integer> ThreeAlarmScoreMap=new HashMap<Integer,Integer>();
+
+
+	static Map<Integer, Integer> ThreeAlarmScoreMap = new HashMap<Integer, Integer>();
+
 	public int getScoreByTimes(Integer times) {
-		if(ThreeAlarmScoreMap.size()==0) {
+		if (ThreeAlarmScoreMap.size() == 0) {
 			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes0Key(), serviceConstant.getThreeAlarmTimes0Score());
 			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes1Key(), serviceConstant.getThreeAlarmTimes1Score());
 			ThreeAlarmScoreMap.put(serviceConstant.getThreeAlarmTimes2Key(), serviceConstant.getThreeAlarmTimes2Score());

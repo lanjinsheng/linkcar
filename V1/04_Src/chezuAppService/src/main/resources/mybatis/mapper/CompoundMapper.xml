@@ -19,16 +19,20 @@
 	  SELECT * FROM compoundInfo where familyId=#{familyId} and stoveId=#{stoveId} and status in(0,1) order by id desc limit 1
     </select>
 
+    <select id="getCompoundInfoByFamilyIdAndStoveId_KCache" resultType="com.idata365.app.entity.v2.CompoundInfo" >
+	  SELECT * FROM compoundInfo where familyId=#{familyId} and stoveId=#{stoveId} and status in(0,1) order by id desc limit 1
+    </select>
+
     <update id="updateCompoundInfo" parameterType="com.idata365.app.entity.v2.CompoundInfo">
      update
           compoundInfo
-          set lookAdUserIds=#{lookAdUserIds},endTime=#{endTime},lookAdCount=#{lookAdCount} where familyId=#{familyId} and stoveId=#{stoveId} and status=1
+          set lookAdUserIds=#{lookAdUserIds},endTime=#{endTime},lookAdCount=#{lookAdCount} where familyId=#{familyId} and stoveId=#{stoveId} and status=0
     </update>
 
     <update id="updateCompoundInfoStatus" >
      update
           compoundInfo
-          set status=#{newStatus} where familyId=#{familyId} and stoveId=#{stoveId} and status=#{oldStatus}
+          set status=#{newStatus},endTime=now(),lookAdCount=(lookAdCount+1) where familyId=#{familyId} and stoveId=#{stoveId} and status=#{oldStatus}
     </update>
 
     <update id="updateFinalComponentId" >

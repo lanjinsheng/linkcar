@@ -42,4 +42,6 @@ public interface AssetUsersPowerLogsMapper {
 
     List<Map<String, Object>> queryPowerStatistics(@Param("day") Integer day);
 
+    AssetUsersPowerLogs getLogsLatest(@Param("userId") long userId);
+
 }

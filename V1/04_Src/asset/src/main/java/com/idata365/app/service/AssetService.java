@@ -389,6 +389,10 @@ public class AssetService extends BaseService<AssetService> {
 		assetUsersAssetMapper.updatePowerAdd(assetUsersPowerLogs);
 		return true;
 	}
+
+	public AssetUsersPowerLogs getLogsLatest(Long userId) {
+		return assetUsersPowerLogsMapper.getLogsLatest(userId);
+	}
 	/**
 	 * 
 	 * @Title: reduceUserPowers

@@ -24,6 +24,7 @@ public interface UserScoreDayStatMapper {
 
     UserScoreDayStat getUserDayScoreByUserFamily(UserFamilyRoleLog userFamilyRoleLog);
 
+    int updateUserDayStat(UserScoreDayStat userScoreDayStat);
 
     void lockUserDayScoreTask(UserScoreDayStat userScoreDayStat);
 
