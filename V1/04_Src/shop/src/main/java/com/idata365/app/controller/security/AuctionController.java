@@ -384,7 +384,6 @@ public class AuctionController extends BaseController {
 		long winnerId = auctionGoods.getWinnerId();
 		if (winnerId == userId) {
 			HashMap<String, Object> datas = new HashMap<String, Object>();
-			datas.put("code", "-1");
 			datas.put("msg", "亲！您已经是当前最高竞价者");
 			return ResultUtils.rtSuccess(datas);
 		}

@@ -38,6 +38,6 @@
     <update id="updateFinalComponentId" >
      update
           compoundInfo
-          set finalComponentId=#{finalComponentId} where id=#{id} and status=1
+          set finalComponentId=#{finalComponentId},status=1 where id=#{id}
     </update>
 </mapper>
