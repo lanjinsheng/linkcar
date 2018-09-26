@@ -14,6 +14,15 @@ public class FamilyRandResultBean implements Serializable {
 	private String familyId;
 	private String familyTypeValue;
 	private String notifyMsg;
+	private String livenessValue;
+
+	public String getLivenessValue() {
+		return livenessValue;
+	}
+
+	public void setLivenessValue(String livenessValue) {
+		this.livenessValue = livenessValue;
+	}
 
 	public String getFamilyTypeValue() {
 		return familyTypeValue;

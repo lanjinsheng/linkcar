@@ -21,4 +21,6 @@ public interface UserLivenessLogMapper {
     int get7DayLivenessValue(@Param("userId") long userId);
 
     int getYesterdayLivenessValueByFamilyId(@Param("familyId") long familyId);
+
+    int get7dayLivenessValueByFamilyId(@Param("familyId") long familyId);
 }

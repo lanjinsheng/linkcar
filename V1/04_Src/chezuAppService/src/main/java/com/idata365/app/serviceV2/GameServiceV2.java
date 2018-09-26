@@ -540,7 +540,7 @@ public class GameServiceV2 extends BaseService<GameServiceV2> {
 					users.get(i).put("isSpectators", "1");// 1 true 0 false
 				}
 			} else {
-				users.get(i).put("desc", "被挑战俱乐部成员");
+				users.get(i).put("desc", "");
 				// users.get(i).put("isMyFamilyFlag", "0");
 				c++;
 				if (c > 4) {
