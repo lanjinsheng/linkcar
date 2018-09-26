@@ -1,12 +1,16 @@
 package com.idata365.app.controller.securityV2;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.idata365.app.constant.DicLivenessConstant;
+import com.idata365.app.constant.InteractConstant;
+import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.entity.InteractLogs;
+import com.idata365.app.entity.UserCar;
+import com.idata365.app.serviceV2.CarService;
+import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.serviceV2.LivenessService;
+import com.idata365.app.serviceV2.UserInfoServiceV2;
+import com.idata365.app.util.DateTools;
+import com.idata365.app.util.ResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.app.constant.InteractConstant;
-import com.idata365.app.controller.security.BaseController;
-import com.idata365.app.entity.InteractLogs;
-import com.idata365.app.serviceV2.InteractService;
-import com.idata365.app.serviceV2.UserInfoServiceV2;
-import com.idata365.app.util.DateTools;
-import com.idata365.app.util.ResultUtils;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class InteractController extends BaseController {
@@ -32,6 +33,8 @@ public class InteractController extends BaseController {
 	UserInfoServiceV2 userInfoServiceV2;
 	@Autowired
 	private LivenessService livenessService;
+	@Autowired
+	private CarService carService;
 
 	 /**
 	  * 
@@ -142,6 +145,7 @@ public class InteractController extends BaseController {
 	@RequestMapping(value = "/cleanCar")
 	Map<String, Object> cleanCar(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<String, Object> requestBodyParams) {
+		Map<String, Object> rtMap = new HashMap<String, Object>();
 		Long toUserId = Long.valueOf(requestBodyParams.get("toUserId").toString());
 		Long userCarId = Long.valueOf(requestBodyParams.get("userCarId").toString());
 
@@ -163,10 +167,17 @@ public class InteractController extends BaseController {
 		log.setUserNameB(userInfoServiceV2.getUsersAccount(toUserId).getNickName());
 		log.setUserCarId(userCarId);
 		tempCarService.insertInteractLogs(log);
-
+		try {
+			Thread.sleep(750L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		UserCar userCurCar = carService.getUserCarBean(toUserId);
+		Map<String, String> powerUpInfo = this.carService.getPowerUpInfo(toUserId, userCurCar.getCarId(),userCurCar.getId());
+		rtMap.put("powerUpPercent", powerUpInfo.get("powerUpPercent"));
 		//擦车加入活跃值业务
 		livenessService.insertUserLivenessLog(this.getUserId(), DicLivenessConstant.livenessId3);
-		return ResultUtils.rtSuccess(null);
+		return ResultUtils.rtSuccess(rtMap);
 	}
 	
 	 public static void main(String []args) {
