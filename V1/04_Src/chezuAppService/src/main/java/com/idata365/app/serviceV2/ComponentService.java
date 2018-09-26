@@ -528,7 +528,7 @@ public class ComponentService extends BaseService<ComponentService> {
         Integer odd_s = odd_tmp>100?100:odd_tmp;
         Integer odd_a = Long.valueOf(Math.round((100 - odd_s) * 0.7)).intValue();
         Integer odd_b = 100 - odd_s - odd_a;
-        String [] arr={odd_s+"%",odd_a+"%",odd_b+"%"};
+        String [] arr={odd_b+"%",odd_a+"%",odd_s+"%"};
         rtMap.put("odds", arr);
         return rtMap;
     }

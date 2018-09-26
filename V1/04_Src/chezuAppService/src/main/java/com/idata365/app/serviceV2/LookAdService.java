@@ -88,7 +88,7 @@ public class LookAdService extends BaseService<LookAdService> {
 					if(cc==app.getMaxAdCount()) {
 						//几率出现
 						int rand = RandUtils.generateRand(1, 10);
-						if (rand > 7) {
+						if (rand > 8) {
 							chezuImService.lookedAllAd(usersAccountMapper.findAccountById(userId).getNickName(), String.valueOf(userId), "");
 						}
 					}
