@@ -613,8 +613,8 @@ public class ComponentService extends BaseService<ComponentService> {
                     }
                     odd_tmp+=compoundMapper.getOddByQualityAndTravelNum(quality, travelNum);
                 }
-                Integer odd_s = odd_tmp;
-                Integer odd_a = Long.valueOf(Math.round((100 - odd_tmp) * 0.7)).intValue();
+                Integer odd_s = odd_tmp>100?100:odd_tmp;
+                Integer odd_a = Long.valueOf(Math.round((100 - odd_s) * 0.7)).intValue();
                 Integer odd_b = 100 - odd_s - odd_a;
                 int rand = RandUtils.generateRand(1, 100);
                 if (rand <= odd_b) {
@@ -705,9 +705,8 @@ public class ComponentService extends BaseService<ComponentService> {
     }
 
     @Transactional
-    public Map<String, Object> submitCompound(Long userId, Integer stoveId) {
+    public Map<String, Object> submitCompound(Long familyId, Integer stoveId) {
 
-        Long familyId = familyMapper.queryCreateFamilyId(userId);
         CompoundInfo compoundInfo = compoundMapper.getCompoundInfoByFamilyIdAndStoveId(familyId, stoveId);
         if (compoundInfo==null) {
             return ResultUtils.rtFailParam(null, "请勿重复提交");
@@ -739,9 +738,9 @@ public class ComponentService extends BaseService<ComponentService> {
             CompoundInfo compoundInfo = compoundMapper.getCompoundInfoByFamilyIdAndStoveId(familyId, arr[i]);
             if (compoundInfo==null) {
                 status[i] = "0";
-            } else if (compoundInfo.getStatus()==0) {
+            } else if (compoundInfo.getStatus()==0&&compoundInfo.getEndTime().getTime()>new Date().getTime()) {
                 status[i] = "1";
-            } else if (compoundInfo.getStatus()==1) {
+            } else if (compoundInfo.getStatus()==1||(compoundInfo.getStatus()==0&&compoundInfo.getEndTime().getTime()<=new Date().getTime())) {
                 status[i] = "2";
                 //处理合成业务
                 if (compoundInfo.getFinalComponentId() == 0) {
@@ -766,8 +765,8 @@ public class ComponentService extends BaseService<ComponentService> {
                         }
                         odd_tmp+=compoundMapper.getOddByQualityAndTravelNum(quality, travelNum);
                     }
-                    Integer odd_s = odd_tmp;
-                    Integer odd_a = Long.valueOf(Math.round((100 - odd_tmp) * 0.7)).intValue();
+                    Integer odd_s = odd_tmp>100?100:odd_tmp;
+                    Integer odd_a = Long.valueOf(Math.round((100 - odd_s) * 0.7)).intValue();
                     Integer odd_b = 100 - odd_s - odd_a;
                     int rand = RandUtils.generateRand(1, 100);
                     if (rand <= odd_b) {
@@ -906,6 +905,7 @@ public class ComponentService extends BaseService<ComponentService> {
                     m.put("logType", "2");
                     m.put("headImg", imgBase + user.get("imgUrl"));
                     m.put("nick", user.get("nickName"));
+                    m.put("time", componentGiveLog.getEventTime().getTime());
 
                     DicComponent dicComponent = DicComponentConstant.getDicComponent(componentGiveLog.getComponentId());
                     m.put("imgUrl", dicComponent.getComponentUrl());
@@ -929,10 +929,14 @@ public class ComponentService extends BaseService<ComponentService> {
 
                     prayingList.add(m);
                 }
-
             }
-
         }
+        // 排序--- flag 1-->2-->3
+        Collections.sort(prayingList, new Comparator<Map<String, Object>>() {
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                return Double.valueOf(o2.get("time").toString()).compareTo(Double.valueOf(o1.get("time").toString()));
+            }
+        });
         int i = componentMapper.countOfPray(userId);
         rtMap.put("isCanPray", i > 0 ? "0" : "1");
         rtMap.put("prayingList", prayingList);

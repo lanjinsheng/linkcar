@@ -177,8 +177,9 @@ public class ComponentController extends BaseController {
 	Map<String, Object> submitCompound(@RequestParam (required = false) Map<String, String> allRequestParams,
 										 @RequestBody  (required = false)  Map<String, Object> requestBodyParams){
 		Integer stoveId=Integer.valueOf(requestBodyParams.get("stoveId").toString());
-		LOG.info("userId==="+this.getUserId()+"===+stoveId=="+stoveId);
-		Map<String,Object> rtMap=componentService.submitCompound(this.getUserId(),stoveId);
+		long familyId=Long.valueOf(requestBodyParams.get("familyId").toString());
+		LOG.info("userId==="+this.getUserId()+"===+stoveId=="+stoveId+"familyId=="+familyId);
+		Map<String,Object> rtMap=componentService.submitCompound(familyId,stoveId);
 		return ResultUtils.rtSuccess(rtMap);
 	}
 
