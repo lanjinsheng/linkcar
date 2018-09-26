@@ -98,9 +98,9 @@ public class NotifyController extends BaseController{
 	
 	
 	private final String PrayingSubmit="通知:@【%s】@祈愿一个 %s,一方有难八方支援,各位大佬快@去资助@TA吧。";
-	private final String PrayingRealize="通知:感谢俱乐部！@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
-	private final String LookedAllAd="通知:@【%s】@今日的所有视频任务已完成,奖励300点动力!";
-	private final String DoingAllActMission="通知:@【 %s】@今日的所有活动任务已完成，奖励动力 %s点!";
+	private final String PrayingRealize="通知:@【%s】@资助@【%s】@一个 %s!真是帮了大忙了!";
+	private final String LookedAllAd="通知:@【%s】@完成今日所有视频任务,奖励大量动力!";
+	private final String DoingAllActMission="通知:@【 %s】@完成今日所有活动任务，奖励动力 %s点!";
 	private final String PrayingSubmitToUrl="lc://PrayPartsInClubVC.push";
 	
    /**
