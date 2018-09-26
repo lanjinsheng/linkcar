@@ -346,7 +346,6 @@ public class InteractService extends BaseService<InteractService> {
 		}
 		return rtList;
 	}
-	@Transactional
 	public int insertInteractLogs(InteractLogs log){
 		return interactLogsMapper.insertLog(log);
 	}

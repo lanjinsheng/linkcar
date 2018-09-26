@@ -398,6 +398,11 @@ public class CarService extends BaseService<CarService> {
 		Map<String,Object> car=userCarLogsMapper.getUserCar(map);
 		return car;
 	}
+
+	public UserCar getUserCarBean(long userId){
+		UserCar userCurCar = userCarMapper.getUserCurCar(userId);
+		return userCurCar;
+	}
 	
 	/**
 	 * 
