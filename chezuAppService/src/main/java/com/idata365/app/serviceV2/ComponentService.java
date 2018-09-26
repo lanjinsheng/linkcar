@@ -141,11 +141,13 @@ public class ComponentService extends BaseService<ComponentService> {
                 m1.put("componentName", dicComponent.getComponentValue());
                 m1.put("quality", dicComponent.getQuality());
                 m1.put("imgUrl", dicComponent.getComponentUrl());
+                m1.put("flag", dicComponent.getTravelNum());
                 m1.put("componentNum", "1");
                 m1.put("componentType", dicComponent.getComponentType());
                 m1.put("componentDesc", dicComponent.getComponentDesc());
                 m1.put("componentAttribute", "动力加成" + (int) (dicComponent.getPowerAddition() * 100) + "%");
                 m1.put("componentLoss", component.getLeftTravelNum() + "次行程");
+                m1.put("damageDegree", component.getLeftTravelNum()+"/"+dicComponent.getTravelNum());
                 Integer componentType = dicComponent.getComponentType();
                 List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
 
@@ -153,7 +155,7 @@ public class ComponentService extends BaseService<ComponentService> {
                     list.add(m1);
                 } else {
                     for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).get("quality").equals(dicComponent.getQuality()) && Integer.valueOf(list.get(i).get("componentLoss").toString().substring(0, 1)) == dicComponent.getTravelNum()) {
+                        if (list.get(i).get("quality").equals(dicComponent.getQuality()) && Integer.valueOf(list.get(i).get("componentLoss").toString().substring(0, 1)) == component.getLeftTravelNum()) {
                             list.get(i).put("componentNum", String.valueOf(Integer.valueOf(list.get(i).get("componentNum").toString()) + 1));
                             List<String> ids1 = (List<String>) list.get(i).get("userComponentIds");
                             ids1.add(component.getId().toString());
@@ -165,6 +167,13 @@ public class ComponentService extends BaseService<ComponentService> {
                         }
                     }
                 }
+
+                // 排序--- flag 1-->2-->3
+                Collections.sort(list, new Comparator<Map<String, Object>>() {
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+                    }
+                });
             }
         }
         rtMap.put("componentLT", componentLT);
@@ -230,6 +239,7 @@ public class ComponentService extends BaseService<ComponentService> {
                 m1.put("componentName", dicComponent.getComponentValue());
                 m1.put("quality", dicComponent.getQuality());
                 m1.put("imgUrl", dicComponent.getComponentUrl());
+                m1.put("flag", dicComponent.getTravelNum());
                 m1.put("componentNum", "1");
                 m1.put("componentType", dicComponent.getComponentType());
                 m1.put("componentDesc", dicComponent.getComponentDesc());
@@ -246,6 +256,7 @@ public class ComponentService extends BaseService<ComponentService> {
                 }
                 m1.put("componentLoss", travelNum + "次行程");
                 m1.put("isCanCompound", "1");
+                m1.put("damageDegree", travelNum+"/"+dicComponent.getTravelNum());
                 Integer componentType = dicComponent.getComponentType();
                 List<Map<String, Object>> list = paramMap.get(String.valueOf(componentType));
 
@@ -253,7 +264,7 @@ public class ComponentService extends BaseService<ComponentService> {
                     list.add(m1);
                 } else {
                     for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).get("quality").equals(dicComponent.getQuality()) && Integer.valueOf(list.get(i).get("componentLoss").toString().substring(0, 1)) == dicComponent.getTravelNum()) {
+                        if (list.get(i).get("quality").equals(dicComponent.getQuality()) && Integer.valueOf(list.get(i).get("componentLoss").toString().substring(0, 1)) == travelNum) {
                             list.get(i).put("componentNum", String.valueOf(Integer.valueOf(list.get(i).get("componentNum").toString()) + 1));
                             List<String> ids1 = (List<String>) list.get(i).get("familyComponentIds");
                             ids1.add(component.getId().toString());
@@ -265,6 +276,12 @@ public class ComponentService extends BaseService<ComponentService> {
                         }
                     }
                 }
+                // 排序--- flag 1-->2-->3
+                Collections.sort(list, new Comparator<Map<String, Object>>() {
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        return Double.valueOf(o1.get("flag").toString()).compareTo(Double.valueOf(o2.get("flag").toString()));
+                    }
+                });
             }
         }
         rtMap.put("componentLT", componentLT);

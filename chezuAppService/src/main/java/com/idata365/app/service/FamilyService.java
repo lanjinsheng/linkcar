@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.idata365.app.mapper.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -54,20 +55,6 @@ import com.idata365.app.entity.UserScoreDayParamBean;
 import com.idata365.app.entity.UsersAccount;
 import com.idata365.app.entity.bean.UserInfo;
 import com.idata365.app.enums.MessageEnum;
-import com.idata365.app.mapper.BoxTreasureMapper;
-import com.idata365.app.mapper.CarpoolApproveMapper;
-import com.idata365.app.mapper.CarpoolMapper;
-import com.idata365.app.mapper.DicGameDayMapper;
-import com.idata365.app.mapper.FamilyInviteMapper;
-import com.idata365.app.mapper.FamilyMapper;
-import com.idata365.app.mapper.ImNotifyMapper;
-import com.idata365.app.mapper.ScoreMapper;
-import com.idata365.app.mapper.TaskMapper;
-import com.idata365.app.mapper.UserConfigMapper;
-import com.idata365.app.mapper.UserLookAdMapper;
-import com.idata365.app.mapper.UserMissionLogsMapper;
-import com.idata365.app.mapper.UserRoleLogMapper;
-import com.idata365.app.mapper.UsersAccountMapper;
 import com.idata365.app.remote.ChezuImService;
 import com.idata365.app.serviceV2.InteractService;
 import com.idata365.app.serviceV2.ScoreServiceV2;
@@ -122,6 +109,8 @@ public class FamilyService extends BaseService<FamilyService> {
 	BoxTreasureMapper boxTreasureMapper;
 	@Autowired
 	UserLookAdMapper userLookAdMapper;
+	@Autowired
+	private UserLivenessLogMapper userLivenessLogMapper;
 
 	public FamilyResultBean findFamily(long userId) {
 		// FamilyResultBean resultBean = new FamilyResultBean();
@@ -517,7 +506,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			} else {
 				tempResultBean.setIsAlreadyRecommend("0");
 			}
-
+			tempResultBean.setLivenessValue(String.valueOf(userLivenessLogMapper.get7dayLivenessValueByFamilyId(tempBean.getFamilyId())));
 			resultList.add(tempResultBean);
 		}
 		return resultList;

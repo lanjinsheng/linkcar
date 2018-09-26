@@ -35,4 +35,8 @@
        SELECT IFNULL(sum(livenessValue),0) FROM userLivenessLog where date(eventTime)=date(date_add(now(), interval -1 day)) and userId in(select userId from userFamilyRelation where familyId=#{familyId})
     </select>
 
+    <select id="get7dayLivenessValueByFamilyId" resultType="java.lang.Integer">
+       SELECT IFNULL(sum(livenessValue),0) FROM userLivenessLog where date(eventTime)=date(date_add(now(), interval -7 day)) and userId in(select userId from userFamilyRelation where familyId=#{familyId})
+    </select>
+
 </mapper>
