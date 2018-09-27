@@ -1234,7 +1234,7 @@ public class ScoreServiceV2 extends BaseService<ScoreServiceV2> {
 		Map<String, String> clubLivenessInfo = new HashMap<String, String>();//活跃值
 		Map<String, String> pkStatusInfo = new HashMap<String, String>();
 		Long familyId = this.familyMapper.queryCreateFamilyId(userId);
-		if (familyId==null&&familyId.longValue()==0) {
+		if (familyId==null||familyId.longValue()==0) {
 			return null;
 		}
 		String yesterday = DateTools.getCurDateAddDay(-1);
