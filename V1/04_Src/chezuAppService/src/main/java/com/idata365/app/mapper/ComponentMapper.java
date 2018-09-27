@@ -46,7 +46,7 @@ public interface ComponentMapper {
 	public int 	gotFamilyComponent(Map<String,Object> map);
 	public ComponentUser getUserComponentByType(Map<String,Object> map);
 
-	public ComponentUser getUserComponentByTypeInUse(@Param("componentType")Integer componentType,@Param("userId")Long userId);
+	public List<ComponentUser> getUserComponentByTypeInUse(@Param("componentType")Integer componentType,@Param("userId")Long userId);
 	public int gotUserComponent(ComponentUser componentUser);
 	
 	

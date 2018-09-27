@@ -472,28 +472,31 @@ public class ComponentService extends BaseService<ComponentService> {
         ComponentUser componentUser = componentMapper.getComponentUser(userComponentId);
         //根据userId和type查询使用中的配件
         Integer componentType = DicComponentConstant.getDicComponent(componentUser.getComponentId()).getComponentType();
-        ComponentUser inUse = componentMapper.getUserComponentByTypeInUse(componentType, userId);
+        List<ComponentUser> inUses = componentMapper.getUserComponentByTypeInUse(componentType, userId);
         //老的返回仓库
-        if (inUse!=null&&inUse.getId() > 0) {
-            Long destroyComponentId = inUse.getId();
-            ComponentUser componentUser2 = componentMapper.getComponentUser(destroyComponentId);
-            //插入componentUserUseLog
-            ComponentUserUseLog log2 = new ComponentUserUseLog();
-            log2.setUserCarId(0L);
-            log2.setComponentId(componentUser2.getComponentId());
-            log2.setEventType(7);
-            log2.setUserId(componentUser2.getUserId());
-            log2.setUserComponentId(userComponentId);
-            componentMapper.insertComponentUserUseLog(log2);
+        if (inUses!=null) {
+            for (ComponentUser inUse : inUses) {
+                if (inUse!=null&&inUse.getId() > 0) {
+                    Long destroyComponentId = inUse.getId();
+                    ComponentUser componentUser2 = componentMapper.getComponentUser(destroyComponentId);
+                    //插入componentUserUseLog
+                    ComponentUserUseLog log2 = new ComponentUserUseLog();
+                    log2.setUserCarId(0L);
+                    log2.setComponentId(componentUser2.getComponentId());
+                    log2.setEventType(7);
+                    log2.setUserId(componentUser2.getUserId());
+                    log2.setUserComponentId(userComponentId);
+                    componentMapper.insertComponentUserUseLog(log2);
 
-            //更新零件
-            Map<String, Object> userCompUpdate2 = new HashMap<>();
-            userCompUpdate2.put("inUse", 0);
-            userCompUpdate2.put("componentStatus", 1);
-            userCompUpdate2.put("userComponentId", destroyComponentId);
-            componentMapper.updateUserComponent(userCompUpdate2);
+                    //更新零件
+                    Map<String, Object> userCompUpdate2 = new HashMap<>();
+                    userCompUpdate2.put("inUse", 0);
+                    userCompUpdate2.put("componentStatus", 1);
+                    userCompUpdate2.put("userComponentId", destroyComponentId);
+                    componentMapper.updateUserComponent(userCompUpdate2);
+                }
+            }
         }
-
 
         //插入componentUserUseLog
         ComponentUserUseLog log = new ComponentUserUseLog();
