@@ -120,7 +120,7 @@ public class InteractService extends BaseService<InteractService> {
 			type=1;
 			InteractLogs log=new InteractLogs();
 			log.setEventType(InteractConstant.PAY_PECCANCY_OTHER);
-			log.setSomeValue(dbPeccancy.getPowerNum());
+			log.setSomeValue(Double.valueOf(dbPeccancy.getPowerNum()*appProperties.getPayPeccancyMultiplying()).intValue());
 			log.setUserIdA(userId);
 			log.setUserIdB(dbPeccancy.getLawManId());
 			log.setUserNameA(nickName);
@@ -131,7 +131,7 @@ public class InteractService extends BaseService<InteractService> {
 	    	
 			InteractLogs log2=new InteractLogs();
 			log2.setEventType(InteractConstant.PAY_PECCANCY_OTHER_HELP);
-			log2.setSomeValue(dbPeccancy.getPowerNum());
+			log2.setSomeValue(Double.valueOf(dbPeccancy.getPowerNum()*appProperties.getPayPeccancyMultiplying()).intValue());
 			log2.setUserIdA(userId);
 			log2.setUserIdB(dbPeccancy.getLawBreakerId());
 			log2.setUserNameA(nickName);
@@ -145,7 +145,7 @@ public class InteractService extends BaseService<InteractService> {
 
 		}
 		Map<String, String> map=chezuAssetService.reducePowersByPeccancy(dbPeccancy.getLawManId(), userId, type,
-				dbPeccancy.getPowerNum()*appProperties.getPayPeccancyMultiplying().intValue(), peccancyId, SignUtils.encryptHMAC(String.valueOf(dbPeccancy.getLawManId())));
+				Double.valueOf(dbPeccancy.getPowerNum()*appProperties.getPayPeccancyMultiplying()).intValue(), peccancyId, SignUtils.encryptHMAC(String.valueOf(dbPeccancy.getLawManId())));
 		if(map==null || map.get("flag").equals("0")){
 			throw new RuntimeException("无法进行缴纳支付");
 		}
@@ -174,7 +174,7 @@ public class InteractService extends BaseService<InteractService> {
 		 }else{//别人的条子
 			 for(Map<String,Object> m:list){
 				 m.put("remark",remark2);
-				 m.put("powerNum",Integer.valueOf(String.valueOf(m.get("powerNum")))*appProperties.getPayPeccancyMultiplying().intValue());
+				 m.put("powerNum",Double.valueOf(Integer.valueOf(String.valueOf(m.get("powerNum"))) * appProperties.getPayPeccancyMultiplying()).intValue());
 			 }
 		 }
 		 return list;

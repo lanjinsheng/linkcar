@@ -11,7 +11,7 @@
   <select id="getFreeComponentUser" resultType="com.idata365.app.entity.v2.ComponentUser">
 	select * from componentUser 
 	 where userId=#{userId}
-	 and componentStatus=1 and inUse=0
+	 and componentStatus=1 and inUse=0 and leftTravelNum>0
 </select>   
 
   <select id="getFreeComponentUserGroupType" resultType="java.util.HashMap">
@@ -136,7 +136,7 @@
 <select id="getUserComponentByTypeInUse" resultType="com.idata365.app.entity.v2.ComponentUser">
      select * from
           componentUser where componentStatus=1 and inUse=1
-          and  componentType=#{componentType} and userId=#{userId} limit 1
+          and  componentType=#{componentType} and userId=#{userId}
 </select>
 <select id="getFreeComponentTypeUser"  parameterType="java.util.HashMap" resultType="com.idata365.app.entity.v2.ComponentUser">
      select * from 
