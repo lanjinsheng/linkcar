@@ -16,10 +16,10 @@ import com.idata365.app.mapper.ProvinceMapper;
 public class ProvinceService extends BaseService<ProvinceService>
 {
 	private static final Logger LOG = LoggerFactory.getLogger(ProvinceService.class);
-	
+
 	@Autowired
 	private ProvinceMapper provinceMapper;
-	
+
 	public List<Province> findProvince()
 	{
 		List<Province> provinces = this.provinceMapper.findProvince();

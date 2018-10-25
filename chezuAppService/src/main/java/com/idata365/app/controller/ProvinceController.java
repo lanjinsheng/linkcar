@@ -1,17 +1,17 @@
-package com.idata365.app.controller.security;
+package com.idata365.app.controller;
 
-import java.util.List;
-import java.util.Map;
-
+import com.idata365.app.controller.security.BaseController;
+import com.idata365.app.entity.Province;
+import com.idata365.app.service.ProvinceService;
+import com.idata365.app.util.ResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idata365.app.entity.Province;
-import com.idata365.app.service.ProvinceService;
-import com.idata365.app.util.ResultUtils;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProvinceController extends BaseController
