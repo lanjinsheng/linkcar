@@ -108,7 +108,7 @@ public class ImService extends BaseService<ImService>
 		String msg1=GsonUtils.toJson(msg, false);
 		msg.put("type", 2);
 		String msg2=GsonUtils.toJson(msg, false);
-		
+
 		List<Map<String,Object>> list=null;
 		if(type==1) {//创建俱乐部
 		    list=(List<Map<String,Object>>)familiesMap.get("createFamily");

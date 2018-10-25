@@ -123,7 +123,7 @@ public class OpenController extends BaseController {
 	
 	@RequestMapping(value = "/ment/openUploadAuctionImg", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json;charset=UTF-8")
-	public @ResponseBody String openUploadAuctionImgPage(@RequestParam CommonsMultipartFile file,
+	public @ResponseBody String openUploadAuctionImgPage(@RequestParam("file") CommonsMultipartFile file,
 			@RequestParam Map<String, Object> map) {
 		Long userId = 1L;
 		if (file == null) {
