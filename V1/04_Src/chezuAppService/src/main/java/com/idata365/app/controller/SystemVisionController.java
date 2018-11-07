@@ -81,10 +81,10 @@ public class SystemVisionController extends BaseController
 			map.put("imBaseUrl", "ws://47.100.208.65:7397/websocket");
 		}else{
 			//测试环境1
-			map.put("appBaseUrl", "http://115.159.216.58:8769");
-			map.put("colBaseUrl", "http://115.159.216.58:9081/v1");
-			map.put("imgBaseUrl", "http://115.159.216.58:8769/zuul");
-			map.put("imBaseUrl", "ws://115.159.216.58:7397/websocket");
+			map.put("appBaseUrl", "http://120.253.162.2:8769");
+			map.put("colBaseUrl", "http://120.253.162.2:9081/v1");
+			map.put("imgBaseUrl", "http://120.253.162.2:8769/zuul");
+			map.put("imBaseUrl", "ws://120.253.162.2:7397/websocket");
 		}
 		return ResultUtils.rtSuccess(map);
 	}
