@@ -3,12 +3,12 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: http://115.159.216.58:8761/eureka/
+      defaultZone: http://120.253.162.2:8761/eureka/
 
   instance:
     lease-expiration-duration-in-seconds: 30 
     lease-renewal-interval-in-seconds: 10
-    ip-address: 115.159.216.58
+    ip-address: 120.253.162.2
     prefer-ip-address: true 
 feign:
   hystrix:
@@ -30,7 +30,7 @@ spring:
     # 驱动配置信息
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://115.159.216.58:6633/devData?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://120.253.162.2:6633/cheData?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: sjTest
     password: sjTest2962143!
     driverClassName: com.mysql.jdbc.Driver

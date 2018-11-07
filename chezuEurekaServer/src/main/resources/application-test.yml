@@ -2,7 +2,7 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: 115.159.216.58
+    hostname: 120.253.162.2
     prefer-ip-address: true
     ip-address: true
   client:
