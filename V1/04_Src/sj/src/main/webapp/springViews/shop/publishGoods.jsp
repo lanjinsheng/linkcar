@@ -24,7 +24,6 @@ String shopUrl = CommentUtil.shopUrl;
 			var formData = new FormData($("#ff")[0]);
         	var imgs = "";
       		$.ajax({
-				 type:'POST',
 				url:'<%=shopUrl%>/ment/openUploadAuctionImg',
 				type: 'POST', 
 			    data: formData, 
