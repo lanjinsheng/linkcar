@@ -8,8 +8,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 public class HMAC {
 
@@ -46,7 +44,8 @@ public class HMAC {
      * @throws Exception
      */
     public static String encryptBase64(byte[] key) throws Exception {
-        return (new BASE64Encoder()).encodeBuffer(key);
+//        return (new BASE64Encoder()).encodeBuffer(key);
+        return java.util.Base64.getEncoder().encodeToString(key);
     }
 
     /**
@@ -56,7 +55,8 @@ public class HMAC {
      * @throws Exception
      */
     public static byte[] decryptBase64(String key) throws Exception {
-        return (new BASE64Decoder()).decodeBuffer(key);
+//        return (new BASE64Decoder()).decodeBuffer(key);
+        return java.util.Base64.getDecoder().decode(key);
     }
 
     /**

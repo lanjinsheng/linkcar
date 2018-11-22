@@ -8,9 +8,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 public class HMAC {
 
     /**
@@ -46,8 +43,10 @@ public class HMAC {
      * @throws Exception
      */
     public static String encryptBase64(byte[] key) throws Exception {
-        return (new BASE64Encoder()).encodeBuffer(key);
+//        return (new BASE64Encoder()).encodeBuffer(key);
+        return java.util.Base64.getEncoder().encodeToString(key);
     }
+
 
     /**
      * BASE64 解密
@@ -56,7 +55,8 @@ public class HMAC {
      * @throws Exception
      */
     public static byte[] decryptBase64(String key) throws Exception {
-        return (new BASE64Decoder()).decodeBuffer(key);
+//        return (new BASE64Decoder()).decodeBuffer(key);
+        return java.util.Base64.getDecoder().decode(key);
     }
 
     /**
@@ -121,7 +121,7 @@ public class HMAC {
      * @param data 需要加密的字符串
      * @param key 密钥
      * @return 字符串
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     public static String encryptHMAC(String data, String key) throws UnsupportedEncodingException {
         if (null==data || data.isEmpty()) {

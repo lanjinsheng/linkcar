@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import com.idata365.app.controller.security.UserInfoController;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * 
@@ -34,8 +32,8 @@ public class ImageUtils {
     /**
      * 将网络图片进行Base64位编码
      * 
-     * @param imgUrl
-     *            图片的url路径，如http://.....xx.jpg
+     * @param
+     *
      * @return
      */
     public static String encodeImgageToBase64(URL imageUrl) {// 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
@@ -50,15 +48,13 @@ public class ImageUtils {
             e.printStackTrace();
         }
         // 对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(outputStream.toByteArray());// 返回Base64编码过的字节数组字符串
+        return java.util.Base64.getEncoder().encodeToString(outputStream.toByteArray());// 返回Base64编码过的字节数组字符串
     }
 
     /**
      * 将本地图片进行Base64位编码
      * 
-     * @param imgUrl
-     *            图片的url路径，如http://.....xx.jpg
+     * @param
      * @return
      */
     public static String encodeImgageToBase64(File imageFile) {// 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
@@ -73,8 +69,7 @@ public class ImageUtils {
             e.printStackTrace();
         }
         // 对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(outputStream.toByteArray());// 返回Base64编码过的字节数组字符串
+        return java.util.Base64.getEncoder().encodeToString(outputStream.toByteArray());// 返回Base64编码过的字节数组字符串
     }
 
     /**
@@ -86,11 +81,10 @@ public class ImageUtils {
      */
     public static void decodeBase64ToImage(String base64, String path,
             String imgName) {
-        BASE64Decoder decoder = new BASE64Decoder();
         try {
             FileOutputStream write = new FileOutputStream(new File(path
                     + imgName));
-            byte[] decoderBytes = decoder.decodeBuffer(base64);
+            byte[] decoderBytes = java.util.Base64.getDecoder().decode(base64);
             write.write(decoderBytes);
             write.close();
         } catch (IOException e) {
@@ -338,7 +332,7 @@ public class ImageUtils {
      *     
         * @Title: dealImgJSZ
         * @Description: TODO(这里用一句话描述这个方法的作用)
-        * @param     参数
+        * @param
         * @return void    返回类型
         * {
 		    {
