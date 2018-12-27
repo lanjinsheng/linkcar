@@ -2,7 +2,7 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: product-eureka.idata365.com
+    hostname: product-eureka.wannigeqiu.com
     prefer-ip-address: true
     ip-address: true
   client:
