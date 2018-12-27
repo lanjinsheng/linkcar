@@ -24,6 +24,8 @@ public class MainResultBean
 	
 	//俱乐部顺风车红点
 	private int clubHave;
+	//小波要求添加，没软用
+	private int  myClubHave;
 	
 	//1表弹出新手引导；0表不需要弹出
 	private int readFlag;
@@ -140,5 +142,12 @@ public class MainResultBean
 	public void setIsHaveBox(int isHaveBox) {
 		this.isHaveBox = isHaveBox;
 	}
-	
+
+	public int getMyClubHave() {
+		return myClubHave;
+	}
+
+	public void setMyClubHave(int myClubHave) {
+		this.myClubHave = myClubHave;
+	}
 }

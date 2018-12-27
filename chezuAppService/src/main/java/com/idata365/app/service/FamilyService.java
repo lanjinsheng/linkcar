@@ -1058,7 +1058,7 @@ public class FamilyService extends BaseService<FamilyService> {
 			sharingMyPoint=1;
 		}
 		resultBean.setClubHave(sharingMyPoint);
-		
+		resultBean.setMyClubHave(sharingMyPoint);
 		//创建俱乐部页面是否有“俱乐部奖金”图标
 		resultBean.setHaveClubBonusIcon(0);
 		Long createFamilyId = this.familyMapper.queryCreateFamilyId(bean.getUserId());

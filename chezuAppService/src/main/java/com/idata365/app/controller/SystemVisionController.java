@@ -75,16 +75,16 @@ public class SystemVisionController extends BaseController
 		// 业务处理
 		if(versionInt<=sysVersionInt){
 			//正式环境1
-			map.put("appBaseUrl", "https://product-app.idata365.com");
-			map.put("colBaseUrl", "https://product-col.idata365.com/v1");
-			map.put("imgBaseUrl", "http://product-app.idata365.com/zuul");
-			map.put("imBaseUrl", "ws://47.100.208.65:7397/websocket");
+			map.put("appBaseUrl", "https://product-app.wannigeqiu.com");
+			map.put("colBaseUrl", "https://product-col.wannigeqiu.com/v1");
+			map.put("imgBaseUrl", "http://product-app.wannigeqiu.com/zuul");
+			map.put("imBaseUrl", "ws://47.89.245.0:7397/websocket");
 		}else{
 			//测试环境1
-			map.put("appBaseUrl", "http://120.253.162.2:8769");
-			map.put("colBaseUrl", "http://120.253.162.2:9081/v1");
-			map.put("imgBaseUrl", "http://120.253.162.2:8769/zuul");
-			map.put("imBaseUrl", "ws://120.253.162.2:7397/websocket");
+			map.put("appBaseUrl", "https://product-app.wannigeqiu.com");
+			map.put("colBaseUrl", "https://product-col.wannigeqiu.com/v1");
+			map.put("imgBaseUrl", "http://product-app.wannigeqiu.com/zuul");
+			map.put("imBaseUrl", "ws://47.89.245.0:7397/websocket");
 		}
 		return ResultUtils.rtSuccess(map);
 	}

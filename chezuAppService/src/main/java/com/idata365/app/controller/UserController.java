@@ -83,8 +83,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("password")))
+				|| ValidTools.isBlank(requestBodyParams.get("password"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
 		String status = LoginRegService.OK;
@@ -153,8 +154,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("loginType"))
-				|| ValidTools.isBlank(requestBodyParams.get("openId"))|| ValidTools.isBlank(requestBodyParams.get("remark")))
+				|| ValidTools.isBlank(requestBodyParams.get("openId"))|| ValidTools.isBlank(requestBodyParams.get("remark"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		int loginType = Integer.valueOf(String.valueOf(requestBodyParams.get("loginType")));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
 		LOG.info("openId================================"+openId);
@@ -240,8 +242,9 @@ public class UserController extends BaseController {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		rtMap.put("isAuthenticated", "0");
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("openId")))
+				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("openId"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
 		String openId = String.valueOf(requestBodyParams.get("openId"));
@@ -306,10 +309,12 @@ public class UserController extends BaseController {
 			rtMap.put("userPhone", account.getPhone());
 			return ResultUtils.rtSuccess(rtMap);
 		} else {
-			if (status.equals(LoginRegService.VC_ERR))
+			if (status.equals(LoginRegService.VC_ERR)) {
 				return ResultUtils.rtFailParam(null, "校验码无效");
-			if (status.equals(LoginRegService.VC_EX))
+			}
+			if (status.equals(LoginRegService.VC_EX)) {
 				return ResultUtils.rtFailParam(null, "校验码过期");
+			}
 		}
 		return ResultUtils.rtSuccess(null);
 	}
@@ -334,8 +339,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("password")))
+				|| ValidTools.isBlank(requestBodyParams.get("password"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String openId = String.valueOf(requestBodyParams.get("openId"));
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
@@ -380,8 +386,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("password")))
+				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("password"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
 		String password = String.valueOf(requestBodyParams.get("password"));
@@ -417,10 +424,12 @@ public class UserController extends BaseController {
 				return ResultUtils.rtSuccess(rtMap);
 			}
 		} else {
-			if (status.equals(LoginRegService.VC_ERR))
+			if (status.equals(LoginRegService.VC_ERR)) {
 				return ResultUtils.rtFailParam(null, "校验码无效");
-			if (status.equals(LoginRegService.VC_EX))
+			}
+			if (status.equals(LoginRegService.VC_EX)) {
 				return ResultUtils.rtFailParam(null, "校验码过期");
+			}
 		}
 		return ResultUtils.rtSuccess(null);
 	}
@@ -444,8 +453,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("password")))
+				|| ValidTools.isBlank(requestBodyParams.get("password"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		// 校验是否需要邀请码
 //		if (SystemConstant.INVITECODE_SWITCH == 1) {
 //			if (ValidTools.isBlank(requestBodyParams.get("inviteCode"))) {
@@ -488,8 +498,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("password")))
+				|| ValidTools.isBlank(requestBodyParams.get("verifyCode"))|| ValidTools.isBlank(requestBodyParams.get("password"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String verifyCode = String.valueOf(requestBodyParams.get("verifyCode"));
 		String password = String.valueOf(requestBodyParams.get("password"));
@@ -512,10 +523,12 @@ public class UserController extends BaseController {
 				return ResultUtils.rtFailParam(null, "账号不存在");
 			}
 		} else {
-			if (status.equals(LoginRegService.VC_ERR))
+			if (status.equals(LoginRegService.VC_ERR)) {
 				return ResultUtils.rtFailParam(null, "校验码无效");
-			if (status.equals(LoginRegService.VC_EX))
+			}
+			if (status.equals(LoginRegService.VC_EX)) {
 				return ResultUtils.rtFailParam(null, "校验码过期");
+			}
 		}
 		return ResultUtils.rtSuccess(null);
 	}
@@ -539,8 +552,9 @@ public class UserController extends BaseController {
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("password")))
+				|| ValidTools.isBlank(requestBodyParams.get("password"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		String password = String.valueOf(requestBodyParams.get("password"));
 		String token = loginRegService.updateUserPwd(phone, password, rtMap);
@@ -574,8 +588,9 @@ public class UserController extends BaseController {
 				.resolveReference(RequestAttributes.REFERENCE_REQUEST);
 		// String sign=request.getHeader("sign");
 		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("phone"))
-				|| ValidTools.isBlank(requestBodyParams.get("codeType")))
+				|| ValidTools.isBlank(requestBodyParams.get("codeType"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String phone = String.valueOf(requestBodyParams.get("phone"));
 		// boolean signValid=SignUtils.security(phone, sign);
 		// if(!signValid) {
@@ -603,8 +618,9 @@ public class UserController extends BaseController {
 	public Map<String, Object> addDeviceUserInfo(@RequestParam(required = false) Map<String, String> allRequestParams,
 			@RequestBody(required = false) Map<Object, Object> requestBodyParams) {
 		Map<String, Object> rtMap = new HashMap<String, Object>();
-		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("deviceToken")))
+		if (requestBodyParams == null || ValidTools.isBlank(requestBodyParams.get("deviceToken"))) {
 			return ResultUtils.rtFailParam(null);
+		}
 		String deviceInfo = String.valueOf(requestBodyParams.get("deviceToken"));
 		String eventType = String.valueOf(requestBodyParams.get("eventType"));
 		long userId = 0;

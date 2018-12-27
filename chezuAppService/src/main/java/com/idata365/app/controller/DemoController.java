@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.executor.ReuseExecutor;
+import com.idata365.app.constant.AppMsgCode;
+import com.idata365.app.util.I18nUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,5 +121,19 @@ public class DemoController extends BaseController {
     public Map<String,Object> getFamilyType(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
 		 DicFamilyType dic=DicFamilyTypeConstant.getDicFamilyType(90);
 		return ResultUtils.rtSuccess(dic);
-	}	
+	}
+	@RequestMapping("/test/getMsgCode")
+	public Map<String,Object> getMsgCode(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+         LOG.info(AppMsgCode.InviteMessage.getCode());
+	     return ResultUtils.rtSuccess(AppMsgCode.InviteMessage.getMsg());
+	}
+	@RequestMapping("/test/setLanguage")
+	public Map<String,Object> setLanguage(@RequestParam (required = false) Map<String, String> allRequestParams,@RequestBody  (required = false)  Map<Object, Object> requestBodyParams){
+		try {
+			I18nUtils.setLanguage("zh-CHS");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResultUtils.rtSuccess(AppMsgCode.InviteMessage.getMsg());
+	}
 }
