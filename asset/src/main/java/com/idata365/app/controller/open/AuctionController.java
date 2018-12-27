@@ -21,11 +21,12 @@ public class AuctionController extends BaseController {
 	@RequestMapping(value = "/asset/unfreezeDiamondAsset", method = RequestMethod.POST)
 	boolean unfreezeDiamondAsset(@RequestParam(value = "buyerId") long buyerId,@RequestParam(value = "sellerId") long sellerId,
 			@RequestParam(value = "auctionGoodsId") long auctionGoodsId,
+			@RequestParam(value = "diamondBidNum") double diamondBidNum,
 			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign ) {
 		LOG.info("PARAM:" + buyerId + "===" + sellerId + "====" +diamondNum+"=="+ sign);
 		boolean bl=false;
 		try{
-			  bl = assetService.unfreezeDiamondAsset(buyerId, sellerId, auctionGoodsId, diamondNum);
+			  bl = assetService.unfreezeDiamondAsset(buyerId, sellerId, auctionGoodsId,diamondBidNum,diamondNum);
 		}catch(Exception e) {
 			e.printStackTrace();
 			bl=false;

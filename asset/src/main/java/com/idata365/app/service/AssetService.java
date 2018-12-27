@@ -325,7 +325,7 @@ public class AssetService extends BaseService<AssetService> {
 		return rtMap;
 	}
 
-	public boolean unfreezeDiamondAsset(long buyer, long sellerId, long auctionGoodsId, double diamondsNum) {
+	public boolean unfreezeDiamondAsset(long buyer, long sellerId, long auctionGoodsId, double diamondsBinNum,double diamondsNum) {
 		// 总收入增加
 		Map<String, Object> earn = new HashMap<String, Object>();
 		earn.put("userId", sellerId);
@@ -354,11 +354,11 @@ public class AssetService extends BaseService<AssetService> {
 
 		Map<String, Object> freeze = new HashMap<String, Object>();
 		freeze.put("userId", buyer);
-		freeze.put("diamondsNum", diamondsNum);
+		freeze.put("diamondsNum", diamondsBinNum);
 		assetUsersAssetMapper.updateEndUnfreeze(freeze);// -
 
 		AuctionUsersDiamondsLogs auctionLog = new AuctionUsersDiamondsLogs();
-		auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsNum));
+		auctionLog.setDiamondsNum(BigDecimal.valueOf(diamondsBinNum));
 		auctionLog.setEffectId(auctionGoodsId);
 		auctionLog.setEventType(AssetConstant.EVENTTYPE_THAW);
 		auctionLog.setRecordType(AssetConstant.RECORDTYPE_1);
