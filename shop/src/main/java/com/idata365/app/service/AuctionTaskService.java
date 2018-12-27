@@ -91,7 +91,7 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			}
 
 			auctionGoods.setWinnerId(max.getAuctionUserId());
-			auctionGoods.setDoneDiamond(max.getAuctionDiamond());
+//			auctionGoods.setDoneDiamond(max.getAuctionDiamond());//竞拍过程已经设置值了
 			auctionGoodMapper.updateGoodsByTask(auctionGoods);
 			
 			//保存订单
@@ -111,7 +111,9 @@ public class AuctionTaskService extends BaseService<AuctionTaskService>{
 			boolean bl=chezuAssetService.unfreezeDiamondAsset(max.getAuctionUserId(), 
 					auctionGoods.getOfUserId(), 
 					auctionGoods.getAuctionGoodsId(),
-					max.getAuctionDiamond().doubleValue(), sign);
+					max.getAuctionDiamond().doubleValue(),
+					auctionGoods.getDoneDiamond().doubleValue(),
+					sign);
 			if(!bl) {
 				throw new RuntimeException("远程资产调用失败");
 			}

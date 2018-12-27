@@ -34,7 +34,7 @@ public class ChezuAssetHystric implements ChezuAssetService {
 
 
 	@Override
-	public boolean unfreezeDiamondAsset(long buyerId, long sellerId, long auctionGoodsId, double diamondNum,
+	public boolean unfreezeDiamondAsset(long buyerId, long sellerId, long auctionGoodsId, double diamondBidNum,double diamondNum,
 			String sign) {
 		// TODO Auto-generated method stub
 		LOG.info(" unfreezeDiamondAsset 挂了   ChezuAssetService");

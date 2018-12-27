@@ -1,5 +1,6 @@
 package com.idata365.appService;
 
+import com.idata365.app.util.I18nUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,7 +18,9 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableAutoConfiguration(exclude={MultipartAutoConfiguration.class})
 public class ShopApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		I18nUtils.loadLanguage("/data1/soft/app/languages", "en");
+		I18nUtils.setLanguage("en");
 		SpringApplication.run(ShopApplication.class, args);
 	}
 }

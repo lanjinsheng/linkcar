@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "service-asset-chezu", fallback = ChezuAssetHystric.class)
 public interface ChezuAssetService {
 	/**
-	 * 远程进行用户账户验证，待远程接口写入 通过map去获取diamondsNum=0, userId=150, powerNum=0
-	 * 
-	 * @param token
+	 *
+	 * @param userId
+	 * @param sign
 	 * @return
 	 */
 	@RequestMapping(value = "/asset/getUserAsset", method = RequestMethod.POST)
@@ -49,22 +49,13 @@ public interface ChezuAssetService {
 			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign,@RequestParam(value = "ofUserId") long ofUserId);
 
 	/**
-	 * 
-	 * @param ofUserId 
-	 * @param long1 
-	 * @Title: freezeDiamondAsset
-	 * @Description: TODO(返回false消费失败，true消费成功)
-	 * @param @param
-	 *            userId
-	 * @param @param
-	 *            diamondNum
-	 * @param @param
-	 *            sign
-	 * @param @return
-	 *            参数
-	 * @return boolean 返回类型
-	 * @throws @author
-	 *             LanYeYe
+	 * (返回false消费失败，true消费成功)
+	 * @param userId
+	 * @param diamondNum
+	 * @param sign
+	 * @param preUserId
+	 * @param auctionGoodsId
+	 * @return
 	 */
 	@RequestMapping(value = "/asset/freezeDiamondAsset", method = RequestMethod.POST)
 	Map<String,String> freezeDiamondAsset(@RequestParam(value = "userId") long userId,
@@ -74,5 +65,5 @@ public interface ChezuAssetService {
 	boolean 
 	unfreezeDiamondAsset(@RequestParam(value = "buyerId") long buyerId,@RequestParam(value = "sellerId") long sellerId,
 			@RequestParam(value = "auctionGoodsId") long auctionGoodsId,
-			@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign );
+			@RequestParam(value = "diamondBidNum") double diamondBidNum,@RequestParam(value = "diamondNum") double diamondNum, @RequestParam(value = "sign") String sign );
 }

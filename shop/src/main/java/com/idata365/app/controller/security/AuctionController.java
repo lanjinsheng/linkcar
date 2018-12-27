@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idata365.app.constant.AppMsgCode;
+import com.idata365.app.locker.Lockers;
 import com.idata365.app.remote.ChezuAppService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -369,24 +371,39 @@ public class AuctionController extends BaseController {
 		BigDecimal auctionDiamond = BigDecimal
 				.valueOf(Double.valueOf(String.valueOf(requestBodyParams.get("auctionDiamond"))));
 		LOG.info("auctionDiamond=================" + auctionDiamond);
+		Lockers.getLocker(String.valueOf(auctionGoodsId)).lock();
+		HashMap<String, Object> datas = new HashMap<String, Object>();
+		try{
 		AuctionGoods auctionGoods = auctionService.findOneAuctionGoodById(auctionGoodsId);
-		if (auctionGoods.getIsMustVerify() == 1) {// 需要身份验证
-			Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
-					SignUtils.encryptHMAC(String.valueOf(userId)));
-			if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
-				HashMap<String, Object> datas = new HashMap<String, Object>();
-				datas.put("code", "-1");
-				datas.put("msg", "亲！请先去认证身份哦");
-				return ResultUtils.rtSuccess(datas);
-			}
+//		if (auctionGoods.getIsMustVerify() == 1) {// 需要身份验证
+//			Map<String, String> authenticated = chezuAccountService.isAuthenticated(userId,
+//					SignUtils.encryptHMAC(String.valueOf(userId)));
+//			if ("0".equals(authenticated.get("IdCardIsOK")) || "0".equals(authenticated.get("VehicleTravelIsOK"))) {
+//				HashMap<String, Object> datas = new HashMap<String, Object>();
+//				datas.put("code", "-1");
+//				datas.put("msg", "亲！请先去认证身份哦");
+//				return ResultUtils.rtSuccess(datas);
+//			}
+//		}
+		Date auctionRealEndTime = auctionGoods.getAuctionRealEndTime();
+		if ((auctionRealEndTime.getTime() - System.currentTimeMillis()) < 2 * 1000) {
+			//出错了,时间已到
+			datas.put("code", "0");
+			datas.put("msg", AppMsgCode.M10001.getMsg());
+		}
+		if(auctionGoods.getDoneDiamond().doubleValue() >= auctionDiamond.doubleValue()){
+        	//出错了,价格不合适
+			datas.put("code", "0");
+			datas.put("msg", AppMsgCode.M10000.getMsg());
+			return ResultUtils.rtSuccess(datas);
 		}
 
 		long winnerId = auctionGoods.getWinnerId();
-		if (winnerId == userId) {
-			HashMap<String, Object> datas = new HashMap<String, Object>();
-			datas.put("msg", "亲！您已经是当前最高竞价者");
-			return ResultUtils.rtSuccess(datas);
-		}
+//		if (winnerId == userId) {
+//			HashMap<String, Object> datas = new HashMap<String, Object>();
+//			datas.put("msg", "亲！您已经是当前最高竞价者");
+//			return ResultUtils.rtSuccess(datas);
+//		}
 
 		// 插入竞拍记录
 		AuctionLogs auctionLogs = new AuctionLogs();
@@ -396,18 +413,32 @@ public class AuctionController extends BaseController {
 		auctionLogs.setAuctionUserId(userId);
 		auctionLogs.setAuctionUserNick(userName==null?PhoneUtils.hidePhone(this.getUserInfo().getPhone()):userName);
 
-		// 修改商品信息
-		auctionGoods.setWinnerId(userId);
-		auctionGoods.setDoneDiamond(auctionDiamond);
-		Date auctionRealEndTime = auctionGoods.getAuctionRealEndTime();
-		if ((auctionRealEndTime.getTime() - new Date().getTime()) < 2 * 1000 * 60) {
-			auctionGoods.setAuctionRealEndTime(DateTools.getAddMinuteDateTime(new Date(), 5));
-		} else {
-			auctionGoods.setAuctionRealEndTime(auctionRealEndTime);
+		//此时判断商品当前竞拍价格是否被超越，如果不是超越 则无需更改用户的锁定金额。
+		//更改当前的商品展示价格
+		boolean changeAsset = false;
+		if(auctionDiamond.doubleValue() > auctionGoods.getBidDiamond().doubleValue()){
+			//换人,变价格，+stepprice
+			auctionGoods.setWinnerId(userId);
+			auctionGoods.setDoneDiamond(auctionGoods.getBidDiamond().add(auctionGoods.getStepPrice()));
+			auctionGoods.setBidDiamond(auctionDiamond);
+			auctionGoods.setWinnerName(auctionLogs.getAuctionUserNick());
+			changeAsset = true;
+			auctionLogs.setAutoBidMan(auctionLogs.getAuctionUserNick());
+			auctionLogs.setAuctionDiamond(auctionGoods.getDoneDiamond());
+		}else if(auctionDiamond.doubleValue() ==  auctionGoods.getBidDiamond().doubleValue()) {
+			//不换人，变价格，给底牌
+			 auctionGoods.setDoneDiamond(auctionDiamond);
+			 auctionLogs.setAutoBidMan(auctionGoods.getWinnerName());
+			 auctionLogs.setAuctionDiamond(auctionGoods.getDoneDiamond());
+		}else{
+			//不换人，变价格，+stepprice
+			auctionGoods.setDoneDiamond(auctionDiamond.add(auctionGoods.getStepPrice()));
+			auctionLogs.setAutoBidMan(auctionGoods.getWinnerName());
+			auctionLogs.setAuctionDiamond(auctionGoods.getDoneDiamond());
 		}
 
-		try {
-			auctionService.doAuction(auctionGoods, auctionLogs, userId, winnerId);
+			auctionService.doAuction(auctionGoods, auctionLogs, userId, winnerId,changeAsset);
+		//IM 通知价格变化与列表
 			List<AuctionLogs> auctionLogsList = auctionService.listAuctionGoodsBeanRecord(auctionGoodsId);
 			AuctionBean auctionBean = new AuctionBean();
 			auctionBean.setAuctionGoods(auctionGoods);
@@ -415,27 +446,26 @@ public class AuctionController extends BaseController {
 			Map<String, Object> notifyAuction = chezuImService.notifyAuction(auctionBean,
 					String.valueOf(auctionService.joinPersons(auctionGoodsId)),
 					String.valueOf(auctionService.joinTimes(auctionGoodsId)));
-			if (1==1) {
-				chezuAppService.sendAuctionRobbedMsg(winnerId, auctionGoods.getPrizeName(), "sign");
-			}
-			HashMap<String, Object> datas = new HashMap<String, Object>();
+//			if (1==1) {
+//				chezuAppService.sendAuctionRobbedMsg(winnerId, auctionGoods.getPrizeName(), "sign");
+//			}
+
 			datas.put("code", "1");
-			datas.put("msg", "交易成功");
+			datas.put("msg", AppMsgCode.M10002.getMsg());
 			return ResultUtils.rtSuccess(datas);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			HashMap<String, Object> datas = new HashMap<String, Object>();
-			
-			
 			if("钻石数量不够支付".equals(e.getMessage())) {
 				datas.put("code", "0");
-				datas.put("msg", "钻石数量不够支付");
+				datas.put("msg", AppMsgCode.M10003.getMsg());
 			}else {
 				datas.put("code", "2");
-				datas.put("msg", "系统维护中，请稍后再试...");
+				datas.put("msg", AppMsgCode.M20000.getMsg());
 			}
 			return ResultUtils.rtSuccess(datas);
+		}finally {
+			Lockers.getLocker(String.valueOf(auctionGoodsId)).unlock();
 		}
 	}
 	
@@ -475,5 +505,12 @@ public class AuctionController extends BaseController {
 		LOG.info("logId=================" + logId);
 		auctionService.applyCdKey(logId);
 		return ResultUtils.rtSuccess(null);
+	}
+
+	public static void main(String []args){
+		Date a= new Date();
+		System.out.println(a.getTime());
+		System.out.println(System.currentTimeMillis());
+
 	}
 }

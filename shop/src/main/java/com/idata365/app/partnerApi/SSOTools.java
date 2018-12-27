@@ -19,20 +19,20 @@ public class SSOTools {
 	
       //内网
 //  public static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";
-	 public static String endpoint = "oss-cn-shanghai-internal.aliyuncs.com";
+	 public static String endpoint = "oss-us-west-1-internal.aliyuncs.com";
     //外网
 //    public static String endpoint = "oss-cn-shanghai.aliyuncs.com";
 //    public static String accessKeyId = "LTAIwwEJMzKOaDtT";
 //    public static String accessKeyId = "LTAI7twiGyhAjuUt";
 //	 public static String accessKeyId = "LTAIZSZOEeCxVXsd";
-	 public static String accessKeyId = "LTAI7twiGyhAjuUt";
+	 public static String accessKeyId = "LTAIyCvk3WQYnDUK";
 	 
 	 
 //    public static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
 //    public static String accessKeySecret = "9PwsBRBT5YIFAoYh4QcjMYAGRjxbs1";
-    public static String accessKeySecret = "9PwsBRBT5YIFAoYh4QcjMYAGRjxbs1";
+    public static String accessKeySecret = "oD8ZaSDg2ZoXyysj5YDG1S9Y4fU7OE";
     //    public static String bucketName_userInfo="app-users-imgs-info";
-    public static String bucketName_userInfo="users-imgs-info";
+    public static String bucketName_userInfo="linkcar1-users";
     
    // private static String bucketName = "driveDatas";
     public static String createSSOUsersImgInfoKey(long userId,UserImgsEnum type) {

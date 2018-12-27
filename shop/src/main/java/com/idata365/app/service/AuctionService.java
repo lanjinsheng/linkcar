@@ -93,7 +93,7 @@ public class AuctionService {
 			map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 			map.put("auctionTag", auctionGood.getAuctionTag());
 			if (auctionGood.getWinnerId() == userId
-					&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
+					&& ((System.currentTimeMillis() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
 				map.put("convertStatus", map.put("convertStatus", auctionGood.getAuctionStatus().toString()));
 			}else {
 				map.put("convertStatus","0");
@@ -127,10 +127,10 @@ public class AuctionService {
 				map.put("joinTimes", String.valueOf(auctionLogsMapper.joinTimes(auctionGood.getAuctionGoodsId())));
 				map.put("startTime", DateTools.formatDateYMD(auctionGood.getAuctionStartTime()));
 				map.put("endTime", DateTools.formatDateYMD(auctionGood.getAuctionRealEndTime()));
-				if (type==1&&auctionGood.getAuctionRealEndTime().getTime() < new Date().getTime()) {//type:1正在竞拍 2已拍
+				if (type==1&&auctionGood.getAuctionRealEndTime().getTime() < System.currentTimeMillis()) {//type:1正在竞拍 2已拍
 					continue;
 				}
-				if (type==2&&auctionGood.getAuctionRealEndTime().getTime() > new Date().getTime()) {//type:1正在竞拍 2已拍
+				if (type==2&&auctionGood.getAuctionRealEndTime().getTime() > System.currentTimeMillis()) {//type:1正在竞拍 2已拍
 					continue;
 				}
 				map.put("auctionValue", auctionGood.getDoneDiamond().stripTrailingZeros().toPlainString());
@@ -139,8 +139,8 @@ public class AuctionService {
 				map.put("isMustVerify", auctionGood.getIsMustVerify().toString());
 				map.put("auctionTag", auctionGood.getAuctionTag());
 				map.put("winnerId", auctionGood.getWinnerId().toString());
-				if (auctionGood.getWinnerId() == userId
-						&& ((new Date().getTime() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
+				if (auctionGood.getWinnerId().longValue() == userId.longValue()
+						&& ((System.currentTimeMillis() - auctionGood.getAuctionRealEndTime().getTime()) >= 0)) {
 					map.put("convertStatus", auctionGood.getAuctionStatus().toString());
 				} else if (type==2) {
 					//map.put("convertStatus","0");
@@ -228,30 +228,34 @@ public class AuctionService {
 		return auctionBean;
 	}
 
-	public void doAuction(AuctionGoods auctionGoods, AuctionLogs auctionLogs, long userId, long preUserId)
+	public void doAuction(AuctionGoods auctionGoods, AuctionLogs auctionLogs, long userId, long preUserId,boolean changeAsset)
 			throws Exception {
 		int a = auctionMapper.updateAuctionGoods(auctionGoods);
 		if (a <= 0) {
 			LOG.error("修改商品失败" + auctionGoods.getAuctionGoodsId() + "==" + userId + "==" + preUserId);
 			throw new RuntimeException("系统异常交易失败");
 		}
+
 		int b = auctionLogsMapper.insertAuctionLogs(auctionLogs);
 		if (b <= 0) {
 			LOG.error("插入日志失败" + auctionGoods.getAuctionGoodsId() + "==" + userId + "==" + preUserId);
 			throw new RuntimeException("系统异常交易失败");
 		}
-		// 资产操作
-		String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
-		String sign = SignUtils.encryptHMAC(paramSign);
-		Map<String, String> remoteMap = chezuAssetService.freezeDiamondAsset(userId,
-				auctionLogs.getAuctionDiamond().doubleValue(), sign, preUserId, auctionGoods.getAuctionGoodsId());
-		if (remoteMap == null) {
-			throw new RuntimeException("系统异常交易失败");
-		} else {
-			if (remoteMap.get("flag").equals("0")) {
-				throw new RuntimeException(remoteMap.get("msg"));
-			}
 
+		if(changeAsset) {
+			// 资产操作
+			String paramSign = userId + auctionLogs.getAuctionDiamond().toString();
+			String sign = SignUtils.encryptHMAC(paramSign);
+			Map<String, String> remoteMap = chezuAssetService.freezeDiamondAsset(userId,
+					auctionLogs.getAuctionDiamond().doubleValue(), sign, preUserId, auctionGoods.getAuctionGoodsId());
+			if (remoteMap == null) {
+				throw new RuntimeException("系统异常交易失败");
+			} else {
+				if (remoteMap.get("flag").equals("0")) {
+					throw new RuntimeException(remoteMap.get("msg"));
+				}
+
+			}
 		}
 	}
 
@@ -269,7 +273,7 @@ public class AuctionService {
 		String remark = goods.getRemark();
 		String cdkey = remark.substring(0, remark.indexOf("-"));
 		String dayStamp = remark.substring(remark.indexOf("-")+1, remark.length());
-		if (new Date().getTime() - DateTools.getDateTimeOfStr(dayStamp, "yyyy-MM-dd HH:mm:ss")
+		if (System.currentTimeMillis() - DateTools.getDateTimeOfStr(dayStamp, "yyyy-MM-dd HH:mm:ss")
 				.getTime() > (1000 * 3600 * 24 - 1000 * 120)) {//111-2018-07-30 12:34:38
 			// 超时
 			rtMap.put("flag", "0");

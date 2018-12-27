@@ -44,8 +44,9 @@
      <insert id="insertAuctionLogs"
 		parameterType="com.idata365.app.entity.AuctionLogs">
 		insert into auctionLogs
-		(auctionTime,auctionUserId,auctionUserNick,auctionDiamond,auctionGoodsId)
-		values(#{auctionTime},#{auctionUserId},#{auctionUserNick},#{auctionDiamond},#{auctionGoodsId})
+		(auctionTime,auctionUserId,auctionUserNick,auctionDiamond,auctionGoodsId,autoBidMan,autoBidDiamond)
+		values(#{auctionTime},#{auctionUserId},#{auctionUserNick},#{auctionDiamond},#{auctionGoodsId},
+		#{autoBidMan},#{autoBidDiamond})
 	 </insert>
 	 
 	 <select id="getLogByLogId" resultMap="BaseResultMap" parameterType="java.lang.Long">

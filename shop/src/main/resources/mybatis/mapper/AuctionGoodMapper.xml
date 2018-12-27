@@ -26,7 +26,7 @@
 	 <update id="updateAuctionGoods"
 		parameterType="com.idata365.app.entity.AuctionGoods">
 		update auctionGoods set
-		winnerId=#{winnerId},doneDiamond=#{doneDiamond},auctionRealEndTime=#{auctionRealEndTime}
+		winnerId=#{winnerId},winnerName=#{winnerName},doneDiamond=#{doneDiamond},auctionRealEndTime=#{auctionRealEndTime}
 		where
 		auctionGoodsId=#{auctionGoodsId} and <![CDATA[doneDiamond<#{doneDiamond}]]>
 	</update>
