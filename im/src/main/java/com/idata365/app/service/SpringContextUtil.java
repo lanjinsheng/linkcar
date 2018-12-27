@@ -8,13 +8,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
-	  private static ApplicationContext applicationContext;     //Spring应用上下文环境
-	 
+	  private static ApplicationContext applicationContext;
 	  /**
 	  * 实现ApplicationContextAware接口的回调方法，设置上下文环境  
 	  * @param applicationContext
 	  * @throws BeansException
 	  */
+	  @Override
 	  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 	    SpringContextUtil.applicationContext = applicationContext;
 	  }

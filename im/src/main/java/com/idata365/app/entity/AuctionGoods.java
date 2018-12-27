@@ -21,6 +21,7 @@ public class AuctionGoods implements Serializable {
 	private BigDecimal startDiamond;
 	private BigDecimal doneDiamond;
 	private Long winnerId;
+	private String winnerName;
 	private String prizeDetailPics;
 	private String prizeDetailTexts;
 	private Long ofUserId;
@@ -35,6 +36,14 @@ public class AuctionGoods implements Serializable {
 	private BigDecimal stepPrice;
 	private Integer auctionStatus;
 	private String remark;
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
+	public void setWinnerName(String winnerName) {
+		this.winnerName = winnerName;
+	}
 
 	public Long getAuctionGoodsId() {
 		return auctionGoodsId;

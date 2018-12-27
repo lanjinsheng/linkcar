@@ -21,7 +21,25 @@ public class AuctionLogs implements Serializable {
 	private Date auctionTime;
 	private BigDecimal auctionDiamond;
 	private String auctionUserNick;
-	
+	private String autoBidMan;
+	private BigDecimal autoBidDiamond;
+
+	public String getAutoBidMan() {
+		return autoBidMan;
+	}
+
+	public void setAutoBidMan(String autoBidMan) {
+		this.autoBidMan = autoBidMan;
+	}
+
+	public BigDecimal getAutoBidDiamond() {
+		return autoBidDiamond;
+	}
+
+	public void setAutoBidDiamond(BigDecimal autoBidDiamond) {
+		this.autoBidDiamond = autoBidDiamond;
+	}
+
 	public Long getAuctionLogsId() {
 		return auctionLogsId;
 	}

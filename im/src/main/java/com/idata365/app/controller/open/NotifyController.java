@@ -68,9 +68,9 @@ public class NotifyController extends BaseController{
 		List<AuctionLogs> list=auctionBean.getAuctionLogsList();
 		for(AuctionLogs log:list) {
 			Map<String,String> logMap=new HashMap<String,String>();
-			logMap.put("nick", log.getAuctionUserNick());
+			logMap.put("nick", log.getAutoBidMan());
 			logMap.put("auctionTime", DateTools.getDateTime(log.getAuctionTime()));
-			logMap.put("auctionDiamond", String.valueOf(log.getAuctionDiamond().doubleValue()));
+			logMap.put("auctionDiamond", String.valueOf(log.getAutoBidDiamond().doubleValue()));
 			actionLogs.add(logMap);
 		}
 		notifyInfo.put("actionLogs", actionLogs);
