@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class ShopApplication {
 
 	public static void main(String[] args) throws Exception {
-		I18nUtils.loadLanguage("/data1/soft/app/languages", "en");
+		I18nUtils.loadLanguage("/data1/soft/shop/languages", "en");
 		I18nUtils.setLanguage("en");
 		SpringApplication.run(ShopApplication.class, args);
 	}
