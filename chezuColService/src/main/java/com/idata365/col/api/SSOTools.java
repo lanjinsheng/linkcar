@@ -24,16 +24,16 @@ import com.idata365.col.util.ZipUtils;
 public class SSOTools {
       //内网
 //  private static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";
-	 private static String endpoint = "oss-cn-shanghai-internal.aliyuncs.com";
+	 private static String endpoint = "oss-us-west-1-internal.aliyuncs.com";
     //外网
 //    private static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
 //    private static String accessKeyId = "LTAIwwEJMzKOaDtT";
 //    private static String accessKeySecret = "tFeII3b2Vsk5q3bT3W6kjd10bt3SYC";
 	 //product
-	  public static String accessKeyId = "LTAIjx32MP3zE8V0";
-	  public static String accessKeySecret = "KTET5NyzOS8lKGanNSvmkcjOhLDgTA";
+	  public static String accessKeyId = "LTAIyCvk3WQYnDUK";
+	  public static String accessKeySecret = "oD8ZaSDg2ZoXyysj5YDG1S9Y4fU7OE";
 //    private static String bucketName = "softtootest1";
-	  private static String bucketName = "drive-datas";
+	  private static String bucketName = "linkcar1";
     
     
    // private static String bucketName = "driveDatas";

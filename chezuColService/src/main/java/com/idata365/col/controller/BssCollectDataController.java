@@ -388,6 +388,28 @@ public class BssCollectDataController extends BaseController<BssCollectDataContr
           startLog.setUserId(userId);
           dataService.insertStartEventLog(startLog);
           return ResultUtils.rtSuccess(StaticDatas.UserConfigDefault);
-    } 
-    
+    }
+    @RequestMapping(value = "/v1/uploadDataTest",method = RequestMethod.POST)
+    public Map<String,Object>  uploadDataTest(@RequestParam CommonsMultipartFile file,@RequestHeader HttpHeaders headers) throws IOException {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+        long userId=1000;
+        String YYYYMMDD=DateTools.getYYYYMMDD();
+        String filePath=userId+"/"+YYYYMMDD+"/A"+1+"_"+System.currentTimeMillis();
+        try {
+                LOG.info("fileOrgName:"+file.getOriginalFilename()+"==now name:"+filePath);
+                //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+                InputStream is=file.getInputStream();
+                SSOTools.saveOSS(is,filePath);
+                is.close();
+
+        }catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return ResultUtils.rtFail(null);
+        }
+
+        return ResultUtils.rtSuccess(null);
+    }
+
 }
