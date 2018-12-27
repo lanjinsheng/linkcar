@@ -1,6 +1,8 @@
 package com.idata365.app;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,29 @@ public class SmsController {
 	private final static Logger LOG = LoggerFactory.getLogger(SmsController.class);
 	@Autowired
 	private SmsService smsService;
-
+	@Autowired
+	private EmailService emailService;
+    public static void main(String []args){
+    	System.out.println(isEmail("1586984@54545.com"));
+	}
 	public SmsController() {
 		System.out.println("this is SmsController~~~~~~");
+	}
+	public static boolean isEmail(String string)
+	{
+		if (string == null){
+			return false;
+		}
+		String regEx1 = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+		Pattern p;
+		Matcher m;
+		p = Pattern.compile(regEx1);
+		m = p.matcher(string);
+		if (m.matches()){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -52,11 +74,15 @@ public class SmsController {
 				LOG.error("短信验证失败"+map.get("mobile")+"==="+map.get("validateCode"));
 				return false;
 			}
-			SendSmsResponse response = smsService.sendSms(map.get("mobile"),
-					map.get("templateType"), map.get("smsSignName"),
-					map.get("validateCode"));
-			LOG.info("code:" + response.getCode());
-			LOG.info("message:" + response.getMessage());
+			if(isEmail(map.get("mobile").toString())){
+				emailService.sendCodeEmail(map.get("validateCode").toString(),map.get("mobile").toString());
+			}else {
+				SendSmsResponse response = smsService.sendSms(map.get("mobile"),
+						map.get("templateType"), map.get("smsSignName"),
+						map.get("validateCode"));
+				LOG.info("code:" + response.getCode());
+				LOG.info("message:" + response.getMessage());
+			}
 			return true;
 		} catch (ClientException e) {
 			LOG.error(e.getMessage());

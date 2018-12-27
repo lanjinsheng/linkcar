@@ -1,8 +1,8 @@
 server:
   port: 9092
  
-accessKeyId: LTAIPq9ykK7vst75
-accessKeySecret: QZXOr94KV41I2277ADFGdOdQ1lEv8U
+accessKeyId: LTAIPq9ykK7vst75-3
+accessKeySecret: QZXOr94KV41I2277ADFGdOdQ1lEv8U-3
 signUpCode: SMS_134135227
 signInCode: SMS_134135229
 findPwCode: SMS_134135226
@@ -11,7 +11,7 @@ inviteCode: SMS_134135230
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://product-eureka.idata365.com/eureka/
+      defaultZone: http://product-eureka.wannigeqiu.com/eureka/
     healthcheck:
       enabled: true
   instance:
