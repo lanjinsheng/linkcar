@@ -68,7 +68,10 @@ public class TripController extends BaseController {
 				rtMap.put("habitId", dbMap.get("habitId"));
 				rtMap.put("time", dbMap.get("time"));
 				rtMap.put("mileage", dbMap.get("mileage"));
-				rtMap.put("driveTip", TripConstant.getTipByScore(Double.valueOf(score)));
+				int br =Integer.valueOf(dbMap.get("brakeTimes").toString());
+				int tn =Integer.valueOf(dbMap.get("turnTimes").toString());
+				int ac =Integer.valueOf(dbMap.get("speedTimes").toString());
+				rtMap.put("driveTip", TripConstant.getTipByScore(Double.valueOf(score),br,tn,ac));
 				rtMap.put("dayStr", dbMap.get("endTime"));
 				rtMap.put("score", dbMap.get("driveScore"));
 				String sign = SignUtils.encryptHMAC(String.valueOf(dbMap.get("id")));
